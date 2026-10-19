@@ -96,6 +96,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 - **Personenmodell:** Eigenschaften als eigene Zeilen (Person – Eigenschaftsart – Wert – gültig von/bis), nicht als Spalten. Grund: Rechte je Eigenschaftsart per RLS, frei definierbare Felder, Historie (siehe rollen.md).
 - **Historie und Löschung:** Einträge mit `valid_from`/`valid_to`; automatische Löschung 5 Jahre nach Ende der Gültigkeit.
 - **Rechte:** Rechteprüfung in der Datenbank (RLS über Rechte-Tabellen), nie nur im Frontend.
+- **Supabase MCP:** vorerst nicht im Einsatz (OAuth scheitert mit projektgebundener URL; Basis-URL hätte Zugriff auf PROD). Datenbankarbeit über die Supabase CLI. Wenn später: nur gegen TEST und nur lesend (read_only=true).
 - **Tabellen je Modul:** Präfix nach Modulkürzel in Kleinbuchstaben (z. B. `ad_api_keys`, `ea_persons`, `ea_assignments`, `gr_groups`). Alle Tabellen im Schema `public`, kein eigenes Schema je Modul.
 
 ## 7. Repo-Struktur
@@ -142,5 +143,6 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 - Kein eigenes Backup von PROD (Risiko akzeptiert).
 - Auftragsverarbeitungsvertrag mit Cloudflare: schließt der Product Owner ab.
 - Änderungen nur per Pull Request, Branch-Schutz für main.
+- Supabase MCP vorerst nicht nutzen; Datenbankarbeit über die Supabase CLI (Merkposten: erneut prüfen).
 
 Keine offenen Punkte in dieser Datei.
