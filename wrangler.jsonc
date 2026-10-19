@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "vereins-os",
+  // Muss zur workerd-Version von @cloudflare/vite-plugin passen (1.20261012).
+  "compatibility_date": "2026-10-12",
+  // Nur statische Auslieferung des Frontends, kein Worker-Code (tech-stack.md, Abschnitt 3).
+  "assets": {
+    "not_found_handling": "single-page-application"
+  }
+}
