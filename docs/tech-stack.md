@@ -1,6 +1,6 @@
 # Tech-Stack: Vereins OS
 
-Stand: 19.10.2026 · Version 0.4 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
+Stand: 19.10.2026 · Version 0.5 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
 
 ## Überblick
 
@@ -91,12 +91,13 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 - **UI-Texte:** deutsch, Begriffe nach glossar.md.
 - **RLS auf jeder Tabelle**, ohne Ausnahme. Keine Tabelle ohne Policy.
 - **Schemaänderungen nur per Migration** (`supabase/migrations/`), nie direkt im Dashboard.
-- **Keine Echtdaten in Tests** und nie im Projekt TEST. Testdaten nur per `supabase/seed.sql`, inkl. Testzugängen je Rechtevorlage.
+- **Keine Echtdaten in Tests** und nie im Projekt TEST. Testdaten nur per `supabase/seed.sh` (Daten in `seed.sql`, Passwort aus `SEED_TEST_PASSWORD`), inkl. Testzugängen je Rechtevorlage; bricht bei PROD ab.
+- **Tests:** Datenbanktests (pgTAP) in einer GitHub Action mit lokalem Supabase-Stack; fachliche Abnahme in TEST mit den Testzugängen.
 - **Keine Secrets im Repo.** Keys nur in Vault bzw. GitHub-Secrets.
 - **Personenmodell:** Eigenschaften als eigene Zeilen (Person – Eigenschaftsart – Wert – gültig von/bis), nicht als Spalten. Grund: Rechte je Eigenschaftsart per RLS, frei definierbare Felder, Historie (siehe rollen.md).
 - **Historie und Löschung:** Einträge mit `valid_from`/`valid_to`; automatische Löschung 5 Jahre nach Ende der Gültigkeit.
 - **Rechte:** Rechteprüfung in der Datenbank (RLS über Rechte-Tabellen), nie nur im Frontend.
-- **Supabase MCP:** vorerst nicht im Einsatz (OAuth scheitert mit projektgebundener URL; Basis-URL hätte Zugriff auf PROD). Datenbankarbeit über die Supabase CLI. Wenn später: nur gegen TEST und nur lesend (read_only=true).
+- **Supabase MCP:** vorerst nicht im Einsatz (OAuth scheitert mit projektgebundener URL; Basis-URL hätte Zugriff auf PROD). Datenbankarbeit über die Supabase CLI. Wenn später: nur gegen TEST und nur lesend (`read_only=true`).
 - **Tabellen je Modul:** Präfix nach Modulkürzel in Kleinbuchstaben (z. B. `ad_api_keys`, `ea_persons`, `ea_assignments`, `gr_groups`). Alle Tabellen im Schema `public`, kein eigenes Schema je Modul.
 
 ## 7. Repo-Struktur
@@ -125,7 +126,12 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 │   ├── config.toml
 │   ├── migrations/
 │   ├── functions/                  Edge Functions
+│   ├── templates/                  Mailvorlagen (Einladung, Passwort zurücksetzen)
+│   ├── tests/                      pgTAP-Tests
+│   ├── setup/                      Einrichtungsskript PROD
+│   ├── seed.sh                     Seed-Skript, bricht bei PROD ab
 │   └── seed.sql                    nur fiktive Daten
+├── .github/workflows/              GitHub Actions (Datenbanktests)
 ├── src/                            Frontend
 └── wrangler.jsonc                  Cloudflare-Konfiguration
 ```
@@ -142,7 +148,8 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 - Tabellen-Präfix nach Modulkürzel, kein eigenes Schema.
 - Kein eigenes Backup von PROD (Risiko akzeptiert).
 - Auftragsverarbeitungsvertrag mit Cloudflare: schließt der Product Owner ab.
-- Änderungen nur per Pull Request, Branch-Schutz für main.
+- Seed über `seed.sh`, pgTAP in GitHub Action mit lokalem Stack, Abnahme in TEST.
+- Änderungen nur per Pull Request, Branch-Schutz für `main` (Product Owner, 19.10.2026).
 - Supabase MCP vorerst nicht nutzen; Datenbankarbeit über die Supabase CLI (Merkposten: erneut prüfen).
 
 Keine offenen Punkte in dieser Datei.

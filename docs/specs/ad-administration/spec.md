@@ -1,8 +1,9 @@
 # Spec: Administration (AD)
 
-Version: 0.2 · Status: Ready · Stand: 19.10.2026 · Product Owner: Toni Werner
+Version: 0.3 · Status: Ready · Stand: 19.10.2026 · Product Owner: Toni Werner
 Stories: docs/specs/ad-administration/02-stories.md (US-AD-01 bis US-AD-16)
-Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.4 (R1–R19), glossar.md v0.4, rollen.md v0.6, tech-stack.md v0.3
+Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.5 (R1–R20), glossar.md v0.4, rollen.md v0.6, tech-stack.md v0.5
+Änderungen v0.3 (19.10.2026): Klärung der Widersprüche aus plan.md (W1–W14, A1–A5, P1); siehe Abschnitt 11.
 
 ## 1. Ziel und Scope
 
@@ -129,7 +130,7 @@ Unique (partiell): `(person_id, template_id) where revoked_at is null`. Wirksam 
 |---|---|---|---|---|
 | id | uuid | ja | gen_random_uuid() | PK |
 | person_id | uuid | ja | – | FK ea_persons(id), unique (ein Zugang je Person) |
-| login_email | citext | ja | – | unique (R2); Check `login_email like '%@dav-leipzig.de'` (R1) |
+| login_email | citext | ja | – | unique (R2); Check `login_email like '%@dav-leipzig.de'` (R1); änderbar nur bei Status `none` oder `invited` (Trigger, R20) |
 | status | ad_access_status | ja | 'none' | |
 | auth_user_id | uuid | nein | – | FK auth.users(id), unique; gesetzt bei Einladung |
 | is_emergency | boolean | ja | false | Notfall-Admin; partieller Unique-Index `where is_emergency` |
@@ -166,20 +167,25 @@ Index: `(occurred_at desc)`, `(action, occurred_at desc)`. Einträge nur über S
 - `ad_has_level(p_module text, p_min ad_level) returns boolean` – Hilfsfunktion für RLS.
 - `ad_my_modules() returns setof (code, name, level)` – für Startseite und Navigation; nur Module mit `is_available` und level ≥ `read`.
 - `ad_find_similar_persons(p_first text, p_last text, p_email text) returns setof ea_persons` – Dublettenprüfung (R3): gleicher Nachname (ohne Groß-/Kleinschreibung) und `similarity(first_name, p_first) >= 0.3` oder Vorname ist Teilwort des anderen (Toni/Anton), oder `p_email` gleich einer vorhandenen Login-Adresse. Schwelle wird in TEST mit Beispielen abgenommen (T25).
+- `ad_me() returns (person_id uuid, first_name text, last_name text, access_status ad_access_status)` – security definer, stable: nur die eigene Person und der eigene Zugang des aufrufenden Nutzers; für Kopfzeile und Startseite (alle angemeldeten Nutzer).
 - `ad_assign_template(p_person uuid, p_template uuid)`, `ad_revoke_template(p_person uuid, p_template uuid)` – prüfen AD ≥ edit, schreiben Zuweisung und Protokoll.
-- `ad_acknowledge_emergency()` – setzt ad_notice_acks.
-- `ad_pending_emergency_logins() returns (count int, last_at timestamptz)` – Anmeldungen des Notfall-Admins nach `emergency_acknowledged_until`.
+- `ad_acknowledge_emergency()` – prüft AD ≥ read; setzt ad_notice_acks.
+- `ad_pending_emergency_logins() returns (count int, last_at timestamptz)` – prüft AD ≥ read; Anmeldungen des Notfall-Admins nach `emergency_acknowledged_until`.
+- Interne Funktionen für Statuswechsel (`ad_apply_invite`, `ad_apply_lock`, `ad_apply_unlock`) – security definer; `grant execute` nur an `service_role`, aufgerufen ausschließlich von den Edge Functions.
+- `ad_user_level` und `ad_has_level` entstehen in der ersten Migration (T1), damit jede folgende Tabelle ihre Policies direkt mitbringt.
 
 ### Trigger auf auth.users (security definer, Schema public)
-- after insert: Zugang mit gleicher `login_email` → `auth_user_id` setzen (auch für Einladungen über das Supabase-Dashboard bei der Ersteinrichtung).
-- after update of `last_sign_in_at`: ist der Zugang `invited` → `active`. Ist `is_emergency` → Protokolleintrag `emergency_login` (R16, auch nach „Passwort vergessen“, US-AD-15 AK4).
+- after insert: Zugang mit gleicher `login_email` → `auth_user_id` setzen; Status `none` → `invited`. Gilt für `ad-invite` und für Einladungen über das Supabase-Dashboard (Ersteinrichtung, US-AD-01).
+- after update of `encrypted_password`: war das Passwort leer und ist jetzt gesetzt und der Zugang `invited` → `active`. Ein eingelöster Link ohne gespeichertes Passwort ändert den Status nicht.
+- after update of `last_sign_in_at`: ist `is_emergency` → Protokolleintrag `emergency_login` (R16, auch nach „Passwort vergessen“, US-AD-15 AK4).
+- „Passwort gesetzt“ bedeutet in dieser Spec: `auth.users.encrypted_password` ist nicht leer.
 
 ### Zeitgesteuerte Jobs (pg_cron)
-- täglich 03:15 (Europe/Berlin): `delete from ad_audit_log where occurred_at < now() - interval '5 years'` (R13).
+- täglich 01:15 UTC (pg_cron läuft in UTC; 02:15 bzw. 03:15 Ortszeit): `delete from ad_audit_log where occurred_at < now() - interval '5 years'` (R13).
 
 ## 3. Rechte / RLS
 
-Grundsatz: Rechte werden bei jeder Abfrage über `ad_has_level` geprüft. Da der Zugangsstatus Teil der Prüfung ist, enden Datenzugriffe nach Sperren oder Entziehen sofort; nur die Anmeldung im Frontend bleibt bis Ablauf des Zugriffstokens (bis zu 1 Stunde) bestehen. Das erfüllt R10 („spätestens“).
+Grundsatz: Rechte werden bei jeder Abfrage über `ad_has_level` geprüft. Jede Tabelle erhält ihre Policies in der Migration, die sie anlegt; Grants nur an `authenticated` (nie `anon`), interne Statusfunktionen nur an `service_role`. Da der Zugangsstatus Teil der Prüfung ist, enden Datenzugriffe nach Sperren oder Entziehen sofort; nur die Anmeldung im Frontend bleibt bis Ablauf des Zugriffstokens (bis zu 1 Stunde) bestehen. Das erfüllt R10 („spätestens“).
 
 Stufen in AD: lesen = alles in AD ansehen inkl. Protokoll und vertraulicher Eigenschaften; bearbeiten = anlegen, ändern, einladen, sperren, entsperren, zuweisen; verwalten = wie bearbeiten (keine zusätzliche Funktion im MVP, da in AD nichts gelöscht wird).
 
@@ -211,12 +217,13 @@ Edge Functions prüfen das Recht des Aufrufers selbst (JWT auswerten, `ad_has_le
 | Von | Nach | Wer | Bedingung |
 |---|---|---|---|
 | kein Zugang | eingeladen | Admin (Edge Function ad-invite) | Login-Adresse gültig (R1, R2), mind. eine wirksame Vorlage (R17), Mail erfolgreich versendet |
+| kein Zugang | eingeladen | System (Trigger auf auth.users) | Nutzer in Supabase Auth angelegt, z. B. Einladung über das Dashboard bei der Ersteinrichtung |
 | eingeladen | eingeladen | Admin (ad-invite) | erneut einladen; last_invited_at aktualisiert |
-| eingeladen | aktiv | Nutzer (Trigger auf auth.users) | erste Anmeldung nach Setzen des Passworts |
+| eingeladen | aktiv | Nutzer (Trigger auf auth.users) | Passwort erstmals gesetzt |
 | eingeladen | gesperrt | Admin (ad-access) | Einladung zurückziehen |
 | aktiv | gesperrt | Admin (ad-access) | – |
-| gesperrt | aktiv | Admin (ad-access) | `auth.users.last_sign_in_at is not null` |
-| gesperrt | eingeladen | Admin (ad-access) | `last_sign_in_at is null`; danach erneut einladen möglich |
+| gesperrt | aktiv | Admin (ad-access) | Passwort gesetzt |
+| gesperrt | eingeladen | Admin (ad-access) | kein Passwort gesetzt; danach erneut einladen möglich |
 
 Sperren setzt in Supabase Auth einen Bann (`ban_duration`), Entsperren hebt ihn auf. Jeder Übergang außer „eingeladen → aktiv“ erzeugt einen Protokolleintrag.
 
@@ -240,7 +247,8 @@ Sperren setzt in Supabase Auth einen Bann (`ban_duration`), Entsperren hebt ihn 
 - R16: Jede Anmeldung des Notfall-Admins → Protokoll + Hinweis in AD bis „Zur Kenntnis genommen“.
 - R17: Wenn keine wirksame Vorlage zugewiesen ist, dann „Bitte zuerst mindestens eine Rechtevorlage zuweisen.“ und keine Einladung.
 - R18: Login-Fehler immer „Anmeldung fehlgeschlagen. Bitte E-Mail-Adresse und Passwort prüfen.“; „Passwort vergessen“ immer „Wenn ein Zugang zu dieser Adresse besteht, haben wir dir eine E-Mail mit einem Link geschickt.“
-- R19: Wenn das Passwort kürzer als 8 Zeichen ist, dann „Das Passwort muss mindestens 8 Zeichen lang sein.“
+- R19: Wenn das Passwort kürzer als 8 Zeichen ist, dann „Das Passwort muss mindestens 8 Zeichen lang sein.“; wenn die beiden Eingaben verschieden sind, dann „Die Passwörter stimmen nicht überein.“
+- R20: Die Login-Adresse ist nur bei Status „kein Zugang“ oder „eingeladen“ änderbar. „Erneut einladen“ übernimmt eine geänderte Adresse auch in Supabase Auth. Bei „aktiv“ oder „gesperrt“: „Die Login-Adresse kann nur vor der Aktivierung des Zugangs geändert werden.“
 
 Weitere Meldungen:
 - Datentyp ändern bei vorhandenen Eigenschaften: „Der Datentyp kann nicht geändert werden, solange Eigenschaften dieser Art existieren.“
@@ -252,22 +260,22 @@ Weitere Meldungen:
 - Keine Rechte: „Für diesen Bereich hast du keine Rechte.“
 - Unerwarteter Fehler: „Etwas ist schiefgelaufen. Bitte versuche es erneut.“
 
-Datenbankfehler tragen einen Code (z. B. `AD_EMAIL_DOMAIN`, `AD_EMAIL_TAKEN`, `AD_NO_TEMPLATE`, `EA_VALUE_TYPE`); das Frontend bildet Codes auf die Meldungen ab.
+Datenbankfehler und Edge Functions tragen einen Code (z. B. `AD_EMAIL_DOMAIN`, `AD_EMAIL_TAKEN`, `AD_EMAIL_LOCKED`, `AD_NO_TEMPLATE`, `AD_FORBIDDEN`, `EA_VALUE_TYPE`); die vollständige Liste mit deutschem Meldungstext je Code steht in `docs/specs/ad-administration/contracts/error-codes.md`. Das Frontend bildet Codes auf die Meldungen ab.
 
 ## 6. Screens und Interaktionen
 
-Allgemein: deutsch, Ansprache „du“, Datum TT.MM.JJJJ, Zeit HH:MM (Europe/Berlin), shadcn/ui, nutzbar ab 375 px ohne horizontales Scrollen (Tabellen werden mobil zu Karten). Kopfzeile: Vereins OS (Link Startseite), Modulname, Name des Nutzers, „Abmelden“.
+Allgemein: deutsch, Ansprache „du“, Datum TT.MM.JJJJ, Zeit HH:MM (Europe/Berlin), shadcn/ui, nutzbar ab 375 px ohne horizontales Scrollen (Tabellen werden mobil zu Karten). Kopfzeile: Vereins OS (Link Startseite), Modulname, Name des Nutzers (über `ad_me()`), „Abmelden“.
 
 | Route | Zeigt | Aktionen | Leerer Zustand / Fehler | Story |
 |---|---|---|---|---|
 | /login | Login-Adresse, Passwort | Anmelden; Link „Passwort vergessen“ | R18-Meldung | US-AD-02 |
 | /passwort-vergessen | Login-Adresse | Link anfordern | immer R18-Bestätigung | US-AD-04 |
-| /passwort-setzen | Passwort, Wiederholung | Speichern (aus Einladungs- oder Reset-Link) | R19; Link ungültig | US-AD-03, US-AD-04 |
+| /passwort-setzen | Passwort, Wiederholung | Speichern (aus Einladungs- oder Reset-Link) | R19 (Länge, Übereinstimmung); Link ungültig | US-AD-03, US-AD-04 |
 | / | Willkommensgrafik (Platzhalterbild im Repo), Kacheln aus ad_my_modules | Modul öffnen | „Für dich sind noch keine Module freigeschaltet.“ | US-AD-05 |
 | /kein-zugriff | Meldung „Für diesen Bereich hast du keine Rechte.“ | Zur Startseite | – | US-AD-05 |
 | /ad | Personenübersicht (ad_v_person_overview): Name, Art-Kennzeichen „Funktionsperson“, Login-Adresse, Status-Badge, Vorlagen; Suche nach Namensteil; Filter Status; oben ggf. Hinweis Notfall-Admin („Der Notfall-Admin hat sich n-mal angemeldet, zuletzt am …“) | Person anlegen; Person öffnen; „Zur Kenntnis genommen“ | „Keine Personen gefunden.“ | US-AD-06, US-AD-15 |
 | /ad/personen/neu | Vorname, Nachname, optional Login-Adresse | Speichern → Dublettenprüfung → ggf. Warndialog | R1, R2, R4 | US-AD-07 |
-| /ad/personen/:id | Abschnitte: **Stammdaten** (Name, Art; bearbeitbar); **Zugang** (Login-Adresse, Status, zuletzt eingeladen, gesperrt am/von); **Rechtevorlagen** (wirksame Vorlagen); **Eigenschaften** (aktuelle oben, beendete als „beendet“, je Eigenschaft Historie aufklappbar; nur Arten mit „sichtbar in“ AD) | Login-Adresse speichern; Einladen / Erneut einladen / Sperren (mit Bestätigung und Hinweis „Bereits angemeldete Nutzer verlieren den Zugriff spätestens nach einer Stunde.“) / Entsperren; Vorlage hinzufügen (nur nicht zugewiesene) / entziehen; Eigenschaft hinzufügen, ändern, beenden | „Noch keine Eigenschaften.“; R1, R2, R17, Mailfehler | US-AD-08, 09, 11, 13 |
+| /ad/personen/:id | Abschnitte: **Stammdaten** (Name, Art; bearbeitbar); **Zugang** (Login-Adresse, Status, zuletzt eingeladen, gesperrt am/von); **Rechtevorlagen** (wirksame Vorlagen); **Eigenschaften** (aktuelle oben, beendete als „beendet“, je Eigenschaft Historie aufklappbar; nur Arten mit „sichtbar in“ AD) | Login-Adresse speichern (nur bei „kein Zugang“/„eingeladen“, R20); Einladen / Erneut einladen / Sperren (mit Bestätigung und Hinweis „Bereits angemeldete Nutzer verlieren den Zugriff spätestens nach einer Stunde.“) / Entsperren; Vorlage hinzufügen (nur nicht zugewiesene) / entziehen; Eigenschaft hinzufügen, ändern, beenden | „Noch keine Eigenschaften.“; R1, R2, R17, Mailfehler | US-AD-08, 09, 11, 13 |
 | /ad/rechtevorlagen | Liste: Name, Beschreibung, Anzahl Personen | Neu; öffnen | – | US-AD-10 |
 | /ad/rechtevorlagen/:id | Name, Beschreibung, Matrix 9 Module × Stufe (Auswahl je Zeile) | Speichern | Name doppelt | US-AD-10 |
 | /ad/eigenschaftsarten | Liste: Name, Datentyp, sichtbar in, vertraulich | Neu; öffnen | „Noch keine Eigenschaftsarten.“ | US-AD-12 |
@@ -282,7 +290,7 @@ Routenschutz: ohne Sitzung → /login (US-AD-02 AK5); ohne AD ≥ read → /kein
 |---|---|---|
 | Supabase Auth | Konfiguration (config.toml + Dashboard) | E-Mail/Passwort; Selbstregistrierung aus (`enable_signup = false`); Mindestlänge Passwort 8; Redirect-URLs: PROD-Adresse (`*.workers.dev`), Vorschau-Adressen, lokal; deutsche Mailvorlagen „Einladung“ und „Passwort zurücksetzen“ nur mit kurzem Hinweistext und Link |
 | SMTP | Supabase Auth → Google-Konto der Sektion | App-Passwort nur in den Supabase-Einstellungen; Absendername „Vereins OS“ |
-| Edge Function `ad-invite` | POST `{ person_id }`, Bearer-JWT des Aufrufers | prüft AD ≥ edit, R1, R2, R17, Status; lädt per Auth-Admin-API ein (neu oder erneut); bei Erfolg: Status `invited`, last_invited_at, auth_user_id, Protokoll `invited`; bei Mailfehler: keine Änderung, Fehlercode `AD_MAIL_FAILED`; ohne Recht: 403 |
+| Edge Function `ad-invite` | POST `{ person_id }`, Bearer-JWT des Aufrufers | prüft AD ≥ edit, R1, R2, R17, Status; lädt per Auth-Admin-API ein (neu oder erneut; bei geänderter Login-Adresse wird die E-Mail des Auth-Nutzers vorher aktualisiert, R20); bei Erfolg: Status `invited`, last_invited_at, auth_user_id, Protokoll `invited`; bei Mailfehler: keine Änderung, Fehlercode `AD_MAIL_FAILED`; ohne Recht: 403 |
 | Edge Function `ad-access` | POST `{ person_id, action: "lock" \| "unlock" }` | prüft AD ≥ edit; setzt bzw. entfernt Bann in Auth; Status nach Abschnitt 4; Protokoll `locked` / `unlocked`; ohne Recht: 403 |
 | EA | Datenbank | EA nutzt ea_persons (über ea_v_persons), ea_property_types, ea_properties und erweitert sie |
 | alle Module | Datenbank | RLS über ad_has_level; Navigation über ad_my_modules |
@@ -297,11 +305,11 @@ Routenschutz: ohne Sitzung → /login (US-AD-02 AK5); ohne AD ≥ read → /kein
 - Mobil ab 375 px; bedienbar ohne Schulung.
 - Antwortzeit Personenübersicht bei 300 Personen < 1 s.
 - Kosten: 0 €.
-- Vor Go-live: Zustellung von Einladung und „Passwort vergessen“ an je eine reale Adresse @dav-leipzig.de testen (Spam-Filter).
+- Zustellung der Login-Mails (Spam-Filter) wird bei der Ersteinrichtung von PROD geprüft: Die erste echte Einladung (Toni Werner) und ein „Passwort vergessen“ gehen an seine reale Adresse @dav-leipzig.de. In TEST keine realen Adressen.
 
-## 9. Testdaten (supabase/seed.sql, nur TEST)
+## 9. Testdaten (supabase/seed.sh, nie PROD)
 
-Seed bricht ab, wenn die Projektkennung nicht die von vereins-os-test ist („Seed nur für TEST erlaubt.“). Passwörter der Testzugänge aus Umgebungsvariable `SEED_TEST_PASSWORD` (lokal `.env`, CI: GitHub-Secret). Alle Namen und Adressen fiktiv; die Adressen existieren nicht.
+Der Seed läuft über `supabase/seed.sh` (Daten in `supabase/seed.sql`, Passwort per Parameter). Er läuft gegen den lokalen Stack (CI) und gegen TEST und bricht ab, wenn die Project Ref die von vereins-os-prod ist („Seed in PROD nicht erlaubt.“). Passwort der Testzugänge aus `SEED_TEST_PASSWORD` (lokal `.env.local`, CI: GitHub-Secret). Alle Namen und Adressen fiktiv; die Adressen existieren nicht. Der Notfall-Admin in TEST nutzt `test.notfall@dav-leipzig.de`; R14 (`geschaeftsstelle@dav-leipzig.de`) gilt für PROD.
 
 | # | Person | Art | Zugang | Status | Vorlagen | Eigenschaften |
 |---|---|---|---|---|---|---|
@@ -325,8 +333,8 @@ Protokoll im Seed: je ein Eintrag `invited`, `template_assigned`, `locked`, `eme
 - [ ] T3: Migration Rechte: ad_templates, ad_template_rights, ad_template_assignments, ad_accesses, Startvorlagen, Funktionen ad_user_level, ad_has_level, ad_my_modules, ad_assign_template, ad_revoke_template (US-AD-01, US-AD-10, US-AD-11)
 - [ ] T4: Migration Protokoll: ad_audit_log, ad_notice_acks, Funktionen ad_pending_emergency_logins, ad_acknowledge_emergency, pg_cron-Job Löschung nach 5 Jahren (US-AD-14, US-AD-15)
 - [ ] T5: Trigger auf auth.users: Verknüpfung per E-Mail, Status aktiv, Protokoll Notfall-Admin (US-AD-03, US-AD-15)
-- [ ] T6: RLS-Policies aller Tabellen nach Abschnitt 3; View ad_v_person_overview (US-AD-06, US-AD-13 AK4 u. a.)
-- [ ] T7: Datenbanktests (pgTAP, `supabase test db`): je Vorlage Lese-/Schreibrechte, vertrauliche Eigenschaften, Funktionsperson in ea_v_persons, gesperrter Zugang ohne Rechte, Protokoll unveränderbar (alle Rechte-Fälle)
+- [ ] T6: View ad_v_person_overview, Funktion ad_me(); Abgleich aller Policies gegen Abschnitt 3 (die Policies selbst entstehen in T1–T4 je Migration) (US-AD-06, US-AD-13 AK4 u. a.)
+- [ ] T7: Datenbanktests (pgTAP, `supabase test db`) in einer GitHub Action mit lokalem Supabase-Stack und Seed: je Vorlage Lese-/Schreibrechte, vertrauliche Eigenschaften, Funktionsperson in ea_v_persons, gesperrter Zugang ohne Rechte, Protokoll unveränderbar (alle Rechte-Fälle)
 - [ ] T8: Funktion ad_find_similar_persons (US-AD-07)
 - [ ] T9: Edge Function ad-invite inkl. Fehlercodes (US-AD-08)
 - [ ] T10: Edge Function ad-access (US-AD-09)
@@ -342,9 +350,9 @@ Protokoll im Seed: je ein Eintrag `invited`, `template_assigned`, `locked`, `eme
 - [ ] T20: Rechtevorlagen Liste und Bearbeiten mit Modul-Matrix (US-AD-10)
 - [ ] T21: Eigenschaftsarten Liste und Bearbeiten (US-AD-12)
 - [ ] T22: Protokoll-Ansicht (US-AD-14)
-- [ ] T23: supabase/seed.sql nach Abschnitt 9 inkl. Abbruch bei PROD und Passwort aus Umgebungsvariable (US-AD-16)
-- [ ] T24: Einrichtungsskript PROD (`supabase/setup/prod-bootstrap.sql`), idempotent, Parameter: Vor-/Nachname und Login-Adresse des Admins; legt Toni Werner (Admin, Vorstand) und Funktionsperson mit Notfall-Zugang (Admin) an; Anleitung für die erste Einladung über das Supabase-Dashboard (US-AD-01)
-- [ ] T25: Abnahme in TEST: Dublettenschwelle mit Beispielen (Toni/Anton Muster, Tippfehler), alle Stories mit den drei Testzugängen; vor Go-live Zustellungstest der Login-Mails (US-AD-07, US-AD-16)
+- [ ] T23: supabase/seed.sh und supabase/seed.sql nach Abschnitt 9 inkl. Abbruch bei PROD und Passwort aus Umgebungsvariable (US-AD-16)
+- [ ] T24: Einrichtungsskript PROD (`supabase/setup/prod-bootstrap.sql`), idempotent, Parameter: Vor-/Nachname und Login-Adresse des Admins; legt Toni Werner (Admin, Vorstand) und Funktionsperson mit Notfall-Zugang (Admin) an; Anleitung für die erste Einladung über das Supabase-Dashboard inkl. Zustellungstest der Login-Mails (US-AD-01)
+- [ ] T25: Abnahme in TEST: Dublettenschwelle mit Beispielen (Toni/Anton Muster, Tippfehler), alle Stories mit den drei Testzugängen (US-AD-07, US-AD-16)
 
 ## 11. Annahmen und offene Punkte
 
@@ -356,6 +364,13 @@ Bestätigt vom Product Owner am 19.10.2026: alle Annahmen aus Steckbrief, Erhebu
 - Testadressen @dav-leipzig.de im Seed existieren nicht als Postfächer.
 - Personenübersicht ohne Paginierung bis ca. 300 Personen.
 
+Entschieden vom Product Owner am 19.10.2026 (v0.3, aus der Prüfung durch /speckit-plan):
+- Statuswechsel an das Passwort gekoppelt: Anlage in Supabase Auth → „eingeladen“, erstes Passwort → „aktiv“ (W1, W2).
+- Login-Adresse nur vor der Aktivierung änderbar (R20).
+- Seed über seed.sh mit Abbruch bei PROD; pgTAP-Tests in GitHub Action mit lokalem Stack; Abnahme in TEST (W5, W6).
+- Policies je Migration, `ad_has_level` in T1; interne Statusfunktionen nur an `service_role`; zusätzliche Fehlercodes mit deutschen Meldungen; Löschlauf 01:15 UTC; Funktion `ad_me()`; Zustellungstest bei der Ersteinrichtung von PROD (A1–A5, P1, W7–W13).
+
 Offen (kein Blocker für AD):
+- [OFFEN] Wie kommen Migrationen nach PROD (manuell durch den Product Owner oder GitHub Action beim Merge auf main)? Klärung vor dem ersten PROD-Deployment; bis dahin wird PROD nicht angefasst.
 - [OFFEN] Vertretung des Admin-Zugangs (Toni Werner).
 - [OFFEN] Löschung des Zugangs, wenn eine Person nach der 5-Jahres-Regel gelöscht wird (Klärung im Steckbrief EA).

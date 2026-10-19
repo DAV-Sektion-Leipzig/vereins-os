@@ -1,12 +1,13 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 19.10.2026 · Version 0.3
+Stand: 19.10.2026 · Version 0.4
 
 Jeder Abschnitt wird beim Steckbrief des Moduls in „Offene Fragen“ übernommen und dort geklärt. Erledigte Punkte werden hier gestrichen.
 
 ## AD – Administration (Priorität 0)
 
 - [OFFEN] Vertretung des Admin-Zugangs: welche:r Mitarbeiter:in der Geschäftsstelle, ab wann? Kein Blocker. (00-steckbrief.md AD)
+- [OFFEN] Weg der Migrationen nach PROD: manuell durch den Product Owner oder GitHub Action beim Merge auf main? Vor dem ersten PROD-Deployment. (spec.md AD Abschnitt 11)
 
 ## EA – Ehrenamtsmanagement (Priorität 1)
 
@@ -65,6 +66,11 @@ Jeder Abschnitt wird beim Steckbrief des Moduls in „Offene Fragen“ übernomm
 - Einstellungen verwalten (AD).
 - SSO über den Microsoft-Tenant (Zustimmung und Mitwirkung des Bundesverbands nötig).
 - Login für Aktive.
+- Login-Adresse nach der Aktivierung ändern (z. B. Namensänderung).
+- Supabase MCP erneut prüfen (OAuth mit projektgebundener URL).
+- Sicherheitshinweis in shadcn-CLI (braces) vor Go-live mit `npm audit` prüfen.
+- Vorschau-URLs mit Cloudflare Access schützen.
+- GitHub: gemeinsames Konto DAVLeipzig in eine Organisation überführen.
 
 ## Erledigt am 19.10.2026
 
