@@ -53,3 +53,4 @@ supabase/.branches/
 Thumbs.db
 *.suo
 *.sw?
+.claude/settings.local.json
