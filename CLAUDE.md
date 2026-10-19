@@ -43,6 +43,13 @@ Arbeitsanweisungen für Claude Code im Vereins OS. Grundlage: [docs/tech-stack.m
 - **Nie gegen PROD arbeiten.** Lokale Entwicklung und Vorschau-Deployments nutzen ausschließlich Supabase TEST (`vereins-os-test`).
 - Keine Migrationen, Seeds, Abfragen oder CLI-Befehle gegen `vereins-os-prod`. PROD wird nur über das Deployment von `main` angesprochen.
 
+## Git-Workflow
+
+- **Nie auf `main` committen oder pushen.** `main` ist geschützt; Änderungen nur per Pull Request.
+- **Je Story ein Branch** (z. B. `us-ad-01-ersteinrichtung`).
+- **Commit-Nachrichten deutsch.**
+- **Pull Request erstellt der Product Owner** bzw. Claude Code erst nach Rückfrage.
+
 ## Repo-Struktur
 
 ```

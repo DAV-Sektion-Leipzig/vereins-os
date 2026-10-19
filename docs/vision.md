@@ -1,6 +1,6 @@
 # Vision: Vereins OS
 
-Stand: 19.10.2026 · Version 0.3 · Product Owner: Toni Werner
+Stand: 19.10.2026 · Version 0.4 · Product Owner: Toni Werner
 
 ## Leitsatz
 
@@ -50,9 +50,9 @@ Schwerpunkte: Ehrenamtsmanagement, Gruppen, Finanzen, Öffentlichkeitsarbeit, Pr
 - Daten einmal pflegen, modulübergreifend nutzen (Verknüpfung statt Einzellisten).
 - Flexibel auf der Person: neue Eigenschaftsarten ohne Änderung der Datenstruktur, mit Gültigkeit und Historie.
 - Geringe Kosten: nur kostenfreie Pläne, solange kein Budget freigegeben ist.
-- Einfach: bedienbar ohne Schulung durch die Geschäftsstelle. [ANNAHME]
-- Mobil nutzbar. [ANNAHME]
-- Datensparsam: nur Daten speichern, die ein konkreter Ablauf braucht. [ANNAHME]
+- Einfach: bedienbar ohne Schulung durch die Geschäftsstelle.
+- Mobil nutzbar (ab 375 px Breite).
+- Datensparsam: nur Daten speichern, die ein konkreter Ablauf braucht.
 
 ## Nicht-Ziele
 
@@ -70,6 +70,8 @@ Schwerpunkte: Ehrenamtsmanagement, Gruppen, Finanzen, Öffentlichkeitsarbeit, Pr
 - Kein Zugriff auf DNS der Domain dav-leipzig.de und keinen Mailversand über den Microsoft-Tenant (verwaltet vom Bundesverband).
 - Mit Echtdaten ist die Sektion Verantwortliche im Sinne der DSGVO: Auftragsverarbeitungsverträge, EU-Region, Eintrag im Verarbeitungsverzeichnis nötig (Details in tech-stack.md).
 - Zuständig für Datenschutz im Vereins OS: Toni Werner (Product Owner, 1. Vorsitzender).
+
+Bestätigt vom Product Owner am 19.10.2026: bedienbar ohne Schulung, mobil ab 375 px, datensparsam.
 
 ## Offene Fragen
 

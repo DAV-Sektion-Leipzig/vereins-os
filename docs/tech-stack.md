@@ -1,6 +1,6 @@
 # Tech-Stack: Vereins OS
 
-Stand: 19.10.2026 · Version 0.3 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
+Stand: 19.10.2026 · Version 0.4 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
 
 ## Überblick
 
@@ -53,6 +53,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 - **Pages oder Workers:** Cloudflare empfiehlt für neue Projekte Workers mit Static Assets; Pages wird weiter unterstützt, bekommt aber keine neuen Funktionen mehr. Für eine reine statische App sind beide gleichwertig. Entscheidung: Workers mit Static Assets. [ANNAHME]
 - **Keine Serverlogik bei Cloudflare.** Cloudflare liefert nur das Frontend aus; Logik, Daten und Jobs liegen ausschließlich in Supabase. So gibt es nur ein Backend.
 - **Repository:** öffentliches Repository der Sektion auf GitHub (Organisationskonto). Unkritisch, solange keine Daten, Keys oder Passwörter im Repo liegen.
+- **Änderungen nur per Pull Request:** Arbeit auf eigenem Branch je Story bzw. Aufgabe; Freigabe durch den Product Owner per Merge nach Prüfung der Cloudflare-Vorschau. `main` ist per Ruleset geschützt (Pull Request erforderlich, kein Force-Push, kein Löschen).
 - **Domain:** Die eigene Domain dav-leipzig.de ist nicht nutzbar (kein DNS-Zugriff). Adresse vorerst die Standard-Adresse von Cloudflare (`*.workers.dev`).
 - **Datenschutz:** Cloudflare verarbeitet beim Ausliefern IP-Adressen der Nutzer. Den Auftragsverarbeitungsvertrag mit Cloudflare schließt der Product Owner ab.
 
@@ -140,5 +141,6 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 - Tabellen-Präfix nach Modulkürzel, kein eigenes Schema.
 - Kein eigenes Backup von PROD (Risiko akzeptiert).
 - Auftragsverarbeitungsvertrag mit Cloudflare: schließt der Product Owner ab.
+- Änderungen nur per Pull Request, Branch-Schutz für main.
 
 Keine offenen Punkte in dieser Datei.
