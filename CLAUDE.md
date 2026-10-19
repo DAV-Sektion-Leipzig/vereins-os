@@ -2,6 +2,8 @@
 
 Arbeitsanweisungen für Claude Code im Vereins OS. Grundlage: [docs/tech-stack.md](docs/tech-stack.md), Abschnitte 6 (Konventionen) und 7 (Repo-Struktur).
 
+Antworte immer auf Deutsch.
+
 ## Fachliche Quelle
 
 - `docs/specs/<modul>/` ist die fachliche Quelle: `00-steckbrief.md`, `01-erhebung.md`, `02-stories.md`, `spec.md`. Umgesetzt wird, was dort steht.
