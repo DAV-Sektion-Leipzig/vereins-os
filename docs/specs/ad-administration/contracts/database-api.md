@@ -22,7 +22,7 @@ Anzeigenamen für „ausgeführt von“ im Protokoll: über `ad_accesses.auth_us
 | Objekt | Operation | Spalten |
 |---|---|---|
 | `ea_persons` | insert, update | `first_name`, `last_name` (`kind` nur durch AD; im MVP nicht in der Oberfläche) |
-| `ad_accesses` | insert, update | `person_id`, `login_email` (Update nur bei Status `none`/`invited`, sonst `AD_EMAIL_LOCKED`, R20) |
+| `ad_accesses` | insert, update | `person_id`, `login_email` (direktes Update nur bei Status `none`; bei `invited` über `ad-access` `change_email`; bei `active`/`locked` `AD_EMAIL_LOCKED`, R20) |
 | `ad_templates` | insert, update | `name`, `description` |
 | `ad_template_rights` | update | `level` |
 | `ea_property_types` | insert, update | `name`, `purpose`, `data_type`, `choice_values`, `visible_in`, `confidential` |

@@ -1,9 +1,11 @@
 # Spec: Administration (AD)
 
-Version: 0.3 · Status: Ready · Stand: 19.10.2026 · Product Owner: Toni Werner
+Version: 0.5 · Status: Ready · Stand: 20.10.2026 · Product Owner: Toni Werner
 Stories: docs/specs/ad-administration/02-stories.md (US-AD-01 bis US-AD-16)
-Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.5 (R1–R20), glossar.md v0.4, rollen.md v0.6, tech-stack.md v0.5
+Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.7 (R1–R20), glossar.md v0.4, rollen.md v0.6, tech-stack.md v0.5
 Änderungen v0.3 (19.10.2026): Klärung der Widersprüche aus plan.md (W1–W14, A1–A5, P1); siehe Abschnitt 11.
+Änderungen v0.4 (19.10.2026): Adressänderung bei „eingeladen“ nimmt die Einladung zurück, Aufräumen in ad-invite bei Fehlern, Abnahme der Mail-Abläufe mit Plus-Adressen; siehe Abschnitt 11.
+Änderungen v0.5 (20.10.2026): Abnahme der Mail-Abläufe mit eigenen Adressen des Product Owners; R1 per Trigger mit zusätzlichen Domains nur in TEST (Tabelle ad_test_login_domains); siehe Abschnitt 11.
 
 ## 1. Ziel und Scope
 
@@ -24,7 +26,7 @@ Typen:
 - `ad_access_status` (Enum): `none` (kein Zugang), `invited` (eingeladen), `active` (aktiv), `locked` (gesperrt).
 - `ea_data_type` (Enum): `text`, `date`, `boolean`, `choice` (UI: Text, Datum, Ja/Nein, Auswahlliste).
 - `ea_person_kind` (Enum): `human` (Mensch), `function` (Funktionsperson).
-- `ad_audit_action` (Enum): `invited`, `template_assigned`, `template_revoked`, `locked`, `unlocked`, `emergency_login`.
+- `ad_audit_action` (Enum): `invited`, `email_changed`, `template_assigned`, `template_revoked`, `locked`, `unlocked`, `emergency_login`.
 
 ### ad_modules
 | Spalte | Typ | Pflicht | Default | Beschreibung |
@@ -130,15 +132,23 @@ Unique (partiell): `(person_id, template_id) where revoked_at is null`. Wirksam 
 |---|---|---|---|---|
 | id | uuid | ja | gen_random_uuid() | PK |
 | person_id | uuid | ja | – | FK ea_persons(id), unique (ein Zugang je Person) |
-| login_email | citext | ja | – | unique (R2); Check `login_email like '%@dav-leipzig.de'` (R1); änderbar nur bei Status `none` oder `invited` (Trigger, R20) |
+| login_email | citext | ja | – | unique (R2); R1 per Trigger `ad_accesses_guard` über `ad_login_email_allowed()` (kein Check-Constraint); direkt änderbar nur bei Status `none`; bei `invited` nur über `ad-access` (`change_email`); sonst Fehler (Trigger, R20) |
 | status | ad_access_status | ja | 'none' | |
-| auth_user_id | uuid | nein | – | FK auth.users(id), unique; gesetzt bei Einladung |
+| auth_user_id | uuid | nein | – | FK auth.users(id) on delete set null, unique; gesetzt bei Einladung |
 | is_emergency | boolean | ja | false | Notfall-Admin; partieller Unique-Index `where is_emergency` |
 | last_invited_at | timestamptz | nein | – | zuletzt eingeladen am |
 | locked_at / locked_by | timestamptz / uuid | nein | – | |
 | created_at / created_by | timestamptz / uuid | ja / nein | now() / auth.uid() | |
 
 Personen ohne Zeile in ad_accesses haben den Status „kein Zugang“.
+
+### ad_test_login_domains (nur TEST)
+| Spalte | Typ | Pflicht | Default | Beschreibung |
+|---|---|---|---|---|
+| domain | citext | ja | – | PK; zusätzlich erlaubte Domain für Login-Adressen, ohne „@“ (z. B. die Domain der privaten Adresse des Product Owners) |
+| created_at | timestamptz | ja | now() | |
+
+In PROD immer leer. Befüllt nur der Product Owner in TEST per SQL-Editor im Supabase-Dashboard; nie per Migration, Seed oder Repo. RLS an, keine Policies, keine Grants an `authenticated` oder `anon`.
 
 ### ad_audit_log (Protokoll)
 | Spalte | Typ | Pflicht | Default | Beschreibung |
@@ -174,6 +184,8 @@ Index: `(occurred_at desc)`, `(action, occurred_at desc)`. Einträge nur über S
 - Interne Funktionen für Statuswechsel (`ad_apply_invite`, `ad_apply_lock`, `ad_apply_unlock`) – security definer; `grant execute` nur an `service_role`, aufgerufen ausschließlich von den Edge Functions.
 - `ad_user_level` und `ad_has_level` entstehen in der ersten Migration (T1), damit jede folgende Tabelle ihre Policies direkt mitbringt.
 
+- `ad_login_email_allowed(p_email citext) returns boolean` – security definer, stable: wahr, wenn die Adresse auf `@dav-leipzig.de` endet oder ihre Domain in `ad_test_login_domains` steht (R1). Genutzt vom Trigger `ad_accesses_guard` und von den Edge Functions `ad-invite` und `ad-access`.
+
 ### Trigger auf auth.users (security definer, Schema public)
 - after insert: Zugang mit gleicher `login_email` → `auth_user_id` setzen; Status `none` → `invited`. Gilt für `ad-invite` und für Einladungen über das Supabase-Dashboard (Ersteinrichtung, US-AD-01).
 - after update of `encrypted_password`: war das Passwort leer und ist jetzt gesetzt und der Zugang `invited` → `active`. Ein eingelöster Link ohne gespeichertes Passwort ändert den Status nicht.
@@ -196,6 +208,7 @@ Stufen in AD: lesen = alles in AD ansehen inkl. Protokoll und vertraulicher Eige
 | ad_template_assignments | AD ≥ read | nur über ad_assign_template | nur über ad_revoke_template | – |
 | ad_accesses | AD ≥ read | AD ≥ edit | AD ≥ edit; Statuswechsel nur über Edge Functions/Trigger | – |
 | ad_audit_log | AD ≥ read | nur System | – | nur pg_cron |
+| ad_test_login_domains | – (nur über ad_login_email_allowed) | nur SQL-Editor in TEST | – | nur SQL-Editor in TEST |
 | ad_notice_acks | eigene Zeile | eigene Zeile | eigene Zeile | – |
 | ea_persons | AD ≥ read: alle; EA ≥ read: nur `kind = 'human'` | AD ≥ edit oder EA ≥ edit; `kind = 'function'` nur AD | wie Anlegen | – (EA später) |
 | ea_property_types | AD ≥ read: alle; EA ≥ read: nur `confidential = false` | AD ≥ edit oder EA = manage; `confidential = true` nur AD ≥ edit | wie Anlegen; Ändern von `confidential` nur AD ≥ edit | – |
@@ -219,6 +232,7 @@ Edge Functions prüfen das Recht des Aufrufers selbst (JWT auswerten, `ad_has_le
 | kein Zugang | eingeladen | Admin (Edge Function ad-invite) | Login-Adresse gültig (R1, R2), mind. eine wirksame Vorlage (R17), Mail erfolgreich versendet |
 | kein Zugang | eingeladen | System (Trigger auf auth.users) | Nutzer in Supabase Auth angelegt, z. B. Einladung über das Dashboard bei der Ersteinrichtung |
 | eingeladen | eingeladen | Admin (ad-invite) | erneut einladen; last_invited_at aktualisiert |
+| eingeladen | kein Zugang | Admin (ad-access, `change_email`) | Login-Adresse geändert; Auth-Eintrag gelöscht, alter Link ungültig (R20) |
 | eingeladen | aktiv | Nutzer (Trigger auf auth.users) | Passwort erstmals gesetzt |
 | eingeladen | gesperrt | Admin (ad-access) | Einladung zurückziehen |
 | aktiv | gesperrt | Admin (ad-access) | – |
@@ -229,7 +243,7 @@ Sperren setzt in Supabase Auth einen Bann (`ban_duration`), Entsperren hebt ihn 
 
 ## 5. Geschäftsregeln
 
-- R1: Wenn die Login-Adresse nicht auf @dav-leipzig.de endet, dann Fehler, sonst Fehlermeldung „Zugang nur mit Adresse @dav-leipzig.de möglich.“
+- R1: Wenn die Login-Adresse nicht auf @dav-leipzig.de endet, dann Fehler, sonst Fehlermeldung „Zugang nur mit Adresse @dav-leipzig.de möglich.“ Ausnahme nur in TEST: Domains aus `ad_test_login_domains` sind zusätzlich erlaubt (Abnahme der Mail-Abläufe, Abschnitt 9). Die Meldung bleibt gleich.
 - R2: Wenn die Login-Adresse bereits einem Zugang gehört, dann Fehlermeldung „Diese Login-Adresse ist bereits vergeben.“
 - R3: Wenn beim manuellen Anlegen `ad_find_similar_persons` Treffer liefert, dann Warndialog mit Trefferliste und „Trotzdem anlegen“ / „Vorhandene Person öffnen“ / „Abbrechen“.
 - R4: Wenn Vorname oder Nachname leer ist, dann Fehlermeldung „Bitte Vorname und Nachname angeben.“
@@ -248,7 +262,7 @@ Sperren setzt in Supabase Auth einen Bann (`ban_duration`), Entsperren hebt ihn 
 - R17: Wenn keine wirksame Vorlage zugewiesen ist, dann „Bitte zuerst mindestens eine Rechtevorlage zuweisen.“ und keine Einladung.
 - R18: Login-Fehler immer „Anmeldung fehlgeschlagen. Bitte E-Mail-Adresse und Passwort prüfen.“; „Passwort vergessen“ immer „Wenn ein Zugang zu dieser Adresse besteht, haben wir dir eine E-Mail mit einem Link geschickt.“
 - R19: Wenn das Passwort kürzer als 8 Zeichen ist, dann „Das Passwort muss mindestens 8 Zeichen lang sein.“; wenn die beiden Eingaben verschieden sind, dann „Die Passwörter stimmen nicht überein.“
-- R20: Die Login-Adresse ist nur bei Status „kein Zugang“ oder „eingeladen“ änderbar. „Erneut einladen“ übernimmt eine geänderte Adresse auch in Supabase Auth. Bei „aktiv“ oder „gesperrt“: „Die Login-Adresse kann nur vor der Aktivierung des Zugangs geändert werden.“
+- R20: Die Login-Adresse ist nur bei Status „kein Zugang“ oder „eingeladen“ änderbar. Bei „eingeladen“ wird die Einladung zurückgenommen: Der Eintrag in Supabase Auth wird gelöscht, der alte Link ist ungültig, der Status wird „kein Zugang“; Meldung „Die Login-Adresse wurde geändert. Bitte die Einladung erneut senden.“ Bei „aktiv“ oder „gesperrt“: „Die Login-Adresse kann nur vor der Aktivierung des Zugangs geändert werden.“
 
 Weitere Meldungen:
 - Datentyp ändern bei vorhandenen Eigenschaften: „Der Datentyp kann nicht geändert werden, solange Eigenschaften dieser Art existieren.“
@@ -290,8 +304,8 @@ Routenschutz: ohne Sitzung → /login (US-AD-02 AK5); ohne AD ≥ read → /kein
 |---|---|---|
 | Supabase Auth | Konfiguration (config.toml + Dashboard) | E-Mail/Passwort; Selbstregistrierung aus (`enable_signup = false`); Mindestlänge Passwort 8; Redirect-URLs: PROD-Adresse (`*.workers.dev`), Vorschau-Adressen, lokal; deutsche Mailvorlagen „Einladung“ und „Passwort zurücksetzen“ nur mit kurzem Hinweistext und Link |
 | SMTP | Supabase Auth → Google-Konto der Sektion | App-Passwort nur in den Supabase-Einstellungen; Absendername „Vereins OS“ |
-| Edge Function `ad-invite` | POST `{ person_id }`, Bearer-JWT des Aufrufers | prüft AD ≥ edit, R1, R2, R17, Status; lädt per Auth-Admin-API ein (neu oder erneut; bei geänderter Login-Adresse wird die E-Mail des Auth-Nutzers vorher aktualisiert, R20); bei Erfolg: Status `invited`, last_invited_at, auth_user_id, Protokoll `invited`; bei Mailfehler: keine Änderung, Fehlercode `AD_MAIL_FAILED`; ohne Recht: 403 |
-| Edge Function `ad-access` | POST `{ person_id, action: "lock" \| "unlock" }` | prüft AD ≥ edit; setzt bzw. entfernt Bann in Auth; Status nach Abschnitt 4; Protokoll `locked` / `unlocked`; ohne Recht: 403 |
+| Edge Function `ad-invite` | POST `{ person_id }`, Bearer-JWT des Aufrufers | prüft AD ≥ edit, R1, R2, R17, Status; lädt per Auth-Admin-API ein (neu oder erneut); bei Erfolg: Status `invited`, last_invited_at, auth_user_id, Protokoll `invited`; bei Fehler der Auth-Admin-API (z. B. Mailversand): hat der Aufruf einen Auth-Eintrag neu angelegt, löscht die Function ihn wieder und setzt Status, auth_user_id und last_invited_at auf den Stand vor dem Aufruf zurück; kein Protokolleintrag; Fehlercode `AD_MAIL_FAILED`. Das Verhalten hängt nicht davon ab, ob Supabase Auth bei SMTP-Fehlern einen Eintrag anlegt; abgesichert durch einen Test der Function mit simuliertem Fehler; ohne Recht: 403 |
+| Edge Function `ad-access` | POST `{ person_id, action: "lock" \| "unlock" \| "change_email", login_email? }` | prüft AD ≥ edit; `lock`/`unlock`: setzt bzw. entfernt Bann in Auth, Status nach Abschnitt 4, Protokoll `locked` / `unlocked`; `change_email` (nur bei Status `invited`, sonst `AD_EMAIL_LOCKED`): prüft R1, R2, löscht den Auth-Eintrag, setzt neue login_email, auth_user_id null, Status `none`, Protokoll `email_changed` (Details: alte → neue Adresse), Meldung „Die Login-Adresse wurde geändert. Bitte die Einladung erneut senden.“; ohne Recht: 403 |
 | EA | Datenbank | EA nutzt ea_persons (über ea_v_persons), ea_property_types, ea_properties und erweitert sie |
 | alle Module | Datenbank | RLS über ad_has_level; Navigation über ad_my_modules |
 
@@ -305,11 +319,18 @@ Routenschutz: ohne Sitzung → /login (US-AD-02 AK5); ohne AD ≥ read → /kein
 - Mobil ab 375 px; bedienbar ohne Schulung.
 - Antwortzeit Personenübersicht bei 300 Personen < 1 s.
 - Kosten: 0 €.
-- Zustellung der Login-Mails (Spam-Filter) wird bei der Ersteinrichtung von PROD geprüft: Die erste echte Einladung (Toni Werner) und ein „Passwort vergessen“ gehen an seine reale Adresse @dav-leipzig.de. In TEST keine realen Adressen.
+- Zustellung der Login-Mails (Spam-Filter) wird bei der Ersteinrichtung von PROD geprüft: Die erste echte Einladung (Toni Werner) und ein „Passwort vergessen“ gehen an seine reale Adresse @dav-leipzig.de. In TEST keine realen Adressen; einzige Ausnahme: eigene Adressen des Product Owners für die Abnahme von Einladung und Passwort-Links (Abschnitt 9).
 
 ## 9. Testdaten (supabase/seed.sh, nie PROD)
 
 Der Seed läuft über `supabase/seed.sh` (Daten in `supabase/seed.sql`, Passwort per Parameter). Er läuft gegen den lokalen Stack (CI) und gegen TEST und bricht ab, wenn die Project Ref die von vereins-os-prod ist („Seed in PROD nicht erlaubt.“). Passwort der Testzugänge aus `SEED_TEST_PASSWORD` (lokal `.env.local`, CI: GitHub-Secret). Alle Namen und Adressen fiktiv; die Adressen existieren nicht. Der Notfall-Admin in TEST nutzt `test.notfall@dav-leipzig.de`; R14 (`geschaeftsstelle@dav-leipzig.de`) gilt für PROD.
+
+Abnahme von Einladung, Passwort setzen und Passwort vergessen in TEST (US-AD-03, US-AD-04, US-AD-08): Der Product Owner nutzt dafür eigene private Adressen (eigene Daten, mit seiner Einwilligung):
+1. Er trägt die Domain seiner privaten Adressen in TEST per SQL-Editor in `ad_test_login_domains` ein.
+2. Er legt über die Oberfläche fiktive Personen mit diesen Adressen an und lädt sie ein.
+3. Nach der Abnahme löscht er im TEST-Dashboard die Auth-Nutzer, die Testpersonen (per SQL) und die Domain aus `ad_test_login_domains`.
+
+Domain und Adressen stehen nie im Repo, im Seed, in `.env.local` oder in einer Migration. Ein Löschen über die Oberfläche ist nicht Teil des MVP.
 
 | # | Person | Art | Zugang | Status | Vorlagen | Eigenschaften |
 |---|---|---|---|---|---|---|
@@ -332,27 +353,27 @@ Protokoll im Seed: je ein Eintrag `invited`, `template_assigned`, `locked`, `eme
 - [ ] T2: Migration Personenmodell: ea_persons, ea_property_types, ea_properties, ea_property_history, Trigger (Validierung, Historie, Datentyp-Sperre, Auswahlwerte, vertraulich nur AD), View ea_v_persons (US-AD-07, US-AD-12, US-AD-13, US-AD-15)
 - [ ] T3: Migration Rechte: ad_templates, ad_template_rights, ad_template_assignments, ad_accesses, Startvorlagen, Funktionen ad_user_level, ad_has_level, ad_my_modules, ad_assign_template, ad_revoke_template (US-AD-01, US-AD-10, US-AD-11)
 - [ ] T4: Migration Protokoll: ad_audit_log, ad_notice_acks, Funktionen ad_pending_emergency_logins, ad_acknowledge_emergency, pg_cron-Job Löschung nach 5 Jahren (US-AD-14, US-AD-15)
-- [ ] T5: Trigger auf auth.users: Verknüpfung per E-Mail, Status aktiv, Protokoll Notfall-Admin (US-AD-03, US-AD-15)
+- [ ] T5: Trigger auf auth.users: Verknüpfung per E-Mail, Status aktiv, Protokoll Notfall-Admin; Trigger `ad_accesses_guard` für R1 (über `ad_login_email_allowed`) und R20; Tabelle `ad_test_login_domains` (US-AD-03, US-AD-08, US-AD-15)
 - [ ] T6: View ad_v_person_overview, Funktion ad_me(); Abgleich aller Policies gegen Abschnitt 3 (die Policies selbst entstehen in T1–T4 je Migration) (US-AD-06, US-AD-13 AK4 u. a.)
-- [ ] T7: Datenbanktests (pgTAP, `supabase test db`) in einer GitHub Action mit lokalem Supabase-Stack und Seed: je Vorlage Lese-/Schreibrechte, vertrauliche Eigenschaften, Funktionsperson in ea_v_persons, gesperrter Zugang ohne Rechte, Protokoll unveränderbar (alle Rechte-Fälle)
+- [ ] T7: Datenbanktests (pgTAP, `supabase test db`) in einer GitHub Action mit lokalem Supabase-Stack und Seed: je Vorlage Lese-/Schreibrechte, vertrauliche Eigenschaften, Funktionsperson in ea_v_persons, gesperrter Zugang ohne Rechte, Protokoll unveränderbar, R1 mit und ohne Eintrag in `ad_test_login_domains` (Testdomain `example.test` nur innerhalb des Tests), `ad_test_login_domains` für `authenticated` nicht lesbar (alle Rechte-Fälle)
 - [ ] T8: Funktion ad_find_similar_persons (US-AD-07)
-- [ ] T9: Edge Function ad-invite inkl. Fehlercodes (US-AD-08)
-- [ ] T10: Edge Function ad-access (US-AD-09)
+- [ ] T9: Edge Function ad-invite inkl. Fehlercodes und Aufräumen bei Fehlern der Auth-Admin-API, mit Test bei simuliertem Fehler (US-AD-08 AK5)
+- [ ] T10: Edge Function ad-access mit lock, unlock und change_email (US-AD-08 AK7, US-AD-09)
 - [ ] T11: Auth-Konfiguration: Selbstregistrierung aus, Passwortlänge 8, Redirect-URLs, deutsche Mailvorlagen; SMTP-Einstellungen dokumentieren (US-AD-02, 03, 04)
 - [ ] T12: Frontend-Grundgerüst: Routing, Routenschutz, Kopfzeile, Fehlercode-Abbildung, /kein-zugriff (US-AD-02, US-AD-05)
 - [ ] T13: Screens Login, Passwort vergessen, Passwort setzen, Abmelden (US-AD-02, 03, 04)
 - [ ] T14: Startseite mit Willkommensgrafik und Modulkacheln (US-AD-05)
 - [ ] T15: Personenübersicht mit Suche, Filter, Notfall-Hinweis (US-AD-06, US-AD-15)
 - [ ] T16: Person anlegen mit Dublettendialog (US-AD-07)
-- [ ] T17: Personendetail: Stammdaten und Zugang (einladen, erneut einladen, sperren, entsperren) (US-AD-08, US-AD-09)
+- [ ] T17: Personendetail: Stammdaten und Zugang (Login-Adresse ändern, einladen, erneut einladen, sperren, entsperren) (US-AD-08, US-AD-09)
 - [ ] T18: Personendetail: Rechtevorlagen zuweisen und entziehen (US-AD-11)
 - [ ] T19: Personendetail: Eigenschaften mit Historie (US-AD-13)
 - [ ] T20: Rechtevorlagen Liste und Bearbeiten mit Modul-Matrix (US-AD-10)
 - [ ] T21: Eigenschaftsarten Liste und Bearbeiten (US-AD-12)
 - [ ] T22: Protokoll-Ansicht (US-AD-14)
 - [ ] T23: supabase/seed.sh und supabase/seed.sql nach Abschnitt 9 inkl. Abbruch bei PROD und Passwort aus Umgebungsvariable (US-AD-16)
-- [ ] T24: Einrichtungsskript PROD (`supabase/setup/prod-bootstrap.sql`), idempotent, Parameter: Vor-/Nachname und Login-Adresse des Admins; legt Toni Werner (Admin, Vorstand) und Funktionsperson mit Notfall-Zugang (Admin) an; Anleitung für die erste Einladung über das Supabase-Dashboard inkl. Zustellungstest der Login-Mails (US-AD-01)
-- [ ] T25: Abnahme in TEST: Dublettenschwelle mit Beispielen (Toni/Anton Muster, Tippfehler), alle Stories mit den drei Testzugängen (US-AD-07, US-AD-16)
+- [ ] T24: Einrichtungsskript PROD (`supabase/setup/prod-bootstrap.sql`), idempotent, Parameter: Vor-/Nachname und Login-Adresse des Admins; legt Toni Werner (Admin, Vorstand) und Funktionsperson mit Notfall-Zugang (Admin) an; Anleitung für die erste Einladung über das Supabase-Dashboard inkl. Zustellungstest der Login-Mails; bricht ab, wenn `ad_test_login_domains` Einträge hat (US-AD-01)
+- [ ] T25: Abnahme in TEST: Dublettenschwelle mit Beispielen (Toni/Anton Muster, Tippfehler), alle Stories mit den drei Testzugängen; Einladung, Adresse ändern, Passwort setzen und Passwort vergessen mit eigenen Adressen des Product Owners nach Abschnitt 9, danach Aufräumen (US-AD-03, US-AD-04, US-AD-07, US-AD-08, US-AD-16)
 
 ## 11. Annahmen und offene Punkte
 
@@ -369,6 +390,15 @@ Entschieden vom Product Owner am 19.10.2026 (v0.3, aus der Prüfung durch /speck
 - Login-Adresse nur vor der Aktivierung änderbar (R20).
 - Seed über seed.sh mit Abbruch bei PROD; pgTAP-Tests in GitHub Action mit lokalem Stack; Abnahme in TEST (W5, W6).
 - Policies je Migration, `ad_has_level` in T1; interne Statusfunktionen nur an `service_role`; zusätzliche Fehlercodes mit deutschen Meldungen; Löschlauf 01:15 UTC; Funktion `ad_me()`; Zustellungstest bei der Ersteinrichtung von PROD (A1–A5, P1, W7–W13).
+
+Entschieden vom Product Owner am 19.10.2026 (v0.4, aus dem Abgleich des Plans):
+- Login-Adresse bei „eingeladen“ ändern nimmt die Einladung zurück (Auth-Eintrag löschen, Status „kein Zugang“), damit der alte Link nicht mehr gilt (R20).
+- `ad-invite` räumt bei Fehlern der Auth-Admin-API selbst auf; der Status bleibt unverändert (US-AD-08 AK5).
+
+Entschieden vom Product Owner am 20.10.2026 (v0.5):
+- Abnahme der Mail-Abläufe in TEST mit eigenen privaten Adressen des Product Owners; Datenschutz nicht betroffen (eigene Daten). Ausnahme in Constitution V (Version 1.1.0).
+- R1 per Trigger statt Check-Constraint; zusätzliche Domains nur in TEST über `ad_test_login_domains`, befüllt per SQL-Editor; PROD bleibt bei @dav-leipzig.de (Variante B).
+- Aufräumen nach der Abnahme über das TEST-Dashboard; keine Löschfunktion in der Oberfläche.
 
 Offen (kein Blocker für AD):
 - [OFFEN] Wie kommen Migrationen nach PROD (manuell durch den Product Owner oder GitHub Action beim Merge auf main)? Klärung vor dem ersten PROD-Deployment; bis dahin wird PROD nicht angefasst.

@@ -1,8 +1,8 @@
 # Implementation Plan: Administration (AD)
 
-**Branch**: `us-ad-01-ersteinrichtung` (Plan); Umsetzung je Story auf eigenem Branch | **Date**: 2026-10-19 | **Spec**: [spec.md](spec.md) v0.3
+**Branch**: `us-ad-01-ersteinrichtung` (Plan); Umsetzung je Story auf eigenem Branch | **Date**: 2026-10-20 | **Spec**: [spec.md](spec.md) v0.5
 
-**Input**: [spec.md](spec.md) v0.3 (führend), [02-stories.md](02-stories.md) v0.3, [01-erhebung.md](01-erhebung.md) v0.5, [00-steckbrief.md](00-steckbrief.md) v0.9, [tech-stack.md](../../tech-stack.md) v0.5, [Constitution](../../../.specify/memory/constitution.md) v1.0.2
+**Input**: [spec.md](spec.md) v0.5 (führend), [02-stories.md](02-stories.md) v0.5, [01-erhebung.md](01-erhebung.md) v0.7, [00-steckbrief.md](00-steckbrief.md) v0.9, [tech-stack.md](../../tech-stack.md) v0.5, [Constitution](../../../.specify/memory/constitution.md) v1.1.1
 
 **Artefakte**: [research.md](research.md) · [data-model.md](data-model.md) · [contracts/](contracts/) · [quickstart.md](quickstart.md)
 
@@ -26,7 +26,7 @@ Rechte werden ausschließlich in der Datenbank geprüft (`ad_has_level`). Das Fr
 **Language/Version**: SQL (PostgreSQL 17, Supabase); TypeScript ~7.0 (Frontend); TypeScript/Deno (Edge Functions); Bash (`seed.sh`)
 **Primary Dependencies**: Supabase (Auth, PostgREST, Edge Functions, pg_cron, pg_trgm, citext); React 19, react-router-dom 7, @supabase/supabase-js 2, shadcn/ui (radix-ui), Tailwind CSS v4, sonner; Vite 8 mit @cloudflare/vite-plugin
 **Storage**: Supabase PostgreSQL, Schema `public`; Supabase Auth (`auth.users`)
-**Testing**: pgTAP (`supabase test db`) in einer GitHub Action mit lokalem Supabase-Stack und Seed; fachliche Abnahme in TEST (T25); keine Frontend-Unit-Tests gefordert
+**Testing**: pgTAP (`supabase test db`) und Deno-Tests der Edge Functions in einer GitHub Action mit lokalem Supabase-Stack und Seed; fachliche Abnahme in TEST (T25); keine Frontend-Unit-Tests gefordert
 **Target Platform**: Browser (mobil ab 375 px); Cloudflare Workers mit Static Assets (`*.workers.dev`); Supabase Free-Plan EU
 **Project Type**: Web-Anwendung – statische SPA, Supabase als einziges Backend
 **Performance Goals**: Personenübersicht bei 300 Personen < 1 s
@@ -39,11 +39,11 @@ Rechte werden ausschließlich in der Datenbank geprüft (`ad_has_level`). Das Fr
 
 | Prinzip | Prüfung | Ergebnis |
 |---|---|---|
-| I Fachliche Quelle | Plan setzt spec.md v0.3 um; alle Artefakte liegen in `docs/specs/ad-administration/`; Begriffe nach glossar.md | ✅ |
+| I Fachliche Quelle | Plan setzt spec.md v0.5 um; alle Artefakte liegen in `docs/specs/ad-administration/`; Begriffe nach glossar.md | ✅ |
 | II Offene Punkte | O1 gemeldet, nicht entschieden | ✅ |
-| III Sicherheit in der DB | RLS und Policies in jeder Migration; `revoke` von `anon`/`public`; Grants an `authenticated`; interne Statusfunktionen nur an `service_role` (spec.md v0.3 Abschnitt 3); Edge Functions prüfen das JWT selbst | ✅ |
+| III Sicherheit in der DB | RLS und Policies in jeder Migration; `revoke` von `anon`/`public`; Grants an `authenticated`; interne Statusfunktionen nur an `service_role` (spec.md v0.5 Abschnitt 3); Edge Functions prüfen das JWT selbst; `ad_test_login_domains` ohne Policy/Grant nach der Ausnahme in III (1.1.1) | ✅ |
 | IV Personenmodell/Historie | Eigenschaften als Zeilen mit `valid_from`/`valid_to`, Historie per Trigger. Die 5-Jahres-Löschung von Personen und Eigenschaften gehört laut spec.md Abschnitt 1 zu EA; AD löscht nur das Protokoll (R13) | ✅ |
-| V Daten/Secrets/Umgebungen | Seed nur fiktiv über `seed.sh`, bricht bei PROD ab; Passwort aus `SEED_TEST_PASSWORD`; in TEST keine realen Adressen; CI ohne Projektzugang; PROD nur durch den Product Owner (O1) | ✅ |
+| V Daten/Secrets/Umgebungen | Seed nur fiktiv über `seed.sh`, bricht bei PROD ab; Passwort aus `SEED_TEST_PASSWORD`; in TEST keine realen Adressen außer der Ausnahme für eigene Adressen des Product Owners (Abnahme der Mail-Abläufe, `ad_test_login_domains` nur per SQL-Editor, Aufräumen im Dashboard); CI ohne Projektzugang; PROD nur durch den Product Owner (O1) | ✅ |
 | VI Automatisieren/einmal pflegen | pg_cron-Löschlauf; Fachmodule lesen `ea_v_persons`, keine Kopien | ✅ |
 | VII Kostenfrei/einfach/mobil | nur Free-Pläne (GitHub Actions, Supabase, Cloudflare); Screens ab 375 px; UI deutsch mit „du“ | ✅ |
 
@@ -69,12 +69,12 @@ docs/specs/ad-administration/
 ### Source Code (repository root)
 
 ```text
-.github/workflows/db-tests.yml         # T7: lokaler Stack + seed.sh + supabase test db
+.github/workflows/db-tests.yml         # T7: lokaler Stack + seed.sh + supabase test db + deno test
 supabase/
 ├── config.toml                        # T11 Auth; T23 [db.seed] enabled = false
 ├── templates/invite.html, recovery.html   # T11
 ├── migrations/                        # T1–T6, T8 (Dateinamen: data-model.md)
-├── functions/_shared/, ad-invite/, ad-access/   # T9, T10
+├── functions/_shared/, ad-invite/ (+ index.test.ts), ad-access/   # T9, T10
 ├── tests/database/*.test.sql          # T7
 ├── seed.sh, seed.sql                  # T23
 └── setup/prod-bootstrap.sql           # T24 (Ausführung nur durch den Product Owner)
@@ -98,7 +98,7 @@ src/
 
 ## Umsetzung nach Tasks (spec.md Abschnitt 10)
 
-Story-Reihenfolge nach 02-stories.md v0.3: 01 → 02 → 05 → 10 → 06 → 07 → 12 → 13 → 11 → 08 → 03 → 04 → 09 → 14 → 15 → 16. Die Datenbankteile aller Stories, auch von US-AD-10 und US-AD-11, entstehen mit US-AD-01.
+Story-Reihenfolge nach 02-stories.md v0.5: 01 → 02 → 05 → 10 → 06 → 07 → 12 → 13 → 11 → 08 → 03 → 04 → 09 → 14 → 15 → 16. Die Datenbankteile aller Stories, auch von US-AD-10 und US-AD-11, entstehen mit US-AD-01.
 
 ### US-AD-01 Ersteinrichtung – Datenbank-Fundament
 
@@ -106,14 +106,14 @@ Story-Reihenfolge nach 02-stories.md v0.3: 01 → 02 → 05 → 10 → 06 → 07
 |---|---|---|
 | T1 | Erweiterungen, Enums, `ad_modules` + Stammdaten, `ad_user_level`, `ad_has_level` | 01, 05 |
 | T2 | Personenmodell mit Triggern (Validierung, Historie, Datentyp-Sperre, Auswahlwerte, vertraulich nur AD), `ea_v_persons`, Policies | 07, 12, 13, 15 |
-| T3 | Vorlagen, Rechte, Zuweisungen, Zugänge (inkl. R20-Trigger), Startvorlagen, `ad_my_modules`, `ad_assign_template`, `ad_revoke_template`, Policies | 01, 10, 11 |
-| T4 | Protokoll, `ad_notice_acks`, Notfall-Funktionen (AD ≥ read), pg_cron 01:15 UTC, interne `ad_apply_*` | 14, 15 |
-| T5 | Trigger auf `auth.users`: Insert (`auth_user_id`, `none` → `invited`), erstes Passwort (`invited` → `active`), Anmeldung des Notfall-Admins (Protokoll) | 01, 03, 15 |
+| T3 | Vorlagen, Rechte, Zuweisungen, Zugänge (FK `auth_user_id` on delete set null), Startvorlagen, `ad_my_modules`, `ad_assign_template`, `ad_revoke_template`, Policies | 01, 10, 11 |
+| T4 | Protokoll (Enum inkl. `email_changed`), `ad_notice_acks`, Notfall-Funktionen (AD ≥ read), pg_cron 01:15 UTC, interne `ad_apply_*`/`ad_revert_invite` | 08, 09, 14, 15 |
+| T5 | Trigger auf `auth.users`: Insert (`auth_user_id`, `none` → `invited`), erstes Passwort (`invited` → `active`), Anmeldung des Notfall-Admins (Protokoll); Tabelle `ad_test_login_domains`, Funktion `ad_login_email_allowed`, Trigger `ad_accesses_guard` (R1, R20) | 01, 03, 07, 08, 15 |
 | T6 | `ad_v_person_overview`, `ad_me()`, Abgleich aller Policies mit Abschnitt 3 | 06, 13, Kopfzeile |
 | T8 | `ad_find_similar_persons` | 07 |
-| T7 | pgTAP-Tests, wachsen mit T1–T8; Workflow `db-tests.yml` | alle Rechte-Fälle |
+| T7 | pgTAP-Tests, wachsen mit T1–T8, inkl. R1 mit `example.test` und `ad_test_login_domains` für `authenticated` nicht lesbar; Deno-Tests; Workflow `db-tests.yml` | alle Rechte-Fälle |
 | T23 | `seed.sh` + `seed.sql` (wird für T7 in CI gebraucht, daher früh) | 16 |
-| T24 | `prod-bootstrap.sql`, idempotent, parametrisiert; Anleitung Dashboard-Einladung und Zustellungstest (quickstart.md D) | 01 |
+| T24 | `prod-bootstrap.sql`, idempotent, parametrisiert, bricht ab, wenn `ad_test_login_domains` Einträge hat; Anleitung Dashboard-Einladung und Zustellungstest (quickstart.md D). Nur Skript und Anleitung, keine Ausführung | 01 |
 
 Abnahme: Die Action ist grün, `db push --linked` gegen TEST läuft ohne Fehler, der Seed in TEST ist vollständig.
 
@@ -129,14 +129,14 @@ Abnahme: Die Action ist grün, `db push --linked` gegen TEST läuft ohne Fehler,
 | 7 | US-AD-12 Eigenschaftsarten | T21 | Art.-9-Hinweis; Datentyp gesperrt, solange Eigenschaften existieren |
 | 8 | US-AD-13 Eigenschaften | T19 | nur Arten, deren „sichtbar in“ AD enthält; „beendet“; Historie aufklappbar |
 | 9 | US-AD-11 Zuweisen/Entziehen | T18 | nur nicht zugewiesene Vorlagen anbieten; RPC |
-| 10 | US-AD-08 Einladen | T9, T17 | contracts/edge-functions.md; Login-Adresse nur bei „kein Zugang“/„eingeladen“ bearbeitbar (R20) |
-| 11 | US-AD-03 Einladung annehmen | T13 | token_hash-Flow (research.md R-04); Status über das Passwort (T5) |
+| 10 | US-AD-08 Einladen | T9, T10, T17 | contracts/edge-functions.md; T9 mit Aufräumen und Deno-Test (AK5); Login-Adresse: bei „kein Zugang“ direkt, bei „eingeladen“ über `change_email` (T10), sonst gesperrt (R20, AK7) |
+| 11 | US-AD-03 Einladung annehmen | T13 | token_hash-Flow (research.md R-04); Status über das Passwort (T5); alter Link nach Adressänderung ungültig (AK7) |
 | 12 | US-AD-04 Passwort vergessen | T13 | immer dieselbe Bestätigung |
 | 13 | US-AD-09 Sperren/Entsperren | T10, T17 | Bestätigungsdialog mit dem Hinweis auf eine Stunde |
 | 14 | US-AD-14 Protokoll | T22 | 50 Einträge je Seite, neueste zuerst |
 | 15 | US-AD-15 Notfall-Admin | T15 | Hinweis in /ad, „Zur Kenntnis genommen“ |
 | 16 | US-AD-16 Testzugänge | T23, T25 | Seed schon mit #1; hier fachliche Abnahme |
-| – | Abnahme | T25 | quickstart.md C; alle `[PRÜFEN T25]` |
+| – | Abnahme | T25 | quickstart.md C1 mit eigenen Adressen des Product Owners, C2 Aufräumen; alle `[PRÜFEN T25]` |
 
 ## Offene Punkte
 
@@ -145,7 +145,7 @@ Abnahme: Die Action ist grün, `db push --linked` gegen TEST läuft ohne Fehler,
 
 ## Abweichungen und Widersprüche
 
-Die Punkte W1–W14, A1–A5, P1 und O2–O4 aus der ersten Fassung dieses Plans sind mit spec.md v0.3 entschieden (spec.md Abschnitt 11). Offen bleibt nur O1, siehe oben.
+Die Punkte W1–W14, A1–A5, P1 und O2–O4 aus der ersten Fassung dieses Plans sind mit spec.md v0.3 entschieden, die drei Befunde aus dem Abgleich mit v0.3 mit spec.md v0.4 und die Abnahme der Mail-Abläufe mit spec.md v0.5 (jeweils spec.md Abschnitt 11). Offen bleibt nur O1, siehe oben.
 
 ## Complexity Tracking
 

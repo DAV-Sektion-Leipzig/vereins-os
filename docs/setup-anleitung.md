@@ -1,6 +1,6 @@
 # Setup-Anleitung: Vereins OS mit Claude Code
 
-Stand: 19.10.2026 · Version 0.1 · Grundlage: tech-stack.md v0.3, rollen.md v0.6, spec.md AD v0.2
+Stand: 20.10.2026 · Version 0.2 · Grundlage: tech-stack.md v0.5, rollen.md v0.6, spec.md AD v0.5
 Ablage: `docs/setup-anleitung.md`
 
 Legende: **[DU]** = manuell im Browser/Dashboard · **[CC]** = in Claude Code ausführen lassen · [ANNAHME] / [OFFEN] wie im Projekt üblich.
@@ -17,7 +17,7 @@ Reihenfolge ist verbindlich: Konten → Repo → Claude Code → Frontend → Su
 | Node.js LTS + npm | Vite, shadcn, Wrangler, Supabase CLI | `node -v` |
 | uv (Python-Tool-Manager) | Installation Spec Kit | `uv --version` |
 | VS Code + Claude Code | Entwicklung | `claude --version` |
-| Docker Desktop | nur für lokale DB-Tests (pgTAP) | [OFFEN] siehe Frage 2 |
+| Docker Desktop | nicht nötig: kein Docker lokal, pgTAP läuft in der GitHub Action (Frage 2, entschieden) | – |
 
 ---
 
@@ -164,7 +164,7 @@ Danach in Claude Code `/mcp` → supabase → Authenticate.
 Service-Schlüssel und Projekt-URL stehen Edge Functions automatisch als Umgebungsvariablen zur Verfügung. Weitere Secrets nur per `npx supabase secrets set …` (mit Rückfrage, siehe 2.5).
 
 ### 5.7 Seed in TEST
-**Hinweis Widerspruch:** spec.md AD Abschnitt 9 verlangt, dass `seed.sql` das Testpasswort aus `SEED_TEST_PASSWORD` liest. Reines SQL kann keine Umgebungsvariablen lesen. [ANNAHME] Lösung: Skript `supabase/seed.sh`, das das Passwort per `psql -v` übergibt und vorher die Project Ref prüft („Seed nur für TEST erlaubt.“). Entscheidung siehe Frage 3.
+Der Seed läuft über `supabase/seed.sh` (Daten in `supabase/seed.sql`). Das Skript übergibt das Testpasswort aus `SEED_TEST_PASSWORD` per `psql -v` und prüft vorher die Project Ref; bei vereins-os-prod bricht es mit „Seed in PROD nicht erlaubt.“ ab (spec.md AD Abschnitt 9, Frage 3 entschieden).
 
 ---
 
@@ -220,6 +220,6 @@ Danach: Umsetzung AD in der Reihenfolge aus 02-stories.md, beginnend mit `/speck
 - [ANNAHME] Installationsweg Impeccable per `npx skills add`; vor Ausführung prüfen.
 - [ANNAHME] Spec Kit lässt sich auf `docs/specs/<modul>/` als Quelle einstellen.
 - [OFFEN] Frage 1: Migrationen nach PROD – manuell durch den Product Owner (`supabase link` auf PROD, `db push`, zurück auf TEST) oder per GitHub Action bei Merge auf `main`?
-- [OFFEN] Frage 2: Docker lokal installieren? Ohne Docker laufen Datenbanktests (pgTAP, `supabase test db`, Task T7) nicht lokal [ANNAHME]; Alternative: Tests in einer GitHub Action.
-- [OFFEN] Frage 3: Seed mit Passwort aus Umgebungsvariable – Skript `seed.sh` statt reinem `seed.sql`? Dann spec.md AD Abschnitt 9 und T23 anpassen.
+- Frage 2 (entschieden): kein Docker lokal. Die Datenbanktests (pgTAP, `supabase test db`, Task T7) laufen in einer GitHub Action mit lokalem Supabase-Stack und Seed; die fachliche Abnahme läuft in TEST.
+- Frage 3 (entschieden): Seed über `supabase/seed.sh` mit Passwort aus `SEED_TEST_PASSWORD`; Abbruch mit „Seed in PROD nicht erlaubt.“ (spec.md AD Abschnitt 9, T23).
 - [OFFEN] Trennung PROD-/TEST-Werte bei Cloudflare-Vorschau-Builds (6.2).

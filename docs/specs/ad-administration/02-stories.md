@@ -1,7 +1,7 @@
 # User Stories: Administration (AD)
 
-Stand: 19.10.2026 · Version 0.3 · Status: Ready · Product Owner: Toni Werner
-Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.5 (Regeln R1–R20), glossar.md v0.4, rollen.md v0.6, spec.md v0.3
+Stand: 20.10.2026 · Version 0.5 · Status: Ready · Product Owner: Toni Werner
+Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.7 (Regeln R1–R20), glossar.md v0.4, rollen.md v0.6, spec.md v0.5
 
 Oberflächentexte in der Ansprache „du“.
 
@@ -65,6 +65,7 @@ Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 �
 - AK1: Gegeben ein Zugang im Status „eingeladen“, wenn ich den Link öffne und ein Passwort mit mindestens 8 Zeichen zweimal gleich eingebe, dann ist der Zugang „aktiv“ und ich lande auf der Startseite.
 - AK2: Gegeben ein Passwort mit weniger als 8 Zeichen, wenn ich speichere, dann erscheint „Das Passwort muss mindestens 8 Zeichen lang sein.“; gegeben zwei verschiedene Eingaben, dann erscheint „Die Passwörter stimmen nicht überein.“ (Fehlerfall).
 - AK6: Gegeben ich öffne den Link, setze aber kein Passwort, wenn ich die Seite verlasse, dann bleibt der Zugang „eingeladen“.
+- AK7: Gegeben der Admin hat die Login-Adresse nach dem Versand geändert, wenn ich den alten Link öffne, dann erscheint die Meldung aus AK3 (Fehlerfall, R20).
 - AK3: Gegeben ein abgelaufener oder bereits benutzter Link, wenn ich ihn öffne, dann erscheint „Der Link ist abgelaufen oder ungültig. Bitte wende dich an den Admin.“ (Fehlerfall).
 - AK4: Gegeben der Zugang wurde nach dem Versand gesperrt, wenn ich den Link öffne, dann kann ich kein Passwort setzen und erhalte dieselbe Meldung wie in AK3 (Rechte-Fall).
 - AK5: Die Einladungs-Mail enthält nur Empfängeradresse, einen kurzen Hinweistext und den Link, keine weiteren Personendaten.
@@ -132,9 +133,9 @@ Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 �
 - AK2: Gegeben eine Person ohne zugewiesene Vorlage, wenn ich einladen will, dann ist „Einladen“ nicht möglich und es erscheint „Bitte zuerst mindestens eine Rechtevorlage zuweisen.“ (Fehlerfall, R17).
 - AK3: Gegeben eine Login-Adresse, die nicht auf @dav-leipzig.de endet, wenn ich speichere, dann erscheint „Zugang nur mit Adresse @dav-leipzig.de möglich.“; ist sie bereits vergeben, erscheint „Diese Login-Adresse ist bereits vergeben.“ (Fehlerfall, R1, R2).
 - AK4: Gegeben der Status ist „eingeladen“, wenn ich „Erneut einladen“ klicke, dann wird eine neue Einladung verschickt, „zuletzt eingeladen am“ aktualisiert und protokolliert.
-- AK5: Gegeben der Mailversand schlägt fehl, wenn ich einlade, dann erscheint „Die Einladung konnte nicht verschickt werden. Bitte später erneut versuchen.“ und der Status bleibt unverändert (Fehlerfall).
+- AK5: Gegeben der Mailversand schlägt fehl, wenn ich einlade, dann erscheint „Die Einladung konnte nicht verschickt werden. Bitte später erneut versuchen.“, der Status bleibt unverändert und in Supabase Auth bleibt kein neu angelegter Eintrag zurück (Fehlerfall).
 - AK6: Gegeben ein Aufrufer ohne AD-Rechte, wenn er die Edge Function „Nutzer einladen“ aufruft, dann lehnt sie ohne Einladung ab (Rechte-Fall).
-- AK7: Gegeben der Status ist „eingeladen“ und ich korrigiere die Login-Adresse, wenn ich „Erneut einladen“ klicke, dann geht die Einladung an die neue Adresse; gegeben der Status ist „aktiv“ oder „gesperrt“, wenn ich die Login-Adresse ändern will, dann erscheint „Die Login-Adresse kann nur vor der Aktivierung des Zugangs geändert werden.“ (R20, Fehlerfall).
+- AK7: Gegeben der Status ist „eingeladen“, wenn ich die Login-Adresse ändere und speichere, dann ist der alte Einladungslink ungültig, der Status ist „kein Zugang“, es erscheint „Die Login-Adresse wurde geändert. Bitte die Einladung erneut senden.“, ein Protokolleintrag „Login-Adresse geändert“ entsteht, und „Einladen“ schickt die Einladung an die neue Adresse; gegeben der Status ist „aktiv“ oder „gesperrt“, wenn ich die Login-Adresse ändern will, dann erscheint „Die Login-Adresse kann nur vor der Aktivierung des Zugangs geändert werden.“ (R20, Fehlerfall).
 **Nicht Teil dieser Story:** automatische Einladung beim Anlegen oder Import; Annahme der Einladung (US-AD-03).
 
 ### US-AD-09: Zugang sperren und entsperren
@@ -207,6 +208,8 @@ Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 �
 **Als** Admin
 **möchte ich** das Protokoll der Einladungen, Rechtevergaben, Sperren und Anmeldungen des Notfall-Admins einsehen,
 **damit** ich nachvollziehen kann, wer wem wann welche Rechte gegeben hat.
+
+Aktionen im Protokoll: eingeladen, Login-Adresse geändert, Vorlage zugewiesen, Vorlage entzogen, gesperrt, entsperrt, Anmeldung Notfall-Admin.
 **Priorität:** Should · **Regeln:** R13, R16 · **Abhängig von:** US-AD-08
 **Akzeptanzkriterien**
 - AK1: Gegeben es gibt Protokolleinträge, wenn ich das Protokoll öffne, dann sehe ich Zeitpunkt, ausgeführt von, betroffene Person, Aktion und Details, neueste zuerst.

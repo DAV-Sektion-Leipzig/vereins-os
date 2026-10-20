@@ -1,14 +1,14 @@
 # Research: Administration (AD)
 
-Stand: 19.10.2026 · Phase 0 zu [plan.md](plan.md) · Grundlage: [spec.md](spec.md) v0.3
+Stand: 20.10.2026 · Phase 0 zu [plan.md](plan.md) · Grundlage: [spec.md](spec.md) v0.5
 
-Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spec.md v0.3 Abschnitt 11. Annahmen, die bei der Abnahme in TEST zu prüfen sind, tragen den Vermerk `[PRÜFEN T25]`.
+Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spec.md v0.5 Abschnitt 11. Annahmen, die bei der Abnahme in TEST zu prüfen sind, tragen den Vermerk `[PRÜFEN T25]`.
 
 ---
 
 ## R-01 Reihenfolge der Migrationen und Policies
 
-- **Entscheidung (spec.md Abschnitt 2/3, v0.3):** Jede Migration bringt für ihre Tabellen `enable row level security`, Policies, `revoke … from anon, public` und `grant … to authenticated` mit. `ad_user_level`/`ad_has_level` entstehen in T1 als `plpgsql`-Funktionen; `plpgsql` löst Tabellennamen erst zur Laufzeit auf, deshalb dürfen `ad_accesses` und `ad_template_assignments` später (T3) folgen.
+- **Entscheidung (spec.md Abschnitt 2/3, seit v0.3):** Jede Migration bringt für ihre Tabellen `enable row level security`, Policies, `revoke … from anon, public` und `grant … to authenticated` mit. `ad_user_level`/`ad_has_level` entstehen in T1 als `plpgsql`-Funktionen; `plpgsql` löst Tabellennamen erst zur Laufzeit auf, deshalb dürfen `ad_accesses` und `ad_template_assignments` später (T3) folgen.
 - **Begründung:** Kreisabhängigkeit – `ad_accesses` verweist per FK auf `ea_persons` (T2), die Policies auf `ea_*` brauchen `ad_has_level`.
 - T6 enthält die View `ad_v_person_overview`, die Funktion `ad_me()` und den Abgleich aller Policies mit spec.md Abschnitt 3.
 
@@ -16,7 +16,8 @@ Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spe
 
 - Supabase vergibt in `public` standardmäßig Rechte an `anon`, `authenticated` und `service_role`; PostgreSQL vergibt `EXECUTE` auf Funktionen an `PUBLIC`. Deshalb widerruft jede Migration ausdrücklich (`revoke all … from anon, public`, `revoke execute … from anon, public`) und vergibt dann gezielt.
 - Spaltenrechte auf `ad_accesses`: `insert (person_id, login_email)`, `update (login_email)`. Status, `auth_user_id`, `locked_*`, `last_invited_at` und `is_emergency` lassen sich nur über interne Funktionen und Trigger ändern.
-- Interne Statusfunktionen `ad_apply_invite`, `ad_apply_lock`, `ad_apply_unlock`: `grant execute … to service_role`, kein Grant an `authenticated` (spec.md v0.3).
+- Interne Statusfunktionen `ad_apply_invite`, `ad_revert_invite`, `ad_apply_lock`, `ad_apply_unlock` und `ad_apply_email_change`: `grant execute … to service_role`, kein Grant an `authenticated` (spec.md v0.5 Abschnitt 3).
+- `ad_audit_log.actor_user_id` hat keinen FK auf `auth.users`. Grund: `ad-invite` (Aufräumen) und `change_email` löschen Auth-Einträge. Hat der Notfall-Admin einen Link eingelöst, ohne ein Passwort zu setzen, gibt es bereits einen Eintrag `emergency_login` mit seiner ID; ein FK würde das Löschen verhindern. Die übrigen `*_by`-Spalten verweisen auf `auth.users` mit `on delete set null`; noch nicht aktivierte Nutzer haben dort keine Einträge.
 - Trigger-Funktionen: kein Grant.
 
 ## R-03 Fehlercodes
@@ -39,7 +40,7 @@ Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spe
 
 ## R-06 Trigger auf auth.users
 
-Drei `security definer`-Trigger-Funktionen im Schema `public`, `set search_path = ''`, ohne Grant (spec.md v0.3 Abschnitt 2):
+Drei `security definer`-Trigger-Funktionen im Schema `public`, `set search_path = ''`, ohne Grant (spec.md v0.5 Abschnitt 2). Dazu kommen in T5 die Tabelle `ad_test_login_domains`, die Funktion `ad_login_email_allowed` und der Trigger `ad_accesses_guard` für R1 und R20 (R-16, data-model.md):
 
 | Trigger | Bedingung | Wirkung |
 |---|---|---|
@@ -58,18 +59,18 @@ Drei `security definer`-Trigger-Funktionen im Schema `public`, `set search_path 
   2. Fachliche Prüfungen.
   3. Auth-Admin-API mit `SUPABASE_SERVICE_ROLE_KEY`, den das Edge-Runtime automatisch bereitstellt (kein Secret im Repo).
   4. Erst nach Erfolg `ad_apply_*(…, p_actor)` aufrufen: Status, Zeitstempel und Protokoll in einer Transaktion.
-- **ad-invite und R20:**
-  - Gibt es einen Auth-Nutzer und weicht seine E-Mail von `login_email` ab, wird sie vorher mit `auth.admin.updateUserById(id, { email: login_email, email_confirm: true })` angepasst.
-  - Danach `auth.admin.inviteUserByEmail(login_email, { redirectTo: SITE_URL + '/passwort-setzen' })`.
-  - `[PRÜFEN T25]` Eine Änderung der E-Mail über die Admin-API löst trotz `double_confirm_changes = true` keine Bestätigungsmails aus.
+- **ad-invite:**
+  - `auth.admin.inviteUserByEmail(login_email, { redirectTo: SITE_URL + '/passwort-setzen' })`, für neue und erneute Einladungen.
+  - Aufräumen bei jedem Fehler der Auth-Admin-API (spec.md v0.5 Abschnitt 7): Ein neu angelegter Auth-Eintrag wird mit `auth.admin.deleteUser` gelöscht, danach stellt `ad_revert_invite` den Ausgangsstand her (Status, `auth_user_id`, `last_invited_at`). Der Insert-Trigger hat den Status unter Umständen schon auf `invited` gesetzt; die Rücksetzung korrigiert das.
+  - Der Auth-Admin-Client wird der Handler-Funktion übergeben. So kann ein Deno-Test (`supabase/functions/ad-invite/index.test.ts`) einen Fehler simulieren und die Aufräum-Aufrufe prüfen, ohne Supabase-Projekt und ohne Docker.
   - `[PRÜFEN T25]` Eine erneute Einladung an einen unbestätigten Auth-Nutzer wird versendet.
-  - `[PRÜFEN T25]` Bei einem SMTP-Fehler bleibt kein neuer Auth-Nutzer zurück. Bliebe einer zurück, würde der Insert-Trigger den Status auf `invited` setzen; das widerspräche US-AD-08 AK5. Dann `ad_apply_invite` nicht aufrufen und den Status per `ad_apply_*`-Rücksetzung korrigieren (Umsetzung in T9 klären).
+- **ad-access change_email (R20):** nur bei Status `invited`. Prüft R1 und R2, löscht den Auth-Eintrag (der alte Link wird ungültig) und ruft `ad_apply_email_change` auf: neue Adresse, `auth_user_id` null, Status `none`, Protokoll `email_changed` mit „alt → neu“. Schlägt das Löschen fehl, ändert sich nichts. Bei Status `none` ändert die Oberfläche die Adresse direkt; der Trigger `ad_accesses_guard` lässt das zu.
 - **ad-access unlock:** Das Ziel hängt davon ab, ob `auth.users.encrypted_password` gefüllt ist (spec.md Abschnitt 4).
 - **Deployment:** `supabase functions deploy` funktioniert ohne Docker. Der Weg nach PROD ist O1.
 
 ## R-08 pg_cron
 
-`cron.schedule('ad_audit_log_retention', '15 1 * * *', …)` – 01:15 UTC (spec.md v0.3).
+`cron.schedule('ad_audit_log_retention', '15 1 * * *', …)` – 01:15 UTC (spec.md v0.5).
 
 ## R-09 Dublettenprüfung
 
@@ -101,7 +102,9 @@ Drei `security definer`-Trigger-Funktionen im Schema `public`, `set search_path 
   2. `supabase start` (Docker steht im Runner zur Verfügung), der Seed ist dabei abgeschaltet.
   3. `supabase/seed.sh` gegen den lokalen Stack mit `SEED_TEST_PASSWORD` aus einem GitHub-Secret.
   4. `supabase test db`.
-- Tests liegen unter `supabase/tests/database/*.test.sql`. Jede Datei läuft in `begin; … rollback;`. Rollenwechsel mit `set local role authenticated` und `set local request.jwt.claims` auf die Seed-Testzugänge (Constitution 1.0.2, Arbeitsablauf Nr. 4).
+- Zusätzlicher Schritt: `deno test supabase/functions` (Deno-Tests der Edge Functions mit simulierten Auth-Fehlern; ohne Supabase-Projekt).
+- Tests liegen unter `supabase/tests/database/*.test.sql`. Jede Datei läuft in `begin; … rollback;`. Rollenwechsel mit `set local role authenticated` und `set local request.jwt.claims` auf die Seed-Testzugänge (Constitution 1.1.0, Arbeitsablauf Nr. 4).
+- R1 wird mit der Testdomain `example.test` geprüft: ohne Eintrag in `ad_test_login_domains` abgelehnt, mit Eintrag (nur innerhalb der Test-Transaktion, danach `rollback`) erlaubt. Außerdem wird geprüft, dass `authenticated` die Tabelle nicht lesen kann (spec.md T7).
 - Die Action greift nie auf TEST oder PROD zu. Sie braucht weder einen Access-Token noch ein DB-Passwort eines Projekts.
 - Lokal gibt es kein Docker, deshalb laufen die Tests nur in CI.
 
@@ -127,6 +130,14 @@ Drei `security definer`-Trigger-Funktionen im Schema `public`, `set search_path 
 - Datum: `Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin' })`. Tabellen werden unter 640 px zu Karten.
 - Frontend-Unit-Tests fordert spec.md nicht; die Abnahme läuft in TEST (T25).
 
+## R-16 R1 per Trigger und Testdomains (spec.md v0.5)
+
+- `ad_login_email_allowed(p_email citext)`: `lower(split_part(p_email, '@', 2)) = 'dav-leipzig.de'` oder die Domain steht in `ad_test_login_domains`. Die Funktion ist security definer, weil `authenticated` die Tabelle nicht lesen darf.
+- Die Funktion wird an drei Stellen genutzt: im Trigger `ad_accesses_guard` (Insert und Update), in `ad-invite` vor dem Einladen und in `ad-access` bei `change_email`. Die Edge Functions rufen sie mit dem Service-Client auf; deshalb `grant execute` nur an `service_role`, und die Liste der Testdomains bleibt für Nutzer unsichtbar.
+- Die Meldung bleibt bei jeder Domain dieselbe (R1).
+- T24 prüft zu Beginn `exists (select 1 from ad_test_login_domains)` und bricht dann ab (spec.md T24). Damit kann eine freigegebene Testdomain nicht unbemerkt in PROD bleiben.
+- Abnahme und Aufräumen: quickstart.md C.
+
 ## R-15 Branches
 
-Der Plan entsteht auf `us-ad-01-ersteinrichtung`. Die Datenbank-Grundlage (T1–T8) inklusive der DB-Teile von US-AD-10 und US-AD-11 gehört zu US-AD-01 (02-stories.md v0.3). Die übrigen Stories bekommen je einen eigenen Branch.
+Der Plan entsteht auf `us-ad-01-ersteinrichtung`. Die Datenbank-Grundlage (T1–T8) inklusive der DB-Teile von US-AD-10 und US-AD-11 gehört zu US-AD-01 (02-stories.md v0.5). Die übrigen Stories bekommen je einen eigenen Branch.

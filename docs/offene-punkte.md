@@ -1,6 +1,6 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 19.10.2026 · Version 0.4
+Stand: 20.10.2026 · Version 0.6
 
 Jeder Abschnitt wird beim Steckbrief des Moduls in „Offene Fragen“ übernommen und dort geklärt. Erledigte Punkte werden hier gestrichen.
 
@@ -89,3 +89,6 @@ Jeder Abschnitt wird beim Steckbrief des Moduls in „Offene Fragen“ übernomm
 | Erinnerung vor Ablauf eines API-Keys (AD) | verschoben zu SC |
 | Schutz vor Aussperren | Notfall-Admin über geschaeftsstelle@dav-leipzig.de; Risiko des gemeinsamen Postfachs akzeptiert |
 | Login-Mails | Supabase Auth mit Gmail als SMTP; Einladung nur auf Knopfdruck |
+| Login-Adresse bei „eingeladen“ ändern (AD) | nimmt die Einladung zurück; alter Link ungültig |
+| Fehlgeschlagene Einladungs-Mail (AD) | ad-invite räumt auf, Status bleibt |
+| Abnahme Mail-Abläufe in TEST (AD) | eigene private Adressen des Product Owners; zusätzliche Domain nur in TEST (ad_test_login_domains); Aufräumen im TEST-Dashboard (20.10.2026) |

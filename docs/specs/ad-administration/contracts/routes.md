@@ -1,6 +1,6 @@
 # Contract: Routen und Routenschutz
 
-Routen, Inhalte und Texte: [spec.md](../spec.md) v0.3 Abschnitt 6. Hier nur Schutz und Datenquelle.
+Routen, Inhalte und Texte: [spec.md](../spec.md) v0.5 Abschnitt 6. Hier nur Schutz und Datenquelle.
 
 | Route | Schutz | Datenquelle | Task |
 |---|---|---|---|

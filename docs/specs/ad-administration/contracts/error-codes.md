@@ -1,14 +1,15 @@
 # Contract: Fehlercodes → Meldungen
 
-Diese Liste ist vollständig und normativ: [spec.md](../spec.md) v0.3 Abschnitt 5 verweist auf sie. Die Meldungstexte stehen wörtlich in spec.md bzw. 02-stories.md. Das Frontend bildet die Codes in `src/lib/errors.ts` auf die Meldungen ab.
+Diese Liste ist vollständig und normativ: [spec.md](../spec.md) v0.5 Abschnitt 5 verweist auf sie. Die Meldungstexte stehen wörtlich in spec.md bzw. 02-stories.md. Das Frontend bildet die Codes in `src/lib/errors.ts` auf die Meldungen ab.
 
 ## Datenbank und Edge Functions
 
 | Code / Constraint | Meldung | Regel |
 |---|---|---|
-| `AD_EMAIL_DOMAIN` / `ad_accesses_login_email_domain` | Zugang nur mit Adresse @dav-leipzig.de möglich. | R1 |
+| `AD_EMAIL_DOMAIN` (Trigger `ad_accesses_guard`, Edge Functions) | Zugang nur mit Adresse @dav-leipzig.de möglich. Gilt auch in TEST bei nicht freigegebener Domain. | R1 |
 | `AD_EMAIL_TAKEN` / `ad_accesses_login_email_key` | Diese Login-Adresse ist bereits vergeben. | R2 |
 | `AD_EMAIL_LOCKED` | Die Login-Adresse kann nur vor der Aktivierung des Zugangs geändert werden. | R20 |
+| `AD_EMAIL_CHANGE_VIA_FUNCTION` (direktes Update bei Status `invited`, nur bei Umgehung der Oberfläche) | Etwas ist schiefgelaufen. Bitte versuche es erneut. | R20 |
 | `AD_EMAIL_MISSING` | Zugang nur mit Adresse @dav-leipzig.de möglich. | R1 |
 | `AD_NAME_REQUIRED` | Bitte Vorname und Nachname angeben. | R4 |
 | `AD_NO_TEMPLATE` | Bitte zuerst mindestens eine Rechtevorlage zuweisen. | R17 |
@@ -26,6 +27,14 @@ Diese Liste ist vollständig und normativ: [spec.md](../spec.md) v0.3 Abschnitt 
 | `AD_PERSON_NOT_FOUND`, `AD_INVALID_STATUS`, `AD_BAD_REQUEST`, `AD_UNEXPECTED`, unbekannt | Etwas ist schiefgelaufen. Bitte versuche es erneut. | – |
 
 `AD_EMAIL_MISSING` übernimmt die R1-Meldung, weil ohne Adresse keine Einladung möglich ist. Die Oberfläche bietet „Einladen“ ohne Login-Adresse gar nicht erst an.
+
+## Hinweise (keine Fehlermeldungen)
+
+Diese Codes melden einen **erfolgreichen** Vorgang. Das Frontend zeigt sie als Hinweis an (z. B. sonner-Toast „info“) und nicht als Fehler. Die Aktion ist ausgeführt.
+
+| Code | Hinweis | Regel |
+|---|---|---|
+| `AD_EMAIL_CHANGED` (Antwort von `ad-access` `change_email`, HTTP 200) | Die Login-Adresse wurde geändert. Bitte die Einladung erneut senden. | R20 |
 
 ## Nur Frontend (Supabase Auth)
 

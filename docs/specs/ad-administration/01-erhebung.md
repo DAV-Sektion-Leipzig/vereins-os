@@ -1,6 +1,6 @@
 # Erhebung: Administration (AD)
 
-Datum: 19.10.2026 · Version 0.5 · Status: abgestimmt · Beteiligte: Toni Werner (Product Owner, Admin), Claude (Requirements Engineering)
+Datum: 20.10.2026 · Version 0.7 · Status: abgestimmt · Beteiligte: Toni Werner (Product Owner, Admin), Claude (Requirements Engineering)
 
 Grundlage: 00-steckbrief.md v0.9, glossar.md v0.4, rollen.md v0.6, tech-stack.md.
 
@@ -36,6 +36,7 @@ Grundlage: 00-steckbrief.md v0.9, glossar.md v0.4, rollen.md v0.6, tech-stack.md
 
 ### B3 Einladung erneut senden
 Bei Status „eingeladen“ (z. B. Link abgelaufen): Admin klickt „Erneut einladen“.
+Ist die Login-Adresse falsch, ändert der Admin sie. Die Einladung wird damit zurückgenommen (alter Link ungültig, Status „kein Zugang“); danach lädt der Admin an die neue Adresse ein (R20).
 
 ### B4 Passwort vergessen
 Nutzer klickt auf der Login-Seite „Passwort vergessen“, gibt seine Login-Adresse ein und setzt das Passwort über den Link selbst. Kein Eingriff des Admins. Die Seite meldet nicht, ob die Adresse existiert (R18).
@@ -73,6 +74,7 @@ Admin öffnet in AD das Protokoll und sieht die Einträge, neueste zuerst.
 | kein Zugang | eingeladen | Admin | Login-Adresse gültig (R1, R2), mind. eine Vorlage zugewiesen (R17) |
 | kein Zugang | eingeladen | System | Einladung über das Supabase-Dashboard (Ersteinrichtung) |
 | eingeladen | eingeladen | Admin | erneut einladen |
+| eingeladen | kein Zugang | Admin | Login-Adresse geändert; alter Link ungültig (R20) |
 | eingeladen | aktiv | Nutzer | Passwort über Einladungslink gesetzt |
 | eingeladen | gesperrt | Admin | Einladung zurückziehen |
 | aktiv | gesperrt | Admin | – (R10) |
@@ -143,12 +145,12 @@ Alle weiteren Angaben (Kontaktadresse, Hauptamt, Funktion …) sind Eigenschafte
 | Zeitpunkt | Zeitstempel | ja | 19.10.2026 14:00 | System |
 | ausgeführt von | Nutzer | ja | Toni Werner | System |
 | betroffene Person | Verweis | ja | Denise Muster | System |
-| Aktion | eingeladen / Vorlage zugewiesen / Vorlage entzogen / gesperrt / entsperrt / Anmeldung Notfall-Admin | ja | Vorlage zugewiesen | System |
+| Aktion | eingeladen / Login-Adresse geändert / Vorlage zugewiesen / Vorlage entzogen / gesperrt / entsperrt / Anmeldung Notfall-Admin | ja | Vorlage zugewiesen | System |
 | Details | Text | nein | Geschäftsstelle | System |
 
 ## D. Regeln
 
-- R1: Login-Adresse muss auf @dav-leipzig.de enden, sonst Fehlermeldung „Zugang nur mit Adresse @dav-leipzig.de möglich.“
+- R1: Login-Adresse muss auf @dav-leipzig.de enden, sonst Fehlermeldung „Zugang nur mit Adresse @dav-leipzig.de möglich.“ Nur in TEST kann der Product Owner für die Abnahme zusätzliche Domains freigeben (eigene private Adressen).
 - R2: Login-Adresse ist eindeutig über alle Zugänge, sonst Fehlermeldung „Diese Login-Adresse ist bereits vergeben.“
 - R3: Beim manuellen Anlegen einer Person zeigt das System eine Dublettenwarnung, wenn die eingegebene Login-Adresse bereits als Login-Adresse vorkommt (Kontaktadressen prüft EA beim Import) oder der Nachname gleich und der Vorname ähnlich ist (z. B. Toni/Anton, Tippfehler). Option „trotzdem anlegen“. Die genaue Schwelle legt die Umsetzung fest; Abnahme in TEST mit Beispielen.
 - R4: Vorname und Nachname sind Pflicht.
@@ -167,7 +169,7 @@ Alle weiteren Angaben (Kontaktadresse, Hauptamt, Funktion …) sind Eigenschafte
 - R17: Eine Einladung ist nur möglich, wenn der Person mindestens eine Rechtevorlage zugewiesen ist.
 - R18: Login und „Passwort vergessen“ verraten nicht, ob eine Login-Adresse existiert oder gesperrt ist.
 - R19: Passwörter haben mindestens 8 Zeichen; keine weiteren Zeichenregeln. Beide Eingaben müssen übereinstimmen.
-- R20: Die Login-Adresse ist nur bis zur Aktivierung des Zugangs änderbar (Status „kein Zugang“ oder „eingeladen“); „Erneut einladen“ übernimmt eine geänderte Adresse.
+- R20: Die Login-Adresse ist nur bis zur Aktivierung des Zugangs änderbar (Status „kein Zugang“ oder „eingeladen“). Eine Änderung bei „eingeladen“ nimmt die Einladung zurück: alter Link ungültig, Status „kein Zugang“, danach neu einladen.
 
 ## E. Schnittstellen
 
