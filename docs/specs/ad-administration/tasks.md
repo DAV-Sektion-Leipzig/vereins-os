@@ -43,9 +43,9 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 ### Infrastruktur für US-AD-01
 
-- [ ] T001 [US-AD-01] (spec T7 Teil, T23 Teil) Leere Verzeichnisse mit `.gitkeep` anlegen: `supabase/tests/database/`, `supabase/tests/bootstrap/`, `supabase/setup/`, `supabase/templates/`, `.github/workflows/`
-- [ ] T002 [US-AD-01] (spec T23 Teil) `supabase/config.toml`: `[db.seed] enabled = false` setzen (sonst führen `supabase start`/`db reset` die Datei `seed.sql` ohne psql-Variable aus). In `.env.example` die Zeile `SEED_DB_URL=` ergänzen (leer, mit Kommentar „Verbindung zu TEST; nie PROD“)
-- [ ] T003 [US-AD-01] (spec T7 Teil) Workflow `.github/workflows/db-tests.yml` anlegen:
+- [X] T001 [US-AD-01] (spec T7 Teil, T23 Teil) Leere Verzeichnisse mit `.gitkeep` anlegen: `supabase/tests/database/`, `supabase/tests/bootstrap/`, `supabase/setup/`, `supabase/templates/`, `.github/workflows/`
+- [X] T002 [US-AD-01] (spec T23 Teil) `supabase/config.toml`: `[db.seed] enabled = false` setzen (sonst führen `supabase start`/`db reset` die Datei `seed.sql` ohne psql-Variable aus). In `.env.example` die Zeile `SEED_DB_URL=` ergänzen (leer, mit Kommentar „Verbindung zu TEST; nie PROD“)
+- [X] T003 [US-AD-01] (spec T7 Teil) Workflow `.github/workflows/db-tests.yml` anlegen:
   - Auslöser `pull_request`. Supabase CLI über `supabase/setup-cli`, Deno über `denoland/setup-deno`.
   - `supabase start`
   - Block A (Einrichtungsskript): `supabase db reset` → `psql "$DB_URL" -v ON_ERROR_STOP=1 -v admin_first=Erika -v admin_last=Beispiel -v admin_email=erika.beispiel@dav-leipzig.de -f supabase/setup/prod-bootstrap.sql` zweimal hintereinander → `supabase test db supabase/tests/bootstrap`
@@ -55,13 +55,13 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 ### Tests für US-AD-01 (zuerst schreiben, müssen fehlschlagen) ⚠️
 
-- [ ] T004 [P] [US-AD-01] (spec T7 Teil) `supabase/tests/database/010_foundation.test.sql` (pgTAP, `begin; … rollback;`). Prüft:
+- [X] T004 [P] [US-AD-01] (spec T7 Teil) `supabase/tests/database/010_foundation.test.sql` (pgTAP, `begin; … rollback;`). Prüft:
   - Erweiterungen `citext`, `pg_trgm`, `pg_cron` sind vorhanden.
   - Enum-Werte exakt: `ad_level` = `none`,`read`,`edit`,`manage` in dieser Reihenfolge; `ad_access_status` = `none`,`invited`,`active`,`locked`; `ea_person_kind` = `human`,`function`; `ad_audit_action` = `invited`,`email_changed`,`template_assigned`,`template_revoked`,`locked`,`unlocked`,`emergency_login`.
   - `ad_modules` hat 9 Zeilen; nur `AD` hat `is_available = true`.
   - Jede Tabelle in `public` hat `relrowsecurity = true`.
   - `anon` hat auf keine Tabelle, View oder Funktion in `public` ein Recht.
-- [ ] T005 [P] [US-AD-01] (spec T7 Teil) `supabase/tests/database/020_persons_rights.test.sql`. Rollenwechsel über `set local role authenticated` und `set local request.jwt.claims` auf die Seed-Testzugänge (feste UUIDs aus T015). Prüft:
+- [X] T005 [P] [US-AD-01] (spec T7 Teil) `supabase/tests/database/020_persons_rights.test.sql`. Rollenwechsel über `set local role authenticated` und `set local request.jwt.claims` auf die Seed-Testzugänge (feste UUIDs aus T015). Prüft:
   - Startvorlagen-Matrix nach spec.md Abschnitt 3.
   - `ad_user_level`: Geschäftsstelle + Vorstand ergibt je Modul die höchste Stufe (R6); `none` ohne Zugang mit Status `active` (R5); eine entzogene oder abgelaufene Zuweisung wirkt nicht.
   - Ein Nutzer ohne AD-Rechte kann `ad_templates`/`ad_template_rights` von „Admin“ nicht ändern (US-AD-01 AK4).
@@ -71,7 +71,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
   - `ea_persons`: Lesen mit AD ≥ read alle, mit EA ≥ read nur `kind = 'human'`; Anlegen nur mit AD ≥ edit oder EA ≥ edit (`function` nur AD); leerer Name → `AD_NAME_REQUIRED`.
   - `ea_v_persons` enthält keine Funktionsperson (R15).
   - `ad_audit_log` für `authenticated` ohne insert/update/delete.
-- [ ] T006 [P] [US-AD-01] (spec T7 Teil) `supabase/tests/database/030_auth_triggers.test.sql`. Prüft:
+- [X] T006 [P] [US-AD-01] (spec T7 Teil) `supabase/tests/database/030_auth_triggers.test.sql`. Prüft:
   - Insert in `auth.users` mit passender `login_email` setzt `auth_user_id` und Status `none` → `invited`.
   - Update von `encrypted_password` von leer auf einen Hash setzt `invited` → `active`; ohne Passwort bleibt der Status `invited`.
   - Update von `last_sign_in_at` bei `is_emergency` schreibt `emergency_login` mit `actor_user_id = id` des Nutzers.
@@ -80,8 +80,8 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
   - R20: `login_email` ändern ist bei `none` erlaubt, bei `invited` (direkt) → `AD_EMAIL_CHANGE_VIA_FUNCTION`, bei `active`/`locked` → `AD_EMAIL_LOCKED`.
   - R2: doppelte Login-Adresse → `ad_accesses_login_email_key`.
   - Rollenfall: `authenticated` mit AD ≥ edit (test.admin) legt einen Zugang mit gültiger `@dav-leipzig.de`-Adresse an und ändert ihn bei Status `none`, ohne Rechtefehler (der Trigger liest `ad_test_login_domains` als security definer).
-- [ ] T007 [P] [US-AD-01] (spec T6 Teil) `supabase/tests/database/050_policies.test.sql`: `policies_are` bzw. `table_privs_are` je Tabelle aus T009–T013, abgeglichen mit spec.md Abschnitt 3 (Lesen, Anlegen, Ändern, Löschen je Tabelle). `ad_test_login_domains` hat keine Policy und keinen Grant.
-- [ ] T008 [P] [US-AD-01] (spec T7 Teil, T24 Teil) `supabase/tests/bootstrap/010_prod_bootstrap.test.sql` (läuft nach dem doppelten Bootstrap in Block A von T003). Prüft:
+- [X] T007 [P] [US-AD-01] (spec T6 Teil) `supabase/tests/database/050_policies.test.sql`: `policies_are` bzw. `table_privs_are` je Tabelle aus T009–T013, abgeglichen mit spec.md Abschnitt 3 (Lesen, Anlegen, Ändern, Löschen je Tabelle). `ad_test_login_domains` hat keine Policy und keinen Grant.
+- [X] T008 [P] [US-AD-01] (spec T7 Teil, T24 Teil) `supabase/tests/bootstrap/010_prod_bootstrap.test.sql` (läuft nach dem doppelten Bootstrap in Block A von T003). Prüft:
   - genau 1 Person „Erika Beispiel“ mit Zugang `erika.beispiel@dav-leipzig.de`, Status `none`, wirksamen Vorlagen Admin und Vorstand;
   - genau 1 Funktionsperson „Geschäftsstelle“ / „Notfall-Admin“ (`kind = 'function'`) mit Zugang `geschaeftsstelle@dav-leipzig.de`, `is_emergency = true`, Vorlage Admin;
   - Vorlagen nicht doppelt (US-AD-01 AK2, AK3);
@@ -89,18 +89,18 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 ### Umsetzung für US-AD-01
 
-- [ ] T009 [US-AD-01] (spec T1) Migration `supabase/migrations/20261020000100_ad_foundation.sql`:
+- [X] T009 [US-AD-01] (spec T1) Migration `supabase/migrations/20261020000100_ad_foundation.sql`:
   - Erweiterungen `citext`, `pg_trgm`, `pg_cron`.
   - Enums `ad_level`, `ad_access_status`, `ea_data_type` (`text`,`date`,`boolean`,`choice`), `ea_person_kind`, `ad_audit_action` exakt nach spec.md Abschnitt 2, mit `grant usage … to authenticated`.
   - `ad_modules` (code PK, name, sort_order, is_available default false), Stammdaten AD, SC, EA, GR, FI, OA, PM, GS, AM (nur AD `true`), Policy select für `authenticated`.
   - `ad_user_level(p_module text) returns ad_level` und `ad_has_level(p_module text, p_min ad_level) returns boolean` als plpgsql, security definer, stable: höchste Stufe aller wirksamen Zuweisungen; `none`, wenn kein Zugang mit Status `active` (R5, R6).
-- [ ] T010 [US-AD-01] (spec T2 Teil) Migration `supabase/migrations/20261020000200_ea_persons.sql`:
+- [X] T010 [US-AD-01] (spec T2 Teil) Migration `supabase/migrations/20261020000200_ea_persons.sql`:
   - `ea_persons` (id uuid default gen_random_uuid(), first_name, last_name, kind default `human`, created_at, created_by default auth.uid()).
   - Checks `btrim(first_name) <> ''` und `btrim(last_name) <> ''`; Trigger `ea_persons_normalize` (trimmen, `AD_NAME_REQUIRED`).
   - Indizes `gin (first_name gin_trgm_ops)`, `(lower(last_name))`.
   - Policies nach data-model.md; Grants `select`, `insert/update (first_name, last_name, kind)`.
   - View `ea_v_persons` (`security_invoker = true`, `where kind = 'human'`).
-- [ ] T011 [US-AD-01] (spec T3) Migration `supabase/migrations/20261020000300_ad_rights.sql`:
+- [X] T011 [US-AD-01] (spec T3) Migration `supabase/migrations/20261020000300_ad_rights.sql`:
   - Tabelle `ad_templates`: Unique-Index `lower(name)` mit Namen `ad_templates_name_key`; Audit-Spalten.
   - Tabelle `ad_template_rights`:
     - Checks `object is null` und `scope = 'all'`; Unique `(template_id, module_code, coalesce(object,''))`; Grant nur `update (level)`.
@@ -113,11 +113,11 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
     - Grants `select`, `insert (person_id, login_email)`, `update (login_email)`.
   - Funktionen `ad_my_modules()`, `ad_assign_template(p_person, p_template)`, `ad_revoke_template(p_person, p_template)` (security definer, AD ≥ edit sonst `AD_FORBIDDEN`, Protokoll mit Vorlagenname in `details`).
   - Policies nach spec.md Abschnitt 3.
-- [ ] T012 [US-AD-01] (spec T4 Teil) Migration `supabase/migrations/20261020000400_ad_audit_log.sql`:
+- [X] T012 [US-AD-01] (spec T4 Teil) Migration `supabase/migrations/20261020000400_ad_audit_log.sql`:
   - `ad_audit_log` (id bigint identity, occurred_at default now(), actor_user_id default auth.uid() **ohne FK**, subject_person_id FK ea_persons, action ad_audit_action, details).
   - Indizes `(occurred_at desc)`, `(action, occurred_at desc)`.
   - Policy select AD ≥ read; Grant nur `select`.
-- [ ] T013 [US-AD-01] (spec T5) Migration `supabase/migrations/20261020000500_ad_auth_triggers.sql`:
+- [X] T013 [US-AD-01] (spec T5) Migration `supabase/migrations/20261020000500_ad_auth_triggers.sql`:
   - Tabelle `ad_test_login_domains` (domain citext PK ohne „@“, created_at): RLS an, `revoke all … from anon, authenticated, public`, keine Policy, kein Grant.
   - Funktion `ad_login_email_allowed(p_email citext) returns boolean` (security definer mit `set search_path = ''`, stable; `@dav-leipzig.de` oder Domain in `ad_test_login_domains`; `grant execute … to service_role`).
   - Trigger `ad_accesses_guard` (before insert or update of login_email):
@@ -125,25 +125,25 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
     - R20: bei `invited` nur mit `current_setting('ad.email_change', true) = 'on'`, sonst `AD_EMAIL_CHANGE_VIA_FUNCTION`; bei `active`/`locked` → `AD_EMAIL_LOCKED`.
   - Drei Trigger auf `auth.users` nach research.md R-06: after insert; after update of encrypted_password; after update of last_sign_in_at mit `emergency_login`.
   - Keine Grants auf Trigger-Funktionen.
-- [ ] T014 [US-AD-01] (spec T23 Teil) Skript `supabase/seed.sh` (ausführbar, Bash, `set -euo pipefail`):
+- [X] T014 [US-AD-01] (spec T23 Teil) Skript `supabase/seed.sh` (ausführbar, Bash, `set -euo pipefail`):
   - Liest `.env.local` nur, wenn die Datei existiert (`set -a; . ./.env.local`), ohne Werte auszugeben.
   - Bricht ab, wenn `SEED_TEST_PASSWORD` oder `SEED_DB_URL` fehlen.
   - Liest die Project Ref aus `SEED_DB_URL` (`db.<ref>.supabase.co` bzw. Benutzer `postgres.<ref>`; lokaler Stack `127.0.0.1`/`localhost` hat keine Ref). Ist es die PROD-Ref (Konstante `PROD_PROJECT_REF` im Skript, der Product Owner trägt den Wert ein): Ausgabe „Seed in PROD nicht erlaubt.“ und Exit 1. Solange die Konstante leer ist, bricht das Skript bei jeder entfernten Verbindung mit derselben Meldung ab (lieber zu streng als PROD).
   - Dann `psql "$SEED_DB_URL" -v ON_ERROR_STOP=1 -v test_password="$SEED_TEST_PASSWORD" -f supabase/seed.sql`.
-- [ ] T015 [US-AD-01] (spec T23 Teil) `supabase/seed.sql` (nur fiktive Daten nach spec.md Abschnitt 9, feste UUIDs, idempotent):
+- [X] T015 [US-AD-01] (spec T23 Teil) `supabase/seed.sql` (nur fiktive Daten nach spec.md Abschnitt 9, feste UUIDs, idempotent):
   - Personen 1–8.
   - `ad_accesses` mit Zielstatus (`active`, `invited`, `locked`, Notfall `is_emergency` mit `test.notfall@dav-leipzig.de`).
   - Zuweisungen nach Tabelle.
   - `auth.users` und `auth.identities` für die Zugänge 1, 2, 3, 6, 7, 8. Passwort `crypt(:'test_password', gen_salt('bf'))` außer bei Eva Eingeladen (leeres Passwort); `banned_until` für Dieter Gesperrt.
   - Protokoll je ein Eintrag `invited`, `template_assigned`, `locked`, `emergency_login`.
   - Reihenfolge nach research.md R-10. Eigenschaften folgen in T049.
-- [ ] T016 [US-AD-01] (spec T11 Teil) Für den **lokalen Stack (CI)** in `supabase/config.toml`: `[auth.rate_limit] email_sent = 30`; `[auth.email.template.invite]` mit deutschem Betreff „Einladung ins Vereins OS“ und `content_path = "./templates/invite.html"`. Datei `supabase/templates/invite.html` anlegen: nur kurzer Hinweistext und Link `{{ .SiteURL }}/passwort-setzen?token_hash={{ .TokenHash }}&type=invite`, keine Personendaten. Diese HTML-Datei überträgt der Product Owner per Checkliste (T018) ins Dashboard von TEST und PROD; nötig für die Dashboard-Einladung (US-AD-01 AK2, AK5). Kein `config push`.
-- [ ] T017 [US-AD-01] (spec T24) Skript `supabase/setup/prod-bootstrap.sql` (psql-Variablen `admin_first`, `admin_last`, `admin_email`):
+- [X] T016 [US-AD-01] (spec T11 Teil) Für den **lokalen Stack (CI)** in `supabase/config.toml`: `[auth.rate_limit] email_sent = 30`; `[auth.email.template.invite]` mit deutschem Betreff „Einladung ins Vereins OS“ und `content_path = "./supabase/templates/invite.html"`. Datei `supabase/templates/invite.html` anlegen: nur kurzer Hinweistext und Link `{{ .SiteURL }}/passwort-setzen?token_hash={{ .TokenHash }}&type=invite`, keine Personendaten. Diese HTML-Datei überträgt der Product Owner per Checkliste (T018) ins Dashboard von TEST und PROD; nötig für die Dashboard-Einladung (US-AD-01 AK2, AK5). Kein `config push`.
+- [X] T017 [US-AD-01] (spec T24) Skript `supabase/setup/prod-bootstrap.sql` (psql-Variablen `admin_first`, `admin_last`, `admin_email`):
   - Bricht ab, wenn eine Variable fehlt oder `exists (select 1 from public.ad_test_login_domains)`.
   - Läuft idempotent in einer Transaktion: Person Admin (`human`) mit Zugang `admin_email`, Status `none`, Zuweisungen Admin und Vorstand. Funktionsperson „Geschäftsstelle“ / „Notfall-Admin“ (`function`) mit Zugang `geschaeftsstelle@dav-leipzig.de`, `is_emergency = true`, Zuweisung Admin. Protokoll `template_assigned` mit `actor_user_id` null.
   - Keine Namen echter Personen im Skript.
   - **Nur erzeugen, nie ausführen** (außer gegen den lokalen Stack in CI).
-- [ ] T018 [US-AD-01] (spec T24) Anleitung `supabase/setup/README.md` für den Product Owner, Schritte nach quickstart.md D:
+- [X] T018 [US-AD-01] (spec T24) Anleitung `supabase/setup/README.md` für den Product Owner, Schritte nach quickstart.md D:
   - Migrationen und Edge Functions nach PROD bringen: Weg [OFFEN] O1. Auth-Einstellungen nach der Checkliste unten.
   - SMTP im PROD-Dashboard eintragen.
   - `prod-bootstrap.sql` mit den Parametern ausführen.
@@ -185,7 +185,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 - [ ] T021 [US-AD-02] (spec T6 Teil) Migration `supabase/migrations/20261020000600_ad_me.sql`: `ad_me() returns table (person_id uuid, first_name text, last_name text, access_status ad_access_status)`, security definer, stable, nur über `ad_accesses.auth_user_id = auth.uid()`; `grant execute … to authenticated`
 - [ ] T022 [US-AD-02] (spec T11 Teil) `supabase/config.toml`:
-  - `[auth.email.template.recovery]` mit Betreff „Passwort zurücksetzen“ und `content_path = "./templates/recovery.html"`; Datei `supabase/templates/recovery.html` mit Link `{{ .SiteURL }}/passwort-setzen?token_hash={{ .TokenHash }}&type=recovery`.
+  - `[auth.email.template.recovery]` mit Betreff „Passwort zurücksetzen“ und `content_path = "./supabase/templates/recovery.html"`; Datei `supabase/templates/recovery.html` mit Link `{{ .SiteURL }}/passwort-setzen?token_hash={{ .TokenHash }}&type=recovery`.
   - Prüfen: `enable_signup = false` und `minimum_password_length = 8`.
   - In `supabase/setup/README.md` einen Abschnitt „SMTP (TEST und PROD)“ ergänzen: Google-Konto der Sektion, App-Passwort nur im Dashboard, Absendername „Vereins OS“.
   - Kein `config push`/`config diff`. `recovery.html` in die Checkliste aus T018 aufnehmen; der Product Owner überträgt sie ins Dashboard von TEST.

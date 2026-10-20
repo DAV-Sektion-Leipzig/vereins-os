@@ -116,7 +116,7 @@ Drei `security definer`-Trigger-Funktionen im Schema `public`, `set search_path 
 ## R-13 Auth-Konfiguration als Code
 
 - `supabase/config.toml`:
-  - `[auth.email.template.invite]` und `[auth.email.template.recovery]` mit `content_path = "./templates/invite.html"` bzw. `recovery.html`, Betreff deutsch.
+  - `[auth.email.template.invite]` und `[auth.email.template.recovery]` mit `content_path = "./supabase/templates/invite.html"` bzw. `recovery.html`, Betreff deutsch.
   - `[auth.rate_limit] email_sent = 30`. Bisher steht dort 2; spec.md Abschnitt 8 nennt 30 je Stunde.
 - `config.toml` gilt **nur für den lokalen Stack (CI)**. Kein `supabase config push` und kein `config diff` gegen TEST oder PROD. Die Auth-Einstellungen (Mailvorlagen aus `supabase/templates/`, `email_sent = 30`, `minimum_password_length = 8`, `enable_signup = false`, Redirect-URLs, SMTP) stellt der Product Owner manuell im Dashboard ein, nach der Checkliste in `supabase/setup/README.md`.
 
