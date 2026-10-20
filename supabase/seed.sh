@@ -12,8 +12,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 # Project Ref von vereins-os-prod (kein Secret; steht auch in der PROD-URL).
-# Solange leer, bricht das Skript bei jeder entfernten Verbindung ab.
-PROD_PROJECT_REF=""
+# Solange leer, bricht das Skript bei jeder entfernten Verbindung ab (Schutz).
+PROD_PROJECT_REF="bihzvargwycqdpdxysvo"
 
 abort_prod() {
   echo "Seed in PROD nicht erlaubt." >&2
