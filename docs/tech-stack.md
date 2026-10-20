@@ -36,7 +36,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 
 - **React + TypeScript + Vite**, als statische Single-Page-App gebaut. [ANNAHME: Vite statt Next.js; die gesamte Serverlogik liegt in Supabase, das Frontend braucht keinen eigenen Server]
 - **UI-Bibliothek:** shadcn/ui mit Tailwind CSS; Komponenten-Setup und Design-Muster als Code im Repo.
-- **Design-Regeln:** Impeccable-Skill mit `design.md` und `product.md`; Ziel: kein generischer „KI-Look“.
+- **Design-Regeln:** Impeccable-Skill mit `design.md` und `PRODUCT.md` (Projektstamm); Ziel: kein generischer „KI-Look“.
 - **Routing:** SPA-Routing mit Rückfall auf `index.html` (von Cloudflare unterstützt).
 - **Mobil nutzbar:** alle Screens ab 375 px Breite. [ANNAHME]
 - **Supabase-Zugriff:** direkt aus dem Frontend mit dem öffentlichen Anon-Key; Schutz ausschließlich über RLS.
@@ -81,7 +81,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 | Spec Kit | Spec- und testgetriebene Umsetzung: constitution, specify, clarify, plan, tasks, implement |
 | Supabase CLI | Schema, Migrationen, Edge Functions, Konfiguration als Code; Agent steuert Backend darüber |
 | shadcn/ui | Komponenten, globales Designmuster |
-| Impeccable | Design-Qualität, `design.md`, `product.md` |
+| Impeccable | Design-Qualität, `design.md`, `PRODUCT.md` |
 | Excalidraw | Diagramme (Datenmodell, Abläufe) als Austausch zwischen Mensch und Agent |
 | Claude Design | Prototypen, Hilfsmittel in der Anforderungserhebung |
 
@@ -105,6 +105,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 ```
 /
 ├── CLAUDE.md                       Arbeitsanweisungen für Claude Code
+├── PRODUCT.md                      Impeccable (Produktkontext)
 ├── .specify/                       Spec Kit (constitution, Vorlagen, Skripte)
 ├── docs/
 │   ├── vision.md
@@ -113,8 +114,8 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 │   ├── glossar.md
 │   ├── tech-stack.md
 │   ├── vorlagen.md
+│   ├── marke.md                    DAV-Corporate-Design (Auszug)
 │   ├── design.md                   Impeccable
-│   ├── product.md                  Impeccable
 │   ├── diagrams/                   Excalidraw-Dateien
 │   └── specs/
 │       └── <modul>/                z. B. ad-administration, ea-ehrenamt
@@ -133,6 +134,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 │   └── seed.sql                    nur fiktive Daten
 ├── .github/workflows/              GitHub Actions (Datenbanktests)
 ├── src/                            Frontend
+│   └── assets/brand/               DAV-Logos (unverändert)
 └── wrangler.jsonc                  Cloudflare-Konfiguration
 ```
 

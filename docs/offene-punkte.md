@@ -55,6 +55,8 @@ Jeder Abschnitt wird beim Steckbrief des Moduls in „Offene Fragen“ übernomm
 ## Übergreifend
 
 - [OFFEN] Zeitpunkt und Umfang des Rollouts sowie Rechte und Reichweiten für weitere Personen mit Amt, Gruppenleitungen und Aktive. (vision.md, rollen.md)
+- [OFFEN] Weitere Logodateien der Sektion: light negativ Weiß (SVG), classic (SVG), brand (Edelweiß quadratisch) für Favicon und App-Symbol. (marke.md)
+- [OFFEN] Themenlogo „DAV …“ für das Vereins OS: gewünscht und mit dem Bundesverband abzustimmen? (marke.md)
 
 ## Merkposten nach MVP
 
@@ -92,3 +94,4 @@ Jeder Abschnitt wird beim Steckbrief des Moduls in „Offene Fragen“ übernomm
 | Login-Adresse bei „eingeladen“ ändern (AD) | nimmt die Einladung zurück; alter Link ungültig |
 | Fehlgeschlagene Einladungs-Mail (AD) | ad-invite räumt auf, Status bleibt |
 | Abnahme Mail-Abläufe in TEST (AD) | eigene private Adressen des Product Owners; zusätzliche Domain nur in TEST (ad_test_login_domains); Aufräumen im TEST-Dashboard (20.10.2026) |
+| Schrift im Vereins OS | Fira Sans (DAV-Vorgabe für den Online-Bereich), selbst gehostet; keine Meta-Webfont-Lizenz nötig (20.10.2026) |
