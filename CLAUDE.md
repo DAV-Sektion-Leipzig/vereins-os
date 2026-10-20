@@ -59,6 +59,8 @@ Antworte immer auf Deutsch.
 /
 ├── CLAUDE.md                       Arbeitsanweisungen für Claude Code
 ├── PRODUCT.md                      Impeccable (Produktkontext)
+├── DESIGN.md                       Impeccable (Designsystem)
+├── .impeccable/                    Impeccable-Einstellungen
 ├── .specify/                       Spec Kit (constitution, Vorlagen, Skripte)
 ├── docs/
 │   ├── vision.md
@@ -68,7 +70,6 @@ Antworte immer auf Deutsch.
 │   ├── tech-stack.md
 │   ├── vorlagen.md
 │   ├── marke.md                    DAV-Corporate-Design (Auszug)
-│   ├── design.md                   Impeccable
 │   ├── diagrams/                   Excalidraw-Dateien
 │   └── specs/
 │       └── <modul>/                z. B. ad-administration, ea-ehrenamt

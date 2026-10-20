@@ -1,6 +1,6 @@
 # Tech-Stack: Vereins OS
 
-Stand: 19.10.2026 · Version 0.5 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
+Stand: 20.10.2026 · Version 0.6 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
 
 ## Überblick
 
@@ -36,7 +36,8 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 
 - **React + TypeScript + Vite**, als statische Single-Page-App gebaut. [ANNAHME: Vite statt Next.js; die gesamte Serverlogik liegt in Supabase, das Frontend braucht keinen eigenen Server]
 - **UI-Bibliothek:** shadcn/ui mit Tailwind CSS; Komponenten-Setup und Design-Muster als Code im Repo.
-- **Design-Regeln:** Impeccable-Skill mit `design.md` und `PRODUCT.md` (Projektstamm); Ziel: kein generischer „KI-Look“.
+- **Design-Regeln:** Impeccable-Skill mit `PRODUCT.md` und `DESIGN.md` im Wurzelverzeichnis (Impeccable-Konvention), Einstellungen in `.impeccable/`; Markenvorgaben des DAV in `docs/marke.md`. Ziel: kein generischer „KI-Look“.
+- **Schrift:** Fira Sans (DAV-Vorgabe für den Online-Bereich), selbst gehostet, nicht von Google- oder Adobe-Servern geladen. Ersetzt die bisherige Geist; Umsetzung im Code folgt nach DESIGN.md.
 - **Routing:** SPA-Routing mit Rückfall auf `index.html` (von Cloudflare unterstützt).
 - **Mobil nutzbar:** alle Screens ab 375 px Breite. [ANNAHME]
 - **Supabase-Zugriff:** direkt aus dem Frontend mit dem öffentlichen Anon-Key; Schutz ausschließlich über RLS.
@@ -81,7 +82,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 | Spec Kit | Spec- und testgetriebene Umsetzung: constitution, specify, clarify, plan, tasks, implement |
 | Supabase CLI | Schema, Migrationen, Edge Functions, Konfiguration als Code; Agent steuert Backend darüber |
 | shadcn/ui | Komponenten, globales Designmuster |
-| Impeccable | Design-Qualität, `design.md`, `PRODUCT.md` |
+| Impeccable | Design-Qualität, `PRODUCT.md`, `DESIGN.md` |
 | Excalidraw | Diagramme (Datenmodell, Abläufe) als Austausch zwischen Mensch und Agent |
 | Claude Design | Prototypen, Hilfsmittel in der Anforderungserhebung |
 
@@ -106,6 +107,8 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 /
 ├── CLAUDE.md                       Arbeitsanweisungen für Claude Code
 ├── PRODUCT.md                      Impeccable (Produktkontext)
+├── DESIGN.md                       Impeccable (Designsystem)
+├── .impeccable/                    Impeccable-Einstellungen
 ├── .specify/                       Spec Kit (constitution, Vorlagen, Skripte)
 ├── docs/
 │   ├── vision.md
@@ -115,7 +118,6 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 │   ├── tech-stack.md
 │   ├── vorlagen.md
 │   ├── marke.md                    DAV-Corporate-Design (Auszug)
-│   ├── design.md                   Impeccable
 │   ├── diagrams/                   Excalidraw-Dateien
 │   └── specs/
 │       └── <modul>/                z. B. ad-administration, ea-ehrenamt

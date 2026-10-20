@@ -1,6 +1,6 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 20.10.2026 · Version 0.6
+Stand: 20.10.2026 · Version 0.8
 
 Jeder Abschnitt wird beim Steckbrief des Moduls in „Offene Fragen“ übernommen und dort geklärt. Erledigte Punkte werden hier gestrichen.
 
@@ -72,6 +72,7 @@ Jeder Abschnitt wird beim Steckbrief des Moduls in „Offene Fragen“ übernomm
 - Supabase MCP erneut prüfen (OAuth mit projektgebundener URL).
 - Sicherheitshinweis in shadcn-CLI (braces) vor Go-live mit `npm audit` prüfen.
 - Vorschau-URLs mit Cloudflare Access schützen.
+- Bundle-Größe (Chunk > 500 kB) vor Go-live prüfen, ggf. Routen bei Bedarf laden (mobil ab 375 px).
 - GitHub: gemeinsames Konto DAVLeipzig in eine Organisation überführen.
 
 ## Erledigt am 19.10.2026
