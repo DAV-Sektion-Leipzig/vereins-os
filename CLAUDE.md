@@ -44,6 +44,7 @@ Antworte immer auf Deutsch.
 
 - **Nie gegen PROD arbeiten.** Lokale Entwicklung und Vorschau-Deployments nutzen ausschließlich Supabase TEST (`vereins-os-test`).
 - Keine Migrationen, Seeds, Abfragen oder CLI-Befehle gegen `vereins-os-prod`. PROD wird nur über das Deployment von `main` angesprochen.
+- **Kein `supabase config push` und kein `supabase config diff`**, weder gegen TEST noch gegen PROD. `supabase/config.toml` gilt nur für den lokalen Stack (CI); Auth-Einstellungen in TEST und PROD stellt der Product Owner manuell im Dashboard ein (Checkliste in `supabase/setup/README.md`).
 
 ## Git-Workflow
 

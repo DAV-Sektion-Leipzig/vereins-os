@@ -111,15 +111,14 @@ Drei `security definer`-Trigger-Funktionen im Schema `public`, `set search_path 
 ## R-12 Migrationen nach PROD
 
 - Für TEST: `supabase db push --linked`, ohne Docker.
-- [OFFEN] **O1** Wie kommen Migrationen, Edge Functions und Auth-Konfiguration nach PROD? Das betrifft auch das Einrichtungsskript und den Zustellungstest (US-AD-01 AK5). Quelle: spec.md Abschnitt 11. Der Agent führt nichts gegen PROD aus.
+- [OFFEN] **O1** Wie kommen Migrationen und Edge Functions nach PROD? (Auth-Einstellungen setzt der Product Owner manuell im Dashboard, R-13.) Das betrifft auch das Einrichtungsskript und den Zustellungstest (US-AD-01 AK5). Quelle: spec.md Abschnitt 11. Der Agent führt nichts gegen PROD aus.
 
 ## R-13 Auth-Konfiguration als Code
 
 - `supabase/config.toml`:
   - `[auth.email.template.invite]` und `[auth.email.template.recovery]` mit `content_path = "./templates/invite.html"` bzw. `recovery.html`, Betreff deutsch.
   - `[auth.rate_limit] email_sent = 30`. Bisher steht dort 2; spec.md Abschnitt 8 nennt 30 je Stunde.
-- Übertragung nach TEST mit `supabase config diff` und danach `supabase config push`.
-- SMTP-Zugangsdaten nur im Dashboard.
+- `config.toml` gilt **nur für den lokalen Stack (CI)**. Kein `supabase config push` und kein `config diff` gegen TEST oder PROD. Die Auth-Einstellungen (Mailvorlagen aus `supabase/templates/`, `email_sent = 30`, `minimum_password_length = 8`, `enable_signup = false`, Redirect-URLs, SMTP) stellt der Product Owner manuell im Dashboard ein, nach der Checkliste in `supabase/setup/README.md`.
 
 ## R-14 Frontend
 
@@ -132,7 +131,7 @@ Drei `security definer`-Trigger-Funktionen im Schema `public`, `set search_path 
 
 ## R-16 R1 per Trigger und Testdomains (spec.md v0.5)
 
-- `ad_login_email_allowed(p_email citext)`: `lower(split_part(p_email, '@', 2)) = 'dav-leipzig.de'` oder die Domain steht in `ad_test_login_domains`. Die Funktion ist security definer, weil `authenticated` die Tabelle nicht lesen darf.
+- `ad_login_email_allowed(p_email citext)`: `lower(split_part(p_email, '@', 2)) = 'dav-leipzig.de'` oder die Domain steht in `ad_test_login_domains`. Die Funktion ist security definer mit `set search_path = ''`, weil `authenticated` die Tabelle nicht lesen darf. Aus demselben Grund ist auch die Trigger-Funktion `ad_accesses_guard` security definer mit `set search_path = ''`; sonst bekäme ein Admin beim Speichern einer gültigen Adresse einen Rechtefehler.
 - Die Funktion wird an drei Stellen genutzt: im Trigger `ad_accesses_guard` (Insert und Update), in `ad-invite` vor dem Einladen und in `ad-access` bei `change_email`. Die Edge Functions rufen sie mit dem Service-Client auf; deshalb `grant execute` nur an `service_role`, und die Liste der Testdomains bleibt für Nutzer unsichtbar.
 - Die Meldung bleibt bei jeder Domain dieselbe (R1).
 - T24 prüft zu Beginn `exists (select 1 from ad_test_login_domains)` und bricht dann ab (spec.md T24). Damit kann eine freigegebene Testdomain nicht unbemerkt in PROD bleiben.

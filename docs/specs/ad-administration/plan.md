@@ -14,7 +14,7 @@ Technisch besteht AD aus:
 - sieben SQL-Migrationen in `supabase/migrations/`. Jede bringt RLS, Policies und Grants für ihre Tabellen mit.
 - zwei Edge Functions (`ad-invite`, `ad-access`) für alles, was den Service-Schlüssel braucht.
 - Trigger auf `auth.users`, die den Zugangsstatus an das Passwort koppeln.
-- der Auth-Konfiguration als Code in `supabase/config.toml`.
+- der Auth-Konfiguration in `supabase/config.toml` für den lokalen Stack (CI); in TEST und PROD setzt der Product Owner die Auth-Einstellungen manuell im Dashboard (Checkliste in `supabase/setup/README.md`, kein `config push`).
 - einem Seed über `seed.sh`.
 - pgTAP-Tests in einer GitHub Action mit lokalem Stack.
 - einer React-SPA mit den Routen aus spec.md Abschnitt 6.
@@ -140,7 +140,7 @@ Abnahme: Die Action ist grün, `db push --linked` gegen TEST läuft ohne Fehler,
 
 ## Offene Punkte
 
-- [OFFEN] **O1** Wie kommen Migrationen, Edge Functions und Auth-Konfiguration nach PROD: manuell durch den Product Owner oder per GitHub Action beim Merge auf `main`? Zu klären vor dem ersten PROD-Deployment; bis dahin wird PROD nicht angefasst. Betroffen sind T24 und US-AD-01 AK5. (spec.md Abschnitt 11; docs/offene-punkte.md)
+- [OFFEN] **O1** Wie kommen Migrationen und Edge Functions nach PROD: manuell durch den Product Owner oder per GitHub Action beim Merge auf `main`? Zu klären vor dem ersten PROD-Deployment; bis dahin wird PROD nicht angefasst. Betroffen sind T24 und US-AD-01 AK5. (spec.md Abschnitt 11; docs/offene-punkte.md)
 - Übernommen aus spec.md Abschnitt 11 (kein Blocker): [OFFEN] Vertretung des Admin-Zugangs; [OFFEN] Löschung des Zugangs bei Löschung der Person nach der 5-Jahres-Regel (EA).
 
 ## Abweichungen und Widersprüche

@@ -27,7 +27,7 @@ Voraussetzungen:
 |---|---|---|---|
 | 1 | Migrationen prüfen | `npx supabase db push --linked --dry-run` | listet nur die neuen AD-Migrationen |
 | 2 | Migrationen anwenden | `npx supabase db push --linked` | läuft ohne Fehler |
-| 3 | Auth-Konfiguration | `npx supabase config diff` → `npx supabase config push` | Selbstregistrierung aus, Passwort ≥ 8, Redirect-URLs, deutsche Vorlagen, `email_sent = 30` |
+| 3 | Auth-Einstellungen | **manuell durch den Product Owner im TEST-Dashboard** nach der Checkliste in `supabase/setup/README.md`; kein `config push`/`config diff` (`config.toml` gilt nur für den lokalen Stack) | Selbstregistrierung aus, Passwort ≥ 8, Redirect-URLs, deutsche Vorlagen aus `supabase/templates/`, `email_sent = 30` |
 | 4 | Edge Functions | `npx supabase functions deploy ad-invite ad-access` | beide aktiv |
 | 5 | Seed | `supabase/seed.sh` | Testdaten nach spec.md Abschnitt 9 |
 | 6 | Seed-Schutz | `seed.sh` mit einer Verbindung, deren Project Ref die von vereins-os-prod ist (nur Prüfung der Ref, ohne Verbindung) | Abbruch „Seed in PROD nicht erlaubt.“ |
@@ -35,7 +35,7 @@ Voraussetzungen:
 
 ## C. Fachliche Abnahme in TEST (T25)
 
-Testzugänge nach spec.md Abschnitt 9, Passwort aus `SEED_TEST_PASSWORD`. Die Seed-Adressen `test.*@dav-leipzig.de` sind fiktiv; Mails an sie kommen nicht an.
+Testzugänge nach spec.md Abschnitt 9, Passwort aus `SEED_TEST_PASSWORD`. Die Seed-Adressen `test.*@dav-leipzig.de` sind fiktiv. **An Seed-Adressen werden in TEST keine Einladungen verschickt** (Bounces, Mail-Limit von 30 je Stunde); kein „Einladen“ oder „Erneut einladen“ bei Seed-Personen. Eingeladen werden nur die eigenen Adressen des Product Owners (C1).
 
 ### C1. Mail-Abläufe mit eigenen Adressen des Product Owners
 
@@ -81,7 +81,7 @@ Außerdem zu prüfen: alle Stellen in [research.md](research.md), die mit `[PRÜ
 ## D. Ersteinrichtung PROD (nur Dokumentation)
 
 Ausführung nur durch den Product Owner, nie durch den Agenten. Der Weg nach PROD ist [OFFEN] (O1).
-1. Migrationen, Edge Functions und Auth-Konfiguration nach PROD bringen (Weg nach O1). SMTP im Dashboard von PROD eintragen.
+1. Migrationen und Edge Functions nach PROD bringen (Weg nach O1). Auth-Einstellungen und SMTP im Dashboard von PROD nach der Checkliste in `supabase/setup/README.md` setzen.
 2. `supabase/setup/prod-bootstrap.sql` mit den Parametern Vorname, Nachname und Login-Adresse des Admins ausführen (T24). Das Skript bricht ab, wenn `ad_test_login_domains` Einträge hat.
 3. Toni Werner über das Supabase-Dashboard einladen. Der Status wechselt auf „eingeladen“.
 4. Zustellungstest (US-AD-01 AK5): Die Einladung muss im Posteingang liegen, nicht im Junk-Ordner oder in der Quarantäne. Passwort setzen; der Status wechselt auf „aktiv“. Danach „Passwort vergessen“ auslösen; auch diese Mail muss im Posteingang liegen.

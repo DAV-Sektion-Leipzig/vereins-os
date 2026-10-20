@@ -20,6 +20,8 @@ description: "Tasks für das Modul Administration (AD)"
 ## Regeln für alle Tasks
 
 - **Nie gegen PROD.** Alle CLI-Befehle gehen nur gegen vereins-os-test oder gegen den lokalen Stack in der GitHub Action. Vor jedem Befehl mit `--linked` muss `npx supabase projects list` zeigen, dass TEST verknüpft ist.
+- **Kein `supabase config push` und kein `supabase config diff`**, weder gegen TEST noch gegen PROD. `supabase/config.toml` gilt nur für den lokalen Stack (CI). Auth-Einstellungen in TEST und PROD stellt der Product Owner nach der Checkliste in `supabase/setup/README.md` im Dashboard ein.
+- **Keine Einladungen an Seed-Adressen in TEST** (`test.*@dav-leipzig.de`): Sie erzeugen Bounces und verbrauchen das Mail-Limit. In TEST werden nur die eigenen Adressen des Product Owners eingeladen (T077).
 - Jede Migration enthält für die Tabellen, Views und Funktionen, die sie anlegt: `enable row level security`, Policies, `revoke all … from anon, public` und `grant … to authenticated`. Für interne Funktionen gilt stattdessen `grant execute … to service_role`. Für `ad_test_login_domains` gibt es weder Policy noch Grant (Ausnahme in Constitution III).
 - security-definer-Funktionen haben immer `set search_path = ''` und nutzen voll qualifizierte Namen.
 - Datei `.env.local` nie lesen, anzeigen oder ändern. Keine Secrets, keine echten Adressen in Dateien.
@@ -77,6 +79,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
   - `authenticated` erhält beim `select` auf `ad_test_login_domains` einen Rechtefehler.
   - R20: `login_email` ändern ist bei `none` erlaubt, bei `invited` (direkt) → `AD_EMAIL_CHANGE_VIA_FUNCTION`, bei `active`/`locked` → `AD_EMAIL_LOCKED`.
   - R2: doppelte Login-Adresse → `ad_accesses_login_email_key`.
+  - Rollenfall: `authenticated` mit AD ≥ edit (test.admin) legt einen Zugang mit gültiger `@dav-leipzig.de`-Adresse an und ändert ihn bei Status `none`, ohne Rechtefehler (der Trigger liest `ad_test_login_domains` als security definer).
 - [ ] T007 [P] [US-AD-01] (spec T6 Teil) `supabase/tests/database/050_policies.test.sql`: `policies_are` bzw. `table_privs_are` je Tabelle aus T009–T013, abgeglichen mit spec.md Abschnitt 3 (Lesen, Anlegen, Ändern, Löschen je Tabelle). `ad_test_login_domains` hat keine Policy und keinen Grant.
 - [ ] T008 [P] [US-AD-01] (spec T7 Teil, T24 Teil) `supabase/tests/bootstrap/010_prod_bootstrap.test.sql` (läuft nach dem doppelten Bootstrap in Block A von T003). Prüft:
   - genau 1 Person „Erika Beispiel“ mit Zugang `erika.beispiel@dav-leipzig.de`, Status `none`, wirksamen Vorlagen Admin und Vorstand;
@@ -116,9 +119,9 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
   - Policy select AD ≥ read; Grant nur `select`.
 - [ ] T013 [US-AD-01] (spec T5) Migration `supabase/migrations/20261020000500_ad_auth_triggers.sql`:
   - Tabelle `ad_test_login_domains` (domain citext PK ohne „@“, created_at): RLS an, `revoke all … from anon, authenticated, public`, keine Policy, kein Grant.
-  - Funktion `ad_login_email_allowed(p_email citext) returns boolean` (security definer, stable; `@dav-leipzig.de` oder Domain in `ad_test_login_domains`; `grant execute … to service_role`).
+  - Funktion `ad_login_email_allowed(p_email citext) returns boolean` (security definer mit `set search_path = ''`, stable; `@dav-leipzig.de` oder Domain in `ad_test_login_domains`; `grant execute … to service_role`).
   - Trigger `ad_accesses_guard` (before insert or update of login_email):
-    - R1 → `AD_EMAIL_DOMAIN`.
+    - security definer mit `set search_path = ''` (liest `ad_test_login_domains`, die `authenticated` nicht lesen darf); R1 → `AD_EMAIL_DOMAIN`.
     - R20: bei `invited` nur mit `current_setting('ad.email_change', true) = 'on'`, sonst `AD_EMAIL_CHANGE_VIA_FUNCTION`; bei `active`/`locked` → `AD_EMAIL_LOCKED`.
   - Drei Trigger auf `auth.users` nach research.md R-06: after insert; after update of encrypted_password; after update of last_sign_in_at mit `emergency_login`.
   - Keine Grants auf Trigger-Funktionen.
@@ -134,23 +137,30 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
   - `auth.users` und `auth.identities` für die Zugänge 1, 2, 3, 6, 7, 8. Passwort `crypt(:'test_password', gen_salt('bf'))` außer bei Eva Eingeladen (leeres Passwort); `banned_until` für Dieter Gesperrt.
   - Protokoll je ein Eintrag `invited`, `template_assigned`, `locked`, `emergency_login`.
   - Reihenfolge nach research.md R-10. Eigenschaften folgen in T049.
-- [ ] T016 [US-AD-01] (spec T11 Teil) `supabase/config.toml`: `[auth.rate_limit] email_sent = 30`; `[auth.email.template.invite]` mit deutschem Betreff „Einladung ins Vereins OS“ und `content_path = "./templates/invite.html"`. Datei `supabase/templates/invite.html` anlegen: nur kurzer Hinweistext und Link `{{ .SiteURL }}/passwort-setzen?token_hash={{ .TokenHash }}&type=invite`, keine Personendaten. Nötig für die Dashboard-Einladung (US-AD-01 AK2, AK5).
+- [ ] T016 [US-AD-01] (spec T11 Teil) Für den **lokalen Stack (CI)** in `supabase/config.toml`: `[auth.rate_limit] email_sent = 30`; `[auth.email.template.invite]` mit deutschem Betreff „Einladung ins Vereins OS“ und `content_path = "./templates/invite.html"`. Datei `supabase/templates/invite.html` anlegen: nur kurzer Hinweistext und Link `{{ .SiteURL }}/passwort-setzen?token_hash={{ .TokenHash }}&type=invite`, keine Personendaten. Diese HTML-Datei überträgt der Product Owner per Checkliste (T018) ins Dashboard von TEST und PROD; nötig für die Dashboard-Einladung (US-AD-01 AK2, AK5). Kein `config push`.
 - [ ] T017 [US-AD-01] (spec T24) Skript `supabase/setup/prod-bootstrap.sql` (psql-Variablen `admin_first`, `admin_last`, `admin_email`):
   - Bricht ab, wenn eine Variable fehlt oder `exists (select 1 from public.ad_test_login_domains)`.
   - Läuft idempotent in einer Transaktion: Person Admin (`human`) mit Zugang `admin_email`, Status `none`, Zuweisungen Admin und Vorstand. Funktionsperson „Geschäftsstelle“ / „Notfall-Admin“ (`function`) mit Zugang `geschaeftsstelle@dav-leipzig.de`, `is_emergency = true`, Zuweisung Admin. Protokoll `template_assigned` mit `actor_user_id` null.
   - Keine Namen echter Personen im Skript.
   - **Nur erzeugen, nie ausführen** (außer gegen den lokalen Stack in CI).
 - [ ] T018 [US-AD-01] (spec T24) Anleitung `supabase/setup/README.md` für den Product Owner, Schritte nach quickstart.md D:
-  - Migrationen, Edge Functions und Auth-Konfiguration nach PROD bringen: Weg [OFFEN] O1.
+  - Migrationen und Edge Functions nach PROD bringen: Weg [OFFEN] O1. Auth-Einstellungen nach der Checkliste unten.
   - SMTP im PROD-Dashboard eintragen.
   - `prod-bootstrap.sql` mit den Parametern ausführen.
   - Erste Einladung über das Dashboard; Status „eingeladen“ prüfen.
   - Zustellungstest Einladung und „Passwort vergessen“ (Posteingang, nicht Junk).
   - Notfall-Admin über AD einladen.
   - Hinweis oben: „Nur durch den Product Owner. Claude Code führt nichts gegen PROD aus.“
+  - **Checkliste „Auth-Einstellungen im Dashboard“** (je für TEST und PROD abhaken, da `config.toml` nur für den lokalen Stack gilt und nie per `config push` übertragen wird):
+    - Authentication → Sign In / Providers: Selbstregistrierung aus (`enable_signup = false`), E-Mail-Anmeldung an.
+    - Passwort-Mindestlänge 8 (`minimum_password_length = 8`), keine weiteren Zeichenregeln.
+    - Rate Limits: E-Mails je Stunde 30 (`email_sent = 30`).
+    - URL-Konfiguration: Site URL und Redirect-URLs wie in `supabase/config.toml` (`[auth]`), für TEST mit Vorschau- und lokaler Adresse.
+    - E-Mail-Vorlagen „Invite user“ und „Reset password“: Betreff deutsch, Inhalt aus `supabase/templates/invite.html` bzw. `recovery.html` kopieren.
+    - SMTP: Google-Konto der Sektion, App-Passwort nur hier, Absendername „Vereins OS“.
 - [ ] T019 [US-AD-01] (spec T1, T3, T5, T23 Teil) Gegen TEST ausrollen (nach Prüfung, dass TEST verknüpft ist):
   - `npx supabase db push --linked --dry-run`, dann `npx supabase db push --linked`.
-  - `npx supabase config diff` → `config push`.
+  - Kein `config push`/`config diff`. Den Product Owner bitten, die Checkliste „Auth-Einstellungen im Dashboard“ (T018) für TEST abzuarbeiten.
   - `supabase/seed.sh` gegen TEST. Ergebnis kurz in der PR-Beschreibung festhalten.
 
 **Checkpoint**: Action grün, TEST mit Schema und Seed. Die Datenbankteile von US-AD-10 und US-AD-11 sind fertig.
@@ -178,7 +188,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
   - `[auth.email.template.recovery]` mit Betreff „Passwort zurücksetzen“ und `content_path = "./templates/recovery.html"`; Datei `supabase/templates/recovery.html` mit Link `{{ .SiteURL }}/passwort-setzen?token_hash={{ .TokenHash }}&type=recovery`.
   - Prüfen: `enable_signup = false` und `minimum_password_length = 8`.
   - In `supabase/setup/README.md` einen Abschnitt „SMTP (TEST und PROD)“ ergänzen: Google-Konto der Sektion, App-Passwort nur im Dashboard, Absendername „Vereins OS“.
-  - `config diff`/`config push` gegen TEST.
+  - Kein `config push`/`config diff`. `recovery.html` in die Checkliste aus T018 aufnehmen; der Product Owner überträgt sie ins Dashboard von TEST.
 - [ ] T023 [P] [US-AD-02] (spec T12) `src/lib/errors.ts`: Abbildung aller Codes und Constraint-Namen aus contracts/error-codes.md auf die Meldungen. `AD_EMAIL_CHANGED` liefert die Art „Hinweis“ statt „Fehler“, SQLSTATE `42501` die Rechte-Meldung, alles Unbekannte die allgemeine Meldung.
 - [ ] T024 [P] [US-AD-02] (spec T12) `src/lib/format.ts`: Datum TT.MM.JJJJ und Zeit HH:MM mit `Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin' })`
 - [ ] T025 [P] [US-AD-02] (spec T12) `src/lib/rights.ts`: `requireSession()` (redirect `/login`), `requireLevel(module, min)` über `rpc('ad_has_level')` (redirect `/kein-zugriff`, bevor Daten geladen werden), `loadMe()` über `rpc('ad_me')`
@@ -414,7 +424,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
   - Knöpfe „Einladen“ / „Erneut einladen“ (`functions.invoke('ad-invite')`); ohne wirksame Vorlage deaktiviert, mit Hinweis R17.
 - [ ] T060 [US-AD-08] (spec T9, T10) Edge Functions nach TEST ausrollen: `npx supabase functions deploy ad-invite ad-access` (nach Prüfung, dass TEST verknüpft ist)
 
-**Checkpoint**: Einladen und Adressänderung funktionieren in TEST; Mails an Seed-Adressen kommen nicht an (erwartet).
+**Checkpoint**: Einladen und Adressänderung sind per Deno-Tests abgesichert. In TEST werden **keine Seed-Adressen eingeladen** (Bounces, Mail-Limit); in TEST prüfbar ist hier nur R17 ohne Mailversand. Einladen und Adressänderung mit echtem Mailversand nimmt der Product Owner mit eigenen Adressen in T077 ab.
 
 ---
 
@@ -573,7 +583,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 **Zweck**: Fachliche Abnahme in TEST (spec T25) und Abschluss.
 
 - [ ] T076 [US-AD-07] (spec T25 Teil) Dublettenschwelle in TEST abnehmen (quickstart.md C: Toni/Anton/Tony Muster, Tippfehler) und das Ergebnis in `docs/specs/ad-administration/abnahme-test.md` festhalten (ohne private Adressen); bei Bedarf Schwelle in einer neuen Migration anpassen (Rückfrage beim Product Owner)
-- [ ] T077 [US-AD-08] (spec T25 Teil) Abnahmeablauf C1 vorbereiten: TEST auf Stand bringen (`db push`, `config push`, `functions deploy`, Seed). Danach führt **der Product Owner selbst** C1 durch (Domain per SQL-Editor, Personen mit eigenen Adressen über die Oberfläche, Einladung, Adressänderung, Passwort setzen, Passwort vergessen) und räumt nach C2 auf. Claude Code trägt keine Domain und keine Adresse ein. Ergebnis ohne Adressen in `docs/specs/ad-administration/abnahme-test.md`. Betrifft US-AD-03, US-AD-04, US-AD-08.
+- [ ] T077 [US-AD-08] (spec T25 Teil) Abnahmeablauf C1 vorbereiten: TEST auf Stand bringen (`db push`, `functions deploy`, Seed; die Auth-Einstellungen hat der Product Owner nach der Checkliste in `supabase/setup/README.md` im Dashboard gesetzt, kein `config push`). Eingeladen werden nur die eigenen Adressen des Product Owners. Danach führt **der Product Owner selbst** C1 durch (Domain per SQL-Editor, Personen mit eigenen Adressen über die Oberfläche, Einladung, Adressänderung, Passwort setzen, Passwort vergessen) und räumt nach C2 auf. Claude Code trägt keine Domain und keine Adresse ein. Ergebnis ohne Adressen in `docs/specs/ad-administration/abnahme-test.md`. Betrifft US-AD-03, US-AD-04, US-AD-08.
 - [ ] T078 [US-AD-16] (spec T25 Teil) Übrige Szenarien aus quickstart.md C mit den drei Testzugängen und test.notfall abnehmen, auch in der Breite 375 px; offene `[PRÜFEN T25]`-Punkte aus research.md abhaken bzw. melden; Ergebnis in `docs/specs/ad-administration/abnahme-test.md`
 - [ ] T079 [P] [US-AD-01] (spec T12 Teil) Querschnitt: `npm run lint` und `npm run build` ohne Fehler; `npm audit` und Ergebnis melden (Merkposten shadcn-CLI aus offene-punkte.md); keine Secrets oder realen Adressen im Diff (`git grep` auf `@` außerhalb von `@dav-leipzig.de`/`example.test`)
 
