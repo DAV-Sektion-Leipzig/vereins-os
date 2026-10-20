@@ -1,3 +1,20 @@
+<!--
+Sync Impact Report
+- Version: 1.0.2 → 1.1.0 → 1.1.1 (20.10.2026)
+  - 1.1.0 (MINOR): Prinzip V – eng gefasste Ausnahme für eigene Adressen des Product Owners in
+    TEST (Abnahme der Mail-Abläufe, ad_test_login_domains nur per SQL-Editor, Aufräumen im
+    Dashboard)
+  - 1.1.1 (PATCH): Prinzip III – Klarstellung für Tabellen ohne Nutzerzugriff (RLS + revoke,
+    keine Policy, kein Grant); Prinzip V – Aufräumen umfasst die Protokolleinträge der Testpersonen
+- Geänderte Prinzipien: III, V
+- Frühere Änderungen: 1.0.2 (19.10.2026) – Arbeitsablauf Nr. 4: pgTAP in GitHub Action mit
+  lokalem Stack und Seed, fachliche Abnahme in TEST; Prinzip V: Seed über seed.sh
+- Hinzugefügte/entfernte Abschnitte: keine
+- Vorlagen: .specify/templates/plan-template.md ✅ (Constitution Check generisch, keine Änderung nötig);
+  spec-template.md ✅ (nicht genutzt, Prinzip I); tasks-template.md ✅ (keine Änderung nötig)
+- Abgeglichene Dokumente: docs/specs/ad-administration/spec.md v0.5 ✅, plan.md ✅, quickstart.md ✅
+- Offene TODOs: keine
+-->
 # Vereins OS Constitution
 
 ## Core Principles
@@ -30,6 +47,9 @@ sind später kaum auffindbar.
 ### III. Sicherheit in der Datenbank (NICHT VERHANDELBAR)
 
 - **RLS auf jeder Tabelle**, ohne Ausnahme. Keine Tabelle ohne Policy.
+- Ausnahme für Tabellen ohne jeden Nutzerzugriff (z. B. `ad_test_login_domains`): RLS an,
+  ausdrückliches `revoke all … from anon, authenticated, public`, weder Policy noch Grant;
+  Zugriff nur über `security definer`-Funktionen bzw. den SQL-Editor des Dashboards.
 - Rechteprüfung erfolgt in der Datenbank (RLS über Rechte-Tabellen), nie nur im Frontend.
 - GRANTs nur an `authenticated`, nie an `anon`. Jede Migration, die eine Tabelle, View oder
   Funktion anlegt, vergibt Rechte ausdrücklich per `grant … to authenticated`.
@@ -55,7 +75,15 @@ Grundlage für DSGVO-konforme Löschung.
 ### V. Daten, Secrets und Umgebungen (NICHT VERHANDELBAR)
 
 - Keine Echtdaten, weder in Tests noch im Projekt TEST. Testdaten nur fiktiv über
-  `supabase/seed.sql`, inkl. Testzugängen je Rechtevorlage.
+  `supabase/seed.sh` (Daten in `supabase/seed.sql`), inkl. Testzugängen je Rechtevorlage;
+  der Seed bricht bei PROD ab.
+- **Ausnahme (eng gefasst):** In TEST sind eigene Adressen des Product Owners erlaubt, und
+  zwar ausschließlich für die Abnahme der Mail-Abläufe (Einladung, Passwort setzen,
+  Passwort vergessen). Die Domain wird nur per SQL-Editor im Supabase-Dashboard von TEST in
+  `ad_test_login_domains` eingetragen. Domain und Adressen stehen nie im Repo, im Seed, in
+  `.env.local` oder in einer Migration. Alle übrigen Daten bleiben fiktiv. Nach der Abnahme
+  räumt der Product Owner im TEST-Dashboard auf (Auth-Nutzer, Testpersonen inkl. ihrer
+  Protokolleinträge, Domain). Für Nutzer bleibt das Protokoll unveränderbar.
 - Keine Secrets im Repo. Keys nur in Supabase Vault bzw. GitHub-Secrets.
 - Lokale Werte stehen in `.env.local` (nicht versioniert, Vorlage `.env.example`);
   `.env.local` wird vom Agenten nie gelesen, angezeigt oder geändert.
@@ -111,8 +139,9 @@ Begründung: Betrieb mit 0 €/Monat (Ziel Z4) und kleine Nutzergruppe ohne Schu
    und weitere Plan-Artefakte dort entstehen.
 3. Der „Constitution Check“ in `plan.md` prüft jedes Prinzip I–VII. Verstöße MÜSSEN begründet
    oder behoben werden, bevor `/speckit-tasks` läuft.
-4. Umsetzung test- und spec-getrieben (`/speckit-implement`): Tests laufen gegen Supabase TEST
-   mit Seed-Daten; RLS-Policies werden je Rechtevorlage mit den Testzugängen geprüft.
+4. Umsetzung test- und spec-getrieben (`/speckit-implement`): Datenbanktests (pgTAP) laufen in
+   einer GitHub Action mit lokalem Supabase-Stack und Seed; RLS-Policies werden dort je
+   Rechtevorlage mit den Testzugängen geprüft. Die fachliche Abnahme läuft in Supabase TEST.
 5. Arbeit auf eigenem Branch je Story bzw. Aufgabe (z. B. `us-ad-01-ersteinrichtung`);
    Abnahme im Cloudflare-Vorschau-Deployment (gegen TEST), Produktion nur über `main`.
 
@@ -129,4 +158,4 @@ Begründung: Betrieb mit 0 €/Monat (Ziel Z4) und kleine Nutzergruppe ohne Schu
 - Jeder Plan (Constitution Check) und jeder Pull Request MUSS die Einhaltung prüfen.
 - Laufende Arbeitsanweisungen für den Agenten stehen in [CLAUDE.md](../../CLAUDE.md).
 
-**Version**: 1.0.1 | **Ratified**: 2026-10-19 | **Last Amended**: 2026-10-19
+**Version**: 1.1.1 | **Ratified**: 2026-10-19 | **Last Amended**: 2026-10-20

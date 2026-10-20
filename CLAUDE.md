@@ -34,7 +34,7 @@ Antworte immer auf Deutsch.
 
 ### Daten und Secrets
 
-- **Keine Echtdaten**, weder in Tests noch im Projekt TEST. Testdaten nur fiktiv über `supabase/seed.sql`, inkl. Testzugängen je Rechtevorlage.
+- **Keine Echtdaten**, weder in Tests noch im Projekt TEST. Testdaten nur fiktiv über `supabase/seed.sh` (Daten in `supabase/seed.sql`, Abbruch bei PROD), inkl. Testzugängen je Rechtevorlage.
 - **Keine Secrets im Repo.** Keys nur in Supabase Vault bzw. GitHub-Secrets.
 - **Lokale Werte stehen in `.env.local`** (nicht versioniert); Vorlage ist `.env.example`. `.env.local` nie lesen, anzeigen oder ändern.
 - **Supabase-Key im Frontend** ist ausschließlich der Publishable Key (`sb_publishable_…`), Variable `VITE_SUPABASE_ANON_KEY`.
@@ -44,6 +44,7 @@ Antworte immer auf Deutsch.
 
 - **Nie gegen PROD arbeiten.** Lokale Entwicklung und Vorschau-Deployments nutzen ausschließlich Supabase TEST (`vereins-os-test`).
 - Keine Migrationen, Seeds, Abfragen oder CLI-Befehle gegen `vereins-os-prod`. PROD wird nur über das Deployment von `main` angesprochen.
+- **Kein `supabase config push` und kein `supabase config diff`**, weder gegen TEST noch gegen PROD. `supabase/config.toml` gilt nur für den lokalen Stack (CI); Auth-Einstellungen in TEST und PROD stellt der Product Owner manuell im Dashboard ein (Checkliste in `supabase/setup/README.md`).
 
 ## Git-Workflow
 
@@ -78,6 +79,7 @@ Antworte immer auf Deutsch.
 │   ├── config.toml
 │   ├── migrations/
 │   ├── functions/                  Edge Functions
+│   ├── seed.sh                     Seed-Skript, bricht bei PROD ab
 │   └── seed.sql                    nur fiktive Daten
 ├── src/                            Frontend (React + TypeScript + Vite, shadcn/ui)
 └── wrangler.jsonc                  Cloudflare-Konfiguration

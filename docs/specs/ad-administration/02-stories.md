@@ -1,7 +1,7 @@
 # User Stories: Administration (AD)
 
-Stand: 19.10.2026 · Version 0.2 · Status: Ready · Product Owner: Toni Werner
-Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.4 (Regeln R1–R19), glossar.md v0.4, rollen.md v0.6, spec.md v0.1
+Stand: 20.10.2026 · Version 0.5 · Status: Ready · Product Owner: Toni Werner
+Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.7 (Regeln R1–R20), glossar.md v0.4, rollen.md v0.6, spec.md v0.5
 
 Oberflächentexte in der Ansprache „du“.
 
@@ -26,7 +26,7 @@ Oberflächentexte in der Ansprache „du“.
 | US-AD-15 | Notfall-Admin nutzen und nachvollziehen | Must | US-AD-01, US-AD-14 |
 | US-AD-16 | Testzugänge in TEST | Must | US-AD-01 |
 
-Empfohlene Umsetzungsreihenfolge: 01 → 10 → 02 → 05 → 06 → 07 → 12 → 13 → 11 → 08 → 03 → 04 → 09 → 14 → 15 → 16.
+Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 → 13 → 11 → 08 → 03 → 04 → 09 → 14 → 15 → 16. Die Datenbankteile von US-AD-10 und US-AD-11 entstehen bereits mit US-AD-01; Login und Grundgerüst (US-AD-02, US-AD-05) kommen vor den Oberflächen der übrigen Stories.
 
 ---
 
@@ -37,7 +37,8 @@ Empfohlene Umsetzungsreihenfolge: 01 → 10 → 02 → 05 → 06 → 07 → 12 �
 **Priorität:** Must · **Regeln:** R6, R14, R15 · **Abhängig von:** –
 **Akzeptanzkriterien**
 - AK1: Gegeben eine leere Datenbank, wenn die Migrationen laufen, dann gibt es die Rechtevorlagen „Admin“ (AD, SC, EA verwalten), „Geschäftsstelle“ (EA, GR, FI, OA, PM, GS, AM verwalten) und „Vorstand“ (überall kein Zugriff).
-- AK2: Gegeben die Migrationen sind gelaufen, wenn das Einrichtungsskript für PROD ausgeführt wird, dann existieren die Person Toni Werner mit Zugang (Login-Adresse als Parameter, Vorlagen Admin und Vorstand) und die Funktionsperson „Geschäftsstelle / Notfall-Admin“ mit Zugang geschaeftsstelle@dav-leipzig.de und Vorlage Admin, beide im Status „kein Zugang“. Die erste Einladung (Toni Werner) erfolgt einmalig über das Supabase-Dashboard, alle weiteren über US-AD-08.
+- AK2: Gegeben die Migrationen sind gelaufen, wenn das Einrichtungsskript für PROD ausgeführt wird, dann existieren die Person Toni Werner mit Zugang (Login-Adresse als Parameter, Vorlagen Admin und Vorstand) und die Funktionsperson „Geschäftsstelle / Notfall-Admin“ mit Zugang geschaeftsstelle@dav-leipzig.de und Vorlage Admin, beide im Status „kein Zugang“. Die erste Einladung (Toni Werner) erfolgt einmalig über das Supabase-Dashboard; der Zugang wechselt dabei auf „eingeladen“ und nach dem Setzen des Passworts auf „aktiv“. Alle weiteren Einladungen laufen über US-AD-08.
+- AK5: Gegeben die erste Einladung über das Dashboard, wenn Toni Werner die Mail an seine reale Adresse @dav-leipzig.de erhält, dann liegt sie im Posteingang (nicht Junk/Quarantäne); ebenso eine „Passwort vergessen“-Mail (Zustellungstest).
 - AK3: Gegeben das Einrichtungsskript wurde schon ausgeführt, wenn es erneut läuft, dann entstehen keine doppelten Personen, Zugänge oder Vorlagen (Fehlerfall).
 - AK4: Gegeben ein Nutzer ohne AD-Rechte, wenn er versucht, die Vorlage „Admin“ zu ändern, dann lehnt die Datenbank ab (Rechte-Fall).
 **Nicht Teil dieser Story:** Testdaten in TEST (US-AD-16); Konfiguration der Vorlage Vorstand.
@@ -62,7 +63,9 @@ Empfohlene Umsetzungsreihenfolge: 01 → 10 → 02 → 05 → 06 → 07 → 12 �
 **Priorität:** Must · **Regeln:** R19 · **Abhängig von:** US-AD-08
 **Akzeptanzkriterien**
 - AK1: Gegeben ein Zugang im Status „eingeladen“, wenn ich den Link öffne und ein Passwort mit mindestens 8 Zeichen zweimal gleich eingebe, dann ist der Zugang „aktiv“ und ich lande auf der Startseite.
-- AK2: Gegeben ein Passwort mit weniger als 8 Zeichen, wenn ich speichere, dann erscheint „Das Passwort muss mindestens 8 Zeichen lang sein.“ (Fehlerfall).
+- AK2: Gegeben ein Passwort mit weniger als 8 Zeichen, wenn ich speichere, dann erscheint „Das Passwort muss mindestens 8 Zeichen lang sein.“; gegeben zwei verschiedene Eingaben, dann erscheint „Die Passwörter stimmen nicht überein.“ (Fehlerfall).
+- AK6: Gegeben ich öffne den Link, setze aber kein Passwort, wenn ich die Seite verlasse, dann bleibt der Zugang „eingeladen“.
+- AK7: Gegeben der Admin hat die Login-Adresse nach dem Versand geändert, wenn ich den alten Link öffne, dann erscheint die Meldung aus AK3 (Fehlerfall, R20).
 - AK3: Gegeben ein abgelaufener oder bereits benutzter Link, wenn ich ihn öffne, dann erscheint „Der Link ist abgelaufen oder ungültig. Bitte wende dich an den Admin.“ (Fehlerfall).
 - AK4: Gegeben der Zugang wurde nach dem Versand gesperrt, wenn ich den Link öffne, dann kann ich kein Passwort setzen und erhalte dieselbe Meldung wie in AK3 (Rechte-Fall).
 - AK5: Die Einladungs-Mail enthält nur Empfängeradresse, einen kurzen Hinweistext und den Link, keine weiteren Personendaten.
@@ -124,14 +127,15 @@ Empfohlene Umsetzungsreihenfolge: 01 → 10 → 02 → 05 → 06 → 07 → 12 �
 **Als** Admin
 **möchte ich** einer Person eine Login-Adresse geben und sie auf Knopfdruck einladen bzw. erneut einladen,
 **damit** sie ihren Zugang selbst aktivieren kann und nie automatisch Einladungen verschickt werden.
-**Priorität:** Must · **Regeln:** R1, R2, R11, R13, R17 · **Abhängig von:** US-AD-07, US-AD-11
+**Priorität:** Must · **Regeln:** R1, R2, R11, R13, R17, R20 · **Abhängig von:** US-AD-07, US-AD-11
 **Akzeptanzkriterien**
 - AK1: Gegeben eine Person mit gültiger Login-Adresse und mindestens einer Vorlage, wenn ich „Einladen“ klicke, dann verschickt Supabase Auth die Einladung, der Status wird „eingeladen“, „zuletzt eingeladen am“ wird gesetzt und ein Protokolleintrag „eingeladen“ entsteht.
 - AK2: Gegeben eine Person ohne zugewiesene Vorlage, wenn ich einladen will, dann ist „Einladen“ nicht möglich und es erscheint „Bitte zuerst mindestens eine Rechtevorlage zuweisen.“ (Fehlerfall, R17).
 - AK3: Gegeben eine Login-Adresse, die nicht auf @dav-leipzig.de endet, wenn ich speichere, dann erscheint „Zugang nur mit Adresse @dav-leipzig.de möglich.“; ist sie bereits vergeben, erscheint „Diese Login-Adresse ist bereits vergeben.“ (Fehlerfall, R1, R2).
 - AK4: Gegeben der Status ist „eingeladen“, wenn ich „Erneut einladen“ klicke, dann wird eine neue Einladung verschickt, „zuletzt eingeladen am“ aktualisiert und protokolliert.
-- AK5: Gegeben der Mailversand schlägt fehl, wenn ich einlade, dann erscheint „Die Einladung konnte nicht verschickt werden. Bitte später erneut versuchen.“ und der Status bleibt unverändert (Fehlerfall).
+- AK5: Gegeben der Mailversand schlägt fehl, wenn ich einlade, dann erscheint „Die Einladung konnte nicht verschickt werden. Bitte später erneut versuchen.“, der Status bleibt unverändert und in Supabase Auth bleibt kein neu angelegter Eintrag zurück (Fehlerfall).
 - AK6: Gegeben ein Aufrufer ohne AD-Rechte, wenn er die Edge Function „Nutzer einladen“ aufruft, dann lehnt sie ohne Einladung ab (Rechte-Fall).
+- AK7: Gegeben der Status ist „eingeladen“, wenn ich die Login-Adresse ändere und speichere, dann ist der alte Einladungslink ungültig, der Status ist „kein Zugang“, es erscheint „Die Login-Adresse wurde geändert. Bitte die Einladung erneut senden.“, ein Protokolleintrag „Login-Adresse geändert“ entsteht, und „Einladen“ schickt die Einladung an die neue Adresse; gegeben der Status ist „aktiv“ oder „gesperrt“, wenn ich die Login-Adresse ändern will, dann erscheint „Die Login-Adresse kann nur vor der Aktivierung des Zugangs geändert werden.“ (R20, Fehlerfall).
 **Nicht Teil dieser Story:** automatische Einladung beim Anlegen oder Import; Annahme der Einladung (US-AD-03).
 
 ### US-AD-09: Zugang sperren und entsperren
@@ -204,6 +208,8 @@ Empfohlene Umsetzungsreihenfolge: 01 → 10 → 02 → 05 → 06 → 07 → 12 �
 **Als** Admin
 **möchte ich** das Protokoll der Einladungen, Rechtevergaben, Sperren und Anmeldungen des Notfall-Admins einsehen,
 **damit** ich nachvollziehen kann, wer wem wann welche Rechte gegeben hat.
+
+Aktionen im Protokoll: eingeladen, Login-Adresse geändert, Vorlage zugewiesen, Vorlage entzogen, gesperrt, entsperrt, Anmeldung Notfall-Admin.
 **Priorität:** Should · **Regeln:** R13, R16 · **Abhängig von:** US-AD-08
 **Akzeptanzkriterien**
 - AK1: Gegeben es gibt Protokolleinträge, wenn ich das Protokoll öffne, dann sehe ich Zeitpunkt, ausgeführt von, betroffene Person, Aktion und Details, neueste zuerst.
@@ -232,10 +238,10 @@ Empfohlene Umsetzungsreihenfolge: 01 → 10 → 02 → 05 → 06 → 07 → 12 �
 **damit** ich und die Geschäftsstelle jede Sicht abnehmen können, ohne Echtdaten zu nutzen.
 **Priorität:** Must · **Regeln:** R6, R8 · **Abhängig von:** US-AD-01
 **Akzeptanzkriterien**
-- AK1: Gegeben eine leere TEST-Datenbank, wenn `supabase/seed.sql` läuft, dann gibt es aktive Testzugänge für Admin, Geschäftsstelle und Vorstand sowie 5–10 fiktive Personen mit Eigenschaften, darunter eine vertrauliche (Hauptamt) und ein Dublettenpaar („Toni Muster“ / „Anton Muster“), siehe spec.md Abschnitt 9.
+- AK1: Gegeben eine leere TEST-Datenbank oder ein lokaler Stack, wenn `supabase/seed.sh` läuft, dann gibt es aktive Testzugänge für Admin, Geschäftsstelle und Vorstand sowie 5–10 fiktive Personen mit Eigenschaften, darunter eine vertrauliche (Hauptamt) und ein Dublettenpaar („Toni Muster“ / „Anton Muster“), siehe spec.md Abschnitt 9.
 - AK2: Gegeben der Testzugang Geschäftsstelle, wenn er Personen liest, dann sieht er keine vertraulichen Eigenschaften (Rechte-Fall).
-- AK3: Die Passwörter der Testzugänge stehen nicht im Repository, sondern werden beim Seed aus einer Umgebungsvariable bzw. einem GitHub-Secret gesetzt.
-- AK4: Gegeben jemand versucht, den Seed gegen PROD auszuführen, wenn das Skript startet, dann bricht es mit „Seed nur für TEST erlaubt.“ ab (Fehlerfall; Prüfung über die Projektkennung).
+- AK3: Die Passwörter der Testzugänge stehen nicht im Repository, sondern werden beim Seed aus `SEED_TEST_PASSWORD` (lokal `.env.local`, CI: GitHub-Secret) gesetzt.
+- AK4: Gegeben jemand versucht, den Seed gegen PROD auszuführen, wenn das Skript startet, dann bricht es mit „Seed in PROD nicht erlaubt.“ ab (Fehlerfall; Prüfung über die Project Ref).
 **Nicht Teil dieser Story:** Testzugang mit Einzelrechten; Abnahme der Fachmodule.
 
 ---
@@ -249,6 +255,6 @@ Empfohlene Umsetzungsreihenfolge: 01 → 10 → 02 → 05 → 06 → 07 → 12 �
 | Fehlerfall und Rechte-Fall je Story | erfüllt |
 | Begriffe im Glossar | erfüllt (glossar.md v0.4) |
 | Datenfelder im Datenmodell der Spec | erfüllt (spec.md Abschnitt 2) |
-| Regeln per ID referenziert | erfüllt (R1–R19) |
+| Regeln per ID referenziert | erfüllt (R1–R20) |
 | Keine [OFFEN]-Punkte, Annahmen sichtbar | erfüllt; Annahmen vom Product Owner am 19.10.2026 bestätigt; technische Annahmen in spec.md Abschnitt 11 |
 | „Nicht Teil dieser Story“ ausgefüllt | erfüllt |
