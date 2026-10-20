@@ -6,15 +6,22 @@ Führend ist spec.md: Abschnitt 2 legt Spalten, Typen und Defaults fest, Abschni
 
 ## Migrationsdateien
 
-| Datei (Vorschlag) | Task | Inhalt |
-|---|---|---|
-| `supabase/migrations/20261020000100_ad_foundation.sql` | T1 | Erweiterungen `citext`, `pg_trgm`, `pg_cron`; Enums; `ad_modules` + Stammdaten; `ad_user_level`, `ad_has_level` (plpgsql) |
-| `…000200_ea_person_model.sql` | T2 | `ea_persons`, `ea_property_types`, `ea_properties`, `ea_property_history`, Trigger, View `ea_v_persons`, Policies |
-| `…000300_ad_rights.sql` | T3 | `ad_templates`, `ad_template_rights`, `ad_template_assignments`, `ad_accesses` (FK `auth_user_id` → `auth.users` on delete set null), Startvorlagen, `ad_my_modules`, `ad_assign_template`, `ad_revoke_template`, Policies |
-| `…000400_ad_audit.sql` | T4 | `ad_audit_log`, `ad_notice_acks`, `ad_pending_emergency_logins`, `ad_acknowledge_emergency`, pg_cron-Job, Policies; interne `ad_apply_invite`, `ad_revert_invite`, `ad_apply_lock`, `ad_apply_unlock`, `ad_apply_email_change` |
-| `…000500_ad_auth_triggers.sql` | T5 | drei Trigger auf `auth.users`; Tabelle `ad_test_login_domains`; Funktion `ad_login_email_allowed`; Trigger `ad_accesses_guard` (R1, R20) |
-| `…000600_ad_overview_me.sql` | T6 | View `ad_v_person_overview`, Funktion `ad_me()` |
-| `…000700_ad_find_similar_persons.sql` | T8 | `ad_find_similar_persons` |
+| Datei (Vorschlag) | spec-Task | Story (tasks.md) | Inhalt |
+|---|---|---|---|
+| `supabase/migrations/20261020000100_ad_foundation.sql` | T1 | US-AD-01 | Erweiterungen, Enums, `ad_modules`, `ad_user_level`, `ad_has_level` |
+| `…000200_ea_persons.sql` | T2 Teil | US-AD-01 | `ea_persons`, `ea_v_persons`, Policies |
+| `…000300_ad_rights.sql` | T3 | US-AD-01 | Vorlagen, Rechte, Zuweisungen, `ad_accesses`, Startvorlagen, `ad_my_modules`, `ad_assign_template`, `ad_revoke_template` |
+| `…000400_ad_audit_log.sql` | T4 Teil | US-AD-01 | `ad_audit_log` |
+| `…000500_ad_auth_triggers.sql` | T5 | US-AD-01 | Trigger auf `auth.users`, `ad_test_login_domains`, `ad_login_email_allowed`, `ad_accesses_guard` (R1, R20) |
+| `…000600_ad_me.sql` | T6 Teil | US-AD-02 | `ad_me()` |
+| `…000700_ad_person_overview.sql` | T6 Teil | US-AD-06 | `ad_v_person_overview` |
+| `…000800_ad_find_similar_persons.sql` | T8 | US-AD-07 | `ad_find_similar_persons` |
+| `…000900_ea_property_types.sql` | T2 Teil | US-AD-12 | `ea_property_types` mit Trigger |
+| `…001000_ea_properties.sql` | T2 Teil | US-AD-13 | `ea_properties`, `ea_property_history`, Trigger |
+| `…001100_ad_invite_functions.sql` | T4 Teil | US-AD-08 | `ad_apply_invite`, `ad_revert_invite`, `ad_apply_email_change` |
+| `…001200_ad_lock_functions.sql` | T4 Teil | US-AD-09 | `ad_apply_lock`, `ad_apply_unlock` |
+| `…001300_ad_audit_retention.sql` | T4 Teil | US-AD-14 | pg_cron-Job, View `ad_v_audit_log` |
+| `…001400_ad_emergency_notice.sql` | T4 Teil | US-AD-15 | `ad_notice_acks`, `ad_pending_emergency_logins`, `ad_acknowledge_emergency` |
 
 Jede Migration enthält für die Tabellen, die sie anlegt, `enable row level security`, die Policies, `revoke all … from anon, public` und `grant … to authenticated`.
 
