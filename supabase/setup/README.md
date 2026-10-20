@@ -7,21 +7,28 @@
 
 ## 1. Checkliste „Auth-Einstellungen im Dashboard“
 
-Für **TEST** und für **PROD** je einmal abhaken.
+Für **TEST** und für **PROD** je einmal abhaken. TEST: Punkte 1–7 und 9 erledigt (Product Owner, 20.10.2026).
 
 | # | Einstellung (Dashboard) | Wert | TEST | PROD |
 |---|---|---|---|---|
-| 1 | Authentication → Sign In / Providers → „Allow new users to sign up“ | aus (`enable_signup = false`) | ☐ | ☐ |
-| 2 | Authentication → Sign In / Providers → Email | an; „Confirm email“ wie in `config.toml` | ☐ | ☐ |
-| 3 | Passwort-Mindestlänge | 8 (`minimum_password_length = 8`), keine weiteren Zeichenregeln | ☐ | ☐ |
-| 4 | Authentication → Rate Limits → E-Mails je Stunde | 30 (`email_sent = 30`) | ☐ | ☐ |
-| 5 | Authentication → URL Configuration → Site URL | PROD: `https://vereins-os.sektion-leipzig.workers.dev`; TEST: dieselbe bzw. die Vorschau-Adresse | ☐ | ☐ |
-| 6 | Authentication → URL Configuration → Redirect URLs | wie `additional_redirect_urls` in `config.toml`; in TEST zusätzlich Vorschau (`https://*-vereins-os.sektion-leipzig.workers.dev/**`) und lokal (`http://localhost:5173/**`) | ☐ | ☐ |
-| 7 | Authentication → Emails → „Invite user“ | Betreff „Einladung ins Vereins OS“, Inhalt aus `supabase/templates/invite.html` | ☐ | ☐ |
-| 8 | Authentication → Emails → „Reset password“ | Betreff „Passwort zurücksetzen“, Inhalt aus `supabase/templates/recovery.html` (kommt mit US-AD-02) | ☐ | ☐ |
-| 9 | Authentication → Emails → SMTP Settings | Google-Konto der Sektion; App-Passwort nur hier eintragen; Absendername „Vereins OS“ | ☐ | ☐ |
+| 1 | Authentication → Sign In / Providers → „Allow new users to sign up“ | aus (`enable_signup = false`) | ☑ | ☐ |
+| 2 | Authentication → Sign In / Providers → Email | an; „Confirm email“ wie in `config.toml` | ☑ | ☐ |
+| 3 | Passwort-Mindestlänge | 8 (`minimum_password_length = 8`), keine weiteren Zeichenregeln | ☑ | ☐ |
+| 4 | Authentication → Rate Limits → E-Mails je Stunde | 30 (`email_sent = 30`) | ☑ | ☐ |
+| 5 | Authentication → URL Configuration → Site URL | PROD: `https://vereins-os.sektion-leipzig.workers.dev`; TEST: dieselbe bzw. die Vorschau-Adresse | ☑ | ☐ |
+| 6 | Authentication → URL Configuration → Redirect URLs | wie `additional_redirect_urls` in `config.toml`; in TEST zusätzlich Vorschau (`https://*-vereins-os.sektion-leipzig.workers.dev/**`) und lokal (`http://localhost:5173/**`) | ☑ | ☐ |
+| 7 | Authentication → Emails → „Invite user“ | Betreff „Einladung ins Vereins OS“, Inhalt aus `supabase/templates/invite.html` | ☑ | ☐ |
+| 8 | Authentication → Emails → „Reset password“ | Betreff „Passwort zurücksetzen“, Inhalt aus `supabase/templates/recovery.html` | ☐ | ☐ |
+| 9 | Authentication → Emails → SMTP Settings | Google-Konto der Sektion; App-Passwort nur hier eintragen; Absendername „Vereins OS“ | ☑ | ☐ |
 
 Die Mailvorlagen enthalten nur einen kurzen Hinweistext und den Link, keine Personendaten.
+
+### SMTP (TEST und PROD)
+
+- Versand der Login-Mails über das Google-Konto der Sektion (Gmail-SMTP: `smtp.gmail.com`, Port 465 oder 587).
+- Benutzer ist die Adresse des Google-Kontos; als Passwort dient ein **App-Passwort** des Google-Kontos. Es wird nur im Dashboard (Authentication → Emails → SMTP Settings) eingetragen, nie im Repo, in `config.toml` oder in `.env.local`.
+- Absendername „Vereins OS“, Absenderadresse die Adresse des Google-Kontos.
+- Supabase begrenzt Auth-Mails mit eigenem SMTP; eingestellt sind 30 je Stunde (Checkliste Punkt 4).
 
 ## 2. Ersteinrichtung PROD (US-AD-01)
 
