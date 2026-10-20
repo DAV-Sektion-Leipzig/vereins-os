@@ -158,7 +158,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
     - URL-Konfiguration: Site URL und Redirect-URLs wie in `supabase/config.toml` (`[auth]`), für TEST mit Vorschau- und lokaler Adresse.
     - E-Mail-Vorlagen „Invite user“ und „Reset password“: Betreff deutsch, Inhalt aus `supabase/templates/invite.html` bzw. `recovery.html` kopieren.
     - SMTP: Google-Konto der Sektion, App-Passwort nur hier, Absendername „Vereins OS“.
-- [ ] T019 [US-AD-01] (spec T1, T3, T5, T23 Teil) Gegen TEST ausrollen (nach Prüfung, dass TEST verknüpft ist):
+- [X] T019 [US-AD-01] (spec T1, T3, T5, T23 Teil) Gegen TEST ausrollen (nach Prüfung, dass TEST verknüpft ist):
   - `npx supabase db push --linked --dry-run`, dann `npx supabase db push --linked`.
   - Kein `config push`/`config diff`. Den Product Owner bitten, die Checkliste „Auth-Einstellungen im Dashboard“ (T018) für TEST abzuarbeiten.
   - `supabase/seed.sh` gegen TEST. Ergebnis kurz in der PR-Beschreibung festhalten.
@@ -179,27 +179,27 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 ### Tests für US-AD-02 ⚠️
 
-- [ ] T020 [P] [US-AD-02] (spec T7 Teil, T6 Teil) `supabase/tests/database/060_ad_me.test.sql`: `ad_me()` liefert für test.admin, test.geschaeftsstelle und test.vorstand jeweils genau die eigene Person mit Status; ohne Zugang keine Zeile; keine fremden Daten.
+- [X] T020 [P] [US-AD-02] (spec T7 Teil, T6 Teil) `supabase/tests/database/060_ad_me.test.sql`: `ad_me()` liefert für test.admin, test.geschaeftsstelle und test.vorstand jeweils genau die eigene Person mit Status; ohne Zugang keine Zeile; keine fremden Daten.
 
 ### Umsetzung für US-AD-02
 
-- [ ] T021 [US-AD-02] (spec T6 Teil) Migration `supabase/migrations/20261020000600_ad_me.sql`: `ad_me() returns table (person_id uuid, first_name text, last_name text, access_status ad_access_status)`, security definer, stable, nur über `ad_accesses.auth_user_id = auth.uid()`; `grant execute … to authenticated`
-- [ ] T022 [US-AD-02] (spec T11 Teil) `supabase/config.toml`:
+- [X] T021 [US-AD-02] (spec T6 Teil) Migration `supabase/migrations/20261020000600_ad_me.sql`: `ad_me() returns table (person_id uuid, first_name text, last_name text, access_status ad_access_status)`, security definer, stable, nur über `ad_accesses.auth_user_id = auth.uid()`; `grant execute … to authenticated`
+- [X] T022 [US-AD-02] (spec T11 Teil) `supabase/config.toml`:
   - `[auth.email.template.recovery]` mit Betreff „Passwort zurücksetzen“ und `content_path = "./supabase/templates/recovery.html"`; Datei `supabase/templates/recovery.html` mit Link `{{ .SiteURL }}/passwort-setzen?token_hash={{ .TokenHash }}&type=recovery`.
   - Prüfen: `enable_signup = false` und `minimum_password_length = 8`.
   - In `supabase/setup/README.md` einen Abschnitt „SMTP (TEST und PROD)“ ergänzen: Google-Konto der Sektion, App-Passwort nur im Dashboard, Absendername „Vereins OS“.
   - Kein `config push`/`config diff`. `recovery.html` in die Checkliste aus T018 aufnehmen; der Product Owner überträgt sie ins Dashboard von TEST.
-- [ ] T023 [P] [US-AD-02] (spec T12) `src/lib/errors.ts`: Abbildung aller Codes und Constraint-Namen aus contracts/error-codes.md auf die Meldungen. `AD_EMAIL_CHANGED` liefert die Art „Hinweis“ statt „Fehler“, SQLSTATE `42501` die Rechte-Meldung, alles Unbekannte die allgemeine Meldung.
-- [ ] T024 [P] [US-AD-02] (spec T12) `src/lib/format.ts`: Datum TT.MM.JJJJ und Zeit HH:MM mit `Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin' })`
-- [ ] T025 [P] [US-AD-02] (spec T12) `src/lib/rights.ts`: `requireSession()` (redirect `/login`), `requireLevel(module, min)` über `rpc('ad_has_level')` (redirect `/kein-zugriff`, bevor Daten geladen werden), `loadMe()` über `rpc('ad_me')`
-- [ ] T026 [US-AD-02] (spec T12) Router in `src/App.tsx` und `src/main.tsx` mit `createBrowserRouter`:
+- [X] T023 [P] [US-AD-02] (spec T12) `src/lib/errors.ts`: Abbildung aller Codes und Constraint-Namen aus contracts/error-codes.md auf die Meldungen. `AD_EMAIL_CHANGED` liefert die Art „Hinweis“ statt „Fehler“, SQLSTATE `42501` die Rechte-Meldung, alles Unbekannte die allgemeine Meldung.
+- [X] T024 [P] [US-AD-02] (spec T12) `src/lib/format.ts`: Datum TT.MM.JJJJ und Zeit HH:MM mit `Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin' })`
+- [X] T025 [P] [US-AD-02] (spec T12) `src/lib/rights.ts`: `requireSession()` (redirect `/login`), `requireLevel(module, min)` über `rpc('ad_has_level')` (redirect `/kein-zugriff`, bevor Daten geladen werden), `loadMe()` über `rpc('ad_me')`
+- [X] T026 [US-AD-02] (spec T12) Router in `src/App.tsx` und `src/main.tsx` mit `createBrowserRouter`:
   - Öffentliche Routen /login, /passwort-vergessen, /passwort-setzen.
   - Geschützter Bereich mit Loader `requireSession` für / und /kein-zugriff.
   - Bereich /ad/* mit Loader `requireLevel('AD','read')`.
   - Platzhalter-Seiten für noch nicht umgesetzte Routen.
-- [ ] T027 [US-AD-02] (spec T12) `src/components/layout/AppHeader.tsx`: „Vereins OS“ (Link /), Modulname, Name aus `ad_me()`, Knopf „Abmelden“ (`auth.signOut()` → /login); ab 375 px ohne horizontales Scrollen
-- [ ] T028 [P] [US-AD-02] (spec T12) `src/features/start/KeinZugriffPage.tsx`: „Für diesen Bereich hast du keine Rechte.“ und Knopf „Zur Startseite“
-- [ ] T029 [US-AD-02] (spec T13 Teil) `src/features/auth/LoginPage.tsx`: Felder Login-Adresse und Passwort, Knopf „Anmelden“, Link „Passwort vergessen“. `signInWithPassword`; **jeder** Fehler zeigt „Anmeldung fehlgeschlagen. Bitte E-Mail-Adresse und Passwort prüfen.“ (R18); Erfolg → /; mit Sitzung → /
+- [X] T027 [US-AD-02] (spec T12) `src/components/layout/AppHeader.tsx`: „Vereins OS“ (Link /), Modulname, Name aus `ad_me()`, Knopf „Abmelden“ (`auth.signOut()` → /login); ab 375 px ohne horizontales Scrollen
+- [X] T028 [P] [US-AD-02] (spec T12) `src/features/start/KeinZugriffPage.tsx`: „Für diesen Bereich hast du keine Rechte.“ und Knopf „Zur Startseite“
+- [X] T029 [US-AD-02] (spec T13 Teil) `src/features/auth/LoginPage.tsx`: Felder Login-Adresse und Passwort, Knopf „Anmelden“, Link „Passwort vergessen“. `signInWithPassword`; **jeder** Fehler zeigt „Anmeldung fehlgeschlagen. Bitte E-Mail-Adresse und Passwort prüfen.“ (R18); Erfolg → /; mit Sitzung → /
 
 **Checkpoint**: Login, Abmelden und Routenschutz funktionieren mit den Seed-Zugängen in TEST.
 

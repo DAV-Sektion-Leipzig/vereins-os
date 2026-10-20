@@ -253,6 +253,12 @@ otp_expiry = 3600
 subject = "Einladung ins Vereins OS"
 content_path = "./supabase/templates/invite.html"
 
+# Vereins OS: Passwort zurücksetzen (US-AD-04). Gilt nur für den lokalen Stack; in TEST und PROD
+# überträgt der Product Owner die HTML-Datei ins Dashboard (kein config push).
+[auth.email.template.recovery]
+subject = "Passwort zurücksetzen"
+content_path = "./supabase/templates/recovery.html"
+
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]
 # enabled = true
