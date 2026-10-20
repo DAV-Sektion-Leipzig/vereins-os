@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import logoUrl from '@/assets/brand/DAVLogo-lg_Leipzig-1378_RGB.svg'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -37,7 +38,8 @@ export function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-svh items-center justify-center px-4 py-8">
+    <main className="flex min-h-svh flex-col items-center justify-center gap-10 border-t-3 border-t-brand-band px-4 py-8">
+      <img src={logoUrl} alt="DAV Sektion Leipzig" className="h-20 w-auto" />
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-lg">Vereins OS</CardTitle>

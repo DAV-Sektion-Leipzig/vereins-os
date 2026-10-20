@@ -37,7 +37,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 - **React + TypeScript + Vite**, als statische Single-Page-App gebaut. [ANNAHME: Vite statt Next.js; die gesamte Serverlogik liegt in Supabase, das Frontend braucht keinen eigenen Server]
 - **UI-Bibliothek:** shadcn/ui mit Tailwind CSS; Komponenten-Setup und Design-Muster als Code im Repo.
 - **Design-Regeln:** Impeccable-Skill mit `PRODUCT.md` und `DESIGN.md` im Wurzelverzeichnis (Impeccable-Konvention), Einstellungen in `.impeccable/`; Markenvorgaben des DAV in `docs/marke.md`. Ziel: kein generischer „KI-Look“.
-- **Schrift:** Fira Sans (DAV-Vorgabe für den Online-Bereich), selbst gehostet, nicht von Google- oder Adobe-Servern geladen. Ersetzt die bisherige Geist; Umsetzung im Code folgt nach DESIGN.md.
+- **Schrift:** Fira Sans (DAV-Vorgabe für den Online-Bereich), selbst gehostet, nicht von Google- oder Adobe-Servern geladen. Ersetzt die bisherige Geist; eingebunden über `@fontsource/fira-sans` (siehe DESIGN.md).
 - **Routing:** SPA-Routing mit Rückfall auf `index.html` (von Cloudflare unterstützt).
 - **Mobil nutzbar:** alle Screens ab 375 px Breite. [ANNAHME]
 - **Supabase-Zugriff:** direkt aus dem Frontend mit dem öffentlichen Anon-Key; Schutz ausschließlich über RLS.
