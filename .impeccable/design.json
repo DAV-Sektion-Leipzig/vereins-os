@@ -344,7 +344,7 @@
       "kind": "nav",
       "description": "Markenband, Sektionslogo light, Produkt- und Modulname, Abmelden.",
       "html": "<header class=\"ds-header\"><div class=\"ds-header-in\"><span class=\"ds-logo\">DAV-Logo</span><span class=\"ds-sep\"></span><strong>Vereins OS</strong><span class=\"ds-mod\">· Administration</span><span class=\"ds-grow\"></span><span class=\"ds-mod\">Eva Beispiel</span><button class=\"ds-ghost\">Abmelden</button></div></header>",
-      "css": ".ds-header{border-top:3px solid #50ae2f;border-bottom:1px solid #d6dbdf;background:#fff;font-family:'Fira Sans',system-ui,sans-serif;color:#363b44}.ds-header-in{display:flex;align-items:center;gap:12px;padding:8px 16px}.ds-logo{display:inline-flex;align-items:center;height:48px;color:#707680;font-size:12px}.ds-sep{width:1px;height:28px;background:#d6dbdf}.ds-header strong{font-weight:600}.ds-mod{font-size:14px;color:#707680}.ds-grow{flex:1}.ds-ghost{background:none;border:1px solid transparent;border-radius:8px;height:28px;padding:0 10px;font-family:'Fira Sans',system-ui,sans-serif;font-size:13px;font-weight:500;color:#363b44;cursor:pointer}.ds-ghost:hover{background:#f4f4f5}.ds-ghost:focus-visible{outline:none;border-color:#2c7eb2;box-shadow:0 0 0 3px rgba(44,126,178,.5)}"
+      "css": ".ds-header{border-top:3px solid #50ae2f;border-bottom:1px solid #d6dbdf;background:#fff;font-family:'Fira Sans',system-ui,sans-serif;color:#363b44}.ds-header-in{display:flex;align-items:center;gap:12px;padding:24px}.ds-logo{display:inline-flex;align-items:center;height:38px;color:#707680;font-size:12px}.ds-sep{width:1px;height:28px;background:#d6dbdf}.ds-header strong{font-weight:600}.ds-mod{font-size:14px;color:#707680}.ds-grow{flex:1}.ds-ghost{background:none;border:1px solid transparent;border-radius:10px;height:32px;padding:0 10px;font-family:'Fira Sans',system-ui,sans-serif;font-size:13px;font-weight:500;color:#363b44;cursor:pointer}.ds-ghost:hover{background:#f4f4f5}.ds-ghost:focus-visible{outline:none;border-color:#2c7eb2;box-shadow:0 0 0 3px rgba(44,126,178,.5)}.ds-sep{margin-left:12px}"
     }
   ],
   "narrative": {
@@ -392,10 +392,15 @@
         "name": "Die Flach-in-Ruhe-Regel",
         "body": "Was auf der Seite liegt, wirft keinen Schatten. Schatten zeigt nur an, dass etwas über der Seite schwebt.",
         "section": "elevation"
+      },
+      {
+        "name": "Die Schutzzonen-Regel",
+        "body": "Um das Sektionslogo bleibt rundum frei, was das Edelweiß hoch ist (docs/marke.md). Das Edelweiß misst rund 63 % der Höhe der Logodatei, die Zone ist also rund 0,63 × Logohöhe, gemessen ab der Kante der Datei. Kopfzeile: Logo 38 px, Zone 24 px zu Markenband, Unterkante der Kopfzeile, Bildschirmrand und Trennlinie. Anmeldung: Logo 80 px, Zone mindestens 50 px (56 px Abstand zur Karte). Wer das Logo größer setzt, vergrößert die Zone mit.",
+        "section": "shapes"
       }
     ],
     "dos": [
-      "**Do** das Logo als Datei `src/assets/brand/DAVLogo-lg_Leipzig-1378_RGB.svg` unverändert einbinden, mit Abstand zu allem anderen.",
+      "**Do** das Logo als Datei `src/assets/brand/DAVLogo-lg_Leipzig-1378_RGB.svg` unverändert einbinden und die Schutzzonen-Regel einhalten (0,63 × Logohöhe rundum).",
       "**Do** Text in Felsgrau dunkel setzen; Felsgrau mittel nur auf Weiß.",
       "**Do** jeden Zustand mit Wort und Symbol zeigen.",
       "**Do** neue Farben nur aus der DAV-Farbwelt (docs/marke.md) ableiten und den Kontrast nachrechnen: Text 4,5 : 1, Bedienelemente und Rahmen von Feldern 3 : 1.",

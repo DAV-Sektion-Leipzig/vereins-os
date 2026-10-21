@@ -188,9 +188,11 @@ Eingebunden über `@fontsource/fira-sans`, nur der Latin-Schnitt (enthält ä, �
 
 ## Layout
 
-Eine Spalte, maximal 64rem (1024 px) breit, mittig, 16 px Seitenrand. Kopfzeile und Inhalt nutzen dieselbe Breite. Abstände auf dem 4-px-Raster: 8 px innerhalb von Gruppen, 16 px zwischen Feldern, 24 px zwischen Abschnitten.
+Eine Spalte, maximal 64rem (1024 px) breit, mittig, 24 px Seitenrand (Schutzzone des Logos, siehe Shapes). Kopfzeile und Inhalt nutzen dieselbe Breite. Abstände auf dem 4-px-Raster: 8 px innerhalb von Gruppen, 16 px zwischen Feldern, 24 px zwischen Abschnitten.
 
-Mobil ab 375 px: Die Kopfzeile zeigt Logo und Modulname, der Name der angemeldeten Person rückt in eine zweite Zeile. Ohne Modul steht dort „Vereins OS“. Tabellen werden mobil zu Karten (PRODUCT.md).
+Mobil ab 375 px: Die Kopfzeile zeigt Logo und Modulname; Name der angemeldeten Person und „Abmelden“ stehen rechts übereinander. Ohne Modul steht „Vereins OS“. Die Willkommensgrafik der Startseite ist mobil (unter 640 px) ein Streifen von 72 px, ab 640 px 176 px hoch. Tabellen werden mobil zu Karten (PRODUCT.md).
+
+Ladezustände sind ruhig: eine Platzhalterzeile in Form des späteren Inhalts mit „Wird geladen …“, ohne Animation. Beim ersten Seitenaufbau zeigt ein schlichter Bildschirm mit Markenband „Wird geladen …“.
 
 ## Elevation & Depth
 
@@ -202,6 +204,9 @@ Flach. Tiefe entsteht über Linien (Felsgrau-Linie) und die gedämpfte Fläche, 
 ## Shapes
 
 Sanft gerundete Ecken: 10 px für Bedienelemente, 14 px für Karten, Pillenform für Status-Kennzeichen. Linien immer 1 px; das Markenband ist mit 3 px die einzige Ausnahme.
+
+### Named Rules
+**Die Schutzzonen-Regel.** Um das Sektionslogo bleibt rundum frei, was das Edelweiß hoch ist (docs/marke.md). Das Edelweiß misst rund 63 % der Höhe der Logodatei, die Zone ist also rund 0,63 × Logohöhe, gemessen ab der Kante der Datei. Kopfzeile: Logo 38 px, Zone 24 px zu Markenband, Unterkante der Kopfzeile, Bildschirmrand und Trennlinie. Anmeldung: Logo 80 px, Zone mindestens 50 px (56 px Abstand zur Karte). Wer das Logo größer setzt, vergrößert die Zone mit.
 
 ## Components
 
@@ -233,17 +238,17 @@ Signature-Komponente `AccessStatusBadge`: Pille, 20 px hoch, Symbol links, Begri
 - **Error / Disabled:** Fehler mit Rand in Fehlerrot und Meldung darunter; deaktiviert mit 50 % Deckkraft.
 
 ### Navigation (Kopfzeile)
-- **Aufbau:** 3-px-Markenband oben, dann Sektionslogo „light“ (44 px mobil, 48 px ab 640 px), 1-px-Trennlinie, „Vereins OS“ (600) und Modulname (Felsgrau mittel). Rechts Name der Person und „Abmelden“ als Ghost-Schaltfläche.
+- **Aufbau:** 3-px-Markenband oben, dann Sektionslogo „light“ (38 px, 24 px Innenabstand rundum als Schutzzone), 24 px Abstand, 1-px-Trennlinie, „Vereins OS“ (600) und Modulname (Felsgrau mittel). Rechts Name der Person und „Abmelden“ als Ghost-Schaltfläche in Standardhöhe (32 px).
 - **Logo:** führt zur Startseite. Alternativtext „DAV Sektion Leipzig“.
-- **Mobil:** Modulname statt „Vereins OS“, Name der Person in zweiter Zeile.
+- **Mobil:** Modulname statt „Vereins OS“; Name der Person rechts über „Abmelden“, damit keine zweite Zeile in die Schutzzone rückt.
 
 ### Anmeldung
-Markenband oben, Sektionslogo „light“ 80 px hoch über der Karte, mit 40 px Abstand (Schutzzone). Karte maximal 24rem breit.
+Markenband oben, Sektionslogo „light“ 80 px hoch über der Karte, mit 56 px Abstand und mindestens 56 px zu den Seitenkanten oben und unten (Schutzzonen-Regel). Karte maximal 24rem breit.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** das Logo als Datei `src/assets/brand/DAVLogo-lg_Leipzig-1378_RGB.svg` unverändert einbinden, mit Abstand zu allem anderen.
+- **Do** das Logo als Datei `src/assets/brand/DAVLogo-lg_Leipzig-1378_RGB.svg` unverändert einbinden und die Schutzzonen-Regel einhalten (0,63 × Logohöhe rundum).
 - **Do** Text in Felsgrau dunkel setzen; Felsgrau mittel nur auf Weiß.
 - **Do** jeden Zustand mit Wort und Symbol zeigen.
 - **Do** neue Farben nur aus der DAV-Farbwelt (docs/marke.md) ableiten und den Kontrast nachrechnen: Text 4,5 : 1, Bedienelemente und Rahmen von Feldern 3 : 1.

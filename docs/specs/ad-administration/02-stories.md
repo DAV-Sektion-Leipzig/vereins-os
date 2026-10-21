@@ -1,7 +1,7 @@
 # User Stories: Administration (AD)
 
-Stand: 20.10.2026 · Version 0.5 · Status: Ready · Product Owner: Toni Werner
-Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.7 (Regeln R1–R20), glossar.md v0.4, rollen.md v0.6, spec.md v0.5
+Stand: 21.10.2026 · Version 0.6 · Status: Ready · Product Owner: Toni Werner
+Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.7 (Regeln R1–R20), glossar.md v0.4, rollen.md v0.6, spec.md v0.6
 
 Oberflächentexte in der Ansprache „du“.
 
@@ -90,7 +90,7 @@ Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 �
 **Priorität:** Must · **Regeln:** R5, R6 · **Abhängig von:** US-AD-02
 **Akzeptanzkriterien**
 - AK1: Gegeben ich habe die Vorlage Admin, wenn ich die Startseite öffne, dann sehe ich die Willkommensgrafik und einen Einstieg zu AD; Einstiege zu Modulen, die noch nicht umgesetzt sind, werden nicht angezeigt.
-- AK2: Gegeben ich habe nur die Vorlage Vorstand ohne Rechte, wenn ich die Startseite öffne, dann sehe ich die Willkommensgrafik und den Hinweis „Für dich sind noch keine Module freigeschaltet.“
+- AK2: Gegeben ich habe nur die Vorlage Vorstand ohne Rechte, wenn ich die Startseite öffne, dann sehe ich die Willkommensgrafik und den Hinweis „Für dich sind noch keine Module freigeschaltet.“ mit dem Zusatz „Wende dich an den Admin, wenn du Zugriff brauchst.“ (ergänzt 21.10.2026, Entscheidung Product Owner)
 - AK3: Gegeben ich habe keine Rechte auf AD, wenn ich eine AD-Seite direkt über die Adresse aufrufe, dann erscheint „Für diesen Bereich hast du keine Rechte.“ und es werden keine Daten geladen (Rechte-Fall).
 - AK4: Gegeben mir wurde eine Vorlage entzogen, wenn meine laufende Sitzung abläuft (spätestens nach 1 Stunde), dann zeigt die Startseite das Modul nicht mehr (Fehlerfall: veraltete Sitzung).
 - AK5: Die Startseite ist ab 375 px Breite ohne horizontales Scrollen nutzbar.

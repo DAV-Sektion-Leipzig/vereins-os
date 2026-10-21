@@ -9,7 +9,7 @@ export function ProtectedLayout() {
   return (
     <div className="flex min-h-svh flex-col">
       <AppHeader me={me} />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-6">
         <Outlet />
       </main>
     </div>

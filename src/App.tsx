@@ -1,4 +1,5 @@
 import { createBrowserRouter, redirect } from 'react-router-dom'
+import { LoadingScreen } from '@/components/layout/LoadingScreen'
 import { PlaceholderPage } from '@/components/layout/PlaceholderPage'
 import { ProtectedLayout } from '@/components/layout/ProtectedLayout'
 import type { RouteHandle } from '@/components/layout/AppHeader'
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
       return null
     },
     element: <LoginPage />,
+    HydrateFallback: LoadingScreen,
   },
   { path: '/passwort-vergessen', element: <PlaceholderPage title="Passwort vergessen" /> },
   { path: '/passwort-setzen', element: <PlaceholderPage title="Passwort setzen" /> },
@@ -30,6 +32,7 @@ export const router = createBrowserRouter([
       return { me: await loadMe() }
     },
     element: <ProtectedLayout />,
+    HydrateFallback: LoadingScreen,
     children: [
       { index: true, loader: loadMyModules, element: <StartPage /> },
       { path: 'kein-zugriff', element: <KeinZugriffPage /> },

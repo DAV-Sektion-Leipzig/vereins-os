@@ -38,11 +38,14 @@ export function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-svh flex-col items-center justify-center gap-10 border-t-3 border-t-brand-band px-4 py-8">
+    <main className="flex min-h-svh flex-col items-center justify-center gap-14 border-t-3 border-t-brand-band px-4 py-14">
+      {/* Schutzzone: Höhe des Edelweiß, bei 80 px Logo mindestens 50 px (DESIGN.md) */}
       <img src={logoUrl} alt="DAV Sektion Leipzig" className="h-20 w-auto" />
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="text-lg">Vereins OS</CardTitle>
+          <CardTitle className="text-lg">
+            <h1>Vereins OS</h1>
+          </CardTitle>
           <CardDescription>Melde dich mit deiner Login-Adresse an.</CardDescription>
         </CardHeader>
         <CardContent>
