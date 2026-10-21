@@ -1,11 +1,13 @@
 # Setup-Anleitung: Vereins OS mit Claude Code
 
-Stand: 20.10.2026 · Version 0.2 · Grundlage: tech-stack.md v0.5, rollen.md v0.6, spec.md AD v0.5
+Stand: 21.10.2026 · Version 0.3 · Grundlage: tech-stack.md v0.6, rollen.md v0.6, spec.md AD v0.5.1
 Ablage: `docs/setup-anleitung.md`
 
 Legende: **[DU]** = manuell im Browser/Dashboard · **[CC]** = in Claude Code ausführen lassen · [ANNAHME] / [OFFEN] wie im Projekt üblich.
 
 Reihenfolge ist verbindlich: Konten → Repo → Claude Code → Frontend → Supabase → Cloudflare → Prüfung. Erst danach mit Spec Kit an US-AD-01 beginnen.
+
+Änderungen v0.3 (21.10.2026): Impeccable über `npx impeccable install`, PRODUCT.md und DESIGN.md im Wurzelverzeichnis; Supabase MCP zurückgestellt; Spec-Kit-Befehle mit Bindestrich; kein `supabase config push`, Auth-Einstellungen per Dashboard-Checkliste; Phase 8 abgeschlossen bis auf P3 und P7.
 
 ---
 
@@ -26,15 +28,15 @@ Reihenfolge ist verbindlich: Konten → Repo → Claude Code → Frontend → Su
 Diese Schritte kann Claude Code nicht übernehmen (Login, Verträge, Region).
 
 ### 1.1 GitHub
-- [ ] Repository `vereins-os` im Organisationskonto der Sektion anlegen, **öffentlich**, Branch `main`.
-- [ ] Settings → Code security: **Secret scanning** und **Push protection** aktivieren (öffentliches Repo, Schutz gegen versehentlich eingecheckte Keys).
-- [ ] Branch-Schutz für `main`: Änderungen nur per Pull Request. [ANNAHME]
+- [ ] Repository `vereins-os` im Konto der Sektion anlegen, Branch `main`. [OFFEN] öffentlich oder privat (siehe offene Punkte).
+- [ ] Settings → Code security: **Secret scanning** und **Push protection** aktivieren (Schutz gegen versehentlich eingecheckte Keys).
+- [ ] Branch-Schutz für `main` per Ruleset: Pull Request erforderlich, kein Force-Push, kein Löschen (entschieden 19.10.2026, tech-stack.md).
 
 ### 1.2 Supabase (Free-Plan, 2 Projekte)
 - [ ] Projekt `vereins-os-test` anlegen, Region **EU Central (Frankfurt)**.
 - [ ] Projekt `vereins-os-prod` anlegen, Region **EU Central (Frankfurt)**. Region ist nachträglich nicht änderbar.
 - [ ] Je Projekt notieren (nicht ins Repo): Project Ref, Project URL, Anon-/Publishable Key, DB-Passwort.
-- [ ] Persönliches Access Token unter Account → Access Tokens erzeugen (für CLI und MCP).
+- [ ] Persönliches Access Token unter Account → Access Tokens erzeugen (für die CLI).
 - [ ] Auftragsverarbeitungsvertrag (DPA) mit Supabase abschließen.
 
 ### 1.3 Google-Konto der Sektion (SMTP für Login-Mails)
@@ -68,7 +70,7 @@ Prompt:
 
 ### 2.5 Berechtigungen für Claude Code [CC]
 Prompt:
-> Lege `.claude/settings.json` an: Lesen von `.env*` verbieten; Befehle `supabase db push`, `supabase link`, `supabase functions deploy`, `supabase secrets set` und `wrangler deploy` nur mit Rückfrage.
+> Lege `.claude/settings.json` an: Lesen und Ändern von `.env`, `.env.local` und `.env.*.local` verbieten; Befehle `supabase db push`, `supabase link`, `supabase functions deploy`, `supabase secrets set`, `wrangler deploy` (auch mit `npx`) und `git push` nur mit Rückfrage.
 
 Grund: Ein falsches `supabase link` lenkt Migrationen auf PROD.
 
@@ -87,12 +89,12 @@ Nur das Paket aus `github/spec-kit` verwenden; gleichnamige Pakete auf PyPI sind
 ```bash
 specify init --here --integration claude
 ```
-Erzeugt `.specify/` und die Befehle für Claude Code (`/speckit.constitution`, `/speckit.specify`, `/speckit.clarify`, `/speckit.plan`, `/speckit.tasks`, `/speckit.implement`). Danach Claude Code neu starten.
+Erzeugt `.specify/` und die Befehle für Claude Code als Skills unter `.claude/skills/`. Aufruf mit Bindestrich: `/speckit-constitution`, `/speckit-specify`, `/speckit-clarify`, `/speckit-plan`, `/speckit-tasks`, `/speckit-implement`, dazu `/speckit-analyze`, `/speckit-checklist`, `/speckit-converge`. Danach Claude Code neu starten.
 
 ### 3.3 Constitution [CC]
-> `/speckit.constitution` Leite die Constitution aus den Prinzipien in `docs/vision.md` und den Konventionen in `docs/tech-stack.md` Abschnitt 6 ab. Ergänze: `docs/specs/<modul>/spec.md` ist führend; `/speckit.specify` wird nicht genutzt.
+> `/speckit-constitution` Leite die Constitution aus den Prinzipien in `docs/vision.md` und den Konventionen in `docs/tech-stack.md` Abschnitt 6 ab. Ergänze: `docs/specs/<modul>/spec.md` ist führend; `/speckit-specify` wird nicht genutzt.
 
-**Hinweis Widerspruch:** Spec Kit legt standardmäßig eigene Ordner `specs/<nr>-<feature>/` mit eigener spec.md an. tech-stack.md legt fest, dass `docs/specs/<modul>/spec.md` führend ist und Spec Kit nur plan.md und tasks.md erzeugt. [ANNAHME] Umsetzung: `/speckit.specify` überspringen, `/speckit.plan` mit Verweis auf `docs/specs/ad-administration/spec.md` aufrufen; Ablageort von plan.md/tasks.md = `docs/specs/<modul>/`. Beim ersten Lauf prüfen, ob die Skripte von Spec Kit das zulassen.
+**Ablage:** Spec Kit legt standardmäßig eigene Ordner `specs/<nr>-<feature>/` mit eigener spec.md an. Im Vereins OS ist `docs/specs/<modul>/spec.md` führend; Spec Kit erzeugt dort nur plan.md, tasks.md und die Begleitdokumente. Umsetzung: `/speckit-specify` überspringen, `/speckit-plan` mit Verweis auf `docs/specs/<modul>/spec.md` aufrufen. Für AD umgesetzt und geprüft (`check-prerequisites.sh` liefert `docs/specs/ad-administration` als FEATURE_DIR).
 
 ---
 
@@ -105,14 +107,16 @@ Erzeugt `.specify/` und die Befehle für Claude Code (`/speckit.constitution`, `
 > Installiere `tailwindcss` und `@tailwindcss/vite`, trage das Plugin in `vite.config.ts` ein. Setze den Alias `@` → `./src` in `tsconfig.json`, `tsconfig.app.json` und `vite.config.ts`. Führe `npx shadcn@latest init` aus (kein `tailwind.config.js`, Tailwind v4). Füge `button`, `input`, `label`, `card`, `dialog`, `table`, `badge`, `select`, `sonner` hinzu.
 
 ### 4.3 Impeccable (Design-Regeln)
-[DU] Installation auf Projektebene:
+[DU] Installation:
 ```bash
-npx skills add https://github.com/pbakaus/impeccable --skill impeccable
+npx impeccable install
 ```
-[ANNAHME] Installationsweg laut Repository; vor Ausführung README unter github.com/pbakaus/impeccable prüfen.
+Bei der Auswahl nur **Claude Code** und den Bereich **Project** wählen. Das legt den Skill unter `.claude/skills/impeccable/` und die Hilfs-Agents unter `.claude/agents/` an. Das plattformabhängige Programm unter `.claude/skills/impeccable/scripts/bin/` steht in `.gitignore`; der Starter lädt es bei Bedarf selbst.
 
 [CC] Danach:
-> Erstelle mit Impeccable `docs/product.md` und `docs/design.md`. Kontext: Arbeitswerkzeug für 4 Nutzer einer DAV-Sektion, deutsch, sachlich, mobil ab 375 px, Tabellen werden mobil zu Karten, kein „KI-Look“.
+> `/impeccable init` und `/impeccable document`.
+
+Impeccable legt `PRODUCT.md` und `DESIGN.md` im **Wurzelverzeichnis** an (Konvention des Skills), nicht in `docs/`. Markenvorgaben des DAV stehen in `docs/marke.md`, das Logo unter `src/assets/brand/`.
 
 ### 4.4 Cloudflare-Anbindung im Code
 > Installiere `@cloudflare/vite-plugin` und `wrangler` als devDependencies, trage das Plugin in `vite.config.ts` ein. Lege `wrangler.jsonc` an: name `vereins-os`, aktuelles `compatibility_date`, `assets.not_found_handling = "single-page-application"`, kein Worker-Code (`main` weglassen).
@@ -137,25 +141,15 @@ Startseite lädt, keine Fehler in der Konsole.
 npx supabase login
 npx supabase link --project-ref <ref-test>
 ```
-**Regel:** Das Repo ist immer mit TEST verknüpft. Wie Migrationen nach PROD kommen: [OFFEN] siehe Frage 1.
+**Regel:** Das Repo ist immer mit TEST verknüpft. Wie Migrationen nach PROD kommen: [OFFEN], siehe offene Punkte.
 
-### 5.3 Supabase MCP für Claude Code (nur TEST) [DU]
-```bash
-claude mcp add --scope project --transport http supabase \
-  "https://mcp.supabase.com/mcp?project_ref=<ref-test>&features=database,docs,debugging,development,functions"
-```
-Danach in Claude Code `/mcp` → supabase → Authenticate.
-
-- Immer mit `project_ref` von **TEST**. Supabase selbst rät, den MCP-Server nie mit Produktionsdaten zu verbinden.
-- `.mcp.json` wird eingecheckt; sie enthält nur die Project Ref, kein Token. Die Project Ref von TEST ist im öffentlichen Repo unkritisch [ANNAHME].
-- Schemaänderungen trotzdem nur per Migrationsdatei (Konvention), nicht per MCP direkt.
+### 5.3 Supabase MCP: zurückgestellt
+Supabase MCP wird vorerst nicht genutzt (Entscheidung tech-stack.md Abschnitt 6): OAuth scheitert mit der projektgebundenen URL, die Basis-URL hätte Zugriff auf PROD. Datenbankarbeit läuft über die Supabase CLI. Es gibt keine `.mcp.json` im Repo. Falls später doch: nur gegen TEST und nur lesend (`read_only=true`).
 
 ### 5.4 Auth-Einstellungen im Dashboard [DU] – je Projekt TEST und PROD
-- [ ] Authentication → Sign In / Providers: E-Mail an, Selbstregistrierung aus.
-- [ ] Authentication → SMTP: eigener SMTP, Host `smtp.gmail.com`, Port 587, Benutzer = Gmail-Adresse, Passwort = App-Passwort, Absendername „Vereins OS“.
-- [ ] Authentication → Rate Limits: Mails ≤ 30/Stunde (Standard bei eigenem SMTP).
-- [ ] Authentication → URL Configuration: Site URL und Redirect-URLs (nach Phase 6 nachtragen).
-- [ ] Mailvorlagen „Invite user“ und „Reset password“ auf Deutsch, nur Hinweistext + Link (Text erzeugt [CC] im Rahmen von T11).
+Kein `supabase config push` und kein `supabase config diff`, weder gegen TEST noch gegen PROD. `supabase/config.toml` gilt nur für den lokalen Stack der GitHub Action. Die Auth-Einstellungen (Selbstregistrierung aus, Passwortlänge, SMTP, Rate Limits, URL Configuration, Mailvorlagen) stellt der Product Owner im Dashboard ein, nach der Checkliste in `supabase/setup/README.md`, und hakt sie dort je Projekt ab.
+
+Stand: TEST vollständig abgehakt (Punkte 1–9); PROD folgt bei der Ersteinrichtung.
 
 ### 5.5 Erweiterungen
 `citext`, `pg_trgm`, `pg_cron` werden per Migration aktiviert (spec.md AD, T1). Kein manueller Schritt im Dashboard.
@@ -183,7 +177,7 @@ Vite schreibt `VITE_*`-Werte beim Build in das Bundle. Produktion braucht PROD-W
 Anon-/Publishable Key ist öffentlich (Schutz nur über RLS). Der Service-Schlüssel kommt **nie** zu Cloudflare.
 
 ### 6.3 Redirect-URLs nachtragen [DU]
-`https://vereins-os.<konto>.workers.dev` (PROD) und das Muster der Vorschau-URLs (TEST) in Supabase → URL Configuration eintragen.
+`https://vereins-os.sektion-leipzig.workers.dev` (PROD) und das Muster der Vorschau-URLs `https://*-vereins-os.sektion-leipzig.workers.dev/**` (TEST) in Supabase → URL Configuration eintragen (Checkliste `supabase/setup/README.md`, Punkte 5 und 6).
 
 ---
 
@@ -198,28 +192,35 @@ Anon-/Publishable Key ist öffentlich (Schutz nur über RLS). Der Service-Schlü
 
 ## Phase 8: Abnahme des Setups
 
-| # | Prüfung | Erwartet |
-|---|---|---|
-| P1 | `npm run dev` | App lokal erreichbar, verbunden mit TEST |
-| P2 | `npx supabase migration list` | zeigt TEST, keine Fehler |
-| P3 | In Claude Code: „Liste die Tabellen in TEST“ (MCP) | Antwort aus TEST, nicht PROD |
-| P4 | Push auf Branch `setup-check` | Vorschau-URL erreichbar |
-| P5 | Merge nach `main` | `*.workers.dev` erreichbar, Direktaufruf `/ad` liefert die App (SPA-Fallback) |
-| P6 | `git grep -i "service_role\|sb_secret\|app-passwort"` | keine Treffer |
-| P7 | Testmail „Passwort vergessen“ aus TEST an eine reale @dav-leipzig.de-Adresse | kommt an, nicht im Spam (Risiko aus Steckbrief AD) |
-| P8 | `/speckit.constitution` vorhanden, `.specify/memory/constitution.md` gefüllt | ja |
+Abgeschlossen am 21.10.2026, außer P3 und P7.
 
-Danach: Umsetzung AD in der Reihenfolge aus 02-stories.md, beginnend mit `/speckit.plan` für `docs/specs/ad-administration/spec.md`.
+| # | Prüfung | Erwartet | Stand |
+|---|---|---|---|
+| P1 | `npm run dev` | App lokal erreichbar, verbunden mit TEST | erledigt |
+| P2 | `npx supabase migration list` | zeigt TEST, keine Fehler | erledigt |
+| P3 | In Claude Code: „Liste die Tabellen in TEST“ (MCP) | Antwort aus TEST, nicht PROD | entfällt (MCP zurückgestellt, 5.3) |
+| P4 | Push auf einen Branch | Vorschau-URL erreichbar | erledigt |
+| P5 | Merge nach `main` | `*.workers.dev` erreichbar, Direktaufruf `/ad` liefert die App (SPA-Fallback) | erledigt |
+| P6 | `git grep -i "service_role\|sb_secret\|app-passwort"` | keine Treffer | erledigt |
+| P7 | Testmail „Passwort vergessen“ an eine reale @dav-leipzig.de-Adresse | kommt an, nicht im Spam (Risiko aus Steckbrief AD) | offen: bei der Ersteinrichtung von PROD (US-AD-01 AK5) |
+| P8 | `/speckit-constitution` ausgeführt, `.specify/memory/constitution.md` gefüllt | ja | erledigt |
+
+Danach: Umsetzung AD in der Reihenfolge aus 02-stories.md mit `/speckit-plan`, `/speckit-tasks` und `/speckit-implement` für `docs/specs/ad-administration/spec.md`.
 
 ---
 
 ## Annahmen und offene Punkte
 
-- [ANNAHME] Branch-Schutz auf `main`.
-- [ANNAHME] Project Ref von TEST darf im öffentlichen Repo stehen (`.mcp.json`).
-- [ANNAHME] Installationsweg Impeccable per `npx skills add`; vor Ausführung prüfen.
-- [ANNAHME] Spec Kit lässt sich auf `docs/specs/<modul>/` als Quelle einstellen.
-- [OFFEN] Frage 1: Migrationen nach PROD – manuell durch den Product Owner (`supabase link` auf PROD, `db push`, zurück auf TEST) oder per GitHub Action bei Merge auf `main`?
-- Frage 2 (entschieden): kein Docker lokal. Die Datenbanktests (pgTAP, `supabase test db`, Task T7) laufen in einer GitHub Action mit lokalem Supabase-Stack und Seed; die fachliche Abnahme läuft in TEST.
-- Frage 3 (entschieden): Seed über `supabase/seed.sh` mit Passwort aus `SEED_TEST_PASSWORD`; Abbruch mit „Seed in PROD nicht erlaubt.“ (spec.md AD Abschnitt 9, T23).
-- [OFFEN] Trennung PROD-/TEST-Werte bei Cloudflare-Vorschau-Builds (6.2).
+Entschieden:
+- Branch-Schutz auf `main` per Ruleset (19.10.2026).
+- Spec Kit arbeitet mit `docs/specs/<modul>/` als Quelle (für AD geprüft).
+- Impeccable über `npx impeccable install`; PRODUCT.md und DESIGN.md im Wurzelverzeichnis.
+- Supabase MCP zurückgestellt; Datenbankarbeit über die Supabase CLI.
+- Kein `supabase config push`; Auth-Einstellungen per Dashboard-Checkliste (`supabase/setup/README.md`).
+- Kein Docker lokal: Die Datenbanktests (pgTAP, `supabase test db`) laufen in einer GitHub Action mit lokalem Supabase-Stack und Seed; die fachliche Abnahme läuft in TEST.
+- Seed über `supabase/seed.sh` mit Passwort aus `SEED_TEST_PASSWORD`; Abbruch mit „Seed in PROD nicht erlaubt.“ (spec.md AD Abschnitt 9).
+
+Offen:
+- [OFFEN] Weg der Migrationen nach PROD: manuell durch den Product Owner (`supabase link` auf PROD, `db push`, zurück auf TEST) oder per GitHub Action beim Merge auf `main`? Vor dem ersten PROD-Deployment. (offene-punkte.md AD)
+- [OFFEN] Repository öffentlich oder privat? Öffentlich ist unkritisch, solange keine Daten, Keys oder Passwörter im Repo liegen (tech-stack.md 3); privat schützt zusätzlich Project Refs und Aufbau.
+- [OFFEN] Trennung der PROD- und TEST-Werte bei Cloudflare: Vite schreibt `VITE_*` beim Build ins Bundle; Produktion braucht PROD-Werte, Vorschau-Builds TEST-Werte (6.2).
