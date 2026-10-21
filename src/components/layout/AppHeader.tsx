@@ -33,7 +33,7 @@ export function AppHeader({ me }: { me: Me | null }) {
       <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-2">
         <div className="flex min-w-0 flex-1 items-center">
           {/* Logo unverändert (docs/marke.md); „Vereins OS“ steht getrennt davon, durch Abstand und Trennlinie */}
-          <Link to="/" className="flex shrink-0 items-center gap-3 rounded-md sm:gap-4">
+          <Link to="/" className="flex shrink-0 items-center gap-3 rounded-md outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring sm:gap-4">
             <img src={logoUrl} alt="DAV Sektion Leipzig" className="h-11 w-auto sm:h-12" />
             <span className="h-7 w-px bg-border" aria-hidden="true" />
             {/* Mobil verdrängt der Modulname den Produktnamen, damit nichts abgeschnitten wird */}

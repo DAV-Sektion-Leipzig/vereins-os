@@ -4,6 +4,8 @@ import { ProtectedLayout } from '@/components/layout/ProtectedLayout'
 import type { RouteHandle } from '@/components/layout/AppHeader'
 import { LoginPage } from '@/features/auth/LoginPage'
 import { KeinZugriffPage } from '@/features/start/KeinZugriffPage'
+import { loadMyModules } from '@/features/start/modules'
+import { StartPage } from '@/features/start/StartPage'
 import { loadMe, requireLevel, requireSession } from '@/lib/rights'
 import { supabase } from '@/lib/supabase'
 
@@ -29,7 +31,7 @@ export const router = createBrowserRouter([
     },
     element: <ProtectedLayout />,
     children: [
-      { index: true, element: <PlaceholderPage title="Startseite" /> },
+      { index: true, loader: loadMyModules, element: <StartPage /> },
       { path: 'kein-zugriff', element: <KeinZugriffPage /> },
       {
         // AD nur mit AD ≥ lesen; sonst /kein-zugriff ohne Datenabfrage (US-AD-05 AK3)

@@ -215,8 +215,8 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 - test.geschaeftsstelle sieht auf /ad die Kein-Zugriff-Seite, ohne dass Daten abgefragt werden (AK3).
 - Breite 375 px funktioniert (AK5).
 
-- [ ] T030 [P] [US-AD-05] (spec T14) Platzhalterbild `src/assets/willkommen.svg` (neutral, ohne Personen oder Logos Dritter)
-- [ ] T031 [US-AD-05] (spec T14) `src/features/start/StartPage.tsx`: Willkommensgrafik, Kacheln aus `rpc('ad_my_modules')` (Link je Modul, AD → /ad), leerer Zustand „Für dich sind noch keine Module freigeschaltet.“; Daten bei jedem Aufruf neu laden (AK4)
+- [X] T030 [P] [US-AD-05] (spec T14) Platzhalterbild `src/assets/willkommen.svg` (neutral, ohne Personen oder Logos Dritter)
+- [X] T031 [US-AD-05] (spec T14) `src/features/start/StartPage.tsx`: Willkommensgrafik, Kacheln aus `rpc('ad_my_modules')` (Link je Modul, AD → /ad), leerer Zustand „Für dich sind noch keine Module freigeschaltet.“; Daten bei jedem Aufruf neu laden (AK4)
 
 **Checkpoint**: Die Startseite zeigt je Testzugang die richtigen Kacheln.
 

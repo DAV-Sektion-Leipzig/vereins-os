@@ -7,7 +7,7 @@
 
 ## 1. Checkliste „Auth-Einstellungen im Dashboard“
 
-Für **TEST** und für **PROD** je einmal abhaken. TEST: Punkte 1–7 und 9 erledigt (Product Owner, 20.10.2026).
+Für **TEST** und für **PROD** je einmal abhaken. TEST: Punkte 1–9 erledigt (Product Owner, 20.10.2026; Punkt 8 am 21.10.2026).
 
 | # | Einstellung (Dashboard) | Wert | TEST | PROD |
 |---|---|---|---|---|
@@ -18,7 +18,7 @@ Für **TEST** und für **PROD** je einmal abhaken. TEST: Punkte 1–7 und 9 erle
 | 5 | Authentication → URL Configuration → Site URL | PROD: `https://vereins-os.sektion-leipzig.workers.dev`; TEST: dieselbe bzw. die Vorschau-Adresse | ☑ | ☐ |
 | 6 | Authentication → URL Configuration → Redirect URLs | wie `additional_redirect_urls` in `config.toml`; in TEST zusätzlich Vorschau (`https://*-vereins-os.sektion-leipzig.workers.dev/**`) und lokal (`http://localhost:5173/**`) | ☑ | ☐ |
 | 7 | Authentication → Emails → „Invite user“ | Betreff „Einladung ins Vereins OS“, Inhalt aus `supabase/templates/invite.html` | ☑ | ☐ |
-| 8 | Authentication → Emails → „Reset password“ | Betreff „Passwort zurücksetzen“, Inhalt aus `supabase/templates/recovery.html` | ☐ | ☐ |
+| 8 | Authentication → Emails → „Reset password“ | Betreff „Passwort zurücksetzen“, Inhalt aus `supabase/templates/recovery.html` | ☑ | ☐ |
 | 9 | Authentication → Emails → SMTP Settings | Google-Konto der Sektion; App-Passwort nur hier eintragen; Absendername „Vereins OS“ | ☑ | ☐ |
 
 Die Mailvorlagen enthalten nur einen kurzen Hinweistext und den Link, keine Personendaten.
