@@ -54,3 +54,6 @@ Thumbs.db
 *.suo
 *.sw?
 .claude/settings.local.json
+
+# Impeccable: plattformabhängiges Programm, lädt der Starter bei Bedarf selbst
+.claude/skills/impeccable/scripts/bin/

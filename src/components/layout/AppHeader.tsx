@@ -1,6 +1,8 @@
 import { LogOutIcon } from 'lucide-react'
 import { Link, useMatches, useNavigate } from 'react-router-dom'
+import logoUrl from '@/assets/brand/DAVLogo-lg_Leipzig-1378_RGB.svg'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import type { Me } from '@/lib/rights'
 import { supabase } from '@/lib/supabase'
 
@@ -27,14 +29,21 @@ export function AppHeader({ me }: { me: Me | null }) {
   }
 
   return (
-    <header className="border-b bg-background">
+    <header className="border-t-3 border-b border-t-brand-band bg-background">
       <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-2">
-        <div className="flex min-w-0 flex-1 items-baseline gap-2">
-          <Link to="/" className="shrink-0 font-semibold">
-            Vereins OS
+        <div className="flex min-w-0 flex-1 items-center">
+          {/* Logo unverändert (docs/marke.md); „Vereins OS“ steht getrennt davon, durch Abstand und Trennlinie */}
+          <Link to="/" className="flex shrink-0 items-center gap-3 rounded-md sm:gap-4">
+            <img src={logoUrl} alt="DAV Sektion Leipzig" className="h-11 w-auto sm:h-12" />
+            <span className="h-7 w-px bg-border" aria-hidden="true" />
+            {/* Mobil verdrängt der Modulname den Produktnamen, damit nichts abgeschnitten wird */}
+            <span className={cn('font-semibold', moduleName && 'hidden sm:inline')}>Vereins OS</span>
           </Link>
           {moduleName && (
-            <span className="truncate text-sm text-muted-foreground">· {moduleName}</span>
+            <span className="ml-3 truncate font-semibold sm:ml-2 sm:text-sm sm:font-normal sm:text-muted-foreground">
+              <span className="hidden sm:inline">· </span>
+              {moduleName}
+            </span>
           )}
         </div>
         {me && (

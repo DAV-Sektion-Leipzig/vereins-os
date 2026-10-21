@@ -1,0 +1,413 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-20T20:18:29+02:00",
+  "title": "Design System: Vereins OS",
+  "extensions": {
+    "colorMeta": {
+      "mittelgruen-dark": {
+        "role": "primary",
+        "displayName": "Mittelgrün dunkel",
+        "canonical": "#00652d",
+        "tonalRamp": [
+          "#004c22",
+          "#008039",
+          "#00b250",
+          "#00e666",
+          "#33ff8e",
+          "#80ffb8",
+          "#c2ffdd",
+          "#e5fff1"
+        ]
+      },
+      "mittelgruen-medium": {
+        "role": "primary",
+        "displayName": "Mittelgrün mittel",
+        "canonical": "#2c8732",
+        "tonalRamp": [
+          "#133a15",
+          "#1f6024",
+          "#2c8732",
+          "#38ad40",
+          "#65cd6c",
+          "#9fe0a3",
+          "#d1f0d3",
+          "#ecf9ed"
+        ]
+      },
+      "mittelgruen-light": {
+        "role": "primary",
+        "displayName": "Mittelgrün hell (Markenband)",
+        "canonical": "#50ae2f",
+        "tonalRamp": [
+          "#1c3c10",
+          "#2e641b",
+          "#418d26",
+          "#53b531",
+          "#7dd45e",
+          "#aee49b",
+          "#d8f2cf",
+          "#effaeb"
+        ]
+      },
+      "mittelgruen-toenung": {
+        "role": "primary",
+        "displayName": "Grüner Hauch",
+        "canonical": "#e6f4e2",
+        "tonalRamp": [
+          "#1d3715",
+          "#305c23",
+          "#438131",
+          "#56a63f",
+          "#7fc76b",
+          "#afdca3",
+          "#d9eed3",
+          "#eff8ed"
+        ]
+      },
+      "felsgrau-dark": {
+        "role": "neutral",
+        "displayName": "Felsgrau dunkel",
+        "canonical": "#363b44",
+        "tonalRamp": [
+          "#22252b",
+          "#383e47",
+          "#4f5663",
+          "#666f80",
+          "#8d96a5",
+          "#b8bdc7",
+          "#dddfe4",
+          "#f1f2f4"
+        ]
+      },
+      "felsgrau-medium": {
+        "role": "neutral",
+        "displayName": "Felsgrau mittel",
+        "canonical": "#707680",
+        "tonalRamp": [
+          "#242629",
+          "#3c3f44",
+          "#53585f",
+          "#6b717a",
+          "#9297a0",
+          "#bbbec3",
+          "#dee0e2",
+          "#f1f2f3"
+        ]
+      },
+      "felsgrau-flaeche": {
+        "role": "neutral",
+        "displayName": "Felsgrau-Fläche",
+        "canonical": "#f4f4f5",
+        "tonalRamp": [
+          "#242428",
+          "#3d3d43",
+          "#55555d",
+          "#6d6d78",
+          "#94949e",
+          "#bcbcc2",
+          "#dfdfe2",
+          "#f2f2f3"
+        ]
+      },
+      "felsgrau-linie": {
+        "role": "neutral",
+        "displayName": "Felsgrau-Linie",
+        "canonical": "#d6dbdf",
+        "tonalRamp": [
+          "#22272b",
+          "#384148",
+          "#4e5a64",
+          "#657481",
+          "#8c9aa6",
+          "#b7c0c7",
+          "#dde1e4",
+          "#f1f2f4"
+        ]
+      },
+      "felsgrau-toenung": {
+        "role": "neutral",
+        "displayName": "Felsgrau-Hauch",
+        "canonical": "#e8ebed",
+        "tonalRamp": [
+          "#22272b",
+          "#384148",
+          "#4e5b64",
+          "#657681",
+          "#8d9ba5",
+          "#b7c1c7",
+          "#dde1e4",
+          "#f1f3f4"
+        ]
+      },
+      "weiss": {
+        "role": "neutral",
+        "displayName": "Weiß",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#262626",
+          "#404040",
+          "#595959",
+          "#737373",
+          "#999999",
+          "#bfbfbf",
+          "#e0e0e0",
+          "#f2f2f2"
+        ]
+      },
+      "kaltblau-medium": {
+        "role": "secondary",
+        "displayName": "Kaltblau mittel (Fokus)",
+        "canonical": "#2c7eb2",
+        "tonalRamp": [
+          "#0f2b3d",
+          "#194866",
+          "#23658f",
+          "#2d82b8",
+          "#5ba7d7",
+          "#99c8e6",
+          "#cee5f3",
+          "#ebf4fa"
+        ]
+      },
+      "kaltblau-dark": {
+        "role": "secondary",
+        "displayName": "Kaltblau dunkel",
+        "canonical": "#00578d",
+        "tonalRamp": [
+          "#002f4c",
+          "#004f80",
+          "#006eb2",
+          "#008ee6",
+          "#33b1ff",
+          "#80ceff",
+          "#c2e8ff",
+          "#e5f5ff"
+        ]
+      },
+      "kaltblau-toenung": {
+        "role": "secondary",
+        "displayName": "Kaltblau-Hauch",
+        "canonical": "#e3ecf5",
+        "tonalRamp": [
+          "#142638",
+          "#22405e",
+          "#2f5984",
+          "#3c73a9",
+          "#6999c9",
+          "#a1bfdd",
+          "#d2e0ef",
+          "#ecf2f8"
+        ]
+      },
+      "sandstein-dark": {
+        "role": "tertiary",
+        "displayName": "Sandstein dunkel",
+        "canonical": "#694718",
+        "tonalRamp": [
+          "#3e2a0e",
+          "#684618",
+          "#916221",
+          "#bb7e2b",
+          "#d9a359",
+          "#e7c697",
+          "#f4e3cd",
+          "#faf4ea"
+        ]
+      },
+      "kletterthemen-toenung": {
+        "role": "tertiary",
+        "displayName": "Klettergelb-Hauch",
+        "canonical": "#feefcc",
+        "tonalRamp": [
+          "#4b3501",
+          "#7d5802",
+          "#af7c03",
+          "#e19f04",
+          "#fbc037",
+          "#fdd882",
+          "#feecc3",
+          "#fff7e6"
+        ]
+      },
+      "fehlerrot": {
+        "role": "tertiary",
+        "displayName": "Fehlerrot (keine DAV-Farbe)",
+        "canonical": "#b42318",
+        "tonalRamp": [
+          "#440d09",
+          "#70160f",
+          "#9d1f15",
+          "#ca271b",
+          "#e7564b",
+          "#f0958f",
+          "#f8ccc9",
+          "#fceae8"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Seitentitel, einer je Seite."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Kartentitel, Abschnitte, Produktname in der Kopfzeile."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Standardtext der Oberfläche."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Feldbeschriftungen und Schaltflächen."
+      },
+      "badge": {
+        "displayName": "Badge",
+        "purpose": "Status-Kennzeichen."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "state-transition",
+        "value": "150ms ease",
+        "purpose": "Farbwechsel bei Hover und Fokus; sonst keine Bewegung."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobil",
+        "value": "375px"
+      },
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Hauptschaltfläche",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Eine je Bereich: Speichern, Anmelden, Einladen.",
+      "html": "<button class=\"ds-btn-primary\">Speichern</button>",
+      "css": ".ds-btn-primary{background:var(--primary,#00652d);color:#fff;height:32px;padding:0 10px;border:1px solid transparent;border-radius:10px;font-family:'Fira Sans',system-ui,sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background .15s}.ds-btn-primary:hover{background:var(--primary-hover,#2c8732)}.ds-btn-primary:focus-visible{outline:none;border-color:#2c7eb2;box-shadow:0 0 0 3px rgba(44,126,178,.5)}.ds-btn-primary:active{transform:translateY(1px)}"
+    },
+    {
+      "name": "Nebenaktion",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Abbrechen und weitere Aktionen neben der Hauptschaltfläche.",
+      "html": "<button class=\"ds-btn-outline\">Abbrechen</button>",
+      "css": ".ds-btn-outline{background:#fff;color:#363b44;height:32px;padding:0 10px;border:1px solid #d6dbdf;border-radius:10px;font-family:'Fira Sans',system-ui,sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background .15s}.ds-btn-outline:hover{background:#f4f4f5}.ds-btn-outline:focus-visible{outline:none;border-color:#2c7eb2;box-shadow:0 0 0 3px rgba(44,126,178,.5)}"
+    },
+    {
+      "name": "Löschen",
+      "kind": "button",
+      "refersTo": "button-destructive",
+      "description": "Löschen, Sperren, Entziehen; immer mit Bestätigung.",
+      "html": "<button class=\"ds-btn-destructive\">Sperren</button>",
+      "css": ".ds-btn-destructive{background:rgba(180,35,24,.1);color:#b42318;height:32px;padding:0 10px;border:1px solid transparent;border-radius:10px;font-family:'Fira Sans',system-ui,sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background .15s}.ds-btn-destructive:hover{background:rgba(180,35,24,.2)}.ds-btn-destructive:focus-visible{outline:none;border-color:rgba(180,35,24,.4);box-shadow:0 0 0 3px rgba(180,35,24,.2)}"
+    },
+    {
+      "name": "Eingabefeld",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Text- und E-Mail-Felder mit Beschriftung darüber.",
+      "html": "<label class=\"ds-field\"><span>Login-Adresse</span><input class=\"ds-input\" type=\"email\" placeholder=\"vorname.nachname@dav-leipzig.de\"></label>",
+      "css": ".ds-field{display:flex;flex-direction:column;gap:8px;font-family:'Fira Sans',system-ui,sans-serif;font-size:14px;font-weight:500;color:#363b44}.ds-input{height:32px;padding:4px 10px;border:1px solid #707680;border-radius:10px;background:#fff;color:#363b44;font-family:'Fira Sans',system-ui,sans-serif;font-size:14px;font-weight:400;caret-color:#00652d;transition:border-color .15s,box-shadow .15s}.ds-input::placeholder{color:#707680}.ds-input:focus-visible{outline:none;border-color:#2c7eb2;box-shadow:0 0 0 3px rgba(44,126,178,.5)}"
+    },
+    {
+      "name": "Status-Kennzeichen",
+      "kind": "chip",
+      "refersTo": "status-aktiv",
+      "description": "Status eines Zugangs, immer mit Wort und Symbol (AccessStatusBadge).",
+      "html": "<div class=\"ds-status-row\"><span class=\"ds-status ds-status-none\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M10.1 2.18a9.93 9.93 0 0 1 3.8 0\"/><path d=\"M17.6 3.71a9.95 9.95 0 0 1 2.69 2.7\"/><path d=\"M21.82 10.1a9.93 9.93 0 0 1 0 3.8\"/><path d=\"M20.29 17.6a9.95 9.95 0 0 1-2.7 2.69\"/><path d=\"M13.9 21.82a9.94 9.94 0 0 1-3.8 0\"/><path d=\"M6.4 20.29a9.95 9.95 0 0 1-2.69-2.7\"/><path d=\"M2.18 13.9a9.93 9.93 0 0 1 0-3.8\"/><path d=\"M3.71 6.4a9.95 9.95 0 0 1 2.7-2.69\"/></svg>kein Zugang</span><span class=\"ds-status ds-status-invited\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2\" y=\"4\" width=\"20\" height=\"16\" rx=\"2\"/><path d=\"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7\"/></svg>eingeladen</span><span class=\"ds-status ds-status-active\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/></svg>aktiv</span><span class=\"ds-status ds-status-locked\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 10 0v4\"/></svg>gesperrt</span></div>",
+      "css": ".ds-status-row{display:flex;flex-wrap:wrap;gap:8px}.ds-status{display:inline-flex;align-items:center;gap:4px;height:20px;padding:2px 8px 2px 6px;border-radius:26px;font-family:'Fira Sans',system-ui,sans-serif;font-size:12px;font-weight:500;white-space:nowrap}.ds-status-none{background:#e8ebed;color:#363b44}.ds-status-invited{background:#e3ecf5;color:#00578d}.ds-status-active{background:#e6f4e2;color:#00652d}.ds-status-locked{background:#feefcc;color:#694718}"
+    },
+    {
+      "name": "Karte",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Gruppiert ein Formular oder einen Abschnitt; flach, mit Rand.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-title\">Zugang</div><p class=\"ds-card-text\">Login-Adresse und Status der Person.</p></div>",
+      "css": ".ds-card{background:#fff;border:1px solid rgba(54,59,68,.1);border-radius:14px;padding:16px;max-width:320px;font-family:'Fira Sans',system-ui,sans-serif;color:#363b44}.ds-card-title{font-size:16px;font-weight:500;margin-bottom:4px}.ds-card-text{font-size:14px;color:#707680;margin:0}"
+    },
+    {
+      "name": "Kopfzeile",
+      "kind": "nav",
+      "description": "Markenband, Sektionslogo light, Produkt- und Modulname, Abmelden.",
+      "html": "<header class=\"ds-header\"><div class=\"ds-header-in\"><span class=\"ds-logo\">DAV-Logo</span><span class=\"ds-sep\"></span><strong>Vereins OS</strong><span class=\"ds-mod\">· Administration</span><span class=\"ds-grow\"></span><span class=\"ds-mod\">Eva Beispiel</span><button class=\"ds-ghost\">Abmelden</button></div></header>",
+      "css": ".ds-header{border-top:3px solid #50ae2f;border-bottom:1px solid #d6dbdf;background:#fff;font-family:'Fira Sans',system-ui,sans-serif;color:#363b44}.ds-header-in{display:flex;align-items:center;gap:12px;padding:8px 16px}.ds-logo{display:inline-flex;align-items:center;height:48px;color:#707680;font-size:12px}.ds-sep{width:1px;height:28px;background:#d6dbdf}.ds-header strong{font-weight:600}.ds-mod{font-size:14px;color:#707680}.ds-grow{flex:1}.ds-ghost{background:none;border:1px solid transparent;border-radius:8px;height:28px;padding:0 10px;font-family:'Fira Sans',system-ui,sans-serif;font-size:13px;font-weight:500;color:#363b44;cursor:pointer}.ds-ghost:hover{background:#f4f4f5}.ds-ghost:focus-visible{outline:none;border-color:#2c7eb2;box-shadow:0 0 0 3px rgba(44,126,178,.5)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Die Seilschaft",
+    "overview": "Das Vereins OS ist ein Werkzeug für Menschen, die täglich mit vielen Personen, Zuständen und Fristen arbeiten, am Schreibtisch wie unterwegs. Wie in einer Seilschaft gilt: dicht beieinander, gut gesichert, jeder Schritt nachvollziehbar. Die Oberfläche ist kompakt und ruhig, damit Status und Handlung immer im Blick sind und nichts gesucht werden muss.\n\nDie Marke kommt aus dem DAV-Corporate-Design (docs/marke.md), nicht aus eigener Erfindung. Felsgrau trägt die Fläche und den Text, Mittelgrün markiert das Handeln. Das helle DAV-Grün erscheint genau einmal als schmales Markenband am oberen Rand. Das Sektionslogo „light“ steht unverändert in der Kopfzeile und auf der Anmeldung. Ausdruck zeigt sich in Präzision: saubere Kontraste, eindeutige Zustände, eine durchgehende Schrift.\n\nDas System kennt nur den hellen Modus. Shadcn/ui (Stil „radix-nova“) liefert die Bauteile; dieses Dokument legt fest, wie sie im DAV-Kleid aussehen.",
+    "keyCharacteristics": [
+      "Weiß als Grund, Felsgrau für Text und Linien, Mittelgrün nur für Handlung und Erfolg",
+      "Jeder Zustand mit Text und Symbol, nie nur Farbe",
+      "Kompakte Dichte (32 px hohe Bedienelemente), mobil ab 375 px",
+      "Fira Sans durchgehend, selbst gehostet",
+      "Logo unverändert, „Vereins OS“ getrennt davon"
+    ],
+    "rules": [
+      {
+        "name": "Die Markenband-Regel",
+        "body": "Das helle DAV-Grün erscheint nur als Band am oberen Rand. Wer es für Text, Symbole oder Rahmen nutzt, verletzt WCAG.",
+        "section": "colors"
+      },
+      {
+        "name": "Die Ein-Grün-Regel",
+        "body": "Mittelgrün dunkel bedeutet „handeln“ oder „in Ordnung“. Keine grünen Überschriften, keine grünen Flächen zur Dekoration.",
+        "section": "colors"
+      },
+      {
+        "name": "Die Weißgrund-Regel",
+        "body": "Felsgrau mittel als Text nur auf Weiß. Auf der Felsgrau-Fläche fällt es auf 4,2 : 1; dort Felsgrau dunkel verwenden.",
+        "section": "colors"
+      },
+      {
+        "name": "Die Text-und-Symbol-Regel",
+        "body": "Ein Zustand ist nie nur Farbe. Jedes Status-Kennzeichen trägt Wort und Symbol.",
+        "section": "colors"
+      },
+      {
+        "name": "Die Eine-Familie-Regel",
+        "body": "Nur Fira Sans. Fira Sans Condensed ist erlaubt, wenn eine breite Tabelle sie braucht; keine weitere Schrift, auch keine Monospace als Stilmittel.",
+        "section": "typography"
+      },
+      {
+        "name": "Die Ziffern-Regel",
+        "body": "Tabellen setzen Ziffern in Tabellenziffern (`tabular-nums`), damit Beträge und Daten untereinander stehen.",
+        "section": "typography"
+      },
+      {
+        "name": "Die Flach-in-Ruhe-Regel",
+        "body": "Was auf der Seite liegt, wirft keinen Schatten. Schatten zeigt nur an, dass etwas über der Seite schwebt.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** das Logo als Datei `src/assets/brand/DAVLogo-lg_Leipzig-1378_RGB.svg` unverändert einbinden, mit Abstand zu allem anderen.",
+      "**Do** Text in Felsgrau dunkel setzen; Felsgrau mittel nur auf Weiß.",
+      "**Do** jeden Zustand mit Wort und Symbol zeigen.",
+      "**Do** neue Farben nur aus der DAV-Farbwelt (docs/marke.md) ableiten und den Kontrast nachrechnen: Text 4,5 : 1, Bedienelemente und Rahmen von Feldern 3 : 1.",
+      "**Do** Tabellenziffern in Tabellen verwenden."
+    ],
+    "donts": [
+      "**Don't** das Logo einfärben (auch nicht DAV-Grün), umranden, verzerren oder Text daran setzen.",
+      "**Don't** Mittelgrün hell oder Felsgrau hell für Text, Symbole oder Rahmen von Bedienelementen verwenden.",
+      "**Don't** einen Dunkelmodus anbieten; das System ist nur hell.",
+      "**Don't** Schriften von Google- oder Adobe-Servern laden.",
+      "**Don't** Fehlerrot als Markenfarbe oder Dekoration einsetzen.",
+      "**Don't** Schatten auf ruhende Karten legen."
+    ]
+  }
+}

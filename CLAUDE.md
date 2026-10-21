@@ -58,6 +58,9 @@ Antworte immer auf Deutsch.
 ```
 /
 ├── CLAUDE.md                       Arbeitsanweisungen für Claude Code
+├── PRODUCT.md                      Impeccable (Produktkontext)
+├── DESIGN.md                       Impeccable (Designsystem)
+├── .impeccable/                    Impeccable-Einstellungen
 ├── .specify/                       Spec Kit (constitution, Vorlagen, Skripte)
 ├── docs/
 │   ├── vision.md
@@ -66,8 +69,7 @@ Antworte immer auf Deutsch.
 │   ├── glossar.md
 │   ├── tech-stack.md
 │   ├── vorlagen.md
-│   ├── design.md                   Impeccable
-│   ├── product.md                  Impeccable
+│   ├── marke.md                    DAV-Corporate-Design (Auszug)
 │   ├── diagrams/                   Excalidraw-Dateien
 │   └── specs/
 │       └── <modul>/                z. B. ad-administration, ea-ehrenamt
@@ -82,5 +84,6 @@ Antworte immer auf Deutsch.
 │   ├── seed.sh                     Seed-Skript, bricht bei PROD ab
 │   └── seed.sql                    nur fiktive Daten
 ├── src/                            Frontend (React + TypeScript + Vite, shadcn/ui)
+│   └── assets/brand/               DAV-Logos (unverändert)
 └── wrangler.jsonc                  Cloudflare-Konfiguration
 ```
