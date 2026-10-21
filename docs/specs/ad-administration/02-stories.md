@@ -1,7 +1,7 @@
 # User Stories: Administration (AD)
 
 Stand: 21.10.2026 · Version 0.6 · Status: Ready · Product Owner: Toni Werner
-Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.7 (Regeln R1–R20), glossar.md v0.4, rollen.md v0.6, spec.md v0.6
+Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.7 (Regeln R1–R20), glossar.md v0.4, rollen.md v0.6, spec.md v0.5.1
 
 Oberflächentexte in der Ansprache „du“.
 

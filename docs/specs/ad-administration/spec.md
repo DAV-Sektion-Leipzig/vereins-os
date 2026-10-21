@@ -1,12 +1,12 @@
 # Spec: Administration (AD)
 
-Version: 0.6 · Status: Ready · Stand: 21.10.2026 · Product Owner: Toni Werner
+Version: 0.5.1 · Status: Ready · Stand: 21.10.2026 · Product Owner: Toni Werner
 Stories: docs/specs/ad-administration/02-stories.md (US-AD-01 bis US-AD-16)
 Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.7 (R1–R20), glossar.md v0.4, rollen.md v0.6, tech-stack.md v0.5
 Änderungen v0.3 (19.10.2026): Klärung der Widersprüche aus plan.md (W1–W14, A1–A5, P1); siehe Abschnitt 11.
 Änderungen v0.4 (19.10.2026): Adressänderung bei „eingeladen“ nimmt die Einladung zurück, Aufräumen in ad-invite bei Fehlern, Abnahme der Mail-Abläufe mit Plus-Adressen; siehe Abschnitt 11.
 Änderungen v0.5 (20.10.2026): Abnahme der Mail-Abläufe mit eigenen Adressen des Product Owners; R1 per Trigger mit zusätzlichen Domains nur in TEST (Tabelle ad_test_login_domains); siehe Abschnitt 11.
-Änderungen v0.6 (21.10.2026): Startseite mit Zusatz im leeren Zustand (US-AD-05 AK2, Entscheidung Product Owner).
+Änderungen v0.5.1 (21.10.2026): Startseite mit Ladezustand und Hinweis auf den Admin im leeren Zustand (US-AD-05 AK2).
 
 ## 1. Ziel und Scope
 
@@ -286,7 +286,7 @@ Allgemein: deutsch, Ansprache „du“, Datum TT.MM.JJJJ, Zeit HH:MM (Europe/Ber
 | /login | Login-Adresse, Passwort | Anmelden; Link „Passwort vergessen“ | R18-Meldung | US-AD-02 |
 | /passwort-vergessen | Login-Adresse | Link anfordern | immer R18-Bestätigung | US-AD-04 |
 | /passwort-setzen | Passwort, Wiederholung | Speichern (aus Einladungs- oder Reset-Link) | R19 (Länge, Übereinstimmung); Link ungültig | US-AD-03, US-AD-04 |
-| / | Willkommensgrafik (Platzhalterbild im Repo), Kacheln aus ad_my_modules | Modul öffnen | „Für dich sind noch keine Module freigeschaltet.“ und darunter „Wende dich an den Admin, wenn du Zugriff brauchst.“ | US-AD-05 |
+| / | Willkommensgrafik (Platzhalterbild im Repo), Kacheln aus ad_my_modules; Ladezustand | Modul öffnen | „Für dich sind noch keine Module freigeschaltet.“ und darunter „Wende dich an den Admin, wenn du Zugriff brauchst.“ | US-AD-05 |
 | /kein-zugriff | Meldung „Für diesen Bereich hast du keine Rechte.“ | Zur Startseite | – | US-AD-05 |
 | /ad | Personenübersicht (ad_v_person_overview): Name, Art-Kennzeichen „Funktionsperson“, Login-Adresse, Status-Badge, Vorlagen; Suche nach Namensteil; Filter Status; oben ggf. Hinweis Notfall-Admin („Der Notfall-Admin hat sich n-mal angemeldet, zuletzt am …“) | Person anlegen; Person öffnen; „Zur Kenntnis genommen“ | „Keine Personen gefunden.“ | US-AD-06, US-AD-15 |
 | /ad/personen/neu | Vorname, Nachname, optional Login-Adresse | Speichern → Dublettenprüfung → ggf. Warndialog | R1, R2, R4 | US-AD-07 |
