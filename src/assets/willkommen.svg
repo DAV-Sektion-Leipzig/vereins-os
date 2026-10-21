@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice">
+  <!-- Willkommensgrafik (US-AD-05): ruhiges Bergpanorama, nur Farben aus DESIGN.md, ohne Personen und Logos -->
+  <rect width="1200" height="300" fill="#e3ecf5"/>
+  <!-- ferne Gipfel: Weiß -->
+  <path fill="#ffffff" d="M0 190 L70 150 L120 165 L190 108 L240 132 L300 92 L350 120 L420 70 L470 104 L520 88 L585 128 L650 84 L700 58 L760 98 L830 76 L890 112 L950 90 L1010 124 L1080 96 L1140 130 L1200 112 L1200 300 L0 300 Z"/>
+  <!-- Fels: Felsgrau-Linie -->
+  <path fill="#d6dbdf" d="M0 228 L90 196 L150 210 L240 168 L310 196 L380 160 L450 188 L540 150 L610 182 L690 156 L760 186 L850 160 L930 194 L1010 170 L1090 198 L1200 176 L1200 300 L0 300 Z"/>
+  <!-- Wiese: grüner Hauch -->
+  <path fill="#e6f4e2" d="M0 262 C180 236 330 250 480 240 C640 229 780 250 930 238 C1050 229 1130 236 1200 232 L1200 300 L0 300 Z"/>
+  <!-- Weg: Felsgrau mittel, gestrichelt -->
+  <path fill="none" stroke="#707680" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 9" d="M250 300 C330 282 420 270 520 262 C610 255 660 246 700 232 C730 220 742 206 756 194"/>
+</svg>

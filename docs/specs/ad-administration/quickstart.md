@@ -49,7 +49,7 @@ Grundlage: spec.md v0.5 Abschnitt 9 und Constitution V (Ausnahme). Alle Schritte
 | Szenario | Zugang | Erwartet | Story |
 |---|---|---|---|
 | Login, Startseite | test.admin | Name in der Kopfzeile, nur Kachel AD | US-AD-02 AK1, US-AD-05 AK1 |
-| Login Vorstand | test.vorstand | Name in der Kopfzeile, „Für dich sind noch keine Module freigeschaltet.“ | US-AD-05 AK2 |
+| Login Vorstand | test.vorstand | Name in der Kopfzeile, „Für dich sind noch keine Module freigeschaltet.“ und darunter „Wende dich an den Admin, wenn du Zugriff brauchst.“ | US-AD-05 AK2 |
 | /ad direkt aufrufen | test.geschaeftsstelle | „Für diesen Bereich hast du keine Rechte.“, keine Abfrage auf AD-Tabellen | US-AD-05 AK3, US-AD-06 AK5 |
 | Login gesperrt | test.gesperrt | R18-Meldung | US-AD-02 AK3 |
 | Dublette | test.admin legt „Toni Muster“, „Tony Muster“, „Anton Muster“ an | Warndialog mit Treffern; Schwelle 0,3 abnehmen | US-AD-07 AK3 |
