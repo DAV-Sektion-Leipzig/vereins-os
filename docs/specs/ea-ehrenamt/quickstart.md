@@ -8,9 +8,9 @@ Die Datenbanktests laufen automatisch in der GitHub Action mit lokalem Stack. Di
 
 | # | Prüfung | Erwartet |
 |---|---|---|
-| 1 | Kern der Administration auf `main` | Migrationen bis `…001400` (AD T35–T43), Seed Personen 1–12 (AD T48), Komponenten T30, T46, T47, T49 |
-| 2 | Ü1, Ü2, R3a im Kern (research.md R-EA-02) | `ea_property_types.valid_from_label` existiert; `ad_first_names_match('Toni','Anton')` = true; `ad_find_similar_persons` liefert für die Referent:in `birth_year = null` |
-| 3 | Fehlen Teile aus Nr. 2 | T0a/T0b laufen als erste Migrationen auf dem Branch `ea-datenbank` |
+| 1 | Kern der Administration auf `main` (Datenbank) | Migrationen bis `…001400`, Seed Personen 1–12 – erledigt (23.10.2026) |
+| 2 | Ü1, Ü2, R3a im Kern (research.md R-EA-02) | erledigt; T0a/T0b entfallen |
+| 3 | Komponenten der Administration für die Oberflächen | AD tasks.md T073, T076, T081, T082 (offen) |
 
 ## B. TEST vor der ersten EA-Migration zurücksetzen
 
@@ -29,8 +29,8 @@ Entscheidung des Product Owners (spec.md AD Abschnitt 9). Ausführung durch den 
 |---|---|---|
 | 1 | Pull Request des Branches `ea-datenbank` öffnen | Workflow `db-tests.yml` startet |
 | 2 | Seed gegen den lokalen Stack | 25 System-Eigenschaftsarten, 57 Qualifikationsarten (47 + 10), Personen 1–12 und 19–22 |
-| 3 | `supabase test db` | alle Tests grün, die der Administration (010–150) unverändert und die neuen ab 200 (research.md R-EA-12) |
-| 4 | Mengentest `280_ea_volume` | `ea_volunteer_list` (Referent:in, alle Filter) < 1 s, `ea_v_expiry` ein Jahr < 2 s, Detail < 1 s |
+| 3 | `supabase test db` | alle Tests grün, die der Administration (010–200) und die neuen ab 210 (research.md R-EA-12) |
+| 4 | Mengentest `290_ea_volume` | `ea_volunteer_list` (Referent:in, alle Filter) < 1 s, `ea_v_expiry` ein Jahr < 2 s, Detail < 1 s |
 
 ## D. Fachliche Abnahme in TEST (T21)
 

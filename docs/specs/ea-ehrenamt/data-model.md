@@ -10,8 +10,6 @@ Zeitstempel = Anlagetag, nach allen Kern-Migrationen der Administration (researc
 
 | Datei | spec-Task | Inhalt |
 |---|---|---|
-| (`…_ad_property_type_labels.sql`) | T0a | nur falls Ü1 nicht im Kern umgesetzt ist (research.md R-EA-02) |
-| (`…_ad_find_similar_persons_v072.sql`) | T0b | nur falls Ü2 nicht im Kern umgesetzt ist |
 | `…000100_ea_system_property_types.sql` | T1 | 25 System-Eigenschaftsarten mit Feldern und Bezeichnungen (C2, C2a) |
 | `…000200_ea_qualification_types.sql` | T2 | 10 Qualifikationsarten (C4) |
 | `…000300_ea_expiry_list.sql` | T4 | `ea_expiry_status`, `ea_default_valid_until`, View `ea_v_expiry`, `ea_volunteer_list`, Index `ea_properties_valid_until_idx` |

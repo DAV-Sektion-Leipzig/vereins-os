@@ -13,14 +13,10 @@ Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spe
 - **Achtung bei `db push`:** `supabase db push` bricht ab, wenn lokal eine Migration liegt, die älter ist als die letzte schon in TEST angewendete. Die noch offenen AD-Migrationen `…001500`–`…001700` (Branches `us-ad-08-zugang`, `us-ad-14-protokoll`) sollten deshalb vor der ersten EA-Migration in TEST sein. Sonst ist für sie einmal `supabase db push --linked --include-all` nötig. Das geht, weil sie nur neue Funktionen und Views anlegen, die von keiner EA-Migration abhängen.
 - **Begründung:** Das Ehrenamtsmanagement legt keine Tabellen an (spec.md Abschnitt 2). Alle Objekte, auf die es schreibt oder Policies stützt, entstehen im Kern.
 
-## R-EA-02 Übergabe Ü1 und Ü2 (T0a, T0b)
+## R-EA-02 Übergabe Ü1 und Ü2 (T0a, T0b entfallen)
 
-- spec.md Administration v0.9.2 hat Ü1 (Bezeichnungen „gültig von/bis“, R49) und Ü2 (`birth_year` nach Lesestufe, R40) als v0.7.2 in die Spec-Tasks T35, T43 und T45–T49 übernommen. Dasselbe gilt für die Namensregel R3a (v0.7.3, `ad_first_names_match`), die der Import braucht (R-EA-10).
-- Die Spec-Kit-Artefakte der Administration (plan.md, tasks.md, data-model.md: „Kern bis v0.7.1“) führen v0.7.2 und v0.7.3 noch nicht. Deshalb ist offen, ob T035 und T043 in tasks.md der Administration in dieser Fassung gebaut werden (plan.md, Offene Punkte H1).
-- **Entscheidung:** Der Branch `ea-datenbank` prüft als ersten Schritt, ob auf `main` die Spalten `ea_property_types.valid_from_label` und `valid_to_label` sowie `ad_first_names_match` existieren und ob `ad_find_similar_persons` `birth_year` nach Lesestufe liefert.
-  - Ist das der Fall, entfallen T0a und T0b.
-  - Andernfalls kommen die beiden Teile als eigene Migrationen der Administration auf denselben Branch: `…_ad_property_type_labels.sql` (Spalten, Check `char_length ≤ 40`, Trimmen per Trigger, Annahme in `ea_save_property_type`) und `…_ad_find_similar_persons_v072.sql` (`create or replace`, gleiche Signatur). Dazu kommen die pgTAP-Fälle aus spec.md AD Abschnitt 9.
-  - Frontend-Teile von Ü1 (Formular der Eigenschaftsart, Eigenschaftsformular, Anzeige) gehören zur Administration (T46, T47). Fehlen sie, meldet Claude Code das, statt sie im Ehrenamtsmanagement nachzubauen.
+- Geprüft am 23.10.2026 (main @ 9e05a8b): Der Kern der Administration enthält Ü1 (`ea_property_types.valid_from_label`, `valid_to_label`, Check ≤ 40, `EA_LABEL_TOO_LONG`; Migration `20261023000800`), Ü2 (`birth_year` nach Lesestufe der Art `birth_date`; `20261023001300`) und R3a (`ad_first_names_match`, ebenda). T0a und T0b entfallen.
+- Die Oberflächen-Teile von Ü1 und Ü2 (Formular der Eigenschaftsart, Eigenschaftsformular, Anzeige, Dublettendialog) stehen in tasks.md der Administration (T073, T081–T083) und werden dort gebaut, nicht im Ehrenamtsmanagement.
 
 ## R-EA-03 Migration der System-Eigenschaftsarten (T1)
 
@@ -74,7 +70,7 @@ Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spe
 - **Anzeige „Funktion – Referat“:** `functions` und `positions` enthalten Werte wie „Trainer:in – Klettern“ (spec.md 2.3). Ohne Referat steht nur der Wert.
 - **Parameterprüfung:** `p_limit` außerhalb 1–200 wird auf die Grenze gesetzt, kein Fehler. Leerer Suchbegriff nach dem Trimmen gilt als kein Filter. `p_function`/`p_position` mit `p_referate`: dieselbe Eigenschaft muss beide Bedingungen erfüllen (spec.md 2.3), umgesetzt als ein `exists` über `cur`.
 - **Suche:** `ilike '%' || p_search || '%'` auf Vor-, Ruf- und Nachname. Die Trigramm-Indizes der Administration (`gin … gin_trgm_ops`) werden dabei genutzt.
-- **Leistung (spec.md Abschnitt 8):** Für die Referent:in ruft die RLS je Zeile `ea_person_visible` auf. `ad_my_referate` ist `stable` und wird je Abfrage einmal ausgewertet (R-19 AD). Der Mengentest (R-EA-12) misst das Ergebnis; Ziel < 1 s bei 1.000 Personen × 30 Eigenschaften.
+- **Leistung (spec.md Abschnitt 8):** Die Lese-Policies der Administration werten die Sichtbarkeit über Mengenfunktionen (`ea_person_ids_ea`, `ea_readable_type_ids`) einmal je Abfrage aus, nicht je Zeile (R-19 AD, Mengentest der Administration: 4 ms statt 2,8 s). `ea_volunteer_list` und `ea_v_expiry` sind `security invoker` und profitieren davon. In eigenen Abfragen ruft das Ehrenamtsmanagement `ea_person_visible`/`ea_property_readable` nicht je Zeile auf. Der Mengentest (R-EA-12) misst das Ergebnis; Ziel < 1 s bei 1.000 Personen × 30 Eigenschaften.
 
 ## R-EA-08 IBAN (T5)
 
@@ -135,17 +131,17 @@ Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spe
 
 ## R-EA-12 Tests (T9)
 
-- **Dateien:** pgTAP-Dateien ab `200_` unter `supabase/tests/database/`, damit sie nach den Tests der Administration laufen. Je Bereich eine Datei; je Datei `begin; … rollback;` und Rollenwechsel über die Seed-Testzugänge (R-11 AD).
-  - `200_ea_system_types.test.sql`: 25 Arten, Felder, Bezeichnungen; zweiter Lauf ohne Änderung; Namenskonflikt bricht ab.
-  - `210_ea_qualification_types.test.sql`: 10 Einträge; idempotent.
-  - `220_ea_expiry.test.sql`: `ea_expiry_status` Grenzfälle; `ea_default_valid_until` (US-EA-07 AK1, AK2, AK5); `ea_v_expiry` je Testzugang.
-  - `230_ea_volunteer_list.test.sql`: Tabelle „Erwartete Ergebnisse“ (spec.md Abschnitt 9), Filter, Status `{left}`, Person 12 nie.
-  - `240_ea_iban.test.sql`: Prüfsumme, Normalisierung, Trigger.
-  - `250_ea_status.test.sql`: R18–R20, R33 AD, Vorstand; `ea_leave` als Referent:in bei Karl Zweireferat (fremdes Referat → `EA_LEAVE_PROPERTY`, nichts geändert).
-  - `260_ea_renew.test.sql`: R6 (US-EA-07 AK3), `EA_RENEW_INVALID`.
-  - `270_ea_import.test.sql`: Rechte (authenticated abgelehnt), Probelauf schreibt nichts, Fehler- und Warnfälle, Lauf schreibt alles.
-  - `280_ea_volume.test.sql`: Mengentest nach spec.md Abschnitt 8 (Muster R-27 AD), misst `ea_volunteer_list` als Referent:in mit allen Filtern, `ea_v_expiry` für ein Jahr und ein Personendetail.
-- **Bestehende Tests:** Die Tests der Administration (T45) laufen nach der Seed-Umstellung unverändert grün (spec.md T3).
+- **Dateien:** pgTAP-Dateien ab `210_` unter `supabase/tests/database/` (`200_seed` gehört der Administration), damit sie nach den Tests der Administration laufen. Je Bereich eine Datei; je Datei `begin; … rollback;` und Rollenwechsel über die Seed-Testzugänge (R-11 AD).
+  - `210_ea_system_types.test.sql`: 25 Arten, Felder, Bezeichnungen; zweiter Lauf ohne Änderung; Namenskonflikt bricht ab.
+  - `220_ea_qualification_types.test.sql`: 10 Einträge; idempotent.
+  - `230_ea_expiry.test.sql`: `ea_expiry_status` Grenzfälle; `ea_default_valid_until` (US-EA-07 AK1, AK2, AK5); `ea_v_expiry` je Testzugang.
+  - `240_ea_volunteer_list.test.sql`: Tabelle „Erwartete Ergebnisse“ (spec.md Abschnitt 9), Filter, Status `{left}`, Person 12 nie.
+  - `250_ea_iban.test.sql`: Prüfsumme, Normalisierung, Trigger.
+  - `260_ea_status.test.sql`: R18–R20, R33 AD, Vorstand; `ea_leave` als Referent:in bei Karl Zweireferat (fremdes Referat → `EA_LEAVE_PROPERTY`, nichts geändert).
+  - `270_ea_renew.test.sql`: R6 (US-EA-07 AK3), `EA_RENEW_INVALID`.
+  - `280_ea_import.test.sql`: Rechte (authenticated abgelehnt), Probelauf schreibt nichts, Fehler- und Warnfälle, Lauf schreibt alles.
+  - `290_ea_volume.test.sql`: Mengentest nach spec.md Abschnitt 8 (Muster R-27 AD), misst `ea_volunteer_list` als Referent:in mit allen Filtern, `ea_v_expiry` für ein Jahr und ein Personendetail.
+- **Bestehende Tests:** Die Tests der Administration (010–200) laufen nach der Seed-Umstellung unverändert grün (spec.md T3). `200_seed.test.sql` prüft die Testarten des Seeds der Administration; zählt er Eigenschaftsarten, wird er mit der Seed-Umstellung angepasst (gleicher Pull Request).
 
 ## R-EA-13 Frontend
 
