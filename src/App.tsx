@@ -5,6 +5,8 @@ import { ProtectedLayout } from '@/components/layout/ProtectedLayout'
 import type { RouteHandle } from '@/components/layout/AppHeader'
 import { loadAdAccess } from '@/features/ad/access'
 import { AdLayout } from '@/features/ad/AdLayout'
+import { loadPersonOverview } from '@/features/ad/personen/data'
+import { PersonenUebersicht } from '@/features/ad/personen/PersonenUebersicht'
 import { loadNewTemplate, loadTemplate, loadTemplateList } from '@/features/ad/rechtevorlagen/data'
 import { RechtevorlageBearbeiten } from '@/features/ad/rechtevorlagen/RechtevorlageBearbeiten'
 import { RechtevorlagenListe } from '@/features/ad/rechtevorlagen/RechtevorlagenListe'
@@ -49,7 +51,9 @@ export const router = createBrowserRouter([
         element: <AdLayout />,
         handle: { moduleName: 'Administration' } satisfies RouteHandle,
         children: [
-          { index: true, element: <PlaceholderPage title="Personen" /> },
+          { index: true, loader: loadPersonOverview, element: <PersonenUebersicht /> },
+          { path: 'personen/neu', element: <PlaceholderPage title="Person anlegen" /> },
+          { path: 'personen/:id', element: <PlaceholderPage title="Person" /> },
           { path: 'rechtevorlagen', loader: loadTemplateList, element: <RechtevorlagenListe /> },
           { path: 'rechtevorlagen/neu', loader: loadNewTemplate, element: <RechtevorlageBearbeiten /> },
           { path: 'rechtevorlagen/:id', loader: loadTemplate, element: <RechtevorlageBearbeiten /> },
