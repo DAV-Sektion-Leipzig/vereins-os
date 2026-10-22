@@ -1,14 +1,12 @@
 ---
-description: "Tasks für das Modul Administration (AD), Kern bis v0.7.1 mit v0.7.2 und v0.7.3"
+description: "Tasks für das Modul Administration (AD), Kern bis v0.7.1"
 ---
 
-# Tasks: Administration (AD) – Kern bis v0.7.1 mit v0.7.2 und v0.7.3
+# Tasks: Administration (AD) – Kern bis v0.7.1
 
-**Input**: [plan.md](plan.md) (Stand 22.10.2026), [spec.md](spec.md) v0.9.2 (führend, Umfang Kern bis v0.7.1 einschließlich v0.7.2 und v0.7.3), [02-stories.md](02-stories.md) v0.8.1, [research.md](research.md), [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md), [Constitution](../../../.specify/memory/constitution.md) v1.1.1
+**Input**: [plan.md](plan.md) (Stand 22.10.2026), [spec.md](spec.md) v0.9 (führend, Umfang Kern bis v0.7.1), [02-stories.md](02-stories.md) v0.8.1, [research.md](research.md), [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md), [Constitution](../../../.specify/memory/constitution.md) v1.1.1
 
 **Stand**: Phasen 1–3 (T001–T031) sind erledigt und bleiben mit Nummer und Text unverändert, weil spec.md und querschnitt-administration.md darauf verweisen. Die Tasks ab T032 ersetzen die offenen Tasks der Fassung vom 20.10.2026 (Grundlage spec.md v0.5); deren Nummern T032–T079 sind damit neu belegt.
-
-**Zum Kern gehören auch v0.7.2 und v0.7.3** (spec.md v0.9.2, Übergabe aus dem Ehrenamtsmanagement `docs/specs/ea-ehrenamt/uebergabe-administration.md` Ü1, Ü2): Bezeichnungen „gültig von/bis“ je Eigenschaftsart (R49), Geburtsjahr in der Dublettenwarnung nur nach Lesestufe (R40), Namensregel R3a (`ad_first_names_match`). Der Datenbankteil ist mit T053, T059 und den Tests T037, T042 umgesetzt; die Oberflächen-Tasks T073, T081–T083 und die Abnahme T104 enthalten den Rest.
 
 **Abgrenzung**: Nicht umgesetzt werden die Nachträge v0.8 (spec T50–T58) und v0.9 (spec T59–T67); Einzelheiten in plan.md, Abschnitt „Abgrenzung“. Insbesondere: R30 nur für EA; `ad_modules` ohne EZ, TK, TKF und ohne `is_hidden`; keine `ad_locations`, `ad_rates`; keine Namens-, Lizenz- und Satzfunktionen; `ea_create_volunteer` und `ad_find_similar_persons` ohne EZ-Erweiterung; Seed nur Personen 1–12.
 
@@ -354,7 +352,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 **Unabhängiger Test**: „Erika Neu“ wird ohne Warnung angelegt; „Tony Muster“ zeigt Toni und Anton Muster nur mit Name, Rufname, Geburtsjahr bzw. „ausgeschieden seit“; „Trotzdem anlegen“ legt an; „Vorhandene Person öffnen“ nur bei sichtbaren Treffern; leerer Name, fremde Domain, doppelte Login-Adresse zeigen R4, R1, R2 (US-AD-07 AK1–AK5, US-AD-25 AK1–AK3, US-AD-24).
 
-- [ ] T073 [P] [US-AD-25] (spec T49 Teil) `src/features/shared/DublettenDialog.tsx`: Trefferliste nach R40 (Name über `personName()`, Geburtsjahr nur, wenn `birth_year` nicht null ist (v0.7.2, Ü2: für die Referent:in liefert die Datenbank null), „ausgeschieden seit TT.MM.JJJJ“), Aktionen als Props je Modul (in AD: „Trotzdem anlegen“, „Vorhandene Person öffnen“ nur bei `is_visible`, „Abbrechen“)
+- [ ] T073 [P] [US-AD-25] (spec T49 Teil) `src/features/shared/DublettenDialog.tsx`: Trefferliste nach R40 (Name über `personName()`, Geburtsjahr, „ausgeschieden seit TT.MM.JJJJ“), Aktionen als Props je Modul (in AD: „Trotzdem anlegen“, „Vorhandene Person öffnen“ nur bei `is_visible`, „Abbrechen“)
 - [ ] T074 [US-AD-07] (spec T16) `src/features/ad/personen/PersonNeu.tsx` (/ad/personen/neu): Vorname, Nachname, optional Rufname, optional Login-Adresse; R4 im Frontend; `rpc('ad_find_similar_persons')`; bei Treffern `DublettenDialog`; Anlegen: insert `ea_persons`, bei Login-Adresse insert `ad_accesses`; Fehler über `errors.ts`
 - [ ] T075 [US-AD-24] (spec T17 Teil, T47 Teil) `src/features/ad/personen/PersonDetail.tsx` (/ad/personen/:id): Seitengerüst mit den Abschnitten Stammdaten, Zugang, Rechtevorlagen, Eigenschaften; `StammdatenAbschnitt.tsx`: Vorname, Rufname, Nachname bearbeitbar, Art als Anzeige, Ehrenamtsstatus nur lesen mit „seit TT.MM.JJJJ“
 
@@ -387,7 +385,6 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 - [ ] T081 [US-AD-22] (spec T46) `src/features/ad/eigenschaftsarten/EigenschaftsartBearbeiten.tsx` (/ad/eigenschaftsarten/neu und /:id):
   - Name, Zweck, Kategorie, Lesestufe (drei Optionen mit Erklärung; „vertraulich“ nur mit AD ≥ bearbeiten), Bezug (kein / Referat / Gremium; „Gruppe“ nur mit GR = verwalten), Bezug Pflicht, mehrere gültige Einträge erlaubt, sichtbar in (Mehrfachauswahl aus `ad_modules`).
   - Felder als Liste: Bezeichnung, Schlüssel (aus der Bezeichnung vorgeschlagen, nach Anlage nicht änderbar), Datentyp (Text, Zahl, Datum, Jahr, Ja/Nein, Auswahlliste, Qualifikationsart), Pflicht, Auswahlwerte bzw. erlaubte Typen (Mehrfachauswahl, leer = alle), Reihenfolge per Auf/Ab; vorhandene Auswahlwerte nicht entfernbar; Datentyp gesperrt, wenn Eigenschaften existieren.
-  - v0.7.2 (R49, Ü1): zwei optionale Eingaben „Bezeichnung für ‚gültig von‘“ und „Bezeichnung für ‚gültig bis‘“ (je höchstens 40 Zeichen; leer = Standardbezeichnung), übergeben in `p_type` als `valid_from_label`, `valid_to_label`; Fehler `EA_LABEL_TOO_LONG`.
   - Beim Anlegen der Hinweis „Erfasse keine Gesundheitsdaten, Religion, politische Meinung oder andere besondere Kategorien nach Art. 9 DSGVO.“
   - Speichern über `rpc('ea_save_property_type')`; Fehler über `errors.ts`.
 
@@ -401,8 +398,8 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 **Unabhängiger Test**: Bei Person 4 erscheinen die Eigenschaften nach Kategorie, Felder als „Bezeichnung: Wert“, Bezug als „Referat Klettern“, Qualifikationsart als „TCSPI – …“; Anlegen, Ändern, Beenden mit Historie; Meldungen zu R27, R28, R35, R37, R38; nur Arten mit „sichtbar in“ AD (US-AD-13 AK1–AK6, US-AD-19 AK2–AK4).
 
-- [ ] T082 [P] [US-AD-19] (spec T47) `src/features/shared/Eigenschaftsformular.tsx`: Eingaben aus `ea_property_fields` (Text, Zahl, Datum, Jahr, Ja/Nein, Auswahlliste, Qualifikationsart über `QualifikationsartAuswahl`), Bezug-Auswahl (aktive Referate bzw. Gremien; bei Reichweite Referat nur `ad_my_referate`), gültig von/bis mit den Bezeichnungen der Eigenschaftsart (`valid_from_label`, `valid_to_label`, sonst „gültig von“/„gültig bis“; v0.7.2, R49); Fehler je Feld (R35); `EA_VALID_RANGE` mit den Bezeichnungen der Art (contracts/error-codes.md)
-- [ ] T083 [US-AD-13] (spec T19, T47) `src/features/ad/personen/EigenschaftenAbschnitt.tsx` in `PersonDetail.tsx`: nach Kategorie gruppiert, aktuelle oben, beendete (`valid_to < heute`) als „beendet“; nur Arten mit `visible_in` ∋ `AD`; Felder als „Bezeichnung: Wert“; gültig von/bis mit den Bezeichnungen der Eigenschaftsart (v0.7.2, R49); historische Qualifikationsart mit „(historisch)“; Historie je Eigenschaft aufklappbar (geändert am/von); Hinzufügen, Ändern, Beenden über `Eigenschaftsformular`; „Noch keine Eigenschaften.“
+- [ ] T082 [P] [US-AD-19] (spec T47) `src/features/shared/Eigenschaftsformular.tsx`: Eingaben aus `ea_property_fields` (Text, Zahl, Datum, Jahr, Ja/Nein, Auswahlliste, Qualifikationsart über `QualifikationsartAuswahl`), Bezug-Auswahl (aktive Referate bzw. Gremien; bei Reichweite Referat nur `ad_my_referate`), gültig von/bis; Fehler je Feld (R35)
+- [ ] T083 [US-AD-13] (spec T19, T47) `src/features/ad/personen/EigenschaftenAbschnitt.tsx` in `PersonDetail.tsx`: nach Kategorie gruppiert, aktuelle oben, beendete (`valid_to < heute`) als „beendet“; nur Arten mit `visible_in` ∋ `AD`; Felder als „Bezeichnung: Wert“; historische Qualifikationsart mit „(historisch)“; Historie je Eigenschaft aufklappbar (geändert am/von); Hinzufügen, Ändern, Beenden über `Eigenschaftsformular`; „Noch keine Eigenschaften.“
 
 **Checkpoint**: Eigenschaften mit Feldern und Historie sind pflegbar.
 
@@ -470,7 +467,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 - [ ] T102 [US-AD-25] (spec T25 Teil) Dublettenschwelle in TEST abnehmen (quickstart.md C: Toni/Anton/Tony Muster, Tippfehler) und das Ergebnis in `docs/specs/ad-administration/abnahme-test.md` festhalten (ohne private Adressen); bei Bedarf Schwelle per neuer Migration anpassen (Rückfrage beim Product Owner)
 - [ ] T103 [US-AD-08] (spec T25 Teil) Abnahmeablauf C1 vorbereiten: TEST auf Stand (`db push`, `functions deploy`, Seed; Auth-Einstellungen hat der Product Owner nach `supabase/setup/README.md` gesetzt). Danach führt **der Product Owner selbst** C1 durch (Domain per SQL-Editor, Personen mit eigenen Adressen, Einladung, Adressänderung, Passwort setzen, Passwort vergessen) und räumt nach C2 auf. Claude Code trägt keine Domain und keine Adresse ein. Ergebnis ohne Adressen in `abnahme-test.md`. Betrifft US-AD-03, US-AD-04, US-AD-08
-- [ ] T104 [US-AD-26] (spec T25 Teil, T32, T49) Szenarien aus quickstart.md C und C3 mit den Testzugängen Admin, Geschäftsstelle, Referent:in, Vorstand und test.notfall abnehmen, auch bei 375 px; dazu v0.7.2: Bezeichnungen „gültig von/bis“ einer Eigenschaftsart im Formular, in der Anzeige und in der Meldung zu `EA_VALID_RANGE`, Dublettendialog „Toni Muster“ als Referent:in ohne Geburtsjahr und als Geschäftsstelle mit 1990; offene `[PRÜFEN T25]`-Punkte aus research.md abhaken bzw. melden; Ergebnis in `abnahme-test.md`
+- [ ] T104 [US-AD-26] (spec T25 Teil, T32, T49) Szenarien aus quickstart.md C und C3 mit den Testzugängen Admin, Geschäftsstelle, Referent:in, Vorstand und test.notfall abnehmen, auch bei 375 px; offene `[PRÜFEN T25]`-Punkte aus research.md abhaken bzw. melden; Ergebnis in `abnahme-test.md`
 - [ ] T105 [P] (spec T12 Teil) Querschnitt: `npm run lint` und `npm run build` ohne Fehler; `npm audit` und Ergebnis melden; keine Secrets oder realen Adressen im Diff (`git grep` auf `@` außerhalb von `@dav-leipzig.de`, `example.test`, `example.org`)
 
 ---

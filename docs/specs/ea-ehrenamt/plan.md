@@ -108,7 +108,7 @@ src/
 | AD T35, T36, T38, T39, T41, T43 (Eigenschaftsarten, Eigenschaften, Sichtbarkeit, EA-Funktionen, Dubletten) | erledigt (`20261023000800`–`1400`, PR #15) | – |
 | AD T48 (Seed Personen 1–12 mit Eigenschaften) | erledigt (AD tasks.md T061) | – |
 | Ü1, Ü2, R3a (AD v0.7.2/v0.7.3), Datenbank | erledigt (`…000800` Bezeichnungen, `…001300` Geburtsjahr nach Lesestufe und `ad_first_names_match`) | T0a, T0b entfallen |
-| Ü1, Ü2, Oberfläche | in AD tasks.md T073, T081–T083 aufgenommen, offen | Teil der AD-Komponenten |
+| Ü1, Ü2, Oberfläche | Dublettendialog (T073) und Formular der Eigenschaftsart (T081) mit Ü1/Ü2 auf den Branches `us-ad-07-person-anlegen` bzw. `us-ad-12-eigenschaftsarten` (noch nicht gemergt); Bezeichnungen im Eigenschaftsformular und in der Anzeige (T082, T083) offen | Teil der AD-Komponenten, siehe H1 |
 | AD T30, T46, T47, T49 (Komponenten: Auswahlfeld Qualifikationsart, Eigenschaftsarten, Eigenschaftsformular, Dublettendialog) | offen (AD tasks.md T073, T076, T081, T082) | blockiert T12–T15, T19 |
 | AD-Migrationen `…001500`–`…001700` (Zugang, Protokoll) | offen | vor der ersten EA-Migration nach TEST bringen oder einmal `--include-all` (research.md R-EA-01) |
 | TEST zurücksetzen vor der ersten EA-Migration | Entscheidung Product Owner (spec.md AD Abschnitt 9) | quickstart.md B, durch den Product Owner oder auf Auftrag |
@@ -165,7 +165,7 @@ Gemeldet an den Product Owner. Nichts davon hat Claude Code entschieden.
 - Übernommen aus spec.md Abschnitt 11 (kein Blocker): Karteileichen; Fördergeber und Förderart; Jahreskarte, Forms, Redaktion, Mailingliste; Amtszeit Jugendausschuss; „Mitarbeiter:in Mitgliederverwaltung“; Regelwerk Führungszeugnis-Einsicht. Text und Link zu Art. 13 DSGVO betreffen die Anwesenheitserfassung.
 
 Hinweise (keine Entscheidung nötig):
-- **H1 – Übergabe Ü1/Ü2 (erledigt 23.10.2026):** Datenbankteil mit PR #15 umgesetzt; Oberflächen-Tasks in tasks.md und plan.md der Administration nachgezogen (T073, T081–T083, T104). Die Datei uebergabe-administration.md steht noch auf „offen“; sie als erledigt zu markieren ist eine fachliche Änderung (Branch `docs/…`, Product Owner).
+- **H1 – Übergabe Ü1/Ü2:** Datenbankteil mit PR #15 umgesetzt; T073 und T081 der Administration berücksichtigen Ü1/Ü2 bereits (Branches `us-ad-07-person-anlegen`, `us-ad-12-eigenschaftsarten`). Beim Bau von T082/T083 (Eigenschaftsformular, Anzeige im Personendetail) die Bezeichnungen „gültig von/bis“ der Eigenschaftsart verwenden (spec.md AD T47, R49). tasks.md der Administration wird hier nicht geändert, weil parallel daran gearbeitet wird. Die Datei uebergabe-administration.md steht noch auf „offen“; sie als erledigt zu markieren ist eine fachliche Änderung (Branch `docs/…`, Product Owner).
 - **H2 – Erwartete Ergebnisse spec.md Abschnitt 9:** In der Spalte `ea_v_expiry` Jahr 2027 nennt die Zeile Referent:in „nur Personen 4, 10, 19, 22“. Personen 10 und 22 haben keine Lizenz oder Qualifikation, und Lena (19) läuft am 22.10.2026 noch im Jahr 2026 ab. Der Test prüft deshalb „nur Personen aus {4, 10, 19, 22}“ mit der Erwartung aus `current_date` (research.md R-EA-06). Keine Änderung der Spec nötig.
 
 ## Complexity Tracking

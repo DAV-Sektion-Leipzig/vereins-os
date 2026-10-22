@@ -1,6 +1,6 @@
-# Implementation Plan: Administration (AD) – Kern bis v0.7.1 mit v0.7.2 und v0.7.3
+# Implementation Plan: Administration (AD) – Kern bis v0.7.1
 
-**Branch**: `ad-kern-plan` (Plan); Umsetzung auf den Branches aus Abschnitt „Branches“ | **Date**: 2026-10-22 | **Spec**: [spec.md](spec.md) v0.9.2, umgesetzt wird der Kern (Abschnitte bis v0.7.1 einschließlich v0.7.2 und v0.7.3)
+**Branch**: `ad-kern-plan` (Plan); Umsetzung auf den Branches aus Abschnitt „Branches“ | **Date**: 2026-10-22 | **Spec**: [spec.md](spec.md) v0.9, umgesetzt wird der Kern (Abschnitte bis v0.7.1)
 
 **Input**: [spec.md](spec.md) v0.9 (führend), [02-stories.md](02-stories.md) v0.8.1, [01-erhebung.md](01-erhebung.md) v0.7, [00-steckbrief.md](00-steckbrief.md) v1.1, [querschnitt-administration.md](../../querschnitt-administration.md) v0.1, [arbeitsplan.md](../../arbeitsplan.md) v0.1, [tech-stack.md](../../tech-stack.md) v0.6, [stammdaten-qualifikationsarten.md](../ea-ehrenamt/stammdaten-qualifikationsarten.md) v0.2, [Constitution](../../../.specify/memory/constitution.md) v1.1.1
 
@@ -18,8 +18,6 @@ Technisch kommen dazu:
 - die Oberflächen unter /ad und die wiederverwendbaren Komponenten Eigenschaftsformular, Dublettendialog und Auswahlfeld „Qualifikationsart“.
 
 ## Abgrenzung: Kern ohne Nachträge v0.8 und v0.9
-
-Zum Kern gehören die Ergänzungen v0.7.2 (Ü1 Bezeichnungen „gültig von/bis“, R49; Ü2 Geburtsjahr nach Lesestufe, R40; Übergabe aus dem Ehrenamtsmanagement) und v0.7.3 (Namensregel R3a). Datenbankteil umgesetzt (Migrationen `…000800`, `…001300`), Oberflächen in tasks.md T073, T081–T083, Abnahme in T104.
 
 Nicht umgesetzt werden der Nachtrag v0.8 (T50–T58) und der Nachtrag v0.9 (T59–T67) ([arbeitsplan.md](../../arbeitsplan.md) 4.1, [querschnitt-administration.md](../../querschnitt-administration.md) Abschnitt 2). Wo spec.md v0.9 in den Kernabschnitten Text mit „v0.8“ oder „v0.9“ markiert, gilt die Fassung ohne diese Ergänzung. Für den Kern heißt das:
 

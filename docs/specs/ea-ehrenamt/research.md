@@ -16,7 +16,7 @@ Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spe
 ## R-EA-02 Übergabe Ü1 und Ü2 (T0a, T0b entfallen)
 
 - Geprüft am 23.10.2026 (main @ 9e05a8b): Der Kern der Administration enthält Ü1 (`ea_property_types.valid_from_label`, `valid_to_label`, Check ≤ 40, `EA_LABEL_TOO_LONG`; Migration `20261023000800`), Ü2 (`birth_year` nach Lesestufe der Art `birth_date`; `20261023001300`) und R3a (`ad_first_names_match`, ebenda). T0a und T0b entfallen.
-- Die Oberflächen-Teile von Ü1 und Ü2 (Formular der Eigenschaftsart, Eigenschaftsformular, Anzeige, Dublettendialog) stehen in tasks.md der Administration (T073, T081–T083) und werden dort gebaut, nicht im Ehrenamtsmanagement.
+- Die Oberflächen-Teile von Ü1 und Ü2 (Formular der Eigenschaftsart, Eigenschaftsformular, Anzeige, Dublettendialog) baut die Administration (T073, T081–T083), nicht das Ehrenamtsmanagement.
 
 ## R-EA-03 Migration der System-Eigenschaftsarten (T1)
 
