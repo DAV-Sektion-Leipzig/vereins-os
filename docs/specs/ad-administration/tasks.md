@@ -1,14 +1,18 @@
 ---
-description: "Tasks für das Modul Administration (AD)"
+description: "Tasks für das Modul Administration (AD), Kern bis v0.7.1"
 ---
 
-# Tasks: Administration (AD)
+# Tasks: Administration (AD) – Kern bis v0.7.1
 
-**Input**: [plan.md](plan.md), [spec.md](spec.md) v0.5 (führend), [02-stories.md](02-stories.md) v0.5, [research.md](research.md), [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md), [Constitution](../../../.specify/memory/constitution.md) v1.1.1
+**Input**: [plan.md](plan.md) (Stand 22.10.2026), [spec.md](spec.md) v0.9 (führend, Umfang Kern bis v0.7.1), [02-stories.md](02-stories.md) v0.8.1, [research.md](research.md), [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md), [Constitution](../../../.specify/memory/constitution.md) v1.1.1
 
-**Tests**: Die Constitution verlangt eine test- und spec-getriebene Umsetzung mit pgTAP-Tests der RLS je Rechtevorlage (Arbeitsablauf Nr. 4). spec.md verlangt in T9 einen Test der Edge Function mit simuliertem Fehler. Deshalb steht vor jeder Datenbank-Migration und vor jeder Edge Function eine Test-Task. Die Tests müssen zuerst fehlschlagen. Für das Frontend fordert spec.md keine Tests; dort gilt die Abnahme in TEST (spec T25).
+**Stand**: Phasen 1–3 (T001–T031) sind erledigt und bleiben mit Nummer und Text unverändert, weil spec.md und querschnitt-administration.md darauf verweisen. Die Tasks ab T032 ersetzen die offenen Tasks der Fassung vom 20.10.2026 (Grundlage spec.md v0.5); deren Nummern T032–T079 sind damit neu belegt.
 
-**Organisation**: Eine Phase je Story in der Reihenfolge aus 02-stories.md: 01 → 02 → 05 → 10 → 06 → 07 → 12 → 13 → 11 → 08 → 03 → 04 → 09 → 14 → 15 → 16. Die letzte Phase ist die Abnahme.
+**Abgrenzung**: Nicht umgesetzt werden die Nachträge v0.8 (spec T50–T58) und v0.9 (spec T59–T67); Einzelheiten in plan.md, Abschnitt „Abgrenzung“. Insbesondere: R30 nur für EA; `ad_modules` ohne EZ, TK, TKF und ohne `is_hidden`; keine `ad_locations`, `ad_rates`; keine Namens-, Lizenz- und Satzfunktionen; `ea_create_volunteer` und `ad_find_similar_persons` ohne EZ-Erweiterung; Seed nur Personen 1–12.
+
+**Tests**: Die Constitution verlangt eine test- und spec-getriebene Umsetzung mit pgTAP-Tests der RLS je Rechtevorlage (Arbeitsablauf Nr. 4). Vor jeder Migration und jeder Edge Function steht eine Test-Task; die Tests müssen zuerst fehlschlagen. Für das Frontend gilt die Abnahme in TEST (spec T25, T32, T49).
+
+**Organisation**: Phasen nach den Branches aus plan.md. Phase 4 ist die gemeinsame Datenbank-Grundlage aller übrigen Stories (Branch `ad-kern-datenbank`); danach eine Phase je Branch mit den Oberflächen.
 
 ## Format: `- [ ] T### [P?] [US-AD-xx] (spec Tn) Beschreibung`
 
@@ -21,14 +25,14 @@ description: "Tasks für das Modul Administration (AD)"
 
 - **Nie gegen PROD.** Alle CLI-Befehle gehen nur gegen vereins-os-test oder gegen den lokalen Stack in der GitHub Action. Vor jedem Befehl mit `--linked` muss `npx supabase projects list` zeigen, dass TEST verknüpft ist.
 - **Kein `supabase config push` und kein `supabase config diff`**, weder gegen TEST noch gegen PROD. `supabase/config.toml` gilt nur für den lokalen Stack (CI). Auth-Einstellungen in TEST und PROD stellt der Product Owner nach der Checkliste in `supabase/setup/README.md` im Dashboard ein.
-- **Keine Einladungen an Seed-Adressen in TEST** (`test.*@dav-leipzig.de`): Sie erzeugen Bounces und verbrauchen das Mail-Limit. In TEST werden nur die eigenen Adressen des Product Owners eingeladen (T077).
+- **Keine Einladungen an Seed-Adressen in TEST** (`test.*@dav-leipzig.de`): Sie erzeugen Bounces und verbrauchen das Mail-Limit. In TEST werden nur die eigenen Adressen des Product Owners eingeladen (T103).
+- **Bestehende Migrationen nicht ändern** (`20261020000100`–`0600` sind in TEST ausgerollt). Jede Änderung kommt per neuer Migration.
 - Jede Migration enthält für die Tabellen, Views und Funktionen, die sie anlegt: `enable row level security`, Policies, `revoke all … from anon, public` und `grant … to authenticated`. Für interne Funktionen gilt stattdessen `grant execute … to service_role`. Für `ad_test_login_domains` gibt es weder Policy noch Grant (Ausnahme in Constitution III).
 - security-definer-Funktionen haben immer `set search_path = ''` und nutzen voll qualifizierte Namen.
 - Datei `.env.local` nie lesen, anzeigen oder ändern. Keine Secrets, keine echten Adressen in Dateien.
 - Fehlercodes und Meldungen nur aus [contracts/error-codes.md](contracts/error-codes.md).
-- Commits auf Deutsch, auf dem Branch der jeweiligen Story.
-
----
+- Dateien unter `docs/` nicht ändern (kommen aus OneDrive, CLAUDE.md). Ausnahme: die von Spec Kit bzw. Claude Code gepflegten Dateien plan.md, research.md, data-model.md, quickstart.md, tasks.md, contracts/ und abnahme-test.md.
+- Commits auf Deutsch, auf dem Branch der jeweiligen Phase; jeder Pull Request nennt Stories, Tasks und die Cloudflare-Vorschau-URL.
 
 ## Phase 1: US-AD-01 Ersteinrichtung PROD (Priorität: Must) 🎯 MVP-Fundament
 
@@ -222,370 +226,249 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 ---
 
-## Phase 4: US-AD-10 Rechtevorlage anlegen und ändern (Must)
+## Phase 4: Datenbank-Kern v0.6/v0.7 (Branch `ad-kern-datenbank`) 🎯 Grundlage für alle weiteren Phasen
 
-**Ziel**: Oberfläche für Rechtevorlagen. Die Datenbank-Seite ist mit T011 fertig und mit T005 getestet (AK4).
+**Ziel**: Alle Datenbankteile des Kerns: Reichweite „Referat“ (nur EA), Referate und Gremien, Qualifikationsarten mit Startbestand, Personenmodell mit Rufname und Ehrenamtsstatus, Eigenschaftsarten mit Feldern, Eigenschaften, Sichtbarkeit je Pfad, EA-Funktionen, Startvorlage Referent:in, Personenübersicht, Dublettenprüfung, Notfall-Hinweis, Löschlauf des Protokolls; Seed Personen 1–12.
 
-**Unabhängiger Test**: test.admin legt eine Vorlage an, ändert eine Stufe der Vorlage Vorstand und erhält bei einem doppelten Namen „Eine Rechtevorlage mit diesem Namen gibt es bereits.“ (AK1–AK3).
+**Stories (Datenbankteil)**: US-AD-06, 07, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26
 
-- [ ] T032 [US-AD-10] (spec T20 Teil) `src/features/ad/AdLayout.tsx`: AD-Navigation (Personen, Rechtevorlagen, Eigenschaftsarten, Protokoll), Unterrouten in `src/App.tsx` eintragen; Schreibknöpfe nur bei `ad_has_level('AD','edit')`
-- [ ] T033 [P] [US-AD-10] (spec T20) `src/features/ad/rechtevorlagen/RechtevorlagenListe.tsx`: Spalten Name, Beschreibung, Anzahl Personen (wirksame Zuweisungen); Knöpfe „Neu“ und „Öffnen“; mobil als Karten
-- [ ] T034 [US-AD-10] (spec T20) `src/features/ad/rechtevorlagen/RechtevorlageBearbeiten.tsx` (/ad/rechtevorlagen/neu und /:id): Name, Beschreibung, Matrix mit 9 Modulen und je einer Auswahl „kein Zugriff / lesen / bearbeiten / verwalten“; Speichern (insert/update `ad_templates`, update `ad_template_rights.level`); Fehler über `errors.ts`
+**Unabhängiger Test**: Die GitHub Action ist grün; die Sichtbarkeitsmatrix aus data-model.md („Testdaten“) gilt für Admin, Geschäftsstelle, Referent:in und Vorstand; `supabase db push --linked` und `supabase/seed.sh` laufen gegen TEST ohne Fehler.
 
-**Checkpoint**: Vorlagen sind über die Oberfläche pflegbar.
+### Tests für Phase 4 ⚠️ (zuerst schreiben, müssen fehlschlagen)
 
----
+- [ ] T032 [US-AD-23] (spec T7 Teil) Bestehende Tests an das neue Modell anpassen: `supabase/tests/database/020_persons_rights.test.sql` (Lesen/Schreiben auf `ea_persons` jetzt nach R32: test.geschaeftsstelle sieht keine Personen ohne Ehrenamtsstatus; Anlegen direkt nur mit AD ≥ edit) und `supabase/tests/database/050_policies.test.sql` (`policies_are`/`table_privs_are` für alle neuen Tabellen aus data-model.md, ersetzte Policies auf `ea_persons`, Grant `update (level, scope)` auf `ad_template_rights`)
+- [ ] T033 [P] [US-AD-20] (spec T7 Teil) `supabase/tests/database/070_scope_referate.test.sql`:
+  - `ad_template_rights.scope` hat den Typ `ad_scope`; `scope = 'referat'` für EA erlaubt, für GR → `AD_SCOPE_NOT_ALLOWED`.
+  - `ad_assign_template` mit Vorlage Referent:in ohne Referat bzw. nur mit inaktivem Referat → `AD_REFERAT_REQUIRED`; mit Referat Klettern → Zuweisung, `ad_assignment_referate`, Protokoll `template_assigned` mit „Klettern“ in `details`; bei einer Vorlage ohne Reichweite „Referat“ werden übergebene Referate nicht gespeichert (R31).
+  - `ad_set_assignment_referate` Klettern → Touren schreibt `referate_changed` mit „vorher → nachher“ (US-AD-21 AK3).
+  - test.referent: `ad_my_referate('EA','edit')` = {Klettern}, `ad_user_level('EA')` = `none`, `ad_has_any_level('EA','read')` = true; ohne aktiven Zugang leer (R5).
+  - `ad_my_modules()` liefert `level` als höchste Stufe über beide Reichweiten; nur Module mit `is_available`.
+  - test.geschaeftsstelle und test.vorstand: `ad_assign_template` → `AD_FORBIDDEN`.
+- [ ] T034 [P] [US-AD-20] (spec T7 Teil) `supabase/tests/database/080_referate_gremien.test.sql`: Startbestand 7 Referate und 4 Gremien in der Reihenfolge aus spec.md; Lesen für jeden Testzugang mit aktivem Zugang; Anlegen/Ändern nur test.admin und test.geschaeftsstelle (EA verwalten), test.vorstand und test.referent abgelehnt; doppelte Bezeichnung ohne Groß-/Kleinschreibung → `ea_referate_name_key`; kein Delete
+- [ ] T035 [P] [US-AD-17] (spec T29) `supabase/tests/database/090_qualification_types.test.sql`:
+  - 47 Einträge nach dem Startbestand; PSA mit Status `historic`.
+  - R21 `AD_QUALIFICATION_NAME_REQUIRED`, `AD_QUALIFICATION_NAME_TAKEN` (ohne Groß-/Kleinschreibung); R22 `AD_QUALIFICATION_CODE_TAKEN`, `AD_QUALIFICATION_CODE_FORMAT`, Kürzel `tcspi` wird `TCSPI`; R23 `AD_QUALIFICATION_LEVEL_REQUIRED`; R24 `AD_QUALIFICATION_VALIDITY` (0, 11, fehlend bei Lizenz), bei Zusatzqualifikation und Lehrgang wird `validity_years` geleert.
+  - `source_ref` für Nutzer nicht änderbar.
+  - Lesen für alle Testzugänge mit aktivem Zugang; Schreiben test.admin und test.geschaeftsstelle; test.vorstand abgelehnt; kein Delete.
+  - Der Insert-Block der Startbestands-Migration läuft ein zweites Mal ohne Änderung; ein vorher geänderter Eintrag bleibt geändert.
+- [ ] T036 [P] [US-AD-24] (spec T7 Teil) `supabase/tests/database/100_persons_v07.test.sql`: neue Spalten mit Defaults (`created_in = 'AD'` für den Bestand); Rufname wird getrimmt, leer → null; Check `volunteer_status`/`volunteer_status_since` beide oder keiner; Funktionsperson mit Ehrenamtsstatus abgelehnt; Nutzer-Update von `volunteer_status`, `kind` oder `created_in` abgelehnt; ohne Nutzerkontext ist der Ehrenamtsstatus setzbar
+- [ ] T037 [P] [US-AD-22] (spec T7 Teil) `supabase/tests/database/110_property_types.test.sql`:
+  - `ea_save_property_type` ohne Felder → `EA_NO_FIELDS`; leerer Zweck → `EA_PURPOSE_REQUIRED`; Auswahlliste ohne Werte → `EA_CHOICE_VALUES_REQUIRED`; doppelter Name → `ea_property_types_name_key`; doppelte Feldbezeichnung → `ea_property_fields_label_key`; unbekannter Modulcode in `visible_in` abgelehnt.
+  - test.geschaeftsstelle: `read_level = 'confidential'` setzen → `AD_CONFIDENTIAL_ONLY_AD`; vertrauliche Arten und ihre Felder sind für sie und test.referent unsichtbar.
+  - Mit vorhandenen Eigenschaften: Datentyp ändern → `EA_DATA_TYPE_LOCKED`; Bezug ändern → `EA_RELATION_LOCKED`; neues Pflichtfeld → `EA_FIELD_NEW_REQUIRED`; Auswahlwert entfernen → `EA_CHOICE_VALUE_REMOVED`, ergänzen erlaubt; Feldschlüssel ändern abgelehnt.
+  - `system_key` nur ohne Nutzerkontext setzbar; `relation_kind = 'group'` ohne GR = verwalten abgelehnt.
+- [ ] T038 [P] [US-AD-19] (spec T7 Teil) `supabase/tests/database/120_properties.test.sql`:
+  - R35: fehlendes Pflichtfeld → `EA_FIELD_REQUIRED` mit Feldbezeichnung im `detail`; Text statt Datum → `EA_VALUE_TYPE` mit Feldbezeichnung; unbekannter Schlüssel → `EA_FIELD_UNKNOWN`; Wert außerhalb der Auswahlliste → `EA_FIELD_CHOICE`; Jahr 1899 und 2101 abgelehnt.
+  - R37: zweiter überlappender Eintrag bei `allow_multiple = false` → `EA_SINGLE_VALUE`; nicht überlappend erlaubt.
+  - R38: Bezug Pflicht ohne Referat → `EA_RELATION_REQUIRED`; inaktives Referat nicht neu wählbar.
+  - R27: historische Qualifikationsart mit Nutzerkontext neu gesetzt → `AD_QUALIFICATION_HISTORIC`, ohne Nutzerkontext erlaubt; andere Werte einer solchen Eigenschaft änderbar. R28: falscher Typ → `AD_QUALIFICATION_KIND`; nicht vorhandene Qualifikationsart → `EA_VALUE_TYPE`.
+  - `valid_to < valid_from` → `ea_properties_valid_range`; ein Update schreibt die alte Fassung in `ea_property_history`.
+- [ ] T039 [P] [US-AD-23] (spec T45) `supabase/tests/database/130_visibility.test.sql`:
+  - Sichtbarkeitsmatrix aus data-model.md („Testdaten“) für Personen über `ea_persons` und `ea_v_persons` je Testzugang.
+  - Lesestufen nach R29: test.geschaeftsstelle liest „Geburtsdatum (Test)“, aber kein „Hauptamt“; test.referent liest weder Geburtsdatum noch Hauptamt; test.admin liest alles; Historie folgt der Eigenschaft.
+  - test.referent: Eigenschaft mit Bezug Klettern an Person 4 anlegen erlaubt; Bezug Ausbildung → `EA_RELATION_FOREIGN_REFERAT`; Funktion von Person 10 im Referat Ausbildung lesbar, nicht änderbar (R41); Person 11 (ausgeschieden) unsichtbar (R34).
+  - Eigenschaft einer Art mit Bezug Gruppe aus dem Pfad EA schreiben → `EA_GROUP_RELATION_ONLY_GR` (R39; Art ohne Nutzerkontext angelegt).
+  - Person 12 (`created_in = 'GR'`, ohne Ehrenamtsstatus) ist mit nur EA-Rechten nicht lesbar, mit AD-Rechten lesbar (Übergabe GR, v0.7.1).
+  - Eine neue Eigenschaft ändert `ad_user_level` und `ad_my_referate` nicht (R7).
+  - test.vorstand sieht keine Person und keine Eigenschaft.
+- [ ] T040 [P] [US-AD-23] (spec T7 Teil) `supabase/tests/database/140_volunteer_functions.test.sql`:
+  - `ea_set_volunteer_status`: test.geschaeftsstelle setzt Person 5 auf `active` mit Historie (wer, wann); test.referent setzt Person 4 auf `dormant`, für Person 5 → `EA_STATUS_FORBIDDEN`; test.vorstand → `EA_STATUS_FORBIDDEN`.
+  - `ea_create_volunteer`: test.referent mit Referat Klettern → Person mit `created_in = 'EA'`, Status `active` mit Historie, erste Eigenschaft mit Bezug Klettern; mit Referat Ausbildung → `EA_RELATION_FOREIGN_REFERAT`; test.geschaeftsstelle ohne Art und Referat erlaubt; die Funktion hat keinen Parameter `p_contact_email`.
+  - `ea_activate_person`: test.referent übernimmt Person 11 mit Zuordnung Klettern (Status `active`, keine neue Person); Funktionsperson abgelehnt.
+  - `ea_person_referate(4)` = {Klettern} für Nutzer mit Pfad EA, sonst keine Zeile.
+- [ ] T041 [P] [US-AD-20] (spec T7 Teil) `supabase/tests/database/150_start_templates.test.sql`: Vorlage „Referent:in“ mit EA `edit`, scope `referat`, alle übrigen 8 Module `none`; Vorlage Admin GR = `read`; zweiter Lauf des Migrationsblocks ändert nichts; eine vom Admin geänderte Stufe bleibt erhalten
+- [ ] T042 [P] [US-AD-25] (spec T7 Teil) `supabase/tests/database/160_find_similar.test.sql`:
+  - `('Anton','Muster',null)` und `('Tony','Muster',null)` finden Toni Muster (4) und Anton Muster (5); `('Erika','Neu',null)` findet nichts; Funktionsperson 8 nie.
+  - Login-Adresse und die E-Mail aus „Kontaktdaten (Test)“ von Person 12 (`paul.nurgruppe@example.test`) werden gefunden.
+  - Rückgabe genau `person_id, first_name, last_name, preferred_name, birth_year, volunteer_status, left_since, is_visible`; `birth_year` 1990 für Person 4; `left_since` nur bei Person 11.
+  - `is_visible` für test.referent bei Person 5 false, bei Person 4 true.
+  - Aufrufbar für test.admin, test.geschaeftsstelle, test.referent; test.vorstand → `AD_FORBIDDEN`.
+- [ ] T043 [P] [US-AD-06] (spec T7 Teil) `supabase/tests/database/170_person_overview.test.sql`: `ad_v_person_overview` liefert für test.admin 12 Zeilen mit Rufname, `access_status = 'none'` ohne Zugang, Ehrenamtsstatus, `created_in` und wirksamen Vorlagen mit Referaten (Person 9: „Referent:in (Klettern)“); test.geschaeftsstelle nur Personen nach Pfad EA; test.vorstand 0 Zeilen; `ad_me()` liefert `preferred_name`; `ad_qualification_usage` zählt verschiedene Personen (TCSPI: 1) und ist für test.vorstand verboten
+- [ ] T044 [P] [US-AD-15] (spec T7 Teil) `supabase/tests/database/180_emergency_notice.test.sql`:
+  - `ad_pending_emergency_logins()` zählt `emergency_login`-Einträge nach `emergency_acknowledged_until` (ohne Zeile: alle); `ad_acknowledge_emergency()` setzt den Zeitpunkt für `auth.uid()`; beide für test.geschaeftsstelle `AD_FORBIDDEN`.
+  - Löschen eines Auth-Nutzers löscht seine Zeile in `ad_notice_acks` mit (cascade).
+  - `cron.job` enthält `ad_audit_log_retention` mit `15 1 * * *`; der Befehl, in der Transaktion ausgeführt, löscht einen Eintrag von vor 6 Jahren und behält einen von gestern; test.admin: update/delete auf `ad_audit_log` abgelehnt (US-AD-14 AK2, AK4).
+- [ ] T045 [P] [US-AD-23] (spec T45 Teil) `supabase/tests/database/190_mengentest.test.sql` nach research.md R-27: 1.000 Personen mit Ehrenamtsstatus und je 30 Eigenschaften; als test.referent eine Seite (50) der Personenübersicht und die Eigenschaften der sichtbaren Personen in je < 1 s
+- [ ] T046 [P] [US-AD-26] (spec T7 Teil) `supabase/tests/database/200_seed.test.sql`: 12 Personen (eine `function`); aktive Testzugänge Admin, Geschäftsstelle, Vorstand, Notfall-Admin, Referent:in; Ehrenamtsstatus der Personen 4, 5, 9, 10, 11 nach spec.md Abschnitt 9 mit Historie; 8 Testarten mit Feldern; Person 5 mit historischer Qualifikationsart; 4 Protokolleinträge, davon `template_assigned` für Rita Referentin mit Referat Klettern; keine `system_key` `function`, `contact`, `license`
 
-## Phase 5: US-AD-06 Übersicht Personen und Zugänge (Must)
+### Umsetzung für Phase 4
 
-**Ziel**: Personenübersicht mit Status, Vorlagen, Suche und Filter.
+- [ ] T047 (spec T26, T33, T35, T37 Teil) Migration `supabase/migrations/20261023000100_ad_kern_enums.sql` nach research.md R-17: `alter type public.ea_data_type add value` `number`, `year`, `qualification_type`; `alter type public.ad_audit_action add value 'referate_changed'`; neue Enums `ad_scope` (`all`, `referat`), `ea_read_level` (`all`, `office`, `confidential`), `ea_relation_kind` (`none`, `referat`, `gremium`, `group`), `ea_property_category` (`master_data`, `contact`, `assignment`, `qualification`, `proof`, `yearly`, `issue`, `external_access`, `other`), `ea_volunteer_status` (`active`, `dormant`, `left`), `ad_qualification_kind` (`license`, `add_on`, `course`, `training`), `ad_license_level` (`pre`, `C`, `B`, `A`, `none`), `ad_qualification_status` (`current`, `historic`); `grant usage on type … to authenticated`
+- [ ] T048 [US-AD-20] (spec T34, T26 Teil) Migration `…000200_ea_referate_gremien.sql`: `ad_has_active_access()`; `ea_referate`, `ea_gremien` nach data-model.md mit Startbestand (Referate: Ausbildung, Touren, Kinder und Jugend, Klettern, Leistungssport, Karl-Stein-Hütte, Sulzenauhütte; Gremien: Vorstand, Beirat, Ehrenrat, Jugendausschuss), Trigger `updated_*`, Policies, Grants; Tests T034 grün
+- [ ] T049 [US-AD-20] (spec T33) Migration `…000300_ad_scope.sql` nach research.md R-18: Check `ad_template_rights_scope_mvp` entfernen, `scope` auf `ad_scope` umstellen, Check `ad_template_rights_scope_allowed` (`scope = 'all' or (scope = 'referat' and module_code = 'EA')`), Trigger mit `AD_SCOPE_NOT_ALLOWED`; `ad_assignment_referate`; `ad_my_referate`, `ad_has_any_level`; neue Fassungen `ad_user_level` (nur scope `all`), `ad_my_modules`; `ad_assign_template(p_person, p_template, p_referate uuid[] default null)` (alte Signatur entfernen) mit R31 (`AD_REFERAT_REQUIRED`) und Protokoll; `ad_set_assignment_referate`; Grant `update (level, scope)`; Tests T033 grün
+- [ ] T050 [US-AD-17] (spec T26) Migration `…000400_ad_qualification_types.sql` nach data-model.md und research.md R-24: Tabelle, Checks, Indizes, Trigger `ad_qualification_types_guard` (R21–R24), `ad_can_edit_qualification_types()`, Policies (select `ad_has_active_access()`, insert/update `ad_can_edit_qualification_types()`), kein Delete
+- [ ] T051 [US-AD-18] (spec T27) Migration `…000500_ad_qualification_types_data.sql`: die 47 Zeilen aus `docs/specs/ea-ehrenamt/stammdaten-qualifikationsarten.md` v0.2 Abschnitt 3 (Quell-ID → `source_ref`, Kürzel → `code`, Bezeichnung → `name`, Sparte → `discipline`, Typ → `kind`, Lizenzstufe → `level`, Spezifikation, Aussteller → `issuer`, DOSB → `dosb_eligible`, Gültigkeitsdauer → `validity_years`, Status, Hinweis → `note`); PSA mit `historic`; `insert … on conflict (source_ref) do nothing`; Tests T035 grün
+- [ ] T052 [US-AD-24] (spec T37) Migration `…000600_ea_persons_v07.sql` nach data-model.md und research.md R-23: Spalten `preferred_name`, `created_in`, `volunteer_status`, `volunteer_status_since` mit Checks und Indizes; `ea_persons_normalize` um Rufname erweitern; `ea_volunteer_status_history`; Trigger `ea_persons_guard`; Tests T036 grün
+- [ ] T053 [US-AD-22] (spec T35) Migration `…000700_ea_property_types.sql` nach data-model.md und research.md R-21: `ea_property_types`, `ea_property_fields`, Trigger, `ea_save_property_type(p_type jsonb, p_fields jsonb)`; Policies vorläufig nur für AD (endgültig in T055); Tests T037 grün (soweit ohne Eigenschaften prüfbar)
+- [ ] T054 [US-AD-13] (spec T36) Migration `…000800_ea_properties.sql` nach research.md R-20: `ea_properties` (`field_values jsonb not null default '{}'`, `related_referat_id`, `related_gremium_id`, `valid_from` Pflicht, `valid_to`, Check `ea_properties_valid_range`), Indizes, Trigger `ea_properties_validate` und `ea_properties_history`, `ea_property_history`; Tests T038 grün
+- [ ] T055 [US-AD-23] (spec T38) Migration `…000900_ea_visibility.sql` nach research.md R-19 und R-22: Funktionen `ea_person_in_referate`, `ea_person_visible_ad`, `ea_person_visible_ea`, `gr_person_visible` (Platzhalter `false`), `ea_person_visible`, `ea_property_readable`, `ea_property_writable`; bisherige Policies auf `ea_persons` per `drop policy` ersetzen; Policies auf `ea_volunteer_status_history`, `ea_property_types`, `ea_property_fields`, `ea_properties`, `ea_property_history`; Tests T032, T039 grün
+- [ ] T056 [US-AD-23] (spec T39) Migration `…001000_ea_volunteer_functions.sql`: `ea_set_volunteer_status`, `ea_person_referate`, `ea_create_volunteer(p_first text, p_last text, p_preferred text, p_property_type uuid, p_referat uuid, p_field_values jsonb, p_valid_from date)` ohne EZ-Erweiterung, `ea_activate_person`; alle setzen das Kennzeichen `ea.status_change`; Tests T040 grün
+- [ ] T057 [US-AD-20] (spec T40) Migration `…001100_ad_start_templates_v07.sql`: Vorlage „Referent:in“ (Rechte über `ad_templates_init_rights`, dann EA `edit` mit scope `referat`), Admin GR `read` nur wo noch `none`; idempotent; Tests T041 grün
+- [ ] T058 [US-AD-06] (spec T6 Teil, T41, T26 Teil) Migration `…001200_ad_person_overview.sql`: View `ad_v_person_overview` nach data-model.md; `ad_me()` per `drop` und neu mit `preferred_name`; `ad_qualification_usage(p_id uuid)`; Tests T043 grün
+- [ ] T059 [US-AD-25] (spec T8, T43) Migration `…001300_ad_find_similar_persons.sql` nach research.md R-25; Tests T042 grün
+- [ ] T060 [US-AD-15] (spec T4 Teil) Migration `…001400_ad_emergency_notice.sql`: `ad_notice_acks` (user_id PK default `auth.uid()`, FK `auth.users(id) on delete cascade`, `emergency_acknowledged_until`), Policies auf die eigene Zeile; `ad_pending_emergency_logins() returns table (count int, last_at timestamptz)` und `ad_acknowledge_emergency()` mit Prüfung AD ≥ read; `cron.schedule('ad_audit_log_retention', '15 1 * * *', $$delete from public.ad_audit_log where occurred_at < now() - interval '5 years'$$)`; Tests T044 grün
+- [ ] T061 [US-AD-26] (spec T23 Teil, T48) `supabase/seed.sql` nach spec.md Abschnitt 9 und research.md R-26 ergänzen: Personen 9–12 (feste UUIDs `…09`–`…12`), Testzugang test.referent@dav-leipzig.de (aktiv, Vorlage Referent:in mit Referat Klettern, Auth-Nutzer `…09`), 8 Testarten mit Feldern („Hauptamt“, „T-Shirt-Größe“, „Erste-Hilfe-Kurs am“, „Lizenz (Test)“, „Funktion (Test)“, „Amt (Test)“, „Geburtsdatum (Test)“ mit `system_key = 'birth_date'`, „Kontaktdaten (Test)“), Eigenschaften der Personen 2, 4, 5, 7, 9–12, Ehrenamtsstatus mit Historie, Protokolleintrag `template_assigned` für Rita Referentin; keine Personen 13–18, keine Orte, keine Sätze; Tests T046 und alle Sichtbarkeitstests grün
+- [ ] T062 [P] (spec T12 Teil, T42) `src/lib/errors.ts`: alle Codes des Kerns aus contracts/error-codes.md (Abschnitte AD und EA, ohne die Codes der Nachträge) und die Constraints `ad_template_rights_scope_allowed`, `ad_qualification_types_name_key`, `ad_qualification_types_code_key`, `ea_referate_name_key`, `ea_property_fields_label_key`; `EA_VALUE_TYPE` mit dem neuen Text; Platzhalter `<Feld>` aus dem `detail` des Fehlers füllen
+- [ ] T063 [P] [US-AD-24] (spec T47 Teil) `src/lib/format.ts`: `personName({ first_name, preferred_name, last_name })` → „Rufname Nachname“, sonst „Vorname Nachname“; `src/components/layout/AppHeader.tsx` nutzt den Rufname aus `ad_me()`
+- [ ] T064 [P] (spec T12 Teil) `src/lib/rights.ts`: `hasAnyLevel(module, min)` über `rpc('ad_has_any_level')` und `canEditQualificationTypes()` über `rpc('ad_can_edit_qualification_types')`
+- [ ] T065 Nach TEST ausrollen (nach Prüfung, dass TEST verknüpft ist): `npx supabase db push --linked --dry-run`, dann `npx supabase db push --linked`; danach `supabase/seed.sh` gegen TEST; Ergebnis im Pull Request nennen
 
-**Unabhängiger Test**:
-- test.admin sieht 8 Personen mit Status und Vorlagen; die Funktionsperson ist gekennzeichnet (AK1, AK3).
-- Suche nach „Muster“ und Filter „gesperrt“ funktionieren; wenn nichts passt, erscheint „Keine Personen gefunden.“ (AK2, AK4).
-- test.geschaeftsstelle erhält keine Daten (AK5).
-
-### Tests für US-AD-06 ⚠️
-
-- [ ] T035 [P] [US-AD-06] (spec T7 Teil) `supabase/tests/database/070_person_overview.test.sql`: `ad_v_person_overview` liefert `access_status = 'none'` für Personen ohne Zugang und nur wirksame Vorlagen; test.geschaeftsstelle und test.vorstand erhalten 0 Zeilen; die Funktionsperson ist enthalten und als `function` gekennzeichnet
-
-### Umsetzung für US-AD-06
-
-- [ ] T036 [US-AD-06] (spec T6 Teil) Migration `supabase/migrations/20261020000700_ad_person_overview.sql`: View `ad_v_person_overview` (`security_invoker = true`): person_id, first_name, last_name, kind, login_email, `coalesce(status,'none') as access_status`, Array der Namen wirksamer Vorlagen; `grant select … to authenticated`
-- [ ] T037 [P] [US-AD-06] (spec T15 Teil) `src/components/StatusBadge.tsx` (kein Zugang / eingeladen / aktiv / gesperrt) und `src/components/ResponsiveTable.tsx` (Tabelle ab 640 px, darunter Karten)
-- [ ] T038 [US-AD-06] (spec T15) `src/features/ad/personen/PersonenUebersicht.tsx` (/ad): Name, Kennzeichen „Funktionsperson“, Login-Adresse, Status-Badge, Vorlagen; Suche nach Namensteil; Filter Status; „Keine Personen gefunden.“; Knöpfe „Person anlegen“ und „Öffnen“; < 1 s bei 300 Personen
-
-**Checkpoint**: Die Übersicht zeigt die Seed-Daten.
-
----
-
-## Phase 6: US-AD-07 Person anlegen mit Dublettenwarnung (Must)
-
-**Ziel**: Person anlegen mit Dublettenprüfung und optionaler Login-Adresse.
-
-**Unabhängiger Test**:
-- „Erika Neu“ wird ohne Warnung angelegt (AK1).
-- „Anton Muster“ bzw. „Tony Muster“ lösen den Warndialog aus (AK3); „Trotzdem anlegen“ legt die Person an (AK4).
-- Ein leerer Name, eine fremde Domain oder eine doppelte Login-Adresse führen zu den Meldungen aus R4, R1 und R2 (AK2, AK5).
-
-### Tests für US-AD-07 ⚠️
-
-- [ ] T039 [P] [US-AD-07] (spec T7 Teil) `supabase/tests/database/080_find_similar.test.sql`:
-  - `ad_find_similar_persons('Anton','Muster',null)` und `('Tony','Muster',null)` finden Toni Muster; `('Erika','Neu',null)` findet nichts.
-  - Eine vorhandene Login-Adresse findet die Person, aber nur für Nutzer mit AD ≥ read (RLS).
-  - test.vorstand erhält keine Treffer.
-
-### Umsetzung für US-AD-07
-
-- [ ] T040 [US-AD-07] (spec T8) Migration `supabase/migrations/20261020000800_ad_find_similar_persons.sql`: `ad_find_similar_persons(p_first text, p_last text, p_email text) returns setof ea_persons`, security invoker, stable. Treffer, wenn `lower(last_name) = lower(p_last)` und (`similarity(first_name, p_first) >= 0.3` oder Teilwort in beide Richtungen, ohne Groß-/Kleinschreibung), oder wenn `p_email` gleich einer `ad_accesses.login_email` ist. `grant execute … to authenticated`
-- [ ] T041 [US-AD-07] (spec T16) `src/features/ad/personen/PersonNeu.tsx` (/ad/personen/neu) mit Dialog `DublettenDialog.tsx`:
-  - Felder Vorname, Nachname, optional Login-Adresse.
-  - Prüfung R4 im Frontend, danach `ad_find_similar_persons`.
-  - Bei Treffern: Liste mit „Trotzdem anlegen“, „Vorhandene Person öffnen“, „Abbrechen“.
-  - Anlegen: insert `ea_persons`, bei Login-Adresse insert `ad_accesses`. Fehler über `errors.ts`.
-- [ ] T042 [US-AD-07] (spec T17 Teil) `src/features/ad/personen/PersonDetail.tsx` (/ad/personen/:id): Seitengerüst mit den Abschnitten Stammdaten, Zugang, Rechtevorlagen, Eigenschaften (zunächst leer). Abschnitt `StammdatenAbschnitt.tsx`: Name bearbeitbar, Art als Anzeige. Nötig für „Vorhandene Person öffnen“.
-
-**Checkpoint**: Anlegen und Dublettenwarnung funktionieren.
-
----
-
-## Phase 7: US-AD-12 Eigenschaftsart anlegen und ändern (Must)
-
-**Ziel**: Eigenschaftsarten mit Zweck, Datentyp, „sichtbar in“ und „vertraulich“.
-
-**Unabhängiger Test**:
-- Anlegen mit Art.-9-Hinweis (AK1).
-- Fehlender Zweck oder Auswahlliste ohne Werte (AK2) sowie ein doppelter Name (AK3) führen zu den Meldungen.
-- Auswahlwerte entfernen ist abgelehnt (AK4).
-- Geschäftsstelle (EA verwalten) kann „vertraulich“ nicht setzen (AK5).
-
-### Tests für US-AD-12 ⚠️
-
-- [ ] T043 [P] [US-AD-12] (spec T7 Teil) `supabase/tests/database/090_property_types.test.sql`:
-  - Leerer Zweck → `EA_PURPOSE_REQUIRED`; `choice` ohne Werte → `EA_CHOICE_VALUES_REQUIRED`; doppelter Name → `ea_property_types_name_key`.
-  - Auswahlwert entfernen → `EA_CHOICE_VALUE_REMOVED`; Wert ergänzen ist erlaubt.
-  - Unbekannter Modulcode in `visible_in` → Fehler.
-  - test.geschaeftsstelle: Art mit `confidential = false` anlegen erlaubt, mit `true` abgelehnt; vertrauliche Arten sind für sie unsichtbar.
-  - test.admin darf alles.
-
-### Umsetzung für US-AD-12
-
-- [ ] T044 [US-AD-12] (spec T2 Teil) Migration `supabase/migrations/20261020000900_ea_property_types.sql`:
-  - `ea_property_types` nach spec.md Abschnitt 2 (name, purpose, data_type, choice_values text[], visible_in text[], confidential default false, origin default `custom`, Audit-Spalten).
-  - Checks und Unique-Index `lower(name)` nach data-model.md.
-  - Trigger `ea_property_types_guard`: `visible_in` ⊆ `ad_modules`; Datentyp-Sperre `EA_DATA_TYPE_LOCKED`, die zur Laufzeit gegen `ea_properties` prüft (plpgsql); `EA_CHOICE_VALUE_REMOVED`; `EA_CONFIDENTIAL_FORBIDDEN`; `updated_*`.
-  - Policies nach spec.md Abschnitt 3; Grants.
-- [ ] T045 [P] [US-AD-12] (spec T21) `src/features/ad/eigenschaftsarten/EigenschaftsartenListe.tsx` (/ad/eigenschaftsarten): Name, Datentyp, sichtbar in, vertraulich; „Noch keine Eigenschaftsarten.“
-- [ ] T046 [US-AD-12] (spec T21) `src/features/ad/eigenschaftsarten/EigenschaftsartBearbeiten.tsx`:
-  - Felder Name, Zweck, Datentyp (Text / Datum / Ja/Nein / Auswahlliste), Auswahlwerte (nur bei Auswahlliste; vorhandene nicht entfernbar), „sichtbar in“ (Mehrfachauswahl aus `ad_modules`), „vertraulich“.
-  - Beim Anlegen der Hinweis: „Erfasse keine Gesundheitsdaten, Religion, politische Meinung oder andere besondere Kategorien nach Art. 9 DSGVO.“
-  - Datentyp gesperrt, wenn Eigenschaften existieren.
-
-**Checkpoint**: Eigenschaftsarten sind pflegbar.
+**Checkpoint**: Die Datenbank des Kerns steht in TEST; alle Oberflächen-Phasen können beginnen.
 
 ---
 
-## Phase 8: US-AD-13 Eigenschaften einer Person pflegen (Must)
+## Phase 5: US-AD-10, US-AD-20 Rechtevorlagen mit Reichweite (Branch `us-ad-10-rechtevorlagen`)
 
-**Ziel**: Eigenschaften mit Gültigkeit und Historie an der Person.
+**Ziel**: Rechtevorlagen in der Oberfläche anlegen und ändern, mit Spalte Reichweite.
 
-**Unabhängiger Test**:
-- Anlegen, Ändern und Beenden mit sichtbarer Historie (AK1, AK2).
-- Ungültiger Zeitraum und falscher Typ zeigen die Meldungen (AK3).
-- test.geschaeftsstelle sieht das Hauptamt nicht (AK4).
-- Rechte bleiben unverändert (AK5).
-- Nur Arten, deren „sichtbar in“ AD enthält, erscheinen; beendete sind gekennzeichnet (AK6).
+**Unabhängiger Test**: test.admin legt eine Vorlage an, ändert eine Stufe der Vorlage Vorstand und erhält bei einem doppelten Namen „Eine Rechtevorlage mit diesem Namen gibt es bereits.“; „Referat“ ist nur bei Ehrenamtsmanagement wählbar; die Vorlage „Referent:in“ zeigt EA bearbeiten mit Reichweite Referat (US-AD-10 AK1–AK3, US-AD-20 AK1–AK3).
 
-### Tests für US-AD-13 ⚠️
+- [ ] T066 [US-AD-10] Bestehenden Branch `us-ad-10-rechtevorlagen` auf `main` rebasen; die Änderungen an `docs/offene-punkte.md` und an `tasks.md` aus Commit `ddf6279` nicht übernehmen; Code aus `fc70e8e` (AdLayout, Rechtevorlagen-Liste und -Formular, `data.ts`, `access.ts`) übernehmen und an T062–T064 anpassen
+- [ ] T067 [US-AD-10] (spec T20 Teil) `src/features/ad/AdLayout.tsx`: Navigation Personen · Rechtevorlagen · Eigenschaftsarten · Qualifikationsarten · Protokoll; Unterrouten in `src/App.tsx`; Schreibknöpfe nur bei `ad_has_level('AD','edit')`
+- [ ] T068 [P] [US-AD-10] (spec T20) `src/features/ad/rechtevorlagen/RechtevorlagenListe.tsx`: Spalten Name, Beschreibung, Anzahl Personen (wirksame Zuweisungen); Knöpfe „Neu“ und „Öffnen“; mobil als Karten
+- [ ] T069 [US-AD-20] (spec T20, T44 Teil) `src/features/ad/rechtevorlagen/RechtevorlageBearbeiten.tsx` (/ad/rechtevorlagen/neu und /:id): Name, Beschreibung, Matrix mit den 9 Modulen aus `ad_modules` und je einer Auswahl „kein Zugriff / lesen / bearbeiten / verwalten“; Spalte Reichweite „alle / Referat“, „Referat“ nur bei Ehrenamtsmanagement wählbar; Speichern (insert/update `ad_templates`, update `ad_template_rights.level` und `scope`); Fehler über `errors.ts` (R30)
 
-- [ ] T047 [P] [US-AD-13] (spec T7 Teil) `supabase/tests/database/100_properties.test.sql`:
-  - Falsche Wertspalte bzw. Wert außerhalb `choice_values` → `EA_VALUE_TYPE`; `valid_to < valid_from` → `ea_properties_valid_range`.
-  - Ein Update schreibt die alte Fassung in `ea_property_history` mit `changed_by`.
-  - test.geschaeftsstelle liest weder vertrauliche Eigenschaften noch deren Historie, und keine Eigenschaften von Funktionspersonen.
-  - Eine neue Eigenschaft ändert `ad_user_level` nicht (R7).
-  - Datentyp einer Art mit Eigenschaften ändern → `EA_DATA_TYPE_LOCKED`.
-
-### Umsetzung für US-AD-13
-
-- [ ] T048 [US-AD-13] (spec T2 Teil) Migration `supabase/migrations/20261020001000_ea_properties.sql`:
-  - `ea_properties` (Wertspalten value_text/value_date/value_boolean, valid_from Pflicht, valid_to, Check `ea_properties_valid_range`, updated_at/updated_by), Indizes `(person_id)`, `(property_type_id)`.
-  - Trigger `ea_properties_validate`.
-  - `ea_property_history` (FK on delete cascade) mit Trigger `ea_properties_history` (after update, security definer).
-  - Policies nach spec.md Abschnitt 3; Grants (Historie nur select).
-- [ ] T049 [US-AD-13] (spec T23 Teil) `supabase/seed.sql` ergänzen:
-  - Eigenschaftsarten „Hauptamt“ (Text, sichtbar in AD, vertraulich, Zweck „Zuordnung der hauptamtlich Beschäftigten“), „T-Shirt-Größe“ (Auswahlliste S, M, L, XL, sichtbar in EA, Zweck „Bestellung von Vereinskleidung“), „Erste-Hilfe-Kurs am“ (Datum, sichtbar in EA, Zweck „Nachweis für Tätigkeiten mit Gruppen“).
-  - Eigenschaften: Anna Fiktiv Hauptamt „Mitarbeiterin Geschäftsstelle“ seit 01.03.2024; Toni Muster T-Shirt-Größe „M“ seit 01.01.2025; Dieter Gesperrt Hauptamt 01.01.2020–31.12.2025.
-- [ ] T050 [US-AD-13] (spec T19) `src/features/ad/personen/EigenschaftenAbschnitt.tsx`:
-  - Nur Arten mit `visible_in` ∋ `AD`; aktuelle oben, beendete (`valid_to < heute`) als „beendet“; „Noch keine Eigenschaften.“
-  - Hinzufügen und Ändern mit einem Eingabefeld je Datentyp; Beenden durch Setzen von „gültig bis“.
-  - Historie je Eigenschaft aufklappbar (geändert am/von).
-
-**Checkpoint**: Eigenschaften mit Historie sind pflegbar; die vertrauliche Eigenschaft ist geschützt.
+**Checkpoint**: Vorlagen mit Reichweite sind über die Oberfläche pflegbar.
 
 ---
 
-## Phase 9: US-AD-11 Rechtevorlage zuweisen und entziehen (Must)
+## Phase 6: US-AD-06, US-AD-15 Personenübersicht (Branch `us-ad-06-personen`)
 
-**Ziel**: Oberfläche für Zuweisen und Entziehen. Datenbank und Tests sind mit T011 und T005 fertig (AK1, AK3–AK5).
+**Ziel**: Übersicht aller lesbaren Personen mit Status, Ehrenamtsstatus, Vorlagen, Suche, Filtern, Paginierung und Notfall-Hinweis.
 
-**Unabhängiger Test**:
-- Geschäftsstelle und Vorstand zuweisen ergibt die höhere Stufe je Modul, mit Protokolleintrag (AK1).
-- Entziehen wird protokolliert (AK2).
-- Eine bereits zugewiesene Vorlage wird nicht noch einmal angeboten (AK3).
+**Unabhängiger Test**: test.admin sieht 12 Personen mit Status, Ehrenamtsstatus und Vorlagen (Person 9 mit „Klettern“); Suche nach „Muster“ und nach einem Rufnamen, Filter „gesperrt“ und „nur Gruppen“ (Person 12) funktionieren; „Keine Personen gefunden.“; nach einer Anmeldung von test.notfall erscheint der Hinweis und verschwindet mit „Zur Kenntnis genommen“; test.vorstand landet auf /kein-zugriff (US-AD-06 AK1–AK5, US-AD-15 AK2).
 
-- [ ] T051 [US-AD-11] (spec T18) `src/features/ad/personen/RechtevorlagenAbschnitt.tsx`: Liste der wirksamen Vorlagen mit „Entziehen“ (Bestätigung, `rpc('ad_revoke_template')`); „Vorlage hinzufügen“ bietet nur nicht zugewiesene Vorlagen an (`rpc('ad_assign_template')`); in `PersonDetail.tsx` einbinden
+- [ ] T070 [P] [US-AD-06] (spec T15 Teil) `src/components/StatusBadge.tsx` (kein Zugang / eingeladen / aktiv / gesperrt), `src/components/ResponsiveTable.tsx` (Tabelle ab 640 px, darunter Karten), `src/components/Pagination.tsx` (50 je Seite, „Zurück“/„Weiter“, Anzeige „n–m von k“)
+- [ ] T071 [US-AD-06] (spec T15) `src/features/ad/personen/PersonenUebersicht.tsx` (/ad) aus `ad_v_person_overview`: Name über `personName()`, Kennzeichen „Funktionsperson“, Login-Adresse, Status-Badge, Ehrenamtsstatus (falls vorhanden), Vorlagen mit Referaten; Suche nach Vor-, Ruf- und Nachname; Filter Zugangsstatus; Filter Zugehörigkeit (mit Zugang, Funktionsperson, Ehrenamtsmanagement, nur Gruppen, ohne Zugehörigkeit) nach research.md R-28; Paginierung; „Keine Personen gefunden.“; Knöpfe „Person anlegen“ und „Öffnen“
+- [ ] T072 [US-AD-15] (spec T15 Teil) `src/features/ad/personen/NotfallHinweis.tsx` oben in `PersonenUebersicht.tsx`: „Der Notfall-Admin hat sich n-mal angemeldet, zuletzt am TT.MM.JJJJ um HH:MM.“ mit dem Knopf „Zur Kenntnis genommen“ (`rpc('ad_acknowledge_emergency')`); nur bei count > 0
 
-**Checkpoint**: Zuweisungen sind in der Oberfläche pflegbar.
-
----
-
-## Phase 10: US-AD-08 Zugang einrichten und einladen (Must)
-
-**Ziel**: Einladen, erneut einladen, Login-Adresse nach R20 ändern, Aufräumen bei Fehlern.
-
-**Unabhängiger Test**:
-- Deno-Tests grün: Aufräumen bei simuliertem Fehler (AK5), 403 ohne Recht (AK6).
-- In TEST führt „Einladen“ ohne Vorlage zu „Bitte zuerst mindestens eine Rechtevorlage zuweisen.“ (AK2).
-- Adresse ändern bei „eingeladen“ führt zum Hinweis und zum Status „kein Zugang“ (AK7).
-- Der Mailversand selbst wird in T077 abgenommen.
-
-### Tests für US-AD-08 ⚠️
-
-- [ ] T052 [P] [US-AD-08] (spec T7 Teil) `supabase/tests/database/120_invite_functions.test.sql`:
-  - `authenticated` darf `ad_apply_invite`, `ad_revert_invite` und `ad_apply_email_change` nicht ausführen; `service_role` darf es.
-  - `ad_apply_invite` setzt `invited`, `last_invited_at`, `auth_user_id` und schreibt `invited`.
-  - `ad_revert_invite` stellt den Ausgangsstand ohne Protokoll her.
-  - `ad_apply_email_change` setzt die neue Adresse, `auth_user_id` null, `none` und schreibt `email_changed` mit Details „alt → neu“.
-- [ ] T053 [P] [US-AD-08] (spec T9) Deno-Test `supabase/functions/ad-invite/index.test.ts` mit simuliertem Auth-Admin-Client und DB-Client:
-  - 401 ohne JWT; 403 `AD_FORBIDDEN` ohne AD ≥ edit (keine Einladung).
-  - 422 `AD_EMAIL_MISSING` / `AD_EMAIL_DOMAIN` / `AD_NO_TEMPLATE`; 409 `AD_EMAIL_TAKEN` / `AD_INVALID_STATUS`.
-  - Erfolg ruft `ad_apply_invite` auf.
-  - **Simulierter Fehler von `inviteUserByEmail`:** neu angelegter Auth-Eintrag wird mit `deleteUser` gelöscht, `ad_revert_invite` aufgerufen, kein `ad_apply_invite`, Antwort 502 `AD_MAIL_FAILED`. Bei einem Ausgangsstand mit `auth_user_id` (erneute Einladung) wird nichts gelöscht.
-- [ ] T054 [P] [US-AD-08] (spec T10 Teil) Deno-Test `supabase/functions/ad-access/index.test.ts`, Fälle `change_email`:
-  - nur bei `invited`, sonst 409 `AD_EMAIL_LOCKED`.
-  - R1 über `ad_login_email_allowed` → `AD_EMAIL_DOMAIN`; R2 → `AD_EMAIL_TAKEN`.
-  - Erfolg: `deleteUser` und danach `ad_apply_email_change`, Antwort 200 mit `code: "AD_EMAIL_CHANGED"`.
-  - Fehler bei `deleteUser` → keine DB-Änderung.
-  - 403 ohne Recht; 400 ohne `login_email`.
-
-### Umsetzung für US-AD-08
-
-- [ ] T055 [US-AD-08] (spec T4 Teil) Migration `supabase/migrations/20261020001100_ad_invite_functions.sql`: `ad_apply_invite(p_person uuid, p_auth_user uuid, p_actor uuid)`, `ad_revert_invite(p_person uuid, p_status ad_access_status, p_auth_user uuid, p_last_invited_at timestamptz)`, `ad_apply_email_change(p_person uuid, p_new_email citext, p_actor uuid)` (setzt `set_config('ad.email_change','on', true)`). Alle security definer; `revoke … from public, anon, authenticated`; `grant execute … to service_role`
-- [ ] T056 [P] [US-AD-08] (spec T9 Teil, T10 Teil) Gemeinsamer Code `supabase/functions/_shared/`:
-  - `cors.ts`: erlaubte Origins aus den Redirect-URLs.
-  - `caller.ts`: Client mit dem JWT des Aufrufers und `rpc('ad_has_level', { p_module: 'AD', p_min: 'edit' })`.
-  - `responses.ts`: JSON-Antworten `{ code }` mit HTTP-Status nach contracts/edge-functions.md.
-  - `admin.ts`: Service-Client aus `SUPABASE_SERVICE_ROLE_KEY` der Edge-Umgebung.
-- [ ] T057 [US-AD-08] (spec T9) `supabase/functions/ad-invite/index.ts`: Handler mit übergebbaren Clients nach contracts/edge-functions.md (Vorbedingungen, `inviteUserByEmail` mit `redirectTo` `<SITE_URL>/passwort-setzen`, Aufräumen bei Fehlern); Tests aus T053 grün
-- [ ] T058 [US-AD-08] (spec T10 Teil) `supabase/functions/ad-access/index.ts`: Handler mit Aktion `change_email` nach contracts/edge-functions.md (lock/unlock folgen in T066); Tests aus T054 grün
-- [ ] T059 [US-AD-08] (spec T17 Teil) `src/features/ad/personen/ZugangAbschnitt.tsx` in `PersonDetail.tsx`:
-  - Anzeige Login-Adresse, Status, „zuletzt eingeladen am“.
-  - Login-Adresse speichern: bei „kein Zugang“ direkt (insert/update `ad_accesses`); bei „eingeladen“ über `functions.invoke('ad-access', { action: 'change_email' })` mit Hinweis `AD_EMAIL_CHANGED`; bei „aktiv“/„gesperrt“ nicht bearbeitbar, mit der Meldung zu `AD_EMAIL_LOCKED`.
-  - Knöpfe „Einladen“ / „Erneut einladen“ (`functions.invoke('ad-invite')`); ohne wirksame Vorlage deaktiviert, mit Hinweis R17.
-- [ ] T060 [US-AD-08] (spec T9, T10) Edge Functions nach TEST ausrollen: `npx supabase functions deploy ad-invite ad-access` (nach Prüfung, dass TEST verknüpft ist)
-
-**Checkpoint**: Einladen und Adressänderung sind per Deno-Tests abgesichert. In TEST werden **keine Seed-Adressen eingeladen** (Bounces, Mail-Limit); in TEST prüfbar ist hier nur R17 ohne Mailversand. Einladen und Adressänderung mit echtem Mailversand nimmt der Product Owner mit eigenen Adressen in T077 ab.
+**Checkpoint**: Die Übersicht zeigt die Seed-Daten aller Pfade.
 
 ---
 
-## Phase 11: US-AD-03 Einladung annehmen und Passwort setzen (Must)
+## Phase 7: US-AD-07, US-AD-24, US-AD-25 Person anlegen mit Dublettenwarnung (Branch `us-ad-07-person-anlegen`)
 
-**Ziel**: Passwort über den Einladungslink setzen.
+**Ziel**: Person mit Rufname anlegen; modulübergreifende Dublettenwarnung als wiederverwendbare Komponente; Seitengerüst der Personendetails.
 
-**Unabhängiger Test** (mit eigener Adresse nach T077):
-- Speichern setzt den Status auf „aktiv“ (AK1).
-- Ungleiche Eingaben bzw. weniger als 8 Zeichen führen zu den R19-Meldungen (AK2).
-- Ein ungültiger oder alter Link zeigt die Einladungs-Meldung (AK3, AK4, AK7).
-- Verlassen ohne Speichern lässt den Status auf „eingeladen“ (AK6).
+**Unabhängiger Test**: „Erika Neu“ wird ohne Warnung angelegt; „Tony Muster“ zeigt Toni und Anton Muster nur mit Name, Rufname, Geburtsjahr bzw. „ausgeschieden seit“; „Trotzdem anlegen“ legt an; „Vorhandene Person öffnen“ nur bei sichtbaren Treffern; leerer Name, fremde Domain, doppelte Login-Adresse zeigen R4, R1, R2 (US-AD-07 AK1–AK5, US-AD-25 AK1–AK3, US-AD-24).
 
-- [ ] T061 [US-AD-03] (spec T13 Teil) `src/features/auth/PasswortSetzenPage.tsx` (/passwort-setzen?token_hash=…&type=invite|recovery):
-  - Felder Passwort und Wiederholung. R19 vor dem Absenden: „Das Passwort muss mindestens 8 Zeichen lang sein.“ bzw. „Die Passwörter stimmen nicht überein.“
-  - Erst beim Speichern `verifyOtp({ token_hash, type })`, dann `updateUser({ password })`. Erfolg → /.
-  - Ungültiger Link: bei `invite` „Der Link ist abgelaufen oder ungültig. Bitte wende dich an den Admin.“, bei `recovery` „Der Link ist abgelaufen oder ungültig. Bitte fordere einen neuen an.“
+- [ ] T073 [P] [US-AD-25] (spec T49 Teil) `src/features/shared/DublettenDialog.tsx`: Trefferliste nach R40 (Name über `personName()`, Geburtsjahr, „ausgeschieden seit TT.MM.JJJJ“), Aktionen als Props je Modul (in AD: „Trotzdem anlegen“, „Vorhandene Person öffnen“ nur bei `is_visible`, „Abbrechen“)
+- [ ] T074 [US-AD-07] (spec T16) `src/features/ad/personen/PersonNeu.tsx` (/ad/personen/neu): Vorname, Nachname, optional Rufname, optional Login-Adresse; R4 im Frontend; `rpc('ad_find_similar_persons')`; bei Treffern `DublettenDialog`; Anlegen: insert `ea_persons`, bei Login-Adresse insert `ad_accesses`; Fehler über `errors.ts`
+- [ ] T075 [US-AD-24] (spec T17 Teil, T47 Teil) `src/features/ad/personen/PersonDetail.tsx` (/ad/personen/:id): Seitengerüst mit den Abschnitten Stammdaten, Zugang, Rechtevorlagen, Eigenschaften; `StammdatenAbschnitt.tsx`: Vorname, Rufname, Nachname bearbeitbar, Art als Anzeige, Ehrenamtsstatus nur lesen mit „seit TT.MM.JJJJ“
 
-**Checkpoint**: Der Einladungslink führt zum aktiven Zugang.
+**Checkpoint**: Anlegen, Dublettenwarnung und Stammdaten funktionieren.
 
 ---
 
-## Phase 12: US-AD-04 Passwort vergessen (Must)
+## Phase 8: US-AD-17, US-AD-18 Qualifikationsarten (Branch `us-ad-17-qualifikationsarten`)
 
-**Ziel**: Passwort selbst über einen Link zurücksetzen.
+**Ziel**: Qualifikationsarten ansehen, anlegen, ändern, auf „historisch“ setzen; Auswahlfeld „Qualifikationsart“ als Komponente.
 
-**Unabhängiger Test**:
-- Jede Adresse führt zur gleichen Bestätigung (AK1).
-- Ein Reset mit eigener Adresse funktioniert (AK2, in T077).
-- Ein abgelaufener Link zeigt die Reset-Meldung (AK3).
-- Ein gesperrter Zugang bleibt gesperrt (AK4).
+**Unabhängiger Test**: Liste mit 47 Einträgen, gruppiert nach Sparte, Standardfilter „aktuell“; Suche nach „TCSPI“; Anlegen und Ändern durch test.admin und test.geschaeftsstelle mit den Meldungen R21–R26; test.vorstand sieht keine Bearbeiten-Knöpfe; Detail zeigt „Verwendet bei n Personen“ (US-AD-17, US-AD-18).
 
-- [ ] T062 [US-AD-04] (spec T13 Teil) `src/features/auth/PasswortVergessenPage.tsx` (/passwort-vergessen): Feld Login-Adresse; `resetPasswordForEmail(email, { redirectTo: <origin>/passwort-setzen })`; zeigt **immer** „Wenn ein Zugang zu dieser Adresse besteht, haben wir dir eine E-Mail mit einem Link geschickt.“ (R18), auch bei Fehlern
+- [ ] T076 [P] [US-AD-19] (spec T30 Teil) `src/features/shared/QualifikationsartAuswahl.tsx`: durchsuchbar nach Bezeichnung und Kürzel, Anzeige „Kürzel – Bezeichnung“, gruppiert nach Sparte, nur Status „aktuell“ und erlaubte Typen (Prop)
+- [ ] T077 [P] [US-AD-17] (spec T30) `src/features/ad/qualifikationsarten/QualifikationsartenListe.tsx` (/ad/qualifikationsarten): Tabelle gruppiert nach Sparte mit Kürzel, Bezeichnung, Typ, Lizenzstufe, Gültigkeitsdauer, Status-Badge; Suche; Filter Sparte, Typ, Status (Standard „aktuell“); „Keine Qualifikationsarten gefunden.“
+- [ ] T078 [US-AD-17] (spec T30) `src/features/ad/qualifikationsarten/QualifikationsartFormular.tsx` (/ad/qualifikationsarten/neu und /:id): Felder nach spec.md Abschnitt 6 (Sparte und Aussteller mit Vorschlägen aus vorhandenen Werten, Lizenzstufe nur bei Lizenz, Gültigkeitsdauer nach R24, DOSB „ja / nein / nicht bekannt“, Quell-ID nur lesen); Detail mit „Verwendet bei n Personen“ (`rpc('ad_qualification_usage')`) und geändert am/von; nach Änderung der Gültigkeitsdauer Hinweis „Die Änderung gilt für neue Einträge. Vorhandene Ablaufdaten bleiben unverändert.“ (R26); Bearbeiten nur bei `canEditQualificationTypes()`
+- [ ] T079 [US-AD-17] (spec T30) Routen /ad/qualifikationsarten* in `src/App.tsx`; die Komponenten so ablegen, dass /ea/qualifikationsarten sie mit EA ohne Änderung einhängt (Routen unter /ea noch nicht aktiv)
 
-**Checkpoint**: Der Reset-Ablauf ist vollständig (die Reset-Seite stammt aus T061).
-
----
-
-## Phase 13: US-AD-09 Zugang sperren und entsperren (Must)
-
-**Ziel**: Sperren und Entsperren mit Bann in Auth und Protokoll.
-
-**Unabhängiger Test**:
-- Eva Eingeladen sperren führt zu „gesperrt“ mit Protokoll (AK1).
-- Dieter Gesperrt entsperren führt zu „aktiv“, weil er ein Passwort hat (AK2); eine gesperrte Person ohne Passwort wird „eingeladen“ (AK3).
-- test.geschaeftsstelle wird abgelehnt (AK5).
-- Es wird nichts gelöscht (AK6).
-
-### Tests für US-AD-09 ⚠️
-
-- [ ] T063 [P] [US-AD-09] (spec T7 Teil) `supabase/tests/database/130_lock_functions.test.sql`:
-  - `ad_apply_lock` setzt `locked`, `locked_at`, `locked_by` und schreibt `locked`; danach liefert `ad_user_level` für den Nutzer sofort `none` (R5, R10).
-  - `ad_apply_unlock` führt mit gesetztem `encrypted_password` zu `active`, ohne zu `invited`, und schreibt `unlocked`.
-  - Eigenschaften und Zuweisungen bleiben erhalten.
-  - Nur `service_role` darf die Funktionen ausführen.
-- [ ] T064 [P] [US-AD-09] (spec T10 Teil) `supabase/functions/ad-access/index.test.ts` ergänzen, Fälle `lock`/`unlock`:
-  - Ausgangsstatus nach contracts/edge-functions.md, sonst 409 `AD_INVALID_STATUS`.
-  - `ban_duration: '876000h'` bzw. `'none'`; danach `ad_apply_lock`/`ad_apply_unlock`.
-  - 403 ohne Recht.
-
-### Umsetzung für US-AD-09
-
-- [ ] T065 [US-AD-09] (spec T4 Teil) Migration `supabase/migrations/20261020001200_ad_lock_functions.sql`: `ad_apply_lock(p_person uuid, p_actor uuid)`, `ad_apply_unlock(p_person uuid, p_actor uuid)` (Zielstatus über `auth.users.encrypted_password`); security definer; nur `grant execute … to service_role`
-- [ ] T066 [US-AD-09] (spec T10) `supabase/functions/ad-access/index.ts` um `lock` und `unlock` erweitern; Tests aus T064 grün; erneut nach TEST deployen
-- [ ] T067 [US-AD-09] (spec T17 Teil) `src/features/ad/personen/ZugangAbschnitt.tsx`:
-  - „Sperren“ mit Bestätigungsdialog und dem Hinweis „Bereits angemeldete Nutzer verlieren den Zugriff spätestens nach einer Stunde.“
-  - „Entsperren“; Anzeige „gesperrt am/von“.
-
-**Checkpoint**: Sperren und Entsperren funktionieren in TEST.
+**Checkpoint**: Qualifikationsarten sind pflegbar.
 
 ---
 
-## Phase 14: US-AD-14 Protokoll einsehen (Should)
+## Phase 9: US-AD-12, US-AD-19, US-AD-22 Eigenschaftsarten mit Feldern (Branch `us-ad-12-eigenschaftsarten`)
 
-**Ziel**: Protokollansicht und Löschlauf nach 5 Jahren.
+**Ziel**: Eigenschaftsarten mit Zweck, Kategorie, Lesestufe, Bezug, „sichtbar in“ und Feldern pflegen.
 
-**Unabhängiger Test**:
-- test.admin sieht die Seed-Einträge, neueste zuerst, mit Namen (AK1).
-- Der Job ist um 01:15 UTC eingeplant und löscht nur Einträge, die älter als 5 Jahre sind (AK2).
-- Ohne Einträge erscheint „Noch keine Einträge.“ (AK3).
-- PATCH/DELETE werden abgelehnt (AK4).
-- test.geschaeftsstelle erhält keine Daten (AK5).
+**Unabhängiger Test**: Anlegen mit Hinweis Art. 9 DSGVO; Art „Lizenz (Test)“ mit drei Feldern (Qualifikationsart nur Typ Lizenz); Meldungen zu R9, R29, R36 und doppeltem Namen; test.geschaeftsstelle sieht „vertraulich“ nicht als Option und keine vertraulichen Arten (US-AD-12, US-AD-19 AK1, US-AD-22).
 
-### Tests für US-AD-14 ⚠️
+- [ ] T080 [P] [US-AD-22] (spec T46) `src/features/ad/eigenschaftsarten/EigenschaftsartenListe.tsx` (/ad/eigenschaftsarten): Name, Kategorie, Lesestufe, Bezug, Anzahl Felder, sichtbar in; „Noch keine Eigenschaftsarten.“
+- [ ] T081 [US-AD-22] (spec T46) `src/features/ad/eigenschaftsarten/EigenschaftsartBearbeiten.tsx` (/ad/eigenschaftsarten/neu und /:id):
+  - Name, Zweck, Kategorie, Lesestufe (drei Optionen mit Erklärung; „vertraulich“ nur mit AD ≥ bearbeiten), Bezug (kein / Referat / Gremium; „Gruppe“ nur mit GR = verwalten), Bezug Pflicht, mehrere gültige Einträge erlaubt, sichtbar in (Mehrfachauswahl aus `ad_modules`).
+  - Felder als Liste: Bezeichnung, Schlüssel (aus der Bezeichnung vorgeschlagen, nach Anlage nicht änderbar), Datentyp (Text, Zahl, Datum, Jahr, Ja/Nein, Auswahlliste, Qualifikationsart), Pflicht, Auswahlwerte bzw. erlaubte Typen (Mehrfachauswahl, leer = alle), Reihenfolge per Auf/Ab; vorhandene Auswahlwerte nicht entfernbar; Datentyp gesperrt, wenn Eigenschaften existieren.
+  - Beim Anlegen der Hinweis „Erfasse keine Gesundheitsdaten, Religion, politische Meinung oder andere besondere Kategorien nach Art. 9 DSGVO.“
+  - Speichern über `rpc('ea_save_property_type')`; Fehler über `errors.ts`.
 
-- [ ] T068 [P] [US-AD-14] (spec T7 Teil) `supabase/tests/database/140_audit_log.test.sql`:
-  - `cron.job` enthält `ad_audit_log_retention` mit `15 1 * * *`; der Befehl des Jobs, in der Transaktion ausgeführt, löscht einen Eintrag von vor 6 Jahren und behält einen von gestern.
-  - test.admin: update/delete auf `ad_audit_log` abgelehnt.
-  - `ad_v_audit_log` liefert den Namen des Akteurs für AD ≥ read und 0 Zeilen für test.geschaeftsstelle.
+**Checkpoint**: Eigenschaftsarten mit Feldern sind pflegbar.
 
-### Umsetzung für US-AD-14
+---
 
-- [ ] T069 [US-AD-14] (spec T4 Teil) Migration `supabase/migrations/20261020001300_ad_audit_retention.sql`:
-  - `cron.schedule('ad_audit_log_retention', '15 1 * * *', $$delete from public.ad_audit_log where occurred_at < now() - interval '5 years'$$)`.
-  - View `ad_v_audit_log` (`security_invoker = true`): Einträge mit Namen der betroffenen Person und des Akteurs (über `ad_accesses.auth_user_id` → `ea_persons`); `grant select … to authenticated`.
-- [ ] T070 [US-AD-14] (spec T22) `src/features/ad/protokoll/ProtokollPage.tsx` (/ad/protokoll): Zeitpunkt, ausgeführt von, betroffene Person, Aktion (deutsche Bezeichnungen: eingeladen, Login-Adresse geändert, Vorlage zugewiesen, Vorlage entzogen, gesperrt, entsperrt, Anmeldung Notfall-Admin), Details; neueste zuerst, 50 Einträge je Seite mit „Weiter blättern“; „Noch keine Einträge.“
+## Phase 10: US-AD-13, US-AD-19, US-AD-23 Eigenschaften einer Person (Branch `us-ad-13-eigenschaften`)
+
+**Ziel**: Eigenschaften an der Person nach Kategorie mit Feldern, Bezug, Gültigkeit und Historie; Eigenschaftsformular als Komponente.
+
+**Unabhängiger Test**: Bei Person 4 erscheinen die Eigenschaften nach Kategorie, Felder als „Bezeichnung: Wert“, Bezug als „Referat Klettern“, Qualifikationsart als „TCSPI – …“; Anlegen, Ändern, Beenden mit Historie; Meldungen zu R27, R28, R35, R37, R38; nur Arten mit „sichtbar in“ AD (US-AD-13 AK1–AK6, US-AD-19 AK2–AK4).
+
+- [ ] T082 [P] [US-AD-19] (spec T47) `src/features/shared/Eigenschaftsformular.tsx`: Eingaben aus `ea_property_fields` (Text, Zahl, Datum, Jahr, Ja/Nein, Auswahlliste, Qualifikationsart über `QualifikationsartAuswahl`), Bezug-Auswahl (aktive Referate bzw. Gremien; bei Reichweite Referat nur `ad_my_referate`), gültig von/bis; Fehler je Feld (R35)
+- [ ] T083 [US-AD-13] (spec T19, T47) `src/features/ad/personen/EigenschaftenAbschnitt.tsx` in `PersonDetail.tsx`: nach Kategorie gruppiert, aktuelle oben, beendete (`valid_to < heute`) als „beendet“; nur Arten mit `visible_in` ∋ `AD`; Felder als „Bezeichnung: Wert“; historische Qualifikationsart mit „(historisch)“; Historie je Eigenschaft aufklappbar (geändert am/von); Hinzufügen, Ändern, Beenden über `Eigenschaftsformular`; „Noch keine Eigenschaften.“
+
+**Checkpoint**: Eigenschaften mit Feldern und Historie sind pflegbar.
+
+---
+
+## Phase 11: US-AD-11, US-AD-21 Rechtevorlagen zuweisen mit Referaten (Branch `us-ad-11-zuweisen`)
+
+**Ziel**: Vorlagen an der Person zuweisen und entziehen; Referate bei Vorlagen mit Reichweite „Referat“.
+
+**Unabhängiger Test**: Geschäftsstelle und Vorstand zuweisen ergibt die höhere Stufe, mit Protokoll; Referent:in ohne Referat → „Bitte mindestens ein Referat auswählen.“; Referat ändern schreibt „Referate geändert“; Entziehen wird protokolliert; zugewiesene Vorlagen werden nicht erneut angeboten (US-AD-11 AK1–AK3, US-AD-21 AK1–AK3).
+
+- [ ] T084 [US-AD-21] (spec T18, T44 Teil) `src/features/ad/personen/RechtevorlagenAbschnitt.tsx` in `PersonDetail.tsx`: wirksame Vorlagen mit Referaten; „Vorlage hinzufügen“ nur mit nicht zugewiesenen Vorlagen, bei Reichweite Referat Mehrfachauswahl der aktiven Referate (`rpc('ad_assign_template', { p_referate })`); „Referate ändern“ (`rpc('ad_set_assignment_referate')`); „Entziehen“ mit Bestätigung (`rpc('ad_revoke_template')`)
+
+**Checkpoint**: Zuweisungen mit Referaten sind pflegbar.
+
+---
+
+## Phase 12: US-AD-08, US-AD-03, US-AD-04, US-AD-09 Zugang (Branch `us-ad-08-zugang`)
+
+**Ziel**: Einladen, erneut einladen, Login-Adresse nach R20 ändern, Passwort setzen, Passwort vergessen, sperren und entsperren.
+
+**Unabhängiger Test**: Deno-Tests grün (Aufräumen bei simuliertem Fehler, 403 ohne Recht); in TEST „Einladen“ ohne Vorlage → R17; Sperren von Eva Eingeladen und Entsperren von Dieter Gesperrt nach spec.md Abschnitt 4; Mailversand wird in T103 mit eigenen Adressen des Product Owners abgenommen.
+
+### Tests für Phase 12 ⚠️
+
+- [ ] T085 [P] [US-AD-08] (spec T7 Teil) `supabase/tests/database/210_invite_functions.test.sql`: `authenticated` darf `ad_apply_invite`, `ad_revert_invite` und `ad_apply_email_change` nicht ausführen, `service_role` darf es; `ad_apply_invite` setzt `invited`, `last_invited_at`, `auth_user_id` und schreibt `invited`; `ad_revert_invite` stellt den Ausgangsstand ohne Protokoll her; `ad_apply_email_change` setzt die neue Adresse, `auth_user_id` null, `none` und schreibt `email_changed` mit „alt → neu“
+- [ ] T086 [P] [US-AD-08] (spec T9) Deno-Test `supabase/functions/ad-invite/index.test.ts` mit simuliertem Auth-Admin-Client und DB-Client: 401 ohne JWT; 403 `AD_FORBIDDEN` ohne AD ≥ edit; 422 `AD_EMAIL_MISSING` / `AD_EMAIL_DOMAIN` / `AD_NO_TEMPLATE`; 409 `AD_EMAIL_TAKEN` / `AD_INVALID_STATUS`; Erfolg ruft `ad_apply_invite`; simulierter Fehler von `inviteUserByEmail`: neu angelegter Auth-Eintrag wird mit `deleteUser` gelöscht, `ad_revert_invite` aufgerufen, kein `ad_apply_invite`, 502 `AD_MAIL_FAILED`; bei erneuter Einladung wird nichts gelöscht
+- [ ] T087 [P] [US-AD-08] (spec T10 Teil) Deno-Test `supabase/functions/ad-access/index.test.ts`, Fälle `change_email`: nur bei `invited`, sonst 409 `AD_EMAIL_LOCKED`; R1 → `AD_EMAIL_DOMAIN`; R2 → `AD_EMAIL_TAKEN`; Erfolg: `deleteUser`, dann `ad_apply_email_change`, 200 mit `code: "AD_EMAIL_CHANGED"`; Fehler bei `deleteUser` → keine DB-Änderung; 403 ohne Recht; 400 ohne `login_email`
+- [ ] T088 [P] [US-AD-09] (spec T7 Teil) `supabase/tests/database/220_lock_functions.test.sql`: `ad_apply_lock` setzt `locked`, `locked_at`, `locked_by`, schreibt `locked`; danach `ad_user_level` und `ad_my_referate` sofort leer (R5, R10); `ad_apply_unlock` führt mit Passwort zu `active`, ohne zu `invited`, schreibt `unlocked`; Eigenschaften und Zuweisungen bleiben; nur `service_role`
+- [ ] T089 [P] [US-AD-09] (spec T10 Teil) `supabase/functions/ad-access/index.test.ts` ergänzen, Fälle `lock`/`unlock`: Ausgangsstatus nach contracts/edge-functions.md, sonst 409 `AD_INVALID_STATUS`; `ban_duration: '876000h'` bzw. `'none'`, danach `ad_apply_lock`/`ad_apply_unlock`; 403 ohne Recht
+
+### Umsetzung für Phase 12
+
+- [ ] T090 [US-AD-08] (spec T4 Teil) Migration `supabase/migrations/20261023001500_ad_invite_functions.sql`: `ad_apply_invite(p_person uuid, p_auth_user uuid, p_actor uuid)`, `ad_revert_invite(p_person uuid, p_status ad_access_status, p_auth_user uuid, p_last_invited_at timestamptz)`, `ad_apply_email_change(p_person uuid, p_new_email citext, p_actor uuid)` (setzt `set_config('ad.email_change','on', true)`); security definer; nur `grant execute … to service_role`; Tests T085 grün
+- [ ] T091 [US-AD-09] (spec T4 Teil) Migration `…001600_ad_lock_functions.sql`: `ad_apply_lock(p_person uuid, p_actor uuid)`, `ad_apply_unlock(p_person uuid, p_actor uuid)` (Zielstatus über `auth.users.encrypted_password`); security definer; nur `service_role`; Tests T088 grün
+- [ ] T092 [P] [US-AD-08] (spec T9 Teil, T10 Teil) `supabase/functions/_shared/`: `cors.ts` (Origins aus den Redirect-URLs), `caller.ts` (Client mit dem JWT des Aufrufers und `rpc('ad_has_level', { p_module: 'AD', p_min: 'edit' })`), `responses.ts` (JSON `{ code }` mit HTTP-Status nach contracts/edge-functions.md), `admin.ts` (Service-Client aus `SUPABASE_SERVICE_ROLE_KEY` der Edge-Umgebung)
+- [ ] T093 [US-AD-08] (spec T9) `supabase/functions/ad-invite/index.ts`: Handler mit übergebbaren Clients nach contracts/edge-functions.md (Vorbedingungen, `inviteUserByEmail` mit `redirectTo` `<SITE_URL>/passwort-setzen`, Aufräumen bei Fehlern); Tests T086 grün
+- [ ] T094 [US-AD-09] (spec T10) `supabase/functions/ad-access/index.ts` mit `change_email`, `lock`, `unlock` nach contracts/edge-functions.md; Tests T087, T089 grün
+- [ ] T095 [US-AD-08] (spec T17 Teil) `src/features/ad/personen/ZugangAbschnitt.tsx` in `PersonDetail.tsx`: Login-Adresse, Status, zuletzt eingeladen, gesperrt am/von; Login-Adresse speichern bei „kein Zugang“ direkt, bei „eingeladen“ über `functions.invoke('ad-access', { action: 'change_email' })` mit Hinweis `AD_EMAIL_CHANGED`, sonst nicht bearbeitbar; „Einladen“ / „Erneut einladen“ (ohne wirksame Vorlage deaktiviert, Hinweis R17); „Sperren“ mit Bestätigung und „Bereits angemeldete Nutzer verlieren den Zugriff spätestens nach einer Stunde.“; „Entsperren“
+- [ ] T096 [P] [US-AD-03] (spec T13 Teil) `src/features/auth/PasswortSetzenPage.tsx` (/passwort-setzen?token_hash=…&type=invite|recovery): Passwort und Wiederholung; R19 vor dem Absenden („Das Passwort muss mindestens 8 Zeichen lang sein.“, „Die Passwörter stimmen nicht überein.“); erst beim Speichern `verifyOtp({ token_hash, type })`, dann `updateUser({ password })`, Erfolg → /; ungültiger Link: bei `invite` „Der Link ist abgelaufen oder ungültig. Bitte wende dich an den Admin.“, bei `recovery` „Der Link ist abgelaufen oder ungültig. Bitte fordere einen neuen an.“
+- [ ] T097 [P] [US-AD-04] (spec T13 Teil) `src/features/auth/PasswortVergessenPage.tsx` (/passwort-vergessen): Login-Adresse; `resetPasswordForEmail(email, { redirectTo: <origin>/passwort-setzen })`; zeigt immer „Wenn ein Zugang zu dieser Adresse besteht, haben wir dir eine E-Mail mit einem Link geschickt.“ (R18), auch bei Fehlern
+- [ ] T098 [US-AD-08] (spec T9, T10) Nach TEST ausrollen (nach Prüfung, dass TEST verknüpft ist): `npx supabase db push --linked`, `npx supabase functions deploy ad-invite ad-access`
+
+**Checkpoint**: Zugänge sind in TEST vollständig verwaltbar; Mailversand folgt in T103.
+
+---
+
+## Phase 13: US-AD-14 Protokoll einsehen (Branch `us-ad-14-protokoll`)
+
+**Ziel**: Protokollansicht mit Namen. Löschlauf und Unveränderbarkeit sind mit T044/T060 erledigt.
+
+**Unabhängiger Test**: test.admin sieht die Seed-Einträge, neueste zuerst, mit Namen und deutschen Aktionen inkl. „Referate geändert“; „Noch keine Einträge.“; test.geschaeftsstelle erhält keine Daten (US-AD-14 AK1, AK3, AK5).
+
+- [ ] T099 [P] [US-AD-14] (spec T7 Teil) `supabase/tests/database/230_audit_view.test.sql`: `ad_v_audit_log` liefert für test.admin den Namen des Akteurs und der betroffenen Person, für test.geschaeftsstelle 0 Zeilen
+- [ ] T100 [US-AD-14] (spec T4 Teil) Migration `supabase/migrations/20261023001700_ad_audit_view.sql`: View `ad_v_audit_log` (`security_invoker = true`) mit Namen der betroffenen Person und des Akteurs (über `ad_accesses.auth_user_id` → `ea_persons`, Rufname bevorzugt); `grant select … to authenticated`; Tests T099 grün
+- [ ] T101 [US-AD-14] (spec T22) `src/features/ad/protokoll/ProtokollPage.tsx` (/ad/protokoll): Zeitpunkt, ausgeführt von, betroffene Person, Aktion (eingeladen, Login-Adresse geändert, Vorlage zugewiesen, Vorlage entzogen, Referate geändert, gesperrt, entsperrt, Anmeldung Notfall-Admin), Details; neueste zuerst, 50 je Seite; „Noch keine Einträge.“
 
 **Checkpoint**: Das Protokoll ist einsehbar.
 
 ---
 
-## Phase 15: US-AD-15 Notfall-Admin nutzen und nachvollziehen (Must)
+## Phase 14: Abnahme und Querschnitt (Branch `ad-kern-abnahme`)
 
-**Ziel**: Hinweis auf Anmeldungen des Notfall-Admins in AD.
+**Zweck**: Fachliche Abnahme des Kerns in TEST (spec T25, T32, T49) und Abschluss.
 
-**Unabhängiger Test**:
-- test.notfall meldet sich an; das Protokoll enthält „Anmeldung Notfall-Admin“ (AK1, aus T013).
-- test.admin sieht in /ad den Hinweis mit Anzahl und Zeitpunkt; „Zur Kenntnis genommen“ blendet ihn aus (AK2).
-- Die Funktionsperson fehlt in `ea_v_persons` (AK3, aus T005).
-- test.geschaeftsstelle erhält keine Daten (AK5).
-
-### Tests für US-AD-15 ⚠️
-
-- [ ] T071 [P] [US-AD-15] (spec T7 Teil) `supabase/tests/database/150_emergency_notice.test.sql`:
-  - `ad_pending_emergency_logins()` zählt `emergency_login`-Einträge nach `emergency_acknowledged_until` (ohne Zeile: alle).
-  - `ad_acknowledge_emergency()` setzt den Zeitpunkt für `auth.uid()`.
-  - Beide Funktionen liefern für test.geschaeftsstelle `AD_FORBIDDEN`.
-  - Löschen eines Auth-Nutzers löscht seine Zeile in `ad_notice_acks` mit (cascade).
-
-### Umsetzung für US-AD-15
-
-- [ ] T072 [US-AD-15] (spec T4 Teil) Migration `supabase/migrations/20261020001400_ad_emergency_notice.sql`: `ad_notice_acks` (user_id PK default auth.uid(), FK `auth.users(id) on delete cascade`, emergency_acknowledged_until), Policies für die eigene Zeile; `ad_pending_emergency_logins() returns table (count int, last_at timestamptz)` und `ad_acknowledge_emergency()`, beide security definer mit Prüfung AD ≥ read; `grant execute … to authenticated`
-- [ ] T073 [US-AD-15] (spec T15 Teil) `src/features/ad/personen/NotfallHinweis.tsx` oben in `PersonenUebersicht.tsx`: „Der Notfall-Admin hat sich n-mal angemeldet, zuletzt am TT.MM.JJJJ um HH:MM.“ mit dem Knopf „Zur Kenntnis genommen“ (`rpc('ad_acknowledge_emergency')`); nur bei count > 0
-
-**Checkpoint**: Der Notfall-Hinweis funktioniert mit test.notfall.
-
----
-
-## Phase 16: US-AD-16 Testzugänge in TEST (Must)
-
-**Ziel**: Vollständiger, geprüfter Seed nach spec.md Abschnitt 9.
-
-**Unabhängiger Test**:
-- `seed.sh` gegen TEST ergibt 8 Personen, 3 aktive Testzugänge sowie Eigenschaften mit Hauptamt und dem Dublettenpaar (AK1).
-- Die Geschäftsstelle sieht kein Hauptamt (AK2).
-- Das Passwort steht nicht im Repo (AK3).
-- Bei PROD-Ref erscheint „Seed in PROD nicht erlaubt.“ (AK4).
-
-### Tests für US-AD-16 ⚠️
-
-- [ ] T074 [P] [US-AD-16] (spec T7 Teil) `supabase/tests/database/160_seed.test.sql`:
-  - 8 Personen, davon 1 `function`.
-  - Status je Zugang nach spec.md Abschnitt 9; 3 Eigenschaftsarten; 3 Eigenschaften; 4 Protokolleinträge.
-  - test.geschaeftsstelle sieht Annas Hauptamt nicht.
-
-### Umsetzung für US-AD-16
-
-- [ ] T075 [US-AD-16] (spec T23) `supabase/seed.sh` und `supabase/seed.sql` gegen spec.md Abschnitt 9 abgleichen; Schutzprüfung mit einer Test-URL ausprobieren, die die PROD-Ref enthält: Abbruch vor jeder Verbindung (quickstart.md B6). Danach `supabase/seed.sh` gegen TEST (nach Prüfung, dass TEST verknüpft ist).
-
-**Checkpoint**: Alle Testzugänge funktionieren in TEST.
-
----
-
-## Phase 17: Abnahme und Querschnitt
-
-**Zweck**: Fachliche Abnahme in TEST (spec T25) und Abschluss.
-
-- [ ] T076 [US-AD-07] (spec T25 Teil) Dublettenschwelle in TEST abnehmen (quickstart.md C: Toni/Anton/Tony Muster, Tippfehler) und das Ergebnis in `docs/specs/ad-administration/abnahme-test.md` festhalten (ohne private Adressen); bei Bedarf Schwelle in einer neuen Migration anpassen (Rückfrage beim Product Owner)
-- [ ] T077 [US-AD-08] (spec T25 Teil) Abnahmeablauf C1 vorbereiten: TEST auf Stand bringen (`db push`, `functions deploy`, Seed; die Auth-Einstellungen hat der Product Owner nach der Checkliste in `supabase/setup/README.md` im Dashboard gesetzt, kein `config push`). Eingeladen werden nur die eigenen Adressen des Product Owners. Danach führt **der Product Owner selbst** C1 durch (Domain per SQL-Editor, Personen mit eigenen Adressen über die Oberfläche, Einladung, Adressänderung, Passwort setzen, Passwort vergessen) und räumt nach C2 auf. Claude Code trägt keine Domain und keine Adresse ein. Ergebnis ohne Adressen in `docs/specs/ad-administration/abnahme-test.md`. Betrifft US-AD-03, US-AD-04, US-AD-08.
-- [ ] T078 [US-AD-16] (spec T25 Teil) Übrige Szenarien aus quickstart.md C mit den drei Testzugängen und test.notfall abnehmen, auch in der Breite 375 px; offene `[PRÜFEN T25]`-Punkte aus research.md abhaken bzw. melden; Ergebnis in `docs/specs/ad-administration/abnahme-test.md`
-- [ ] T079 [P] [US-AD-01] (spec T12 Teil) Querschnitt: `npm run lint` und `npm run build` ohne Fehler; `npm audit` und Ergebnis melden (Merkposten shadcn-CLI aus offene-punkte.md); keine Secrets oder realen Adressen im Diff (`git grep` auf `@` außerhalb von `@dav-leipzig.de`/`example.test`)
+- [ ] T102 [US-AD-25] (spec T25 Teil) Dublettenschwelle in TEST abnehmen (quickstart.md C: Toni/Anton/Tony Muster, Tippfehler) und das Ergebnis in `docs/specs/ad-administration/abnahme-test.md` festhalten (ohne private Adressen); bei Bedarf Schwelle per neuer Migration anpassen (Rückfrage beim Product Owner)
+- [ ] T103 [US-AD-08] (spec T25 Teil) Abnahmeablauf C1 vorbereiten: TEST auf Stand (`db push`, `functions deploy`, Seed; Auth-Einstellungen hat der Product Owner nach `supabase/setup/README.md` gesetzt). Danach führt **der Product Owner selbst** C1 durch (Domain per SQL-Editor, Personen mit eigenen Adressen, Einladung, Adressänderung, Passwort setzen, Passwort vergessen) und räumt nach C2 auf. Claude Code trägt keine Domain und keine Adresse ein. Ergebnis ohne Adressen in `abnahme-test.md`. Betrifft US-AD-03, US-AD-04, US-AD-08
+- [ ] T104 [US-AD-26] (spec T25 Teil, T32, T49) Szenarien aus quickstart.md C und C3 mit den Testzugängen Admin, Geschäftsstelle, Referent:in, Vorstand und test.notfall abnehmen, auch bei 375 px; offene `[PRÜFEN T25]`-Punkte aus research.md abhaken bzw. melden; Ergebnis in `abnahme-test.md`
+- [ ] T105 [P] (spec T12 Teil) Querschnitt: `npm run lint` und `npm run build` ohne Fehler; `npm audit` und Ergebnis melden; keine Secrets oder realen Adressen im Diff (`git grep` auf `@` außerhalb von `@dav-leipzig.de`, `example.test`, `example.org`)
 
 ---
 
@@ -593,15 +476,19 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 ### Zwischen den Phasen
 
-- **Phase 1 (US-AD-01)** blockiert alles: Schema, Rechte, Trigger, Seed und CI.
-- **Phase 2 (US-AD-02)** blockiert alle Oberflächen (Router, Routenschutz, `errors.ts`, Kopfzeile).
-- Phase 3 → Phase 4 (`AdLayout`) → Phasen 5–16 folgen der Reihenfolge aus 02-stories.md.
-- Fachliche Abhängigkeiten:
-  - US-AD-07 baut die Detailseite (T042), die Phasen 8–10 und 13 brauchen sie.
-  - US-AD-12 vor US-AD-13 (Eigenschaftsarten vor Eigenschaften).
-  - US-AD-08 vor US-AD-03 und US-AD-09 (`ad-access`, Zugangsabschnitt).
-  - US-AD-14 vor US-AD-15 wird nur für die Anzeige gebraucht; das Protokoll entsteht bereits in T012.
-- Phase 17 erst, wenn alle Phasen fertig sind.
+- **Phasen 1–3** sind erledigt.
+- **Phase 4** (Datenbank-Kern) blockiert alle weiteren Phasen.
+- Danach: Phase 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14.
+  - Phase 5 liefert `AdLayout` für alle Oberflächen unter /ad.
+  - Phase 7 liefert `PersonDetail` für die Phasen 10–12.
+  - Phase 8 liefert `QualifikationsartAuswahl` für Phase 9 und 10.
+  - Phase 9 vor Phase 10 (Eigenschaftsarten vor Eigenschaften).
+  - Phase 11 braucht Phase 5 (Reichweite) und Phase 7 (Detailseite).
+  - Phase 14 erst, wenn alle Phasen fertig sind.
+
+### Innerhalb von Phase 4
+
+Migrationen in der Reihenfolge der Dateinamen: T047 → T048 → T049 → T050 → T051 → T052 → T053 → T054 → T055 → T056 → T057 → T058 → T059 → T060 → T061 → T065. Die Tests T032–T046 entstehen vorher und parallel; jede Migration macht ihre Tests grün. T062–T064 laufen parallel zu den Migrationen.
 
 ### Innerhalb einer Story
 
@@ -609,27 +496,27 @@ Erst die Tests (müssen fehlschlagen), dann die Migration, dann Edge Functions, 
 
 ### Parallel möglich
 
-- Phase 1: T004–T008 (Testdateien) parallel; T014/T015 parallel zu T016 und T017/T018, nachdem die Migrationen stehen.
-- Phase 2: T023, T024, T025, T028 parallel.
-- Phase 10: T052, T053, T054 parallel; T056 parallel zu T055.
-- Phase 13: T063 und T064 parallel.
+- Phase 4: T033–T046 (Testdateien) parallel; T062, T063, T064 parallel zu den Migrationen.
+- Phase 6: T070 parallel zu T071-Vorbereitung.
+- Phase 8: T076, T077 parallel.
+- Phase 12: T085–T089 parallel; T092 parallel zu T090/T091; T096, T097 parallel.
 
-## Beispiel: parallel in US-AD-01
+## Beispiel: parallel in Phase 4
 
 ```text
-T004 supabase/tests/database/010_foundation.test.sql
-T005 supabase/tests/database/020_persons_rights.test.sql
-T006 supabase/tests/database/030_auth_triggers.test.sql
-T007 supabase/tests/database/050_policies.test.sql
-T008 supabase/tests/bootstrap/010_prod_bootstrap.test.sql
+T033 supabase/tests/database/070_scope_referate.test.sql
+T034 supabase/tests/database/080_referate_gremien.test.sql
+T035 supabase/tests/database/090_qualification_types.test.sql
+T037 supabase/tests/database/110_property_types.test.sql
+T039 supabase/tests/database/130_visibility.test.sql
+T062 src/lib/errors.ts
 ```
 
 ## Umsetzungsstrategie
 
-1. **MVP-Fundament:** Phase 1 (US-AD-01) auf `us-ad-01-ersteinrichtung`, PR mit grüner Action. Danach ist die Ersteinrichtung von PROD durch den Product Owner möglich, sobald O1 geklärt ist.
-2. **Nutzbare Anmeldung:** Phasen 2–3 (US-AD-02, US-AD-05); Abnahme in der Cloudflare-Vorschau gegen TEST.
-3. **Pflege in AD:** Phasen 4–9 je Story auf eigenem Branch.
-4. **Zugänge:** Phasen 10–13 (Einladen, Annehmen, Reset, Sperren).
-5. **Nachvollziehbarkeit:** Phasen 14–16, dann die Abnahme in Phase 17.
+1. **Datenbank-Kern zuerst:** Phase 4 auf `ad-kern-datenbank`, PR mit grüner Action und Ausrollen nach TEST. Danach ist der Kern über SQL/REST in TEST prüfbar (Sichtbarkeit, Referate, Eigenschaften).
+2. **Pflege in AD:** Phasen 5–11 je Branch, jeweils mit Abnahme in der Cloudflare-Vorschau gegen TEST.
+3. **Zugänge:** Phase 12 (Einladen, Annehmen, Reset, Sperren).
+4. **Nachvollziehbarkeit und Abnahme:** Phase 13, dann Phase 14 (Grundlage für Schritt 7 des Arbeitsplans).
 
 Offen: [OFFEN] O1 – Weg nach PROD (spec.md Abschnitt 11). Keine Task in dieser Datei führt etwas gegen PROD aus.

@@ -1,6 +1,6 @@
 # Quickstart: Validierung AD
 
-Stand: 20.10.2026 · Phase 1 zu [plan.md](plan.md) · Grundlage: [spec.md](spec.md) v0.5
+Stand: 22.10.2026 · Phase 1 zu [plan.md](plan.md) · Grundlage: [spec.md](spec.md) v0.9, Umfang Kern bis v0.7.1
 
 Datenbanktests laufen automatisch in der GitHub Action (lokaler Stack). Die fachliche Abnahme läuft in **vereins-os-test**. Kein Schritt dieser Anleitung wird gegen PROD ausgeführt.
 
@@ -9,7 +9,7 @@ Datenbanktests laufen automatisch in der GitHub Action (lokaler Stack). Die fach
 | # | Schritt | Erwartet |
 |---|---|---|
 | 1 | Pull Request öffnen oder aktualisieren | Workflow `.github/workflows/db-tests.yml` startet |
-| 2 | `supabase start` (automatischer Seed aus) → `supabase/seed.sh` gegen den lokalen Stack | 8 Personen, 3 aktive Testzugänge, 4 Protokolleinträge |
+| 2 | `supabase start` (automatischer Seed aus) → `supabase/seed.sh` gegen den lokalen Stack | 12 Personen, 5 aktive Testzugänge (Admin, Geschäftsstelle, Vorstand, Notfall-Admin, Referent:in), 4 Protokolleinträge; Testarten und Eigenschaften nach spec.md Abschnitt 9 |
 | 3 | `supabase test db` | alle pgTAP-Tests grün (research.md R-11) |
 | 4 | `deno test supabase/functions` | Aufräumen von `ad-invite` bei simuliertem Auth-Fehler grün (US-AD-08 AK5) |
 
@@ -77,6 +77,23 @@ Nach spec.md Abschnitt 9 Schritt 3. Es gibt keine Löschfunktion in der Oberflä
 Hinweis: Schritt 2 löscht auch die Protokolleinträge der Testpersonen. Sie enthalten die privaten Adressen (Details von `email_changed`). Das ist eine enge Ausnahme nur für dieses Aufräumen in TEST (Constitution V, Version 1.1.1). Für Nutzer bleibt das Protokoll unveränderbar (US-AD-14 AK4).
 
 Außerdem zu prüfen: alle Stellen in [research.md](research.md), die mit `[PRÜFEN T25]` markiert sind.
+
+## C3. Kern v0.7 in TEST (T32, T49)
+
+Testzugänge Admin, Geschäftsstelle, Referent:in (Klettern) und Vorstand; Erwartung je Zugang nach [data-model.md](data-model.md), Abschnitt „Testdaten“.
+
+| Szenario | Schritte | Erwartet | Story |
+|---|---|---|---|
+| Sichtbarkeit je Pfad | mit jedem Testzugang die Personen 1–12 per REST bzw. in /ad abfragen | Tabelle in data-model.md; Vorstand sieht niemanden | US-AD-23, US-AD-26 |
+| Lesestufen | Geschäftsstelle und Referent:in lesen die Eigenschaften von Person 4 und Person 2 | Geschäftsstelle ohne „Hauptamt“; Referent:in ohne „Geburtsdatum“ und „Hauptamt“ | US-AD-22, US-AD-23 |
+| Reichweite | test.admin setzt in einer Vorlage für GR die Reichweite „Referat“ | „Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement möglich.“ | US-AD-20 |
+| Referate zuweisen | test.admin weist einer Testperson die Vorlage Referent:in ohne Referat zu | „Bitte mindestens ein Referat auswählen.“; mit Referat: Protokoll `template_assigned` mit Referat | US-AD-21 |
+| Eigenschaftsart mit Feldern | test.admin legt eine Art mit zwei Feldern an, ändert danach den Datentyp eines Felds mit vorhandenen Eigenschaften | Speichern ok; Datentyp-Änderung abgelehnt | US-AD-22 |
+| Qualifikationsarten | Liste mit 47 Einträgen (Filter Status „aktuell“ blendet historische aus); test.vorstand kann nicht speichern | R21–R26 nach spec.md | US-AD-17, US-AD-18 |
+| Qualifikationsart als Feld | Eigenschaft „Lizenz (Test)“ an Person 4 mit historischer Qualifikationsart speichern | „Diese Qualifikationsart ist historisch und kann nicht neu vergeben werden.“ | US-AD-19 |
+| Dublettenwarnung | test.admin legt „Tony Muster“ an | Warndialog mit Toni und Anton Muster, nur Name, Rufname, Geburtsjahr, ggf. „ausgeschieden seit“ | US-AD-25 |
+| Rufname | Rufname an Person 4 setzen | Anzeige „Rufname Nachname“ in Übersicht, Detail und Kopfzeile | US-AD-24 |
+| Mobil | alle neuen Screens bei 375 px | kein horizontales Scrollen | spec.md Abschnitt 6 |
 
 ## D. Ersteinrichtung PROD (nur Dokumentation)
 

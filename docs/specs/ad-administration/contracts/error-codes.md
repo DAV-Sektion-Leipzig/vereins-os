@@ -1,6 +1,6 @@
 # Contract: Fehlercodes → Meldungen
 
-Stand: 22.10.2026 · Grundlage: [spec.md Administration](../spec.md) v0.8 (Abschnitt 5 und Abschnitt 2), [02-stories.md Gruppen](../../gr-gruppen/02-stories.md) v0.7 (US-GR-19), [spec.md Anwesenheitserfassung](../../ez-einsaetze/spec.md) v0.1 (Abschnitt 5)
+Stand: 22.10.2026 · Grundlage: [spec.md Administration](../spec.md) v0.9 (Abschnitt 5 und Abschnitt 2; umgesetzt wird zunächst der Kern bis v0.7.1, siehe [plan.md](../plan.md)), [02-stories.md Gruppen](../../gr-gruppen/02-stories.md) v0.7 (US-GR-19), [spec.md Anwesenheitserfassung](../../ez-einsaetze/spec.md) v0.1 (Abschnitt 5)
 
 Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnung Code → Meldung auf sie. Die Meldungstexte stehen wörtlich in der jeweiligen Spec. Das Frontend bildet die Codes in `src/lib/errors.ts` auf die Meldungen ab.
 
@@ -22,7 +22,7 @@ Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnun
 | `AD_NO_TEMPLATE` | Bitte zuerst mindestens eine Rechtevorlage zuweisen. | R17 | geplant (T9) |
 | `AD_MAIL_FAILED` | Die Einladung konnte nicht verschickt werden. Bitte später erneut versuchen. | – | geplant (T9) |
 | `AD_TEMPLATE_NAME_TAKEN` / `ad_templates_name_key` | Eine Rechtevorlage mit diesem Namen gibt es bereits. | – | umgesetzt |
-| `AD_SCOPE_NOT_ALLOWED` | Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement und in der Anwesenheitserfassung möglich. | R30 | geplant (T33, T50) |
+| `AD_SCOPE_NOT_ALLOWED` / `ad_template_rights_scope_allowed` | Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement möglich. | R30 | geplant (T33) |
 | `AD_REFERAT_REQUIRED` | Bitte mindestens ein Referat auswählen. | R31 | geplant (T33) |
 | `AD_CONFIDENTIAL_ONLY_AD` | Nur mit Rechten auf die Administration möglich. | R29 | geplant (T35) |
 | `AD_QUALIFICATION_NAME_REQUIRED` | Bitte eine Bezeichnung angeben. | R21 | geplant (T26) |
@@ -47,6 +47,8 @@ Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnun
 
 `AD_FORBIDDEN` meldet auch `ea_search_active_persons` ohne EZ ≥ bearbeiten (spec.md Abschnitt 2).
 
+`AD_SCOPE_NOT_ALLOWED`: Im Kern (bis v0.7.1) gilt der Text aus 02-stories.md US-AD-20 AK3. Mit dem Nachtrag v0.8 (T50, T54) wird er ersetzt durch „Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement und in der Anwesenheitserfassung möglich.“ (spec.md R30).
+
 ## Ehrenamtsmanagement (EA)
 
 Soweit in spec.md Administration definiert (Personenmodell, Eigenschaftsarten, Eigenschaften, Ehrenamtsstatus).
@@ -62,6 +64,7 @@ Soweit in spec.md Administration definiert (Personenmodell, Eigenschaftsarten, E
 | `EA_FIELD_NEW_REQUIRED` | Neue Felder können nur optional angelegt werden, solange es Eigenschaften dieser Art gibt. | R36 | geplant (T35) |
 | `EA_CHOICE_VALUE_REMOVED` | Auswahlwerte können ergänzt, aber nicht entfernt werden. | R36 | geplant (T35) |
 | `EA_RELATION_LOCKED` | Der Bezug kann nicht geändert werden, solange Eigenschaften dieser Art existieren. | – | geplant (T35) |
+| Constraint `ea_property_fields_label_key` (kein Code, [OFFEN]) | Ein Feld mit dieser Bezeichnung gibt es bereits. | – | geplant (T35) |
 | `EA_FIELD_REQUIRED` | Bitte ‚<Feld>‘ ausfüllen. | R35 | geplant (T36) |
 | `EA_VALUE_TYPE` | Der Wert für ‚<Feld>‘ passt nicht zum Datentyp. | R35 | geplant (T36) |
 | `EA_FIELD_UNKNOWN` | Unbekanntes Feld. | R35 | geplant (T36) |
