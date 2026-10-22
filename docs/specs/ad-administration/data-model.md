@@ -17,7 +17,7 @@ Ausgerollt in TEST (nicht ändern; Änderungen nur per neuer Migration):
 | `20261020000500_ad_auth_triggers.sql` | T5 | Trigger auf `auth.users`, `ad_test_login_domains`, `ad_login_email_allowed`, `ad_accesses_guard` (R1, R20) |
 | `20261020000600_ad_me.sql` | T6 Teil | `ad_me()` |
 
-Neu im Kern (Branch `ad-kern-datenbank`, Reihenfolge = Dateiname):
+Neu im Kern (Branch `ad-kern-datenbank`, Reihenfolge = Dateiname; die Startvorlagen (T40) stehen vor den Eigenschaftsarten, weil der Seed die Vorlage Referent:in braucht):
 
 | Datei | spec-Task | Inhalt |
 |---|---|---|
@@ -27,11 +27,11 @@ Neu im Kern (Branch `ad-kern-datenbank`, Reihenfolge = Dateiname):
 | `…000400_ad_qualification_types.sql` | T26 | `ad_qualification_types`, Trigger (R21–R24, Kürzel groß), `ad_can_edit_qualification_types()` |
 | `…000500_ad_qualification_types_data.sql` | T27 | Startbestand 47 Qualifikationsarten |
 | `…000600_ea_persons_v07.sql` | T37 | neue Spalten `ea_persons`, `ea_volunteer_status_history`, Trigger `ea_persons_guard` |
-| `…000700_ea_property_types.sql` | T35 | `ea_property_types`, `ea_property_fields`, Trigger, `ea_save_property_type` |
-| `…000800_ea_properties.sql` | T36 | `ea_properties`, `ea_property_history`, Trigger `ea_properties_validate`, `ea_properties_history` |
-| `…000900_ea_visibility.sql` | T38 | Sichtbarkeitsfunktionen, Policies auf `ea_persons` (ersetzt), `ea_volunteer_status_history`, `ea_property_types`, `ea_property_fields`, `ea_properties`, `ea_property_history` |
-| `…001000_ea_volunteer_functions.sql` | T39 | `ea_set_volunteer_status`, `ea_person_referate`, `ea_create_volunteer` (Kern-Signatur), `ea_activate_person` |
-| `…001100_ad_start_templates_v07.sql` | T40 | Vorlage „Referent:in“ (EA `edit`, scope `referat`), Admin GR `read` |
+| `…000700_ad_start_templates_v07.sql` | T40 | Vorlage „Referent:in“ (EA `edit`, scope `referat`), Admin GR `read` |
+| `…000800_ea_property_types.sql` | T35 | `ea_property_types`, `ea_property_fields`, Trigger, `ea_save_property_type` |
+| `…000900_ea_properties.sql` | T36 | `ea_properties`, `ea_property_history`, Trigger `ea_properties_validate`, `ea_properties_history` |
+| `…001000_ea_visibility.sql` | T38 | Sichtbarkeitsfunktionen, Policies auf `ea_persons` (ersetzt), `ea_volunteer_status_history`, `ea_property_types`, `ea_property_fields`, `ea_properties`, `ea_property_history` |
+| `…001100_ea_volunteer_functions.sql` | T39 | `ea_set_volunteer_status`, `ea_person_referate`, `ea_create_volunteer` (Kern-Signatur), `ea_activate_person` |
 | `…001200_ad_person_overview.sql` | T6 Teil, T41, T26 Teil | `ad_v_person_overview`, neue Fassung `ad_me()` (mit Rufname), `ad_qualification_usage` |
 | `…001300_ad_find_similar_persons.sql` | T8, T43 | `ad_find_similar_persons` nach R40 |
 | `…001400_ad_emergency_notice.sql` | T4 Teil | `ad_notice_acks`, `ad_pending_emergency_logins`, `ad_acknowledge_emergency`, pg_cron-Job 01:15 UTC |

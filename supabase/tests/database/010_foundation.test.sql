@@ -11,10 +11,21 @@ select has_extension('pg_cron');
 -- Enums mit genau diesen Werten in dieser Reihenfolge
 select enum_has_labels('public', 'ad_level', array['none', 'read', 'edit', 'manage']);
 select enum_has_labels('public', 'ad_access_status', array['none', 'invited', 'active', 'locked']);
-select enum_has_labels('public', 'ea_data_type', array['text', 'date', 'boolean', 'choice']);
+select enum_has_labels('public', 'ea_data_type',
+  array['text', 'date', 'boolean', 'choice', 'number', 'year', 'qualification_type']);
 select enum_has_labels('public', 'ea_person_kind', array['human', 'function']);
 select enum_has_labels('public', 'ad_audit_action',
-  array['invited', 'email_changed', 'template_assigned', 'template_revoked', 'locked', 'unlocked', 'emergency_login']);
+  array['invited', 'email_changed', 'template_assigned', 'template_revoked', 'referate_changed', 'locked', 'unlocked',
+        'emergency_login']);
+select enum_has_labels('public', 'ad_scope', array['all', 'referat']);
+select enum_has_labels('public', 'ea_read_level', array['all', 'office', 'confidential']);
+select enum_has_labels('public', 'ea_relation_kind', array['none', 'referat', 'gremium', 'group']);
+select enum_has_labels('public', 'ea_property_category',
+  array['master_data', 'contact', 'assignment', 'qualification', 'proof', 'yearly', 'issue', 'external_access', 'other']);
+select enum_has_labels('public', 'ea_volunteer_status', array['active', 'dormant', 'left']);
+select enum_has_labels('public', 'ad_qualification_kind', array['license', 'add_on', 'course', 'training']);
+select enum_has_labels('public', 'ad_license_level', array['pre', 'C', 'B', 'A', 'none']);
+select enum_has_labels('public', 'ad_qualification_status', array['current', 'historic']);
 
 -- Module
 select is((select count(*)::int from public.ad_modules), 9, 'ad_modules hat 9 Module');

@@ -21,11 +21,12 @@ select results_eq(
   $$ select t.name, r.module_code, r.level::text
      from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
      where r.level <> 'none' order by t.name, r.module_code $$,
-  $$ values ('Admin'::text, 'AD'::text, 'manage'::text), ('Admin', 'EA', 'manage'), ('Admin', 'SC', 'manage'),
+  $$ values ('Admin'::text, 'AD'::text, 'manage'::text), ('Admin', 'EA', 'manage'), ('Admin', 'GR', 'read'),
+            ('Admin', 'SC', 'manage'),
             ('Geschäftsstelle', 'AM', 'manage'), ('Geschäftsstelle', 'EA', 'manage'), ('Geschäftsstelle', 'FI', 'manage'),
             ('Geschäftsstelle', 'GR', 'manage'), ('Geschäftsstelle', 'GS', 'manage'), ('Geschäftsstelle', 'OA', 'manage'),
-            ('Geschäftsstelle', 'PM', 'manage') $$,
-  'Startvorlagen nach spec.md Abschnitt 3; Vorstand ohne Rechte'
+            ('Geschäftsstelle', 'PM', 'manage'), ('Referent:in', 'EA', 'edit') $$,
+  'Startvorlagen nach spec.md Abschnitt 3 (Kern v0.7); Vorstand ohne Rechte'
 );
 select is((select count(*)::int from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
            where t.name = 'Vorstand'), 9, 'Vorstand hat je Modul eine Zeile');
@@ -33,7 +34,7 @@ select is((select count(*)::int from public.ad_template_rights r join public.ad_
 -- ad_user_level je Testzugang
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
 select is(public.ad_user_level('AD'), 'manage'::public.ad_level, 'Admin: AD verwalten');
-select is(public.ad_user_level('GR'), 'none'::public.ad_level, 'Admin: GR kein Zugriff');
+select is(public.ad_user_level('GR'), 'read'::public.ad_level, 'Admin: GR lesen (E5)');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
 select is(public.ad_user_level('AD'), 'none'::public.ad_level, 'Geschäftsstelle: AD kein Zugriff');
 select is(public.ad_user_level('EA'), 'manage'::public.ad_level, 'Geschäftsstelle: EA verwalten');
