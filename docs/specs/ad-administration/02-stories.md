@@ -1,7 +1,10 @@
 # User Stories: Administration (AD)
 
-Stand: 21.10.2026 · Version 0.6 · Status: Ready · Product Owner: Toni Werner
-Grundlage: 00-steckbrief.md v0.9, 01-erhebung.md v0.7 (Regeln R1–R20), glossar.md v0.4, rollen.md v0.6, spec.md v0.5.1
+Stand: 21.10.2026 · Version 0.8.1 · Status: Ready (Nachtrag freigegeben am 21.10.2026) · Product Owner: Toni Werner
+Grundlage: 00-steckbrief.md v1.1, 01-erhebung.md v0.7 (Regeln R1–R20), spec.md v0.7.1 (Regeln R21–R42), glossar.md v1.1, rollen.md v0.8
+Änderungen v0.7 (21.10.2026): US-AD-17 bis US-AD-19 (Qualifikationsarten) ergänzt.
+Änderungen v0.8 (21.10.2026): Nachtrag Personenmodell aus EA und GR: US-AD-20 bis US-AD-26; Hinweise in US-AD-12, US-AD-13, US-AD-19.
+Änderungen v0.8.1 (21.10.2026): Admin sieht alle Personen aller Module (US-AD-06, US-AD-23 AK7, US-AD-25 AK2).
 
 Oberflächentexte in der Ansprache „du“.
 
@@ -25,8 +28,19 @@ Oberflächentexte in der Ansprache „du“.
 | US-AD-14 | Protokoll einsehen | Should | US-AD-08 |
 | US-AD-15 | Notfall-Admin nutzen und nachvollziehen | Must | US-AD-01, US-AD-14 |
 | US-AD-16 | Testzugänge in TEST | Must | US-AD-01 |
+| US-AD-17 | Qualifikationsarten verwalten | Must | US-AD-01 |
+| US-AD-18 | Startbestand Qualifikationsarten | Must | US-AD-17 |
+| US-AD-19 | Qualifikationsart als Datentyp eines Felds | Must | US-AD-12, US-AD-17 |
+| US-AD-20 | Rechtevorlage mit Reichweite „Referat“ (Referent:in) | Must | US-AD-10 |
+| US-AD-21 | Referate bei der Zuweisung festlegen | Must | US-AD-11, US-AD-20 |
+| US-AD-22 | Eigenschaftsart mit Feldern, Kategorie, Lesestufe und Bezug | Must | US-AD-12, US-AD-17 |
+| US-AD-23 | Sichtbarkeit von Personen je Modul und Ehrenamtsstatus (Datenbank) | Must | US-AD-21, US-AD-22 |
+| US-AD-24 | Rufname | Should | US-AD-07 |
+| US-AD-25 | Dublettenwarnung modulübergreifend | Must | US-AD-07, US-AD-23 |
+| US-AD-26 | Testzugang Referent:in und Seed v0.7 | Must | US-AD-16, US-AD-23 |
 
-Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 → 13 → 11 → 08 → 03 → 04 → 09 → 14 → 15 → 16. Die Datenbankteile von US-AD-10 und US-AD-11 entstehen bereits mit US-AD-01; Login und Grundgerüst (US-AD-02, US-AD-05) kommen vor den Oberflächen der übrigen Stories.
+Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 → 13 → 11 → 08 → 03 → 04 → 09 → 14 → 15 → 16 → 17 → 18 → 19. Die Datenbankteile von US-AD-10 und US-AD-11 entstehen bereits mit US-AD-01; Login und Grundgerüst (US-AD-02, US-AD-05) kommen vor den Oberflächen der übrigen Stories. US-AD-17 bis US-AD-19 können nach US-AD-13 jederzeit folgen; sie müssen vor der Migration der Aktivenliste (EA) fertig sein.
+Nachtrag v0.7: Da `ea_property_types` und `ea_properties` noch nicht umgesetzt sind, werden US-AD-12, US-AD-13 und US-AD-19 direkt in der Form von US-AD-22 gebaut. Reihenfolge ab dem aktuellen Stand (US-AD-01, 02, 05 erledigt): 20 → 10 → 21 → 11 → 22 (mit 12, 19) → 23 → 13 → 24 → 06 → 07 mit 25 → 08 → 03 → 04 → 09 → 14 → 15 → 16 mit 26 → 17 → 18. US-AD-23 muss vor der ersten GR-Migration fertig sein.
 
 ---
 
@@ -36,7 +50,7 @@ Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 �
 **damit** ich ohne vorhandenen Admin überhaupt starten kann.
 **Priorität:** Must · **Regeln:** R6, R14, R15 · **Abhängig von:** –
 **Akzeptanzkriterien**
-- AK1: Gegeben eine leere Datenbank, wenn die Migrationen laufen, dann gibt es die Rechtevorlagen „Admin“ (AD, SC, EA verwalten), „Geschäftsstelle“ (EA, GR, FI, OA, PM, GS, AM verwalten) und „Vorstand“ (überall kein Zugriff).
+- AK1: Gegeben eine leere Datenbank, wenn die Migrationen laufen, dann gibt es die Rechtevorlagen „Admin“ (AD, SC, EA verwalten), „Geschäftsstelle“ (EA, GR, FI, OA, PM, GS, AM verwalten) und „Vorstand“ (überall kein Zugriff). (v0.7: zusätzlich „Referent:in“ und „Admin“ mit GR lesen, siehe US-AD-20.)
 - AK2: Gegeben die Migrationen sind gelaufen, wenn das Einrichtungsskript für PROD ausgeführt wird, dann existieren die Person Toni Werner mit Zugang (Login-Adresse als Parameter, Vorlagen Admin und Vorstand) und die Funktionsperson „Geschäftsstelle / Notfall-Admin“ mit Zugang geschaeftsstelle@dav-leipzig.de und Vorlage Admin, beide im Status „kein Zugang“. Die erste Einladung (Toni Werner) erfolgt einmalig über das Supabase-Dashboard; der Zugang wechselt dabei auf „eingeladen“ und nach dem Setzen des Passworts auf „aktiv“. Alle weiteren Einladungen laufen über US-AD-08.
 - AK5: Gegeben die erste Einladung über das Dashboard, wenn Toni Werner die Mail an seine reale Adresse @dav-leipzig.de erhält, dann liegt sie im Posteingang (nicht Junk/Quarantäne); ebenso eine „Passwort vergessen“-Mail (Zustellungstest).
 - AK3: Gegeben das Einrichtungsskript wurde schon ausgeführt, wenn es erneut läuft, dann entstehen keine doppelten Personen, Zugänge oder Vorlagen (Fehlerfall).
@@ -100,9 +114,9 @@ Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 �
 **Als** Admin
 **möchte ich** in AD eine Liste aller Personen mit Zugangsstatus und Rechtevorlagen sehen und nach Namen suchen,
 **damit** ich gezielt Personen einladen, sperren und pflegen kann – auch die aus dem Import.
-**Priorität:** Must · **Regeln:** R11, R15 · **Abhängig von:** US-AD-01
+**Priorität:** Must · **Regeln:** R11, R15, R32 · **Abhängig von:** US-AD-01
 **Akzeptanzkriterien**
-- AK1: Gegeben es gibt Personen, wenn ich die Übersicht öffne, dann sehe ich je Person Vorname, Nachname, Login-Adresse (falls vorhanden), Zugangsstatus (kein Zugang / eingeladen / aktiv / gesperrt) und zugewiesene Vorlagen.
+- AK1: Gegeben es gibt Personen, wenn ich die Übersicht öffne, dann sehe ich je Person Vorname, Nachname, Login-Adresse (falls vorhanden), Zugangsstatus (kein Zugang / eingeladen / aktiv / gesperrt) und zugewiesene Vorlagen. (v0.7.1: zusätzlich Rufname, Ehrenamtsstatus und Referate; alle Personen aller Module, Filter „Zugehörigkeit“ und Paginierung 50 je Seite.)
 - AK2: Gegeben die Übersicht, wenn ich nach Zugangsstatus filtere oder einen Namensteil eingebe, dann sehe ich nur passende Personen.
 - AK3: Gegeben die Funktionsperson „Geschäftsstelle“, wenn ich die Übersicht öffne, dann ist sie als „Funktionsperson“ gekennzeichnet.
 - AK4: Gegeben keine Person passt zum Filter, wenn ich suche, dann erscheint „Keine Personen gefunden.“ (leerer Zustand / Fehlerfall).
@@ -117,10 +131,10 @@ Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 �
 **Akzeptanzkriterien**
 - AK1: Gegeben ich gebe Vorname und Nachname ein und es gibt keine ähnliche Person, wenn ich speichere, dann ist die Person angelegt mit Art „Mensch“ und Status „kein Zugang“; angelegt am/von sind gesetzt.
 - AK2: Gegeben Vorname oder Nachname fehlt, wenn ich speichere, dann erscheint „Bitte Vorname und Nachname angeben.“ und nichts wird gespeichert (Fehlerfall).
-- AK3: Gegeben es existiert „Toni Werner“, wenn ich „Anton Werner“ anlege oder eine bereits vorkommende E-Mail-Adresse eingebe, dann erscheint eine Warnung mit den ähnlichen Personen und den Optionen „Trotzdem anlegen“, „Vorhandene Person öffnen“ und „Abbrechen“.
+- AK3: Gegeben es existiert „Toni Werner“, wenn ich „Anton Werner“ anlege oder eine bereits vorkommende E-Mail-Adresse eingebe, dann erscheint eine Warnung mit den ähnlichen Personen und den Optionen „Trotzdem anlegen“, „Vorhandene Person öffnen“ und „Abbrechen“. (v0.7: Trefferdaten und Optionen nach US-AD-25.)
 - AK4: Gegeben ich wähle „Trotzdem anlegen“, wenn ich bestätige, dann wird die Person angelegt.
 - AK5: Gegeben ich gebe optional eine Login-Adresse ein, wenn sie nicht auf @dav-leipzig.de endet oder bereits vergeben ist, dann erscheinen die Meldungen aus R1 bzw. R2 (Fehlerfall).
-- AK6: Gegeben ein Nutzer ohne AD-Rechte, wenn er per Datenbankaufruf eine Person über AD anlegen will, dann lehnt die Datenbank ab; Personen anlegen ist nur mit AD- oder EA-Rechten mindestens „bearbeiten“ erlaubt (Rechte-Fall).
+- AK6: Gegeben ein Nutzer ohne AD-Rechte, wenn er per Datenbankaufruf eine Person über AD anlegen will, dann lehnt die Datenbank ab; Personen anlegen ist nur mit AD- oder EA-Rechten mindestens „bearbeiten“ erlaubt (Rechte-Fall). (v0.7: zusätzlich GR ≥ bearbeiten über die GR-Funktion; Referent:innen nur über `ea_create_volunteer`.)
 **Nicht Teil dieser Story:** Excel-Import, Dublettenprüfliste und Zusammenführen (EA); Löschen.
 
 ### US-AD-08: Zugang einrichten und einladen
@@ -150,7 +164,7 @@ Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 �
 - AK4: Gegeben ein Nutzer ist angemeldet, wenn ich seinen Zugang sperre, dann endet sein Zugriff spätestens mit Ablauf der Sitzung (bis zu 1 Stunde); ein Hinweis beim Sperren nennt dies.
 - AK5: Gegeben ein Nutzer ohne AD-Rechte, wenn er einen Zugang sperren will, dann lehnt das System ab (Rechte-Fall).
 - AK6: Beim Sperren wird nichts gelöscht; Eigenschaften und Rechtevorlagen bleiben erhalten (Fehlerfall-Absicherung, R12).
-**Nicht Teil dieser Story:** sofortiges Beenden laufender Sitzungen; Löschen von Zugängen; Enddatum an Eigenschaften (US-AD-13).
+**Nicht Teil dieser Story:** sofortiges Beenden laufender Sitzungen; Löschen von Zugängen; Enddatum an Eigenschaften (US-AD-13); Ehrenamtsstatus „ausgeschieden“ (EA).
 
 ### US-AD-10: Rechtevorlage anlegen und ändern
 **Als** Admin
@@ -162,7 +176,7 @@ Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 �
 - AK2: Gegeben eine Vorlage mit diesem Namen existiert, wenn ich speichere, dann erscheint „Eine Rechtevorlage mit diesem Namen gibt es bereits.“ (Fehlerfall).
 - AK3: Gegeben ich ändere die Stufe eines Moduls in der Vorlage Vorstand, wenn ich speichere, dann gilt sie für alle Personen mit dieser Vorlage spätestens nach Ablauf ihrer Sitzung.
 - AK4: Gegeben ein Nutzer ohne AD-Rechte, wenn er eine Vorlage ändern will, dann lehnt die Datenbank ab (Rechte-Fall).
-**Nicht Teil dieser Story:** Rechte je Objekt, Reichweiten, Einzelrechte; Löschen von Vorlagen.
+**Nicht Teil dieser Story:** Rechte je Objekt, Einzelrechte; Reichweite „Referat“ (US-AD-20); Löschen von Vorlagen.
 
 ### US-AD-11: Rechtevorlage zuweisen und entziehen
 **Als** Admin
@@ -175,30 +189,32 @@ Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 �
 - AK3: Gegeben die Vorlage ist der Person bereits zugewiesen, wenn ich sie erneut zuweisen will, dann wird sie nicht doppelt angelegt und nicht erneut angeboten (Fehlerfall).
 - AK4: Gegeben eine Person ohne aktiven Zugang mit zugewiesener Vorlage, wenn Daten abgefragt werden, dann wirken keine Rechte (R5).
 - AK5: Gegeben ein Nutzer ohne AD-Rechte, wenn er eine Vorlage zuweisen will, dann lehnt die Datenbank ab (Rechte-Fall).
-**Nicht Teil dieser Story:** Befristung in der Oberfläche; Ableitung von Rechten aus Eigenschaften (R7).
+**Nicht Teil dieser Story:** Befristung in der Oberfläche; Ableitung von Rechten aus Eigenschaften (R7); Referate je Zuweisung (US-AD-21).
 
 ### US-AD-12: Eigenschaftsart anlegen und ändern
 **Als** Admin
 **möchte ich** Eigenschaftsarten mit Zweck, Datentyp, „sichtbar in“ und „vertraulich“ anlegen und ändern,
 **damit** ich Angaben wie Hauptamt erfassen kann, ohne die Datenstruktur zu ändern.
 **Priorität:** Must · **Regeln:** R8, R9 · **Abhängig von:** US-AD-01
+**Hinweis v0.7:** Wird in der Form von US-AD-22 umgesetzt: Datentyp und Auswahlwerte gehören zu den Feldern; „vertraulich“ ist die Lesestufe „vertraulich“. Die Akzeptanzkriterien gelten sinngemäß je Feld bzw. für die Lesestufe.
 **Akzeptanzkriterien**
-- AK1: Gegeben ich gebe Name, Zweck, Datentyp (Text / Datum / Ja/Nein / Auswahlliste), „sichtbar in“ (mind. ein Modul) und „vertraulich“ an, wenn ich speichere, dann ist die Eigenschaftsart angelegt; beim Anlegen wird der Hinweis angezeigt: „Erfasse keine Gesundheitsdaten, Religion, politische Meinung oder andere besondere Kategorien nach Art. 9 DSGVO.“
+- AK1: Gegeben ich gebe Name, Zweck, Datentyp (Text / Datum / Ja/Nein / Auswahlliste; Qualifikationsart siehe US-AD-19), „sichtbar in“ (mind. ein Modul) und „vertraulich“ an, wenn ich speichere, dann ist die Eigenschaftsart angelegt; beim Anlegen wird der Hinweis angezeigt: „Erfasse keine Gesundheitsdaten, Religion, politische Meinung oder andere besondere Kategorien nach Art. 9 DSGVO.“
 - AK2: Gegeben der Zweck fehlt oder eine Auswahlliste hat keine Auswahlwerte, wenn ich speichere, dann erscheint „Bitte einen Zweck angeben.“ bzw. „Bitte mindestens einen Auswahlwert angeben.“ (Fehlerfall, R9).
 - AK3: Gegeben der Name existiert bereits, wenn ich speichere, dann erscheint „Eine Eigenschaftsart mit diesem Namen gibt es bereits.“ (Fehlerfall).
 - AK4: Gegeben es gibt schon Eigenschaften dieser Art, wenn ich den Datentyp ändern will, dann erscheint „Der Datentyp kann nicht geändert werden, solange Eigenschaften dieser Art existieren.“; Auswahlwerte können ergänzt, aber nicht entfernt werden („Auswahlwerte können ergänzt, aber nicht entfernt werden.“) (Fehlerfall).
 - AK5: Gegeben ein Nutzer ohne AD-Rechte (z. B. Geschäftsstelle mit EA verwalten), wenn er das Kennzeichen „vertraulich“ setzen oder ändern will, dann lehnt die Datenbank ab; „vertraulich“ setzt nur, wer AD-Rechte hat (Rechte-Fall).
-**Nicht Teil dieser Story:** Löschen von Eigenschaftsarten; Oberfläche für Eigenschaftsarten in EA; weitere Datentypen (Zahl, Datei).
+**Nicht Teil dieser Story:** Löschen von Eigenschaftsarten; Oberfläche für Eigenschaftsarten in EA; mehrere Felder, Kategorie, Bezug (US-AD-22); Datentyp Datei.
 
 ### US-AD-13: Eigenschaften einer Person pflegen
 **Als** Admin
 **möchte ich** an einer Person Eigenschaften mit Gültigkeit anlegen, ändern und beenden und frühere Werte sehen,
 **damit** z. B. das Hauptamt von Denise oder ihr Ausscheiden nachvollziehbar erfasst ist.
-**Priorität:** Must · **Regeln:** R7, R8, R12 · **Abhängig von:** US-AD-12
+**Priorität:** Must · **Regeln:** R7, R8, R12, R29, R35 · **Abhängig von:** US-AD-12
+**Hinweis v0.7:** Eingabe über das Eigenschaftsformular (Felder der Eigenschaftsart, ggf. Bezug); „Wert“ bedeutet die Werte aller Felder.
 **Akzeptanzkriterien**
 - AK1: Gegeben eine Person, wenn ich Eigenschaftsart, Wert (passend zum Datentyp) und gültig von angebe und speichere, dann ist die Eigenschaft angelegt; geändert am/von sind gesetzt.
 - AK2: Gegeben eine bestehende Eigenschaft, wenn ich den Wert ändere oder gültig bis setze, dann bleibt die frühere Fassung mit geändert am/von in der Historie sichtbar.
-- AK3: Gegeben gültig bis liegt vor gültig von oder der Wert passt nicht zum Datentyp, wenn ich speichere, dann erscheint „‚Gültig bis‘ darf nicht vor ‚gültig von‘ liegen.“ bzw. „Der Wert passt nicht zum Datentyp der Eigenschaftsart.“ (Fehlerfall).
+- AK3: Gegeben gültig bis liegt vor gültig von oder der Wert passt nicht zum Datentyp, wenn ich speichere, dann erscheint „‚Gültig bis‘ darf nicht vor ‚gültig von‘ liegen.“ bzw. „Der Wert passt nicht zum Datentyp der Eigenschaftsart.“ (v0.7: „Der Wert für ‚<Feld>‘ passt nicht zum Datentyp.“) (Fehlerfall).
 - AK4: Gegeben eine vertrauliche Eigenschaft (z. B. Hauptamt), wenn ein Nutzer mit der Vorlage Geschäftsstelle Eigenschaften dieser Person per Oberfläche oder Datenbankabfrage liest, dann erhält er die vertrauliche Eigenschaft nicht (Rechte-Fall, R8).
 - AK5: Gegeben ich gebe einer Person die Eigenschaft Hauptamt oder eine Funktion, wenn ich speichere, dann ändert sich an ihren Rechten nichts (R7).
 - AK6: In der Ansicht einer Person zeigt AD alle Eigenschaftsarten, deren „sichtbar in“ AD enthält; Eigenschaften mit gültig bis in der Vergangenheit erscheinen als „beendet“.
@@ -209,7 +225,7 @@ Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 �
 **möchte ich** das Protokoll der Einladungen, Rechtevergaben, Sperren und Anmeldungen des Notfall-Admins einsehen,
 **damit** ich nachvollziehen kann, wer wem wann welche Rechte gegeben hat.
 
-Aktionen im Protokoll: eingeladen, Login-Adresse geändert, Vorlage zugewiesen, Vorlage entzogen, gesperrt, entsperrt, Anmeldung Notfall-Admin.
+Aktionen im Protokoll: eingeladen, Login-Adresse geändert, Vorlage zugewiesen, Vorlage entzogen, Referate geändert (v0.7), gesperrt, entsperrt, Anmeldung Notfall-Admin.
 **Priorität:** Should · **Regeln:** R13, R16 · **Abhängig von:** US-AD-08
 **Akzeptanzkriterien**
 - AK1: Gegeben es gibt Protokolleinträge, wenn ich das Protokoll öffne, dann sehe ich Zeitpunkt, ausgeführt von, betroffene Person, Aktion und Details, neueste zuerst.
@@ -217,7 +233,7 @@ Aktionen im Protokoll: eingeladen, Login-Adresse geändert, Vorlage zugewiesen, 
 - AK3: Gegeben es gibt noch keine Einträge, wenn ich das Protokoll öffne, dann erscheint „Noch keine Einträge.“ (leerer Zustand).
 - AK4: Gegeben ein Nutzer (auch Admin), wenn er einen Protokolleintrag ändern oder löschen will, dann lehnt die Datenbank ab; Einträge entstehen nur durch das System (Fehlerfall / Manipulationsschutz).
 - AK5: Gegeben ein Nutzer ohne AD-Rechte, wenn er das Protokoll lesen will, dann erhält er keine Daten (Rechte-Fall).
-**Nicht Teil dieser Story:** Export des Protokolls; Protokoll von Änderungen an Eigenschaften (dafür Historie, US-AD-13).
+**Nicht Teil dieser Story:** Export des Protokolls; Protokoll von Änderungen an Eigenschaften (dafür Historie, US-AD-13); Protokoll von Änderungen an Qualifikationsarten; Wechsel des Ehrenamtsstatus (eigene Historie).
 
 ### US-AD-15: Notfall-Admin nutzen und nachvollziehen
 **Als** Admin
@@ -238,23 +254,158 @@ Aktionen im Protokoll: eingeladen, Login-Adresse geändert, Vorlage zugewiesen, 
 **damit** ich und die Geschäftsstelle jede Sicht abnehmen können, ohne Echtdaten zu nutzen.
 **Priorität:** Must · **Regeln:** R6, R8 · **Abhängig von:** US-AD-01
 **Akzeptanzkriterien**
-- AK1: Gegeben eine leere TEST-Datenbank oder ein lokaler Stack, wenn `supabase/seed.sh` läuft, dann gibt es aktive Testzugänge für Admin, Geschäftsstelle und Vorstand sowie 5–10 fiktive Personen mit Eigenschaften, darunter eine vertrauliche (Hauptamt) und ein Dublettenpaar („Toni Muster“ / „Anton Muster“), siehe spec.md Abschnitt 9.
+- AK1: Gegeben eine leere TEST-Datenbank oder ein lokaler Stack, wenn `supabase/seed.sh` läuft, dann gibt es aktive Testzugänge für Admin, Geschäftsstelle und Vorstand sowie 5–10 fiktive Personen mit Eigenschaften, darunter eine vertrauliche (Hauptamt) und ein Dublettenpaar („Toni Muster“ / „Anton Muster“), siehe spec.md Abschnitt 9. (v0.7: Erweiterung in US-AD-26.)
 - AK2: Gegeben der Testzugang Geschäftsstelle, wenn er Personen liest, dann sieht er keine vertraulichen Eigenschaften (Rechte-Fall).
 - AK3: Die Passwörter der Testzugänge stehen nicht im Repository, sondern werden beim Seed aus `SEED_TEST_PASSWORD` (lokal `.env.local`, CI: GitHub-Secret) gesetzt.
 - AK4: Gegeben jemand versucht, den Seed gegen PROD auszuführen, wenn das Skript startet, dann bricht es mit „Seed in PROD nicht erlaubt.“ ab (Fehlerfall; Prüfung über die Project Ref).
 **Nicht Teil dieser Story:** Testzugang mit Einzelrechten; Abnahme der Fachmodule.
 
+### US-AD-17: Qualifikationsarten verwalten
+**Als** Admin (in AD) bzw. Nutzer mit der Vorlage Geschäftsstelle (in EA, über „EA verwalten“)
+**möchte ich** Qualifikationsarten mit Sparte, Typ, Lizenzstufe, Spezifikation, Aussteller, DOSB-Kennzeichen, Gültigkeitsdauer und Status anlegen und ändern,
+**damit** EA und spätere Module mit einer einheitlichen, gepflegten Liste arbeiten, z. B. wenn der Bundesverband 2027 „DAV-Skibetreuer*in“ einführt.
+**Priorität:** Must · **Regeln:** R12, R21–R26 · **Abhängig von:** US-AD-01
+**Akzeptanzkriterien**
+- AK1: Gegeben es gibt Qualifikationsarten, wenn ich „Qualifikationsarten“ öffne, dann sehe ich je Eintrag Kürzel, Bezeichnung, Typ, Lizenzstufe, Gültigkeitsdauer und Status, gruppiert nach Sparte; ich kann nach Bezeichnung oder Kürzel suchen und nach Sparte, Typ und Status filtern; Standardfilter ist Status „aktuell“.
+- AK2: Gegeben ich fülle Bezeichnung, Sparte, Typ und Aussteller aus und – bei Typ „Lizenz“ – Lizenzstufe und Gültigkeitsdauer, wenn ich speichere, dann ist die Qualifikationsart mit Status „aktuell“ angelegt; angelegt am/von sind gesetzt.
+- AK3: Gegeben die Bezeichnung oder das Kürzel ist bereits vergeben, wenn ich speichere, dann erscheint „Eine Qualifikationsart mit dieser Bezeichnung gibt es bereits.“ bzw. „Dieses Kürzel ist bereits vergeben.“; gegeben Typ „Lizenz“ ohne Lizenzstufe oder ohne gültige Gültigkeitsdauer, dann erscheint „Bitte eine Lizenzstufe wählen.“ bzw. „Bitte eine Gültigkeitsdauer in Jahren angeben (1–10).“ (Fehlerfall, R21–R24).
+- AK4: Gegeben eine Qualifikationsart ist an Personen vergeben, wenn ich sie auf „historisch“ setze, dann bleiben die vorhandenen Eigenschaften unverändert, neue Eigenschaften können sie nicht mehr wählen, und die Detailansicht zeigt „Verwendet bei n Personen“ (R25).
+- AK5: Gegeben ich ändere die Gültigkeitsdauer, wenn ich speichere, dann erscheint „Die Änderung gilt für neue Einträge. Vorhandene Ablaufdaten bleiben unverändert.“ und vorhandene Eigenschaften bleiben unverändert (R26).
+- AK6: Gegeben ein Nutzer mit der Vorlage Vorstand (ohne AD ≥ bearbeiten und ohne EA verwalten), wenn er per Datenbankaufruf eine Qualifikationsart anlegt oder ändert, dann lehnt die Datenbank ab; gegeben der Testzugang Geschäftsstelle, wenn er per Datenbankaufruf eine Qualifikationsart ändert, dann ist das erlaubt; die Seiten unter /ad bleiben für ihn gesperrt (Rechte-Fall).
+- AK7: Es gibt keine Funktion zum Löschen; ein Löschversuch per Datenbankaufruf wird abgelehnt (R12).
+**Nicht Teil dieser Story:** Startbestand (US-AD-18); Verweis aus Eigenschaften (US-AD-19); Ablaufdaten und Stichtagsliste (EA); Protokoll der Änderungen.
+
+### US-AD-18: Startbestand Qualifikationsarten
+**Als** Admin
+**möchte ich**, dass die 47 Qualifikationsarten aus stammdaten-qualifikationsarten.md per Migration in TEST und PROD angelegt werden,
+**damit** die Migration der Aktivenliste und die Erfassung in EA sofort darauf verweisen können.
+**Priorität:** Must · **Regeln:** R21–R25 · **Abhängig von:** US-AD-17
+**Akzeptanzkriterien**
+- AK1: Gegeben eine leere Tabelle, wenn die Migrationen laufen, dann gibt es 47 Qualifikationsarten mit den Werten der Liste (Kürzel, Bezeichnung, Sparte, Typ, Lizenzstufe, Spezifikation, Aussteller, DOSB, Gültigkeitsdauer, Status, Hinweis, Quell-ID): 36 aktuell, 11 historisch (inkl. PSA bis zur Entscheidung).
+- AK2: Gegeben der Admin hat nach der Migration einen Eintrag geändert, wenn die Migration erneut läuft (z. B. frischer lokaler Stack mit Seed und anschließender Migration), dann wird nichts überschrieben und nichts doppelt angelegt (Abgleich über Quell-ID; Fehlerfall).
+- AK3: Die Migration enthält keine Personendaten und läuft deshalb – anders als der Seed – auch in PROD.
+- AK4: Gegeben ein Nutzer ohne Pflegerecht (Vorlage Vorstand), wenn er die Startwerte per Datenbankaufruf ändern will, dann lehnt die Datenbank ab (Rechte-Fall).
+**Nicht Teil dieser Story:** Qualifikationsarten aus Abschnitt 4 der Stammdatenliste (nur nach Entscheidung des Product Owners); Abgleich mit dem Bundesverband.
+
+### US-AD-19: Qualifikationsart als Datentyp eines Felds
+**Als** Admin
+**möchte ich** einem Feld einer Eigenschaftsart den Datentyp „Qualifikationsart“ geben und die erlaubten Typen einschränken,
+**damit** EA an Personen auf eine Qualifikationsart verweist statt Freitext zu speichern.
+**Priorität:** Must · **Regeln:** R27, R28 · **Abhängig von:** US-AD-12, US-AD-17
+**Hinweis v0.7:** Der Datentyp gilt je Feld (US-AD-22); der Verweis liegt im Wert der Eigenschaft.
+**Akzeptanzkriterien**
+- AK1: Gegeben ich lege eine Eigenschaftsart an, wenn ich für ein Feld den Datentyp „Qualifikationsart“ wähle, dann kann ich optional die erlaubten Typen einschränken (z. B. nur „Lizenz“) und speichern.
+- AK2: Gegeben eine Eigenschaft mit einem solchen Feld, wenn ich einen Wert erfasse, dann wähle ich aus einer durchsuchbaren Liste der Qualifikationsarten mit Status „aktuell“ und erlaubtem Typ (Anzeige „Kürzel – Bezeichnung“, gruppiert nach Sparte); gespeichert wird der Verweis.
+- AK3: Gegeben eine historische Qualifikationsart, wenn ich sie einer Person neu zuordnen will (auch per Datenbankaufruf), dann erscheint „Diese Qualifikationsart ist historisch und kann nicht neu vergeben werden.“ (Fehlerfall, R27); vorhandene Eigenschaften mit dieser Qualifikationsart bleiben gültig, sind weiter änderbar (z. B. gültig bis) und werden mit „(historisch)“ angezeigt.
+- AK4: Gegeben eine Qualifikationsart mit nicht erlaubtem Typ, wenn ich sie speichere, dann erscheint „Dieser Typ von Qualifikation ist hier nicht erlaubt.“ (Fehlerfall, R28).
+- AK5: Gegeben ein Nutzer mit EA ≥ bearbeiten, wenn er eine Eigenschaft mit einem solchen Feld an einer Person anlegt, dann gelten dieselben Rechte wie für jede andere Eigenschaft; Rechte auf AD braucht er nicht (Rechte-Fall).
+- AK6: Gegeben die Bezeichnung einer Qualifikationsart wird geändert, wenn ich eine Person ansehe, die darauf verweist, dann sehe ich die neue Bezeichnung (Verweis, keine Kopie).
+**Nicht Teil dieser Story:** Oberfläche zur Lizenzerfassung in EA; Ablaufberechnung; Fortbildungen.
+
+### US-AD-20: Rechtevorlage mit Reichweite „Referat“ (Referent:in)
+**Als** Admin
+**möchte ich** je Modul neben der Stufe auch die Reichweite („alle“ oder „Referat“) festlegen und eine Startvorlage „Referent:in“ mit „EA bearbeiten, Reichweite Referat“ haben,
+**damit** Referent:innen und Hüttenwart:innen nur die Aktiven ihres Referats sehen und pflegen.
+**Priorität:** Must · **Regeln:** R6, R7, R30 · **Abhängig von:** US-AD-10
+**Akzeptanzkriterien**
+- AK1: Gegeben die Migrationen v0.7 sind gelaufen, wenn ich die Rechtevorlagen öffne, dann gibt es zusätzlich „Referent:in“ (EA bearbeiten, Reichweite Referat; übrige Module kein Zugriff) und die Vorlage „Admin“ hat zusätzlich „Gruppen lesen“.
+- AK2: Gegeben ich bearbeite eine Vorlage, wenn ich für EA die Reichweite „Referat“ wähle und speichere, dann ist sie gespeichert und gilt für alle Personen mit dieser Vorlage spätestens nach Ablauf ihrer Sitzung.
+- AK3: Gegeben ich wähle für ein anderes Modul als EA die Reichweite „Referat“, wenn ich speichere, dann erscheint „Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement möglich.“ und nichts wird gespeichert (Fehlerfall, R30).
+- AK4: Gegeben ein Nutzer hat nur die Vorlage Referent:in, wenn Rechte geprüft werden, dann gilt EA nicht als „alle lesen“ (`ad_has_level('EA','read')` ist falsch), `ad_my_referate('EA','read')` liefert seine Referate und die Startseite zeigt EA, sobald das Modul verfügbar ist.
+- AK5: Gegeben ein Nutzer ohne AD-Rechte, wenn er die Reichweite einer Vorlage per Datenbankaufruf ändern will, dann lehnt die Datenbank ab (Rechte-Fall).
+**Nicht Teil dieser Story:** Reichweiten „Gruppe“ und „nur eigene“; Einzelrechte; Zuweisung der Referate (US-AD-21).
+
+### US-AD-21: Referate bei der Zuweisung festlegen
+**Als** Admin
+**möchte ich** beim Zuweisen einer Vorlage mit Reichweite „Referat“ ein oder mehrere Referate wählen und später ändern,
+**damit** z. B. der Hüttenwart der Karl-Stein-Hütte nur sein Referat sieht und eine Referentin mit zwei Referaten beide.
+**Priorität:** Must · **Regeln:** R13, R31 · **Abhängig von:** US-AD-11, US-AD-20
+**Akzeptanzkriterien**
+- AK1: Gegeben eine Person ohne Vorlage, wenn ich ihr „Referent:in“ mit den Referaten Klettern und Ausbildung zuweise, dann ist die Zuweisung mit beiden Referaten gespeichert und ein Protokolleintrag „Vorlage zugewiesen“ nennt Vorlage und Referate.
+- AK2: Gegeben ich weise „Referent:in“ ohne Referat zu, wenn ich speichere, dann erscheint „Bitte mindestens ein Referat auswählen.“ und nichts wird gespeichert (Fehlerfall, R31).
+- AK3: Gegeben eine bestehende Zuweisung mit Referat Klettern, wenn ich das Referat auf Touren ändere, dann gilt der Datenzugriff sofort für Touren statt Klettern und ein Protokolleintrag „Referate geändert“ nennt vorher und nachher.
+- AK4: Gegeben eine Vorlage ohne Reichweite „Referat“ (z. B. Geschäftsstelle), wenn ich sie zuweise, dann wird keine Referatsauswahl angezeigt und keine Referate gespeichert.
+- AK5: Gegeben ein inaktives Referat, wenn ich Referate auswähle, dann wird es nicht angeboten (Fehlerfall).
+- AK6: Gegeben ein Nutzer ohne AD-Rechte, wenn er Referate einer Zuweisung per Datenbankaufruf ändern will, dann lehnt die Datenbank ab (Rechte-Fall).
+**Nicht Teil dieser Story:** Pflege der Referate selbst (Oberfläche in EA); automatische Ableitung der Referate aus dem Amt Referent:in (R7).
+
+### US-AD-22: Eigenschaftsart mit Feldern, Kategorie, Lesestufe und Bezug
+**Als** Admin (in AD; die Geschäftsstelle später in EA über „EA verwalten“)
+**möchte ich** eine Eigenschaftsart mit Zweck, Kategorie, Lesestufe, optionalem Bezug (Referat oder Gremium) und einem oder mehreren Feldern anlegen und ändern,
+**damit** z. B. eine Lizenz mit Qualifikationsart, Lizenznummer und gültig bis als ein Eintrag erfasst wird und die Führungszeugnis-Einsicht nur Geschäftsstelle und Admin lesen.
+**Priorität:** Must · **Regeln:** R9, R27–R29, R35–R38 · **Abhängig von:** US-AD-12, US-AD-17
+**Akzeptanzkriterien**
+- AK1: Gegeben ich gebe Name, Zweck, Kategorie „Qualifikationen“, Lesestufe „alle mit Zugriff“ und die Felder „Qualifikationsart“ (Qualifikationsart, nur Typ Lizenz, Pflicht), „Lizenznummer“ (Text) und „gültig bis“ (Datum) an, wenn ich speichere, dann ist die Eigenschaftsart mit drei Feldern angelegt; beim Anlegen erscheint der Hinweis zu Art. 9 DSGVO.
+- AK2: Gegeben die Eigenschaftsart hat kein Feld, der Zweck fehlt oder ein Feld vom Typ Auswahlliste hat keine Werte, wenn ich speichere, dann erscheint „Bitte mindestens ein Feld anlegen.“, „Bitte einen Zweck angeben.“ bzw. „Bitte mindestens einen Auswahlwert angeben.“ (Fehlerfall, R9).
+- AK3: Gegeben es gibt Eigenschaften dieser Art, wenn ich den Datentyp eines Felds oder den Bezug ändern oder ein neues Pflichtfeld anlegen will, dann erscheinen die Meldungen aus R36 bzw. „Der Bezug kann nicht geändert werden, solange Eigenschaften dieser Art existieren.“; ein neues optionales Feld wird gespeichert (Fehlerfall).
+- AK4: Gegeben eine Eigenschaftsart mit Bezug „Referat“ und „Bezug Pflicht“, wenn eine Eigenschaft ohne Referat gespeichert wird, dann erscheint „Bitte ein Referat (bzw. Gremium, Gruppe) wählen.“ (Fehlerfall, R38); gegeben „nur ein gültiger Eintrag“, wenn eine zweite gültige Eigenschaft im selben Zeitraum gespeichert wird, dann erscheint die Meldung aus R37.
+- AK5: Gegeben ein Nutzer mit „EA verwalten“ ohne AD-Rechte (Geschäftsstelle), wenn er per Datenbankaufruf die Lesestufe „vertraulich“ setzt, dann lehnt die Datenbank mit „Nur mit Rechten auf die Administration möglich.“ ab; die Lesestufen „alle mit Zugriff“ und „nur Geschäftsstelle und Admin“ darf er setzen (Rechte-Fall, R29).
+- AK6: Gegeben ein Nutzer mit der Vorlage Vorstand oder Referent:in, wenn er per Datenbankaufruf eine Eigenschaftsart anlegt, dann lehnt die Datenbank ab (Rechte-Fall).
+**Nicht Teil dieser Story:** Oberfläche für Eigenschaftsarten in EA; Bezug „Gruppe“ (mit der ersten GR-Migration); Löschen von Eigenschaftsarten und Feldern; Datentyp Datei.
+
+### US-AD-23: Sichtbarkeit von Personen je Modul und Ehrenamtsstatus (Datenbank)
+**Als** Admin
+**möchte ich**, dass jede Person und jede Eigenschaft nur über die Module lesbar ist, zu denen die Person gehört, und dass der Ehrenamtsstatus mit Historie gespeichert wird,
+**damit** Kinder aus Gruppen nicht in AD oder EA auftauchen, Referent:innen nur ihr Referat sehen und Ausgeschiedene nur Geschäftsstelle und Admin.
+**Priorität:** Must · **Regeln:** R15, R29, R32–R34, R39, R41, R42 · **Abhängig von:** US-AD-21, US-AD-22
+**Akzeptanzkriterien**
+- AK1: Gegeben der Seed v0.7, wenn die Testzugänge Admin, Geschäftsstelle, Referent:in (Klettern) und Vorstand Personen und Eigenschaften abfragen, dann entspricht das Ergebnis der Tabelle „Erwartete Sichtbarkeit“ in spec.md Abschnitt 9.
+- AK2: Gegeben Toni Muster (aktiv, Referat Klettern), wenn die Referentin Klettern ihn über `ea_set_volunteer_status` auf „ruhend“ setzt, dann ist er weiter für sie sichtbar und die Historie enthält Status, Datum und wer; setzt sie ihn auf „ausgeschieden“, dann sieht sie ihn nicht mehr, die Geschäftsstelle schon.
+- AK3: Gegeben Anton Muster (nur Referat Ausbildung), wenn die Referentin Klettern seinen Status ändern will, dann erscheint „Du darfst den Status dieser Person nicht ändern.“ (Fehlerfall, R33).
+- AK4: Gegeben die Referentin Klettern, wenn sie über `ea_create_volunteer` eine Person mit Funktion im Referat Klettern anlegt, dann ist die Person mit Status „aktiv“ angelegt und für sie sichtbar; mit Referat Ausbildung erscheint „Du kannst nur Zuordnungen zu deinen Referaten pflegen.“ (Fehlerfall, R41).
+- AK5: Gegeben Karl Zweireferat (Klettern und Ausbildung), wenn die Referentin Klettern ihn liest, dann sieht sie beide Funktionen, aber kein Geburtsdatum; die Funktion im Referat Ausbildung kann sie nicht ändern; die Geschäftsstelle sieht das Geburtsdatum, vertrauliche Eigenschaften sieht nur der Admin (Rechte-Fall, R29, R41, R42).
+- AK6: Gegeben ein Nutzer mit EA-Rechten, wenn er `volunteer_status` an ea_persons direkt ändern will, dann lehnt die Datenbank ab (Rechte-Fall).
+- AK7: Gegeben Paul Nurgruppe (nur Gruppenbezug, kein Zugang, kein Ehrenamtsstatus), wenn Geschäftsstelle (nur über EA) oder Referent:in Personen oder Eigenschaften abfragen, dann ist er nicht enthalten; der Admin sieht ihn mit allen Eigenschaften (Rechte-Fall, R32, v0.7.1).
+**Nicht Teil dieser Story:** Oberflächen für Ehrenamtsstatus, Sicht je Referat, Rückkehr und Bestätigungsdialog (EA); Pfad GR (erste GR-Migration); Löschlauf.
+
+### US-AD-24: Rufname
+**Als** Admin
+**möchte ich** an einer Person einen Rufnamen pflegen,
+**damit** Personen so angezeigt und gefunden werden, wie sie angesprochen werden (z. B. Anton → Toni).
+**Priorität:** Should · **Regeln:** R4 · **Abhängig von:** US-AD-07
+**Akzeptanzkriterien**
+- AK1: Gegeben die Person Anton Muster, wenn ich den Rufnamen „Toni“ speichere, dann wird sie in Übersicht, Personendetail und (bei eigenem Zugang) in der Kopfzeile als „Toni Muster“ angezeigt; der Vorname bleibt „Anton“.
+- AK2: Gegeben die Personenübersicht, wenn ich „Toni“ suche, dann finde ich die Person auch über den Rufnamen.
+- AK3: Gegeben ich speichere einen Rufnamen, der nur aus Leerzeichen besteht, wenn ich speichere, dann wird kein Rufname gespeichert und die Anzeige nutzt den Vornamen (Fehlerfall).
+- AK4: Gegeben ein Nutzer, der die Person nicht mit mindestens „bearbeiten“ lesen darf, wenn er den Rufnamen per Datenbankaufruf ändern will, dann lehnt die Datenbank ab (Rechte-Fall).
+**Nicht Teil dieser Story:** Pflichtangabe Rufname; Rufname im Migrationsskript (EA).
+
+### US-AD-25: Dublettenwarnung modulübergreifend
+**Als** Nutzer mit AD-, EA- oder GR-Rechten mindestens „bearbeiten“
+**möchte ich** beim Anlegen einer Person auch vor ähnlichen Personen aus anderen Modulen gewarnt werden, ohne deren Daten zu sehen,
+**damit** ein Mensch nur einmal existiert, z. B. wenn eine Mutter aus einer Jugendgruppe Helferin wird.
+**Priorität:** Must · **Regeln:** R3, R40 · **Abhängig von:** US-AD-07, US-AD-23
+**Akzeptanzkriterien**
+- AK1: Gegeben Olga Ausgeschieden existiert, wenn die Referentin Klettern „Olga Ausgeschieden“ anlegen will, dann zeigt der Dialog nur Vorname, Nachname, Rufname, Geburtsjahr (falls vorhanden) und „ausgeschieden seit 30.06.2025“ und bietet in EA „Wieder aktivieren“ statt „Vorhandene Person öffnen“.
+- AK2: Gegeben Paul Nurgruppe existiert nur mit Gruppenbezug, wenn die Referentin Klettern „Paul Nurgruppe“ anlegen will, dann erscheint der Treffer mit Name und ggf. Geburtsjahr, ohne „Vorhandene Person öffnen“ und ohne Kontaktdaten, mit „Ins Ehrenamtsmanagement übernehmen“; legt der Admin ihn an, bietet der Dialog „Vorhandene Person öffnen“ (Admin sieht alle Personen).
+- AK3: Gegeben ein Aufruf von `ad_find_similar_persons`, wenn die Funktion Treffer liefert, dann enthält das Ergebnis nur die Spalten aus spec.md Abschnitt 2; keine Eigenschaften, keine Kontaktdaten, keine Zugehörigkeiten (Datenschutz, R40).
+- AK4: Gegeben keine ähnliche Person, wenn ich speichere, dann wird die Person ohne Dialog angelegt.
+- AK5: Gegeben ein Nutzer ohne Rechte „bearbeiten“ in AD, EA oder GR (z. B. Vorstand), wenn er die Funktion aufruft, dann lehnt die Datenbank ab (Rechte-Fall).
+**Nicht Teil dieser Story:** Zusammenführen von Personen; Oberfläche „Wieder aktivieren“ (EA, nutzt `ea_activate_person`).
+
+### US-AD-26: Testzugang Referent:in und Seed v0.7
+**Als** Admin
+**möchte ich** in TEST einen Testzugang Referent:in und fiktive Personen mit Ehrenamtsstatus, Referaten und einer Person nur aus Gruppen haben,
+**damit** wir die Sichtbarkeit je Rechtevorlage abnehmen können, ohne Echtdaten zu nutzen.
+**Priorität:** Must · **Regeln:** R29, R32 · **Abhängig von:** US-AD-16, US-AD-23
+**Akzeptanzkriterien**
+- AK1: Gegeben eine leere TEST-Datenbank oder ein lokaler Stack, wenn `supabase/seed.sh` läuft, dann gibt es zusätzlich den aktiven Testzugang test.referent@dav-leipzig.de (Vorlage Referent:in, Referat Klettern), die Personen 9–12 und die Testeigenschaftsarten aus spec.md Abschnitt 9.
+- AK2: Gegeben der Seed, wenn ich mich mit dem Testzugang Referent:in anmelde, dann sehe ich nur die Personen aus der Tabelle „Erwartete Sichtbarkeit“.
+- AK3: Gegeben der Testzugang Referent:in, wenn er AD-Seiten aufruft, dann erscheint „Für diesen Bereich hast du keine Rechte.“ (Rechte-Fall).
+- AK4: Gegeben jemand versucht, den Seed gegen PROD auszuführen, wenn das Skript startet, dann bricht es mit „Seed in PROD nicht erlaubt.“ ab (Fehlerfall).
+**Nicht Teil dieser Story:** Abnahme der EA-Oberflächen; Testzugang Gruppenleitung.
+
 ---
 
-## Prüfung Definition of Ready (Stand 19.10.2026)
+## Prüfung Definition of Ready (Stand 21.10.2026)
 
 | Kriterium | Status |
 |---|---|
 | Rechtevorlage, Ziel und Nutzen benannt | erfüllt für alle Stories |
 | Akzeptanzkriterien testbar (Given-When-Then) | erfüllt |
 | Fehlerfall und Rechte-Fall je Story | erfüllt |
-| Begriffe im Glossar | erfüllt (glossar.md v0.4) |
-| Datenfelder im Datenmodell der Spec | erfüllt (spec.md Abschnitt 2) |
-| Regeln per ID referenziert | erfüllt (R1–R20) |
-| Keine [OFFEN]-Punkte, Annahmen sichtbar | erfüllt; Annahmen vom Product Owner am 19.10.2026 bestätigt; technische Annahmen in spec.md Abschnitt 11 |
+| Begriffe im Glossar | erfüllt (glossar.md v1.1: Referat, Gremium, Lesestufe, Feld, Kategorie, Ehrenamtsstatus, Rufname, Reichweite); „Pfad“ (AD, EA, GR) ist nur in spec.md Abschnitt 3 definiert |
+| Datenfelder im Datenmodell der Spec | erfüllt (spec.md v0.7 Abschnitt 2) |
+| Regeln per ID referenziert | erfüllt (R1–R42) |
+| Keine [OFFEN]-Punkte, Annahmen sichtbar | US-AD-01 bis US-AD-19 erfüllt; US-AD-20 bis US-AD-26: Annahmen v0.7 in spec.md Abschnitt 11, Freigabe durch den Product Owner offen |
 | „Nicht Teil dieser Story“ ausgefüllt | erfüllt |
