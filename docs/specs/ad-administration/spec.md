@@ -1,8 +1,8 @@
 # Spec: Administration (AD)
 
-Version: 0.8 · Status: Abschnitte bis v0.7.1 Ready · Nachtrag v0.8 (Anwesenheitserfassung) Entwurf, Annahmen in Abschnitt 11 · Stand: 22.10.2026 · Product Owner: Toni Werner
-Stories: docs/specs/ad-administration/02-stories.md (US-AD-01 bis US-AD-26); Nachtrag v0.8 ohne eigene Stories, Abnahme über die Übergabe-Anforderungen A1–A5, A8 und die Tasks T50–T58
-Grundlage: 00-steckbrief.md v1.1, 01-erhebung.md v0.7 (R1–R20), glossar.md v1.5, rollen.md v1.0, tech-stack.md v0.6, specs/ea-ehrenamt/stammdaten-qualifikationsarten.md v0.2, specs/ea-ehrenamt/00-steckbrief.md v0.6, specs/ea-ehrenamt/migration-aktivenliste.md v0.4, specs/gr-gruppen/uebergabe-nachtrag-administration.md v1.0, specs/ez-einsaetze/uebergabe-rechte-administration.md v1.2, specs/gr-gruppen/01-erhebung.md v0.7 (R20 `gr_group_roster`)
+Version: 0.9 · Status: Abschnitte bis v0.7.1 Ready · Nachtrag v0.8 (Anwesenheitserfassung) Entwurf · Nachtrag v0.9 (Planungshilfe Touren und Kurse) Entwurf, Annahmen in Abschnitt 11 · Stand: 22.10.2026 · Product Owner: Toni Werner
+Stories: docs/specs/ad-administration/02-stories.md (US-AD-01 bis US-AD-26); Nachträge v0.8 und v0.9 ohne eigene Stories, Abnahme über die Übergabe-Anforderungen und die Tasks T50–T58 (v0.8) bzw. T59–T67 (v0.9)
+Grundlage: 00-steckbrief.md v1.1, 01-erhebung.md v0.7 (R1–R20), glossar.md v1.5, rollen.md v1.0, tech-stack.md v0.6, specs/ea-ehrenamt/stammdaten-qualifikationsarten.md v0.2, specs/ea-ehrenamt/00-steckbrief.md v0.6, specs/ea-ehrenamt/migration-aktivenliste.md v0.4, specs/gr-gruppen/uebergabe-nachtrag-administration.md v1.0, specs/ez-einsaetze/uebergabe-rechte-administration.md v1.2, specs/gr-gruppen/01-erhebung.md v0.7 (R20 `gr_group_roster`), specs/tk-touren-kurse/uebergabe-administration.md v1.6, specs/tk-touren-kurse/spec.md v0.2
 Änderungen v0.3 (19.10.2026): Klärung der Widersprüche aus plan.md (W1–W14, A1–A5, P1); siehe Abschnitt 11.
 Änderungen v0.4 (19.10.2026): Adressänderung bei „eingeladen“ nimmt die Einladung zurück, Aufräumen in ad-invite bei Fehlern, Abnahme der Mail-Abläufe mit Plus-Adressen; siehe Abschnitt 11.
 Änderungen v0.5 (20.10.2026): Abnahme der Mail-Abläufe mit eigenen Adressen des Product Owners; R1 per Trigger mit zusätzlichen Domains nur in TEST (Tabelle ad_test_login_domains); siehe Abschnitt 11.
@@ -11,20 +11,21 @@ Grundlage: 00-steckbrief.md v1.1, 01-erhebung.md v0.7 (R1–R20), glossar.md v1.
 Änderungen v0.7 (21.10.2026, Nachtrag Personenmodell): aus EA – Rechtevorlage Referent:in mit Reichweite „Referat“, Referate und Gremien als Stammdaten, Lesestufe statt Kennzeichen „vertraulich“, Eigenschaftsart mit mehreren Feldern, Kategorie und Bezug, Rufname, Ehrenamtsstatus (Datenmodell und Funktionen), Dublettenwarnung modulübergreifend; aus GR (Übergabe v1.0) – gemeinsame Personen-Tabelle, Sichtbarkeit je Zugehörigkeit (Pfade AD, EA, GR), Startwert Admin „Gruppen lesen“, Anlegen von Personen durch GR, Bezug auf Gruppen. Neue Regeln R29–R42, Stories US-AD-20 bis US-AD-26, Tasks T33–T49. Ersetzt die noch nicht umgesetzten Teile von T2 (ea_property_types, ea_properties, ea_property_history) sowie T28 und T31.
 Änderungen v0.7.1 (21.10.2026, Freigabe Product Owner): Der Admin (AD ≥ lesen) sieht immer alle Personen aller Module mit allen Eigenschaften, damit Vollständigkeit herstellbar ist (ersetzt E2 der Übergabe aus GR für die Administration); Übernahme von Personen aus anderen Modulen durch Referent:innen und Bedeutung der Lesestufe „nur Geschäftsstelle und Admin“ bestätigt; Personenübersicht mit Filter „Zugehörigkeit“ und Paginierung.
 Änderungen v0.8 (22.10.2026, Nachtrag Anwesenheitserfassung, Übergabe uebergabe-rechte-administration.md v1.2): Modul Anwesenheitserfassung (EZ) in `ad_modules`; Startwerte EZ (Admin lesen, Geschäftsstelle verwalten, Referent:in bearbeiten mit Reichweite Referat, Vorstand ohne Rechte); Reichweite „Referat“ für EA und EZ (R30); Namensfunktionen für die Anwesenheitserfassung statt eines weiteren RLS-Pfads (`ez_person_visible` als Platzhalter, `ea_person_names`, `ea_search_active_persons`); Anlegen von Aktiven aus einem Arbeitseinsatz über `ea_create_volunteer` mit EZ-Rechten; Stammdaten Orte (`ad_locations`); Regeln R43–R45; Tasks T50–T58; Reichweite „Gruppe“ und Vorlage Gruppenleitung für Iteration 1 vorgemerkt.
+Änderungen v0.9 (22.10.2026, Nachtrag Planungshilfe Touren und Kurse, Übergabe specs/tk-touren-kurse/uebergabe-administration.md v1.6; auf Wunsch des Product Owners im Chat Planungshilfe Touren und Kurse eingearbeitet, weil der Chat der Administration in einem anderen Projekt liegt): Module Planungshilfe Touren und Kurse (TK) und Freigabe Touren und Kurse (TKF, ohne Seiten) in `ad_modules` mit Spalte `is_hidden`; Startwerte TK (Admin lesen, Geschäftsstelle verwalten, Referent:in bearbeiten mit Reichweite Referat, Vorstand ohne); neue Rechtevorlage „Freigabe Touren und Kurse“ (TKF bearbeiten, Reichweite Referat); Reichweite „Referat“ für EA, EZ, TK, TKF (R30); Stammdaten Sätze und Pauschalen `ad_rates` mit `ad_rates_at`, Pflege nur Admin (R46); Lesefunktion `ea_person_licenses` (R47); Namenssuche und Namen für TK (`tk_person_visible` als Platzhalter, R48); Seed-Ergänzung (Personen 13–18); Tasks T59–T67.
 
-**Hinweis zum Umsetzungsstand (Repository main @ 67f68d9, geprüft 21.10.2026):** Erledigt sind im Repository T001–T031 (Nummerierung von Spec Kit; US-AD-01, US-AD-02, US-AD-05). `ea_persons` existiert bereits (Migration `20261020000200_ea_persons.sql`, in TEST, nicht in PROD). Alle Änderungen an `ea_persons` und an bestehenden Policies erfolgen per **neuer** Migration. `ea_property_types`, `ea_properties` und `ea_property_history` existieren noch nicht und werden direkt in der Form dieser Spec angelegt. Branch `us-ad-10-rechtevorlagen` ist unfertig und pausiert. Der Nachtrag v0.7 ist freigegeben (21.10.2026); die Umsetzung kann mit T33 wieder aufgenommen werden. Der Nachtrag v0.8 setzt T33, T38, T39 und T40 voraus und wird vor der ersten Migration der Anwesenheitserfassung umgesetzt; Reihenfolge der Module: Gruppen → Anwesenheitserfassung → Finanzen (Product Owner, 22.10.2026).
+**Hinweis zum Umsetzungsstand (Repository main @ 67f68d9, geprüft 21.10.2026):** Erledigt sind im Repository T001–T031 (Nummerierung von Spec Kit; US-AD-01, US-AD-02, US-AD-05). `ea_persons` existiert bereits (Migration `20261020000200_ea_persons.sql`, in TEST, nicht in PROD). Alle Änderungen an `ea_persons` und an bestehenden Policies erfolgen per **neuer** Migration. `ea_property_types`, `ea_properties` und `ea_property_history` existieren noch nicht und werden direkt in der Form dieser Spec angelegt. Branch `us-ad-10-rechtevorlagen` ist unfertig und pausiert. Der Nachtrag v0.7 ist freigegeben (21.10.2026); die Umsetzung kann mit T33 wieder aufgenommen werden. Der Nachtrag v0.8 setzt T33, T38, T39 und T40 voraus und wird vor der ersten Migration der Anwesenheitserfassung umgesetzt; Reihenfolge der Module: Gruppen → Anwesenheitserfassung → Finanzen (Product Owner, 22.10.2026). Der Nachtrag v0.9 setzt T33–T40 und T52 voraus und wird vor der ersten Migration der Planungshilfe Touren und Kurse umgesetzt; `ea_person_licenses` setzt zusätzlich die System-Eigenschaftsart Lizenz der ersten EA-Migration voraus (R47).
 
 ## 1. Ziel und Scope
 
-**Ziel:** Login, Zugänge und Rechte für das Vereins OS; Grundstruktur des Personenmodells (Person, Eigenschaftsart, Eigenschaft) für alle Module mit einer gemeinsamen Personen-Tabelle; Stammdaten der Qualifikationsarten, Referate, Gremien und Orte. Erfolg: alle 4 Nutzer melden sich in PROD an; der Admin legt Personen an, lädt ein, weist Rechtevorlagen (auch mit Referaten) zu, ändert sie und sperrt Zugänge ohne Code-Änderung; je Rechtevorlage ein Testzugang in TEST; die 47 Qualifikationsarten liegen in TEST und PROD vor und sind ohne Code-Änderung pflegbar; jede Person ist nur in den Modulen lesbar, zu denen sie gehört.
+**Ziel:** Login, Zugänge und Rechte für das Vereins OS; Grundstruktur des Personenmodells (Person, Eigenschaftsart, Eigenschaft) für alle Module mit einer gemeinsamen Personen-Tabelle; Stammdaten der Qualifikationsarten, Referate, Gremien, Orte und Sätze. Erfolg: alle 4 Nutzer melden sich in PROD an; der Admin legt Personen an, lädt ein, weist Rechtevorlagen (auch mit Referaten) zu, ändert sie und sperrt Zugänge ohne Code-Änderung; je Rechtevorlage ein Testzugang in TEST; die 47 Qualifikationsarten liegen in TEST und PROD vor und sind ohne Code-Änderung pflegbar; jede Person ist nur in den Modulen lesbar, zu denen sie gehört.
 
-**Im Scope:** Login/Logout, Einladung und Passwort setzen, Passwort vergessen (Supabase Auth, SMTP über Google-Konto der Sektion); Startseite; Personenübersicht mit Zugangsstatus; Person anlegen mit Dublettenwarnung (modulübergreifend, minimale Trefferdaten); Zugang einladen, erneut einladen, sperren, entsperren; Rechtevorlagen anlegen, ändern, zuweisen, entziehen, mit Reichweite „alle“ oder „Referat“ (Referat nur für EA und EZ); Referate je Zuweisung; Eigenschaftsarten mit Zweck, Kategorie, Lesestufe, Bezug und 1–n Feldern anlegen und ändern; Eigenschaften pflegen inkl. Historie; Rufname; Notfall-Admin mit Protokoll und Hinweis; Protokoll (5 Jahre); Ersteinrichtung PROD; Seed für TEST; Qualifikationsarten anlegen, ändern, auf „historisch“ setzen; Startbestand Qualifikationsarten, Referate und Gremien per Migration; Datentyp „Qualifikationsart“ (Verweis) je Feld; Datenmodell und Datenbankfunktionen für den Ehrenamtsstatus; Sichtbarkeit von Personen und Eigenschaften je Pfad (AD, EA, GR) per RLS; **neu v0.8:** Modul Anwesenheitserfassung in `ad_modules` mit Startwerten der Rechtevorlagen; Namensfunktionen für die Anwesenheitserfassung (Namen zu Personen-IDs, Suche über Aktive); Anlegen von Aktiven aus der Anwesenheitserfassung; Stammdaten Orte mit Pflege durch den Admin.
+**Im Scope:** Login/Logout, Einladung und Passwort setzen, Passwort vergessen (Supabase Auth, SMTP über Google-Konto der Sektion); Startseite; Personenübersicht mit Zugangsstatus; Person anlegen mit Dublettenwarnung (modulübergreifend, minimale Trefferdaten); Zugang einladen, erneut einladen, sperren, entsperren; Rechtevorlagen anlegen, ändern, zuweisen, entziehen, mit Reichweite „alle“ oder „Referat“ (Referat nur für EA, EZ, TK und TKF); Referate je Zuweisung; Eigenschaftsarten mit Zweck, Kategorie, Lesestufe, Bezug und 1–n Feldern anlegen und ändern; Eigenschaften pflegen inkl. Historie; Rufname; Notfall-Admin mit Protokoll und Hinweis; Protokoll (5 Jahre); Ersteinrichtung PROD; Seed für TEST; Qualifikationsarten anlegen, ändern, auf „historisch“ setzen; Startbestand Qualifikationsarten, Referate und Gremien per Migration; Datentyp „Qualifikationsart“ (Verweis) je Feld; Datenmodell und Datenbankfunktionen für den Ehrenamtsstatus; Sichtbarkeit von Personen und Eigenschaften je Pfad (AD, EA, GR) per RLS; **v0.8:** Modul Anwesenheitserfassung in `ad_modules` mit Startwerten der Rechtevorlagen; Namensfunktionen für die Anwesenheitserfassung (Namen zu Personen-IDs, Suche über Aktive); Anlegen von Aktiven aus der Anwesenheitserfassung; Stammdaten Orte mit Pflege durch den Admin; **neu v0.9:** Module Planungshilfe Touren und Kurse und Freigabe Touren und Kurse mit Startwerten und Rechtevorlage „Freigabe Touren und Kurse“; Stammdaten Sätze und Pauschalen (Vergütungs- und Reisekostenordnung, Zahlungsgebühren, Emissionsfaktoren, Grenzwerte) mit Pflege durch den Admin; Lesefunktion Lizenzen gewählter Personen; Namensfunktionen für die Planungshilfe.
 
-**Nicht im Scope:** E-Mails aus Fachabläufen; automatische Einladung; sofortiges Beenden der Frontend-Sitzung beim Sperren; Befristung von Zuweisungen in der Oberfläche; Rechte je Objekt, Einzelrechte, Reichweiten „Gruppe“ (vorgemerkt für Iteration 1 der Anwesenheitserfassung, Abschnitt 11) und „nur eigene“; Reichweite „Referat“ für andere Module als EA und EZ; Startkonfiguration Vorstand; Löschfunktionen in AD (auch für Qualifikationsarten, Referate, Gremien, Orte); API-Key-Verwaltung (mit SC); Einstellungen; Personenakte; Excel-Import, Dublettenprüfliste, Zusammenführen; Oberflächen für Ehrenamtsstatus, Sicht je Referat, Gremium-Sichten, Filter, Ablaufdaten, Ablaufstatus, Stichtagsliste und Fortbildungen an Personen, Migration der Aktivenliste (alles EA); Tabellen und Oberflächen für Gruppen, Teilnahme, Erziehungsberechtigte, Notfallkontakte, Verträge (alles GR); Tabellen und Oberflächen für Einsätze und Anwesenheiten, Funktion `ez_person_visible` in endgültiger Form (alles EZ); Löschlauf für Personen nach 5 Jahren (nach MVP, alle Module); Abgleich der Qualifikationsarten mit dem Bundesverband; Login für Aktive und Gruppenleitungen; SSO.
+**Nicht im Scope:** E-Mails aus Fachabläufen; automatische Einladung; sofortiges Beenden der Frontend-Sitzung beim Sperren; Befristung von Zuweisungen in der Oberfläche; Rechte je Objekt, Einzelrechte, Reichweiten „Gruppe“ (vorgemerkt für Iteration 1 der Anwesenheitserfassung, Abschnitt 11) und „nur eigene“ (vorgemerkt für Iteration 2 der Planungshilfe); Reichweite „Referat“ für andere Module als EA, EZ, TK und TKF; Startkonfiguration Vorstand; Löschfunktionen in AD (auch für Qualifikationsarten, Referate, Gremien, Orte, Sätze); API-Key-Verwaltung (mit SC); Einstellungen; Personenakte; Excel-Import, Dublettenprüfliste, Zusammenführen; Oberflächen für Ehrenamtsstatus, Sicht je Referat, Gremium-Sichten, Filter, Ablaufdaten, Ablaufstatus, Stichtagsliste und Fortbildungen an Personen, Migration der Aktivenliste (alles EA); Tabellen und Oberflächen für Gruppen, Teilnahme, Erziehungsberechtigte, Notfallkontakte, Verträge (alles GR); Tabellen und Oberflächen für Einsätze und Anwesenheiten, Funktion `ez_person_visible` in endgültiger Form (alles EZ); Tabellen und Oberflächen für Planungen, Funktion `tk_person_visible` in endgültiger Form (alles TK); Pflege der Sätze durch Geschäftsstelle oder Referent:innen (später möglich); Löschlauf für Personen nach 5 Jahren (nach MVP, alle Module); Abgleich der Qualifikationsarten mit dem Bundesverband; Login für Aktive und Gruppenleitungen; SSO.
 
 ## 2. Datenmodell
 
-Konventionen nach tech-stack.md: Schema `public`, snake_case, Präfix nach Modulkürzel, RLS auf jeder Tabelle. Die Tabellen des Personenmodells und die Stammdaten Referate und Gremien tragen das Präfix `ea_` (wie in tech-stack.md benannt), werden aber mit AD angelegt. Die Stammdaten der Qualifikationsarten und der Orte tragen das Präfix `ad_`, weil AD sie führt. Audit-Spalten `*_by` verweisen auf `auth.users(id)` und werden per Default `auth.uid()` bzw. Trigger gesetzt, nie vom Frontend.
+Konventionen nach tech-stack.md: Schema `public`, snake_case, Präfix nach Modulkürzel, RLS auf jeder Tabelle. Die Tabellen des Personenmodells und die Stammdaten Referate und Gremien tragen das Präfix `ea_` (wie in tech-stack.md benannt), werden aber mit AD angelegt. Die Stammdaten der Qualifikationsarten, der Orte und der Sätze tragen das Präfix `ad_`, weil AD sie führt. Audit-Spalten `*_by` verweisen auf `auth.users(id)` und werden per Default `auth.uid()` bzw. Trigger gesetzt, nie vom Frontend.
 
 Erweiterungen: `citext`, `pg_trgm`, `pg_cron`.
 
@@ -42,16 +43,19 @@ Typen:
 - `ad_qualification_kind` (Enum): `license` (Lizenz), `add_on` (Zusatzqualifikation), `course` (Lehrgang), `training` (Weiterbildung). UI-Bezeichnung des Felds: „Typ“.
 - `ad_license_level` (Enum): `pre` (Vorstufe), `C`, `B`, `A`, `none` (ohne Stufe).
 - `ad_qualification_status` (Enum): `current` (aktuell), `historic` (historisch).
+- `ad_rate_group` (Enum, neu v0.9): `remuneration` (Vergütung), `travel` (Reisekosten), `fee` (Beitrag und Rundung), `payment_fee` (Zahlungsgebühr), `climate` (Klima und Emissionsfaktor), `threshold` (Grenzwert).
 
 ### ad_modules
 | Spalte | Typ | Pflicht | Default | Beschreibung |
 |---|---|---|---|---|
-| code | text | ja | – | PK: AD, SC, EA, GR, EZ, FI, OA, PM, GS, AM |
-| name | text | ja | – | Anzeigename, z. B. „Administration“, „Anwesenheitserfassung“ |
+| code | text | ja | – | PK: AD, SC, EA, GR, EZ, TK, TKF, FI, OA, PM, GS, AM |
+| name | text | ja | – | Anzeigename, z. B. „Administration“, „Anwesenheitserfassung“, „Planungshilfe Touren und Kurse“ |
 | sort_order | int | ja | – | Reihenfolge auf der Startseite |
 | is_available | boolean | ja | false | Modul umgesetzt; nur dann auf der Startseite. Im MVP nur AD = true |
+| is_hidden | boolean | ja | false | **neu v0.9:** Modul ohne eigene Seiten (nur Recht); erscheint nie auf der Startseite und nicht in `ad_my_modules`, aber in der Vorlagen-Matrix |
 
-Stammdaten per Migration. **Neu v0.8:** Zeile `EZ` / „Anwesenheitserfassung“ / `is_available = false` per Migration der Administration (T50), nicht erst mit der ersten Migration der Anwesenheitserfassung, damit Startwerte und Reichweite vorher gesetzt und getestet werden können. `sort_order` direkt nach GR [ANNAHME]. `is_available` setzt die Anwesenheitserfassung mit ihrer Freigabe.
+Stammdaten per Migration. **v0.8:** Zeile `EZ` / „Anwesenheitserfassung“ / `is_available = false` per Migration der Administration (T50), nicht erst mit der ersten Migration der Anwesenheitserfassung, damit Startwerte und Reichweite vorher gesetzt und getestet werden können. `sort_order` direkt nach GR [ANNAHME]. `is_available` setzt die Anwesenheitserfassung mit ihrer Freigabe.
+**Neu v0.9 (T59):** Zeilen `TK` / „Planungshilfe Touren und Kurse“ / `is_available = false` / `is_hidden = false` (sort_order nach EZ) und `TKF` / „Freigabe Touren und Kurse“ / `is_available = false` / `is_hidden = true` (sort_order direkt nach TK). `is_available` für beide setzt die Planungshilfe mit ihrer Freigabe. TKF bildet das Freigaberecht im bestehenden Modell ab (Stufe „bearbeiten“ = darf freigeben), ohne eine neue Aktion einzuführen (Entscheidung Product Owner 22.10.2026: Freigabe delegierbar, vergeben durch den Admin; Umsetzung über TKF [ANNAHME]).
 
 ### ea_persons (bestehend; Änderungen v0.7 per neuer Migration)
 | Spalte | Typ | Pflicht | Default | Beschreibung |
@@ -61,7 +65,7 @@ Stammdaten per Migration. **Neu v0.8:** Zeile `EZ` / „Anwesenheitserfassung“
 | last_name | text | ja | – | Nachname; getrimmt, nicht leer (R4) |
 | preferred_name | text | nein | null | **neu** Rufname; getrimmt; leer → null. Anzeige „Rufname Nachname“, sonst „Vorname Nachname“; Suche über Vor-, Ruf- und Nachname |
 | kind | ea_person_kind | ja | human | Funktionsperson nur durch AD (R15) |
-| created_in | text | ja | 'AD' | **neu** Modul der Anlage: `AD`, `EA`, `GR`, `EZ` (neu v0.8), `script` (Check); nicht änderbar. Bestand bei der Migration: `AD` |
+| created_in | text | ja | 'AD' | **neu** Modul der Anlage: `AD`, `EA`, `GR`, `EZ` (neu v0.8), `script` (Check); nicht änderbar. Bestand bei der Migration: `AD`. Die Planungshilfe legt keine Personen an (v0.9) |
 | volunteer_status | ea_volunteer_status | nein | null | **neu** aktueller Ehrenamtsstatus; null = kein Ehrenamtsstatus (Person gehört nicht zum Ehrenamtsmanagement). Nur über `ea_set_volunteer_status`, `ea_create_volunteer`, `ea_activate_person` oder ohne Nutzerkontext (Migrationsskript) änderbar (Trigger) |
 | volunteer_status_since | date | nein | null | **neu** gültig ab; Check: beide null oder beide gesetzt |
 | created_at | timestamptz | ja | now() | |
@@ -108,6 +112,25 @@ Aufbau wie `ea_referate`. Startbestand per Migration: Vorstand, Beirat, Ehrenrat
 
 Keine Personendaten. Kein Delete (keine Policy, kein Grant). Startbestand: [OFFEN] liefert der Product Owner; dann per Migration in TEST und PROD (`insert … on conflict do nothing` über lower(name)). Bis dahin in TEST nur Testorte aus dem Seed (Abschnitt 9). Die Anwesenheitserfassung verweist mit Fremdschlüssel auf `ad_locations(id)` (on delete restrict). Änderungen werden nicht protokolliert (nur updated_at/by).
 
+### ad_rates (Sätze und Pauschalen, neu v0.9)
+| Spalte | Typ | Pflicht | Default | Beschreibung |
+|---|---|---|---|---|
+| id | uuid | ja | gen_random_uuid() | PK |
+| rate_key | text | ja | – | technischer Schlüssel (`^[a-zA-Z][a-zA-Z0-9_]{1,39}$`), z. B. `rOrg`, `fee_paypal`, `ef_rail_long`; Liste spec.md TK Abschnitt 7 |
+| label | text | ja | – | Bezeichnung, z. B. „Organisationspauschale je Tag“ |
+| rate_group | ad_rate_group | ja | – | Gruppe für die Anzeige |
+| unit | text | ja | – | Einheit, z. B. „€“, „€/km“, „%“, „g je Personen-km“, „km“ |
+| value | numeric(12,4) | nein | null | Wert; Pflicht außer bei `payment_fee` (Check); ≥ 0 |
+| percent | numeric(6,3) | nein | null | nur `payment_fee`: Prozentsatz (Check); ≥ 0 |
+| fixed | numeric(10,2) | nein | null | nur `payment_fee`: fester Betrag je Zahlung; ≥ 0 |
+| active | boolean | ja | true | nur bei `payment_fee` fachlich genutzt (Zahlmethode in Yolawo aktiv) |
+| valid_from | date | ja | – | gültig ab |
+| source | text | ja | – | Quelle, z. B. „Vergütungsordnung 2025, Anhang 1“ |
+| note | text | nein | null | Hinweis |
+| created_at / created_by, updated_at / updated_by | | | | Audit |
+
+Unique `(rate_key, valid_from)` (R46). Je Schlüssel mehrere Zeilen mit unterschiedlichem `valid_from` (Historie). Kein Delete (keine Policy, kein Grant); eine falsche Zeile wird korrigiert, nicht gelöscht. Startbestand per Migration in TEST und PROD (T61): alle Schlüssel aus spec.md TK Abschnitt 7 mit den Werten aus specs/tk-touren-kurse/prototyp-tourenkonzept.md 5.1–5.4, `valid_from = 2026-01-01` [OFFEN: echte Gültig-ab-Daten], `insert … on conflict (rate_key, valid_from) do nothing`. Keine Stornoregel (Entscheidung Product Owner 22.10.2026). Finanzen nutzt dieselben Sätze der Vergütungsordnung (keine eigene Tabelle). Änderungen werden nicht protokolliert (nur updated_at/by) [ANNAHME].
+
 ### ea_property_types (v0.7 neu gefasst; noch nicht umgesetzt)
 | Spalte | Typ | Pflicht | Default | Beschreibung |
 |---|---|---|---|---|
@@ -119,7 +142,7 @@ Keine Personendaten. Kein Delete (keine Policy, kein Grant). Startbestand: [OFFE
 | relation_kind | ea_relation_kind | ja | 'none' | Bezug; nicht änderbar, sobald Eigenschaften existieren (Trigger) |
 | relation_required | boolean | ja | false | Bezug Pflicht; nur bei relation_kind ≠ none (Check) |
 | allow_multiple | boolean | ja | true | mehrere gleichzeitig gültige Eigenschaften dieser Art je Person erlaubt (R37) |
-| system_key | text | nein | null | unique; Kennung für Eigenschaftsarten, auf die Code verweist (z. B. `birth_date`, neu v0.8 genutzt: `function`, `contact` [ANNAHME: Schlüssel legt die erste EA-Migration fest]); nur per Migration bzw. ohne Nutzerkontext setzbar |
+| system_key | text | nein | null | unique; Kennung für Eigenschaftsarten, auf die Code verweist (z. B. `birth_date`, v0.8 genutzt: `function`, `contact`, neu v0.9 genutzt: `license` [ANNAHME: Schlüssel legt die erste EA-Migration fest]); nur per Migration bzw. ohne Nutzerkontext setzbar |
 | visible_in | text[] | ja | – | ≥ 1 Modulcode aus ad_modules; nur Anzeige |
 | origin | text | ja | 'custom' | 'system' oder 'custom' |
 | created_at / created_by | timestamptz / uuid | ja / nein | now() / auth.uid() | |
@@ -186,7 +209,7 @@ Trigger `ea_properties_history` (after update): schreibt die alte Fassung. Keine
 | level | ad_license_level | nein | null | Lizenzstufe; Pflicht bei `license`, sonst null (Check, R23) |
 | specification | text | nein | null | Spezifikation (Fachrichtung) |
 | issuer | text | ja | 'Bundesverband' | Aussteller; Startwerte: Bundesverband, Bundesverband (JDAV); weitere möglich (z. B. Landessportbund) |
-| dosb_eligible | boolean | nein | null | DOSB-lizenzfähig; null = nicht bekannt |
+| dosb_eligible | boolean | nein | null | DOSB-lizenzfähig; null = nicht bekannt. v0.9: Grundlage für „förderfähig“ in `ea_person_licenses` [ANNAHME, glossar.md „Lizenz“] |
 | validity_years | smallint | nein | null | Gültigkeitsdauer in Jahren (bei DAV-Lizenzen = Fortbildungsintervall); Pflicht bei `license`, 1–10; bei `add_on` und `course` null (Check, R24) |
 | status | ad_qualification_status | ja | 'current' | R25 |
 | note | text | nein | null | Hinweis |
@@ -207,7 +230,7 @@ Verweise aus Eigenschaften liegen v0.7 in `ea_properties.field_values` (ohne Fre
 | description | text | nein | – | |
 | created_at / created_by, updated_at / updated_by | | | | |
 
-Startwerte per Migration: „Admin“, „Geschäftsstelle“, „Vorstand“ (US-AD-01 AK1); neu v0.7: „Referent:in“ (US-AD-20).
+Startwerte per Migration: „Admin“, „Geschäftsstelle“, „Vorstand“ (US-AD-01 AK1); v0.7: „Referent:in“ (US-AD-20); **neu v0.9:** „Freigabe Touren und Kurse“ (Beschreibung „Darf Touren und Kurse des zugewiesenen Referats freigeben, bearbeiten und Rückfragen stellen.“).
 
 ### ad_template_rights
 | Spalte | Typ | Pflicht | Default | Beschreibung |
@@ -216,11 +239,11 @@ Startwerte per Migration: „Admin“, „Geschäftsstelle“, „Vorstand“ (U
 | template_id | uuid | ja | – | FK ad_templates(id) on delete cascade |
 | module_code | text | ja | – | FK ad_modules(code) |
 | object | text | nein | null | für Rechte je Objekt nach MVP; im MVP Check `object is null` |
-| scope | ad_scope | ja | 'all' | Reichweite; v0.8: Check `scope = 'all' or (scope = 'referat' and module_code in ('EA','EZ'))` (R30) |
-| level | ad_level | ja | 'none' | Stufe |
+| scope | ad_scope | ja | 'all' | Reichweite; v0.9: Check `scope = 'all' or (scope = 'referat' and module_code in ('EA','EZ','TK','TKF'))` (R30) |
+| level | ad_level | ja | 'none' | Stufe; bei TKF nur `none` oder `edit` (Check, neu v0.9) |
 
-Unique: `(template_id, module_code, coalesce(object, ''))`. Je Vorlage wird für jedes Modul eine Zeile geführt; die Migration T50 ergänzt für jede vorhandene Vorlage (auch vom Admin selbst angelegte) eine Zeile EZ mit `none`, außer den Startwerten.
-Startwerte: Admin = AD, SC, EA `manage`, **GR `read` (neu v0.7, E5)**, **EZ `read` (neu v0.8, A1)**, übrige `none`; Geschäftsstelle = EA, GR, **EZ (neu v0.8)**, FI, OA, PM, GS, AM `manage`, AD/SC `none`; Vorstand = alle `none` (Ziel laut Product Owner: EZ lesen, vom Admin zu setzen); **Referent:in (neu v0.7) = EA `edit` mit scope `referat`, EZ `edit` mit scope `referat` (neu v0.8), übrige `none`**. Alle Startwerte mit scope `all`, außer Referent:in EA und EZ. Die Startwerte für EZ setzt die Migration nur, wenn die Zeile noch nicht existiert bzw. noch `none` ist (keine Überschreibung von Änderungen des Admins).
+Unique: `(template_id, module_code, coalesce(object, ''))`. Je Vorlage wird für jedes Modul eine Zeile geführt; die Migration T50 ergänzt für jede vorhandene Vorlage (auch vom Admin selbst angelegte) eine Zeile EZ mit `none`, außer den Startwerten; **T59 ebenso für TK und TKF.**
+Startwerte: Admin = AD, SC, EA `manage`, **GR `read` (v0.7, E5)**, **EZ `read` (v0.8, A1)**, **TK `read` (neu v0.9)**, TKF `none`, übrige `none`; Geschäftsstelle = EA, GR, **EZ (v0.8)**, **TK (neu v0.9)**, FI, OA, PM, GS, AM `manage`, AD/SC/TKF `none`; Vorstand = alle `none` (Ziel laut Product Owner: EZ lesen, vom Admin zu setzen); **Referent:in (v0.7) = EA `edit` mit scope `referat`, EZ `edit` mit scope `referat` (v0.8), TK `edit` mit scope `referat` (neu v0.9), übrige `none`**; **Freigabe Touren und Kurse (neu v0.9) = TKF `edit` mit scope `referat`, übrige `none`**. Alle Startwerte mit scope `all`, außer Referent:in EA, EZ, TK und Freigabe TKF. Die Startwerte für EZ, TK und TKF setzt die Migration nur, wenn die Zeile noch nicht existiert bzw. noch `none` ist (keine Überschreibung von Änderungen des Admins).
 
 ### ad_template_assignments
 | Spalte | Typ | Pflicht | Default | Beschreibung |
@@ -240,7 +263,7 @@ Unique (partiell): `(person_id, template_id) where revoked_at is null`. Wirksam 
 | assignment_id | uuid | ja | – | FK ad_template_assignments(id) on delete cascade |
 | referat_id | uuid | ja | – | FK ea_referate(id) |
 
-PK `(assignment_id, referat_id)`. Referate einer Zuweisung, deren Vorlage mindestens ein Recht mit scope `referat` hat (R31). Die Referate gelten für alle Module der Vorlage mit scope `referat` gemeinsam (v0.8: EA und EZ; A2 der Übergabe aus EZ). Schreiben nur über `ad_assign_template` und `ad_set_assignment_referate`. Lesen: AD ≥ read; der Nutzer selbst über `ad_my_referate`.
+PK `(assignment_id, referat_id)`. Referate einer Zuweisung, deren Vorlage mindestens ein Recht mit scope `referat` hat (R31). Die Referate gelten für alle Module der Vorlage mit scope `referat` gemeinsam (v0.8: EA und EZ; v0.9: zusätzlich TK; A2 der Übergabe aus EZ). Die Vorlage „Freigabe Touren und Kurse“ hat eigene Zuweisungen mit eigenen Referaten. Schreiben nur über `ad_assign_template` und `ad_set_assignment_referate`. Lesen: AD ≥ read; der Nutzer selbst über `ad_my_referate`.
 
 ### ad_accesses (Zugänge)
 | Spalte | Typ | Pflicht | Default | Beschreibung |
@@ -275,7 +298,7 @@ In PROD immer leer. Befüllt nur der Product Owner in TEST per SQL-Editor im Sup
 | action | ad_audit_action | ja | – | |
 | details | text | nein | – | z. B. Name der Vorlage; bei `template_assigned` und `referate_changed` zusätzlich die Referate |
 
-Index: `(occurred_at desc)`, `(action, occurred_at desc)`. Einträge nur über Security-Definer-Funktionen und Trigger; kein Insert/Update/Delete für Nutzer (US-AD-14 AK4). Änderungen an Qualifikationsarten, Referaten, Gremien und Orten werden nicht protokolliert (nur updated_at/by). Wechsel des Ehrenamtsstatus stehen in `ea_volunteer_status_history`, nicht im Protokoll.
+Index: `(occurred_at desc)`, `(action, occurred_at desc)`. Einträge nur über Security-Definer-Funktionen und Trigger; kein Insert/Update/Delete für Nutzer (US-AD-14 AK4). Änderungen an Qualifikationsarten, Referaten, Gremien, Orten und Sätzen werden nicht protokolliert (nur updated_at/by). Wechsel des Ehrenamtsstatus stehen in `ea_volunteer_status_history`, nicht im Protokoll. Vergabe und Entzug der Vorlage „Freigabe Touren und Kurse“ werden wie jede Vorlage protokolliert (v0.9).
 
 ### ad_notice_acks
 | Spalte | Typ | Pflicht | Default | Beschreibung |
@@ -285,21 +308,24 @@ Index: `(occurred_at desc)`, `(action, occurred_at desc)`. Einträge nur über S
 
 ### Views (security_invoker = true)
 - `ad_v_person_overview`: Person (inkl. Rufname), Art, Login-Adresse, Zugangsstatus (`coalesce(status,'none')`), Ehrenamtsstatus, Gruppenbezug ja/nein (ab erster GR-Migration über `gr_person_visible`-Logik; bis dahin `created_in = 'GR'`) [ANNAHME], Liste der wirksamen Vorlagen mit Referaten. Für US-AD-06. Zeigt durch RLS nur Personen, die der Nutzer lesen darf (R32; Admin: alle).
-- `ea_v_persons`: nur `kind = 'human'`. Alle Fachmodule lesen Personen über diese View (R15). Welche Zeilen ein Nutzer sieht, entscheidet die RLS auf ea_persons (R32). Ausnahme v0.8: Die Anwesenheitserfassung liest Namen über `ea_person_names` und `ea_search_active_persons` (R44), nicht über die View.
+- `ea_v_persons`: nur `kind = 'human'`. Alle Fachmodule lesen Personen über diese View (R15). Welche Zeilen ein Nutzer sieht, entscheidet die RLS auf ea_persons (R32). Ausnahme v0.8/v0.9: Anwesenheitserfassung und Planungshilfe lesen Namen über `ea_person_names` und `ea_search_active_persons` (R44, R48), nicht über die View.
 
 ### Funktionen
 Rechte und Stammdaten:
 - `ad_user_level(p_module text) returns ad_level` – security definer, stable: höchste Stufe aller wirksamen Zuweisungen des aufrufenden Nutzers für das Modul **mit Reichweite `all`**; `none`, wenn kein Zugang mit Status `active` besteht (R5, R6). Rechte mit Reichweite `referat` zählen hier nicht (R30).
 - `ad_has_level(p_module text, p_min ad_level) returns boolean` – Hilfsfunktion für RLS; Reichweite `all`.
-- `ad_my_referate(p_module text, p_min ad_level) returns uuid[]` – **neu**, security definer, stable: Referate aus allen wirksamen Zuweisungen des aufrufenden Nutzers, deren Vorlage für das Modul ein Recht mit scope `referat` und Stufe ≥ p_min hat; leer ohne aktiven Zugang. Gilt ab v0.8 auch für `p_module = 'EZ'` (genutzt von der Anwesenheitserfassung und von `gr_group_roster`, R20 der Erhebung Gruppen).
+- `ad_my_referate(p_module text, p_min ad_level) returns uuid[]` – **neu**, security definer, stable: Referate aus allen wirksamen Zuweisungen des aufrufenden Nutzers, deren Vorlage für das Modul ein Recht mit scope `referat` und Stufe ≥ p_min hat; leer ohne aktiven Zugang. Gilt ab v0.8 auch für `p_module = 'EZ'` (genutzt von der Anwesenheitserfassung und von `gr_group_roster`, R20 der Erhebung Gruppen), ab v0.9 für `TK` und `TKF` (Planungshilfe; Freigaberecht = `ad_my_referate('TKF','edit')`).
 - `ad_has_any_level(p_module text, p_min ad_level) returns boolean` – **neu**: `ad_has_level(...)` oder `cardinality(ad_my_referate(...)) > 0`; für Navigation und Routenschutz.
 - `ad_has_active_access() returns boolean` – security definer, stable: wahr, wenn der aufrufende Nutzer einen Zugang mit Status `active` hat; für das Lesen der Qualifikationsarten, Referate, Gremien und Orte.
 - `ad_can_edit_qualification_types() returns boolean` – `ad_has_level('AD','edit') or ad_has_level('EA','manage')`; für RLS und Oberfläche.
 - `ad_can_edit_locations() returns boolean` – **neu v0.8**: `ad_has_level('AD','edit')` [OFFEN: zusätzlich Geschäftsstelle über `ad_has_level('EZ','manage')`]; für RLS und Oberfläche.
+- `ad_can_edit_rates() returns boolean` – **neu v0.9**: `ad_has_level('AD','edit')` (nur Admin, Product Owner 22.10.2026); zentrale Stelle, damit Geschäftsstelle oder Referent:innen später ohne Umbau ergänzt werden können; für RLS und Oberfläche.
+- `ad_can_read_rates() returns boolean` – **neu v0.9**: `ad_has_level('AD','read') or ad_has_any_level('TK','read') or ad_has_any_level('TKF','edit') or ad_has_level('FI','read')`.
+- `ad_rates_at(p_date date) returns setof (rate_key text, label text, rate_group ad_rate_group, unit text, value numeric, percent numeric, fixed numeric, active boolean, valid_from date, source text)` – **neu v0.9**, security definer, stable: je `rate_key` die Zeile mit dem spätesten `valid_from <= p_date`; Schlüssel ohne gültige Zeile fehlen (die Planungshilfe meldet sie, R3 der Spec TK). Erlaubt mit `ad_can_read_rates()`, sonst `AD_FORBIDDEN`.
 - `ad_qualification_usage(p_id uuid) returns int` – security definer, stable: Anzahl verschiedener Personen mit einer Eigenschaft, deren `field_values` auf die Qualifikationsart verweist (auch über vertrauliche Eigenschaftsarten, nur die Zahl, keine Namen); erlaubt, wenn `ad_can_edit_qualification_types()`.
-- `ad_my_modules() returns setof (code, name, level)` – für Startseite und Navigation; nur Module mit `is_available` und `ad_has_any_level(code,'read')`; level = höchste Stufe über beide Reichweiten.
+- `ad_my_modules() returns setof (code, name, level)` – für Startseite und Navigation; nur Module mit `is_available`, **nicht `is_hidden` (v0.9)**, und `ad_has_any_level(code,'read')`; level = höchste Stufe über beide Reichweiten. Für TK gilt zusätzlich: wer nur TKF hat, sieht die Kachel TK (`ad_has_any_level('TKF','edit')`) [ANNAHME].
 - `ad_me() returns (person_id uuid, first_name text, last_name text, preferred_name text, access_status ad_access_status)` – security definer, stable: nur die eigene Person und der eigene Zugang des aufrufenden Nutzers; für Kopfzeile und Startseite (alle angemeldeten Nutzer). v0.7 um Rufname ergänzt.
-- `ad_assign_template(p_person uuid, p_template uuid, p_referate uuid[] default null)` – prüft AD ≥ edit; hat die Vorlage ein Recht mit scope `referat` (in EA oder EZ), ist p_referate mit ≥ 1 aktivem Referat Pflicht (R31), sonst muss es null oder leer sein; schreibt Zuweisung, ad_assignment_referate und Protokoll `template_assigned` (Details: Vorlage, Referate).
+- `ad_assign_template(p_person uuid, p_template uuid, p_referate uuid[] default null)` – prüft AD ≥ edit; hat die Vorlage ein Recht mit scope `referat` (in EA, EZ, TK oder TKF), ist p_referate mit ≥ 1 aktivem Referat Pflicht (R31), sonst muss es null oder leer sein; schreibt Zuweisung, ad_assignment_referate und Protokoll `template_assigned` (Details: Vorlage, Referate).
 - `ad_set_assignment_referate(p_assignment uuid, p_referate uuid[])` – **neu**, prüft AD ≥ edit und R31; ersetzt die Referate; Protokoll `referate_changed` (Details: vorher → nachher).
 - `ad_revoke_template(p_person uuid, p_template uuid)` – prüft AD ≥ edit, schreibt Entzug und Protokoll.
 - `ad_acknowledge_emergency()` – prüft AD ≥ read; setzt ad_notice_acks.
@@ -315,19 +341,23 @@ Sichtbarkeit (neu v0.7, R32; alle security definer, stable, fester `search_path`
   (`ad_has_level('EA', p_min)` und (`volunteer_status <> 'left'` oder `ad_has_level('EA','manage')`))
   oder (`volunteer_status <> 'left'` und `ea_person_in_referate(p_person, ad_my_referate('EA', p_min))`)).
 - `gr_person_visible(p_person uuid, p_min ad_level default 'read') returns boolean` – Platzhalter, liefert `false`; die erste GR-Migration ersetzt die Funktion (`create or replace`) mit derselben Signatur (Gruppenbezug: Teilnahme, Erziehungsberechtigung, Notfallkontakt oder Eigenschaft mit Bezug auf eine Gruppe) [ANNAHME].
-- `ea_person_visible(p_person uuid) returns boolean` – Oder-Verknüpfung der drei Pfade AD, EA, GR; Grundlage der Policies. **v0.8: Die Anwesenheitserfassung ist bewusst kein vierter Pfad**, weil sie nur Namen sehen darf (A3); ein RLS-Pfad auf `ea_persons` würde zusätzlich Ehrenamtsstatus und Anlagemodul freigeben.
+- `ea_person_visible(p_person uuid) returns boolean` – Oder-Verknüpfung der drei Pfade AD, EA, GR; Grundlage der Policies. **v0.8: Die Anwesenheitserfassung ist bewusst kein vierter Pfad**, weil sie nur Namen sehen darf (A3); ein RLS-Pfad auf `ea_persons` würde zusätzlich Ehrenamtsstatus und Anlagemodul freigeben. **v0.9: ebenso die Planungshilfe** (Namen und Lizenzen nur über Funktionen, R47, R48).
 - `ea_property_readable(p_property_type uuid, p_person uuid) returns boolean` – nach R29: `confidential` → nur Pfad AD; `office` → Pfad AD oder (Pfad EA und `ad_has_level('EA','manage')`) oder (Pfad GR und `ad_has_level('GR','manage')`); `all` → irgendein Pfad.
 - `ea_property_writable(p_property_type uuid, p_person uuid, p_referat uuid) returns boolean` – nach R42: lesbar und (AD ≥ edit im Pfad AD oder EA ≥ edit im Pfad EA – bei Reichweite Referat zusätzlich Bezug-Referat ∈ `ad_my_referate('EA','edit')` (R41) – oder GR ≥ edit im Pfad GR); `confidential` nur AD ≥ edit; `relation_kind = 'group'` nur GR ≥ edit (R39). Wird von den Policies für alte und neue Fassung aufgerufen.
 
-Namen für die Anwesenheitserfassung (neu v0.8, A3, R44; security definer, stable, fester `search_path`):
+Namen für Anwesenheitserfassung und Planungshilfe (v0.8 A3, R44; v0.9 R48; security definer, stable, fester `search_path`):
 - `ez_person_visible(p_person uuid) returns boolean` – Platzhalter, liefert `false`; die erste Migration der Anwesenheitserfassung ersetzt die Funktion (`create or replace`) mit derselben Signatur: Person steht auf der Anwesenheitsliste eines für den Nutzer lesbaren Einsatzes, oder ist am heutigen Tag Teilnehmer:in, Gruppenleitung, Trainer:in oder Helfer:in einer Gruppe eines Referats aus `ad_my_referate('EZ','read')` (bzw. jeder Gruppe bei `ad_has_level('EZ','read')`), oder ist Aktive:r (Ehrenamtsstatus „aktiv“ oder „ruhend“) mit heute gültiger Eigenschaft mit Bezug auf ein solches Referat [ANNAHME: Ausgestaltung im Modul Anwesenheitserfassung].
-- `ea_person_names(p_ids uuid[]) returns setof (id uuid, first_name text, preferred_name text, last_name text)` – liefert nur Menschen (`kind = 'human'`), für die `ea_person_visible(id) or ez_person_visible(id)` wahr ist; andere IDs werden ohne Fehler ausgelassen. Höchstens 500 IDs je Aufruf, sonst Fehler `AD_TOO_MANY_IDS` [ANNAHME]. Keine weiteren Spalten.
-- `ea_search_active_persons(p_query text, p_limit int default 20) returns setof (id uuid, first_name text, preferred_name text, last_name text)` – erlaubt mit `ad_has_any_level('EZ','edit')`, sonst Fehler `AD_FORBIDDEN`; sucht in Menschen mit `volunteer_status = 'active'` über Vor-, Ruf- und Nachname (Teilwort, ohne Groß-/Kleinschreibung, `pg_trgm`); p_query getrimmt mindestens 2 Zeichen, sonst `AD_SEARCH_TOO_SHORT`; p_limit 1–50; Sortierung Nachname, Rufname bzw. Vorname. Für die Auswahl der organisierenden Person und für Vertretungen über Referatsgrenzen hinweg (Product Owner, 22.10.2026). Liefert keine Referate, Funktionen oder sonstigen Eigenschaften.
+- `tk_person_visible(p_person uuid) returns boolean` – **neu v0.9**, Platzhalter, liefert `false`; die erste Migration der Planungshilfe ersetzt die Funktion mit derselben Signatur (Person ist Leitung oder Helfer:in in einer für den Nutzer lesbaren Planung; spec.md TK T2).
+- `ea_person_names(p_ids uuid[]) returns setof (id uuid, first_name text, preferred_name text, last_name text)` – liefert nur Menschen (`kind = 'human'`), für die `ea_person_visible(id) or ez_person_visible(id) or tk_person_visible(id)` (v0.9) wahr ist; andere IDs werden ohne Fehler ausgelassen. Höchstens 500 IDs je Aufruf, sonst Fehler `AD_TOO_MANY_IDS` [ANNAHME]. Keine weiteren Spalten.
+- `ea_search_active_persons(p_query text, p_limit int default 20) returns setof (id uuid, first_name text, preferred_name text, last_name text)` – erlaubt mit `ad_has_any_level('EZ','edit')` **oder (v0.9) `ad_has_any_level('TK','edit')` oder `ad_has_any_level('TKF','edit')`**, sonst Fehler `AD_FORBIDDEN`; sucht in Menschen mit `volunteer_status = 'active'` über Vor-, Ruf- und Nachname (Teilwort, ohne Groß-/Kleinschreibung, `pg_trgm`); p_query getrimmt mindestens 2 Zeichen, sonst `AD_SEARCH_TOO_SHORT`; p_limit 1–50; Sortierung Nachname, Rufname bzw. Vorname. Für die Auswahl der organisierenden Person und für Vertretungen über Referatsgrenzen hinweg (Product Owner, 22.10.2026) sowie für die Leitung von Touren und Kursen (v0.9). Liefert keine Referate, Funktionen oder sonstigen Eigenschaften.
+
+Lizenzen für die Planungshilfe (neu v0.9, R47; security definer, stable, fester `search_path`):
+- `ea_person_licenses(p_person_ids uuid[], p_date date) returns setof (person_id uuid, qualification_type_id uuid, qualification_code text, qualification_name text, valid_until date, is_fundable boolean, valid_on_date boolean)` – erlaubt mit `ad_has_any_level('TK','read')` oder `ad_has_any_level('TKF','edit')`, sonst `AD_FORBIDDEN`; höchstens 50 IDs (`AD_TOO_MANY_IDS`); nur Menschen mit Ehrenamtsstatus „aktiv“ oder „ruhend“; liefert je Person alle heute oder am p_date gültigen Eigenschaften der Art mit `system_key = 'license'` [ANNAHME], deren Feld vom Typ Qualifikationsart auf eine Qualifikationsart mit `kind = 'license'` verweist: Kürzel und Bezeichnung der Qualifikationsart, `valid_until` aus dem Feld „gültig bis“ der Eigenschaft (Feldschlüssel `valid_until` [ANNAHME: legt die erste EA-Migration fest]; fehlt er, gilt `valid_to` der Eigenschaft), `is_fundable = coalesce(dosb_eligible, false)` [ANNAHME: förderfähig = DOSB-lizenzfähig], `valid_on_date = valid_until is null or valid_until >= p_date`. Lesestufe der Eigenschaftsart muss `all` sein, sonst keine Zeile. Keine Lizenznummer, keine anderen Eigenschaften.
 
 Ehrenamtsstatus und Anlegen (neu v0.7; Oberflächen in EA):
 - `ea_set_volunteer_status(p_person uuid, p_status ea_volunteer_status, p_valid_from date default current_date)` – security definer: erlaubt, wenn `ea_person_visible_ea(p_person, 'edit')` (R33); setzt Status und schreibt ea_volunteer_status_history; sonst Fehler `EA_STATUS_FORBIDDEN`. Setzt keine Enddaten an Eigenschaften (das macht EA im Dialog, siehe Steckbrief EA).
 - `ea_person_referate(p_person uuid) returns setof (id uuid, name text)` – security definer: aktuelle Referate der Person (Name), erlaubt, wenn `ea_person_visible_ea(p_person)`; für den Bestätigungsdialog „Die Person ist auch in … tätig“.
-- `ea_create_volunteer(p_first text, p_last text, p_preferred text, p_property_type uuid, p_referat uuid, p_field_values jsonb, p_valid_from date, p_contact_email text default null) returns uuid` – security definer: legt in einer Transaktion Person, Ehrenamtsstatus „aktiv“ (Historie) und die erste Zuordnung (Eigenschaft der Art p_property_type mit Bezug auf p_referat) an. Erlaubt mit `ad_has_level('EA','edit')` oder p_referat ∈ `ad_my_referate('EA','edit')` (R41) – **neu v0.8 (A4, R45):** oder mit `ad_has_level('EZ','edit')` oder p_referat ∈ `ad_my_referate('EZ','edit')`. Mit Reichweite „alle“ (Geschäftsstelle, Admin) sind p_property_type und p_referat optional (z. B. Mitglied eines Gremiums ohne Referat); mit Reichweite „Referat“ Pflicht. Beim Aufruf nur über EZ-Rechte (kein passendes EA-Recht) gilt zusätzlich: p_referat ist Pflicht, p_property_type muss die Eigenschaftsart mit `system_key = 'function'` sein und p_field_values genau die Funktion „Helfer:in“ enthalten, sonst `EA_CREATE_FORBIDDEN` [ANNAHME]. `created_in` = `'EZ'`, wenn der Aufruf nur über EZ-Rechte erlaubt ist, sonst `'EA'`. p_contact_email (neu v0.8, optional): legt zusätzlich eine Eigenschaft der Art mit `system_key = 'contact'` mit dieser E-Mail an (R35 gilt). Grund: Ohne Ehrenamtsstatus bzw. ohne Zuordnung wäre eine angelegte Person sofort unsichtbar. Die bestehende Signatur bleibt durch den Default-Parameter aufrufbar.
+- `ea_create_volunteer(p_first text, p_last text, p_preferred text, p_property_type uuid, p_referat uuid, p_field_values jsonb, p_valid_from date, p_contact_email text default null) returns uuid` – security definer: legt in einer Transaktion Person, Ehrenamtsstatus „aktiv“ (Historie) und die erste Zuordnung (Eigenschaft der Art p_property_type mit Bezug auf p_referat) an. Erlaubt mit `ad_has_level('EA','edit')` oder p_referat ∈ `ad_my_referate('EA','edit')` (R41) – **neu v0.8 (A4, R45):** oder mit `ad_has_level('EZ','edit')` oder p_referat ∈ `ad_my_referate('EZ','edit')`. Mit Reichweite „alle“ (Geschäftsstelle, Admin) sind p_property_type und p_referat optional (z. B. Mitglied eines Gremiums ohne Referat); mit Reichweite „Referat“ Pflicht. Beim Aufruf nur über EZ-Rechte (kein passendes EA-Recht) gilt zusätzlich: p_referat ist Pflicht, p_property_type muss die Eigenschaftsart mit `system_key = 'function'` sein und p_field_values genau die Funktion „Helfer:in“ enthalten, sonst `EA_CREATE_FORBIDDEN` [ANNAHME]. `created_in` = `'EZ'`, wenn der Aufruf nur über EZ-Rechte erlaubt ist, sonst `'EA'`. p_contact_email (neu v0.8, optional): legt zusätzlich eine Eigenschaft der Art mit `system_key = 'contact'` mit dieser E-Mail an (R35 gilt). Grund: Ohne Ehrenamtsstatus bzw. ohne Zuordnung wäre eine angelegte Person sofort unsichtbar. Die bestehende Signatur bleibt durch den Default-Parameter aufrufbar. Die Planungshilfe nutzt die Funktion nicht (v0.9: externe Leitende werden vorher im Ehrenamtsmanagement angelegt).
 - `ea_activate_person(p_person uuid, p_property_type uuid, p_referat uuid, p_field_values jsonb, p_valid_from date)` – security definer: für die Rückkehr Ausgeschiedener und für Menschen, die schon in einem anderen Pfad existieren (z. B. Erziehungsberechtigte:r wird Trainer:in, E1): setzt Status „aktiv“ (Historie) und legt die Zuordnung an. Erlaubt wie `ea_create_volunteer` ohne die EZ-Erweiterung [ANNAHME: aus der Anwesenheitserfassung wird über die Dublettenwarnung eine vorhandene Person direkt auf die Anwesenheitsliste gesetzt, nicht reaktiviert]; Person muss `kind = 'human'` sein.
 - Personen ohne Ehrenamtsstatus anlegen: AD ≥ edit (`created_in = 'AD'`) direkt; GR ≥ edit über eine Funktion der GR-Migration (A6).
 
@@ -342,7 +372,7 @@ Dublettenprüfung (v0.7 geändert, R40):
 
 ### Zeitgesteuerte Jobs (pg_cron)
 - täglich 01:15 UTC (pg_cron läuft in UTC; 02:15 bzw. 03:15 Ortszeit): `delete from ad_audit_log where occurred_at < now() - interval '5 years'` (R13).
-- Löschlauf für Personen: nicht im MVP. Eine Person darf nur gelöscht werden, wenn kein Pfad sie mehr braucht (A8 der Übergabe aus GR); Regel folgt mit dem Löschlauf. Ab v0.8 zählt dazu auch die Anwesenheit bei Einsätzen (Aufbewahrung für Abrechnung und Nachweis, Frist [OFFEN] im Modul Anwesenheitserfassung).
+- Löschlauf für Personen: nicht im MVP. Eine Person darf nur gelöscht werden, wenn kein Pfad sie mehr braucht (A8 der Übergabe aus GR); Regel folgt mit dem Löschlauf. Ab v0.8 zählt dazu auch die Anwesenheit bei Einsätzen (Aufbewahrung für Abrechnung und Nachweis, Frist [OFFEN] im Modul Anwesenheitserfassung), ab v0.9 die Leitung in Planungen der Planungshilfe.
 
 ## 3. Rechte / RLS
 
@@ -360,6 +390,8 @@ Stufen in AD: lesen = alles in AD ansehen inkl. Protokoll und vertraulicher Eige
 | GR | GR ≥ lesen | Gruppenbezug (Funktion `gr_person_visible`, ab erster GR-Migration) |
 
 Anwesenheitserfassung (neu v0.8): kein Lesepfad auf `ea_persons` und `ea_properties`. Namen nur über `ea_person_names` (Bedingung `ez_person_visible`) und `ea_search_active_persons` (nur aktive Personen, nur mit EZ ≥ bearbeiten); Namen von Gruppen-Teilnehmer:innen über `gr_group_roster` (Modul Gruppen, R20 der Erhebung Gruppen). Eigenschaften, Kontaktdaten und Geburtsdaten sind über die Anwesenheitserfassung nie lesbar (R44).
+
+Planungshilfe Touren und Kurse (neu v0.9): kein Lesepfad auf `ea_persons` und `ea_properties`. Namen nur über `ea_person_names` (Bedingung `tk_person_visible`) und `ea_search_active_persons` (nur mit TK ≥ bearbeiten oder TKF); Lizenzen nur über `ea_person_licenses` (R47). Keine Kontaktdaten, Geburtsdaten, Lizenznummern oder anderen Eigenschaften (R48).
 
 Eigenschaften sind lesbar, wenn die Person über einen Pfad lesbar ist und die Lesestufe es in diesem Pfad erlaubt (R29):
 
@@ -381,7 +413,8 @@ Eigenschaften sind lesbar, wenn die Person über einen Pfad lesbar ist und die L
 | ad_test_login_domains | – (nur über ad_login_email_allowed) | nur SQL-Editor in TEST | – | nur SQL-Editor in TEST |
 | ad_notice_acks | eigene Zeile | eigene Zeile | eigene Zeile | – |
 | ad_qualification_types | jeder Nutzer mit Zugang „aktiv“ (ad_has_active_access) | AD ≥ edit oder EA = manage | AD ≥ edit oder EA = manage; `source_ref` nur Migration | – |
-| ad_locations (neu v0.8) | jeder Nutzer mit Zugang „aktiv“ (ad_has_active_access) [ANNAHME] | `ad_can_edit_locations()` | `ad_can_edit_locations()` | – |
+| ad_locations (v0.8) | jeder Nutzer mit Zugang „aktiv“ (ad_has_active_access) [ANNAHME] | `ad_can_edit_locations()` | `ad_can_edit_locations()` | – |
+| ad_rates (neu v0.9) | `ad_can_read_rates()` | `ad_can_edit_rates()` (nur Admin) | `ad_can_edit_rates()`; `rate_key` und `valid_from` nicht änderbar (Trigger) | – |
 | ea_referate, ea_gremien | jeder Nutzer mit Zugang „aktiv“ | AD ≥ edit oder EA = manage [ANNAHME] | wie Anlegen | – |
 | ea_persons | `ea_person_visible(id)` (R32) | AD ≥ edit direkt (created_in = AD); EA (beide Reichweiten) und EZ (beide Reichweiten, v0.8) nur über `ea_create_volunteer`, damit die Person sofort einen Ehrenamtsstatus hat; GR ≥ edit über GR-Funktion (A6); `kind = 'function'` nur AD | Namen und Rufname: wer die Person über einen Pfad mit ≥ edit lesen darf; `volunteer_status` nur über die EA-Funktionen (Trigger); `kind`, `created_in` nicht änderbar | – (Löschlauf nach MVP) |
 | ea_volunteer_status_history | wie ea_persons | nur über EA-Funktionen | – | – |
@@ -391,14 +424,15 @@ Eigenschaften sind lesbar, wenn die Person über einen Pfad lesbar ist und die L
 
 Rechtevorlagen (Startwerte, R6; Reichweite „alle“, außer wo genannt):
 
-| Rechtevorlage | AD | SC | EA | GR | EZ (neu v0.8) | FI | OA | PM | GS | AM |
-|---|---|---|---|---|---|---|---|---|---|---|
-| Admin | verwalten | verwalten | verwalten | lesen (neu v0.7) | lesen | – | – | – | – | – |
-| Geschäftsstelle | – | – | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten |
-| Referent:in (neu v0.7) | – | – | bearbeiten, Reichweite Referat | – | bearbeiten, Reichweite Referat | – | – | – | – | – |
-| Vorstand | – | – | – | – | – (Ziel: lesen, vom Admin zu setzen) | – | – | – | – | – |
+| Rechtevorlage | AD | SC | EA | GR | EZ (v0.8) | TK (neu v0.9) | TKF (neu v0.9) | FI | OA | PM | GS | AM |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Admin | verwalten | verwalten | verwalten | lesen (v0.7) | lesen | lesen | – | – | – | – | – | – |
+| Geschäftsstelle | – | – | verwalten | verwalten | verwalten | verwalten | – | verwalten | verwalten | verwalten | verwalten | verwalten |
+| Referent:in (v0.7) | – | – | bearbeiten, Reichweite Referat | – | bearbeiten, Reichweite Referat | bearbeiten, Reichweite Referat | – | – | – | – | – | – |
+| Freigabe Touren und Kurse (neu v0.9) | – | – | – | – | – | – | bearbeiten (= freigeben), Reichweite Referat | – | – | – | – | – |
+| Vorstand | – | – | – | – | – (Ziel: lesen, vom Admin zu setzen) | – | – | – | – | – | – | – |
 
-Die Geschäftsstelle pflegt Qualifikationsarten über „EA verwalten“, ohne Rechte auf AD (Entscheidung Product Owner 21.10.2026). Die Rechte-Matrix ändert sich dadurch nicht. Hüttenwart:innen erhalten die Vorlage Referent:in mit ihrem Hütten-Referat; damit erfassen sie auch Arbeitseinsätze ihres Hütten-Referats in der Anwesenheitserfassung (v0.8). Zugänge werden schrittweise vergeben: zuerst Referent:innen und Vorstand, später Gruppenleitungen, dann stellvertretende Gruppenleitungen und weitere Trainer:innen; Erziehungsberechtigte und Teilnehmer:innen erhalten keinen Zugang (E6). Eine Vorlage für Gruppenleitungen folgt mit der Reichweite „Gruppe“ (Iteration 1 der Anwesenheitserfassung, A6/A7, Abschnitt 11).
+Die Geschäftsstelle pflegt Qualifikationsarten über „EA verwalten“, ohne Rechte auf AD (Entscheidung Product Owner 21.10.2026). Die Rechte-Matrix ändert sich dadurch nicht. Hüttenwart:innen erhalten die Vorlage Referent:in mit ihrem Hütten-Referat; damit erfassen sie auch Arbeitseinsätze ihres Hütten-Referats in der Anwesenheitserfassung (v0.8). Die Vorlage Referent:in gibt TK-Rechte in allen ihren Referaten; Planungen gibt es nur in den Referaten Touren und Ausbildung (spec.md TK R12), andere Referent:innen sehen dort nichts (v0.9). Die Vorlage „Freigabe Touren und Kurse“ vergibt der Admin auf Wunsch der Referent:in an Referent:innen der Referate Touren und Ausbildung und an weitere Personen (Delegation, Product Owner 22.10.2026); sie wirkt auch ohne die Vorlage Referent:in (Bearbeiten und Rückfragen in der Planungshilfe). Zugänge werden schrittweise vergeben: zuerst Referent:innen und Vorstand, später Gruppenleitungen, dann stellvertretende Gruppenleitungen und weitere Trainer:innen; Erziehungsberechtigte und Teilnehmer:innen erhalten keinen Zugang (E6). Eine Vorlage für Gruppenleitungen folgt mit der Reichweite „Gruppe“ (Iteration 1 der Anwesenheitserfassung, A6/A7, Abschnitt 11).
 
 Edge Functions prüfen das Recht des Aufrufers selbst (JWT auswerten, `ad_has_level('AD','edit')` im Kontext des Aufrufers), bevor sie mit dem Service-Schlüssel arbeiten. Der Service-Schlüssel liegt nur in den Secrets der Edge Functions.
 
@@ -437,6 +471,8 @@ Zustände einer Qualifikationsart: aktuell ↔ historisch; Wechsel in beide Rich
 
 Zustände eines Orts (neu v0.8): aktiv ↔ inaktiv; Wechsel in beide Richtungen jederzeit durch Nutzer mit `ad_can_edit_locations()` (R43).
 
+Sätze (neu v0.9): keine Zustände; ein neuer Wert entsteht als neue Zeile mit späterem `valid_from` (R46). Zahlungsgebühren haben das Kennzeichen aktiv/inaktiv.
+
 ## 5. Geschäftsregeln
 
 - R1: Wenn die Login-Adresse nicht auf @dav-leipzig.de endet, dann Fehler, sonst Fehlermeldung „Zugang nur mit Adresse @dav-leipzig.de möglich.“ Ausnahme nur in TEST: Domains aus `ad_test_login_domains` sind zusätzlich erlaubt (Abnahme der Mail-Abläufe, Abschnitt 9). Die Meldung bleibt gleich.
@@ -450,10 +486,10 @@ Zustände eines Orts (neu v0.8): aktiv ↔ inaktiv; Wechsel in beide Richtungen 
 - R9: Wenn der Zweck leer ist, dann „Bitte einen Zweck angeben.“; wenn ein Feld vom Typ Auswahlliste keine Werte hat, dann „Bitte mindestens einen Auswahlwert angeben.“; wenn eine Eigenschaftsart kein Feld hat, dann „Bitte mindestens ein Feld anlegen.“
 - R10: Wenn ein Zugang gesperrt ist, dann ist keine Anmeldung möglich; Datenzugriff endet sofort (RLS), Frontend-Sitzung spätestens nach 1 Stunde.
 - R11: Einladungen nur über den Knopf „Einladen“ / „Erneut einladen“; kein Trigger, Import oder Job lädt ein.
-- R12: Keine Löschfunktion in AD. Ausscheiden = Ehrenamtsstatus „ausgeschieden“ (EA), Zugang sperren (AD) und ggf. gültig bis an Eigenschaften. Qualifikationsarten werden nicht gelöscht, sondern auf „historisch“ gesetzt (R25); Referate, Gremien und Orte werden inaktiv gesetzt.
+- R12: Keine Löschfunktion in AD. Ausscheiden = Ehrenamtsstatus „ausgeschieden“ (EA), Zugang sperren (AD) und ggf. gültig bis an Eigenschaften. Qualifikationsarten werden nicht gelöscht, sondern auf „historisch“ gesetzt (R25); Referate, Gremien und Orte werden inaktiv gesetzt; Sätze erhalten einen neuen Wert mit späterem „gültig ab“ (R46).
 - R13: Einladen, Zuweisen, Entziehen, Referate ändern, Sperren, Entsperren, Anmeldung Notfall-Admin → Protokolleintrag; Löschung nach 5 Jahren.
 - R14: Genau ein Zugang mit `is_emergency = true` (geschaeftsstelle@dav-leipzig.de, Vorlage Admin).
-- R15: Wenn `kind = 'function'`, dann nicht in `ea_v_persons`, kein Ehrenamtsstatus, nicht für EA-, GR- oder EZ-Rechte sichtbar (auch nicht in `ea_person_names` und `ea_search_active_persons`), nicht im Löschlauf.
+- R15: Wenn `kind = 'function'`, dann nicht in `ea_v_persons`, kein Ehrenamtsstatus, nicht für EA-, GR-, EZ- oder TK-Rechte sichtbar (auch nicht in `ea_person_names`, `ea_search_active_persons` und `ea_person_licenses`), nicht im Löschlauf.
 - R16: Jede Anmeldung des Notfall-Admins → Protokoll + Hinweis in AD bis „Zur Kenntnis genommen“.
 - R17: Wenn keine wirksame Vorlage zugewiesen ist, dann „Bitte zuerst mindestens eine Rechtevorlage zuweisen.“ und keine Einladung.
 - R18: Login-Fehler immer „Anmeldung fehlgeschlagen. Bitte E-Mail-Adresse und Passwort prüfen.“; „Passwort vergessen“ immer „Wenn ein Zugang zu dieser Adresse besteht, haben wir dir eine E-Mail mit einem Link geschickt.“
@@ -468,9 +504,9 @@ Zustände eines Orts (neu v0.8): aktiv ↔ inaktiv; Wechsel in beide Richtungen 
 - R27: Wenn ein Nutzer ein Feld neu auf eine historische Qualifikationsart verweisen lässt, dann „Diese Qualifikationsart ist historisch und kann nicht neu vergeben werden.“ Migrationen und Skripte ohne Nutzerkontext dürfen historische Qualifikationsarten setzen (Altbestand).
 - R28: Wenn das Feld die erlaubten Typen einschränkt und die gewählte Qualifikationsart einen anderen Typ hat, dann „Dieser Typ von Qualifikation ist hier nicht erlaubt.“
 - **R29 (neu, Lesestufe):** Jede Eigenschaftsart hat genau eine Lesestufe: „alle mit Zugriff“, „nur Geschäftsstelle und Admin“ oder „vertraulich“. Wirkung je Pfad nach Abschnitt 3. „Vertraulich“ setzt und ändert nur, wer AD ≥ bearbeiten hat, sonst „Nur mit Rechten auf die Administration möglich.“ Beim Anlegen erscheint der Hinweis zu Art. 9 DSGVO.
-- **R30 (Reichweite, v0.8 erweitert):** Eine Rechtevorlage hat je Modul eine Reichweite „alle“ oder „Referat“; „Referat“ ist im MVP nur für das Ehrenamtsmanagement (EA) und die Anwesenheitserfassung (EZ) zulässig, sonst „Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement und in der Anwesenheitserfassung möglich.“ Rechte mit Reichweite „Referat“ wirken in EA nur auf Personen, die nach R32 über eines der zugewiesenen Referate sichtbar sind, in EZ nur auf Einsätze dieser Referate (Einsatz mit Gruppe über das Referat der Gruppe, sonst direkt; Prüfung in den Policies der Anwesenheitserfassung).
+- **R30 (Reichweite, v0.9 erweitert):** Eine Rechtevorlage hat je Modul eine Reichweite „alle“ oder „Referat“; „Referat“ ist im MVP nur für das Ehrenamtsmanagement (EA), die Anwesenheitserfassung (EZ), die Planungshilfe Touren und Kurse (TK) und die Freigabe Touren und Kurse (TKF) zulässig, sonst „Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement, in der Anwesenheitserfassung und in der Planungshilfe Touren und Kurse möglich.“ Rechte mit Reichweite „Referat“ wirken in EA nur auf Personen, die nach R32 über eines der zugewiesenen Referate sichtbar sind, in EZ nur auf Einsätze dieser Referate (Einsatz mit Gruppe über das Referat der Gruppe, sonst direkt; Prüfung in den Policies der Anwesenheitserfassung), in TK und TKF nur auf Planungen dieser Referate (Prüfung in der Planungshilfe). TKF kennt nur die Stufen „kein Zugriff“ und „bearbeiten“ (= freigeben), sonst „Für die Freigabe gibt es nur ‚kein Zugriff‘ oder ‚bearbeiten‘.“ (`AD_LEVEL_NOT_ALLOWED`).
 - **R31 (neu):** Wenn eine Vorlage mit Reichweite „Referat“ zugewiesen wird, dann ist mindestens ein aktives Referat Pflicht, sonst „Bitte mindestens ein Referat auswählen.“ Bei Vorlagen ohne Reichweite „Referat“ werden keine Referate gespeichert. Eine Person kann mehrere Referate haben. Die Referate einer Zuweisung gelten für alle Module der Vorlage mit Reichweite „Referat“ (v0.8).
-- **R32 (neu, Sichtbarkeit je Zugehörigkeit):** Personen und Eigenschaften sind nur über die Pfade AD, EA und GR nach Abschnitt 3 lesbar. Nutzer mit AD-Rechten (Admin) sehen alle Personen. In EA und GR erscheinen nur Personen mit Ehrenamtsstatus bzw. Gruppenbezug: Personen, die nur in Gruppen vorkommen, sind in EA nicht sichtbar; Personen nur aus AD (z. B. Hauptamtliche ohne Ehrenamt) nicht in EA und GR. Bekommt eine Person einen Ehrenamtsstatus oder Gruppenbezug, erscheint sie ab dann im jeweiligen Pfad. Die Anwesenheitserfassung erhält nur Namen nach R44.
+- **R32 (neu, Sichtbarkeit je Zugehörigkeit):** Personen und Eigenschaften sind nur über die Pfade AD, EA und GR nach Abschnitt 3 lesbar. Nutzer mit AD-Rechten (Admin) sehen alle Personen. In EA und GR erscheinen nur Personen mit Ehrenamtsstatus bzw. Gruppenbezug: Personen, die nur in Gruppen vorkommen, sind in EA nicht sichtbar; Personen nur aus AD (z. B. Hauptamtliche ohne Ehrenamt) nicht in EA und GR. Bekommt eine Person einen Ehrenamtsstatus oder Gruppenbezug, erscheint sie ab dann im jeweiligen Pfad. Anwesenheitserfassung und Planungshilfe erhalten nur Namen (und die Planungshilfe Lizenzen) nach R44, R47, R48.
 - **R33 (neu, Ehrenamtsstatus):** Den Ehrenamtsstatus setzen Nutzer mit EA ≥ bearbeiten (Reichweite alle) für jede Person mit Status und Referent:innen für Personen, die über eines ihrer Referate sichtbar sind; Wirkung für die ganze Person. Sonst „Du darfst den Status dieser Person nicht ändern.“ Jeder Wechsel wird mit Datum, wer und wann gespeichert.
 - **R34 (neu):** Ausgeschiedene Personen lesen im Pfad EA nur Nutzer mit EA = verwalten (Reichweite alle), d. h. Geschäftsstelle und Admin.
 - **R35 (neu, Felder):** Wenn ein Pflichtfeld fehlt, dann „Bitte ‚<Feld>‘ ausfüllen.“; wenn ein Wert nicht zum Datentyp passt, dann „Der Wert für ‚<Feld>‘ passt nicht zum Datentyp.“; wenn ein Schlüssel kein Feld der Eigenschaftsart ist, dann „Unbekanntes Feld.“; wenn ein Auswahlwert nicht in der Liste steht, dann „Bitte einen Wert aus der Liste wählen.“; Jahr: ganzzahlig 1900–2100; Zahl: Dezimalzahl.
@@ -482,8 +518,11 @@ Zustände eines Orts (neu v0.8): aktiv ↔ inaktiv; Wechsel in beide Richtungen 
 - **R41 (neu):** Referent:innen legen Eigenschaften mit Bezug auf ein Referat nur für eigene Referate an oder ändern sie dorthin; sonst „Du kannst nur Zuordnungen zu deinen Referaten pflegen.“ Eigenschaften anderer Referate derselben Person sehen sie (Lesestufe „alle mit Zugriff“), ändern sie aber nicht.
 - **R42 (neu):** Schreiben setzt Lesen voraus: Eine Eigenschaft anlegen oder ändern darf nur, wer sie im selben Pfad lesen darf und dort mindestens „bearbeiten“ hat.
 - **R43 (neu v0.8, Orte):** Wenn die Bezeichnung eines Orts leer ist, dann „Bitte eine Bezeichnung angeben.“; wenn sie ohne Groß-/Kleinschreibung bereits existiert, dann „Einen Ort mit dieser Bezeichnung gibt es bereits.“ Orte werden nicht gelöscht, sondern inaktiv gesetzt; inaktive Orte sind in der Anwesenheitserfassung nicht neu wählbar, vorhandene Einsätze zeigen sie weiter. Ohne Recht: „Für diesen Bereich hast du keine Rechte.“
-- **R44 (neu v0.8, Namen für die Anwesenheitserfassung):** Über die Anwesenheitserfassung sind von Personen nur Vorname, Rufname und Nachname lesbar – nie Eigenschaften, Kontaktdaten, Geburtsdatum, Ehrenamtsstatus oder Zugehörigkeiten. `ea_person_names` liefert nur Personen nach `ez_person_visible` (bzw. die ohnehin über einen Pfad lesbar sind); `ea_search_active_persons` liefert nur Personen mit Ehrenamtsstatus „aktiv“ und nur an Nutzer mit EZ ≥ bearbeiten; Suchbegriff mindestens 2 Zeichen („Bitte mindestens 2 Zeichen eingeben.“), höchstens 50 Treffer.
+- **R44 (neu v0.8, Namen für die Anwesenheitserfassung):** Über die Anwesenheitserfassung sind von Personen nur Vorname, Rufname und Nachname lesbar – nie Eigenschaften, Kontaktdaten, Geburtsdatum, Ehrenamtsstatus oder Zugehörigkeiten. `ea_person_names` liefert nur Personen nach `ez_person_visible` (bzw. die ohnehin über einen Pfad lesbar sind); `ea_search_active_persons` liefert nur Personen mit Ehrenamtsstatus „aktiv“ und nur an Nutzer mit EZ ≥ bearbeiten (v0.9 zusätzlich TK ≥ bearbeiten oder TKF, R48); Suchbegriff mindestens 2 Zeichen („Bitte mindestens 2 Zeichen eingeben.“), höchstens 50 Treffer.
 - **R45 (neu v0.8, Personen aus der Anwesenheitserfassung anlegen):** Mit EZ ≥ bearbeiten (Reichweite alle oder Referat des Einsatzes) darf beim Arbeitseinsatz eine neue Person angelegt werden: Vorname und Nachname Pflicht (R4), Rufname und Kontakt-E-Mail optional; sie erhält Ehrenamtsstatus „aktiv“ und die Funktion Helfer:in mit Bezug auf das Referat des Einsatzes. Vorher läuft die Dublettenprüfung (R3, R40). Bei Reichweite Referat und fremdem Referat: „Du kannst nur Personen für deine Referate anlegen.“
+- **R46 (neu v0.9, Sätze):** Sätze, Pauschalen, Zahlungsgebühren, Emissionsfaktoren und Grenzwerte pflegt nur der Admin (Product Owner 22.10.2026), sonst „Für diesen Bereich hast du keine Rechte.“ Ein neuer Wert wird als neue Zeile mit „gültig ab“ angelegt; Schlüssel und „gültig ab“ einer Zeile sind nicht änderbar; je Schlüssel und Datum höchstens eine Zeile („Für dieses Datum gibt es schon einen Wert.“, `AD_RATE_DUPLICATE`); Werte ≥ 0 („Wert ungültig.“, `AD_RATE_VALUE`); Bezeichnung, Einheit und Quelle Pflicht („Bitte ‚<Feld>‘ angeben.“, `AD_RATE_FIELD_REQUIRED`). Zahlungsgebühren mit Prozentsatz und festem Betrag statt Wert. Beim Speichern eines neuen Werts erscheint „Planungen im Entwurf oder eingereicht mit Beginn ab {gültig ab} rechnen mit dem neuen Wert. Freigegebene Planungen behalten ihren Satzstand.“ Kein Löschen.
+- **R47 (neu v0.9, Lizenzen für die Planungshilfe):** Die Planungshilfe erhält von Personen nur Lizenzen nach `ea_person_licenses`: Qualifikationsart (Kürzel, Bezeichnung), gültig bis, förderfähig und gültig am Datum; keine Lizenznummer, keine anderen Eigenschaften; nur für aktive und ruhende Personen und nur aus Eigenschaftsarten mit Lesestufe „alle mit Zugriff“.
+- **R48 (neu v0.9, Namen für die Planungshilfe):** Über die Planungshilfe sind von Personen nur Vorname, Rufname und Nachname lesbar (`ea_person_names` mit `tk_person_visible`; `ea_search_active_persons` mit TK ≥ bearbeiten oder TKF), dazu Lizenzen nach R47; nie Kontaktdaten, Geburtsdatum, Ehrenamtsstatus oder Zugehörigkeiten. Kontakt- und Notfalldaten der Leitung erfasst die Planungshilfe je Planung selbst (spec.md TK).
 
 Weitere Meldungen:
 - Datentyp ändern bei vorhandenen Eigenschaften: „Der Datentyp kann nicht geändert werden, solange Eigenschaften dieser Art existieren.“
@@ -496,7 +535,7 @@ Weitere Meldungen:
 - Keine Rechte: „Für diesen Bereich hast du keine Rechte.“
 - Unerwarteter Fehler: „Etwas ist schiefgelaufen. Bitte versuche es erneut.“
 
-Datenbankfehler und Edge Functions tragen einen Code (bisher `AD_EMAIL_DOMAIN`, `AD_EMAIL_TAKEN`, `AD_EMAIL_LOCKED`, `AD_NO_TEMPLATE`, `AD_FORBIDDEN`, `EA_VALUE_TYPE`, `AD_QUALIFICATION_NAME_REQUIRED`, `AD_QUALIFICATION_NAME_TAKEN`, `AD_QUALIFICATION_CODE_TAKEN`, `AD_QUALIFICATION_CODE_FORMAT`, `AD_QUALIFICATION_LEVEL_REQUIRED`, `AD_QUALIFICATION_VALIDITY`, `AD_QUALIFICATION_HISTORIC`, `AD_QUALIFICATION_KIND`; neu v0.7 `AD_CONFIDENTIAL_ONLY_AD`, `AD_SCOPE_NOT_ALLOWED`, `AD_REFERAT_REQUIRED`, `EA_FIELD_REQUIRED`, `EA_FIELD_UNKNOWN`, `EA_FIELD_CHOICE`, `EA_FIELD_LOCKED`, `EA_FIELD_NEW_REQUIRED`, `EA_NO_FIELDS`, `EA_SINGLE_VALUE`, `EA_RELATION_REQUIRED`, `EA_RELATION_LOCKED`, `EA_RELATION_FOREIGN_REFERAT`, `EA_GROUP_RELATION_ONLY_GR`, `EA_STATUS_FORBIDDEN`; neu v0.8 `AD_LOCATION_NAME_REQUIRED`, `AD_LOCATION_NAME_TAKEN`, `AD_SEARCH_TOO_SHORT`, `AD_TOO_MANY_IDS`, `EA_CREATE_FORBIDDEN`, `EA_CREATE_FOREIGN_REFERAT`); die vollständige Liste mit deutschem Meldungstext je Code steht in `docs/specs/ad-administration/contracts/error-codes.md`. `AD_SCOPE_NOT_ALLOWED` meldet ab v0.8 den Text aus R30. `EA_VALUE_TYPE` meldet v0.7 den Feldnamen mit (R35). Das Frontend bildet Codes auf die Meldungen ab.
+Datenbankfehler und Edge Functions tragen einen Code (bisher `AD_EMAIL_DOMAIN`, `AD_EMAIL_TAKEN`, `AD_EMAIL_LOCKED`, `AD_NO_TEMPLATE`, `AD_FORBIDDEN`, `EA_VALUE_TYPE`, `AD_QUALIFICATION_NAME_REQUIRED`, `AD_QUALIFICATION_NAME_TAKEN`, `AD_QUALIFICATION_CODE_TAKEN`, `AD_QUALIFICATION_CODE_FORMAT`, `AD_QUALIFICATION_LEVEL_REQUIRED`, `AD_QUALIFICATION_VALIDITY`, `AD_QUALIFICATION_HISTORIC`, `AD_QUALIFICATION_KIND`; neu v0.7 `AD_CONFIDENTIAL_ONLY_AD`, `AD_SCOPE_NOT_ALLOWED`, `AD_REFERAT_REQUIRED`, `EA_FIELD_REQUIRED`, `EA_FIELD_UNKNOWN`, `EA_FIELD_CHOICE`, `EA_FIELD_LOCKED`, `EA_FIELD_NEW_REQUIRED`, `EA_NO_FIELDS`, `EA_SINGLE_VALUE`, `EA_RELATION_REQUIRED`, `EA_RELATION_LOCKED`, `EA_RELATION_FOREIGN_REFERAT`, `EA_GROUP_RELATION_ONLY_GR`, `EA_STATUS_FORBIDDEN`; neu v0.8 `AD_LOCATION_NAME_REQUIRED`, `AD_LOCATION_NAME_TAKEN`, `AD_SEARCH_TOO_SHORT`, `AD_TOO_MANY_IDS`, `EA_CREATE_FORBIDDEN`, `EA_CREATE_FOREIGN_REFERAT`; neu v0.9 `AD_LEVEL_NOT_ALLOWED`, `AD_RATE_DUPLICATE`, `AD_RATE_VALUE`, `AD_RATE_FIELD_REQUIRED`, `AD_RATE_LOCKED`); die vollständige Liste mit deutschem Meldungstext je Code steht in `docs/specs/ad-administration/contracts/error-codes.md`. `AD_SCOPE_NOT_ALLOWED` meldet ab v0.9 den Text aus R30. `AD_RATE_LOCKED`: „Schlüssel und ‚gültig ab‘ können nicht geändert werden. Bitte einen neuen Wert anlegen.“ `EA_VALUE_TYPE` meldet v0.7 den Feldnamen mit (R35). Das Frontend bildet Codes auf die Meldungen ab.
 
 ## 6. Screens und Interaktionen
 
@@ -513,25 +552,26 @@ Allgemein: deutsch, Ansprache „du“, Datum TT.MM.JJJJ, Zeit HH:MM (Europe/Ber
 | /ad/personen/neu | Vorname, Nachname, optional Rufname, optional Login-Adresse | Speichern → Dublettenprüfung → ggf. Warndialog (Treffer nur mit Daten nach R40; „Vorhandene Person öffnen“ nur bei sichtbaren Treffern) | R1, R2, R4 | US-AD-07, US-AD-25 |
 | /ad/personen/:id | Abschnitte: **Stammdaten** (Vorname, Rufname, Nachname, Art; bearbeitbar; Ehrenamtsstatus nur lesen mit „seit“); **Zugang** (Login-Adresse, Status, zuletzt eingeladen, gesperrt am/von); **Rechtevorlagen** (wirksame Vorlagen, bei Reichweite Referat mit Referaten); **Eigenschaften** (nach Kategorie gruppiert; aktuelle oben, beendete als „beendet“; je Eigenschaft Historie aufklappbar; nur Arten mit „sichtbar in“ AD; Felder als „Bezeichnung: Wert“; Bezug als „Referat …“ bzw. „Gremium …“; Qualifikationsart als „Kürzel – Bezeichnung“, historische mit „(historisch)“) | Stammdaten speichern; Login-Adresse speichern (nur bei „kein Zugang“/„eingeladen“, R20); Einladen / Erneut einladen / Sperren (mit Bestätigung und Hinweis „Bereits angemeldete Nutzer verlieren den Zugriff spätestens nach einer Stunde.“) / Entsperren; Vorlage hinzufügen (nur nicht zugewiesene; bei Reichweite Referat Mehrfachauswahl der Referate, R31) / Referate ändern / entziehen; Eigenschaft hinzufügen (Formular aus den Feldern der Eigenschaftsart, Bezug-Auswahl), ändern, beenden | „Noch keine Eigenschaften.“; R1, R2, R17, R27, R28, R31, R35, R37, R38, Mailfehler | US-AD-08, 09, 11, 13, 19, 21, 24 |
 | /ad/rechtevorlagen | Liste: Name, Beschreibung, Anzahl Personen | Neu; öffnen | – | US-AD-10 |
-| /ad/rechtevorlagen/:id | Name, Beschreibung, Matrix 10 Module × Stufe (Auswahl je Zeile; v0.8 mit Zeile Anwesenheitserfassung); Spalte Reichweite (alle / Referat), „Referat“ nur bei Ehrenamtsmanagement und Anwesenheitserfassung wählbar | Speichern | Name doppelt; R30 | US-AD-10, US-AD-20 |
+| /ad/rechtevorlagen/:id | Name, Beschreibung, Matrix 12 Module × Stufe (Auswahl je Zeile; v0.8 mit Zeile Anwesenheitserfassung; v0.9 mit Zeilen Planungshilfe Touren und Kurse und Freigabe Touren und Kurse – bei Freigabe nur „kein Zugriff“ / „bearbeiten (freigeben)“); Spalte Reichweite (alle / Referat), „Referat“ nur bei Ehrenamtsmanagement, Anwesenheitserfassung, Planungshilfe und Freigabe wählbar | Speichern | Name doppelt; R30 | US-AD-10, US-AD-20 |
 | /ad/eigenschaftsarten | Liste: Name, Kategorie, Lesestufe, Bezug, Anzahl Felder, sichtbar in | Neu; öffnen | „Noch keine Eigenschaftsarten.“ | US-AD-12, US-AD-22 |
 | /ad/eigenschaftsarten/:id | Name, Zweck, Kategorie, Lesestufe (drei Optionen mit Erklärung; „vertraulich“ nur mit AD ≥ bearbeiten), Bezug (kein / Referat / Gremium; „Gruppe“ nur mit GR = verwalten), Bezug Pflicht, mehrere gültige Einträge erlaubt, sichtbar in (Mehrfachauswahl); **Felder** als Liste (Bezeichnung, Schlüssel, Datentyp, Pflicht, Auswahlwerte bei Auswahlliste bzw. erlaubte Typen bei Qualifikationsart (Mehrfachauswahl, leer = alle), Reihenfolge per Auf/Ab); Hinweis Art. 9 DSGVO beim Anlegen | Speichern; Feld hinzufügen | R9, R29, R36, Name doppelt | US-AD-12, US-AD-19, US-AD-22 |
 | /ad/qualifikationsarten | Tabelle gruppiert nach Sparte: Kürzel, Bezeichnung, Typ, Lizenzstufe, Gültigkeitsdauer, Status-Badge; Suche nach Bezeichnung oder Kürzel; Filter Sparte, Typ, Status (Standard „aktuell“) | Neu; öffnen | „Keine Qualifikationsarten gefunden.“ | US-AD-17 |
 | /ad/qualifikationsarten/neu, /ad/qualifikationsarten/:id | Formular: Bezeichnung, Kürzel, Sparte (Eingabe mit Vorschlägen aus vorhandenen Werten), Typ, Lizenzstufe (nur bei Lizenz), Spezifikation, Aussteller (Vorschläge), DOSB-lizenzfähig (ja / nein / nicht bekannt), Gültigkeitsdauer in Jahren (nach R24), Status, Hinweis, Quell-ID (nur lesen); Detailansicht zusätzlich „Verwendet bei n Personen“ und geändert am/von | Speichern | R21–R26 | US-AD-17 |
 | /ea/qualifikationsarten, /ea/qualifikationsarten/neu, /ea/qualifikationsarten/:id | dieselben Komponenten wie unter /ad, eingehängt in die Navigation des Ehrenamtsmanagements | wie oben | wie oben | US-AD-17 |
-| /ad/orte (neu v0.8) | Liste: Bezeichnung, Punktekonto Kletterhalle ja/nein, Status-Badge (aktiv/inaktiv); Filter Status (Standard „aktiv“); sortiert nach Bezeichnung | Neu; öffnen | „Noch keine Orte angelegt.“ | Übergabe EZ A8 |
-| /ad/orte/neu, /ad/orte/:id (neu v0.8) | Formular: Bezeichnung, Punktekonto Kletterhalle (Ja/Nein), Status (aktiv/inaktiv); Detail zusätzlich geändert am/von | Speichern | R43 | Übergabe EZ A8 |
+| /ad/orte (v0.8) | Liste: Bezeichnung, Punktekonto Kletterhalle ja/nein, Status-Badge (aktiv/inaktiv); Filter Status (Standard „aktiv“); sortiert nach Bezeichnung | Neu; öffnen | „Noch keine Orte angelegt.“ | Übergabe EZ A8 |
+| /ad/orte/neu, /ad/orte/:id (v0.8) | Formular: Bezeichnung, Punktekonto Kletterhalle (Ja/Nein), Status (aktiv/inaktiv); Detail zusätzlich geändert am/von | Speichern | R43 | Übergabe EZ A8 |
+| /ad/saetze (neu v0.9) | Tabelle gruppiert nach Gruppe (Vergütung, Reisekosten, Beitrag und Rundung, Zahlungsgebühren, Klima und Emissionsfaktoren, Grenzwerte): Bezeichnung, aktueller Wert mit Einheit (bei Zahlungsgebühren „% + € fix“, aktiv), gültig ab, Quelle; Auswahl „Stand am“ (Standard heute, zeigt `ad_rates_at`); je Schlüssel aufklappbare Historie aller Werte | Neuer Wert (je Schlüssel: Wert bzw. %/fix/aktiv, gültig ab, Quelle, Hinweis); Bezeichnung/Quelle/Hinweis einer Zeile korrigieren; nur mit `ad_can_edit_rates()` | „Noch keine Sätze angelegt.“; R46 | Übergabe TK 10, 13 |
 
-Navigation AD: Personen · Rechtevorlagen · Eigenschaftsarten · Qualifikationsarten · Orte (neu v0.8) · Protokoll.
+Navigation AD: Personen · Rechtevorlagen · Eigenschaftsarten · Qualifikationsarten · Orte (v0.8) · Sätze (neu v0.9) · Protokoll.
 
-Routenschutz: ohne Sitzung → /login (US-AD-02 AK5); /ad/* ohne AD ≥ read → /kein-zugriff, keine Datenabfrage (US-AD-05 AK3); /ea/* ohne `ad_has_any_level('EA','read')` → /kein-zugriff; /ea/qualifikationsarten* ohne EA = manage → /kein-zugriff. Bearbeiten-Knöpfe nur bei `ad_can_edit_qualification_types()` bzw. bei Orten `ad_can_edit_locations()`. Die Routen unter /ea werden aktiv, sobald EA umgesetzt ist (`ad_modules.is_available`); bis dahin pflegt nur der Admin. Navigation wird bei jedem Seitenaufruf aus ad_my_modules geladen.
+Routenschutz: ohne Sitzung → /login (US-AD-02 AK5); /ad/* ohne AD ≥ read → /kein-zugriff, keine Datenabfrage (US-AD-05 AK3); /ea/* ohne `ad_has_any_level('EA','read')` → /kein-zugriff; /ea/qualifikationsarten* ohne EA = manage → /kein-zugriff. Bearbeiten-Knöpfe nur bei `ad_can_edit_qualification_types()` bzw. bei Orten `ad_can_edit_locations()`, bei Sätzen `ad_can_edit_rates()`. Die Routen unter /ea werden aktiv, sobald EA umgesetzt ist (`ad_modules.is_available`); bis dahin pflegt nur der Admin. Navigation wird bei jedem Seitenaufruf aus ad_my_modules geladen.
 
-Wiederverwendbare Komponenten für AD, EA, GR und EZ:
+Wiederverwendbare Komponenten für AD, EA, GR, EZ und TK:
 - Auswahlfeld „Qualifikationsart“ (v0.6): durchsuchbar nach Bezeichnung und Kürzel, Anzeige „Kürzel – Bezeichnung“, gruppiert nach Sparte, nur Status „aktuell“ und erlaubte Typen.
 - **Eigenschaftsformular** (neu v0.7): baut Eingaben aus ea_property_fields (Text, Zahl, Datum, Jahr, Ja/Nein, Auswahlliste, Qualifikationsart), Bezug-Auswahl (bei Reichweite Referat nur eigene Referate), gültig von/bis; zeigt Fehler je Feld (R35).
 - **Dublettendialog** (neu v0.7): Trefferliste nach R40; Aktionen je Modul (R3).
-- **Personensuche „Aktive“** (neu v0.8): Eingabefeld mit Vorschlägen aus `ea_search_active_persons` ab 2 Zeichen, Anzeige „Rufname Nachname“; für die Anwesenheitserfassung (organisierende Person, Vertretung).
-- **Auswahlfeld „Ort“** (neu v0.8): nur aktive Orte, sortiert nach Bezeichnung; für die Anwesenheitserfassung.
+- **Personensuche „Aktive“** (v0.8): Eingabefeld mit Vorschlägen aus `ea_search_active_persons` ab 2 Zeichen, Anzeige „Rufname Nachname“; für die Anwesenheitserfassung (organisierende Person, Vertretung) und die Planungshilfe (Leitung, v0.9).
+- **Auswahlfeld „Ort“** (v0.8): nur aktive Orte, sortiert nach Bezeichnung; für die Anwesenheitserfassung.
 
 ## 7. Schnittstellen
 
@@ -541,15 +581,17 @@ Wiederverwendbare Komponenten für AD, EA, GR und EZ:
 | SMTP | Supabase Auth → Google-Konto der Sektion | App-Passwort nur in den Supabase-Einstellungen; Absendername „Vereins OS“ |
 | Edge Function `ad-invite` | POST `{ person_id }`, Bearer-JWT des Aufrufers | prüft AD ≥ edit, R1, R2, R17, Status; lädt per Auth-Admin-API ein (neu oder erneut); bei Erfolg: Status `invited`, last_invited_at, auth_user_id, Protokoll `invited`; bei Fehler der Auth-Admin-API (z. B. Mailversand): hat der Aufruf einen Auth-Eintrag neu angelegt, löscht die Function ihn wieder und setzt Status, auth_user_id und last_invited_at auf den Stand vor dem Aufruf zurück; kein Protokolleintrag; Fehlercode `AD_MAIL_FAILED`. Das Verhalten hängt nicht davon ab, ob Supabase Auth bei SMTP-Fehlern einen Eintrag anlegt; abgesichert durch einen Test der Function mit simuliertem Fehler; ohne Recht: 403 |
 | Edge Function `ad-access` | POST `{ person_id, action: "lock" \| "unlock" \| "change_email", login_email? }` | prüft AD ≥ edit; `lock`/`unlock`: setzt bzw. entfernt Bann in Auth, Status nach Abschnitt 4, Protokoll `locked` / `unlocked`; `change_email` (nur bei Status `invited`, sonst `AD_EMAIL_LOCKED`): prüft R1, R2, löscht den Auth-Eintrag, setzt neue login_email, auth_user_id null, Status `none`, Protokoll `email_changed` (Details: alte → neue Adresse), Meldung „Die Login-Adresse wurde geändert. Bitte die Einladung erneut senden.“; ohne Recht: 403 |
-| EA | Datenbank | nutzt ea_persons (über ea_v_persons), ea_property_types, ea_property_fields, ea_properties, ea_referate, ea_gremien; setzt den Ehrenamtsstatus über `ea_set_volunteer_status`, legt Personen über `ea_create_volunteer` an, übernimmt bzw. reaktiviert über `ea_activate_person`; nutzt `ea_person_referate` für den Bestätigungsdialog; liest ad_qualification_types; nutzt Eigenschaftsformular, Dublettendialog und Auswahlfeld „Qualifikationsart“ sowie die Seiten unter /ea/qualifikationsarten; legt die System-Eigenschaftsarten (Funktion mit `system_key = 'function'`, Amt, Kontaktdaten mit `system_key = 'contact'`, Geburtsdatum mit `system_key = 'birth_date'`, Mitglied usw.) per Migration an [ANNAHME: Schlüssel `function` und `contact`, v0.8]; das Migrationsskript der Aktivenliste schreibt ohne Nutzerkontext (`created_in = 'script'`, Status nach migration-aktivenliste.md) |
+| EA | Datenbank | nutzt ea_persons (über ea_v_persons), ea_property_types, ea_property_fields, ea_properties, ea_referate, ea_gremien; setzt den Ehrenamtsstatus über `ea_set_volunteer_status`, legt Personen über `ea_create_volunteer` an, übernimmt bzw. reaktiviert über `ea_activate_person`; nutzt `ea_person_referate` für den Bestätigungsdialog; liest ad_qualification_types; nutzt Eigenschaftsformular, Dublettendialog und Auswahlfeld „Qualifikationsart“ sowie die Seiten unter /ea/qualifikationsarten; legt die System-Eigenschaftsarten (Funktion mit `system_key = 'function'`, Amt, Kontaktdaten mit `system_key = 'contact'`, Geburtsdatum mit `system_key = 'birth_date'`, Lizenz mit `system_key = 'license'` und Feldern `qualification_type`, `valid_until` (v0.9), Mitglied usw.) per Migration an [ANNAHME: Schlüssel `function`, `contact` (v0.8), `license` und Feldschlüssel (v0.9)]; das Migrationsskript der Aktivenliste schreibt ohne Nutzerkontext (`created_in = 'script'`, Status nach migration-aktivenliste.md) |
 | GR | Datenbank | ersetzt `gr_person_visible` (gleiche Signatur); ergänzt `ea_properties.related_group_id` und `ea_property_history.related_group_id` mit Fremdschlüssel, Validierung und R39; ergänzt eine Funktion zum Anlegen von Personen mit Gruppenbezug (`created_in = 'GR'`, A6); nutzt die gemeinsamen Eigenschaftsarten Kontaktdaten, Geburtsdatum, Mitglied („sichtbar in“ enthält GR, A3); gruppenspezifische Daten in `gr_`-Tabellen; setzt für Trainer:innen und Helfer:innen ohne Ehrenamtsstatus „aktiv“ [ANNAHME]; v0.8: `gr_group_roster(group_id, date)` prüft u. a. `ad_has_level('EZ','read')` und `ad_my_referate('EZ','read')` (R20 der Erhebung Gruppen) |
 | EZ (Anwesenheitserfassung, v0.8) | Datenbank | Rechte über `ad_has_level('EZ', …)` und `ad_my_referate('EZ', …)` (Reichweite Referat, R30); ersetzt `ez_person_visible` (gleiche Signatur); liest Namen nur über `ea_person_names` und `ea_search_active_persons` (R44) und Gruppenlisten über `gr_group_roster`; legt Helfer:innen beim Arbeitseinsatz über `ad_find_similar_persons` und `ea_create_volunteer` an (R45, `created_in = 'EZ'`); verweist mit Fremdschlüssel auf `ad_locations` (Ort beim Training) und `ea_referate`; liest ad_qualification_types (Lizenzprüfung für die Vergütung, später); setzt `ad_modules.is_available` für EZ mit ihrer Freigabe |
+| TK (Planungshilfe Touren und Kurse, neu v0.9) | Datenbank | Rechte über `ad_has_level('TK', …)`, `ad_my_referate('TK', …)` und Freigabe über `ad_my_referate('TKF','edit')` (R30); ersetzt `tk_person_visible` (gleiche Signatur); liest Namen nur über `ea_person_names` und `ea_search_active_persons`, Lizenzen nur über `ea_person_licenses` (R47, R48); liest Sätze über `ad_rates_at` (R46); liest ad_qualification_types; nutzt die Komponente „Personensuche Aktive“; setzt `ad_modules.is_available` für TK und TKF mit ihrer Freigabe (spec.md TK) |
+| FI (Finanzen, später) | Datenbank | liest Sätze der Vergütungsordnung über `ad_rates_at` (keine eigene Tabelle; v0.9) |
 | alle Module | Datenbank | RLS über ad_has_level, ad_my_referate, ea_person_visible; Navigation über ad_my_modules |
 
 ## 8. Nicht-funktionale Anforderungen
 
 - RLS auf jeder Tabelle; keine Tabelle ohne Policy; Rechteprüfung nie nur im Frontend.
-- Schemaänderungen nur per Migration; Seed nur in TEST. Ausnahme Stammdaten ohne Personendaten (ad_modules, Startvorlagen inkl. Referent:in und Startwerte EZ, Startbestand Qualifikationsarten, Referate, Gremien, Orte): per Migration in TEST und PROD.
+- Schemaänderungen nur per Migration; Seed nur in TEST. Ausnahme Stammdaten ohne Personendaten (ad_modules, Startvorlagen inkl. Referent:in und „Freigabe Touren und Kurse“, Startwerte EZ und TK, Startbestand Qualifikationsarten, Referate, Gremien, Orte, Sätze): per Migration in TEST und PROD.
 - Keine Secrets im Repo (Service-Schlüssel, SMTP-App-Passwort, Testpasswörter).
 - Login-Mails enthalten keine Personendaten außer Empfängeradresse und Link.
 - Auth-Mails: max. 30 pro Stunde (Supabase-Grenze mit eigenem SMTP) – ausreichend.
@@ -557,6 +599,7 @@ Wiederverwendbare Komponenten für AD, EA, GR und EZ:
 - Antwortzeit Personenübersicht bei 1.000 Personen (alle Module, v0.7.1) < 1 s je Seite; Liste der Qualifikationsarten bei 100 Einträgen < 1 s.
 - Neu v0.7: Liste von 1.000 Personen (Aktive, Teilnehmer:innen, Erziehungsberechtigte) mit je 30 Eigenschaften im Pfad EA mit Reichweite Referat < 1 s; Sichtbarkeitsfunktionen `stable`, Indizes auf `related_referat_id` und `volunteer_status`; geprüft per Mengentest in pgTAP [ANNAHME: Mengengerüst].
 - Neu v0.8: `ea_search_active_persons` bei 300 Aktiven und `ea_person_names` mit 50 IDs je < 300 ms (Eingabe auf dem Telefon während des Trainings) [ANNAHME]; geprüft im Mengentest.
+- Neu v0.9: `ad_rates_at` bei 100 Schlüsseln mit je 5 Werten und `ea_person_licenses` mit 10 IDs je < 100 ms [ANNAHME]; geprüft im Mengentest.
 - Kosten: 0 €.
 - Zustellung der Login-Mails (Spam-Filter) wird bei der Ersteinrichtung von PROD geprüft: Die erste echte Einladung (Toni Werner) und ein „Passwort vergessen“ gehen an seine reale Adresse @dav-leipzig.de. In TEST keine realen Adressen; einzige Ausnahme: eigene Adressen des Product Owners für die Abnahme von Einladung und Passwort-Links (Abschnitt 9).
 
@@ -581,16 +624,22 @@ Domain und Adressen stehen nie im Repo, im Seed, in `.env.local` oder in einer M
 | 6 | Eva Eingeladen | Mensch | test.eingeladen@dav-leipzig.de | eingeladen | Geschäftsstelle | – | – |
 | 7 | Dieter Gesperrt | Mensch | test.gesperrt@dav-leipzig.de | gesperrt | Geschäftsstelle | – | Hauptamt 01.01.2020–31.12.2025 (beendet, vertraulich) |
 | 8 | Geschäftsstelle Notfall-Admin | Funktionsperson | test.notfall@dav-leipzig.de (is_emergency) | aktiv | Admin | – | – |
-| 9 | Rita Referentin | Mensch | test.referent@dav-leipzig.de | aktiv | Referent:in (Referat Klettern; wirkt ab v0.8 für EA und EZ) | aktiv seit 01.01.2024 | Amt (Test) „Referent:in“, Referat Klettern, seit 01.01.2024 |
+| 9 | Rita Referentin | Mensch | test.referent@dav-leipzig.de | aktiv | Referent:in (Referat Klettern; wirkt ab v0.8 für EA und EZ, ab v0.9 auch TK) | aktiv seit 01.01.2024 | Amt (Test) „Referent:in“, Referat Klettern, seit 01.01.2024 |
 | 10 | Karl Zweireferat | Mensch | – | kein Zugang | – | aktiv seit 01.01.2023 | Funktion (Test) „Helfer:in“, Referat Klettern; Funktion (Test) „Trainer:in“, Referat Ausbildung; Geburtsdatum (Test) 03.03.1985 |
 | 11 | Olga Ausgeschieden | Mensch | – | kein Zugang | – | ausgeschieden seit 30.06.2025 | Funktion (Test) „Trainer:in“, Referat Klettern, 01.01.2020–30.06.2025 |
 | 12 | Paul Nurgruppe | Mensch (`created_in = 'GR'`) | – | kein Zugang | – | – | Kontaktdaten (Test) E-Mail „paul.nurgruppe@example.test“ (simuliert eine Person nur aus Gruppen) |
+| 13 | Tina Touren (neu v0.9) | Mensch | test.touren@dav-leipzig.de | aktiv | Referent:in (Referat Touren); Freigabe Touren und Kurse (Referat Touren) | aktiv seit 01.01.2024 | Amt (Test) „Referent:in“, Referat Touren, seit 01.01.2024 |
+| 14 | Alex Ausbildung (neu v0.9) | Mensch | test.ausbildung@dav-leipzig.de | aktiv | Referent:in (Referat Ausbildung) – ohne Freigabe | aktiv seit 01.01.2024 | Amt (Test) „Referent:in“, Referat Ausbildung, seit 01.01.2024 |
+| 15 | Fritz Freigabe (neu v0.9) | Mensch | test.freigabe@dav-leipzig.de | aktiv | Freigabe Touren und Kurse (Referat Touren) – ohne Referent:in | aktiv seit 01.01.2025 | Funktion (Test) „Helfer:in“, Referat Touren, seit 01.01.2025 |
+| 16 | Bernd Berg (neu v0.9) | Mensch | – | kein Zugang | – | aktiv seit 01.01.2020 | Funktion (Test) „Trainer:in“, Referat Touren; Lizenz (Test) „Trainer*in C Bergwandern“ [ANNAHME: Qualifikationsart im Startbestand vorhanden, DOSB-lizenzfähig], gültig bis 30.10.2027 |
+| 17 | Hilde Helfer (neu v0.9) | Mensch | – | kein Zugang | – | aktiv seit 01.01.2022 | Funktion (Test) „Helfer:in“, Referat Touren; keine Lizenz |
+| 18 | Karl Kletter (neu v0.9) | Mensch | – | kein Zugang | – | aktiv seit 01.01.2018 | Funktion (Test) „Trainer:in“, Referat Ausbildung; Lizenz (Test) TCSPI, gültig bis 31.12.2025 (abgelaufen) |
 
 Eigenschaftsarten im Seed (Felder in Klammern):
 - „Hauptamt“ (Bezeichnung: Text, Pflicht) – vertraulich, Kategorie Sonstiges, sichtbar in AD, Zweck „Zuordnung der hauptamtlich Beschäftigten“.
 - „T-Shirt-Größe“ (Größe: Auswahlliste S, M, L, XL, Pflicht) – alle mit Zugriff, Kategorie Ausgaben, nur ein gültiger Eintrag, sichtbar in EA, Zweck „Bestellung von Vereinskleidung“.
 - „Erste-Hilfe-Kurs am“ (Datum: Datum, Pflicht) – alle mit Zugriff, Kategorie Qualifikationen, sichtbar in EA, Zweck „Nachweis für Tätigkeiten mit Gruppen“.
-- „Lizenz (Test)“ (Qualifikationsart: Qualifikationsart, nur Typ Lizenz, Pflicht; Lizenznummer: Text; gültig bis: Datum) – alle mit Zugriff, Kategorie Qualifikationen, sichtbar in AD und EA, Zweck „Nachweis der Trainerlizenz“.
+- „Lizenz (Test)“ (Qualifikationsart: Qualifikationsart, nur Typ Lizenz, Pflicht, Schlüssel `qualification_type`; Lizenznummer: Text; gültig bis: Datum, Schlüssel `valid_until`) – alle mit Zugriff, Kategorie Qualifikationen, sichtbar in AD und EA, Zweck „Nachweis der Trainerlizenz“; v0.9: im Seed mit `system_key = 'license'` [ANNAHME].
 - „Funktion (Test)“ (Funktion: Auswahlliste Trainer:in, Helfer:in, Pflicht) – Bezug Referat (Pflicht), Kategorie Zuordnung, alle mit Zugriff, sichtbar in AD und EA, Zweck „Zuordnung zu Referaten“; v0.8: im Seed mit `system_key = 'function'`, solange die erste EA-Migration die endgültige Art noch nicht anlegt [ANNAHME].
 - „Amt (Test)“ (Amt: Auswahlliste Referent:in, Hüttenwart:in, Pflicht) – Bezug Referat (Pflicht), Kategorie Zuordnung, alle mit Zugriff, sichtbar in AD und EA, Zweck „Gewählte Verantwortung für ein Referat“.
 - „Geburtsdatum (Test)“ (Datum: Datum, Pflicht) – nur Geschäftsstelle und Admin, Kategorie Stammdaten, `system_key = 'birth_date'`, nur ein gültiger Eintrag, sichtbar in AD, EA, GR, Zweck „Lizenzanträge“.
@@ -598,31 +647,47 @@ Eigenschaftsarten im Seed (Felder in Klammern):
 
 Die endgültigen System-Eigenschaftsarten legt die erste EA-Migration an; der Seed verwendet nur Testarten.
 
-Qualifikationsarten, Referate, Gremien: kommen aus Migrationen, nicht aus dem Seed. Die Eigenschaft von Person 5 (Altbestand mit historischer Qualifikationsart) fügt der Seed ohne Nutzerkontext ein; R27 greift dort nicht.
+Qualifikationsarten, Referate, Gremien, Sätze: kommen aus Migrationen, nicht aus dem Seed. Die Eigenschaft von Person 5 (Altbestand mit historischer Qualifikationsart) fügt der Seed ohne Nutzerkontext ein; R27 greift dort nicht.
 
 Orte im Seed (neu v0.8, nur TEST, solange der Startbestand [OFFEN] ist): „Kletterhalle Test“ (Punktekonto Kletterhalle ja, aktiv), „Fels Test“ (nein, aktiv), „Halle alt Test“ (nein, inaktiv).
 
+Sätze (neu v0.9): Startbestand per Migration T61 (gültig ab 01.01.2026); der Seed ergänzt nur in TEST einen zweiten Wert `rOrg = 12` gültig ab 01.01.2028 (für US-TK-19 AK2).
+
 Protokoll im Seed: je ein Eintrag `invited`, `template_assigned` (Rita Referentin, Referat Klettern), `locked`, `emergency_login`.
 
-Erwartete Sichtbarkeit (Grundlage der pgTAP-Tests T45):
+Erwartete Sichtbarkeit (Grundlage der pgTAP-Tests T45; Personen 13–18 v0.9 analog: Geschäftsstelle sieht 13–18 im Pfad EA, Referent:in Klettern keine davon):
 
 | Testzugang | sieht Personen | sieht nicht |
 |---|---|---|
-| Admin | 1–12 (Pfad AD: alle Personen), alle Lesestufen | – |
-| Geschäftsstelle | 4, 5, 9, 10, 11 (EA verwalten), Lesestufen „alle mit Zugriff“ und „nur Geschäftsstelle und Admin“ | 1–3, 6–8 (kein AD, kein Ehrenamtsstatus), 12; vertrauliche Eigenschaften |
-| Referent:in (Klettern) | 4, 9, 10 (Referat Klettern); bei 10 auch die Funktion im Referat Ausbildung (lesen, nicht ändern) | 5 (nur Ausbildung), 11 (ausgeschieden), 12, alle ohne Ehrenamtsstatus; Geburtsdatum; vertrauliche Eigenschaften |
+| Admin | 1–18 (Pfad AD: alle Personen), alle Lesestufen | – |
+| Geschäftsstelle | 4, 5, 9, 10, 11, 13–18 (EA verwalten), Lesestufen „alle mit Zugriff“ und „nur Geschäftsstelle und Admin“ | 1–3, 6–8 (kein AD, kein Ehrenamtsstatus), 12; vertrauliche Eigenschaften |
+| Referent:in (Klettern) | 4, 9, 10 (Referat Klettern); bei 10 auch die Funktion im Referat Ausbildung (lesen, nicht ändern) | 5 (nur Ausbildung), 11 (ausgeschieden), 12, 13–18, alle ohne Ehrenamtsstatus; Geburtsdatum; vertrauliche Eigenschaften |
 | Vorstand | niemanden | alle |
 
-Erwartete Ergebnisse der Namensfunktionen (neu v0.8, Grundlage der pgTAP-Tests T56; `ez_person_visible` als Platzhalter `false`):
+Erwartete Ergebnisse der Namensfunktionen (v0.8, Grundlage der pgTAP-Tests T56; `ez_person_visible` als Platzhalter `false`):
 
 | Testzugang | `ea_search_active_persons('Muster')` | `ea_search_active_persons('Karl')` | `ea_person_names([4, 5, 12])` |
 |---|---|---|---|
 | Admin (EZ lesen) | Fehler `AD_FORBIDDEN` | Fehler `AD_FORBIDDEN` | 4, 5, 12 (Pfad AD) |
-| Geschäftsstelle (EZ verwalten) | 4 (nicht 5: ruhend) | 10 | 4, 5 (Pfad EA) |
-| Referent:in (Klettern, EZ bearbeiten Referat) | 4 | 10 | 4 (Pfad EA Referat) |
+| Geschäftsstelle (EZ verwalten) | 4 (nicht 5: ruhend) | 10, 18 | 4, 5 (Pfad EA) |
+| Referent:in (Klettern, EZ bearbeiten Referat) | 4 | 10, 18 | 4 (Pfad EA Referat) |
 | Vorstand | Fehler `AD_FORBIDDEN` | Fehler `AD_FORBIDDEN` | keine |
 
 Zusätzlich: Funktionsperson 8 nie in den Ergebnissen; Suchbegriff „M“ → `AD_SEARCH_TOO_SHORT`; Rückgabe enthält nur die vier Spalten.
+
+Erwartete Ergebnisse v0.9 (Grundlage der pgTAP-Tests T65; `tk_person_visible` als Platzhalter `false`):
+
+| Testzugang | `ad_my_referate('TK','edit')` | `ad_my_referate('TKF','edit')` | `ea_search_active_persons('Berg')` | `ea_person_licenses([16, 17, 18], 2027-10-29)` | `ad_rates_at(2028-01-01)` Wert `rOrg` |
+|---|---|---|---|---|---|
+| Admin (TK lesen) | {} | {} | Fehler `AD_FORBIDDEN` | 16: Bergwandern, bis 30.10.2027, förderfähig, gültig; 18: TCSPI, bis 31.12.2025, nicht gültig | 12 |
+| Geschäftsstelle (TK verwalten) | {} (Reichweite alle) | {} | 16 | wie Admin | 12 |
+| Tina Touren | {Touren} | {Touren} | 16 | wie Admin | 12 |
+| Alex Ausbildung | {Ausbildung} | {} | 16 | wie Admin | 12 |
+| Fritz Freigabe | {} | {Touren} | 16 | wie Admin | 12 |
+| Rita Referentin (Klettern) | {Klettern} | {} | 16 (wegen EZ bearbeiten) | wie Admin (TK bearbeiten Referat Klettern) | 12 |
+| Vorstand | {} | {} | Fehler `AD_FORBIDDEN` | Fehler `AD_FORBIDDEN` | Fehler `AD_FORBIDDEN` |
+
+Zusätzlich: `ad_rates_at(2027-12-31)` liefert `rOrg = 10`; Person 17 ohne Zeile in `ea_person_licenses`; Lizenznummer nie in der Rückgabe; `ad_my_modules` liefert für Fritz Freigabe die Kachel TK (sobald verfügbar), nie TKF; Schreiben in `ad_rates` nur für den Admin.
 
 ## 10. Umsetzungs-Tasks
 
@@ -690,6 +755,17 @@ Nachtrag v0.8 (Anwesenheitserfassung; Voraussetzung T33, T38, T39, T40; vor der 
 - [ ] T56: pgTAP Nachtrag v0.8: Startwerte EZ je Vorlage; Reichweite „Referat“ für EZ erlaubt, für GR abgelehnt (`AD_SCOPE_NOT_ALLOWED`); `ad_my_referate('EZ','edit')` für Rita Referentin = {Klettern}; Orte: Lesen mit aktivem Zugang, Schreiben nur `ad_can_edit_locations()`, kein Löschen, R43; Namensfunktionen nach der Tabelle in Abschnitt 9 inkl. Spaltenliste; `ea_create_volunteer` über EZ-Rechte: Referent:in Klettern legt Helfer:in für Klettern an (`created_in = 'EZ'`, Status aktiv, Funktion Helfer:in), für Ausbildung abgelehnt (`EA_CREATE_FOREIGN_REFERAT`), mit Funktion Trainer:in abgelehnt (`EA_CREATE_FORBIDDEN`); Mengentest Abschnitt 8 (A1–A4, A8)
 - [ ] T57: Seed-Ergänzung v0.8: Orte nach Abschnitt 9; `system_key` an den Testarten Funktion und Kontaktdaten; Testzugänge erhalten die EZ-Startwerte über ihre Vorlagen (A5)
 - [ ] T58: Abnahme in TEST mit den Testzugängen Admin (EZ nur lesen), Geschäftsstelle, Referent:in (Klettern) und Vorstand (kein Zugriff): Vorlagen-Matrix, Orte pflegen (nur Admin), Namenssuche und Anlegen per SQL-Aufruf, solange die Oberfläche der Anwesenheitserfassung fehlt (A1–A5, A8)
+
+Nachtrag v0.9 (Planungshilfe Touren und Kurse; Voraussetzung T33–T40, T52; vor der ersten Migration der Planungshilfe):
+- [ ] T59: Migration Module TK und TKF: Spalte `ad_modules.is_hidden` (Default false); Zeilen `TK` und `TKF` (`is_available = false`, TKF `is_hidden = true`); `ad_my_modules` ohne `is_hidden`, Kachel TK auch bei `ad_has_any_level('TKF','edit')`; `ad_template_rights` je vorhandener Vorlage um TK und TKF ergänzen (`none`); Startwerte Admin TK `read`, Geschäftsstelle TK `manage`, Referent:in TK `edit` mit scope `referat`, Vorstand `none`; neue Vorlage „Freigabe Touren und Kurse“ mit TKF `edit` scope `referat`, übrige `none` – ohne Änderungen des Admins zu überschreiben; Checks R30 (Reichweite für EA, EZ, TK, TKF; TKF nur `none`/`edit`) (Übergabe TK 1–3, 9, 11)
+- [ ] T60: Migration Sätze: Enum `ad_rate_group`, Tabelle `ad_rates` mit Checks, Unique `(rate_key, valid_from)`, Trigger updated_* und Sperre von `rate_key`/`valid_from`; Funktionen `ad_can_edit_rates`, `ad_can_read_rates`, `ad_rates_at`; RLS nach Abschnitt 3, kein Delete (R46; Übergabe TK 10, 12)
+- [ ] T61: Migration Startbestand Sätze: alle Schlüssel aus spec.md TK Abschnitt 7 mit Werten, Einheiten und Quellen aus prototyp-tourenkonzept.md 5.1–5.4, gültig ab 01.01.2026, idempotent ohne Überschreiben (Übergabe TK 13)
+- [ ] T62: Migration Namen und Lizenzen für TK: `tk_person_visible` (Platzhalter false); `ea_person_names` um `tk_person_visible` erweitern; `ea_search_active_persons` für TK ≥ edit und TKF freigeben; `ea_person_licenses` nach Abschnitt 2 (R47, R48; Übergabe TK 4, 5, 8, 12)
+- [ ] T63: Fehlercodes v0.9 in contracts/error-codes.md (`AD_LEVEL_NOT_ALLOWED`, `AD_RATE_DUPLICATE`, `AD_RATE_VALUE`, `AD_RATE_FIELD_REQUIRED`, `AD_RATE_LOCKED`; neuer Text für `AD_SCOPE_NOT_ALLOWED`)
+- [ ] T64: Frontend: Zeilen Planungshilfe und Freigabe in der Vorlagen-Matrix (R30, Stufen bei TKF eingeschränkt); Screens /ad/saetze mit „Stand am“, Historie und „Neuer Wert“; Navigationseintrag „Sätze“; Personensuche „Aktive“ für TK freigeben
+- [ ] T65: pgTAP Nachtrag v0.9: Startwerte TK/TKF je Vorlage; Reichweite „Referat“ für TK/TKF erlaubt; TKF `manage` abgelehnt (`AD_LEVEL_NOT_ALLOWED`); Tabelle „Erwartete Ergebnisse v0.9“ in Abschnitt 9; `ad_rates`: Lesen nach `ad_can_read_rates`, Schreiben nur Admin, R46, kein Löschen, `ad_rates_at` nach Datum; `ea_person_licenses`: Spaltenliste ohne Lizenznummer, nur Lesestufe „alle mit Zugriff“, Funktionsperson und ausgeschiedene Personen nie; Mengentest Abschnitt 8
+- [ ] T66: Seed-Ergänzung v0.9: Personen 13–18 mit Zugängen und Vorlagen (inkl. Referaten), `system_key = 'license'` und Feldschlüssel an „Lizenz (Test)“, zweiter Wert `rOrg` gültig ab 01.01.2028 (nur TEST)
+- [ ] T67: Abnahme in TEST mit Admin (Sätze pflegen, Freigabe-Vorlage vergeben und entziehen inkl. Protokoll), Geschäftsstelle (Sätze nur lesen), Tina Touren, Alex Ausbildung, Fritz Freigabe (per SQL-Aufruf der Funktionen, solange die Oberfläche der Planungshilfe fehlt), Vorstand (kein Zugriff)
 
 ## 11. Annahmen und offene Punkte
 
@@ -778,14 +854,37 @@ Annahmen v0.8 (bei Abnahme bestätigen):
 - [ANNAHME] Neue Vorlagen erhalten für EZ die Stufe `none`; die Migration überschreibt keine Änderungen des Admins.
 - [ANNAHME] Höchstens 500 IDs je Aufruf von `ea_person_names`; Antwortzeit < 300 ms.
 
+Entschieden vom Product Owner am 22.10.2026 (v0.9, Übergabe aus der Planungshilfe Touren und Kurse v1.6; auf Wunsch des Product Owners im Chat Planungshilfe Touren und Kurse eingearbeitet, weil der Chat der Administration in einem anderen Projekt liegt):
+- Modulname „Planungshilfe Touren und Kurse“, Kürzel TK; Nutzer im MVP Referent:innen Touren und Ausbildung und Geschäftsstelle.
+- Freigabe von Touren und Kursen liegt bei den Referent:innen und ist delegierbar; das Freigaberecht vergibt und entzieht der Admin; wer es hat, darf Planungen auch bearbeiten und Rückfragen stellen.
+- Sätze und Pauschalen (u. a. Organisationspauschale, Tagessätze, Hüttenpauschalen) sind Stammdaten der Administration; Pflege vorerst nur durch den Admin; Finanzen nutzt dieselben Sätze.
+- Keine Stornoregel in den Sätzen.
+- Lizenz-Stichtag für den Trainersatz: erster Tag der Tour (Prüfung in der Planungshilfe über `ea_person_licenses` mit dem Startdatum).
+
+Annahmen v0.9 (bei Abnahme bestätigen):
+- [ANNAHME] Freigaberecht als zweites Modul TKF ohne Seiten (`is_hidden`), Stufe „bearbeiten“ = freigeben; Alternative wäre eine neue Aktion „freigeben“ im Rechtemodell.
+- [ANNAHME] Startwerte TK: Admin lesen, Geschäftsstelle verwalten, Referent:in bearbeiten mit Reichweite Referat, Vorstand ohne; die Geschäftsstelle erhält kein Freigaberecht.
+- [ANNAHME] Wer nur die Vorlage „Freigabe Touren und Kurse“ hat, sieht die Kachel der Planungshilfe.
+- [ANNAHME] System-Schlüssel `license` und Feldschlüssel `qualification_type`, `valid_until` für die Eigenschaftsart Lizenz (legt die erste EA-Migration fest).
+- [ANNAHME] „Förderfähig“ = Qualifikationsart mit `dosb_eligible = true` (glossar.md „Lizenz“).
+- [ANNAHME] `ea_person_licenses` liefert nur Lizenzen aus Eigenschaftsarten mit Lesestufe „alle mit Zugriff“, höchstens 50 IDs, ohne Lizenznummer.
+- [ANNAHME] Änderungen an Sätzen nur mit updated_at/by, ohne Protokolleintrag; nie löschen.
+- [ANNAHME] Lesen der Sätze für AD lesen, TK lesen (beide Reichweiten), TKF und FI lesen.
+- [ANNAHME] Seed-Lizenz „Trainer*in C Bergwandern“ ist im Startbestand der Qualifikationsarten enthalten und DOSB-lizenzfähig; sonst wird eine passende Qualifikationsart verwendet.
+
 Vorgemerkt für Iteration 1 der Anwesenheitserfassung (nicht MVP):
 - A6 – Reichweite „Gruppe“: Enum-Wert `group` für `ad_scope`, Tabelle `ad_assignment_groups` (analog `ad_assignment_referate`), Funktion `ad_my_groups(p_module, p_min)`; bei Zuweisung legt der Admin eine oder mehrere Gruppen fest [ANNAHME]; zunächst nur für die Anwesenheitserfassung.
 - A7 – Rechtevorlage „Gruppenleitung“: EZ bearbeiten mit Reichweite „Gruppe“ (Einsätze der eigenen Gruppen anlegen, Anwesenheit erfassen); dieselbe Vorlage für Trainer:innen [ANNAHME]; Zugänge nach E6.
 
+Vorgemerkt für später (Planungshilfe):
+- Reichweite „nur eigene“ für Tourenleitende (Iteration 2 der Planungshilfe; öffentliches Formular oder Zugang [OFFEN]).
+- Pflege der Sätze auch durch Geschäftsstelle oder Referent:innen (Erweiterung von `ad_can_edit_rates`).
+
 Offen (kein Blocker für AD):
 - [OFFEN] Wie kommen Migrationen nach PROD (manuell durch den Product Owner oder GitHub Action beim Merge auf main)? Klärung vor dem ersten PROD-Deployment; bis dahin wird PROD nicht angefasst.
 - [OFFEN] Vertretung des Admin-Zugangs (Toni Werner).
-- [OFFEN] Löschlauf nach 5 Jahren über alle Pfade (A8 der Übergabe GR): Person nur löschen, wenn kein Pfad sie mehr braucht; Löschung des Zugangs. Nach MVP. Ab v0.8 inklusive Anwesenheiten (Aufbewahrungsfrist im Modul Anwesenheitserfassung).
+- [OFFEN] Löschlauf nach 5 Jahren über alle Pfade (A8 der Übergabe GR): Person nur löschen, wenn kein Pfad sie mehr braucht; Löschung des Zugangs. Nach MVP. Ab v0.8 inklusive Anwesenheiten (Aufbewahrungsfrist im Modul Anwesenheitserfassung), ab v0.9 inklusive Leitung in Planungen.
 - [OFFEN] Startbestand der Orte (liefert Product Owner); Pflege der Orte zusätzlich durch die Geschäftsstelle (über EZ verwalten)?
+- [OFFEN] Echte Gültig-ab-Daten der Sätze (Startbestand nutzt 01.01.2026); Bestätigung der Prototyp-Annahmen durch das Referat Touren (spec.md TK Abschnitt 11).
 - [OFFEN] Eigene Rechtevorlage für Trainer:innen oder dieselbe wie Gruppenleitung (Iteration 1)?
-- [OFFEN] Stories für den Nachtrag v0.8 (US-AD-27 ff.) im Chat Administration nachziehen oder Abnahme über T56/T58 genügen lassen.
+- [OFFEN] Stories für die Nachträge v0.8 und v0.9 (US-AD-27 ff.) nachziehen oder Abnahme über T56/T58 bzw. T65/T67 genügen lassen.
