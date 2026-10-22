@@ -19,6 +19,8 @@ import { loadNewTemplate, loadTemplate, loadTemplateList } from '@/features/ad/r
 import { RechtevorlageBearbeiten } from '@/features/ad/rechtevorlagen/RechtevorlageBearbeiten'
 import { RechtevorlagenListe } from '@/features/ad/rechtevorlagen/RechtevorlagenListe'
 import { LoginPage } from '@/features/auth/LoginPage'
+import { PasswortSetzenPage } from '@/features/auth/PasswortSetzenPage'
+import { PasswortVergessenPage } from '@/features/auth/PasswortVergessenPage'
 import { KeinZugriffPage } from '@/features/start/KeinZugriffPage'
 import { loadMyModules } from '@/features/start/modules'
 import { StartPage } from '@/features/start/StartPage'
@@ -37,8 +39,8 @@ export const router = createBrowserRouter([
     element: <LoginPage />,
     HydrateFallback: LoadingScreen,
   },
-  { path: '/passwort-vergessen', element: <PlaceholderPage title="Passwort vergessen" /> },
-  { path: '/passwort-setzen', element: <PlaceholderPage title="Passwort setzen" /> },
+  { path: '/passwort-vergessen', element: <PasswortVergessenPage /> },
+  { path: '/passwort-setzen', element: <PasswortSetzenPage /> },
   {
     // Geschützter Bereich: ohne Sitzung → /login (US-AD-02 AK5)
     id: 'protected',

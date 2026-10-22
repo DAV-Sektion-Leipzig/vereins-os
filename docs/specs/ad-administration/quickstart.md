@@ -28,7 +28,7 @@ Voraussetzungen:
 | 1 | Migrationen prüfen | `npx supabase db push --linked --dry-run` | listet nur die neuen AD-Migrationen |
 | 2 | Migrationen anwenden | `npx supabase db push --linked` | läuft ohne Fehler |
 | 3 | Auth-Einstellungen | **manuell durch den Product Owner im TEST-Dashboard** nach der Checkliste in `supabase/setup/README.md`; kein `config push`/`config diff` (`config.toml` gilt nur für den lokalen Stack) | Selbstregistrierung aus, Passwort ≥ 8, Redirect-URLs, deutsche Vorlagen aus `supabase/templates/`, `email_sent = 30` |
-| 4 | Edge Functions | `npx supabase functions deploy ad-invite ad-access` | beide aktiv |
+| 4 | Edge Functions | `npx supabase functions deploy ad-invite ad-access` (nach Prüfung, dass TEST verknüpft ist). Optional `npx supabase secrets set SITE_URL=<Adresse der Vorschau>` für `redirectTo`; ohne Secret gilt die PROD-Adresse, die in beiden Projekten in der Redirect-Liste steht. `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` stellt die Edge-Laufzeit bereit | beide aktiv |
 | 5 | Seed | `supabase/seed.sh` | Testdaten nach spec.md Abschnitt 9 |
 | 6 | Seed-Schutz | `seed.sh` mit einer Verbindung, deren Project Ref die von vereins-os-prod ist (nur Prüfung der Ref, ohne Verbindung) | Abbruch „Seed in PROD nicht erlaubt.“ |
 | 7 | Frontend | `npm run dev` → http://localhost:5173, alternativ Cloudflare-Vorschau | Login-Seite |

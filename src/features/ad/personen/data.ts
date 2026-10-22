@@ -157,19 +157,31 @@ export type DetailResult = {
   person: PersonRow | null
   properties: PropertiesData | null
   assignments: AssignmentsData | null
+  access: AccessInfo | null
+  lockedByName: string | null
   failed: boolean
 }
 
 export async function loadPersonDetail({ params }: LoaderFunctionArgs): Promise<DetailResult> {
   await requireLevel('AD', 'read')
-  const [person, properties, assignments] = await Promise.all([
+  const [person, properties, assignments, access] = await Promise.all([
     supabase.from('ad_v_person_overview').select('*').eq('person_id', params.id!).maybeSingle(),
     loadPersonProperties(params.id!),
     loadAssignments(params.id!),
+    loadAccess(params.id!),
   ])
-  if (person.error) return { person: null, properties: null, assignments: null, failed: true }
+  if (person.error || access.failed) {
+    return { person: null, properties: null, assignments: null, access: null, lockedByName: null, failed: true }
+  }
   if (!person.data) throw redirect('/ad')
-  return { person: person.data as PersonRow, properties, assignments, failed: false }
+  return {
+    person: person.data as PersonRow,
+    properties,
+    assignments,
+    access: access.access,
+    lockedByName: access.lockedByName,
+    failed: false,
+  }
 }
 
 export type SimilarResult = { hits: SimilarPerson[]; error: unknown }
@@ -400,5 +412,36 @@ export async function setAssignmentReferate(assignmentId: string, referate: stri
 
 export async function revokeTemplate(personId: string, templateId: string) {
   const { error } = await supabase.rpc('ad_revoke_template', { p_person: personId, p_template: templateId })
+  return error ?? null
+}
+
+// --- Zugang einer Person (US-AD-08, US-AD-09; T095)
+
+export type AccessInfo = {
+  login_email: string
+  status: AccessStatus
+  last_invited_at: string | null
+  locked_at: string | null
+  locked_by: string | null
+}
+
+export async function loadAccess(personId: string): Promise<{ access: AccessInfo | null; lockedByName: string | null; failed: boolean }> {
+  const { data, error } = await supabase
+    .from('ad_accesses')
+    .select('login_email, status, last_invited_at, locked_at, locked_by')
+    .eq('person_id', personId)
+    .maybeSingle()
+  if (error) return { access: null, lockedByName: null, failed: true }
+  const access = (data as AccessInfo | null) ?? null
+  const names = access?.locked_by ? await loadUserNames([access.locked_by]) : {}
+  return { access, lockedByName: access?.locked_by ? (names[access.locked_by] ?? null) : null, failed: false }
+}
+
+/** Login-Adresse bei „kein Zugang“ direkt (R20); R1 prüft der Trigger, R2 der Unique-Index. */
+export async function saveLoginEmail(personId: string, email: string, exists: boolean) {
+  const login_email = email.trim()
+  const { error } = exists
+    ? await supabase.from('ad_accesses').update({ login_email }).eq('person_id', personId)
+    : await supabase.from('ad_accesses').insert({ person_id: personId, login_email })
   return error ?? null
 }

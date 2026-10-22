@@ -6,13 +6,14 @@ import { EigenschaftenAbschnitt } from '@/features/ad/personen/EigenschaftenAbsc
 import { RechtevorlagenAbschnitt } from '@/features/ad/personen/RechtevorlagenAbschnitt'
 import { Section } from '@/features/ad/personen/Section'
 import { StammdatenAbschnitt } from '@/features/ad/personen/StammdatenAbschnitt'
+import { ZugangAbschnitt } from '@/features/ad/personen/ZugangAbschnitt'
 import type { DetailResult } from '@/features/ad/personen/data'
 import { MESSAGES } from '@/lib/errors'
 import { personName } from '@/lib/format'
 
 // T075 (US-AD-24; Gerüst für US-AD-08, 09, 11, 13): Personendetail mit den Abschnitten aus spec.md Abschnitt 6.
 export function PersonDetail() {
-  const { person, properties, assignments, failed } = useLoaderData() as DetailResult
+  const { person, properties, assignments, access, lockedByName, failed } = useLoaderData() as DetailResult
   const { canEdit } = useAdAccess()
   const location = useLocation()
   const handedError = (location.state as { error?: string } | null)?.error ?? null
@@ -47,17 +48,13 @@ export function PersonDetail() {
 
       <StammdatenAbschnitt person={person} canEdit={canEdit} />
 
-      <Section id="zugang" title="Zugang">
-        <dl className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-[max-content_1fr]">
-          <dt className="text-muted-foreground">Login-Adresse</dt>
-          <dd>{person.login_email ?? '–'}</dd>
-          <dt className="text-muted-foreground">Status</dt>
-          <dd>
-            <AccessStatusBadge status={person.access_status} />
-          </dd>
-        </dl>
-        <p className="text-sm text-muted-foreground">Einladen, Sperren und Adresse ändern folgen.</p>
-      </Section>
+      <ZugangAbschnitt
+        person={person}
+        access={access}
+        lockedByName={lockedByName}
+        hasTemplate={(assignments?.assignments.length ?? 0) > 0}
+        canEdit={canEdit}
+      />
 
       {assignments ? (
         <RechtevorlagenAbschnitt personId={person.person_id} data={assignments} canEdit={canEdit} />
