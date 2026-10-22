@@ -1,8 +1,8 @@
 # Research: Administration (AD)
 
-Stand: 20.10.2026 · Phase 0 zu [plan.md](plan.md) · Grundlage: [spec.md](spec.md) v0.5
+Stand: 22.10.2026 · Phase 0 zu [plan.md](plan.md) · Grundlage: [spec.md](spec.md) v0.9, Umfang Kern bis v0.7.1 (R-01 bis R-16 aus v0.5, R-17 ff. neu)
 
-Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spec.md v0.5 Abschnitt 11. Annahmen, die bei der Abnahme in TEST zu prüfen sind, tragen den Vermerk `[PRÜFEN T25]`.
+Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spec.md Abschnitt 11. Annahmen, die bei der Abnahme in TEST zu prüfen sind, tragen den Vermerk `[PRÜFEN T25]`.
 
 ---
 
@@ -74,7 +74,7 @@ Drei `security definer`-Trigger-Funktionen im Schema `public`, `set search_path 
 
 ## R-09 Dublettenprüfung
 
-`ad_find_similar_persons` als `security invoker`, `stable`, Bedingung nach spec.md. Treffer über die Login-Adresse erhält nur, wer `ad_accesses` lesen darf (RLS). Die Schwelle 0,3 ist eine Konstante; die Abnahme folgt in T25.
+Ersetzt durch R-25 (spec.md v0.7, R40): Die Funktion sucht modulübergreifend und ist deshalb security definer. Die Schwelle 0,3 bleibt eine Konstante; die Abnahme folgt in T25.
 
 ## R-10 Seed: seed.sh + seed.sql
 
@@ -139,4 +139,88 @@ Drei `security definer`-Trigger-Funktionen im Schema `public`, `set search_path 
 
 ## R-15 Branches
 
-Der Plan entsteht auf `us-ad-01-ersteinrichtung`. Die Datenbank-Grundlage (T1–T8) inklusive der DB-Teile von US-AD-10 und US-AD-11 gehört zu US-AD-01 (02-stories.md v0.5). Die übrigen Stories bekommen je einen eigenen Branch.
+Ersetzt durch plan.md, Abschnitt „Branches“: Die Datenbankteile des Kerns hängen voneinander ab (Reichweite, Referate, Eigenschaftsarten, Sichtbarkeit) und kommen auf den gemeinsamen Branch `ad-kern-datenbank`; die Oberflächen je Story auf eigene Branches (CLAUDE.md, Git-Workflow).
+
+## R-17 Enum-Erweiterungen in eigener Migration
+
+- **Entscheidung:** Die neuen Enum-Werte (`ea_data_type`: `number`, `year`, `qualification_type`; `ad_audit_action`: `referate_changed`) und die neuen Enums des Kerns entstehen in der ersten Migration `20261023000100_ad_kern_enums.sql`, vor allen Objekten, die sie nutzen.
+- **Begründung:** `alter type … add value` ist in einer Transaktion erlaubt, der neue Wert darf aber erst nach dem Commit genutzt werden. Jede Migrationsdatei läuft in einer eigenen Transaktion; Defaults, Checks oder Inserts mit den neuen Werten stehen deshalb erst in späteren Dateien.
+- **Alternative:** Enums neu anlegen und Spalten umstellen – unnötig, weil die bestehenden Werte gültig bleiben.
+
+## R-18 Reichweite und Zuweisung mit Referaten
+
+- `ad_template_rights.scope` ist heute `text` mit Check `scope = 'all'`. Die Migration T33 entfernt den Check, stellt die Spalte per `alter column … type public.ad_scope using scope::public.ad_scope` um und legt den Check für den Kern an: `scope = 'all' or (scope = 'referat' and module_code = 'EA')` (Constraint-Name `ad_template_rights_scope_allowed`). Verstöße meldet ein Trigger mit `AD_SCOPE_NOT_ALLOWED`, der Check sichert ab. T50 ersetzt den Check später um EZ, T59 um TK und TKF.
+- `ad_user_level` wird per `create or replace` auf Reichweite `all` eingeschränkt (Signatur unverändert). `ad_my_modules` per `create or replace` mit `ad_has_any_level`; `level` = höchste Stufe über beide Reichweiten.
+- `ad_assign_template(p_person, p_template)` bekommt den Parameter `p_referate uuid[] default null`. Weil sich die Signatur ändert, wird die alte Funktion mit `drop function` entfernt und neu angelegt (Grants neu). Ein Aufruf ohne Referate bleibt gültig.
+- Protokoll: `template_assigned` mit Details „Vorlage, Referate: …“; `ad_set_assignment_referate` schreibt `referate_changed` mit „vorher → nachher“.
+
+## R-19 Sichtbarkeit je Pfad (R32)
+
+- Alle Sichtbarkeitsfunktionen (`ea_person_in_referate`, `ea_person_visible_ad`, `ea_person_visible_ea`, `gr_person_visible`, `ea_person_visible`, `ea_property_readable`, `ea_property_writable`) sind `security definer`, `stable`, `set search_path = ''`. Sie lesen `ea_persons` und `ea_properties` als Eigentümer ohne RLS; damit gibt es keine Rekursion zwischen Policy und Funktion.
+- Die Policies auf `ea_persons`, `ea_properties`, `ea_property_history`, `ea_volunteer_status_history` rufen nur diese Funktionen auf. Die bisherigen Policies aus `20261020000200_ea_persons.sql` werden in T38 mit `drop policy` ersetzt.
+- `gr_person_visible` ist ein Platzhalter (`false`), den die erste GR-Migration mit gleicher Signatur ersetzt.
+- Leistung: Indizes auf `ea_properties (related_referat_id) where …`, `ea_persons (volunteer_status) where …`; `ad_my_referate` wird je Abfrage einmal ausgewertet (stable). Nachweis über den Mengentest (R-27).
+
+## R-20 Werte je Feld in `field_values` (R35)
+
+- `ea_properties.field_values` ist ein `jsonb`-Objekt `{ "<key>": <wert> }`. Der Trigger `ea_properties_validate` prüft je Feld der Art: Pflicht (`EA_FIELD_REQUIRED`, Detail = Bezeichnung), unbekannter Schlüssel (`EA_FIELD_UNKNOWN`), Typ (`EA_VALUE_TYPE`, Detail = Bezeichnung): Text/Auswahl als String, Zahl als Zahl, Datum als String `YYYY-MM-DD` (gültiges Datum), Jahr als ganze Zahl 1900–2100, Ja/Nein als boolean, Qualifikationsart als uuid-String einer vorhandenen Qualifikationsart; Auswahl im Wertebereich (`EA_FIELD_CHOICE`). Leere Strings gelten als nicht gesetzt.
+- Der Feldname geht im `detail` des Fehlers (`using detail = …`) ans Frontend; `src/lib/errors.ts` setzt ihn in die Meldung ein.
+- R37 (`EA_SINGLE_VALUE`): Überschneidung der Zeiträume `[valid_from, coalesce(valid_to, 'infinity')]` mit einer anderen Eigenschaft derselben Person und Art, wenn `allow_multiple = false`.
+- R38: genau die zum `relation_kind` passende Bezugsspalte; Pflicht (`EA_RELATION_REQUIRED`); inaktive Referate/Gremien nur, wenn der Bezug unverändert bleibt.
+- R27/R28 nur bei neu gesetztem oder geändertem Wert und nur mit Nutzerkontext (`auth.uid() is not null`).
+
+## R-21 Eigenschaftsart mit Feldern speichern
+
+- Die Oberfläche speichert Art und Felder in einem Aufruf: `ea_save_property_type(p_type jsonb, p_fields jsonb) returns uuid`, `security invoker` (RLS der Tabellen gilt), in einer Transaktion. Sie prüft R9 (mindestens ein Feld, `EA_NO_FIELDS`) und legt neue Felder an bzw. ändert vorhandene. Felder werden nicht gelöscht.
+- Trigger auf `ea_property_types`: `visible_in` nur Codes aus `ad_modules`; `read_level = 'confidential'` setzen/ändern nur mit AD ≥ edit (`AD_CONFIDENTIAL_ONLY_AD`); `relation_kind` gesperrt bei vorhandenen Eigenschaften (`EA_RELATION_LOCKED`); `relation_kind = 'group'` nur mit GR = manage (`AD_FORBIDDEN`); `system_key` nur ohne Nutzerkontext.
+- Trigger auf `ea_property_fields`: `key` nach Anlage unveränderlich; Datentyp gesperrt bei vorhandenen Eigenschaften (`EA_DATA_TYPE_LOCKED`); Auswahlwerte nur ergänzen (`EA_CHOICE_VALUE_REMOVED`); neues Pflichtfeld bei vorhandenen Eigenschaften (`EA_FIELD_NEW_REQUIRED`); Bezeichnung eindeutig je Art (Unique-Index `lower(label)`; Meldung „Ein Feld mit dieser Bezeichnung gibt es bereits.“ über den Constraint-Namen).
+- `EA_FIELD_LOCKED` wird im Kern nicht ausgelöst, solange die Abgrenzung zu `EA_DATA_TYPE_LOCKED` [OFFEN] ist (contracts/error-codes.md); der Datentyp-Fall nutzt `EA_DATA_TYPE_LOCKED`.
+
+## R-22 Policies für Eigenschaften (R29, R41, R42)
+
+- `ea_properties`: select `ea_person_visible(person_id) and ea_property_readable(property_type_id, person_id)`; insert with check `ea_property_writable(property_type_id, person_id, related_referat_id)`; update using (alte Fassung) und with check (neue Fassung) jeweils `ea_property_writable(…)`. Kein Delete (Beenden über `valid_to`).
+- Fehlercodes für abgelehnte Schreibversuche: Die Policies selbst liefern SQLSTATE `42501`. Für die fachlich unterscheidbaren Fälle prüft der Trigger `ea_properties_validate` vorab und meldet `EA_RELATION_FOREIGN_REFERAT` (R41) bzw. `EA_GROUP_RELATION_ONLY_GR` (R39); alles andere bleibt `42501` → „Für diesen Bereich hast du keine Rechte.“
+- `ea_property_history`: select über `exists` auf die lesbare Eigenschaft; nur Trigger schreibt.
+
+## R-23 Geschützte Spalten an `ea_persons`
+
+- Neue Spalten nach spec.md Abschnitt 2 per `alter table`; Bestand `created_in = 'AD'` per Default.
+- Trigger `ea_persons_guard` (before update): `kind`, `created_in` unveränderlich; `volunteer_status`/`volunteer_status_since` nur, wenn `auth.uid() is null` (Migration, Seed, Migrationsskript) oder das transaktionslokale Kennzeichen `ea.status_change` gesetzt ist. Das Kennzeichen setzen nur `ea_set_volunteer_status`, `ea_create_volunteer` und `ea_activate_person` (Muster wie `ad.email_change` in R-16).
+- Insert: Policy erlaubt direktes Anlegen nur mit AD ≥ edit (`created_in = 'AD'`, `volunteer_status is null`); EA legt nur über `ea_create_volunteer` an.
+- Rufname: `ea_persons_normalize` trimmt zusätzlich `preferred_name`, leer → null.
+
+## R-24 Qualifikationsarten
+
+- Tabelle, Checks und Indizes nach spec.md Abschnitt 2; Kürzel per Trigger in Großbuchstaben, danach Check `^[A-Z0-9]{1,10}$` (`AD_QUALIFICATION_CODE_FORMAT`). Fachliche Prüfungen R21–R24 im Trigger mit den Codes aus contracts/error-codes.md; Unique-Indizes mit Namen `ad_qualification_types_name_key`, `…_code_key` als Absicherung.
+- Startbestand (T27): eigene Migration, 47 Zeilen aus stammdaten-qualifikationsarten.md v0.2 Abschnitt 3, `insert … on conflict (source_ref) do nothing`; keine Personendaten, läuft in TEST und PROD.
+- `ad_qualification_usage` entsteht nach `ea_properties` (sucht in `field_values` aller Felder vom Typ `qualification_type`).
+
+## R-25 Dublettenprüfung modulübergreifend (R3, R40)
+
+- `ad_find_similar_persons(p_first, p_last, p_email)` ist `security definer`, `stable`, `set search_path = ''`. Prüft zuerst das Recht (AD ≥ edit, `ad_has_any_level('EA','edit')`, GR ≥ edit), sonst `AD_FORBIDDEN`.
+- Treffer: `kind = 'human'` und (gleicher Nachname ohne Groß-/Kleinschreibung und (`similarity(first_name, p_first) >= 0.3` oder Vor- bzw. Rufname ist Teilwort des anderen)) oder `p_email` gleich `ad_accesses.login_email` oder gleich einem String-Wert in `field_values` einer Eigenschaft, deren Art die Kategorie `contact` hat (ohne Groß-/Kleinschreibung) [ANNAHME aus spec.md].
+- Rückgabe nur die Spalten nach spec.md; `birth_year` aus dem ersten Datumsfeld der Art mit `system_key = 'birth_date'` (heute gültige Eigenschaft), sonst null; `is_visible = ea_person_visible(person_id)`.
+- Ersetzt T8 vollständig; die Fassung aus v0.5 wird nicht mehr gebaut.
+
+## R-26 Seed Personen 1–12
+
+- Personen 9–12, Eigenschaftsarten (Testarten aus spec.md Abschnitt 9, ohne `system_key` `function`, `contact`, `license`; mit `system_key = 'birth_date'`), Eigenschaften, Ehrenamtsstatus mit Historie, Zuweisung Referent:in mit Referat Klettern und der Protokolleintrag `template_assigned` werden in `seed.sql` ergänzt.
+- Der Seed läuft ohne Nutzerkontext (`auth.uid()` ist null): Die Trigger erlauben das Setzen des Ehrenamtsstatus und historischer Qualifikationsarten (Person 5, R27).
+- Feste UUIDs für die neuen Personen (`a…09`–`a…12`) und Testzugang Referent:in (`b…09`), damit die pgTAP-Tests sie ansprechen.
+
+## R-27 Mengentest (spec.md Abschnitt 8)
+
+- Eigene pgTAP-Datei, läuft in `begin; … rollback;`: erzeugt 1.000 Personen mit Ehrenamtsstatus und je 30 Eigenschaften (davon ein Teil mit Bezug auf Referate), wechselt auf den Testzugang Referent:in und misst mit `clock_timestamp()` eine Seite der Personenübersicht und die Eigenschaften aller sichtbaren Personen. Erwartet < 1 s.
+- Läuft nur in CI (lokaler Stack); die Werte sind ein Anhaltspunkt, kein Nachweis für TEST.
+
+## R-28 Frontend des Kerns
+
+- Navigation und Routenschutz: /ad/* mit `ad_has_level('AD','read')` wie bisher; Bearbeiten-Knöpfe bei Qualifikationsarten über `ad_can_edit_qualification_types()`. /ea/qualifikationsarten wird erst mit EA aktiv; die Komponenten liegen so, dass EA sie ohne Änderung einhängt.
+- Personenübersicht: Paginierung 50 je Seite über `range` und `count: 'exact'`; Suche über Vor-, Ruf- und Nachname (`or(…ilike…)`); Filter Zugangsstatus und Zugehörigkeit (mit Zugang, Funktionsperson, Ehrenamtsmanagement, nur Gruppen = `created_in = 'GR'` ohne Ehrenamtsstatus, ohne Zugehörigkeit).
+- Personenname überall über eine Hilfsfunktion `personName()` in `src/lib/format.ts`: „Rufname Nachname“, sonst „Vorname Nachname“.
+- Fehlercodes mit Feldname (`EA_FIELD_REQUIRED`, `EA_VALUE_TYPE`) setzen das `detail` des Fehlers in den Platzhalter `<Feld>` ein.
+- Der bestehende Stand auf `us-ad-10-rechtevorlagen` (AdLayout, Rechtevorlagen-Liste und -Formular, `data.ts`, `access.ts`) wird per Rebase auf `main` übernommen und um die Spalte Reichweite ergänzt.
+
+## R-29 Meldung für R30 im Kern
+
+- Ohne Nachtrag v0.8 gilt der Text aus 02-stories.md US-AD-20 AK3: „Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement möglich.“ contracts/error-codes.md führt diesen Text; der Text aus v0.8 („… und in der Anwesenheitserfassung …“) folgt mit T50.
