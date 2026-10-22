@@ -2,6 +2,7 @@ import { ChevronLeftIcon, CircleAlertIcon } from 'lucide-react'
 import { Link, useLoaderData, useLocation } from 'react-router-dom'
 import { AccessStatusBadge } from '@/components/AccessStatusBadge'
 import { useAdAccess } from '@/features/ad/access'
+import { EigenschaftenAbschnitt } from '@/features/ad/personen/EigenschaftenAbschnitt'
 import { Section } from '@/features/ad/personen/Section'
 import { StammdatenAbschnitt } from '@/features/ad/personen/StammdatenAbschnitt'
 import type { DetailResult } from '@/features/ad/personen/data'
@@ -10,7 +11,7 @@ import { personName } from '@/lib/format'
 
 // T075 (US-AD-24; Gerüst für US-AD-08, 09, 11, 13): Personendetail mit den Abschnitten aus spec.md Abschnitt 6.
 export function PersonDetail() {
-  const { person, failed } = useLoaderData() as DetailResult
+  const { person, properties, failed } = useLoaderData() as DetailResult
   const { canEdit } = useAdAccess()
   const location = useLocation()
   const handedError = (location.state as { error?: string } | null)?.error ?? null
@@ -70,9 +71,16 @@ export function PersonDetail() {
         <p className="text-sm text-muted-foreground">Zuweisen und Entziehen folgen.</p>
       </Section>
 
-      <Section id="eigenschaften" title="Eigenschaften">
-        <p className="text-sm text-muted-foreground">Dieser Bereich folgt.</p>
-      </Section>
+      {properties ? (
+        <EigenschaftenAbschnitt personId={person.person_id} data={properties} canEdit={canEdit} />
+      ) : (
+        <Section id="eigenschaften" title="Eigenschaften">
+          <p role="alert" className="flex items-center gap-2 text-sm text-destructive">
+            <CircleAlertIcon aria-hidden="true" className="size-4 shrink-0" />
+            {MESSAGES.unexpected}
+          </p>
+        </Section>
+      )}
     </section>
   )
 }

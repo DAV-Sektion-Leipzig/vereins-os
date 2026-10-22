@@ -2,7 +2,11 @@
 // Welche Personen sichtbar sind, entscheidet die RLS (R32); das Frontend filtert nur innerhalb davon.
 import { redirect, type LoaderFunctionArgs } from 'react-router-dom'
 import { PAGE_SIZE } from '@/components/Pagination'
+import type { PropertyField, PropertyType } from '@/features/ad/eigenschaftsarten/data'
+import type { QualificationType } from '@/features/ad/qualifikationsarten/data'
 import type { SimilarPerson } from '@/features/shared/DublettenDialog'
+import type { FieldValues, NamedOption, PropertyInput } from '@/features/shared/Eigenschaftsformular'
+import { personName } from '@/lib/format'
 import { requireLevel, type AccessStatus } from '@/lib/rights'
 import { supabase } from '@/lib/supabase'
 
@@ -149,14 +153,17 @@ export async function acknowledgeEmergency() {
 
 // --- Person anlegen und Personendetail (US-AD-07, US-AD-24, US-AD-25; T074, T075)
 
-export type DetailResult = { person: PersonRow | null; failed: boolean }
+export type DetailResult = { person: PersonRow | null; properties: PropertiesData | null; failed: boolean }
 
 export async function loadPersonDetail({ params }: LoaderFunctionArgs): Promise<DetailResult> {
   await requireLevel('AD', 'read')
-  const { data, error } = await supabase.from('ad_v_person_overview').select('*').eq('person_id', params.id!).maybeSingle()
-  if (error) return { person: null, failed: true }
-  if (!data) throw redirect('/ad')
-  return { person: data as PersonRow, failed: false }
+  const [person, properties] = await Promise.all([
+    supabase.from('ad_v_person_overview').select('*').eq('person_id', params.id!).maybeSingle(),
+    loadPersonProperties(params.id!),
+  ])
+  if (person.error) return { person: null, properties: null, failed: true }
+  if (!person.data) throw redirect('/ad')
+  return { person: person.data as PersonRow, properties, failed: false }
 }
 
 export type SimilarResult = { hits: SimilarPerson[]; error: unknown }
@@ -206,5 +213,109 @@ export async function updatePersonName(id: string, input: { first: string; prefe
     .from('ea_persons')
     .update({ first_name: input.first.trim(), last_name: input.last.trim(), preferred_name: input.preferred.trim() || null })
     .eq('id', id)
+  return error ?? null
+}
+
+// --- Eigenschaften einer Person (US-AD-13, US-AD-19, US-AD-22; T083)
+
+export type PropertyTypeWithFields = PropertyType & { fields: PropertyField[] }
+
+export type PropertyHistory = {
+  id: number
+  field_values: FieldValues
+  related_referat_id: string | null
+  related_gremium_id: string | null
+  valid_from: string
+  valid_to: string | null
+  changed_at: string
+  changed_by: string | null
+}
+
+export type PersonProperty = {
+  id: string
+  person_id: string
+  property_type_id: string
+  field_values: FieldValues
+  related_referat_id: string | null
+  related_gremium_id: string | null
+  valid_from: string
+  valid_to: string | null
+  updated_at: string
+  updated_by: string | null
+  ea_property_history: PropertyHistory[]
+}
+
+export type PropertiesData = {
+  /** Eigenschaftsarten mit „sichtbar in“ AD, mit Feldern */
+  types: PropertyTypeWithFields[]
+  properties: PersonProperty[]
+  referate: NamedOption[]
+  gremien: NamedOption[]
+  qualificationTypes: QualificationType[]
+  /** Anzeigename je Auth-Nutzer (geändert von) */
+  userNames: Record<string, string>
+}
+
+const TYPE_COLUMNS =
+  'id, name, purpose, category, read_level, relation_kind, relation_required, allow_multiple, system_key, visible_in, origin, valid_from_label, valid_to_label'
+
+// Namen zu Auth-Nutzern über Zugang → Person; nur lesbar, soweit die RLS es erlaubt
+async function loadUserNames(userIds: string[]): Promise<Record<string, string>> {
+  const ids = [...new Set(userIds.filter(Boolean))]
+  if (ids.length === 0) return {}
+  const accesses = await supabase.from('ad_accesses').select('auth_user_id, person_id').in('auth_user_id', ids)
+  if (accesses.error || accesses.data.length === 0) return {}
+  const persons = await supabase
+    .from('ea_persons')
+    .select('id, first_name, preferred_name, last_name')
+    .in('id', accesses.data.map((a) => a.person_id))
+  if (persons.error) return {}
+  const byPerson = new Map(persons.data.map((p) => [p.id, personName(p)]))
+  return Object.fromEntries(
+    accesses.data.flatMap((a) => (byPerson.has(a.person_id) ? [[a.auth_user_id as string, byPerson.get(a.person_id)!]] : [])),
+  )
+}
+
+export async function loadPersonProperties(personId: string): Promise<PropertiesData | null> {
+  const [types, properties, referate, gremien, qualificationTypes] = await Promise.all([
+    supabase.from('ea_property_types').select(`${TYPE_COLUMNS}, ea_property_fields(*)`).contains('visible_in', ['AD']).order('name'),
+    supabase.from('ea_properties').select('*, ea_property_history(*)').eq('person_id', personId).order('valid_from', { ascending: false }),
+    supabase.from('ea_referate').select('id, name, is_active').order('sort_order'),
+    supabase.from('ea_gremien').select('id, name, is_active').order('sort_order'),
+    supabase.from('ad_qualification_types').select('id, code, name, discipline, kind, status').order('name'),
+  ])
+  if (types.error || properties.error || referate.error || gremien.error || qualificationTypes.error) return null
+
+  const props = properties.data as PersonProperty[]
+  const userNames = await loadUserNames([
+    ...props.map((p) => p.updated_by ?? ''),
+    ...props.flatMap((p) => (p.ea_property_history ?? []).map((h) => h.changed_by ?? '')),
+  ])
+
+  return {
+    types: (types.data as (PropertyType & { ea_property_fields: PropertyField[] })[]).map(({ ea_property_fields, ...t }) => ({
+      ...t,
+      fields: [...ea_property_fields].sort((a, b) => a.sort_order - b.sort_order),
+    })),
+    properties: props,
+    referate: referate.data as NamedOption[],
+    gremien: gremien.data as NamedOption[],
+    qualificationTypes: qualificationTypes.data as QualificationType[],
+    userNames,
+  }
+}
+
+/** Legt eine Eigenschaft an oder ändert sie; Regeln R27, R28, R35, R37, R38 prüft die Datenbank. */
+export async function saveProperty(id: string | null, personId: string, typeId: string, input: PropertyInput) {
+  const row = {
+    field_values: input.field_values,
+    related_referat_id: input.related_referat_id,
+    related_gremium_id: input.related_gremium_id,
+    valid_from: input.valid_from,
+    valid_to: input.valid_to,
+  }
+  const { error } = id
+    ? await supabase.from('ea_properties').update(row).eq('id', id)
+    : await supabase.from('ea_properties').insert({ ...row, person_id: personId, property_type_id: typeId })
   return error ?? null
 }

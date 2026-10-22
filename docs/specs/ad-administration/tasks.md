@@ -398,8 +398,8 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 **Unabhängiger Test**: Bei Person 4 erscheinen die Eigenschaften nach Kategorie, Felder als „Bezeichnung: Wert“, Bezug als „Referat Klettern“, Qualifikationsart als „TCSPI – …“; Anlegen, Ändern, Beenden mit Historie; Meldungen zu R27, R28, R35, R37, R38; nur Arten mit „sichtbar in“ AD (US-AD-13 AK1–AK6, US-AD-19 AK2–AK4).
 
-- [ ] T082 [P] [US-AD-19] (spec T47) `src/features/shared/Eigenschaftsformular.tsx`: Eingaben aus `ea_property_fields` (Text, Zahl, Datum, Jahr, Ja/Nein, Auswahlliste, Qualifikationsart über `QualifikationsartAuswahl`), Bezug-Auswahl (aktive Referate bzw. Gremien; bei Reichweite Referat nur `ad_my_referate`), gültig von/bis; Fehler je Feld (R35)
-- [ ] T083 [US-AD-13] (spec T19, T47) `src/features/ad/personen/EigenschaftenAbschnitt.tsx` in `PersonDetail.tsx`: nach Kategorie gruppiert, aktuelle oben, beendete (`valid_to < heute`) als „beendet“; nur Arten mit `visible_in` ∋ `AD`; Felder als „Bezeichnung: Wert“; historische Qualifikationsart mit „(historisch)“; Historie je Eigenschaft aufklappbar (geändert am/von); Hinzufügen, Ändern, Beenden über `Eigenschaftsformular`; „Noch keine Eigenschaften.“
+- [x] T082 [P] [US-AD-19] (spec T47) `src/features/shared/Eigenschaftsformular.tsx`: Eingaben aus `ea_property_fields` (Text, Zahl, Datum, Jahr, Ja/Nein, Auswahlliste, Qualifikationsart über `QualifikationsartAuswahl`), Bezug-Auswahl (aktive Referate bzw. Gremien; bei Reichweite Referat nur `ad_my_referate`), gültig von/bis; Fehler je Feld (R35)
+- [x] T083 [US-AD-13] (spec T19, T47) `src/features/ad/personen/EigenschaftenAbschnitt.tsx` in `PersonDetail.tsx`: nach Kategorie gruppiert, aktuelle oben, beendete (`valid_to < heute`) als „beendet“; nur Arten mit `visible_in` ∋ `AD`; Felder als „Bezeichnung: Wert“; historische Qualifikationsart mit „(historisch)“; Historie je Eigenschaft aufklappbar (geändert am/von); Hinzufügen, Ändern, Beenden über `Eigenschaftsformular`; „Noch keine Eigenschaften.“
 
 **Checkpoint**: Eigenschaften mit Feldern und Historie sind pflegbar.
 
