@@ -10,6 +10,42 @@ Antworte immer auf Deutsch.
 - Spec Kit liest die `spec.md` eines Moduls und erzeugt daraus `plan.md` und `tasks.md`. Eine eigene Spec-Kit-`spec.md` wird nicht separat gepflegt.
 - Begriffe nach [docs/glossar.md](docs/glossar.md): ein Begriff pro Sache, keine Synonyme. Im Code (Datenbank) englisch, in der Oberfläche deutsch.
 
+## Fachliche Dokumente (Quelle: OneDrive)
+
+- Quelle der fachlichen Dokumente ist der Ordner
+  `~/Library/CloudStorage/OneDrive-DeutscherAlpenvereine.V/Claude/VereinsOS`
+  (Spiegel des Projektwissens). Ins Repository gehören daraus nur `PRODUCT.md` und `docs/`.
+  Nie übernehmen: `_alt/`, `_nur-projektwissen/`, `Claude outputs/`, `.DS_Store`.
+
+- Zu Beginn jeder Aufgabe abgleichen:
+  ```bash
+  SRC=~/Library/CloudStorage/OneDrive-DeutscherAlpenvereine.V/Claude/VereinsOS
+  diff -rq -x .DS_Store "$SRC/docs" docs | grep -v "^Only in docs"
+  diff -q "$SRC/PRODUCT.md" PRODUCT.md
+  ```
+  Gibt es Unterschiede: eigener Branch `docs/sync-JJJJ-MM-TT`, dann
+  ```bash
+  rsync -av --checksum --exclude .DS_Store "$SRC/docs/" docs/
+  cp "$SRC/PRODUCT.md" PRODUCT.md
+  ```
+  Ohne `--delete`: Dateien, die nur im Repository liegen (z. B. `contracts/`), bleiben.
+  Danach die Personendaten-Prüfung (unten), dann ein Pull Request mit der Liste der
+  geänderten Dateien und ihrer Version und der vollständigen Cloudflare-Vorschau-URL.
+  Betrifft die Aufgabe geänderte Dokumente, erst nach dem Merge weitermachen.
+
+- Die übernommenen Dateien nicht ändern. Bei Widerspruch oder Lücke anhalten und
+  beschreiben (Datei, Abschnitt, Vorschlag). Die Änderung erfolgt im Anforderungs-Chat
+  und kommt über OneDrive zurück. Ausnahme: Was Spec Kit oder Claude Code erzeugt
+  (z. B. `plan.md`, `tasks.md`, `contracts/`), wird nur im Repository gepflegt.
+
+- Personendaten-Prüfung vor jedem Commit von `docs/` (öffentliches Repository):
+  ```bash
+  grep -rEn "DE[0-9]{20}" docs PRODUCT.md
+  grep -rEhoi "[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}" docs PRODUCT.md | sort -u
+  ```
+  Bei einer IBAN oder einer E-Mail-Adresse außerhalb von @dav-leipzig.de, example.test
+  und example.org (reservierte Beispieldomains): anhalten und fragen.
+
 ## Offene Punkte
 
 - Offene Punkte nicht selbst entscheiden. Fehlt eine fachliche Entscheidung oder widersprechen sich Dokumente: als `[OFFEN]` kennzeichnen und melden, mit Quelle (Datei), wie in [docs/offene-punkte.md](docs/offene-punkte.md).

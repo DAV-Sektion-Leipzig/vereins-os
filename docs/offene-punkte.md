@@ -1,6 +1,16 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 22.10.2026 · Version 2.9
+Stand: 22.10.2026 · Version 3.9
+Änderungen v3.9: Entscheidung Mittelweg (Product Owner 22.10.2026): Kern der Administration (Spec bis v0.7.1, T33–T49) wird umgesetzt, Nachträge v0.8 und v0.9 erst mit dem jeweiligen Modul; Querschnitts-Check (claude/querschnitt-administration.md v0.1) und Arbeitsplan (claude/arbeitsplan.md v0.1) erstellt; Fragen Q1–Q9 unter „Übergreifend“ eingetragen; Planungshilfe bis zur Einordnung eingefroren.
+Änderungen v3.8: Übergabe der Planungshilfe Touren und Kurse an die Administration (v1.7) in spec.md AD v0.9 eingearbeitet (Chat der Administration liegt in einem anderen Projekt); Annahmen v0.9 bei AD eingetragen; rollen.md v1.1; Spec Planungshilfe v0.2, Stories v0.4.
+Änderungen v3.7: Planungshilfe Touren und Kurse: Spec v0.1 (Entwurf) erstellt; Annahmen der Spec eingetragen; Übergabe an Administration v1.6 (Modul TKF, Signaturen, Schlüssel der Sätze, Testzugänge).
+Änderungen v3.6: Planungshilfe Touren und Kurse: Organisationspauschale der Gemeinschaftstour trägt vorerst die Sektion (Rückholung von Teilnehmenden offen); Sätze pflegt vorerst nur der Admin; Übergabe an Administration v1.5; Stories v0.3.
+Änderungen v3.5: Planungshilfe Touren und Kurse: Gemeinschaftstour mit Organisationspauschale entschieden (Prototyp fehlerhaft); Sätze und Pauschalen als Stammdaten der Administration (neu bei AD, Übergabe v1.4; bei FI entfällt die eigene Satzpflege); Stornoregel nicht im Scope; Stories v0.2.
+Änderungen v3.4: Planungshilfe Touren und Kurse: Stories v0.1 erstellt; PDF-Übernahme nicht im Scope; Person mit Freigaberecht darf bearbeiten und Rückfragen stellen; Annahmen der Stories (A1–A11) eingetragen.
+Änderungen v3.3: Planungshilfe Touren und Kurse: Freigaberecht vergibt der Admin; Auswertungen und Ablösung des HTML-Formulars in Iterationen (MVP Kosten, Iteration 1 CO2, Iteration 2 Eingabe durch Tourenleitende); Übergabe an Administration v1.3.
+Änderungen v3.2: Planungshilfe Touren und Kurse: Lizenz-Stichtag (erster Tag, ganze Tour), Freigabe durch Referent:innen (delegierbar), Einreichungen an tourenreferat@dav-leipzig.de, Einsatz bei Absage „abgesagt“, Ziel Ablösung des HTML-Formulars entschieden; Übergaben v1.2; neue Punkte bei Administration und Anwesenheitserfassung.
+Änderungen v3.1: Planungshilfe Touren und Kurse: Kurse im Referat Ausbildung, Einsatz mit Status „in Yolawo angelegt“, Stichtag der Lizenz = letzter Tag der Tour bzw. des Kurses entschieden; neue offene Punkte; Übergaben v1.1.
+Änderungen v3.0: Neues Modul Planungshilfe Touren und Kurse (TK) mit Steckbrief v0.1 und Erhebung v0.1; offener Punkt der Anwesenheitserfassung zur Übernahme von Kurs und Tour entschieden (TK erzeugt den Einsatz); Abgrenzung zu Finanzen entschieden (TK befüllt vor, Finanzen rechnet); Übergaben aus TK an Administration, Anwesenheitserfassung, Finanzen (je v1.0, offen) eingetragen.
 Änderungen v2.9: Spec Anwesenheitserfassung v0.1 (Entwurf) erstellt; Gruppen-Stories v0.7 mit `gr_groups_for_attendance` (US-GR-19 AK8); Annahmen der Spec bei EZ eingetragen.
 Änderungen v2.8: Vorschlag der eigenen Gruppe beim Erfassen (US-EZ-19, R18; neue Gruppen-Story US-GR-20 `gr_my_groups`); Gruppe nicht änderbar und Stichtag bei mehrtägigen Einsätzen bestätigt; Orte pflegt nur der Admin.
 Änderungen v2.7: Entscheidungen des Product Owners eingetragen: Annahmen der Stories Anwesenheitserfassung bestätigt (EZ 02-stories.md v0.2); A13 Gruppen bestätigt (GR 02-stories.md v0.5); Startliste der Orte gibt der Product Owner bei der Umsetzung mit.
@@ -16,17 +26,22 @@ Jeder Abschnitt wird beim Steckbrief des Moduls in „Offene Fragen“ übernomm
 - [OFFEN] Vertretung des Admin-Zugangs: welche:r Mitarbeiter:in der Geschäftsstelle, ab wann? Kein Blocker. (00-steckbrief.md AD)
 - [OFFEN] Weg der Migrationen nach PROD: manuell durch den Product Owner oder GitHub Action beim Merge auf main? Vor dem ersten PROD-Deployment. (spec.md AD Abschnitt 11)
 - Erledigt 21.10.2026: Nachtrag Personenmodell (spec.md AD v0.7.1) freigegeben; Umsetzung kann mit T33 wieder aufgenommen werden. Verbleibende Annahmen v0.7 in spec.md Abschnitt 11 (bei Abnahme bestätigen).
+- Entschieden 22.10.2026 (Product Owner, Mittelweg): Claude Code setzt den Kern der Administration fort (Spec bis v0.7.1, T33–T49, Anweisung in claude/arbeitsplan.md 4.1). Die Nachträge v0.8 (T50–T58) und v0.9 (T59–T67) werden erst vor der ersten Migration der Anwesenheitserfassung bzw. der Planungshilfe Touren und Kurse umgesetzt. Laut Querschnitts-Check (claude/querschnitt-administration.md v0.1) ändert kein noch nicht spezifiziertes Modul den Kern [ANNAHME bis zur Beantwortung von Q1–Q9].
 - [ANNAHME] Annahmen aus spec.md AD v0.6 bei Abnahme bestätigen: Qualifikationsarten lesbar für alle Nutzer mit aktivem Zugang; Gültigkeitsdauer-Änderung ohne Rückwirkung; Sparte und Aussteller als Text mit Vorschlägen; keine Protokollierung von Änderungen an Qualifikationsarten; PSA vorerst historisch.
 - Aus dem Nachtrag v0.8 (Anwesenheitserfassung, Übergabe eingearbeitet 22.10.2026):
   - Startbestand der Orte: gibt der Product Owner bei der Umsetzung mit (Migration T51; entschieden 22.10.2026).
   - Pflege der Orte: nur Admin (entschieden 22.10.2026); `ad_can_edit_locations()` bleibt `ad_has_level('AD','edit')`.
-  - [OFFEN] Stories für den Nachtrag v0.8 (US-AD-27 ff.) nachziehen oder Abnahme über T56/T58 genügen lassen?
+  - [OFFEN] Stories für den Nachtrag v0.8 (US-AD-27 ff.) nachziehen oder Abnahme über T56/T58 genügen lassen? Aufgeschoben bis zur Umsetzung des Nachtrags (gilt ebenso für v0.9, T65/T67).
   - [ANNAHME] Annahmen v0.8 bei Abnahme bestätigen (spec.md Abschnitt 11): kein vierter RLS-Pfad, Namen nur über `ea_person_names` und `ea_search_active_persons`; `ez_person_visible` als Platzhalter; Suche nur über Status „aktiv“, ab 2 Zeichen, höchstens 50 Treffer; aus der Anwesenheitserfassung angelegte Personen erhalten genau die Funktion Helfer:in; System-Schlüssel `function` und `contact`; Kennzeichen „Punktekonto Kletterhalle“ am Ort; höchstens 500 IDs je Aufruf.
   - Vorgemerkt für Iteration 1 der Anwesenheitserfassung: Reichweite „Gruppe“ (A6), Rechtevorlage Gruppenleitung (A7). [OFFEN] Eigene Rechtevorlage für Trainer:innen oder dieselbe wie Gruppenleitung?
+- Erledigt 22.10.2026: Übergabe aus der Planungshilfe Touren und Kurse (specs/tk-touren-kurse/uebergabe-administration.md v1.7) eingearbeitet in spec.md AD v0.9 (Tasks T59–T67; auf Wunsch des Product Owners im Chat Planungshilfe, weil der Chat der Administration in einem anderen Projekt liegt).
+- [ANNAHME] Annahmen v0.9 bei Abnahme bestätigen (spec.md AD Abschnitt 11): Freigaberecht als Modul TKF ohne Seiten (`is_hidden`, Stufe bearbeiten = freigeben); Startwerte TK (Admin lesen, Geschäftsstelle verwalten ohne Freigabe, Referent:in bearbeiten mit Referat); Kachel TK auch mit nur Freigaberecht; System-Schlüssel `license` und Feldschlüssel `qualification_type`, `valid_until`; förderfähig = DOSB-lizenzfähig; `ea_person_licenses` ohne Lizenznummer, nur Lesestufe „alle mit Zugriff“; Sätze ohne Protokoll, nie löschen; Seed-Qualifikationsart „Trainer*in C Bergwandern“.
+- [OFFEN] Echte Gültig-ab-Daten der Sätze (Startbestand 01.01.2026).
+- Hinweis für die erste EA-Migration (aus AD v0.9): Eigenschaftsart Lizenz mit `system_key = 'license'` und Feldern `qualification_type`, `valid_until` [ANNAHME]; Voraussetzung für `ea_person_licenses`.
 
 ## EA – Ehrenamtsmanagement (Priorität 1)
 
-Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) · Spaltenzuordnung: migration-aktivenliste.md (Version 0.4) · Qualifikationsarten: stammdaten-qualifikationsarten.md (Version 0.2)
+Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) · Spaltenzuordnung: migration-aktivenliste.md (Version 0.4) · Qualifikationsarten: stammdaten-qualifikationsarten.md (Version 0.2) · Nächster Schritt: Erhebung, Stories, Spec im neuen Chat „Ehrenamtsmanagement“ (claude/arbeitsplan.md, Schritt 5)
 
 - [OFFEN] Karteileichen (eigenes Tabellenblatt): später migrieren (nur Ausscheiden < 5 Jahre, Status „ausgeschieden“) oder mit der Excel-Liste löschen?
 - [OFFEN] DOSB-Lizenz: zusätzlich ein Feld „DOSB-Lizenz gültig bis“ (4 Jahre ab Ausstellung) an der Lizenz führen?
@@ -42,6 +57,7 @@ Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) ·
 - Hinweis aus AD (v0.7): Das Datenmodell für Ehrenamtsstatus, Referate, Gremien, Lesestufen und Eigenschaftsarten mit Feldern sowie die Funktionen `ea_set_volunteer_status`, `ea_create_volunteer`, `ea_activate_person`, `ea_person_referate` entstehen in AD (spec.md v0.7). EA baut darauf die Oberflächen und legt die System-Eigenschaftsarten an (u. a. Geburtsdatum mit `system_key = 'birth_date'`).
 - Hinweis aus AD (v0.8): Die erste EA-Migration legt die System-Eigenschaftsarten Funktion und Kontaktdaten mit `system_key = 'function'` bzw. `'contact'` an [ANNAHME]; `ea_create_volunteer` und `ad_find_similar_persons` nutzen sie für Personen aus der Anwesenheitserfassung.
 - **Übergabe aus EZ (offen, v1.2):** specs/ez-einsaetze/uebergabe-ehrenamtsmanagement.md – Aktive aus Arbeitseinsätzen (Status „aktiv“, Funktion Helfer:in mit Bezug Referat); Einsatzhistorie und letzter Einsatz je Person (Iteration 2); Feld „TE pro Woche“ prüfen; Nachweise „Bestätigung steuerfreie Einnahmen“ und „Erklärung zur Ehrenamtspauschale“; förderfähige Lizenz mit Erwerbsdatum; Aktive als Auswahl für die organisierende Person.
+- Hinweis aus der Planungshilfe Touren und Kurse (22.10.2026): Die Planungshilfe liest Lizenzen (Qualifikationsart, gültig bis, förderfähig) der als Leitung gewählten Aktiven, um Trainer- oder Helfersatz zu bestimmen (Funktion in AD, siehe Übergabe dort). Wanderleiter:innen und weitere Tourenleitende des Referats Touren sollten mit ihren Lizenzen im Ehrenamtsmanagement erfasst sein; sonst rechnet die Planungshilfe den Helfersatz.
 
 ## GR – Gruppen (Priorität 2)
 
@@ -63,7 +79,10 @@ Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) ·
 Steckbrief: docs/specs/ez-einsaetze/00-steckbrief.md (Version 0.7, abgeschlossen) · Erhebung: 01-erhebung.md (Version 0.3, 22.10.2026) · Stories: 02-stories.md (Version 0.3, 22.10.2026; Training, Fahrten, Wettkampfbegleitung, Arbeitseinsätze) · Spec: spec.md (Version 0.1, Entwurf, 22.10.2026) · Übergaben: uebergabe-rechte-administration.md (v1.3, erledigt), uebergabe-trainingszeiten.md (v1.3, erledigt), uebergabe-ehrenamtsmanagement.md (v1.2, offen), uebergabe-finanzen.md (v1.5, offen)
 
 Keine Blocker vor der Spec. Für Kurs und Tour:
-- [OFFEN] Wie wird aus einem im Modul Touren und Kurse geplanten Kurs bzw. einer Tour ein Einsatz (Übernahme oder Anlegen in EZ)? Klärung im Chat Touren und Kurse; bis dahin legt EZ Kurse und Touren selbst an [ANNAHME]. Stories für Kurs, Tour und Trainingslager folgen danach.
+- Entschieden 22.10.2026 (Product Owner, Chat Planungshilfe Touren und Kurse): Die Planungshilfe Touren und Kurse **erzeugt** den Einsatz Kurs bzw. Tour, sobald die Planung den Status „in Yolawo angelegt“ hat (Referat Touren bzw. Ausbildung, Titel, Zeiten, organisierende Person, Leitung und Helfende mit Rolle, Stand „eingetragen“). Die bisherige Annahme „EZ legt Kurse und Touren selbst an“ entfällt.
+- **Übergabe aus der Planungshilfe Touren und Kurse (offen, v1.2):** specs/tk-touren-kurse/uebergabe-anwesenheitserfassung.md – neuer Stand „abgesagt“ für Einsätze (bei Absage markieren statt löschen; Product Owner 22.10.2026; [OFFEN] auch für andere Einsatzarten?); Einsatzarten `course`, `tour` freischalten und ihre Form festlegen; `ez_events.tk_plan_id`; Funktion zum Anlegen/Aktualisieren (`ez_upsert_planned_event`) und Absagen (`ez_cancel_planned_event`), gesperrt ab erster Anwesenheit „anwesend“; Lesefunktion Stand „durchgeführt“; Titellänge 60 gegenüber 90 Zeichen.
+- [OFFEN] Teilnehmende bei Kurs und Tour erfassen (Anmeldung liegt in Yolawo) oder nur Leitung? Kurse außerhalb der Planungshilfe; Trainingslager über die Planungshilfe?
+- Hinweis aus dem Arbeitsplan (22.10.2026): Vor Status „Ready“ der Spec und vor Umsetzung des Nachtrags v0.8 der Administration müssen Q1 (Freigaben) und Q2 (Namenszugriff) aus dem Querschnitts-Check entschieden sein.
 
 Vor Status „Ready“ der Spec zu bestätigen (02-stories.md v0.3, spec.md v0.1 Abschnitt 11):
 - [ANNAHME] Wettkampfbegleitung nur mit Gruppe; „alle anwesend“ lässt „nicht erschienen“ unverändert; Probetrainings nicht in der Summe der Kontrollliste; Vorauswahl bei mehreren eigenen Gruppen über den Wochentag der Trainingszeit; Warnung ohne Link bei nicht lesbarem Einsatz; Schutz gegen Doppel-Speichern; Entwurf im Browser nur mit Person-IDs.
@@ -77,29 +96,51 @@ In der Spec oder später:
 - Hinweis aus GR (v0.7): `gr_group_roster(group_id, date)` liefert Gruppe, Referat, gültige Trainingszeiten des Wochentags und je Person ID, Vorname, Rufname, Nachname, Rolle (`participant`, `group_lead`, `trainer`, `helper`); eine Person kann mit zwei Rollen erscheinen – EZ entscheidet über die Darstellung.
 - Hinweis aus EA: „TE pro Woche“ ist bis dahin ein Feld an der Funktion Trainer:in.
 
-## Touren und Kurse (neu, Idee; Arbeitstitel [ANNAHME])
+## TK – Planungshilfe Touren und Kurse (Priorität offen)
 
-- [OFFEN] Steckbrief in eigenem Chat (Product Owner, 21.10.2026). Vom Referat Touren angeregt.
-- Festgelegt 22.10.2026 (Product Owner): eigenständiges Planungstool für Erstellung, Planung, Kalkulation und Berechnung von Kursen und Touren – u. a. CO2-Berechnung, Deckungsbeitrag, Kosten, Ausgaben, benötigtes Material. Der Product Owner liefert einen HTML-Prototyp (mit Claude erstellt) des Referenten Touren.
-- Hinweis aus EZ (21.10.2026): Das Modul übernimmt auch die Anmeldung von Fahrten, einschließlich Kinder- und Jugendfahrten (heute eigenes Forms-Formular des Referats Kinder und Jugend; Screenshots liegen beim Product Owner).
-- [OFFEN] Übergang zur Anwesenheitserfassung: Wird ein geplanter Kurs bzw. eine Tour als Einsatz übernommen? Durchführung und Anwesenheit werden in EZ erfasst.
-- [OFFEN] Abgrenzung zu Finanzen: Kalkulation (Planung) hier, Vergütung nach der Vergütungsordnung in Finanzen [ANNAHME]; Kostendeckung von Führungstouren (Vergütungsordnung Punkt 9.1).
-- [OFFEN] Kürzel, Hauptnutzer, Priorität.
+Steckbrief: docs/specs/tk-touren-kurse/00-steckbrief.md (Version 0.7, Entwurf, 22.10.2026) · Erhebung: 01-erhebung.md (Version 0.7, Entwurf) · Stories: 02-stories.md (Version 0.4, Entwurf; US-TK-01 bis US-TK-24) · Spec: spec.md (Version 0.2, Entwurf, 22.10.2026) · Prototyp: prototyp-tourenkonzept.md (Übergabe des HTML-Prototyps „Tourenkonzept“, 22.10.2026) · Übergaben: uebergabe-administration.md (v1.7, erledigt), uebergabe-anwesenheitserfassung.md (v1.2, offen), uebergabe-finanzen.md (v1.3, offen) · Stand der Arbeit: eingefroren bis zur Einordnung in die Reihenfolge (claude/arbeitsplan.md, Schritt 11)
+
+Entschieden 22.10.2026 (Product Owner): Modulname „Planungshilfe Touren und Kurse“, Kürzel TK, Ablage docs/specs/tk-touren-kurse/; Leitung aus den Aktiven (Trainer:innen mit Lizenz); TK erzeugt den Einsatz in der Anwesenheitserfassung; TK befüllt die Abrechnung vor, Finanzen rechnet; CO2-Bilanz und Planungsunterstützung wie im Prototyp; Nutzer im MVP Referat Touren und Geschäftsstelle, Tourenleitende reichen per PDF aus dem HTML-Formular ein.
+
+Entschieden 22.10.2026 (Product Owner, zweiter Block): Kurse gehören zum Referat Ausbildung und werden mit der Planungshilfe geplant; der Einsatz entsteht mit Status „in Yolawo angelegt“; Trainersatz nur, wenn die Lizenz am letzten Tag der Tour bzw. des Kurses gültig ist (z. B. Lizenz bis 30.10., Kurs am 15.10. → Trainersatz) – präzisiert im dritten Block.
+
+Entschieden 22.10.2026 (Product Owner, dritter Block): Stichtag ist der erste Tag; läuft die Lizenz während der Tour ab, gilt der Trainersatz für die ganze Tour (keine tageweise Rechnung). Freigabe von Touren und Kursen liegt bei den Referent:innen und ist delegierbar. Einreichungen gehen weiter per PDF an tourenreferat@dav-leipzig.de, auch für Kurse. Bei Absage wird der Einsatz als „abgesagt“ markiert. Ziel: HTML-Formular ablösen, alle Einreichungen strukturiert in der Datenbank für Auswertungen (CO2, Einsätze) speichern.
+
+- [OFFEN] Wer setzt „in Yolawo angelegt“, wenn die Tourenleitung das Angebot selbst anlegt?
+Entschieden 22.10.2026 (Product Owner, vierter Block): Das Freigaberecht vergibt der Admin. Iterationen: MVP = Erhebungsformular vollständig im Vereins OS mit Kalkulation und Kostenauswertung, CO2-Daten werden von Anfang an erfasst; Iteration 1 = CO2-Auswertung; Iteration 2 = Ablösung des HTML-Formulars mit Eingabe durch Tourenleitende (öffentliche Integration oder Zugang).
+
+Entschieden 22.10.2026 (Product Owner, fünfter Block): PDF-Übernahme nicht im Scope (Referat überträgt von Hand; Ablösung des HTML-Formulars folgt bald in Iteration 2); wer das Freigaberecht hat, darf Planungen auch bearbeiten und Rückfragen stellen.
+
+- [ANNAHME] Annahmen der Stories bestätigen (02-stories.md A1–A11): Referat aus dem Tourtyp; Freigaberecht als eigene Vorlage mit Startwert für alle Referent:innen Touren und Ausbildung, Geschäftsstelle gibt nicht frei; Admin sieht keine Kontakt- und Notfalldaten; Titel für den Einsatz auf 60 Zeichen gekürzt; „durchgeführt“ manuell, „abgeschlossen“ nur Geschäftsstelle; Löschfrist Notfallkontakte 14 Tage inkl. Mobilnummer; Spalten der Kostenauswertung, CSV nur Geschäftsstelle; keine E-Mails im MVP; externe Leitende vorher im Ehrenamtsmanagement anlegen; c1 bleibt Bestätigung; „in Yolawo angelegt“ setzt das Referat.
+- [OFFEN] Gemeinschaftstour: Die Organisationspauschale wird gezahlt (Vergütungsordnung Ziff. 9.2) und trägt vorerst die Sektion (Product Owner 22.10.2026). Nach dem MVP klären: von den Teilnehmenden zurückholen (Umlage oder kleiner Beitrag)?
+- [OFFEN] Löschfrist Notfallkontakte der Tourenleitung (Vorschlag 14 Tage nach Tourende); Bestätigung Datenschutz.
+- Entschieden 22.10.2026: Sätze und Pauschalen sind Stammdaten der Administration (Übergabe v1.4). Pflege vorerst nur durch den Admin (Product Owner 22.10.2026). Stornoregel (Rückerstattung 90 %/50 %) ist nicht im Scope.
+- [OFFEN] Externe Leitende ohne Ehrenamtsstatus (anlegen als Aktive oder nicht zulässig).
+- [OFFEN] Anmeldung von Fahrten (inkl. Kinder- und Jugendfahrten, bisher dem Modul zugeordnet): spätere Iteration von TK oder anderes Modul?
+- [OFFEN] „Benötigtes Material“: Material der Sektion reservieren oder nur Ausrüstungsliste?
+- [ANNAHME] Annahmen der Spec bestätigen (spec.md Abschnitt 11): Freigaberecht über Modul TKF; Kennzeichen an Kostenzeilen statt Texterkennung; Grenzwerte als Sätze; Enduhrzeit Pflicht beim Publizieren mehrtägiger Planungen; Autospeichern, kein Browser-Entwurf; Löschen nur Geschäftsstelle (Entwurf bzw. abgesagt ohne Einsatz); Zuordnung Qualifikationsart → Sportart per Migration; Mengengerüst; Aufbewahrung 5 Jahre.
+- [OFFEN] Iteration 2 (später anschauen, Product Owner 22.10.2026): öffentliches Formular ohne Login (Datenschutz, Missbrauchsschutz) oder Zugang für Tourenleitende mit Reichweite „nur eigene“?
+- [OFFEN] Priorität und Einordnung in die Reihenfolge (Vorschlag: nach der Anwesenheitserfassung).
+- [OFFEN] Annahmen des Prototyps vom Referat Touren bestätigen: MwSt. 19 % auf Zahlungsgebühren, Konditionsgrenzen, Technikstufen, Zuordnung Qualifikation → Sportart, Hüttenpreis-Plausibilität 45–90 €, Faktoren Reisebus und Selbstversorgerhütte, Gültig-ab-Daten der Sätze.
+- [OFFEN] Glossar und rollen.md ergänzen (Planung, Teilnahmebeitrag, Kostendeckung, CO2-Bilanz, Klimaschutzbudget, Yolawo, Tourenleitung; Spalte TK in der Rechte-Matrix) – mit den Stories.
+- [ANNAHME] bestätigen: Statusmodell; Admin liest; Berechnung in der Datenbank; PDF der Einreichung wird nicht gespeichert; Planwerte nur Vorbelegung für Finanzen.
 
 ## FI – Finanzen (Priorität 3 – nach der Anwesenheitserfassung)
 
-- [OFFEN] Struktur: Abrechnung als eigenes Modul, das in Finanzen aufgeht? (Idee Product Owner 22.10.2026; mit der Navigation entscheiden)
+- [OFFEN] Struktur: Abrechnung als eigenes Modul, das in Finanzen aufgeht? (Idee Product Owner 22.10.2026; mit der Navigation entscheiden; Querschnitt Q5)
 - [OFFEN] Was ist ein „Vertrag“ im Bereich Kinder und Jugend? Wird er in FI oder GR geführt, hängt er an einer Gruppe? (vision.md, glossar.md, modul-landkarte.md)
 - [OFFEN] Richtung des Buchungslaufs (Auszahlung oder Einzug) und Empfänger der Mails. (vision.md)
 - [OFFEN] Übergabe: DATEV-Buchungsexport oder SEPA-Datei; Datei-Export oder Schnittstelle über SC? (vision.md, modul-landkarte.md)
-- [OFFEN] Aufbewahrungsfristen für Abrechnungsdaten (Steuer, Buchhaltung) gegenüber der 5-Jahres-Regel. (rollen.md)
+- [OFFEN] Aufbewahrungsfristen für Abrechnungsdaten (Steuer, Buchhaltung) gegenüber der 5-Jahres-Regel. (rollen.md; Querschnitt Q4: wer klärt, vor dem Steckbrief Finanzen)
 - [OFFEN] Rundung angebrochener Trainingseinheiten (30 Minuten); Satz der Wettkampfbegleitung je Wettkampf oder je Tag (jetzt auch mehrtägig); halbjährliche Abrechnungsdokumente auch für andere Referate als Kinder und Jugend und Leistungssport?
 - [OFFEN] Eintägige Ausbildungsfahrt: Satz der Mehrtageskurse oder der Fahrten; Einsätze nach Abgabe des Halbjahres sperren?
 - [OFFEN] Ehrenamtspauschale (Antrag, Vorstandsbeschluss, Vereinbarung, jährliche Erklärung): Abbildung in FI?
-- [OFFEN] Abgrenzung zum Modul Touren und Kurse: Kalkulation dort, Vergütung hier [ANNAHME].
+- Entschieden 22.10.2026 (Product Owner): Abgrenzung zur Planungshilfe Touren und Kurse – Kalkulation dort, Vergütung und Kostenerstattung hier; die Planungshilfe befüllt die Abrechnung von Kursen und Touren vor.
 - Hinweis aus EA: Bankverbindung der Aktiven und Trainervereinbarung liegen im Ehrenamtsmanagement.
-- Hinweis aus EZ: Trainerabrechnung liegt in FI (entschieden 21.10.2026); die Anwesenheitserfassung erhebt und speichert nur. Regeln und Sätze der Übungsleiterpauschale stehen in der Vergütungsordnung (Anhang 1); Sätze pflegbar in FI [ANNAHME]. Abrechnungszeitraum bei Fahrten ab Startort (Reisezeit = Arbeitszeit; kein Vorstandsbeschluss nötig). Zeiten: eintägig Kategorie; mehrtägig Start und Ende mit Datum und Uhrzeit.
+- Hinweis aus dem Querschnitts-Check (22.10.2026): Nutzer nur mit Rechten auf Finanzen (z. B. Schatzmeister:in) bräuchten eine eigene Lesefunktion für Bankverbindung, Nachweise und Lizenzen (P7); Fristen und Höchstbeträge als Parameter (P11, Q6). Im Steckbrief Finanzen entscheiden.
+- Hinweis aus EZ: Trainerabrechnung liegt in FI (entschieden 21.10.2026); die Anwesenheitserfassung erhebt und speichert nur. Regeln und Sätze der Übungsleiterpauschale stehen in der Vergütungsordnung (Anhang 1); Sätze liegen als Stammdaten in der Administration (Product Owner 22.10.2026; ersetzt „pflegbar in FI“). Abrechnungszeitraum bei Fahrten ab Startort (Reisezeit = Arbeitszeit; kein Vorstandsbeschluss nötig). Zeiten: eintägig Kategorie; mehrtägig Start und Ende mit Datum und Uhrzeit.
 - **Übergabe aus EZ (offen, v1.5):** specs/ez-einsaetze/uebergabe-finanzen.md – Datengrundlage aus der Anwesenheitserfassung, Zuordnung Einsatzart → Abrechnungsart, Sätze der Vergütungsordnung, Tages- und Halbtagessätze aus Kategorie bzw. Start und Ende, förderfähige Lizenz, halbjährliche Abrechnung mit Fristen 31.07./15.12., Kontrolle des Punktekontos der Kletterhalle (nur Kinder, je Ort).
+- **Übergabe aus der Planungshilfe Touren und Kurse (offen, v1.3):** specs/tk-touren-kurse/uebergabe-finanzen.md – Planwerte je Planung als Vorbelegung (Personen mit Satzart, Tage, Halbtage, Lehreinheiten, Organisationspauschale, Plan-Kosten der Leitung); gemeinsame Sätze aus den Stammdaten der Administration; Stichtag der Lizenz am Startdatum, Trainersatz für die ganze Tour (gegenüber „ab Abrechnungshalbjahr des Lizenzerwerbs“ prüfen); abgesagte Einsätze nicht abrechnen; offen: Kosten der Leitung bei Absage, Reisekostenabrechnung in Finanzen, Erinnerung „Abrechnung innerhalb von 4 Wochen“, Gemeinschaftstour mit Organisationspauschale (Ziff. 9.2).
 
 ## OA – Öffentlichkeitsarbeit (Priorität 4)
 
@@ -109,23 +150,34 @@ In der Spec oder später:
 ## SC – Schnittstellen-Connector (spätestens mit OA)
 
 - [OFFEN] API-Key-Verwaltung als Erweiterung von AD: Felder, Anzeige der letzten Zeichen, Erinnerung vor Ablauf per E-Mail. (modul-landkarte.md, 00-steckbrief.md AD)
-- Weitere Anforderungen kommen aus EA (E-Mail vor Ablauf einer Qualifikation, Geburtstagserinnerung), FI (DATEV/Sparkasse) und OA (Instagram, Umfragen).
+- Weitere Anforderungen kommen aus EA (E-Mail vor Ablauf einer Qualifikation, Geburtstagserinnerung), FI (DATEV/Sparkasse) und OA (Instagram, Umfragen); ggf. TK (Schreib-Schnittstelle Yolawo, falls vorhanden [OFFEN]).
 
 ## PM, GS, AM – Projekt-, Geschäftsstellen-, Aufgabenmanagement (Priorität 5)
 
 - [OFFEN] Inhalt, Hauptnutzer und Abgrenzung von PM gegenüber GS. (modul-landkarte.md)
-- [OFFEN] Werden Aufgaben nur Nutzern oder auch Personen ohne Login zugewiesen? (modul-landkarte.md)
+- [OFFEN] Werden Aufgaben nur Nutzern oder auch Personen ohne Login zugewiesen? (modul-landkarte.md; Querschnitt Q7)
 - [OFFEN] Messgröße für Vision-Ziel Z3 (Aufgaben mit Erinnerungen). (vision.md)
 
 ## Übergreifend
 
+- [OFFEN] Fragen aus dem Querschnitts-Check Administration (claude/querschnitt-administration.md v0.1, mit Vorschlägen; Antwort im Chat „Überblick“):
+  - Q1 Freigaben: Muster „Modul ohne Seiten“ (TKF) als Regel oder eigene Aktion „freigeben“? Vor Umsetzung des Nachtrags v0.8 entscheiden.
+  - Q2 Namenszugriff weiterer Module: `ea_person_names` je Modul erweitern oder verallgemeinern? Vor Umsetzung des Nachtrags v0.8 entscheiden.
+  - Q3 Verpflichtungserklärung zum Datenschutz vor dem ersten Zugang einer Referent:in?
+  - Q4 Wer klärt Aufbewahrungsfristen für Abrechnungsdaten? (siehe FI)
+  - Q5 Abrechnung als eigenes Modul? (siehe FI)
+  - Q6 Beträge (z. B. steuerfreier Höchstbetrag) in den Stammdaten Sätze, Datumsfristen im Modul Finanzen?
+  - Q7 Aufgaben an Personen ohne Zugang? (siehe PM, GS, AM)
+  - Q8 Projektteams mit eigenen Rechten (Reichweite „Projekt“)?
+  - Q9 Weitere Nutzergruppen mit Zugang (Schatzmeister:in, Kassenprüfung, Redaktion)?
 - [OFFEN] Zeitpunkt und Umfang des Rollouts sowie Rechte und Reichweiten für weitere Personen mit Amt, Gruppenleitungen und Aktive. Teilweise geklärt: Referent:innen und Hüttenwart:innen im MVP; Reihenfolge der Zugänge (E6, 21.10.2026); Gruppenleitungen und Trainer:innen erhalten Zugang mit Iteration 1 von EZ. (vision.md, rollen.md)
-- [OFFEN] Navigation und Modulstruktur (u. a. Finanzen/Abrechnung, Touren und Kurse).
-- [OFFEN] Verpflichtungserklärung zum Datenschutz bei der ersten Anmeldung: Text, Versionierung, erneute Bestätigung bei neuer Version (nach MVP; betrifft AD).
+- [OFFEN] Navigation und Modulstruktur (u. a. Finanzen/Abrechnung, Planungshilfe Touren und Kurse).
+- [OFFEN] Verpflichtungserklärung zum Datenschutz bei der ersten Anmeldung: Text, Versionierung, erneute Bestätigung bei neuer Version (nach MVP; betrifft AD; Zeitpunkt siehe Q3).
 - [OFFEN] Weitere Logodateien der Sektion: light negativ Weiß (SVG), classic (SVG), brand (Edelweiß quadratisch) für Favicon und App-Symbol. (marke.md)
 - [OFFEN] Themenlogo „DAV …“ für das Vereins OS: gewünscht und mit dem Bundesverband abzustimmen? (marke.md)
 - Hinweis: Projektdokumente werden in parallelen Sitzungen bearbeitet. Vor jedem Schreiben neu einlesen und zusammenführen (Glossar wurde am 21.10.2026 zweimal überschrieben und wiederhergestellt).
 - Hinweis: Screenshots mit echten Personendaten (z. B. Forms-Formulare mit Namen von Kindern) werden nicht im Projekt oder Repository abgelegt.
+- Hinweis (22.10.2026): Im Repository liegen unter docs/specs/ bisher nur die Dokumente der Administration (Stand vor v0.8). Abgleich mit dem Projektwissen nach claude/arbeitsplan.md Abschnitt 3, bevor Claude Code fortsetzt. Der lokale OneDrive-Ordner „VereinsOS“ enthält nur alte Stände (Version 0.1) und ist keine Quelle.
 
 ## Merkposten nach MVP
 
@@ -161,6 +213,11 @@ In der Spec oder später:
 - Einchecken per QR-Code bei Arbeitseinsätzen mit Anlegen neuer Personen durch Spontane (EZ, späte Iteration; öffentliche Seite, DSGVO und Missbrauchsschutz klären).
 - Kletterhalle im Vereinszentrum: Erfassung bzw. Kontrolle neu betrachten (EZ, FI).
 - Erinnerung vor den Abgabefristen der halbjährlichen Abrechnung (31.07., 15.12.) (FI, ggf. mit SC oder AM).
+- Iteration 2 (TK): Eingabe durch Tourenleitende (öffentliche Integration oder Zugang „nur eigene“); Ablösung des HTML-Formulars „Tourenkonzept“.
+- Iteration 1 (TK): CO2-Auswertung über alle Planungen (je Jahr, Referat, Verkehrsmittel).
+- Pflege der Sätze und Pauschalen auch durch Geschäftsstelle oder Referent:innen (AD, TK; vorerst nur Admin).
+- Ist-CO2-Bilanz nach der Tour, Feedbackbogen, Tourenberichte, Foto-Upload mit Bildrechten (TK).
+- Kopieren einer Planung aus dem Vorjahr (TK) [ANNAHME: ggf. schon im MVP].
 
 ## Erledigt am 19.10.2026
 
@@ -295,7 +352,7 @@ In der Spec oder später:
 | Zeiten bei Fahrten | wie heute: eintägig Kategorie unter / mindestens 8 Stunden; mehrtägig Startdatum, Beginn, Enddatum |
 | Ausbildungsfahrt | ein- oder mehrtägig, gleiche Abfrage wie Fahrten |
 | Bemerkungsfeld | wird übernommen, mit Hinweis (keine sensiblen Angaben über Kinder) |
-| Anmeldung von Fahrten | nicht in der Anwesenheitserfassung; gehört ins Modul Touren und Kurse, auch Kinder- und Jugendfahrten |
+| Anmeldung von Fahrten | nicht in der Anwesenheitserfassung; gehört ins Modul Touren und Kurse, auch Kinder- und Jugendfahrten (seit 22.10.2026 Planungshilfe Touren und Kurse; dort [OFFEN], ob im Scope) |
 
 ## Erledigt am 22.10.2026 (Erhebung EZ v0.2 und v0.3)
 
@@ -328,3 +385,35 @@ In der Spec oder später:
 | Stichtag bei mehrtägigen Einsätzen | Startdatum |
 | Pflege der Orte | nur Admin |
 | Vorschlag der eigenen Gruppe | wer selbst Gruppenleitung, Trainer:in oder Helfer:in ist, bekommt seine Gruppe vorbelegt; der Vorschlag gibt keine zusätzlichen Rechte (US-EZ-19, R18; Gruppen US-GR-20) |
+
+## Erledigt am 22.10.2026 (Planungshilfe Touren und Kurse, Steckbrief v0.1)
+
+| Punkt | Entscheidung |
+|---|---|
+| Modulname, Kürzel, Ablage | „Planungshilfe Touren und Kurse“, TK, docs/specs/tk-touren-kurse/ |
+| Hauptnutzer im MVP | Referat Touren und Geschäftsstelle; Tourenleitende reichen per PDF aus dem HTML-Formular ein |
+| Übernahme geplanter Kurse und Touren als Einsatz (bisher offen bei EZ) | TK erzeugt den Einsatz in der Anwesenheitserfassung |
+| Abgrenzung Kalkulation zu Abrechnung (bisher offen bei TK und FI) | TK befüllt die Abrechnung vor; Finanzen rechnet mit Ist-Werten ab |
+| Leitung | aus den Aktiven mit Lizenz aus dem Ehrenamtsmanagement statt Freitext |
+| Kurse | gehören zum Referat Ausbildung; Planung ebenfalls mit der Planungshilfe |
+| Zeitpunkt der Einsatz-Erzeugung | Status „in Yolawo angelegt“ |
+| Stichtag der Lizenz | Lizenz muss am ersten Tag der Tour bzw. des Kurses gültig sein; läuft sie während der Tour ab, Trainersatz für die ganze Tour |
+| Freigabe | Referent:innen des Referats; delegierbar an andere Personen |
+| Einreichungen | weiter per PDF an tourenreferat@dav-leipzig.de, auch für Kurse |
+| Absage | Einsatz wird als „abgesagt“ markiert |
+| Freigaberecht | vergibt und entzieht der Admin |
+| Auswertungen | MVP Kosten; Iteration 1 CO2; Daten von Anfang an vollständig erfassen |
+| Übergabe an die Administration | eingearbeitet in spec.md AD v0.9 (im Chat Planungshilfe) |
+| Ablösung HTML-Formular | Iteration 2; zuerst das Erhebungsformular vollständig im Vereins OS bauen |
+| PDF-Übernahme | nicht im Scope; Referat überträgt von Hand bis Iteration 2 |
+| Freigaberecht und Bearbeiten | wer freigeben darf, darf auch bearbeiten und Rückfragen stellen |
+| Ziel | HTML-Formular ablösen; alle Einreichungen strukturiert in der Datenbank für Auswertungen (CO2, Einsätze) |
+| Vorlage | HTML-Prototyp „Tourenkonzept“ und dessen Übergabe (prototyp-tourenkonzept.md) |
+
+## Erledigt am 22.10.2026 (Überblick, Mittelweg Administration)
+
+| Punkt | Entscheidung |
+|---|---|
+| Alle Module zuerst spezifizieren oder Administration weiter umsetzen? | Mittelweg: Kern der Administration (bis v0.7.1) weiter umsetzen; vorher Querschnitts-Check der übrigen Module auf Auswirkungen; Ergänzungen als Nachtrag (Product Owner 22.10.2026) |
+| Nachträge v0.8 und v0.9 der Administration | werden mit dem jeweiligen Modul umgesetzt (vor der ersten Migration der Anwesenheitserfassung bzw. der Planungshilfe) |
+| Arbeitsweise in Chats | ein Modul je Chat in diesem Projekt; übergreifende Fragen im Chat „Überblick“; Startprompts in claude/arbeitsplan.md |
