@@ -5,7 +5,9 @@ begin;
 create extension if not exists pgtap with schema extensions;
 select * from no_plan();
 
-select is((select count(*)::int from public.ad_templates), 3, 'genau drei Startvorlagen (AK1, AK3)');
+select results_eq($$ select name from public.ad_templates order by name $$,
+  $$ values ('Admin'::text), ('Geschäftsstelle'), ('Referent:in'), ('Vorstand') $$,
+  'genau die Startvorlagen (AK1, AK3; Referent:in seit spec v0.7)');
 
 select is((select count(*)::int from public.ea_persons), 2, 'genau zwei Personen, nichts doppelt (AK3)');
 

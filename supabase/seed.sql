@@ -1,9 +1,11 @@
 -- Testdaten nach spec.md AD Abschnitt 9 – nur fiktive Personen und Adressen (die Adressen existieren nicht).
 -- Nur über supabase/seed.sh ausführen (psql-Variable test_password; Abbruch bei PROD).
 -- Idempotent; feste UUIDs, auf die sich die pgTAP-Tests beziehen:
---   Personen a…01–a…08, Auth-Nutzer b…01 (Admin), b…02 (Geschäftsstelle), b…03 (Vorstand),
---   b…06 (eingeladen), b…07 (gesperrt), b…08 (Notfall-Admin).
--- Eigenschaftsarten und Eigenschaften folgen mit US-AD-13.
+--   Personen a…01–a…12, Auth-Nutzer b…01 (Admin), b…02 (Geschäftsstelle), b…03 (Vorstand),
+--   b…06 (eingeladen), b…07 (gesperrt), b…08 (Notfall-Admin), b…09 (Referent:in, Referat Klettern).
+-- Nur Personen 1–12 (Kern bis v0.7.1); Personen 13–18, Orte und Sätze folgen mit den Nachträgen v0.8/v0.9.
+-- Läuft ohne Nutzerkontext: Ehrenamtsstatus und historische Qualifikationsarten sind dadurch setzbar.
+-- Eigenschaftsarten und Eigenschaften folgen mit den Migrationen zu Eigenschaften (spec T35, T36).
 
 -- 1. Personen
 insert into public.ea_persons (id, first_name, last_name, kind) values
@@ -17,6 +19,30 @@ insert into public.ea_persons (id, first_name, last_name, kind) values
   ('a0000000-0000-4000-8000-000000000008', 'Geschäftsstelle', 'Notfall-Admin', 'function')
 on conflict (id) do nothing;
 
+insert into public.ea_persons (id, first_name, last_name, kind, created_in) values
+  ('a0000000-0000-4000-8000-000000000009', 'Rita', 'Referentin', 'human', 'AD'),
+  ('a0000000-0000-4000-8000-000000000010', 'Karl', 'Zweireferat', 'human', 'AD'),
+  ('a0000000-0000-4000-8000-000000000011', 'Olga', 'Ausgeschieden', 'human', 'AD'),
+  ('a0000000-0000-4000-8000-000000000012', 'Paul', 'Nurgruppe', 'human', 'GR')
+on conflict (id) do nothing;
+
+-- Ehrenamtsstatus mit Historie (spec.md Abschnitt 9)
+with v (person_id, status, since) as (values
+  ('a0000000-0000-4000-8000-000000000004'::uuid, 'active'::public.ea_volunteer_status, date '2025-03-01'),
+  ('a0000000-0000-4000-8000-000000000005'::uuid, 'dormant'::public.ea_volunteer_status, date '2026-01-01'),
+  ('a0000000-0000-4000-8000-000000000009'::uuid, 'active'::public.ea_volunteer_status, date '2024-01-01'),
+  ('a0000000-0000-4000-8000-000000000010'::uuid, 'active'::public.ea_volunteer_status, date '2023-01-01'),
+  ('a0000000-0000-4000-8000-000000000011'::uuid, 'left'::public.ea_volunteer_status, date '2025-06-30')
+), upd as (
+  update public.ea_persons p
+     set volunteer_status = v.status, volunteer_status_since = v.since
+    from v
+   where p.id = v.person_id and p.volunteer_status is null
+  returning p.id, p.volunteer_status, p.volunteer_status_since
+)
+insert into public.ea_volunteer_status_history (person_id, status, valid_from)
+select id, volunteer_status, volunteer_status_since from upd;
+
 -- 2. Zugänge mit Zielstatus (vor auth.users, damit der Insert-Trigger nur auth_user_id setzt)
 insert into public.ad_accesses (person_id, login_email, status, is_emergency, last_invited_at, locked_at) values
   ('a0000000-0000-4000-8000-000000000001', 'test.admin@dav-leipzig.de', 'active', false, now() - interval '30 days', null),
@@ -24,7 +50,8 @@ insert into public.ad_accesses (person_id, login_email, status, is_emergency, la
   ('a0000000-0000-4000-8000-000000000003', 'test.vorstand@dav-leipzig.de', 'active', false, now() - interval '30 days', null),
   ('a0000000-0000-4000-8000-000000000006', 'test.eingeladen@dav-leipzig.de', 'invited', false, now() - interval '2 days', null),
   ('a0000000-0000-4000-8000-000000000007', 'test.gesperrt@dav-leipzig.de', 'locked', false, now() - interval '400 days', now() - interval '10 days'),
-  ('a0000000-0000-4000-8000-000000000008', 'test.notfall@dav-leipzig.de', 'active', true, now() - interval '30 days', null)
+  ('a0000000-0000-4000-8000-000000000008', 'test.notfall@dav-leipzig.de', 'active', true, now() - interval '30 days', null),
+  ('a0000000-0000-4000-8000-000000000009', 'test.referent@dav-leipzig.de', 'active', false, now() - interval '30 days', null)
 on conflict (person_id) do nothing;
 
 -- 3. Zuweisungen der Rechtevorlagen
@@ -36,13 +63,23 @@ select v.person_id, t.id
     ('a0000000-0000-4000-8000-000000000003'::uuid, 'Vorstand'),
     ('a0000000-0000-4000-8000-000000000006'::uuid, 'Geschäftsstelle'),
     ('a0000000-0000-4000-8000-000000000007'::uuid, 'Geschäftsstelle'),
-    ('a0000000-0000-4000-8000-000000000008'::uuid, 'Admin')
+    ('a0000000-0000-4000-8000-000000000008'::uuid, 'Admin'),
+    ('a0000000-0000-4000-8000-000000000009'::uuid, 'Referent:in')
   ) as v (person_id, template_name)
   join public.ad_templates t on t.name = v.template_name
  where not exists (
    select 1 from public.ad_template_assignments ta
     where ta.person_id = v.person_id and ta.template_id = t.id and ta.revoked_at is null
  );
+
+-- Referat der Zuweisung Referent:in (R31)
+insert into public.ad_assignment_referate (assignment_id, referat_id)
+select ta.id, r.id
+  from public.ad_template_assignments ta
+  join public.ad_templates t on t.id = ta.template_id and t.name = 'Referent:in'
+  join public.ea_referate r on r.name = 'Klettern'
+ where ta.person_id = 'a0000000-0000-4000-8000-000000000009' and ta.revoked_at is null
+on conflict do nothing;
 
 -- 4. Auth-Nutzer (Passwort aus psql-Variable; eingeladen ohne Passwort; gesperrt mit Bann)
 insert into auth.users (
@@ -67,7 +104,8 @@ from (values
   ('b0000000-0000-4000-8000-000000000003'::uuid, 'test.vorstand@dav-leipzig.de', true, false),
   ('b0000000-0000-4000-8000-000000000006'::uuid, 'test.eingeladen@dav-leipzig.de', false, false),
   ('b0000000-0000-4000-8000-000000000007'::uuid, 'test.gesperrt@dav-leipzig.de', true, true),
-  ('b0000000-0000-4000-8000-000000000008'::uuid, 'test.notfall@dav-leipzig.de', true, false)
+  ('b0000000-0000-4000-8000-000000000008'::uuid, 'test.notfall@dav-leipzig.de', true, false),
+  ('b0000000-0000-4000-8000-000000000009'::uuid, 'test.referent@dav-leipzig.de', true, false)
 ) as v (id, email, with_password, banned)
 on conflict (id) do nothing;
 
@@ -79,7 +117,8 @@ select gen_random_uuid(), u.id, u.id::text, 'email',
  where u.id in (
    'b0000000-0000-4000-8000-000000000001', 'b0000000-0000-4000-8000-000000000002',
    'b0000000-0000-4000-8000-000000000003', 'b0000000-0000-4000-8000-000000000006',
-   'b0000000-0000-4000-8000-000000000007', 'b0000000-0000-4000-8000-000000000008'
+   'b0000000-0000-4000-8000-000000000007', 'b0000000-0000-4000-8000-000000000008',
+   'b0000000-0000-4000-8000-000000000009'
  )
 on conflict (provider_id, provider) do nothing;
 
@@ -88,14 +127,14 @@ update public.ad_accesses
    set locked_by = 'b0000000-0000-4000-8000-000000000001'
  where person_id = 'a0000000-0000-4000-8000-000000000007' and locked_by is null;
 
--- 5. Protokoll: je ein Eintrag invited, template_assigned, locked, emergency_login
+-- 5. Protokoll: je ein Eintrag invited, template_assigned (Rita Referentin, Referat Klettern), locked, emergency_login
 insert into public.ad_audit_log (occurred_at, actor_user_id, subject_person_id, action, details)
 select v.occurred_at, v.actor, v.subject, v.action::public.ad_audit_action, v.details
   from (values
     (now() - interval '2 days', 'b0000000-0000-4000-8000-000000000001'::uuid,
      'a0000000-0000-4000-8000-000000000006'::uuid, 'invited', null::text),
     (now() - interval '30 days', 'b0000000-0000-4000-8000-000000000001'::uuid,
-     'a0000000-0000-4000-8000-000000000002'::uuid, 'template_assigned', 'Geschäftsstelle'),
+     'a0000000-0000-4000-8000-000000000009'::uuid, 'template_assigned', 'Referent:in (Referate: Klettern)'),
     (now() - interval '10 days', 'b0000000-0000-4000-8000-000000000001'::uuid,
      'a0000000-0000-4000-8000-000000000007'::uuid, 'locked', null),
     (now() - interval '1 day', 'b0000000-0000-4000-8000-000000000008'::uuid,
