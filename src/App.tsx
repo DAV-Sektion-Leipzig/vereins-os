@@ -12,6 +12,8 @@ import { loadPersonDetail, loadPersonOverview } from '@/features/ad/personen/dat
 import { PersonDetail } from '@/features/ad/personen/PersonDetail'
 import { PersonenUebersicht } from '@/features/ad/personen/PersonenUebersicht'
 import { PersonNeu } from '@/features/ad/personen/PersonNeu'
+import { loadAuditLog } from '@/features/ad/protokoll/data'
+import { ProtokollPage } from '@/features/ad/protokoll/ProtokollPage'
 import { loadNewQualificationType, loadQualificationType, loadQualificationTypes } from '@/features/ad/qualifikationsarten/data'
 import { QualifikationsartenListe } from '@/features/ad/qualifikationsarten/QualifikationsartenListe'
 import { QualifikationsartFormular } from '@/features/ad/qualifikationsarten/QualifikationsartFormular'
@@ -73,7 +75,7 @@ export const router = createBrowserRouter([
           { path: 'qualifikationsarten', loader: loadQualificationTypes, element: <QualifikationsartenListe /> },
           { path: 'qualifikationsarten/neu', loader: loadNewQualificationType, element: <QualifikationsartFormular /> },
           { path: 'qualifikationsarten/:id', loader: loadQualificationType, element: <QualifikationsartFormular /> },
-          { path: 'protokoll', element: <PlaceholderPage title="Protokoll" /> },
+          { path: 'protokoll', loader: loadAuditLog, element: <ProtokollPage /> },
           { path: '*', element: <PlaceholderPage title="Administration" /> },
         ],
       },

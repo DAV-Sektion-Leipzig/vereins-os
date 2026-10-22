@@ -453,9 +453,9 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 **Unabhängiger Test**: test.admin sieht die Seed-Einträge, neueste zuerst, mit Namen und deutschen Aktionen inkl. „Referate geändert“; „Noch keine Einträge.“; test.geschaeftsstelle erhält keine Daten (US-AD-14 AK1, AK3, AK5).
 
-- [ ] T099 [P] [US-AD-14] (spec T7 Teil) `supabase/tests/database/230_audit_view.test.sql`: `ad_v_audit_log` liefert für test.admin den Namen des Akteurs und der betroffenen Person, für test.geschaeftsstelle 0 Zeilen
-- [ ] T100 [US-AD-14] (spec T4 Teil) Migration `supabase/migrations/20261023001700_ad_audit_view.sql`: View `ad_v_audit_log` (`security_invoker = true`) mit Namen der betroffenen Person und des Akteurs (über `ad_accesses.auth_user_id` → `ea_persons`, Rufname bevorzugt); `grant select … to authenticated`; Tests T099 grün
-- [ ] T101 [US-AD-14] (spec T22) `src/features/ad/protokoll/ProtokollPage.tsx` (/ad/protokoll): Zeitpunkt, ausgeführt von, betroffene Person, Aktion (eingeladen, Login-Adresse geändert, Vorlage zugewiesen, Vorlage entzogen, Referate geändert, gesperrt, entsperrt, Anmeldung Notfall-Admin), Details; neueste zuerst, 50 je Seite; „Noch keine Einträge.“
+- [x] T099 [P] [US-AD-14] (spec T7 Teil) `supabase/tests/database/230_audit_view.test.sql`: `ad_v_audit_log` liefert für test.admin den Namen des Akteurs und der betroffenen Person, für test.geschaeftsstelle 0 Zeilen
+- [x] T100 [US-AD-14] (spec T4 Teil) Migration `supabase/migrations/20261023001700_ad_audit_view.sql`: View `ad_v_audit_log` (`security_invoker = true`) mit Namen der betroffenen Person und des Akteurs (über `ad_accesses.auth_user_id` → `ea_persons`, Rufname bevorzugt); `grant select … to authenticated`; Tests T099 grün
+- [x] T101 [US-AD-14] (spec T22) `src/features/ad/protokoll/ProtokollPage.tsx` (/ad/protokoll): Zeitpunkt, ausgeführt von, betroffene Person, Aktion (eingeladen, Login-Adresse geändert, Vorlage zugewiesen, Vorlage entzogen, Referate geändert, gesperrt, entsperrt, Anmeldung Notfall-Admin), Details; neueste zuerst, 50 je Seite; „Noch keine Einträge.“
 
 **Checkpoint**: Das Protokoll ist einsehbar.
 
