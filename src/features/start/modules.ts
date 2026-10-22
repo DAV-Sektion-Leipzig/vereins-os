@@ -8,13 +8,6 @@ export type MyModulesResult = { modules: MyModule[]; failed: boolean }
 // Einstieg je umgesetztem Modul; Module ohne Eintrag erscheinen nicht (US-AD-05 AK1)
 export const MODULE_PATHS: Partial<Record<ModuleCode, string>> = { AD: '/ad' }
 
-export const LEVEL_LABELS: Record<Level, string> = {
-  none: 'kein Zugriff',
-  read: 'lesen',
-  edit: 'bearbeiten',
-  manage: 'verwalten',
-}
-
 async function fetchMyModules(): Promise<MyModulesResult> {
   const { data, error } = await supabase.rpc('ad_my_modules')
   if (error || !Array.isArray(data)) return { modules: [], failed: true }

@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase'
 export type ModuleCode = 'AD' | 'SC' | 'EA' | 'GR' | 'FI' | 'OA' | 'PM' | 'GS' | 'AM'
 export type Level = 'none' | 'read' | 'edit' | 'manage'
 export type AccessStatus = 'none' | 'invited' | 'active' | 'locked'
+export type Scope = 'all' | 'referat'
 
 export type Me = {
   person_id: string
@@ -13,6 +14,22 @@ export type Me = {
   preferred_name: string | null
   last_name: string
   access_status: AccessStatus
+}
+
+export const LEVELS: Level[] = ['none', 'read', 'edit', 'manage']
+
+export const LEVEL_LABELS: Record<Level, string> = {
+  none: 'kein Zugriff',
+  read: 'lesen',
+  edit: 'bearbeiten',
+  manage: 'verwalten',
+}
+
+export const SCOPES: Scope[] = ['all', 'referat']
+
+export const SCOPE_LABELS: Record<Scope, string> = {
+  all: 'alle',
+  referat: 'Referat',
 }
 
 /** Ohne Sitzung → /login (US-AD-02 AK5). */
@@ -27,6 +44,12 @@ export async function requireLevel(module: ModuleCode, min: Level) {
   await requireSession()
   const { data, error } = await supabase.rpc('ad_has_level', { p_module: module, p_min: min })
   if (error || data !== true) throw redirect('/kein-zugriff')
+}
+
+/** Prüft eine Stufe ohne Umleitung, z. B. für Schreibknöpfe. Die Datenbank prüft beim Schreiben erneut. */
+export async function hasLevel(module: ModuleCode, min: Level): Promise<boolean> {
+  const { data, error } = await supabase.rpc('ad_has_level', { p_module: module, p_min: min })
+  return !error && data === true
 }
 
 /** Recht in irgendeiner Reichweite (alle oder Referat), z. B. für Navigation und /ea (spec.md AD Abschnitt 6). */
