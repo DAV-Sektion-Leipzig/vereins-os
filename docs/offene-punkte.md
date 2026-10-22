@@ -1,6 +1,13 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 22.10.2026 · Version 3.9
+Stand: 22.10.2026 · Version 4.6
+Änderungen v4.6: Spec Ehrenamtsmanagement v0.2 Ready (Freigabe Product Owner); Annahmen der Spec bestätigt; Ü1/Ü2 dürfen von Claude Code aus der Übergabe umgesetzt werden (T0a, T0b).
+Änderungen v4.5: Ehrenamtsmanagement: Spec v0.1 (Entwurf) erstellt; Annahmen der Stories A1–A7 bestätigt (Stories v0.2); Annahmen der Spec eingetragen.
+Änderungen v4.4: Ehrenamtsmanagement: Stories v0.1 (US-EA-01 bis US-EA-19) und Erhebung v0.5; Übergabe an die Administration v1.1 (Ü3 Seed); Annahmen der Stories bei EA eingetragen.
+Änderungen v4.3: Ehrenamtsmanagement (Erhebung v0.4): Qualifikationsarten Erste Hilfe, Rettungsschwimmer, JDAV-Aufbaumodule für die Migration und Annahmen entschieden; Art. 13 DSGVO für Personen aus Arbeitseinsätzen entschieden, Übergabe an die Anwesenheitserfassung (v1.0, offen) eingetragen.
+Änderungen v4.2: Ehrenamtsmanagement (Erhebung v0.3): Vereinbarung über die ehrenamtliche Tätigkeit als eigener Nachweis; Statusdialog beim Ausscheiden und Pflegerechte der Referent:innen entschieden.
+Änderungen v4.1: Übergabe Ehrenamtsmanagement → Administration (v1.0, offen: Bezeichnungen „gültig von/bis“, Geburtsjahr in der Dublettenwarnung) bei AD eingetragen; zwei offene Punkte bei EA entschieden (Erhebung EA v0.2).
+Änderungen v4.0: Ehrenamtsmanagement: Erhebung v0.1 (Entwurf) erstellt; Entscheidungen zur Migration (Funktion aus Lizenz, ein Statuseintrag ab Stichtag, Feld „DOSB-Lizenz gültig bis“, Felder der Lizenz, bereinigte CSV, Fortbildungen je Jahr); Übergabe der Anwesenheitserfassung an das Ehrenamtsmanagement (v1.3) als erledigt markiert; neue offene Punkte bei EA; Hinweis zu Feldschlüsseln bei AD.
 Änderungen v3.9: Entscheidung Mittelweg (Product Owner 22.10.2026): Kern der Administration (Spec bis v0.7.1, T33–T49) wird umgesetzt, Nachträge v0.8 und v0.9 erst mit dem jeweiligen Modul; Querschnitts-Check (claude/querschnitt-administration.md v0.1) und Arbeitsplan (claude/arbeitsplan.md v0.1) erstellt; Fragen Q1–Q9 unter „Übergreifend“ eingetragen; Planungshilfe bis zur Einordnung eingefroren.
 Änderungen v3.8: Übergabe der Planungshilfe Touren und Kurse an die Administration (v1.7) in spec.md AD v0.9 eingearbeitet (Chat der Administration liegt in einem anderen Projekt); Annahmen v0.9 bei AD eingetragen; rollen.md v1.1; Spec Planungshilfe v0.2, Stories v0.4.
 Änderungen v3.7: Planungshilfe Touren und Kurse: Spec v0.1 (Entwurf) erstellt; Annahmen der Spec eingetragen; Übergabe an Administration v1.6 (Modul TKF, Signaturen, Schlüssel der Sätze, Testzugänge).
@@ -38,17 +45,17 @@ Jeder Abschnitt wird beim Steckbrief des Moduls in „Offene Fragen“ übernomm
 - [ANNAHME] Annahmen v0.9 bei Abnahme bestätigen (spec.md AD Abschnitt 11): Freigaberecht als Modul TKF ohne Seiten (`is_hidden`, Stufe bearbeiten = freigeben); Startwerte TK (Admin lesen, Geschäftsstelle verwalten ohne Freigabe, Referent:in bearbeiten mit Referat); Kachel TK auch mit nur Freigaberecht; System-Schlüssel `license` und Feldschlüssel `qualification_type`, `valid_until`; förderfähig = DOSB-lizenzfähig; `ea_person_licenses` ohne Lizenznummer, nur Lesestufe „alle mit Zugriff“; Sätze ohne Protokoll, nie löschen; Seed-Qualifikationsart „Trainer*in C Bergwandern“.
 - [OFFEN] Echte Gültig-ab-Daten der Sätze (Startbestand 01.01.2026).
 - Hinweis für die erste EA-Migration (aus AD v0.9): Eigenschaftsart Lizenz mit `system_key = 'license'` und Feldern `qualification_type`, `valid_until` [ANNAHME]; Voraussetzung für `ea_person_licenses`.
+- **Übergabe aus EA (offen, v1.1):** specs/ea-ehrenamt/uebergabe-administration.md – Ü3 Seed: Testarten mit `system_key` entfallen mit der ersten EA-Migration, Seed-Personen verweisen auf die System-Eigenschaftsarten (setzt EA um); Ü1 Spalten `valid_from_label`, `valid_to_label` an `ea_property_types` (Bezeichnungen „gültig von/bis“ je Eigenschaftsart); Ü2 `ad_find_similar_persons` liefert `birth_year` nur mit AD lesen, EA verwalten oder GR verwalten. Ergänzungen des Kerns, günstig mit T35 bzw. T43.
+- Hinweis aus EA (22.10.2026): System-Eigenschaftsarten und Feldschlüssel stehen in specs/ea-ehrenamt/01-erhebung.md C2 (u. a. `contact` mit Feld `email`, `function` mit Feld `function` und Wert „Helfer:in“, Bezug Referat optional; `license` mit `qualification_type`, `valid_until`). Bei der Umsetzung der Nachträge v0.8 und v0.9 diese Schlüssel verwenden.
 
 ## EA – Ehrenamtsmanagement (Priorität 1)
 
-Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) · Spaltenzuordnung: migration-aktivenliste.md (Version 0.4) · Qualifikationsarten: stammdaten-qualifikationsarten.md (Version 0.2) · Nächster Schritt: Erhebung, Stories, Spec im neuen Chat „Ehrenamtsmanagement“ (claude/arbeitsplan.md, Schritt 5)
+Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) · Spaltenzuordnung: migration-aktivenliste.md (Version 0.4) · Qualifikationsarten: stammdaten-qualifikationsarten.md (Version 0.2) · Erhebung: 01-erhebung.md (Version 0.5, Entwurf, 22.10.2026) · Stories: 02-stories.md (Version 0.2, Entwurf) · Spec: spec.md (Version 0.2, Ready, 22.10.2026) · Übergaben: uebergabe-administration.md (v1.1, offen), uebergabe-anwesenheitserfassung.md (v1.0, offen) · Nächster Schritt: offene Fragen der Erhebung klären, dann Stories und Spec (Chat „Ehrenamtsmanagement“)
 
 - [OFFEN] Karteileichen (eigenes Tabellenblatt): später migrieren (nur Ausscheiden < 5 Jahre, Status „ausgeschieden“) oder mit der Excel-Liste löschen?
-- [OFFEN] DOSB-Lizenz: zusätzlich ein Feld „DOSB-Lizenz gültig bis“ (4 Jahre ab Ausstellung) an der Lizenz führen?
 - [OFFEN] Qualifikationsarten mit Klärungsbedarf: PSA, Trainer*in C Mountainbike Guide & Fahrtechnik, Jugendleiter*in (DOSB-Lizenz, Juleica), nicht im Export enthaltene Qualifikationsarten (z. B. DAV-Skibetreuer*in ab 2027). (stammdaten-qualifikationsarten.md Abschnitt 6)
-- [OFFEN] Zuordnung Lizenzbezeichnungen der Excel-Liste → Kürzel der Qualifikationsart: wird im Migrationsskript festgelegt (Product Owner, 21.10.2026), nachdem der Product Owner das Tabellenblatt der Aktiven gesichtet hat.
+- Migration: Der Product Owner überträgt die Excel-Liste in die bereinigte CSV-Vorlage (01-erhebung.md C3) und trägt die Kürzel der Qualifikationsarten ein (Sichtung, claude/arbeitsplan.md Schritt 4).
 - [OFFEN] Führungszeugnis-Einsicht: Für welche Funktionen ist sie Pflicht? Gibt es weitere Nachweise? (Erneuerung alle 3 Jahre entschieden.)
-- [OFFEN] Bedeutung „LE“ (Spalte N), Unterschied „Jahr Kurs-verlängerung“ zu „Letzte FB“ (beide Felder werden zunächst 1:1 übernommen). Hinweis: Die Vergütungsordnung kennt „Lehreinheit“ (1 h, Kurse); prüfen, ob „LE“ das meint.
 - [OFFEN] Förderung: Fördergeber und Förderart.
 - [OFFEN] Jahreskarte wofür; Forms, Redaktion, Mailingliste: welche Systeme?
 - [OFFEN] Amtszeit Jugendausschuss (fehlt in der Aktivenliste).
@@ -56,7 +63,9 @@ Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) ·
 - [OFFEN] Löschlauf nach 5 Jahren: Person ganz löschen oder Stammdaten behalten; Löschung des Zugangs (Supabase-Auth-Eintrag). Später betrachten; Grundsatz aus GR: nur löschen, wenn kein Modul die Person mehr braucht. (rollen.md, spec.md AD Abschnitt 2)
 - Hinweis aus AD (v0.7): Das Datenmodell für Ehrenamtsstatus, Referate, Gremien, Lesestufen und Eigenschaftsarten mit Feldern sowie die Funktionen `ea_set_volunteer_status`, `ea_create_volunteer`, `ea_activate_person`, `ea_person_referate` entstehen in AD (spec.md v0.7). EA baut darauf die Oberflächen und legt die System-Eigenschaftsarten an (u. a. Geburtsdatum mit `system_key = 'birth_date'`).
 - Hinweis aus AD (v0.8): Die erste EA-Migration legt die System-Eigenschaftsarten Funktion und Kontaktdaten mit `system_key = 'function'` bzw. `'contact'` an [ANNAHME]; `ea_create_volunteer` und `ad_find_similar_persons` nutzen sie für Personen aus der Anwesenheitserfassung.
-- **Übergabe aus EZ (offen, v1.2):** specs/ez-einsaetze/uebergabe-ehrenamtsmanagement.md – Aktive aus Arbeitseinsätzen (Status „aktiv“, Funktion Helfer:in mit Bezug Referat); Einsatzhistorie und letzter Einsatz je Person (Iteration 2); Feld „TE pro Woche“ prüfen; Nachweise „Bestätigung steuerfreie Einnahmen“ und „Erklärung zur Ehrenamtspauschale“; förderfähige Lizenz mit Erwerbsdatum; Aktive als Auswahl für die organisierende Person.
+- Bestätigt 22.10.2026 – Annahmen der Spec (spec.md Abschnitt 11): keine neuen Tabellen (Funktion `ea_volunteer_list`, View `ea_v_expiry`); Import über `ea_import_volunteers` nur für `service_role`; Neuberechnung „gültig bis“ solange nicht von Hand geändert; Kürzel/Sparte/Aussteller der zusätzlichen Qualifikationsarten; CSV mit BOM; Verlängern nur Lizenz und Qualifikation; leere Lizenz-„gültig bis“ im Import berechnet; Mengengerüst.
+- Voraussetzung der Umsetzung: Kern der Administration (T1–T49); Ü1 und Ü2 setzt Claude Code notfalls als T0a/T0b aus der Übergabe um. Einarbeitung von Ü1–Ü3 in spec.md AD im Chat der Administration nachziehen.
+- Erledigt 22.10.2026: Übergabe aus EZ (specs/ez-einsaetze/uebergabe-ehrenamtsmanagement.md v1.3) eingearbeitet in 01-erhebung.md v0.1 (Abschnitte C2 Nr. 4, 6, 9, 16, 17 und „Übergabe … – Verbleib“).
 - Hinweis aus der Planungshilfe Touren und Kurse (22.10.2026): Die Planungshilfe liest Lizenzen (Qualifikationsart, gültig bis, förderfähig) der als Leitung gewählten Aktiven, um Trainer- oder Helfersatz zu bestimmen (Funktion in AD, siehe Übergabe dort). Wanderleiter:innen und weitere Tourenleitende des Referats Touren sollten mit ihren Lizenzen im Ehrenamtsmanagement erfasst sein; sonst rechnet die Planungshilfe den Helfersatz.
 
 ## GR – Gruppen (Priorität 2)
@@ -76,7 +85,7 @@ Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) ·
 
 ## EZ – Anwesenheitserfassung (Priorität 2b – nach Gruppen, vor Finanzen)
 
-Steckbrief: docs/specs/ez-einsaetze/00-steckbrief.md (Version 0.7, abgeschlossen) · Erhebung: 01-erhebung.md (Version 0.3, 22.10.2026) · Stories: 02-stories.md (Version 0.3, 22.10.2026; Training, Fahrten, Wettkampfbegleitung, Arbeitseinsätze) · Spec: spec.md (Version 0.1, Entwurf, 22.10.2026) · Übergaben: uebergabe-rechte-administration.md (v1.3, erledigt), uebergabe-trainingszeiten.md (v1.3, erledigt), uebergabe-ehrenamtsmanagement.md (v1.2, offen), uebergabe-finanzen.md (v1.5, offen)
+Steckbrief: docs/specs/ez-einsaetze/00-steckbrief.md (Version 0.7, abgeschlossen) · Erhebung: 01-erhebung.md (Version 0.3, 22.10.2026) · Stories: 02-stories.md (Version 0.3, 22.10.2026; Training, Fahrten, Wettkampfbegleitung, Arbeitseinsätze) · Spec: spec.md (Version 0.1, Entwurf, 22.10.2026) · Übergaben: uebergabe-rechte-administration.md (v1.3, erledigt), uebergabe-trainingszeiten.md (v1.3, erledigt), uebergabe-ehrenamtsmanagement.md (v1.3, erledigt), uebergabe-finanzen.md (v1.5, offen)
 
 Keine Blocker vor der Spec. Für Kurs und Tour:
 - Entschieden 22.10.2026 (Product Owner, Chat Planungshilfe Touren und Kurse): Die Planungshilfe Touren und Kurse **erzeugt** den Einsatz Kurs bzw. Tour, sobald die Planung den Status „in Yolawo angelegt“ hat (Referat Touren bzw. Ausbildung, Titel, Zeiten, organisierende Person, Leitung und Helfende mit Rolle, Stand „eingetragen“). Die bisherige Annahme „EZ legt Kurse und Touren selbst an“ entfällt.
@@ -89,7 +98,8 @@ Vor Status „Ready“ der Spec zu bestätigen (02-stories.md v0.3, spec.md v0.1
 - [ANNAHME] aus der Spec: Schreiben nur über Datenbankfunktionen; Referat beim Arbeitseinsatz nicht änderbar; eintägig/mehrtägig änderbar; Gruppenleitung mit Rolle Trainer:in vorbelegt; Probetraining nur beim Training; Teilnehmer:in nur beim Training Pflicht; neue Person erst nach erstem Speichern des Arbeitseinsatzes; nicht aktive Dublettentreffer nicht direkt eintragbar; Liste Standard aktuelles Halbjahr; Mengengerüst; `ez_person_visible` enger als in spec.md AD v0.8.
 
 In der Spec oder später:
-- [OFFEN] Information nach Art. 13 DSGVO an Personen, die aus einem Arbeitseinsatz angelegt werden.
+- Entschieden 22.10.2026 (Product Owner, Chat Ehrenamtsmanagement): Information nach Art. 13 DSGVO beim Anlegen über ein Pflicht-Häkchen mit Link auf die Datenschutzhinweise; [OFFEN] Text und Link liefert der Product Owner.
+- **Übergabe aus EA (offen, v1.0):** specs/ea-ehrenamt/uebergabe-anwesenheitserfassung.md – Pflicht-Häkchen „Person informiert“ beim Anlegen neuer Personen im Arbeitseinsatz; Bestätigung wird nicht gespeichert [ANNAHME].
 - [OFFEN] Löschfrist der Einsätze gegenüber Aufbewahrungsfristen für Abrechnungsgrundlagen (gemeinsam mit FI).
 - [ANNAHME] bei der Spec bestätigen: Kürzel EZ und Ablage docs/specs/ez-einsaetze/ bleiben; Rolle vorbelegt aus der Funktion und je Einsatz änderbar; Stände „eingetragen / anwesend / nicht erschienen“; Trainingszeit nur als Vorschlag; Bezeichnungen wie im Forms-Formular; Ausbildungsfahrt = Mehrtageskurs; Warnung bei doppelter Erfassung; Kennzeichen „Punktekonto Kletterhalle“ am Ort.
 - Hinweis aus AD (v0.8): Die erste Migration der Anwesenheitserfassung ersetzt `ez_person_visible` (Platzhalter, gleiche Signatur) und setzt `ad_modules.is_available` für EZ erst mit der Freigabe. Namen nur über `ea_person_names`, `ea_search_active_persons` und `gr_group_roster`, nie direkt aus `ea_persons`. Neue Personen beim Arbeitseinsatz über `ad_find_similar_persons` und `ea_create_volunteer` (`created_in = 'EZ'`). Orte über `ad_locations` (nur aktive wählbar).
@@ -417,3 +427,25 @@ Entschieden 22.10.2026 (Product Owner, fünfter Block): PDF-Übernahme nicht im 
 | Alle Module zuerst spezifizieren oder Administration weiter umsetzen? | Mittelweg: Kern der Administration (bis v0.7.1) weiter umsetzen; vorher Querschnitts-Check der übrigen Module auf Auswirkungen; Ergänzungen als Nachtrag (Product Owner 22.10.2026) |
 | Nachträge v0.8 und v0.9 der Administration | werden mit dem jeweiligen Modul umgesetzt (vor der ersten Migration der Anwesenheitserfassung bzw. der Planungshilfe) |
 | Arbeitsweise in Chats | ein Modul je Chat in diesem Projekt; übergreifende Fragen im Chat „Überblick“; Startprompts in claude/arbeitsplan.md |
+
+## Erledigt am 22.10.2026 (Erhebung EA v0.1)
+
+| Punkt | Entscheidung |
+|---|---|
+| Funktion bei der Migration | Lizenz in L1–L3 (auch abgelaufen) → Trainer:in, sonst Helfer:in; abgelaufene werden markiert |
+| Ehrenamtsstatus bei der Migration | ein Eintrag ab Stichtag; „Aktiv seit“ nur als „gültig von“ der Funktion |
+| DOSB-Lizenz | optionales Feld „DOSB-Lizenz gültig bis“, ohne Ablaufmarkierung im MVP; Excel „gültig bis“ = Ablauf nach Fortbildungsregelung |
+| Felder der Lizenz | Pflicht Qualifikationsart und gültig bis; optional Lizenznummer, DOSB-Lizenz gültig bis, letzte Fortbildung; Erwerbsdatum = gültig von; „Stufe laut Vereinsportal“ und „Jahr Kursverlängerung“ entfallen (damit auch Frage „LE“) |
+| Eingabe der Migration | bereinigte CSV mit festen Spalten (01-erhebung.md C3) statt Excel direkt; Zuordnung Bezeichnung → Kürzel beim Übertragen |
+| Fortbildungen der Vorjahre | je Jahr ein Eintrag (Titel 1:1) |
+| Bezeichnungen „gültig von/bis“ | je Eigenschaftsart pflegbar (Übergabe an die Administration Ü1) |
+| Startwerte Funktion und Amt | Funktion: Trainer:in, Helfer:in; Amt: Referent:in, stellv. Referent:in, Hüttenwart:in; Rest ergänzt die Geschäftsstelle |
+| Geburtsjahr in der Dublettenwarnung | nur Geschäftsstelle und Admin (Übergabe an die Administration Ü2) |
+| Vereinbarung über die ehrenamtliche Tätigkeit | eigener Nachweis (Nur Geschäftsstelle und Admin), getrennt von der Trainervereinbarung |
+| Ausscheiden | laufende Funktionen, Ämter, Gremium-Mitgliedschaften vorausgewählt zum Beenden, abwählbar; Hinweis auf Ausgaben und externe Zugänge; Bestätigung bei weiteren Referaten |
+| Qualifikationsarten für die Migration | Erste Hilfe und Rettungsschwimmer als Weiterbildung (2 Jahre), acht JDAV-Aufbaumodule als Lehrgang; Anlage mit der ersten Migration des Ehrenamtsmanagements |
+| Annahmen der Erhebung | bestätigt: neue Person startet „aktiv“; Führungszeugnis-Einsicht 3 Jahre ab Ausstellungsdatum; CSV-Export der Stichtagsliste nur Geschäftsstelle und Admin, ohne Kontaktdaten; Ausweis und Ehrenkodex Lesestufe „alle“ |
+| Art. 13 DSGVO bei Personen aus Arbeitseinsätzen | Pflicht-Häkchen beim Anlegen mit Link auf die Datenschutzhinweise (Übergabe an die Anwesenheitserfassung) |
+| Annahmen der Stories EA (A1–A7) | bestätigt: Statusdatum höchstens 1 Jahr in der Zukunft; Ausscheiden in einer Transaktion; Migration in einer Transaktion; `npm run ea:migrate` mit Bestätigung der Projekt-Ref; Filter in der URL, 50 je Seite; Navigation; Abbruch bei Namenskonflikt |
+| Pflegerechte Referent:innen | alle Eigenschaften der Lesestufe „alle“ für Personen ihrer Referate; Zuordnungen nur zu eigenen Referaten |
+

@@ -1,6 +1,7 @@
 # Steckbrief: Ehrenamtsmanagement (EA)
 
-Stand: 21.10.2026 · Version 0.6 · Status: Entwurf · Product Owner: Toni Werner
+Stand: 22.10.2026 · Version 0.7 · Status: Entwurf · Product Owner: Toni Werner
+Änderungen v0.7: Erhebung v0.1 erstellt; dort entschieden: Lizenzfelder (Qualifikationsart, gültig bis, Lizenznummer, DOSB-Lizenz gültig bis, letzte Fortbildung; „Stufe laut Vereinsportal“ und „Jahr Kursverlängerung“ entfallen), Migration über bereinigte CSV, Status ein Eintrag ab Stichtag; offene Frage DOSB-Lizenz erledigt. Wo der Steckbrief abweicht, gilt die Erhebung.
 Änderungen v0.6: Qualifikationsarten sind Stammdaten der Administration (spec.md AD v0.6, US-AD-17 bis US-AD-19); Liste geliefert (47, stammdaten-qualifikationsarten.md); Pflege durch Admin und Geschäftsstelle; Gültigkeitsdauern nach Fortbildungsregelung des Bundesverbands; Ablauf zum Jahresende [ANNAHME].
 Änderungen v0.5: „ruhend“ bestätigt; Referent:innen setzen alle drei Status mit Wirkung für die ganze Person; Rückkehr Ausgeschiedener über „wieder aktivieren“; Karteileichen (eigenes Tabellenblatt) nicht Teil der Migration.
 Änderungen v0.4: Ehrenamtsstatus (aktiv, ruhend, ausgeschieden) als eigener Status; Ausgeschiedene nicht in der Übersicht; Zweck von Geburtsdatum und Geschlecht; je Lizenz eine eigene Lizenznummer.
@@ -130,7 +131,7 @@ Stand: 21.10.2026 · Version 0.6 · Status: Entwurf · Product Owner: Toni Werne
 
 **Offene Fragen:**
 - [OFFEN] Karteileichen: später migrieren (z. B. nur, wenn das Ausscheiden weniger als 5 Jahre zurückliegt, mit Status „ausgeschieden“) oder in der Excel-Liste belassen und mit ihr löschen?
-- [OFFEN] DOSB-Lizenz: zusätzlich zum Ablaufdatum nach Fortbildungsregelung ein eigenes Feld „DOSB-Lizenz gültig bis“ (4 Jahre ab Ausstellung) an der Lizenz führen?
+- Erledigt 22.10.2026: DOSB-Lizenz als optionales Feld „DOSB-Lizenz gültig bis“ an der Lizenz, ohne Ablaufmarkierung im MVP.
 - [OFFEN] Qualifikationsarten mit Klärungsbedarf (stammdaten-qualifikationsarten.md, Abschnitt 6): PSA (vorerst historisch), Trainer*in C Mountainbike Guide & Fahrtechnik, Jugendleiter*in (DOSB-Lizenz, Juleica), nicht im Export enthaltene Qualifikationsarten (z. B. DAV-Skibetreuer*in ab 2027).
 - [OFFEN] Regelwerk Führungszeugnis-Einsicht: Pflicht je Funktion, Erneuerungsintervall, weitere Nachweise. Liefert Product Owner.
 - [OFFEN] Offene Punkte der Spaltenzuordnung (migration-aktivenliste.md, Abschnitt 5): „LE“, „Jahr Kurs-verlängerung“, Fördergeber, Jahreskarte, Forms/Redaktion/Mailingliste, Amtszeit Jugendausschuss.
