@@ -1,7 +1,8 @@
 # User Stories: Ehrenamtsmanagement (EA)
 
-Stand: 22.10.2026 · Version 0.2 · Status: Entwurf · Product Owner: Toni Werner
+Stand: 23.10.2026 · Version 0.2.1 · Status: Entwurf · Product Owner: Toni Werner
 Grundlage: 01-erhebung.md v0.5 (Regeln R1–R17 EA), specs/ad-administration/spec.md v0.9 (Regeln „… AD“), glossar.md v1.5
+Änderungen v0.2.1: US-EA-18 AK6 – Schlüssel wird verdeckt im Terminal abgefragt, nie in einer Datei (Product Owner 23.10.2026).
 Änderungen v0.2: Annahmen A1–A7 vom Product Owner bestätigt (22.10.2026); Spec v0.1 erstellt.
 Änderungen v0.1: Ersterstellung (US-EA-01 bis US-EA-19).
 
@@ -274,7 +275,7 @@ Hinweise:
 - AK3: Gegeben ein Fehler während des Laufs, dann wird nichts geschrieben (eine Transaktion für den ganzen Lauf [ANNAHME]).
 - AK4: Gegeben eine Zeile mit `aktiv = nein`, zwei Referaten und einer abgelaufenen Lizenz, dann entstehen: Status „ruhend“ ab Stichtag, je Referat Funktion „Trainer:in“ ab `aktiv_seit`, Lizenz mit historischer oder aktueller Qualifikationsart.
 - AK5: Gegeben der Lauf ist fertig, dann enthält ein Abschlussbericht die Anzahl angelegter Personen und Eigenschaften je Art; die CSV-Dateien liegen nie im Repository (`.gitignore` für `*.csv` im Migrationsordner außer `beispiel.csv`).
-- AK6 (Rechte): Gegeben kein Schlüssel mit vollen Rechten in der lokalen Umgebung (`SUPABASE_SERVICE_ROLE_KEY`), dann Abbruch „Schlüssel fehlt.“
+- AK6 (Rechte): Gegeben der Admin gibt bei der verdeckten Abfrage keinen Schlüssel mit vollen Rechten (Secret Key) ein, dann Abbruch „Schlüssel fehlt.“; der Schlüssel steht nie in einer Datei, im Bericht oder in der Ausgabe.
 **Nicht Teil dieser Story:** Karteileichen, weitere Listen (nach MVP; das Skript ist wiederverwendbar).
 
 ### US-EA-19: Testdaten des Ehrenamtsmanagements
