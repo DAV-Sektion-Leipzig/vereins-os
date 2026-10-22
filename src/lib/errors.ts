@@ -22,7 +22,31 @@ export const MESSAGES = {
   dataTypeLocked: 'Der Datentyp kann nicht geändert werden, solange Eigenschaften dieser Art existieren.',
   choiceValueRemoved: 'Auswahlwerte können ergänzt, aber nicht entfernt werden.',
   validRange: '‚Gültig bis‘ darf nicht vor ‚gültig von‘ liegen.',
-  valueType: 'Der Wert passt nicht zum Datentyp der Eigenschaftsart.',
+  valueType: 'Der Wert für ‚<Feld>‘ passt nicht zum Datentyp.',
+  noFields: 'Bitte mindestens ein Feld anlegen.',
+  fieldNewRequired: 'Neue Felder können nur optional angelegt werden, solange es Eigenschaften dieser Art gibt.',
+  relationLocked: 'Der Bezug kann nicht geändert werden, solange Eigenschaften dieser Art existieren.',
+  fieldLabelTaken: 'Ein Feld mit dieser Bezeichnung gibt es bereits.',
+  labelTooLong: 'Die Bezeichnung darf höchstens 40 Zeichen lang sein.',
+  fieldRequired: 'Bitte ‚<Feld>‘ ausfüllen.',
+  fieldUnknown: 'Unbekanntes Feld.',
+  fieldChoice: 'Bitte einen Wert aus der Liste wählen.',
+  singleValue: 'Für diese Eigenschaftsart ist nur ein gültiger Eintrag je Zeitraum erlaubt.',
+  relationRequired: 'Bitte ein Referat (bzw. Gremium, Gruppe) wählen.',
+  groupRelationOnlyGr: 'Diese Angabe wird im Modul Gruppen gepflegt.',
+  relationForeignReferat: 'Du kannst nur Zuordnungen zu deinen Referaten pflegen.',
+  statusForbidden: 'Du darfst den Status dieser Person nicht ändern.',
+  confidentialOnlyAd: 'Nur mit Rechten auf die Administration möglich.',
+  scopeNotAllowed: 'Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement möglich.',
+  referatRequired: 'Bitte mindestens ein Referat auswählen.',
+  qualificationNameRequired: 'Bitte eine Bezeichnung angeben.',
+  qualificationNameTaken: 'Eine Qualifikationsart mit dieser Bezeichnung gibt es bereits.',
+  qualificationCodeTaken: 'Dieses Kürzel ist bereits vergeben.',
+  qualificationCodeFormat: 'Das Kürzel darf nur Großbuchstaben und Ziffern enthalten (max. 10 Zeichen).',
+  qualificationLevelRequired: 'Bitte eine Lizenzstufe wählen.',
+  qualificationValidity: 'Bitte eine Gültigkeitsdauer in Jahren angeben (1–10).',
+  qualificationHistoric: 'Diese Qualifikationsart ist historisch und kann nicht neu vergeben werden.',
+  qualificationKind: 'Dieser Typ von Qualifikation ist hier nicht erlaubt.',
   forbidden: 'Für diesen Bereich hast du keine Rechte.',
   unexpected: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
   loginFailed: 'Anmeldung fehlgeschlagen. Bitte E-Mail-Adresse und Passwort prüfen.',
@@ -50,6 +74,29 @@ const CODE_MESSAGES: Record<string, string> = {
   EA_CHOICE_VALUE_REMOVED: MESSAGES.choiceValueRemoved,
   EA_VALID_RANGE: MESSAGES.validRange,
   EA_VALUE_TYPE: MESSAGES.valueType,
+  EA_NO_FIELDS: MESSAGES.noFields,
+  EA_FIELD_NEW_REQUIRED: MESSAGES.fieldNewRequired,
+  EA_RELATION_LOCKED: MESSAGES.relationLocked,
+  EA_LABEL_TOO_LONG: MESSAGES.labelTooLong,
+  EA_FIELD_REQUIRED: MESSAGES.fieldRequired,
+  EA_FIELD_UNKNOWN: MESSAGES.fieldUnknown,
+  EA_FIELD_CHOICE: MESSAGES.fieldChoice,
+  EA_SINGLE_VALUE: MESSAGES.singleValue,
+  EA_RELATION_REQUIRED: MESSAGES.relationRequired,
+  EA_GROUP_RELATION_ONLY_GR: MESSAGES.groupRelationOnlyGr,
+  EA_RELATION_FOREIGN_REFERAT: MESSAGES.relationForeignReferat,
+  EA_STATUS_FORBIDDEN: MESSAGES.statusForbidden,
+  AD_CONFIDENTIAL_ONLY_AD: MESSAGES.confidentialOnlyAd,
+  AD_SCOPE_NOT_ALLOWED: MESSAGES.scopeNotAllowed,
+  AD_REFERAT_REQUIRED: MESSAGES.referatRequired,
+  AD_QUALIFICATION_NAME_REQUIRED: MESSAGES.qualificationNameRequired,
+  AD_QUALIFICATION_NAME_TAKEN: MESSAGES.qualificationNameTaken,
+  AD_QUALIFICATION_CODE_TAKEN: MESSAGES.qualificationCodeTaken,
+  AD_QUALIFICATION_CODE_FORMAT: MESSAGES.qualificationCodeFormat,
+  AD_QUALIFICATION_LEVEL_REQUIRED: MESSAGES.qualificationLevelRequired,
+  AD_QUALIFICATION_VALIDITY: MESSAGES.qualificationValidity,
+  AD_QUALIFICATION_HISTORIC: MESSAGES.qualificationHistoric,
+  AD_QUALIFICATION_KIND: MESSAGES.qualificationKind,
   AD_FORBIDDEN: MESSAGES.forbidden,
   EA_CONFIDENTIAL_FORBIDDEN: MESSAGES.forbidden,
 }
@@ -67,6 +114,10 @@ const CONSTRAINT_MESSAGES: Record<string, string> = {
   ea_properties_valid_range: MESSAGES.validRange,
   ea_persons_first_name_not_blank: MESSAGES.nameRequired,
   ea_persons_last_name_not_blank: MESSAGES.nameRequired,
+  ea_property_fields_label_key: MESSAGES.fieldLabelTaken,
+  ad_template_rights_scope_allowed: MESSAGES.scopeNotAllowed,
+  ad_qualification_types_name_key: MESSAGES.qualificationNameTaken,
+  ad_qualification_types_code_key: MESSAGES.qualificationCodeTaken,
 }
 
 type ErrorLike = {
@@ -79,6 +130,11 @@ function asErrorLike(value: unknown): ErrorLike {
   return typeof value === 'object' && value !== null ? (value as ErrorLike) : {}
 }
 
+/** Setzt den Feldnamen aus dem detail des Datenbankfehlers in den Platzhalter „<Feld>“ ein (R35). */
+function withField(text: string, details: string): string {
+  return text.replace('<Feld>', details || 'Feld')
+}
+
 function findConstraint(text: string): string | undefined {
   return Object.keys(CONSTRAINT_MESSAGES).find((name) => text.includes(name))
 }
@@ -87,7 +143,7 @@ function findConstraint(text: string): string | undefined {
 export function toMessage(errorOrCode: unknown): AppMessage {
   if (typeof errorOrCode === 'string') {
     if (errorOrCode in INFO_CODES) return { kind: 'info', text: INFO_CODES[errorOrCode] }
-    return { kind: 'error', text: CODE_MESSAGES[errorOrCode] ?? MESSAGES.unexpected }
+    return { kind: 'error', text: withField(CODE_MESSAGES[errorOrCode] ?? MESSAGES.unexpected, '') }
   }
 
   const error = asErrorLike(errorOrCode)
@@ -98,7 +154,7 @@ export function toMessage(errorOrCode: unknown): AppMessage {
   // Codes aus der Datenbank kommen als Meldungstext (raise exception '<CODE>'), aus Edge Functions als code
   for (const candidate of [message, code]) {
     if (candidate in INFO_CODES) return { kind: 'info', text: INFO_CODES[candidate] }
-    if (candidate in CODE_MESSAGES) return { kind: 'error', text: CODE_MESSAGES[candidate] }
+    if (candidate in CODE_MESSAGES) return { kind: 'error', text: withField(CODE_MESSAGES[candidate], details) }
   }
 
   const constraint = findConstraint(`${message} ${details}`)

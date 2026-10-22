@@ -5,7 +5,8 @@
 --   b…06 (eingeladen), b…07 (gesperrt), b…08 (Notfall-Admin), b…09 (Referent:in, Referat Klettern).
 -- Nur Personen 1–12 (Kern bis v0.7.1); Personen 13–18, Orte und Sätze folgen mit den Nachträgen v0.8/v0.9.
 -- Läuft ohne Nutzerkontext: Ehrenamtsstatus und historische Qualifikationsarten sind dadurch setzbar.
--- Eigenschaftsarten und Eigenschaften folgen mit den Migrationen zu Eigenschaften (spec T35, T36).
+--   Testarten d…01–d…08, Eigenschaften e…01–e…14 (spec.md Abschnitt 9, Feldschlüssel nach EA 01-erhebung.md C2).
+-- Testarten mit system_key (birth_date, contact) gelten nur bis zur ersten EA-Migration (spec v0.7.2, Ü3).
 
 -- 1. Personen
 insert into public.ea_persons (id, first_name, last_name, kind) values
@@ -144,3 +145,96 @@ select v.occurred_at, v.actor, v.subject, v.action::public.ad_audit_action, v.de
    select 1 from public.ad_audit_log l
     where l.subject_person_id = v.subject and l.action = v.action::public.ad_audit_action
  );
+
+-- 6. Testarten (Eigenschaftsarten mit Feldern) nach spec.md Abschnitt 9
+insert into public.ea_property_types
+  (id, name, purpose, category, read_level, relation_kind, relation_required, allow_multiple, system_key, visible_in)
+values
+  ('d0000000-0000-4000-8000-000000000001', 'Hauptamt', 'Zuordnung der hauptamtlich Beschäftigten',
+   'other', 'confidential', 'none', false, true, null, '{AD}'),
+  ('d0000000-0000-4000-8000-000000000002', 'T-Shirt-Größe', 'Bestellung von Vereinskleidung',
+   'issue', 'all', 'none', false, false, null, '{EA}'),
+  ('d0000000-0000-4000-8000-000000000003', 'Erste-Hilfe-Kurs am', 'Nachweis für Tätigkeiten mit Gruppen',
+   'qualification', 'all', 'none', false, true, null, '{EA}'),
+  ('d0000000-0000-4000-8000-000000000004', 'Lizenz (Test)', 'Nachweis der Trainerlizenz',
+   'qualification', 'all', 'none', false, true, null, '{AD,EA}'),
+  ('d0000000-0000-4000-8000-000000000005', 'Funktion (Test)', 'Zuordnung zu Referaten',
+   'assignment', 'all', 'referat', true, true, null, '{AD,EA}'),
+  ('d0000000-0000-4000-8000-000000000006', 'Amt (Test)', 'Gewählte Verantwortung für ein Referat',
+   'assignment', 'all', 'referat', true, true, null, '{AD,EA}'),
+  ('d0000000-0000-4000-8000-000000000007', 'Geburtsdatum (Test)', 'Lizenzanträge',
+   'master_data', 'office', 'none', false, false, 'birth_date', '{AD,EA,GR}'),
+  ('d0000000-0000-4000-8000-000000000008', 'Kontaktdaten (Test)', 'Erreichbarkeit',
+   'contact', 'all', 'none', false, true, 'contact', '{AD,EA,GR}')
+on conflict (id) do nothing;
+
+insert into public.ea_property_fields
+  (property_type_id, key, label, data_type, is_required, choice_values, allowed_qualification_kinds, sort_order)
+values
+  ('d0000000-0000-4000-8000-000000000001', 'title', 'Bezeichnung', 'text', true, null, null, 1),
+  ('d0000000-0000-4000-8000-000000000002', 'size', 'Größe', 'choice', true, '{S,M,L,XL}', null, 1),
+  ('d0000000-0000-4000-8000-000000000003', 'date', 'Datum', 'date', true, null, null, 1),
+  ('d0000000-0000-4000-8000-000000000004', 'qualification_type', 'Qualifikationsart', 'qualification_type', true,
+   null, '{license}', 1),
+  ('d0000000-0000-4000-8000-000000000004', 'license_number', 'Lizenznummer', 'text', false, null, null, 2),
+  ('d0000000-0000-4000-8000-000000000004', 'valid_until', 'gültig bis', 'date', false, null, null, 3),
+  ('d0000000-0000-4000-8000-000000000005', 'function', 'Funktion', 'choice', true, '{Trainer:in,Helfer:in}', null, 1),
+  ('d0000000-0000-4000-8000-000000000006', 'position', 'Amt', 'choice', true, '{Referent:in,Hüttenwart:in}', null, 1),
+  ('d0000000-0000-4000-8000-000000000007', 'date', 'Geburtsdatum', 'date', true, null, null, 1),
+  ('d0000000-0000-4000-8000-000000000008', 'email', 'E-Mail', 'text', false, null, null, 1),
+  ('d0000000-0000-4000-8000-000000000008', 'phone_mobile', 'Telefon mobil', 'text', false, null, null, 2)
+on conflict (property_type_id, key) do nothing;
+
+-- 7. Eigenschaften (ohne Nutzerkontext: historische Qualifikationsart von Person 5 erlaubt, R27)
+insert into public.ea_properties
+  (id, person_id, property_type_id, field_values, related_referat_id, valid_from, valid_to)
+select v.id, v.person_id, v.type_id, v.field_values,
+       (select r.id from public.ea_referate r where r.name = v.referat), v.valid_from, v.valid_to
+  from (values
+    -- Anna Fiktiv: Hauptamt (vertraulich)
+    ('e0000000-0000-4000-8000-000000000001'::uuid, 'a0000000-0000-4000-8000-000000000002'::uuid,
+     'd0000000-0000-4000-8000-000000000001'::uuid, '{"title": "Mitarbeiterin Geschäftsstelle"}'::jsonb,
+     null::text, date '2024-03-01', null::date),
+    -- Toni Muster
+    ('e0000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000004',
+     'd0000000-0000-4000-8000-000000000005', '{"function": "Trainer:in"}', 'Klettern', date '2025-03-01', null),
+    ('e0000000-0000-4000-8000-000000000003', 'a0000000-0000-4000-8000-000000000004',
+     'd0000000-0000-4000-8000-000000000004',
+     jsonb_build_object('qualification_type', (select id from public.ad_qualification_types where code = 'TCSPI'),
+                        'license_number', 'TEST-0001', 'valid_until', '2027-12-31'),
+     null, date '2025-03-01', null),
+    ('e0000000-0000-4000-8000-000000000004', 'a0000000-0000-4000-8000-000000000004',
+     'd0000000-0000-4000-8000-000000000002', '{"size": "M"}', null, date '2025-01-01', null),
+    ('e0000000-0000-4000-8000-000000000005', 'a0000000-0000-4000-8000-000000000004',
+     'd0000000-0000-4000-8000-000000000007', '{"date": "1990-05-12"}', null, date '1990-05-12', null),
+    -- Anton Muster (Dublettenpaar zu 4)
+    ('e0000000-0000-4000-8000-000000000006', 'a0000000-0000-4000-8000-000000000005',
+     'd0000000-0000-4000-8000-000000000005', '{"function": "Trainer:in"}', 'Ausbildung', date '2016-05-01', null),
+    ('e0000000-0000-4000-8000-000000000007', 'a0000000-0000-4000-8000-000000000005',
+     'd0000000-0000-4000-8000-000000000004',
+     jsonb_build_object('qualification_type', (select id from public.ad_qualification_types where code = 'TCSP'),
+                        'valid_until', '2019-12-31'),
+     null, date '2016-05-01', null),
+    -- Dieter Gesperrt: Hauptamt beendet (vertraulich)
+    ('e0000000-0000-4000-8000-000000000008', 'a0000000-0000-4000-8000-000000000007',
+     'd0000000-0000-4000-8000-000000000001', '{"title": "Mitarbeiter Geschäftsstelle"}', null,
+     date '2020-01-01', date '2025-12-31'),
+    -- Rita Referentin
+    ('e0000000-0000-4000-8000-000000000009', 'a0000000-0000-4000-8000-000000000009',
+     'd0000000-0000-4000-8000-000000000006', '{"position": "Referent:in"}', 'Klettern', date '2024-01-01', null),
+    -- Karl Zweireferat
+    ('e0000000-0000-4000-8000-000000000010', 'a0000000-0000-4000-8000-000000000010',
+     'd0000000-0000-4000-8000-000000000005', '{"function": "Helfer:in"}', 'Klettern', date '2023-01-01', null),
+    ('e0000000-0000-4000-8000-000000000011', 'a0000000-0000-4000-8000-000000000010',
+     'd0000000-0000-4000-8000-000000000005', '{"function": "Trainer:in"}', 'Ausbildung', date '2023-01-01', null),
+    ('e0000000-0000-4000-8000-000000000012', 'a0000000-0000-4000-8000-000000000010',
+     'd0000000-0000-4000-8000-000000000007', '{"date": "1985-03-03"}', null, date '1985-03-03', null),
+    -- Olga Ausgeschieden
+    ('e0000000-0000-4000-8000-000000000013', 'a0000000-0000-4000-8000-000000000011',
+     'd0000000-0000-4000-8000-000000000005', '{"function": "Trainer:in"}', 'Klettern', date '2020-01-01',
+     date '2025-06-30'),
+    -- Paul Nurgruppe (simuliert eine Person nur aus Gruppen)
+    ('e0000000-0000-4000-8000-000000000014', 'a0000000-0000-4000-8000-000000000012',
+     'd0000000-0000-4000-8000-000000000008', '{"email": "paul.nurgruppe@example.test"}', null, date '2025-01-01', null)
+  ) as v (id, person_id, type_id, field_values, referat, valid_from, valid_to)
+on conflict (id) do nothing;

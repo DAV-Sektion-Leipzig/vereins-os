@@ -76,16 +76,30 @@ select results_eq(
      from pg_policies
      where schemaname = 'public'
        and tablename in ('ea_referate', 'ea_gremien', 'ad_assignment_referate', 'ad_qualification_types',
-                         'ea_volunteer_status_history')
+                         'ea_volunteer_status_history', 'ea_property_types', 'ea_property_fields', 'ea_properties',
+                         'ea_property_history', 'ad_notice_acks')
      order by tablename, policyname $$,
   $$ values
      ('ad_assignment_referate'::text, 'ad_assignment_referate_select'::text, 'SELECT'::text),
+     ('ad_notice_acks', 'ad_notice_acks_insert', 'INSERT'),
+     ('ad_notice_acks', 'ad_notice_acks_select', 'SELECT'),
+     ('ad_notice_acks', 'ad_notice_acks_update', 'UPDATE'),
      ('ad_qualification_types', 'ad_qualification_types_insert', 'INSERT'),
      ('ad_qualification_types', 'ad_qualification_types_select', 'SELECT'),
      ('ad_qualification_types', 'ad_qualification_types_update', 'UPDATE'),
      ('ea_gremien', 'ea_gremien_insert', 'INSERT'),
      ('ea_gremien', 'ea_gremien_select', 'SELECT'),
      ('ea_gremien', 'ea_gremien_update', 'UPDATE'),
+     ('ea_properties', 'ea_properties_insert', 'INSERT'),
+     ('ea_properties', 'ea_properties_select', 'SELECT'),
+     ('ea_properties', 'ea_properties_update', 'UPDATE'),
+     ('ea_property_fields', 'ea_property_fields_insert', 'INSERT'),
+     ('ea_property_fields', 'ea_property_fields_select', 'SELECT'),
+     ('ea_property_fields', 'ea_property_fields_update', 'UPDATE'),
+     ('ea_property_history', 'ea_property_history_select', 'SELECT'),
+     ('ea_property_types', 'ea_property_types_insert', 'INSERT'),
+     ('ea_property_types', 'ea_property_types_select', 'SELECT'),
+     ('ea_property_types', 'ea_property_types_update', 'UPDATE'),
      ('ea_referate', 'ea_referate_insert', 'INSERT'),
      ('ea_referate', 'ea_referate_select', 'SELECT'),
      ('ea_referate', 'ea_referate_update', 'UPDATE'),
@@ -114,6 +128,29 @@ select ok(not has_column_privilege('authenticated', 'public.ea_persons', 'volunt
 select ok(not has_column_privilege('authenticated', 'public.ea_persons', 'created_in', 'INSERT, UPDATE'), 'ea_persons.created_in: nur Default');
 select ok(not has_table_privilege('authenticated', 'public.ea_volunteer_status_history', 'INSERT, UPDATE, DELETE'),
   'ea_volunteer_status_history: nur über Funktionen');
+select ok(not has_table_privilege('authenticated', 'public.ea_property_types', 'DELETE'), 'ea_property_types: nicht löschen');
+select ok(not has_column_privilege('authenticated', 'public.ea_property_types', 'system_key', 'INSERT, UPDATE'),
+  'ea_property_types.system_key: nur Migration');
+select ok(has_column_privilege('authenticated', 'public.ea_property_types', 'valid_from_label', 'UPDATE'),
+  'ea_property_types.valid_from_label: ändern (R49)');
+select ok(not has_table_privilege('authenticated', 'public.ea_property_fields', 'DELETE'), 'ea_property_fields: nicht löschen');
+select ok(not has_column_privilege('authenticated', 'public.ea_property_fields', 'key', 'UPDATE'),
+  'ea_property_fields.key: nach Anlage unveränderlich');
+select ok(not has_table_privilege('authenticated', 'public.ea_properties', 'DELETE'), 'ea_properties: nicht löschen');
+select ok(not has_column_privilege('authenticated', 'public.ea_properties', 'person_id', 'UPDATE'),
+  'ea_properties.person_id: nicht ändern');
+select ok(not has_table_privilege('authenticated', 'public.ea_property_history', 'INSERT, UPDATE, DELETE'),
+  'ea_property_history: nur Trigger');
+select ok(has_function_privilege('authenticated', 'public.ea_save_property_type(jsonb, jsonb)', 'EXECUTE'),
+  'ea_save_property_type');
+select ok(has_function_privilege('authenticated', 'public.ad_find_similar_persons(text, text, text)', 'EXECUTE'),
+  'ad_find_similar_persons');
+select ok(has_function_privilege('authenticated', 'public.ea_create_volunteer(text, text, text, uuid, uuid, jsonb, date)', 'EXECUTE'),
+  'ea_create_volunteer');
+select ok(not has_function_privilege('authenticated', 'public.ea_check_create(uuid, uuid)', 'EXECUTE'), 'ea_check_create intern');
+select ok(not has_function_privilege('authenticated', 'public.ea_property_type_in_use(uuid)', 'EXECUTE'),
+  'ea_property_type_in_use intern');
+select ok(has_table_privilege('authenticated', 'public.ad_v_person_overview', 'SELECT'), 'ad_v_person_overview: lesen');
 
 -- Funktionen
 select ok(has_function_privilege('authenticated', 'public.ad_has_level(text, public.ad_level)', 'EXECUTE'), 'ad_has_level');

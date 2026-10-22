@@ -10,6 +10,7 @@ export type AccessStatus = 'none' | 'invited' | 'active' | 'locked'
 export type Me = {
   person_id: string
   first_name: string
+  preferred_name: string | null
   last_name: string
   access_status: AccessStatus
 }
@@ -26,6 +27,18 @@ export async function requireLevel(module: ModuleCode, min: Level) {
   await requireSession()
   const { data, error } = await supabase.rpc('ad_has_level', { p_module: module, p_min: min })
   if (error || data !== true) throw redirect('/kein-zugriff')
+}
+
+/** Recht in irgendeiner Reichweite (alle oder Referat), z. B. für Navigation und /ea (spec.md AD Abschnitt 6). */
+export async function hasAnyLevel(module: ModuleCode, min: Level): Promise<boolean> {
+  const { data, error } = await supabase.rpc('ad_has_any_level', { p_module: module, p_min: min })
+  return !error && data === true
+}
+
+/** Qualifikationsarten pflegen: Admin oder Geschäftsstelle (AD ≥ bearbeiten oder EA = verwalten). */
+export async function canEditQualificationTypes(): Promise<boolean> {
+  const { data, error } = await supabase.rpc('ad_can_edit_qualification_types')
+  return !error && data === true
 }
 
 /** Eigene Person und eigener Zugang (ad_me); null ohne Zugang. */

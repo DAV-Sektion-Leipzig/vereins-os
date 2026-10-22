@@ -84,7 +84,7 @@ Bestehend (T1): `ad_level` (`none` < `read` < `edit` < `manage`), `ad_access_sta
 - `ea_persons_normalize` trimmt zusätzlich den Rufname (leer → null).
 - Trigger `ea_persons_guard` (research.md R-23): `kind`, `created_in` unveränderlich; Ehrenamtsstatus nur ohne Nutzerkontext oder mit Kennzeichen `ea.status_change`.
 - Policies (T38, ersetzen die bisherigen):
-  - select: `ea_person_visible(id)`
+  - select: `(select ad_has_level('AD','read')) or id in (select ea_person_ids_ea('read')) or id in (select gr_person_ids('read'))` – gleiche Regel wie `ea_person_visible`, je Abfrage einmal ausgewertet (research.md R-19)
   - insert: `ad_has_level('AD','edit') and created_in = 'AD' and volunteer_status is null`
   - update: `ad_has_level('AD','edit') or ea_person_visible_ea(id, 'edit') or gr_person_visible(id, 'edit')` (using und with check)
 - Grants: `select`, `insert (first_name, last_name, preferred_name, kind)`, `update (first_name, last_name, preferred_name)`.
@@ -93,7 +93,7 @@ Bestehend (T1): `ad_level` (`none` < `read` < `edit` < `manage`), `ad_access_sta
 - Index `(person_id, set_at desc)`. Policy select `ea_person_visible(person_id)`. Kein Schreib-Grant; geschrieben von den EA-Funktionen (T39) und ohne Nutzerkontext (Seed, Migrationsskript).
 
 ### ea_property_types, ea_property_fields (T35)
-- `ea_property_types`: Unique-Index `lower(name)` (`ea_property_types_name_key`), unique `system_key`; Checks Zweck nicht leer (`EA_PURPOSE_REQUIRED` im Trigger), `cardinality(visible_in) >= 1`, `origin in ('system','custom')`, `relation_required` nur bei `relation_kind <> 'none'`.
+- `ea_property_types`: Unique-Index `lower(name)` (`ea_property_types_name_key`), unique `system_key`; Spalten `valid_from_label`, `valid_to_label` mit Check ≤ 40 Zeichen (R49, v0.7.2); Checks Zweck nicht leer (`EA_PURPOSE_REQUIRED` im Trigger), `cardinality(visible_in) >= 1`, `origin in ('system','custom')`, `relation_required` nur bei `relation_kind <> 'none'`.
 - `ea_property_fields`: Unique `(property_type_id, key)`, Unique-Index `(property_type_id, lower(label))` (`ea_property_fields_label_key`); Check `key ~ '^[a-z][a-z0-9_]{0,39}$'`; Check `choice_values` genau bei `choice` mit ≥ 1 Wert (`EA_CHOICE_VALUES_REQUIRED` im Trigger); Check `allowed_qualification_kinds` nur bei `qualification_type`.
 - Trigger nach research.md R-21. RPC `ea_save_property_type(p_type jsonb, p_fields jsonb)` (security invoker) speichert Art und Felder in einer Transaktion und prüft R9 (`EA_NO_FIELDS`).
 - Policies (T38): select `ad_has_level('AD','read') or ((ad_has_any_level('EA','read') or ad_has_level('GR','read')) and read_level <> 'confidential')` (bei Feldern über die Art); insert/update `ad_has_level('AD','edit') or (ad_has_level('EA','manage') and read_level <> 'confidential')`. Kein Delete.
@@ -127,9 +127,10 @@ Bestehend (T1): `ad_level` (`none` < `read` < `edit` < `manage`), `ad_access_sta
 | `ad_can_edit_qualification_types()` | security definer, stable | authenticated | T26 |
 | `ad_qualification_usage(uuid)` | security definer, stable | authenticated | T41 (nach `ea_properties`) |
 | `ea_save_property_type(jsonb, jsonb)` | security invoker | authenticated | T35 |
-| `ea_person_in_referate`, `ea_person_visible_ad`, `ea_person_visible_ea`, `gr_person_visible`, `ea_person_visible`, `ea_property_readable`, `ea_property_writable` | security definer, stable | authenticated | T38 |
+| `ea_person_in_referate`, `ea_person_visible_ad`, `ea_person_visible_ea`, `gr_person_visible`, `ea_person_visible`, `ea_property_readable`, `ea_property_writable`; Mengenfunktionen `ea_person_ids_ea`, `gr_person_ids`, `ea_readable_type_ids` für die Policies | security definer, stable | authenticated | T38 |
 | `ea_set_volunteer_status`, `ea_person_referate`, `ea_create_volunteer(text, text, text, uuid, uuid, jsonb, date)`, `ea_activate_person` | security definer | authenticated | T39 |
 | `ad_me()` | security definer, stable | authenticated | T6; neu in T41 (`drop` und neu, weil die Rückgabe wächst) |
+| `ad_first_names_match(text, text)` (R3a, v0.7.3) | immutable | authenticated | T43 |
 | `ad_find_similar_persons(text, text, text)` | security definer, stable | authenticated | T43 |
 | `ad_pending_emergency_logins()`, `ad_acknowledge_emergency()` | security definer | authenticated | T4 (`…001400`) |
 | `ad_apply_invite`, `ad_revert_invite`, `ad_apply_email_change`, `ad_apply_lock`, `ad_apply_unlock` | security definer | service_role | T4 (`…001500`, `…001600`) |
