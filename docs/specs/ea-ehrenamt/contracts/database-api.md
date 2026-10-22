@@ -52,4 +52,4 @@ Neue Codes nach spec.md Abschnitt 5. Spec-Task T8 trägt sie in [error-codes.md 
 | `EA_LEAVE_PROPERTY` | Diese Angabe kann hier nicht beendet werden. | R20 |
 | `EA_RENEW_INVALID` | Nur aktuelle Lizenzen und Qualifikationen können verlängert werden; das neue Datum muss nach dem bisherigen liegen. | R6 |
 
-Offen: Code und Meldung für `ea_create_volunteer`/`ea_activate_person` im Kern (R3 EA, US-EA-05 AK6), siehe plan.md, Offene Punkte O3.
+Zusätzlich (Entscheidung Product Owner 23.10.2026, plan.md O3): `ea_create_volunteer` und `ea_activate_person` melden `EA_CREATE_FORBIDDEN` („Für diesen Bereich hast du keine Rechte.“) und `EA_CREATE_REFERAT_REQUIRED` („Bitte eine Funktion oder ein Amt in deinem Referat angeben.“); die Prüfung ersetzt eine Migration des Ehrenamtsmanagements.
