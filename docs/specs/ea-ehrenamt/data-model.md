@@ -6,7 +6,7 @@ Führend ist spec.md. Das Ehrenamtsmanagement legt **keine Tabellen** an. Es arb
 
 ## Migrationsdateien
 
-Zeitstempel = Anlagetag, nach allen Kern-Migrationen der Administration (research.md R-EA-01). Reihenfolge = Dateiname.
+Präfix `20261024`, nach allen Kern-Migrationen der Administration (letzte: `20261023001700`; research.md R-EA-01). Reihenfolge = Dateiname.
 
 | Datei | spec-Task | Inhalt |
 |---|---|---|
@@ -15,8 +15,9 @@ Zeitstempel = Anlagetag, nach allen Kern-Migrationen der Administration (researc
 | `…000300_ea_expiry_list.sql` | T4 | `ea_expiry_status`, `ea_default_valid_until`, View `ea_v_expiry`, `ea_volunteer_list`, Index `ea_properties_valid_until_idx` |
 | `…000400_ea_iban.sql` | T5 | `ea_iban_normalize`, `ea_iban_valid`, Trigger `ea_properties_iban` |
 | `…000500_ea_status_renew.sql` | T6 | `ea_change_volunteer_status`, `ea_leave`, `ea_renew_property` |
-| `…000600_ea_import.sql` | T7 | `ea_import_volunteers` (nur `service_role`) |
-| `…000700_ea_module_available.sql` | T22 | `ad_modules.is_available = true` für EA (erst nach der Abnahme, eigener Branch) |
+| `…000600_ea_check_create.sql` | O3 | `ea_check_create` neu (`create or replace`): `EA_CREATE_FORBIDDEN`, `EA_CREATE_REFERAT_REQUIRED` |
+| `…000700_ea_import.sql` | T7 | `ea_import_volunteers` (nur `service_role`) |
+| `…000800_ea_module_available.sql` | T22 | `ad_modules.is_available = true` für EA (erst nach der Abnahme, eigener Branch) |
 
 Jede Migration widerruft für die Funktionen, die sie anlegt, zuerst die Rechte: `revoke execute … from public, anon`. Danach vergibt sie `grant execute … to authenticated` (Ausnahme T7: nur `service_role`) bzw. `grant select on ea_v_expiry to authenticated` (R-02 AD). Alle Funktionen haben einen festen `search_path` (spec.md 2.3); security-definer-Funktionen nutzen `set search_path = ''` und voll qualifizierte Namen.
 
