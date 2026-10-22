@@ -4,8 +4,8 @@ import { Await, Link, useLoaderData, useRevalidator, useRouteLoaderData } from '
 import welcomeUrl from '@/assets/willkommen.svg'
 import { Button } from '@/components/ui/button'
 import { MESSAGES } from '@/lib/errors'
-import type { Me } from '@/lib/rights'
-import { LEVEL_LABELS, MODULE_PATHS, type loadMyModules, type MyModulesResult } from '@/features/start/modules'
+import { LEVEL_LABELS, type Me } from '@/lib/rights'
+import { MODULE_PATHS, type loadMyModules, type MyModulesResult } from '@/features/start/modules'
 
 // US-AD-05: Willkommensgrafik und Einstiege zu den Modulen, für die Rechte bestehen.
 export function StartPage() {

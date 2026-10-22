@@ -3,11 +3,16 @@ import { LoadingScreen } from '@/components/layout/LoadingScreen'
 import { PlaceholderPage } from '@/components/layout/PlaceholderPage'
 import { ProtectedLayout } from '@/components/layout/ProtectedLayout'
 import type { RouteHandle } from '@/components/layout/AppHeader'
+import { loadAdAccess } from '@/features/ad/access'
+import { AdLayout } from '@/features/ad/AdLayout'
+import { loadNewTemplate, loadTemplate, loadTemplateList } from '@/features/ad/rechtevorlagen/data'
+import { RechtevorlageBearbeiten } from '@/features/ad/rechtevorlagen/RechtevorlageBearbeiten'
+import { RechtevorlagenListe } from '@/features/ad/rechtevorlagen/RechtevorlagenListe'
 import { LoginPage } from '@/features/auth/LoginPage'
 import { KeinZugriffPage } from '@/features/start/KeinZugriffPage'
 import { loadMyModules } from '@/features/start/modules'
 import { StartPage } from '@/features/start/StartPage'
-import { loadMe, requireLevel, requireSession } from '@/lib/rights'
+import { loadMe, requireSession } from '@/lib/rights'
 import { supabase } from '@/lib/supabase'
 
 // Routen nach spec.md AD Abschnitt 6 und contracts/routes.md. Noch nicht umgesetzte Seiten sind Platzhalter.
@@ -38,11 +43,19 @@ export const router = createBrowserRouter([
       { path: 'kein-zugriff', element: <KeinZugriffPage /> },
       {
         // AD nur mit AD ≥ lesen; sonst /kein-zugriff ohne Datenabfrage (US-AD-05 AK3)
+        id: 'ad',
         path: 'ad',
-        loader: () => requireLevel('AD', 'read').then(() => null),
+        loader: loadAdAccess,
+        element: <AdLayout />,
         handle: { moduleName: 'Administration' } satisfies RouteHandle,
         children: [
-          { index: true, element: <PlaceholderPage title="Administration" /> },
+          { index: true, element: <PlaceholderPage title="Personen" /> },
+          { path: 'rechtevorlagen', loader: loadTemplateList, element: <RechtevorlagenListe /> },
+          { path: 'rechtevorlagen/neu', loader: loadNewTemplate, element: <RechtevorlageBearbeiten /> },
+          { path: 'rechtevorlagen/:id', loader: loadTemplate, element: <RechtevorlageBearbeiten /> },
+          { path: 'eigenschaftsarten', element: <PlaceholderPage title="Eigenschaftsarten" /> },
+          { path: 'qualifikationsarten', element: <PlaceholderPage title="Qualifikationsarten" /> },
+          { path: 'protokoll', element: <PlaceholderPage title="Protokoll" /> },
           { path: '*', element: <PlaceholderPage title="Administration" /> },
         ],
       },

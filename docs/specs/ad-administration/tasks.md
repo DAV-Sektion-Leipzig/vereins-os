@@ -311,7 +311,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 - [x] T062 [P] (spec T12 Teil, T42) `src/lib/errors.ts`: alle Codes des Kerns aus contracts/error-codes.md (Abschnitte AD und EA, ohne die Codes der Nachträge) und die Constraints `ad_template_rights_scope_allowed`, `ad_qualification_types_name_key`, `ad_qualification_types_code_key`, `ea_referate_name_key`, `ea_property_fields_label_key`; `EA_VALUE_TYPE` mit dem neuen Text; Platzhalter `<Feld>` aus dem `detail` des Fehlers füllen
 - [x] T063 [P] [US-AD-24] (spec T47 Teil) `src/lib/format.ts`: `personName({ first_name, preferred_name, last_name })` → „Rufname Nachname“, sonst „Vorname Nachname“; `src/components/layout/AppHeader.tsx` nutzt den Rufname aus `ad_me()`
 - [x] T064 [P] (spec T12 Teil) `src/lib/rights.ts`: `hasAnyLevel(module, min)` über `rpc('ad_has_any_level')` und `canEditQualificationTypes()` über `rpc('ad_can_edit_qualification_types')`
-- [ ] T065 Nach TEST ausrollen (nach Prüfung, dass TEST verknüpft ist): `npx supabase db push --linked --dry-run`, dann `npx supabase db push --linked`; danach `supabase/seed.sh` gegen TEST; Ergebnis im Pull Request nennen
+- [x] T065 Nach TEST ausrollen (nach Prüfung, dass TEST verknüpft ist): `npx supabase db push --linked --dry-run`, dann `npx supabase db push --linked`; danach `supabase/seed.sh` gegen TEST; Ergebnis im Pull Request nennen
 
 **Checkpoint**: Die Datenbank des Kerns steht in TEST; alle Oberflächen-Phasen können beginnen.
 
@@ -323,10 +323,10 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 **Unabhängiger Test**: test.admin legt eine Vorlage an, ändert eine Stufe der Vorlage Vorstand und erhält bei einem doppelten Namen „Eine Rechtevorlage mit diesem Namen gibt es bereits.“; „Referat“ ist nur bei Ehrenamtsmanagement wählbar; die Vorlage „Referent:in“ zeigt EA bearbeiten mit Reichweite Referat (US-AD-10 AK1–AK3, US-AD-20 AK1–AK3).
 
-- [ ] T066 [US-AD-10] Bestehenden Branch `us-ad-10-rechtevorlagen` auf `main` rebasen; die Änderungen an `docs/offene-punkte.md` und an `tasks.md` aus Commit `ddf6279` nicht übernehmen; Code aus `fc70e8e` (AdLayout, Rechtevorlagen-Liste und -Formular, `data.ts`, `access.ts`) übernehmen und an T062–T064 anpassen
-- [ ] T067 [US-AD-10] (spec T20 Teil) `src/features/ad/AdLayout.tsx`: Navigation Personen · Rechtevorlagen · Eigenschaftsarten · Qualifikationsarten · Protokoll; Unterrouten in `src/App.tsx`; Schreibknöpfe nur bei `ad_has_level('AD','edit')`
-- [ ] T068 [P] [US-AD-10] (spec T20) `src/features/ad/rechtevorlagen/RechtevorlagenListe.tsx`: Spalten Name, Beschreibung, Anzahl Personen (wirksame Zuweisungen); Knöpfe „Neu“ und „Öffnen“; mobil als Karten
-- [ ] T069 [US-AD-20] (spec T20, T44 Teil) `src/features/ad/rechtevorlagen/RechtevorlageBearbeiten.tsx` (/ad/rechtevorlagen/neu und /:id): Name, Beschreibung, Matrix mit den 9 Modulen aus `ad_modules` und je einer Auswahl „kein Zugriff / lesen / bearbeiten / verwalten“; Spalte Reichweite „alle / Referat“, „Referat“ nur bei Ehrenamtsmanagement wählbar; Speichern (insert/update `ad_templates`, update `ad_template_rights.level` und `scope`); Fehler über `errors.ts` (R30)
+- [x] T066 [US-AD-10] Bestehenden Branch `us-ad-10-rechtevorlagen` auf `main` rebasen; die Änderungen an `docs/offene-punkte.md` und an `tasks.md` aus Commit `ddf6279` nicht übernehmen; Code aus `fc70e8e` (AdLayout, Rechtevorlagen-Liste und -Formular, `data.ts`, `access.ts`) übernehmen und an T062–T064 anpassen
+- [x] T067 [US-AD-10] (spec T20 Teil) `src/features/ad/AdLayout.tsx`: Navigation Personen · Rechtevorlagen · Eigenschaftsarten · Qualifikationsarten · Protokoll; Unterrouten in `src/App.tsx`; Schreibknöpfe nur bei `ad_has_level('AD','edit')`
+- [x] T068 [P] [US-AD-10] (spec T20) `src/features/ad/rechtevorlagen/RechtevorlagenListe.tsx`: Spalten Name, Beschreibung, Anzahl Personen (wirksame Zuweisungen); Knöpfe „Neu“ und „Öffnen“; mobil als Karten
+- [x] T069 [US-AD-20] (spec T20, T44 Teil) `src/features/ad/rechtevorlagen/RechtevorlageBearbeiten.tsx` (/ad/rechtevorlagen/neu und /:id): Name, Beschreibung, Matrix mit den 9 Modulen aus `ad_modules` und je einer Auswahl „kein Zugriff / lesen / bearbeiten / verwalten“; Spalte Reichweite „alle / Referat“, „Referat“ nur bei Ehrenamtsmanagement wählbar; Speichern (insert/update `ad_templates`, update `ad_template_rights.level` und `scope`); Fehler über `errors.ts` (R30)
 
 **Checkpoint**: Vorlagen mit Reichweite sind über die Oberfläche pflegbar.
 
