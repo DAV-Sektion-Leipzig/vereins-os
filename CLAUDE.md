@@ -13,9 +13,14 @@ Antworte immer auf Deutsch.
 ## Fachliche Dokumente (Quelle: OneDrive)
 
 - Quelle der fachlichen Dokumente ist der Ordner
-  `~/Library/CloudStorage/OneDrive-DeutscherAlpenvereine.V/Claude/VereinsOS`
-  (Spiegel des Projektwissens). Ins Repository gehören daraus nur `PRODUCT.md` und `docs/`.
+  `~/Library/CloudStorage/OneDrive-DeutscherAlpenvereine.V/Claude/VereinsOS`.
+  Dort spezifiziert der Product Owner mit Claude Cowork und mit den Chats des
+  claude.ai-Projekts; der Ordner hat die Struktur des Repositorys. Ins Repository gehören
+  daraus nur `PRODUCT.md` und `docs/`.
   Nie übernehmen: `_alt/`, `_nur-projektwissen/`, `Claude outputs/`, `.DS_Store`.
+- `Claude outputs/` ist die Ablage von Claude Cowork für Entwürfe. Liegt dort eine Datei,
+  die es auch unter `docs/` gibt, und ist sie neuer oder anders: nicht übernehmen, sondern
+  melden. Der Product Owner verschiebt die freigegebene Fassung nach `docs/`.
 
 - Zu Beginn jeder Aufgabe abgleichen:
   ```bash
@@ -85,7 +90,10 @@ Antworte immer auf Deutsch.
 ## Git-Workflow
 
 - **Nie auf `main` committen oder pushen.** `main` ist geschützt; Änderungen nur per Pull Request.
-- **Je Story ein Branch** (z. B. `us-ad-01-ersteinrichtung`).
+- **Je Story bzw. Aufgabe ein Branch** (z. B. `us-ad-01-ersteinrichtung`), wie in
+  tech-stack.md Abschnitt 3 und der Constitution. Bedingen sich Stories gegenseitig
+  (z. B. gemeinsame Migrationen), kommt der zusammenhängende Teil auf einen gemeinsamen
+  Branch (z. B. `ad-kern-datenbank`); der Pull Request nennt die enthaltenen Stories und Tasks.
 - **Commit-Nachrichten deutsch.**
 - **Pull Request erstellt der Product Owner** bzw. Claude Code erst nach Rückfrage.
 
