@@ -9,6 +9,9 @@ import { loadPersonDetail, loadPersonOverview } from '@/features/ad/personen/dat
 import { PersonDetail } from '@/features/ad/personen/PersonDetail'
 import { PersonenUebersicht } from '@/features/ad/personen/PersonenUebersicht'
 import { PersonNeu } from '@/features/ad/personen/PersonNeu'
+import { loadNewQualificationType, loadQualificationType, loadQualificationTypes } from '@/features/ad/qualifikationsarten/data'
+import { QualifikationsartenListe } from '@/features/ad/qualifikationsarten/QualifikationsartenListe'
+import { QualifikationsartFormular } from '@/features/ad/qualifikationsarten/QualifikationsartFormular'
 import { loadNewTemplate, loadTemplate, loadTemplateList } from '@/features/ad/rechtevorlagen/data'
 import { RechtevorlageBearbeiten } from '@/features/ad/rechtevorlagen/RechtevorlageBearbeiten'
 import { RechtevorlagenListe } from '@/features/ad/rechtevorlagen/RechtevorlagenListe'
@@ -60,7 +63,9 @@ export const router = createBrowserRouter([
           { path: 'rechtevorlagen/neu', loader: loadNewTemplate, element: <RechtevorlageBearbeiten /> },
           { path: 'rechtevorlagen/:id', loader: loadTemplate, element: <RechtevorlageBearbeiten /> },
           { path: 'eigenschaftsarten', element: <PlaceholderPage title="Eigenschaftsarten" /> },
-          { path: 'qualifikationsarten', element: <PlaceholderPage title="Qualifikationsarten" /> },
+          { path: 'qualifikationsarten', loader: loadQualificationTypes, element: <QualifikationsartenListe /> },
+          { path: 'qualifikationsarten/neu', loader: loadNewQualificationType, element: <QualifikationsartFormular /> },
+          { path: 'qualifikationsarten/:id', loader: loadQualificationType, element: <QualifikationsartFormular /> },
           { path: 'protokoll', element: <PlaceholderPage title="Protokoll" /> },
           { path: '*', element: <PlaceholderPage title="Administration" /> },
         ],
