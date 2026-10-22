@@ -49,7 +49,8 @@ Antworte immer auf Deutsch.
   grep -rEhoi "[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}" docs PRODUCT.md | sort -u
   ```
   Bei einer IBAN oder einer E-Mail-Adresse außerhalb von @dav-leipzig.de, example.test
-  und example.org (reservierte Beispieldomains): anhalten und fragen.
+  und example.org (reservierte Beispieldomains): anhalten und fragen. Ausnahme: die
+  allgemein bekannte Beispiel-IBAN `DE89370400440532013000` für fiktive Testdaten.
 
 ## Offene Punkte
 
