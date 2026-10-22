@@ -83,7 +83,17 @@ Antworte immer auf Deutsch.
   (z. B. gemeinsame Migrationen), kommt der zusammenhängende Teil auf einen gemeinsamen
   Branch (z. B. `ad-kern-datenbank`); der Pull Request nennt die enthaltenen Stories und Tasks.
 - **Commit-Nachrichten deutsch.**
-- **Pull Request erstellt der Product Owner** bzw. Claude Code erst nach Rückfrage.
+- **Pull Requests legt Claude Code selbst an** (`gh pr create`, GitHub CLI unter `~/.local/bin/gh`).
+  Der PR nennt Stories, Tasks und die vollständige Cloudflare-Vorschau-URL.
+- **Mergen** (Entscheidung Product Owner 23.10.2026):
+  - **Auto-Merge** (`gh pr merge --auto --merge`) nur, wenn der PR ausschließlich Migrationen,
+    pgTAP-Tests, Seed oder Umsetzungsdateien (`plan.md`, `research.md`, `data-model.md`,
+    `quickstart.md`, `tasks.md`, `contracts/`, `abnahme-test.md`) ändert. GitHub mergt, sobald
+    die Pflicht-Checks `db-tests` und `Workers Builds: vereins-os` grün sind.
+  - **Kein Auto-Merge**, sobald der PR die Oberfläche (`src/`), Edge Functions, fachliche
+    Dokumente (`docs/` außer Umsetzungsdateien, `PRODUCT.md`), `CLAUDE.md`, die Constitution
+    oder `.github/` ändert. Dann mergt der Product Owner nach Prüfung der Vorschau.
+  - Ist ein Check rot, nicht erneut anstoßen, sondern Ursache melden.
 
 ## Repo-Struktur
 

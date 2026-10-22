@@ -1,6 +1,7 @@
 # Tech-Stack: Vereins OS
 
-Stand: 20.10.2026 · Version 0.6 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
+Stand: 23.10.2026 · Version 0.7 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
+Änderungen v0.7 (23.10.2026, Entscheidung Product Owner): Claude Code legt Pull Requests an; Auto-Merge für Datenbank, Tests und Umsetzungsdateien nach grünen Pflicht-Checks; Oberfläche und fachliche Dokumente gibt weiterhin der Product Owner frei (Abschnitt 3).
 
 ## Überblick
 
@@ -54,7 +55,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 - **Pages oder Workers:** Cloudflare empfiehlt für neue Projekte Workers mit Static Assets; Pages wird weiter unterstützt, bekommt aber keine neuen Funktionen mehr. Für eine reine statische App sind beide gleichwertig. Entscheidung: Workers mit Static Assets. [ANNAHME]
 - **Keine Serverlogik bei Cloudflare.** Cloudflare liefert nur das Frontend aus; Logik, Daten und Jobs liegen ausschließlich in Supabase. So gibt es nur ein Backend.
 - **Repository:** öffentliches Repository der Sektion auf GitHub (Organisationskonto). Unkritisch, solange keine Daten, Keys oder Passwörter im Repo liegen.
-- **Änderungen nur per Pull Request:** Arbeit auf eigenem Branch je Story bzw. Aufgabe; Freigabe durch den Product Owner per Merge nach Prüfung der Cloudflare-Vorschau. `main` ist per Ruleset geschützt (Pull Request erforderlich, kein Force-Push, kein Löschen).
+- **Änderungen nur per Pull Request:** Arbeit auf eigenem Branch je Story bzw. Aufgabe; Claude Code legt den Pull Request an. Oberfläche, Edge Functions und fachliche Dokumente gibt der Product Owner per Merge nach Prüfung der Cloudflare-Vorschau frei. Pull Requests mit ausschließlich Migrationen, Tests, Seed oder Umsetzungsdateien werden automatisch gemergt, sobald die Pflicht-Checks (Datenbanktests, Cloudflare-Build) grün sind. `main` ist per Ruleset geschützt (Pull Request erforderlich, Pflicht-Checks, kein Force-Push, kein Löschen).
 - **Domain:** Die eigene Domain dav-leipzig.de ist nicht nutzbar (kein DNS-Zugriff). Adresse vorerst die Standard-Adresse von Cloudflare (`*.workers.dev`).
 - **Datenschutz:** Cloudflare verarbeitet beim Ausliefern IP-Adressen der Nutzer. Den Auftragsverarbeitungsvertrag mit Cloudflare schließt der Product Owner ab.
 
@@ -153,7 +154,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 - Kein eigenes Backup von PROD (Risiko akzeptiert).
 - Auftragsverarbeitungsvertrag mit Cloudflare: schließt der Product Owner ab.
 - Seed über `seed.sh`, pgTAP in GitHub Action mit lokalem Stack, Abnahme in TEST.
-- Änderungen nur per Pull Request, Branch-Schutz für `main` (Product Owner, 19.10.2026).
+- Änderungen nur per Pull Request, Branch-Schutz für `main` (Product Owner, 19.10.2026); Auto-Merge für Datenbank, Tests und Umsetzungsdateien (Product Owner, 23.10.2026).
 - Supabase MCP vorerst nicht nutzen; Datenbankarbeit über die Supabase CLI (Merkposten: erneut prüfen).
 
 Keine offenen Punkte in dieser Datei.
