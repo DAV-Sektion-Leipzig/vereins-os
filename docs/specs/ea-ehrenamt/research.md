@@ -99,7 +99,7 @@ Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spe
 - **`ea_renew_property`:** Zuerst bekommt die alte Eigenschaft `valid_to = p_valid_from - 1`, dann wird die neue eingefügt. So sieht die Prüfung R37 AD (`allow_multiple`) keine Überschneidung, falls eine Art später auf „nur einer“ umgestellt wird.
   - `field_values = alt || p_field_values`. Damit bleiben Qualifikationsart und Lizenznummer erhalten, neue Werte (`valid_until`, `last_training`) überschreiben.
   - Optional folgt eine `further_training`-Eigenschaft mit `{"year", "title", "qualification_type"}`.
-- **Historische Qualifikationsart beim Verlängern:** Die neue Eigenschaft setzt das Feld Qualifikationsart neu. Der Trigger der Administration lehnt eine historische Art deshalb mit `AD_QUALIFICATION_HISTORIC` ab (R27 AD). Das ist folgerichtig, aber in der Oberfläche nicht beschrieben (plan.md, Offene Punkte O2).
+- **Historische Qualifikationsart beim Verlängern:** Die neue Eigenschaft setzt das Feld Qualifikationsart neu. Der Trigger der Administration lehnt eine historische Art deshalb mit `AD_QUALIFICATION_HISTORIC` ab (R27 AD). Die Oberfläche zeigt den Knopf „Verlängern“ deshalb nur bei Qualifikationsarten mit Status „aktuell“ (Entscheidung Product Owner 23.10.2026, plan.md O2).
 
 ## R-EA-10 Import `ea_import_volunteers` (T7)
 

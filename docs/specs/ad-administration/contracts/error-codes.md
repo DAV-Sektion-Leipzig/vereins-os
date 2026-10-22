@@ -78,7 +78,8 @@ Soweit in spec.md Administration definiert (Personenmodell, Eigenschaftsarten, E
 | `EA_CONFIDENTIAL_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. [OFFEN] gilt nach R29 noch? | R8 | [OFFEN] |
 | `EA_STATUS_FORBIDDEN` | Du darfst den Status dieser Person nicht ändern. | R33 | umgesetzt |
 | `EA_CREATE_FOREIGN_REFERAT` | Du kannst nur Personen für deine Referate anlegen. | R45 | geplant (T53) |
-| `EA_CREATE_FORBIDDEN` | [OFFEN] Meldung fehlt in spec.md | R45 | geplant (T53) |
+| `EA_CREATE_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | R41, R45 | geplant (Ehrenamtsmanagement, Branch `ea-datenbank`; Entscheidung Product Owner 23.10.2026, plan.md EA O3) |
+| `EA_CREATE_REFERAT_REQUIRED` | Bitte eine Funktion oder ein Amt in deinem Referat angeben. | R3 EA | geplant (Ehrenamtsmanagement, Branch `ea-datenbank`; Entscheidung Product Owner 23.10.2026, plan.md EA O3) |
 
 `EA_VALUE_TYPE`, `EA_FIELD_REQUIRED`, `EA_FIELD_CHOICE`, `AD_QUALIFICATION_HISTORIC` und `AD_QUALIFICATION_KIND` liefern die Feldbezeichnung im `detail` des Fehlers; `src/lib/errors.ts` setzt sie für „<Feld>“ ein. Der frühere Text von `EA_VALUE_TYPE` „Der Wert passt nicht zum Datentyp der Eigenschaftsart.“ entfällt.
 
@@ -153,7 +154,7 @@ Diese Codes bzw. Fälle melden einen **erfolgreichen** Vorgang. Das Frontend zei
 
 ## Offene Punkte
 
-- [OFFEN] Meldungstext fehlt in der Spec für `AD_TOO_MANY_IDS`, `EA_CREATE_FORBIDDEN` (Quelle: docs/specs/ad-administration/spec.md v0.8, Abschnitt 2) sowie `EZ_STATUS_NOT_ALLOWED`, `EZ_KIND_NOT_AVAILABLE`, `EZ_KIND_NOT_ALLOWED`, `EZ_LOCATION_NO_POINTS` (Quelle: docs/specs/ez-einsaetze/spec.md v0.1, Abschnitte 2 und 5). Bis zur Klärung zeigt das Frontend die Meldung für unerwartete Fehler.
+- [OFFEN] Meldungstext fehlt in der Spec für `AD_TOO_MANY_IDS` (Quelle: docs/specs/ad-administration/spec.md v0.8, Abschnitt 2) sowie `EZ_STATUS_NOT_ALLOWED`, `EZ_KIND_NOT_AVAILABLE`, `EZ_KIND_NOT_ALLOWED`, `EZ_LOCATION_NO_POINTS` (Quelle: docs/specs/ez-einsaetze/spec.md v0.1, Abschnitte 2 und 5). Bis zur Klärung zeigt das Frontend die Meldung für unerwartete Fehler.
 - [OFFEN] `EA_FIELD_LOCKED` und `EA_DATA_TYPE_LOCKED`: Beide stehen für R36. Ist `EA_FIELD_LOCKED` der Nachfolger (Datentyp je Feld seit v0.7) oder ein eigener Fall? (Quelle: docs/specs/ad-administration/spec.md v0.8, R36 und Abschnitt 5)
 - [OFFEN] `EA_CONFIDENTIAL_FORBIDDEN`: Seit R29 regelt die Lesestufe „vertraulich“ den Lesezugriff, beim Setzen gilt `AD_CONFIDENTIAL_ONLY_AD`. Bleibt der Code? (Quelle: docs/specs/ad-administration/spec.md v0.8, R8, R29)
 - [OFFEN] Ohne Code in der Spec: „Ein Feld mit dieser Bezeichnung gibt es bereits.“ (spec.md Administration, Abschnitt 5, „Weitere Meldungen“) und „Gruppe nicht gefunden.“ (gr-gruppen/02-stories.md v0.7, US-GR-19 AK6).

@@ -38,7 +38,7 @@ Technisch baut das Modul vollständig auf dem Kern der Administration auf: Perso
 | Prinzip | Prüfung | Ergebnis |
 |---|---|---|
 | I Fachliche Quelle | Plan setzt spec.md v0.2 vollständig um, nicht mehr; Artefakte in `docs/specs/ea-ehrenamt/`; Begriffe nach glossar.md (Aktive:r, Ehrenamtsstatus, Eigenschaftsart, Qualifikationsart, Referat, Gremium) | ✅ |
-| II Offene Punkte | Widersprüche und Lücken unten als O1–O3 und H1–H2 gemeldet, nicht entschieden; [ANNAHME]n aus spec.md Abschnitt 11 sind bestätigt; neue Annahmen nur in Umsetzungsdetails (Texte im Prüfbericht) und als solche markiert | ✅ |
+| II Offene Punkte | Widersprüche und Lücken unten als O1–O3 und H1–H2 gemeldet; O2 und O3 hat der Product Owner am 23.10.2026 entschieden, O1 ist offen; [ANNAHME]n aus spec.md Abschnitt 11 sind bestätigt; neue Annahmen nur in Umsetzungsdetails (Texte im Prüfbericht) und als solche markiert | ✅ |
 | III Sicherheit in der DB | Keine neue Tabelle; die View hat `security_invoker`, die Funktionen sind `security invoker` (RLS der Administration gilt); Grants nur an `authenticated` | ⚠️ siehe unten |
 | III, Ausnahme Import | `ea_import_volunteers` ist `security definer` mit Grant nur an `service_role`, nicht an `authenticated`. Begründung: Der Lauf muss ohne Nutzerkontext schreiben (Altbestand, Status, `created_in = 'script'`) und eine Transaktion sein (A3). Gleiches Muster wie `ad_apply_*` der Administration. Kein Weg aus dem Frontend. | ✅ begründet |
 | III/V Secrets | spec.md Abschnitt 7 sieht `SUPABASE_SERVICE_ROLE_KEY` in `.env.migration.local` vor. Constitution III („Secret Key / service_role … nie in `.env`-Dateien“) und CLAUDE.md verbieten das. | ❌ **O1, Product Owner** |
@@ -122,12 +122,12 @@ Nach CLAUDE.md: je Story bzw. Aufgabe ein Branch. Was sich gegenseitig bedingt, 
 | # | Branch | Spec-Tasks | Stories | Inhalt | hängt ab von |
 |---|---|---|---|---|---|
 | 1 | `claude/beautiful-shannon-667zkn` | – | – | plan.md, research.md, data-model.md, contracts/, quickstart.md; danach tasks.md | – |
-| 2 | `ea-datenbank` | T1–T6, T8, T9 (ohne Import) | 16, 19; Datenbankteil von 02, 03, 06–09, 11, 12 | Migrationen …000100–…000500, Fehlercodes, Seed, pgTAP 210–270, 290 | AD-Kern Datenbank (erledigt) |
+| 2 | `ea-datenbank` | T1–T6, T8, T9 (ohne Import); Fehlercodes beim Anlegen (O3) | 16, 19; Datenbankteil von 02, 03, 06–09, 11, 12 | Migrationen …000100–…000500, Fehlercodes, Seed, pgTAP 210–270, 290 | AD-Kern Datenbank (erledigt) |
 | 3 | `us-ea-17-import` | T7, T9 (Import), T20 | 17, 18 | `ea_import_volunteers`, pgTAP 280, Skript | 2; T20 zusätzlich O1 |
 | 4 | `us-ea-01-navigation` | T10 | 01 | Routen, EaLayout, Routenschutz | 2 |
 | 5 | `us-ea-02-aktive` | T11 | 02, 03 | Übersicht, Filter, URL, Karten | 4 |
 | 6 | `us-ea-04-detail` | T12 | 04, 11 | Detail, Historie, Bezeichnungen, Ablauf-Badges | 4, AD T47 |
-| 7 | `us-ea-05-person-anlegen` | T13 | 05, 10 | Anlegen, Dublettendialog-Aktionen | 6, AD T49; O3 für die Meldungen |
+| 7 | `us-ea-05-person-anlegen` | T13 | 05, 10 | Anlegen, Dublettendialog-Aktionen | 6, AD T49 |
 | 8 | `us-ea-06-eigenschaften` | T14 | 06, 07 | Eigenschaften pflegen, Vorbelegung, Verlängern | 6, AD T30, T47 |
 | 9 | `us-ea-08-status` | T15 | 08, 09 | Status ändern, Ausscheiden | 6 |
 | 10 | `us-ea-12-ablauf` | T16 | 12 | Stichtagsliste, CSV | 4 |
@@ -155,13 +155,12 @@ Gemeldet an den Product Owner. Nichts davon hat Claude Code entschieden.
   - *Vorschlag:* Das Skript liest beide Werte nur aus der Umgebung der laufenden Shell. Der Admin setzt den Schlüssel unmittelbar vor dem Aufruf, ohne ihn in einer Datei abzulegen (z. B. `read -s SUPABASE_SERVICE_ROLE_KEY; export SUPABASE_SERVICE_ROLE_KEY`). spec.md Abschnitt 7 würde dann auf einem Branch `docs/ea-schluessel` angepasst.
   - *Alternative:* eine eng gefasste Ausnahme in der Constitution (wie die in Prinzip V).
   - Außerdem zu klären: Wer führt den Probelauf gegen TEST aus (US-EA-17 AK6, T20)? Vorschlag: der Admin, nicht Claude Code, weil Claude Code dafür den Secret Key von TEST bräuchte.
-- [OFFEN] **O2 – Verlängern bei historischer Qualifikationsart:** Verlängern legt eine neue Eigenschaft an und setzt das Feld Qualifikationsart neu. R27 AD lehnt das bei historischen Arten ab („Diese Qualifikationsart ist historisch …“). spec.md Abschnitt 6 sagt nicht, ob der Knopf „Verlängern“ dann fehlt oder die Meldung erscheint. Quelle: `docs/specs/ea-ehrenamt/spec.md` Abschnitt 6 (Dialog „Verlängern“), `docs/specs/ad-administration/spec.md` R27.
-  - *Vorschlag:* Den Knopf nur bei Qualifikationsarten mit Status `current` zeigen. Kein Blocker für die Datenbank.
-- [OFFEN] **O3 – Fehlercodes beim Anlegen im Kern:** Die umgesetzte Prüfung `ea_check_create` (Migration `20261023001100`, genutzt von `ea_create_volunteer` und `ea_activate_person`) meldet:
-  - Vorstand (kein EA-Recht): `AD_FORBIDDEN` („Für diesen Bereich hast du keine Rechte.“). US-EA-05 AK6 erwartet `EA_CREATE_FORBIDDEN`; dieser Code ist in der Administration erst mit dem Nachtrag v0.8 (T53) geplant und hat keinen Meldungstext.
-  - Referent:in ohne Funktion oder Amt: `EA_RELATION_REQUIRED` („Bitte ein Referat (bzw. Gremium, Gruppe) wählen.“). R3 EA bzw. US-EA-05 AK2 und US-EA-10 AK5 verlangen „Bitte eine Funktion oder ein Amt in deinem Referat angeben.“
-  - Quelle: `docs/specs/ea-ehrenamt/02-stories.md` US-EA-05 AK2, AK6, US-EA-10 AK5; `docs/specs/ea-ehrenamt/spec.md` R3; `docs/specs/ad-administration/contracts/error-codes.md` (Offene Punkte); `supabase/migrations/20261023001100_ea_volunteer_functions.sql`.
-  - *Vorschlag:* Die Stories gelten wörtlich. Eine neue Migration der Administration ersetzt `ea_check_create`: `EA_CREATE_FORBIDDEN` → „Für diesen Bereich hast du keine Rechte.“ und neu `EA_CREATE_REFERAT_REQUIRED` → Meldung R3 EA. Entscheidung über Code und Text im Chat der Administration. Bis dahin prüft das Formular R3 vor dem Aufruf (Pflichtfeld für Referent:innen), sodass die Meldung aus R3 in der Oberfläche erscheint. Blocker nur für die Abnahme von US-EA-05 AK6.
+- **O2 – Verlängern bei historischer Qualifikationsart (entschieden, Product Owner 23.10.2026):** Der Knopf „Verlängern“ erscheint nur bei Lizenzen und Qualifikationen, deren Qualifikationsart den Status „aktuell“ hat. Bei historischen Arten fehlt er. Die Datenbank lehnt das Verlängern ohnehin ab (R27 AD). Umsetzung in T14 (Branch `us-ea-06-eigenschaften`). spec.md Abschnitt 6 (Dialog „Verlängern“) beschreibt das noch nicht; Nachtrag nur auf Auftrag (Branch `docs/…`).
+- **O3 – Fehlercodes beim Anlegen (entschieden, Product Owner 23.10.2026, wie vorgeschlagen):** Eine neue Migration auf dem Branch `ea-datenbank` (`…_ea_check_create.sql`, `create or replace` mit gleicher Signatur) ersetzt die Prüfung `ea_check_create` der Administration (Migration `20261023001100`, genutzt von `ea_create_volunteer` und `ea_activate_person`):
+  - ohne EA-Recht (z. B. Vorstand): `EA_CREATE_FORBIDDEN` → „Für diesen Bereich hast du keine Rechte.“ (statt `AD_FORBIDDEN`; US-EA-05 AK6),
+  - Referent:in ohne Funktion oder Amt: `EA_CREATE_REFERAT_REQUIRED` → „Bitte eine Funktion oder ein Amt in deinem Referat angeben.“ (statt `EA_RELATION_REQUIRED`; R3, US-EA-05 AK2, US-EA-10 AK5),
+  - fremdes Referat: unverändert `EA_RELATION_FOREIGN_REFERAT`.
+  - Codes eingetragen in contracts/error-codes.md der Administration. Die pgTAP-Tests der Administration (`140_volunteer_functions`), die die alten Codes prüfen, werden im selben Pull Request angepasst. Die spätere Erweiterung um die Anwesenheitserfassung (AD T53) baut auf dieser Fassung auf. Das Formular prüft R3 zusätzlich vor dem Aufruf.
 - Übernommen aus spec.md Abschnitt 11 (kein Blocker): Karteileichen; Fördergeber und Förderart; Jahreskarte, Forms, Redaktion, Mailingliste; Amtszeit Jugendausschuss; „Mitarbeiter:in Mitgliederverwaltung“; Regelwerk Führungszeugnis-Einsicht. Text und Link zu Art. 13 DSGVO betreffen die Anwesenheitserfassung.
 
 Hinweise (keine Entscheidung nötig):
