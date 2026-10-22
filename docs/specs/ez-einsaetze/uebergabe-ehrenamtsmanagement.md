@@ -1,7 +1,8 @@
 # Übergabe an das Ehrenamtsmanagement: Aktive aus der Anwesenheitserfassung, Einsatzhistorie, Nachweise der Vergütungsordnung
 
-Stand: 22.10.2026 · Version 1.2 · Von: Anwesenheitserfassung (EZ) · An: Ehrenamtsmanagement (EA) · Status: offen
+Stand: 22.10.2026 · Version 1.3 · Von: Anwesenheitserfassung (EZ) · An: Ehrenamtsmanagement (EA) · Status: erledigt
 Quelle: specs/ez-einsaetze/00-steckbrief.md (v0.6); Vergütungsordnung der Sektion (2025_DAV_Leipzig_FO_VGO)
+Änderungen v1.3: Als erledigt markiert; eingearbeitet in specs/ea-ehrenamt/01-erhebung.md v0.1 (C2 Nr. 4, 6, 9, 16, 17; Abschnitt „Übergabe … – Verbleib“). Offene Punkte (Art. 13 DSGVO, Vereinbarung über die ehrenamtliche Tätigkeit) werden im Ehrenamtsmanagement weitergeführt.
 Änderungen v1.2: Modulname Anwesenheitserfassung (vorher Einsätze); E6 (Aktive als Auswahl für die organisierende Person) ergänzt.
 Änderungen v1.1: E4 (Nachweise aus der Vergütungsordnung) und E5 (förderfähige Lizenz) ergänzt.
 

@@ -1,8 +1,9 @@
 # Spaltenzuordnung Aktivenliste → Ehrenamtsmanagement
 
-Stand: 21.10.2026 · Version 0.4 · Entwurf · Quelle: Vorlage_Aktiven_Liste.xlsx (nur Kopfzeile, 68 Spalten, keine Personendaten)
+Stand: 22.10.2026 · Version 0.5 · Entwurf · Quelle: Vorlage_Aktiven_Liste.xlsx (nur Kopfzeile, 68 Spalten, keine Personendaten)
 Zweck: Grundlage für Abschnitt C (Daten) in 01-erhebung.md und für das Migrationsskript. Lesestufen: **alle** = alle mit Zugriff auf das Ehrenamtsmanagement · **GST** = nur Geschäftsstelle und Admin · **vertr.** = vertraulich.
 Umfang: nur das Tabellenblatt der aktiven und ruhenden Aktiven. Das Tabellenblatt der Karteileichen (Ausgeschiedene) wird nicht migriert ([OFFEN], ob später).
+Änderungen v0.5: Das Migrationsskript liest eine bereinigte CSV (01-erhebung.md C3); diese Datei ist nur noch Hilfe für die Übertragung aus der Excel-Liste. Entschieden 22.10.2026: Lizenz mit Qualifikationsart, gültig bis, Lizenznummer, DOSB-Lizenz gültig bis, letzte Fortbildung; Spalten N („Stufe laut Vereinsportal“) und AF („Jahr Kurs-verlängerung“) entfallen; Ehrenamtsstatus ein Eintrag ab Stichtag (Spalte BO nur gültig von der Funktion); Funktion Trainer:in bei mindestens einer Lizenz; Fortbildungen je Jahr ein Eintrag. Wo diese Datei abweicht, gilt die Erhebung.
 Änderungen v0.4: „ruhend“ bestätigt; Karteileichen-Blatt ausgenommen; Spalte „aktiv?“ eindeutig („nein“ = ruhend).
 Änderungen v0.3: Spalte „aktiv?“ → Ehrenamtsstatus; Zweck von Geburtsdatum und Geschlecht geklärt; je Lizenz eine eigene Lizenznummer.
 
