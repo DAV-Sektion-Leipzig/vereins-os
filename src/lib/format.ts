@@ -39,3 +39,14 @@ export function formatTime(value: Date | string): string {
 export function formatDateTime(value: Date | string): string {
   return `${formatDate(value)} ${formatTime(value)}`
 }
+
+export type PersonNameParts = {
+  first_name: string
+  preferred_name?: string | null
+  last_name: string
+}
+
+/** „Rufname Nachname“, sonst „Vorname Nachname“ (spec.md AD Abschnitt 6, US-AD-24). */
+export function personName({ first_name, preferred_name, last_name }: PersonNameParts): string {
+  return `${preferred_name?.trim() || first_name} ${last_name}`
+}

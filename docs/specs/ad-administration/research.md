@@ -159,7 +159,8 @@ Ersetzt durch plan.md, Abschnitt „Branches“: Die Datenbankteile des Kerns h�
 - Alle Sichtbarkeitsfunktionen (`ea_person_in_referate`, `ea_person_visible_ad`, `ea_person_visible_ea`, `gr_person_visible`, `ea_person_visible`, `ea_property_readable`, `ea_property_writable`) sind `security definer`, `stable`, `set search_path = ''`. Sie lesen `ea_persons` und `ea_properties` als Eigentümer ohne RLS; damit gibt es keine Rekursion zwischen Policy und Funktion.
 - Die Policies auf `ea_persons`, `ea_properties`, `ea_property_history`, `ea_volunteer_status_history` rufen nur diese Funktionen auf. Die bisherigen Policies aus `20261020000200_ea_persons.sql` werden in T38 mit `drop policy` ersetzt.
 - `gr_person_visible` ist ein Platzhalter (`false`), den die erste GR-Migration mit gleicher Signatur ersetzt.
-- Leistung: Indizes auf `ea_properties (related_referat_id) where …`, `ea_persons (volunteer_status) where …`; `ad_my_referate` wird je Abfrage einmal ausgewertet (stable). Nachweis über den Mengentest (R-27).
+- Leistung (Ergebnis Mengentest, R-27): Die Policies auf `ea_persons`, `ea_properties` und `ea_volunteer_status_history` rufen nicht je Zeile `ea_person_visible`/`ea_property_readable` auf (30.000 Eigenschaften: 2,8 s), sondern die Mengenfunktionen `ea_person_ids_ea(p_min)`, `gr_person_ids(p_min)` und `ea_readable_type_ids(p_path)` in `in (select …)`; PostgreSQL wertet sie einmal je Abfrage aus (gleicher Fall: 4 ms). Die Regeln sind dieselben; `ea_person_visible` und `ea_property_readable` bleiben für Funktionen und Tests erhalten. `gr_person_ids` leitet sich aus `gr_person_visible` ab, damit die erste GR-Migration nur diese Funktion ersetzen muss.
+- Schreib-Policies (`ea_property_writable`) bleiben zeilenweise; sie betreffen nur einzelne Zeilen.
 
 ## R-20 Werte je Feld in `field_values` (R35)
 
@@ -174,6 +175,7 @@ Ersetzt durch plan.md, Abschnitt „Branches“: Die Datenbankteile des Kerns h�
 - Die Oberfläche speichert Art und Felder in einem Aufruf: `ea_save_property_type(p_type jsonb, p_fields jsonb) returns uuid`, `security invoker` (RLS der Tabellen gilt), in einer Transaktion. Sie prüft R9 (mindestens ein Feld, `EA_NO_FIELDS`) und legt neue Felder an bzw. ändert vorhandene. Felder werden nicht gelöscht.
 - Trigger auf `ea_property_types`: `visible_in` nur Codes aus `ad_modules`; `read_level = 'confidential'` setzen/ändern nur mit AD ≥ edit (`AD_CONFIDENTIAL_ONLY_AD`); `relation_kind` gesperrt bei vorhandenen Eigenschaften (`EA_RELATION_LOCKED`); `relation_kind = 'group'` nur mit GR = manage (`AD_FORBIDDEN`); `system_key` nur ohne Nutzerkontext.
 - Trigger auf `ea_property_fields`: `key` nach Anlage unveränderlich; Datentyp gesperrt bei vorhandenen Eigenschaften (`EA_DATA_TYPE_LOCKED`); Auswahlwerte nur ergänzen (`EA_CHOICE_VALUE_REMOVED`); neues Pflichtfeld bei vorhandenen Eigenschaften (`EA_FIELD_NEW_REQUIRED`); Bezeichnung eindeutig je Art (Unique-Index `lower(label)`; Meldung „Ein Feld mit dieser Bezeichnung gibt es bereits.“ über den Constraint-Namen).
+- Bezeichnungen „gültig von/bis“ (R49, spec v0.7.2): Spalten `valid_from_label`, `valid_to_label`; der Trigger trimmt, leer → null, über 40 Zeichen `EA_LABEL_TOO_LONG` (Check als Absicherung); Rechte wie die übrigen Spalten.
 - `EA_FIELD_LOCKED` wird im Kern nicht ausgelöst, solange die Abgrenzung zu `EA_DATA_TYPE_LOCKED` [OFFEN] ist (contracts/error-codes.md); der Datentyp-Fall nutzt `EA_DATA_TYPE_LOCKED`.
 
 ## R-22 Policies für Eigenschaften (R29, R41, R42)
@@ -198,8 +200,9 @@ Ersetzt durch plan.md, Abschnitt „Branches“: Die Datenbankteile des Kerns h�
 ## R-25 Dublettenprüfung modulübergreifend (R3, R40)
 
 - `ad_find_similar_persons(p_first, p_last, p_email)` ist `security definer`, `stable`, `set search_path = ''`. Prüft zuerst das Recht (AD ≥ edit, `ad_has_any_level('EA','edit')`, GR ≥ edit), sonst `AD_FORBIDDEN`.
-- Treffer: `kind = 'human'` und (gleicher Nachname ohne Groß-/Kleinschreibung und (`similarity(first_name, p_first) >= 0.3` oder Vor- bzw. Rufname ist Teilwort des anderen)) oder `p_email` gleich `ad_accesses.login_email` oder gleich einem String-Wert in `field_values` einer Eigenschaft, deren Art die Kategorie `contact` hat (ohne Groß-/Kleinschreibung) [ANNAHME aus spec.md].
-- Rückgabe nur die Spalten nach spec.md; `birth_year` aus dem ersten Datumsfeld der Art mit `system_key = 'birth_date'` (heute gültige Eigenschaft), sonst null; `is_visible = ea_person_visible(person_id)`.
+- Treffer nach R3a (spec v0.7.3): `kind = 'human'` und gleicher Nachname (getrimmt, ohne Groß-/Kleinschreibung) und `ad_first_names_match(p_first, first_name)` oder `ad_first_names_match(p_first, preferred_name)`; oder `p_email` gleich der Login-Adresse oder dem Feld `email` bzw. `dav_email` einer Eigenschaft der Art mit `system_key = 'contact'` (spec v0.7.2).
+- `ad_first_names_match` (immutable): Trigramm-Ähnlichkeit ≥ 0,3, einer im anderen enthalten oder gemeinsame Teilfolge von 3 Zeichen (über `generate_series` und `strpos` auf allen Teilfolgen des kürzeren Werts).
+- Rückgabe nur die Spalten nach spec.md; `birth_year` aus dem Feld `date` der Art mit `system_key = 'birth_date'` (heute gültige Eigenschaft, sonst die mit dem spätesten `valid_from`), nur wenn die Lesestufe dieser Art es für den Aufrufer erlaubt (R40, Ü2); `is_visible = ea_person_visible(person_id)`.
 - Ersetzt T8 vollständig; die Fassung aus v0.5 wird nicht mehr gebaut.
 
 ## R-26 Seed Personen 1–12

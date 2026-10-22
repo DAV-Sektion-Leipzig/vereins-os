@@ -2,6 +2,7 @@ import { LogOutIcon } from 'lucide-react'
 import { Link, useMatches, useNavigate } from 'react-router-dom'
 import logoUrl from '@/assets/brand/DAVLogo-lg_Leipzig-1378_RGB.svg'
 import { Button } from '@/components/ui/button'
+import { personName } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import type { Me } from '@/lib/rights'
 import { supabase } from '@/lib/supabase'
@@ -53,7 +54,7 @@ export function AppHeader({ me }: { me: Me | null }) {
         <div className="flex min-w-0 shrink-0 flex-col items-end sm:flex-row sm:items-center sm:gap-3">
           {me && (
             <span className="max-w-36 truncate text-sm text-muted-foreground sm:max-w-48">
-              {me.first_name} {me.last_name}
+              {personName(me)}
             </span>
           )}
           {/* Text bündig mit dem Namen darüber; die Fläche der Schaltfläche ragt in den Innenabstand */}

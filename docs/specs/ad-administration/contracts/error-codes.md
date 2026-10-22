@@ -22,17 +22,17 @@ Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnun
 | `AD_NO_TEMPLATE` | Bitte zuerst mindestens eine Rechtevorlage zuweisen. | R17 | geplant (T9) |
 | `AD_MAIL_FAILED` | Die Einladung konnte nicht verschickt werden. Bitte später erneut versuchen. | – | geplant (T9) |
 | `AD_TEMPLATE_NAME_TAKEN` / `ad_templates_name_key` | Eine Rechtevorlage mit diesem Namen gibt es bereits. | – | umgesetzt |
-| `AD_SCOPE_NOT_ALLOWED` / `ad_template_rights_scope_allowed` | Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement möglich. | R30 | geplant (T33) |
-| `AD_REFERAT_REQUIRED` | Bitte mindestens ein Referat auswählen. | R31 | geplant (T33) |
-| `AD_CONFIDENTIAL_ONLY_AD` | Nur mit Rechten auf die Administration möglich. | R29 | geplant (T35) |
-| `AD_QUALIFICATION_NAME_REQUIRED` | Bitte eine Bezeichnung angeben. | R21 | geplant (T26) |
-| `AD_QUALIFICATION_NAME_TAKEN` | Eine Qualifikationsart mit dieser Bezeichnung gibt es bereits. | R21 | geplant (T26) |
-| `AD_QUALIFICATION_CODE_TAKEN` | Dieses Kürzel ist bereits vergeben. | R22 | geplant (T26) |
-| `AD_QUALIFICATION_CODE_FORMAT` | Das Kürzel darf nur Großbuchstaben und Ziffern enthalten (max. 10 Zeichen). | R22 | geplant (T26) |
-| `AD_QUALIFICATION_LEVEL_REQUIRED` | Bitte eine Lizenzstufe wählen. | R23 | geplant (T26) |
-| `AD_QUALIFICATION_VALIDITY` | Bitte eine Gültigkeitsdauer in Jahren angeben (1–10). | R24 | geplant (T26) |
-| `AD_QUALIFICATION_HISTORIC` | Diese Qualifikationsart ist historisch und kann nicht neu vergeben werden. | R27 | geplant (T36) |
-| `AD_QUALIFICATION_KIND` | Dieser Typ von Qualifikation ist hier nicht erlaubt. | R28 | geplant (T36) |
+| `AD_SCOPE_NOT_ALLOWED` / `ad_template_rights_scope_allowed` | Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement möglich. | R30 | umgesetzt |
+| `AD_REFERAT_REQUIRED` | Bitte mindestens ein Referat auswählen. | R31 | umgesetzt |
+| `AD_CONFIDENTIAL_ONLY_AD` | Nur mit Rechten auf die Administration möglich. | R29 | umgesetzt |
+| `AD_QUALIFICATION_NAME_REQUIRED` | Bitte eine Bezeichnung angeben. | R21 | umgesetzt |
+| `AD_QUALIFICATION_NAME_TAKEN` | Eine Qualifikationsart mit dieser Bezeichnung gibt es bereits. | R21 | umgesetzt |
+| `AD_QUALIFICATION_CODE_TAKEN` | Dieses Kürzel ist bereits vergeben. | R22 | umgesetzt |
+| `AD_QUALIFICATION_CODE_FORMAT` | Das Kürzel darf nur Großbuchstaben und Ziffern enthalten (max. 10 Zeichen). | R22 | umgesetzt |
+| `AD_QUALIFICATION_LEVEL_REQUIRED` | Bitte eine Lizenzstufe wählen. | R23 | umgesetzt |
+| `AD_QUALIFICATION_VALIDITY` | Bitte eine Gültigkeitsdauer in Jahren angeben (1–10). | R24 | umgesetzt |
+| `AD_QUALIFICATION_HISTORIC` | Diese Qualifikationsart ist historisch und kann nicht neu vergeben werden. | R27 | umgesetzt |
+| `AD_QUALIFICATION_KIND` | Dieser Typ von Qualifikation ist hier nicht erlaubt. | R28 | umgesetzt |
 | `AD_LOCATION_NAME_REQUIRED` | Bitte eine Bezeichnung angeben. | R43 | geplant (T51) |
 | `AD_LOCATION_NAME_TAKEN` | Einen Ort mit dieser Bezeichnung gibt es bereits. | R43 | geplant (T51) |
 | `AD_SEARCH_TOO_SHORT` | Bitte mindestens 2 Zeichen eingeben. | R44 | geplant (T52) |
@@ -55,31 +55,34 @@ Soweit in spec.md Administration definiert (Personenmodell, Eigenschaftsarten, E
 
 | Code / Constraint | Meldung | Regel | Status |
 |---|---|---|---|
-| `EA_PROPERTY_TYPE_NAME_TAKEN` / `ea_property_types_name_key` | Eine Eigenschaftsart mit diesem Namen gibt es bereits. | – | geplant (T35) |
-| `EA_PURPOSE_REQUIRED` | Bitte einen Zweck angeben. | R9 | geplant (T35) |
-| `EA_CHOICE_VALUES_REQUIRED` | Bitte mindestens einen Auswahlwert angeben. | R9 | geplant (T35) |
-| `EA_NO_FIELDS` | Bitte mindestens ein Feld anlegen. | R9 | geplant (T35) |
-| `EA_DATA_TYPE_LOCKED` | Der Datentyp kann nicht geändert werden, solange Eigenschaften dieser Art existieren. | R36 | geplant (T35) |
+| `EA_PROPERTY_TYPE_NAME_TAKEN` / `ea_property_types_name_key` | Eine Eigenschaftsart mit diesem Namen gibt es bereits. | – | umgesetzt |
+| `EA_PURPOSE_REQUIRED` | Bitte einen Zweck angeben. | R9 | umgesetzt |
+| `EA_CHOICE_VALUES_REQUIRED` | Bitte mindestens einen Auswahlwert angeben. | R9 | umgesetzt |
+| `EA_NO_FIELDS` | Bitte mindestens ein Feld anlegen. | R9 | umgesetzt |
+| `EA_DATA_TYPE_LOCKED` | Der Datentyp kann nicht geändert werden, solange Eigenschaften dieser Art existieren. | R36 | umgesetzt |
 | `EA_FIELD_LOCKED` | Der Datentyp kann nicht geändert werden, solange Eigenschaften dieser Art existieren. [OFFEN] Abgrenzung zu `EA_DATA_TYPE_LOCKED` | R36 | geplant (T35) |
-| `EA_FIELD_NEW_REQUIRED` | Neue Felder können nur optional angelegt werden, solange es Eigenschaften dieser Art gibt. | R36 | geplant (T35) |
-| `EA_CHOICE_VALUE_REMOVED` | Auswahlwerte können ergänzt, aber nicht entfernt werden. | R36 | geplant (T35) |
-| `EA_RELATION_LOCKED` | Der Bezug kann nicht geändert werden, solange Eigenschaften dieser Art existieren. | – | geplant (T35) |
-| Constraint `ea_property_fields_label_key` (kein Code, [OFFEN]) | Ein Feld mit dieser Bezeichnung gibt es bereits. | – | geplant (T35) |
-| `EA_FIELD_REQUIRED` | Bitte ‚<Feld>‘ ausfüllen. | R35 | geplant (T36) |
-| `EA_VALUE_TYPE` | Der Wert für ‚<Feld>‘ passt nicht zum Datentyp. | R35 | geplant (T36) |
-| `EA_FIELD_UNKNOWN` | Unbekanntes Feld. | R35 | geplant (T36) |
-| `EA_FIELD_CHOICE` | Bitte einen Wert aus der Liste wählen. | R35 | geplant (T36) |
-| `EA_SINGLE_VALUE` | Für diese Eigenschaftsart ist nur ein gültiger Eintrag je Zeitraum erlaubt. | R37 | geplant (T36) |
-| `EA_RELATION_REQUIRED` | Bitte ein Referat (bzw. Gremium, Gruppe) wählen. | R38 | geplant (T36) |
-| `EA_VALID_RANGE` / `ea_properties_valid_range` | ‚Gültig bis‘ darf nicht vor ‚gültig von‘ liegen. | – | geplant (T36) |
-| `EA_GROUP_RELATION_ONLY_GR` | Diese Angabe wird im Modul Gruppen gepflegt. | R39 | geplant (T38) |
-| `EA_RELATION_FOREIGN_REFERAT` | Du kannst nur Zuordnungen zu deinen Referaten pflegen. | R41 | geplant (T38) |
+| `EA_FIELD_NEW_REQUIRED` | Neue Felder können nur optional angelegt werden, solange es Eigenschaften dieser Art gibt. | R36 | umgesetzt |
+| `EA_CHOICE_VALUE_REMOVED` | Auswahlwerte können ergänzt, aber nicht entfernt werden. | R36 | umgesetzt |
+| `EA_RELATION_LOCKED` | Der Bezug kann nicht geändert werden, solange Eigenschaften dieser Art existieren. | – | umgesetzt |
+| `EA_LABEL_TOO_LONG` / `ea_property_types_valid_from_label_length`, `…_valid_to_label_length` | Die Bezeichnung darf höchstens 40 Zeichen lang sein. | R49 | umgesetzt |
+| Constraint `ea_property_fields_label_key` (kein Code, [OFFEN]) | Ein Feld mit dieser Bezeichnung gibt es bereits. | – | umgesetzt |
+| `EA_FIELD_REQUIRED` | Bitte ‚<Feld>‘ ausfüllen. | R35 | umgesetzt |
+| `EA_VALUE_TYPE` | Der Wert für ‚<Feld>‘ passt nicht zum Datentyp. | R35 | umgesetzt |
+| `EA_FIELD_UNKNOWN` | Unbekanntes Feld. | R35 | umgesetzt |
+| `EA_FIELD_CHOICE` | Bitte einen Wert aus der Liste wählen. | R35 | umgesetzt |
+| `EA_SINGLE_VALUE` | Für diese Eigenschaftsart ist nur ein gültiger Eintrag je Zeitraum erlaubt. | R37 | umgesetzt |
+| `EA_RELATION_REQUIRED` | Bitte ein Referat (bzw. Gremium, Gruppe) wählen. | R38 | umgesetzt |
+| `EA_VALID_RANGE` / `ea_properties_valid_range` | ‚Gültig bis‘ darf nicht vor ‚gültig von‘ liegen. | – | umgesetzt |
+| `EA_GROUP_RELATION_ONLY_GR` | Diese Angabe wird im Modul Gruppen gepflegt. | R39 | umgesetzt |
+| `EA_RELATION_FOREIGN_REFERAT` | Du kannst nur Zuordnungen zu deinen Referaten pflegen. | R41 | umgesetzt |
 | `EA_CONFIDENTIAL_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. [OFFEN] gilt nach R29 noch? | R8 | [OFFEN] |
-| `EA_STATUS_FORBIDDEN` | Du darfst den Status dieser Person nicht ändern. | R33 | geplant (T39) |
+| `EA_STATUS_FORBIDDEN` | Du darfst den Status dieser Person nicht ändern. | R33 | umgesetzt |
 | `EA_CREATE_FOREIGN_REFERAT` | Du kannst nur Personen für deine Referate anlegen. | R45 | geplant (T53) |
 | `EA_CREATE_FORBIDDEN` | [OFFEN] Meldung fehlt in spec.md | R45 | geplant (T53) |
 
-`EA_VALUE_TYPE` meldet ab v0.7 den Feldnamen mit (R35); der frühere Text „Der Wert passt nicht zum Datentyp der Eigenschaftsart.“ entfällt.
+`EA_VALUE_TYPE`, `EA_FIELD_REQUIRED`, `EA_FIELD_CHOICE`, `AD_QUALIFICATION_HISTORIC` und `AD_QUALIFICATION_KIND` liefern die Feldbezeichnung im `detail` des Fehlers; `src/lib/errors.ts` setzt sie für „<Feld>“ ein. Der frühere Text von `EA_VALUE_TYPE` „Der Wert passt nicht zum Datentyp der Eigenschaftsart.“ entfällt.
+
+`EA_VALID_RANGE` (Constraint `ea_properties_valid_range`): Die Oberfläche nennt statt „Gültig bis“/„gültig von“ die Bezeichnungen der Eigenschaftsart, falls gesetzt (R49), z. B. „‚Beendet am‘ darf nicht vor ‚erworben bzw. verlängert am‘ liegen.“ [ANNAHME spec v0.7.2].
 
 ## Gruppen (GR)
 
