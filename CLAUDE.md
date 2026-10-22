@@ -10,38 +10,25 @@ Antworte immer auf Deutsch.
 - Spec Kit liest die `spec.md` eines Moduls und erzeugt daraus `plan.md` und `tasks.md`. Eine eigene Spec-Kit-`spec.md` wird nicht separat gepflegt.
 - Begriffe nach [docs/glossar.md](docs/glossar.md): ein Begriff pro Sache, keine Synonyme. Im Code (Datenbank) englisch, in der Oberfläche deutsch.
 
-## Fachliche Dokumente (Quelle: OneDrive)
+## Fachliche Dokumente (Quelle: Git)
 
-- Quelle der fachlichen Dokumente ist der Ordner
-  `~/Library/CloudStorage/OneDrive-DeutscherAlpenvereine.V/Claude/VereinsOS`.
-  Dort spezifiziert der Product Owner mit Claude Cowork und mit den Chats des
-  claude.ai-Projekts; der Ordner hat die Struktur des Repositorys. Ins Repository gehören
-  daraus nur `PRODUCT.md` und `docs/`.
-  Nie übernehmen: `_alt/`, `_nur-projektwissen/`, `Claude outputs/`, `.DS_Store`.
-- `Claude outputs/` ist die Ablage von Claude Cowork für Entwürfe. Liegt dort eine Datei,
-  die es auch unter `docs/` gibt, und ist sie neuer oder anders: nicht übernehmen, sondern
-  melden. Der Product Owner verschiebt die freigegebene Fassung nach `docs/`.
-
-- Zu Beginn jeder Aufgabe abgleichen:
-  ```bash
-  SRC=~/Library/CloudStorage/OneDrive-DeutscherAlpenvereine.V/Claude/VereinsOS
-  diff -rq -x .DS_Store "$SRC/docs" docs | grep -v "^Only in docs"
-  diff -q "$SRC/PRODUCT.md" PRODUCT.md
-  ```
-  Gibt es Unterschiede: eigener Branch `docs/sync-JJJJ-MM-TT`, dann
-  ```bash
-  rsync -av --checksum --exclude .DS_Store "$SRC/docs/" docs/
-  cp "$SRC/PRODUCT.md" PRODUCT.md
-  ```
-  Ohne `--delete`: Dateien, die nur im Repository liegen (z. B. `contracts/`), bleiben.
-  Danach die Personendaten-Prüfung (unten), dann ein Pull Request mit der Liste der
-  geänderten Dateien und ihrer Version und der vollständigen Cloudflare-Vorschau-URL.
-  Betrifft die Aufgabe geänderte Dokumente, erst nach dem Merge weitermachen.
-
-- Die übernommenen Dateien nicht ändern. Bei Widerspruch oder Lücke anhalten und
-  beschreiben (Datei, Abschnitt, Vorschlag). Die Änderung erfolgt im Anforderungs-Chat
-  und kommt über OneDrive zurück. Ausnahme: Was Spec Kit oder Claude Code erzeugt
-  (z. B. `plan.md`, `tasks.md`, `contracts/`), wird nur im Repository gepflegt.
+- **Quelle der Wahrheit ist `main` in diesem Repository** (seit 22.10.2026). Die fachlichen
+  Dokumente liegen unter `docs/` und in `PRODUCT.md`. Es gibt keine zweite Kopie, die
+  abgeglichen wird.
+- Der frühere OneDrive-Ordner `~/Library/CloudStorage/OneDrive-DeutscherAlpenvereine.V/Claude/VereinsOS`
+  ist eingefroren: nicht mehr lesen, nicht abgleichen, nichts daraus übernehmen.
+- Zu Beginn jeder Aufgabe `main` aktualisieren (`git pull`) und von dort einen Branch anlegen.
+- **Fachliche Dateien** (`00-steckbrief.md`, `01-erhebung.md`, `02-stories.md`, `spec.md`,
+  Übergaben, `glossar.md`, `rollen.md`, `offene-punkte.md` usw.) ändert Claude Code nur auf
+  ausdrücklichen Auftrag des Product Owners, auf einem Branch `docs/<thema>` mit eigenem
+  Pull Request. Findet Claude Code bei der Umsetzung einen Widerspruch oder eine Lücke:
+  anhalten und beschreiben (Datei, Abschnitt, Vorschlag), nicht selbst entscheiden.
+- **Umsetzungsdateien** (`plan.md`, `research.md`, `data-model.md`, `quickstart.md`,
+  `tasks.md`, `contracts/`, `abnahme-test.md`) pflegt Claude Code selbst.
+- Arbeiten Anforderungs-Chats oder Claude Cowork an Dateien mit, dann in einem eigenen
+  Checkout des Repositorys (nicht im Arbeitsordner von Claude Code) und auf einem eigenen
+  Branch `docs/<thema>`; der Product Owner mergt den Pull Request.
+- Dateien werden per `git mv` umbenannt und per `git rm` gelöscht, damit es im Diff sichtbar ist.
 
 - Personendaten-Prüfung vor jedem Commit von `docs/` (öffentliches Repository):
   ```bash

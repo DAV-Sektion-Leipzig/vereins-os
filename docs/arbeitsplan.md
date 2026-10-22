@@ -1,7 +1,9 @@
 # Arbeitsplan: Mittelweg Administration und nächste Module
 
-Stand: 22.10.2026 · Version 0.1 · Product Owner: Toni Werner
-Ablage: Projektwissen `claude/arbeitsplan.md`; im Repository `docs/arbeitsplan.md` [ANNAHME]
+Stand: 22.10.2026 · Version 0.3 · Product Owner: Toni Werner
+Änderungen v0.3: Quelle der Wahrheit ist das Repository (main); der OneDrive-Ordner „VereinsOS“ ist eingefroren (Entscheidung Product Owner 22.10.2026). Abschnitt 1 „Ablage“ und Abschnitt 3 angepasst.
+Änderungen v0.2: Vorgabe des Product Owners: Dateien immer zusätzlich im OneDrive-Ordner „VereinsOS“ in Repository-Struktur ablegen; Abschnitt 3 auf diese Quelle umgestellt.
+Ablage: im Repository `docs/arbeitsplan.md`
 Grundlage: Entscheidung des Product Owners vom 22.10.2026 (Mittelweg), querschnitt-administration.md v0.1, modul-landkarte.md, offene-punkte.md
 
 ## 1. Grundsätze
@@ -10,7 +12,7 @@ Grundlage: Entscheidung des Product Owners vom 22.10.2026 (Mittelweg), querschni
 - Übergreifende Fragen (Reifegrad, Querschnitt, Reihenfolge) werden im Chat **„Überblick“** geklärt, in dem dieser Plan entstanden ist.
 - Claude Code arbeitet im Repository (VS Code), nicht in einem Chat dieses Projekts. Was Claude Code braucht, muss vorher unter `docs/` im Repository liegen.
 - Gemeinsame Dateien werden vor jedem Schreiben neu eingelesen (Projektanweisung). Im Überblick-Chat schreibe ich nur in `offene-punkte.md`, `modul-landkarte.md` und in die Dateien dieses Plans.
-- Der lokale OneDrive-Ordner „VereinsOS“ enthält nur alte Stände (vision.md und modul-landkarte.md, je Version 0.1). Deshalb nicht als Quelle für das Repository nutzen.
+- **Ablage (Entscheidung Product Owner 22.10.2026):** Quelle der Wahrheit für alle Dokumente ist das Repository DAVLeipzig/vereins-os (`main`), Ordner `docs/` und `PRODUCT.md`. Änderungen entstehen auf einem Branch `docs/<thema>` und kommen per Pull Request nach `main`. Der OneDrive-Ordner „VereinsOS“ ist eingefroren und wird nicht mehr bearbeitet. Chats ohne Zugriff auf das Repository nennen am Ende die geänderten Dateien mit Inhalt; Claude Code übernimmt sie per Pull Request. Das Projektwissen des claude.ai-Projekts wird über die GitHub-Anbindung auf `docs/` gelesen.
 
 ## 2. Schritte
 
@@ -36,7 +38,7 @@ Offene Entscheidung, aufgeschoben: Stories für die Nachträge v0.8 und v0.9 (US
 
 ## 3. Dateien für das Repository (Schritt 2)
 
-Quelle: Projektwissen dieses Projekts, Stand 22.10.2026. Zuordnung nach umzug-kontext.md. Vor dem Kopieren auf echte Personendaten prüfen (öffentliches Repository).
+Erledigt am 22.10.2026: Alle Dateien liegen im Repository (`docs/`, `PRODUCT.md`); seither ist das Repository die Quelle (Abschnitt 1). Die folgende Liste bleibt als Übersicht der Zuordnung.
 
 **Für den Kern der Administration nötig:**
 
