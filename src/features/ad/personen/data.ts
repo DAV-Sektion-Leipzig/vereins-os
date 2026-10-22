@@ -1,7 +1,8 @@
-// Personenübersicht (US-AD-06, US-AD-15, US-AD-24; T071, T072) aus ad_v_person_overview.
+// Personen in AD: Übersicht (US-AD-06, US-AD-15; T071, T072), Anlegen und Detail (US-AD-07, US-AD-24, US-AD-25; T074, T075).
 // Welche Personen sichtbar sind, entscheidet die RLS (R32); das Frontend filtert nur innerhalb davon.
-import type { LoaderFunctionArgs } from 'react-router-dom'
+import { redirect, type LoaderFunctionArgs } from 'react-router-dom'
 import { PAGE_SIZE } from '@/components/Pagination'
+import type { SimilarPerson } from '@/features/shared/DublettenDialog'
 import { requireLevel, type AccessStatus } from '@/lib/rights'
 import { supabase } from '@/lib/supabase'
 
@@ -143,5 +144,67 @@ export async function loadPersonOverview({ request }: LoaderFunctionArgs): Promi
 
 export async function acknowledgeEmergency() {
   const { error } = await supabase.rpc('ad_acknowledge_emergency')
+  return error ?? null
+}
+
+// --- Person anlegen und Personendetail (US-AD-07, US-AD-24, US-AD-25; T074, T075)
+
+export type DetailResult = { person: PersonRow | null; failed: boolean }
+
+export async function loadPersonDetail({ params }: LoaderFunctionArgs): Promise<DetailResult> {
+  await requireLevel('AD', 'read')
+  const { data, error } = await supabase.from('ad_v_person_overview').select('*').eq('person_id', params.id!).maybeSingle()
+  if (error) return { person: null, failed: true }
+  if (!data) throw redirect('/ad')
+  return { person: data as PersonRow, failed: false }
+}
+
+export type SimilarResult = { hits: SimilarPerson[]; error: unknown }
+
+/** Dublettenprüfung nach R3a/R40 (ad_find_similar_persons); die Datenbank prüft das Recht zum Aufruf. */
+export async function findSimilarPersons(first: string, last: string, email: string): Promise<SimilarResult> {
+  const { data, error } = await supabase.rpc('ad_find_similar_persons', {
+    p_first: first.trim(),
+    p_last: last.trim(),
+    p_email: email.trim() || null,
+  })
+  if (error) return { hits: [], error }
+  return { hits: (data ?? []) as SimilarPerson[], error: null }
+}
+
+export type CreateInput = { first: string; preferred: string; last: string; email: string }
+export type CreateResult = { id: string | null; error: unknown }
+
+/**
+ * Legt die Person an (Art Mensch, created_in AD) und bei Login-Adresse den Zugang (Status „kein Zugang“).
+ * R2 wird vorab geprüft, damit die Person nicht ohne Zugang stehen bleibt; R1 prüft der Trigger (Testdomains in TEST).
+ */
+export async function createPerson(input: CreateInput): Promise<CreateResult> {
+  const email = input.email.trim()
+  if (email) {
+    const taken = await supabase.from('ad_accesses').select('id').eq('login_email', email).maybeSingle()
+    if (taken.error) return { id: null, error: taken.error }
+    if (taken.data) return { id: null, error: 'AD_EMAIL_TAKEN' }
+  }
+
+  const { data, error } = await supabase
+    .from('ea_persons')
+    .insert({ first_name: input.first.trim(), last_name: input.last.trim(), preferred_name: input.preferred.trim() || null })
+    .select('id')
+    .single()
+  if (error) return { id: null, error }
+
+  if (email) {
+    const access = await supabase.from('ad_accesses').insert({ person_id: data.id, login_email: email })
+    if (access.error) return { id: data.id, error: access.error }
+  }
+  return { id: data.id, error: null }
+}
+
+export async function updatePersonName(id: string, input: { first: string; preferred: string; last: string }) {
+  const { error } = await supabase
+    .from('ea_persons')
+    .update({ first_name: input.first.trim(), last_name: input.last.trim(), preferred_name: input.preferred.trim() || null })
+    .eq('id', id)
   return error ?? null
 }

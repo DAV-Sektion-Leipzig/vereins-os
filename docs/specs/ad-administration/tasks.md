@@ -352,9 +352,9 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 **Unabhängiger Test**: „Erika Neu“ wird ohne Warnung angelegt; „Tony Muster“ zeigt Toni und Anton Muster nur mit Name, Rufname, Geburtsjahr bzw. „ausgeschieden seit“; „Trotzdem anlegen“ legt an; „Vorhandene Person öffnen“ nur bei sichtbaren Treffern; leerer Name, fremde Domain, doppelte Login-Adresse zeigen R4, R1, R2 (US-AD-07 AK1–AK5, US-AD-25 AK1–AK3, US-AD-24).
 
-- [ ] T073 [P] [US-AD-25] (spec T49 Teil) `src/features/shared/DublettenDialog.tsx`: Trefferliste nach R40 (Name über `personName()`, Geburtsjahr, „ausgeschieden seit TT.MM.JJJJ“), Aktionen als Props je Modul (in AD: „Trotzdem anlegen“, „Vorhandene Person öffnen“ nur bei `is_visible`, „Abbrechen“)
-- [ ] T074 [US-AD-07] (spec T16) `src/features/ad/personen/PersonNeu.tsx` (/ad/personen/neu): Vorname, Nachname, optional Rufname, optional Login-Adresse; R4 im Frontend; `rpc('ad_find_similar_persons')`; bei Treffern `DublettenDialog`; Anlegen: insert `ea_persons`, bei Login-Adresse insert `ad_accesses`; Fehler über `errors.ts`
-- [ ] T075 [US-AD-24] (spec T17 Teil, T47 Teil) `src/features/ad/personen/PersonDetail.tsx` (/ad/personen/:id): Seitengerüst mit den Abschnitten Stammdaten, Zugang, Rechtevorlagen, Eigenschaften; `StammdatenAbschnitt.tsx`: Vorname, Rufname, Nachname bearbeitbar, Art als Anzeige, Ehrenamtsstatus nur lesen mit „seit TT.MM.JJJJ“
+- [x] T073 [P] [US-AD-25] (spec T49 Teil) `src/features/shared/DublettenDialog.tsx`: Trefferliste nach R40 (Name über `personName()`, Geburtsjahr, „ausgeschieden seit TT.MM.JJJJ“), Aktionen als Props je Modul (in AD: „Trotzdem anlegen“, „Vorhandene Person öffnen“ nur bei `is_visible`, „Abbrechen“)
+- [x] T074 [US-AD-07] (spec T16) `src/features/ad/personen/PersonNeu.tsx` (/ad/personen/neu): Vorname, Nachname, optional Rufname, optional Login-Adresse; R4 im Frontend; `rpc('ad_find_similar_persons')`; bei Treffern `DublettenDialog`; Anlegen: insert `ea_persons`, bei Login-Adresse insert `ad_accesses`; Fehler über `errors.ts`
+- [x] T075 [US-AD-24] (spec T17 Teil, T47 Teil) `src/features/ad/personen/PersonDetail.tsx` (/ad/personen/:id): Seitengerüst mit den Abschnitten Stammdaten, Zugang, Rechtevorlagen, Eigenschaften; `StammdatenAbschnitt.tsx`: Vorname, Rufname, Nachname bearbeitbar, Art als Anzeige, Ehrenamtsstatus nur lesen mit „seit TT.MM.JJJJ“
 
 **Checkpoint**: Anlegen, Dublettenwarnung und Stammdaten funktionieren.
 

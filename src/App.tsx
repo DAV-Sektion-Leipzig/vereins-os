@@ -3,10 +3,12 @@ import { LoadingScreen } from '@/components/layout/LoadingScreen'
 import { PlaceholderPage } from '@/components/layout/PlaceholderPage'
 import { ProtectedLayout } from '@/components/layout/ProtectedLayout'
 import type { RouteHandle } from '@/components/layout/AppHeader'
-import { loadAdAccess } from '@/features/ad/access'
+import { loadAdAccess, requireAdEdit } from '@/features/ad/access'
 import { AdLayout } from '@/features/ad/AdLayout'
-import { loadPersonOverview } from '@/features/ad/personen/data'
+import { loadPersonDetail, loadPersonOverview } from '@/features/ad/personen/data'
+import { PersonDetail } from '@/features/ad/personen/PersonDetail'
 import { PersonenUebersicht } from '@/features/ad/personen/PersonenUebersicht'
+import { PersonNeu } from '@/features/ad/personen/PersonNeu'
 import { loadNewTemplate, loadTemplate, loadTemplateList } from '@/features/ad/rechtevorlagen/data'
 import { RechtevorlageBearbeiten } from '@/features/ad/rechtevorlagen/RechtevorlageBearbeiten'
 import { RechtevorlagenListe } from '@/features/ad/rechtevorlagen/RechtevorlagenListe'
@@ -52,8 +54,8 @@ export const router = createBrowserRouter([
         handle: { moduleName: 'Administration' } satisfies RouteHandle,
         children: [
           { index: true, loader: loadPersonOverview, element: <PersonenUebersicht /> },
-          { path: 'personen/neu', element: <PlaceholderPage title="Person anlegen" /> },
-          { path: 'personen/:id', element: <PlaceholderPage title="Person" /> },
+          { path: 'personen/neu', loader: requireAdEdit, element: <PersonNeu /> },
+          { path: 'personen/:id', loader: loadPersonDetail, element: <PersonDetail /> },
           { path: 'rechtevorlagen', loader: loadTemplateList, element: <RechtevorlagenListe /> },
           { path: 'rechtevorlagen/neu', loader: loadNewTemplate, element: <RechtevorlageBearbeiten /> },
           { path: 'rechtevorlagen/:id', loader: loadTemplate, element: <RechtevorlageBearbeiten /> },
