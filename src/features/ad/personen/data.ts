@@ -153,17 +153,23 @@ export async function acknowledgeEmergency() {
 
 // --- Person anlegen und Personendetail (US-AD-07, US-AD-24, US-AD-25; T074, T075)
 
-export type DetailResult = { person: PersonRow | null; properties: PropertiesData | null; failed: boolean }
+export type DetailResult = {
+  person: PersonRow | null
+  properties: PropertiesData | null
+  assignments: AssignmentsData | null
+  failed: boolean
+}
 
 export async function loadPersonDetail({ params }: LoaderFunctionArgs): Promise<DetailResult> {
   await requireLevel('AD', 'read')
-  const [person, properties] = await Promise.all([
+  const [person, properties, assignments] = await Promise.all([
     supabase.from('ad_v_person_overview').select('*').eq('person_id', params.id!).maybeSingle(),
     loadPersonProperties(params.id!),
+    loadAssignments(params.id!),
   ])
-  if (person.error) return { person: null, properties: null, failed: true }
+  if (person.error) return { person: null, properties: null, assignments: null, failed: true }
   if (!person.data) throw redirect('/ad')
-  return { person: person.data as PersonRow, properties, failed: false }
+  return { person: person.data as PersonRow, properties, assignments, failed: false }
 }
 
 export type SimilarResult = { hits: SimilarPerson[]; error: unknown }
@@ -317,5 +323,82 @@ export async function saveProperty(id: string | null, personId: string, typeId: 
   const { error } = id
     ? await supabase.from('ea_properties').update(row).eq('id', id)
     : await supabase.from('ea_properties').insert({ ...row, person_id: personId, property_type_id: typeId })
+  return error ?? null
+}
+
+// --- Rechtevorlagen einer Person (US-AD-11, US-AD-21; T084)
+
+export type TemplateOption = { id: string; name: string; description: string | null; needsReferate: boolean }
+
+export type Assignment = {
+  id: string
+  template_id: string
+  templateName: string
+  needsReferate: boolean
+  assigned_at: string
+  referate: { id: string; name: string }[]
+}
+
+export type AssignmentsData = {
+  assignments: Assignment[]
+  templates: TemplateOption[]
+  referate: NamedOption[]
+}
+
+export async function loadAssignments(personId: string): Promise<AssignmentsData | null> {
+  const [templates, rights, assignments, referate] = await Promise.all([
+    supabase.from('ad_templates').select('id, name, description').order('name'),
+    supabase.from('ad_template_rights').select('template_id, scope, level').eq('scope', 'referat').neq('level', 'none'),
+    supabase
+      .from('ad_template_assignments')
+      .select('id, template_id, assigned_at, ad_assignment_referate(referat_id, ea_referate(id, name, sort_order))')
+      .eq('person_id', personId)
+      .is('revoked_at', null),
+    supabase.from('ea_referate').select('id, name, is_active').order('sort_order'),
+  ])
+  if (templates.error || rights.error || assignments.error || referate.error) return null
+
+  const needs = new Set(rights.data.map((r) => r.template_id as string))
+  const templateOptions: TemplateOption[] = templates.data.map((t) => ({ ...t, needsReferate: needs.has(t.id) }))
+  const byId = new Map(templateOptions.map((t) => [t.id, t]))
+
+  type Row = {
+    id: string
+    template_id: string
+    assigned_at: string
+    ad_assignment_referate: { referat_id: string; ea_referate: { id: string; name: string; sort_order: number } | null }[]
+  }
+  const rows = (assignments.data as unknown as Row[]).map((a) => ({
+    id: a.id,
+    template_id: a.template_id,
+    templateName: byId.get(a.template_id)?.name ?? '–',
+    needsReferate: byId.get(a.template_id)?.needsReferate ?? false,
+    assigned_at: a.assigned_at,
+    referate: a.ad_assignment_referate
+      .flatMap((r) => (r.ea_referate ? [r.ea_referate] : []))
+      .sort((x, y) => x.sort_order - y.sort_order)
+      .map(({ id, name }) => ({ id, name })),
+  }))
+  rows.sort((a, b) => a.templateName.localeCompare(b.templateName, 'de'))
+
+  return { assignments: rows, templates: templateOptions, referate: referate.data as NamedOption[] }
+}
+
+export async function assignTemplate(personId: string, templateId: string, referate: string[]) {
+  const { error } = await supabase.rpc('ad_assign_template', {
+    p_person: personId,
+    p_template: templateId,
+    p_referate: referate.length > 0 ? referate : null,
+  })
+  return error ?? null
+}
+
+export async function setAssignmentReferate(assignmentId: string, referate: string[]) {
+  const { error } = await supabase.rpc('ad_set_assignment_referate', { p_assignment: assignmentId, p_referate: referate })
+  return error ?? null
+}
+
+export async function revokeTemplate(personId: string, templateId: string) {
+  const { error } = await supabase.rpc('ad_revoke_template', { p_person: personId, p_template: templateId })
   return error ?? null
 }

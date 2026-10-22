@@ -411,7 +411,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 **Unabhängiger Test**: Geschäftsstelle und Vorstand zuweisen ergibt die höhere Stufe, mit Protokoll; Referent:in ohne Referat → „Bitte mindestens ein Referat auswählen.“; Referat ändern schreibt „Referate geändert“; Entziehen wird protokolliert; zugewiesene Vorlagen werden nicht erneut angeboten (US-AD-11 AK1–AK3, US-AD-21 AK1–AK3).
 
-- [ ] T084 [US-AD-21] (spec T18, T44 Teil) `src/features/ad/personen/RechtevorlagenAbschnitt.tsx` in `PersonDetail.tsx`: wirksame Vorlagen mit Referaten; „Vorlage hinzufügen“ nur mit nicht zugewiesenen Vorlagen, bei Reichweite Referat Mehrfachauswahl der aktiven Referate (`rpc('ad_assign_template', { p_referate })`); „Referate ändern“ (`rpc('ad_set_assignment_referate')`); „Entziehen“ mit Bestätigung (`rpc('ad_revoke_template')`)
+- [x] T084 [US-AD-21] (spec T18, T44 Teil) `src/features/ad/personen/RechtevorlagenAbschnitt.tsx` in `PersonDetail.tsx`: wirksame Vorlagen mit Referaten; „Vorlage hinzufügen“ nur mit nicht zugewiesenen Vorlagen, bei Reichweite Referat Mehrfachauswahl der aktiven Referate (`rpc('ad_assign_template', { p_referate })`); „Referate ändern“ (`rpc('ad_set_assignment_referate')`); „Entziehen“ mit Bestätigung (`rpc('ad_revoke_template')`)
 
 **Checkpoint**: Zuweisungen mit Referaten sind pflegbar.
 

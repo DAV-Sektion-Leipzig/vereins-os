@@ -3,6 +3,7 @@ import { Link, useLoaderData, useLocation } from 'react-router-dom'
 import { AccessStatusBadge } from '@/components/AccessStatusBadge'
 import { useAdAccess } from '@/features/ad/access'
 import { EigenschaftenAbschnitt } from '@/features/ad/personen/EigenschaftenAbschnitt'
+import { RechtevorlagenAbschnitt } from '@/features/ad/personen/RechtevorlagenAbschnitt'
 import { Section } from '@/features/ad/personen/Section'
 import { StammdatenAbschnitt } from '@/features/ad/personen/StammdatenAbschnitt'
 import type { DetailResult } from '@/features/ad/personen/data'
@@ -11,7 +12,7 @@ import { personName } from '@/lib/format'
 
 // T075 (US-AD-24; Gerüst für US-AD-08, 09, 11, 13): Personendetail mit den Abschnitten aus spec.md Abschnitt 6.
 export function PersonDetail() {
-  const { person, properties, failed } = useLoaderData() as DetailResult
+  const { person, properties, assignments, failed } = useLoaderData() as DetailResult
   const { canEdit } = useAdAccess()
   const location = useLocation()
   const handedError = (location.state as { error?: string } | null)?.error ?? null
@@ -58,18 +59,16 @@ export function PersonDetail() {
         <p className="text-sm text-muted-foreground">Einladen, Sperren und Adresse ändern folgen.</p>
       </Section>
 
-      <Section id="rechtevorlagen" title="Rechtevorlagen">
-        {person.templates.length > 0 ? (
-          <ul className="list-inside list-disc text-sm">
-            {person.templates.map((t) => (
-              <li key={t}>{t}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-sm text-muted-foreground">Noch keine Rechtevorlage zugewiesen.</p>
-        )}
-        <p className="text-sm text-muted-foreground">Zuweisen und Entziehen folgen.</p>
-      </Section>
+      {assignments ? (
+        <RechtevorlagenAbschnitt personId={person.person_id} data={assignments} canEdit={canEdit} />
+      ) : (
+        <Section id="rechtevorlagen" title="Rechtevorlagen">
+          <p role="alert" className="flex items-center gap-2 text-sm text-destructive">
+            <CircleAlertIcon aria-hidden="true" className="size-4 shrink-0" />
+            {MESSAGES.unexpected}
+          </p>
+        </Section>
+      )}
 
       {properties ? (
         <EigenschaftenAbschnitt personId={person.person_id} data={properties} canEdit={canEdit} />
