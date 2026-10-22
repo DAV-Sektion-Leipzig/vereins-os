@@ -2,7 +2,7 @@
 
 Stand: 22.10.2026 · zu [plan.md](../plan.md) · Grundlage: [spec.md](../spec.md) Abschnitt 7, [01-erhebung.md](../01-erhebung.md) C3, R15–R17, [migration-aktivenliste.md](../migration-aktivenliste.md)
 
-Gesperrt bis zur Entscheidung über die Bereitstellung des Schlüssels (plan.md, Offene Punkte O1). Der Ablauf und die Zuordnung unten gelten unabhängig davon.
+Schlüssel nach spec.md v0.2.1 Abschnitt 7: verdeckte Eingabe beim Start, nie gespeichert. Ausführung nur durch den Admin.
 
 ## Aufruf
 
@@ -13,7 +13,8 @@ npm run ea:migrate -- --file <pfad> --run     [--cutoff TT.MM.JJJJ]
 
 | Fall | Verhalten |
 |---|---|
-| `SUPABASE_URL` oder `SUPABASE_SERVICE_ROLE_KEY` fehlt in `process.env` | Abbruch „Schlüssel fehlt.“ (US-EA-18 AK6) |
+| Start | Abfrage „Projekt-URL:“ (sichtbar) und „Secret Key:“ (verdeckt) [ANNAHME: Wortlaut]; leere oder ungültige URL → Abbruch mit Hinweis |
+| Secret Key leer | Abbruch „Schlüssel fehlt.“ (US-EA-18 AK6) |
 | weder `--dry-run` noch `--run` bzw. beide | Abbruch mit Hinweis zum Aufruf |
 | Pflichtspalte der Vorlage fehlt | Abbruch „Spalte <name> fehlt.“, kein Bericht (US-EA-17 AK5) |
 | `--dry-run` | RPC `ea_import_volunteers(rows, cutoff, true)` → `<datei>.pruefbericht.md` |

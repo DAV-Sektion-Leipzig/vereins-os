@@ -1,8 +1,8 @@
 # Implementation Plan: Ehrenamtsmanagement (EA)
 
-**Branch**: `claude/beautiful-shannon-667zkn` (Plan); Umsetzung auf den Branches aus Abschnitt „Branches“ | **Date**: 2026-10-22 | **Spec**: [spec.md](spec.md) v0.2 (Ready)
+**Branch**: `claude/beautiful-shannon-667zkn` (Plan); Umsetzung auf den Branches aus Abschnitt „Branches“ | **Date**: 2026-10-22 | **Spec**: [spec.md](spec.md) v0.2.1 (Ready)
 
-**Input**: [spec.md](spec.md) v0.2 (führend), [02-stories.md](02-stories.md) v0.2, [01-erhebung.md](01-erhebung.md) v0.5, [00-steckbrief.md](00-steckbrief.md) v0.7, [migration-aktivenliste.md](migration-aktivenliste.md) v0.5, [uebergabe-administration.md](uebergabe-administration.md) v1.1, [spec.md Administration](../ad-administration/spec.md) v0.9.2, [plan.md Administration](../ad-administration/plan.md), [arbeitsplan.md](../../arbeitsplan.md) v0.3, [Constitution](../../../.specify/memory/constitution.md) v1.2.0
+**Input**: [spec.md](spec.md) v0.2.1 (führend), [02-stories.md](02-stories.md) v0.2.1, [01-erhebung.md](01-erhebung.md) v0.5, [00-steckbrief.md](00-steckbrief.md) v0.7, [migration-aktivenliste.md](migration-aktivenliste.md) v0.5, [uebergabe-administration.md](uebergabe-administration.md) v1.1, [spec.md Administration](../ad-administration/spec.md) v0.9.2, [plan.md Administration](../ad-administration/plan.md), [arbeitsplan.md](../../arbeitsplan.md) v0.3, [Constitution](../../../.specify/memory/constitution.md) v1.2.0
 
 **Artefakte**: [research.md](research.md) · [data-model.md](data-model.md) · [contracts/](contracts/) · [quickstart.md](quickstart.md) · tasks.md (folgt mit `/speckit-tasks`)
 
@@ -38,18 +38,18 @@ Technisch baut das Modul vollständig auf dem Kern der Administration auf: Perso
 | Prinzip | Prüfung | Ergebnis |
 |---|---|---|
 | I Fachliche Quelle | Plan setzt spec.md v0.2 vollständig um, nicht mehr; Artefakte in `docs/specs/ea-ehrenamt/`; Begriffe nach glossar.md (Aktive:r, Ehrenamtsstatus, Eigenschaftsart, Qualifikationsart, Referat, Gremium) | ✅ |
-| II Offene Punkte | Widersprüche und Lücken unten als O1–O3 und H1–H2 gemeldet; O2 und O3 hat der Product Owner am 23.10.2026 entschieden, O1 ist offen; [ANNAHME]n aus spec.md Abschnitt 11 sind bestätigt; neue Annahmen nur in Umsetzungsdetails (Texte im Prüfbericht) und als solche markiert | ✅ |
+| II Offene Punkte | Widersprüche und Lücken unten als O1–O3 und H1–H2 gemeldet; O1–O3 hat der Product Owner am 23.10.2026 entschieden; [ANNAHME]n aus spec.md Abschnitt 11 sind bestätigt; neue Annahmen nur in Umsetzungsdetails (Texte im Prüfbericht) und als solche markiert | ✅ |
 | III Sicherheit in der DB | Keine neue Tabelle; die View hat `security_invoker`, die Funktionen sind `security invoker` (RLS der Administration gilt); Grants nur an `authenticated` | ⚠️ siehe unten |
 | III, Ausnahme Import | `ea_import_volunteers` ist `security definer` mit Grant nur an `service_role`, nicht an `authenticated`. Begründung: Der Lauf muss ohne Nutzerkontext schreiben (Altbestand, Status, `created_in = 'script'`) und eine Transaktion sein (A3). Gleiches Muster wie `ad_apply_*` der Administration. Kein Weg aus dem Frontend. | ✅ begründet |
-| III/V Secrets | spec.md Abschnitt 7 sieht `SUPABASE_SERVICE_ROLE_KEY` in `.env.migration.local` vor. Constitution III („Secret Key / service_role … nie in `.env`-Dateien“) und CLAUDE.md verbieten das. | ❌ **O1, Product Owner** |
+| III/V Secrets | Der Secret Key für das Migrationsskript wird verdeckt im Terminal eingegeben und nie gespeichert; keine `.env`-Datei; Probelauf und Lauf nur durch den Admin (spec.md v0.2.1 Abschnitt 7, O1) | ✅ |
 | IV Personenmodell/Historie | Eigenschaften als Zeilen über System-Eigenschaftsarten; Verlängern und Ausscheiden beenden Einträge über `valid_to` statt zu überschreiben; Statushistorie über die Funktionen der Administration; kein Löschen | ✅ |
 | V Daten/Umgebungen | Seed fiktiv (Personen 19–22, `example.test`, Beispiel-IBAN `DE89370400440532013000`); CSV und Berichte nie im Repository (`.gitignore`); Claude Code arbeitet nur gegen TEST; PROD-Lauf durch den Admin (T23); Reset von TEST nur auf Auftrag | ✅ |
 | VI Einmal pflegen | eine gemeinsame Personen-Tabelle; Stammdaten einmal; System-Schlüssel für andere Module (data-model.md); keine Kopien von Personendaten | ✅ |
 | VII Kostenfrei/einfach/mobil | nur Free-Pläne und freie npm-Pakete; Karten ab 375 px; UI deutsch mit „du“ | ✅ |
 
-**Gate-Ergebnis:** bestanden für alle Tasks außer **T20 (Migrationsskript)**. T20 bleibt gesperrt, bis O1 entschieden und spec.md Abschnitt 7 angepasst ist. Die Datenbankfunktion `ea_import_volunteers` (T7) ist davon nicht berührt, weil sie keinen Schlüssel braucht.
+**Gate-Ergebnis:** bestanden. Der frühere Verstoß (Schlüssel in `.env.migration.local`) ist mit spec.md v0.2.1 behoben (O1).
 
-**Re-Check nach Phase 1:** data-model.md legt keine Tabelle und keine Policy an. Die View hat `security_invoker`. Alle Funktionen außer dem Import sind `security invoker` und haben einen festen `search_path`. Kein Grant an `anon`. Der Import ist nur für `service_role` ausführbar; pgTAP prüft die Ablehnung für `authenticated`. Das Ergebnis bleibt unverändert: Nur O1 ist offen.
+**Re-Check nach Phase 1:** data-model.md legt keine Tabelle und keine Policy an. Die View hat `security_invoker`. Alle Funktionen außer dem Import sind `security invoker` und haben einen festen `search_path`. Kein Grant an `anon`. Der Import ist nur für `service_role` ausführbar; pgTAP prüft die Ablehnung für `authenticated`. Keine Verstöße.
 
 ## Project Structure
 
@@ -78,7 +78,7 @@ supabase/
 ├── tests/database/2xx_ea_*.test.sql    # T9 (research.md R-EA-12)
 └── seed.sql                            # T3: Umstellung Ü3, Personen 19–22
 
-scripts/ea-migrate/                     # T20 (gesperrt bis O1)
+scripts/ea-migrate/                     # T20
 ├── index.ts, csv.ts, columns.ts, report.ts
 ├── vorlage.csv, beispiel.csv, beispiel-fehler.csv
 package.json                            # Script "ea:migrate", devDependencies tsx, csv-parse
@@ -123,7 +123,7 @@ Nach CLAUDE.md: je Story bzw. Aufgabe ein Branch. Was sich gegenseitig bedingt, 
 |---|---|---|---|---|---|
 | 1 | `claude/beautiful-shannon-667zkn` | – | – | plan.md, research.md, data-model.md, contracts/, quickstart.md; danach tasks.md | – |
 | 2 | `ea-datenbank` | T1–T6, T8, T9 (ohne Import); Fehlercodes beim Anlegen (O3) | 16, 19; Datenbankteil von 02, 03, 06–09, 11, 12 | Migrationen …000100–…000500, Fehlercodes, Seed, pgTAP 210–270, 290 | AD-Kern Datenbank (erledigt) |
-| 3 | `us-ea-17-import` | T7, T9 (Import), T20 | 17, 18 | `ea_import_volunteers`, pgTAP 280, Skript | 2; T20 zusätzlich O1 |
+| 3 | `us-ea-17-import` | T7, T9 (Import), T20 | 17, 18 | `ea_import_volunteers`, pgTAP 280, Skript | 2 |
 | 4 | `us-ea-01-navigation` | T10 | 01 | Routen, EaLayout, Routenschutz | 2 |
 | 5 | `us-ea-02-aktive` | T11 | 02, 03 | Übersicht, Filter, URL, Karten | 4 |
 | 6 | `us-ea-04-detail` | T12 | 04, 11 | Detail, Historie, Bezeichnungen, Ablauf-Badges | 4, AD T47 |
@@ -151,10 +151,7 @@ Reihenfolge: 1 → 2 → (3 parallel) → 4 → 5, 6, 10–13 → 7, 8, 9 → 14
 
 Gemeldet an den Product Owner. Nichts davon hat Claude Code entschieden.
 
-- [OFFEN] **O1 – Schlüssel des Migrationsskripts (blockiert T20):** spec.md Abschnitt 7 sieht `SUPABASE_URL` und `SUPABASE_SERVICE_ROLE_KEY` in `.env.migration.local` vor (in `.gitignore`). Constitution Prinzip III und CLAUDE.md („Secret Key / service_role … nie in `.env`-Dateien, nie im Repo“) verbieten den Schlüssel in `.env`-Dateien. Quelle: `docs/specs/ea-ehrenamt/spec.md` Abschnitt 7 gegen `.specify/memory/constitution.md` Prinzip III.
-  - *Vorschlag:* Das Skript liest beide Werte nur aus der Umgebung der laufenden Shell. Der Admin setzt den Schlüssel unmittelbar vor dem Aufruf, ohne ihn in einer Datei abzulegen (z. B. `read -s SUPABASE_SERVICE_ROLE_KEY; export SUPABASE_SERVICE_ROLE_KEY`). spec.md Abschnitt 7 würde dann auf einem Branch `docs/ea-schluessel` angepasst.
-  - *Alternative:* eine eng gefasste Ausnahme in der Constitution (wie die in Prinzip V).
-  - Außerdem zu klären: Wer führt den Probelauf gegen TEST aus (US-EA-17 AK6, T20)? Vorschlag: der Admin, nicht Claude Code, weil Claude Code dafür den Secret Key von TEST bräuchte.
+- **O1 – Schlüssel des Migrationsskripts (entschieden, Product Owner 23.10.2026):** Das Skript fragt Projekt-URL und Secret Key beim Start ab; der Schlüssel wird verdeckt eingegeben, nur im Arbeitsspeicher gehalten und nie gespeichert oder ausgegeben. Keine `.env`-Datei. Probelauf und Lauf, auch gegen TEST, führt der Admin aus; Claude Code bekommt den Schlüssel nie. spec.md v0.2.1 Abschnitt 7 und US-EA-18 AK6 sind angepasst. T20 ist freigegeben.
 - **O2 – Verlängern bei historischer Qualifikationsart (entschieden, Product Owner 23.10.2026):** Der Knopf „Verlängern“ erscheint nur bei Lizenzen und Qualifikationen, deren Qualifikationsart den Status „aktuell“ hat. Bei historischen Arten fehlt er. Die Datenbank lehnt das Verlängern ohnehin ab (R27 AD). Umsetzung in T14 (Branch `us-ea-06-eigenschaften`). spec.md Abschnitt 6 (Dialog „Verlängern“) beschreibt das noch nicht; Nachtrag nur auf Auftrag (Branch `docs/…`).
 - **O3 – Fehlercodes beim Anlegen (entschieden, Product Owner 23.10.2026, wie vorgeschlagen):** Eine neue Migration auf dem Branch `ea-datenbank` (`…_ea_check_create.sql`, `create or replace` mit gleicher Signatur) ersetzt die Prüfung `ea_check_create` der Administration (Migration `20261023001100`, genutzt von `ea_create_volunteer` und `ea_activate_person`):
   - ohne EA-Recht (z. B. Vorstand): `EA_CREATE_FORBIDDEN` → „Für diesen Bereich hast du keine Rechte.“ (statt `AD_FORBIDDEN`; US-EA-05 AK6),
@@ -171,5 +168,4 @@ Hinweise (keine Entscheidung nötig):
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |---|---|---|
-| `SUPABASE_SERVICE_ROLE_KEY` in `.env.migration.local` (spec.md Abschnitt 7) | Das Skript braucht für den Import ohne Nutzerkontext einen Schlüssel mit vollen Rechten. | Nicht aufgelöst. Die Datei verstößt gegen Prinzip III. Vorschlag ohne Verstoß: Schlüssel nur in der Shell-Umgebung (O1). Entscheidung beim Product Owner; bis dahin ist T20 gesperrt. |
 | `ea_import_volunteers` mit Grant an `service_role` statt `authenticated` | Schreiben ohne Nutzerkontext (Altbestand, Status) in einer Transaktion (A3) | Ein Grant an `authenticated` würde den Import für jeden Nutzer öffnen. Mehrere RPC-Aufrufe aus dem Skript wären keine Transaktion. Gleiches Muster wie `ad_apply_*`. |

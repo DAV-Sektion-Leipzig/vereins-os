@@ -48,7 +48,7 @@ Bereitstellung: `npx supabase db push --linked --dry-run`, dann ohne `--dry-run`
 | 8 | US-EA-08, 09 | Geschäftsstelle, Referent:in | Toni ruhend; Karl ruhend (Bestätigung); Sven ausgeschieden zum 31.12.2026 | Akzeptanzkriterien US-EA-08 und US-EA-09 |
 | 9 | US-EA-11, 12 | Geschäftsstelle, Referent:in | Lena, Max im Detail; „Ablauf“ 2027; CSV exportieren | Badges; Toni TCSPI 31.12.2027; `ablauf-2027.csv` in Excel lesbar (Umlaute, Spalten) |
 | 10 | US-EA-13, 14, 15 | Geschäftsstelle | Gremien; Referat „Naturschutz“; Eigenschaftsart „Schlüssel Materiallager“ | Akzeptanzkriterien US-EA-13 bis 15 |
-| 11 | US-EA-17 | Admin gegen TEST (Schlüssel von TEST nach plan.md O1; Claude Code nur, wenn O1 das vorsieht) | `npm run ea:migrate -- --file scripts/ea-migrate/beispiel.csv --dry-run`; ebenso `beispiel-fehler.csv` | Prüfbericht ohne Fehler bzw. mit den zwei Fehlern |
+| 11 | US-EA-17 | Admin gegen TEST (Secret Key von TEST verdeckt eingeben) | `npm run ea:migrate -- --file scripts/ea-migrate/beispiel.csv --dry-run`; ebenso `beispiel-fehler.csv` | Prüfbericht ohne Fehler bzw. mit den zwei Fehlern |
 | 12 | US-EA-18 | Admin, gegen TEST | `--run` mit `beispiel.csv`, Rückfrage mit der Ref von TEST | Abschlussbericht; 5 Personen mit `created_in = 'script'` |
 | 13 | US-EA-19 | – | Seed-Daten prüfen | nur fiktive Namen, Adressen `example.test`, Beispiel-IBAN |
 | 14 | US-EA-01 AK1 | Geschäftsstelle | nach T22 in TEST: Startseite | Kachel „Ehrenamtsmanagement“ |
@@ -60,7 +60,7 @@ Nach Schritt 12 sind die 5 Beispielpersonen in TEST. Für eine erneute Abnahme w
 Claude Code führt diesen Abschnitt nicht aus und liest keine Dateien daraus.
 
 1. Excel-Liste zum Stichtag einfrieren, nach `vorlage.csv` übertragen (migration-aktivenliste.md). Die Datei liegt außerhalb des Repositorys oder ist durch `.gitignore` geschützt.
-2. Schlüssel bereitstellen, wie in plan.md O1 entschieden.
+2. Secret Key von PROD im Supabase-Dashboard kopieren und erst bei der Abfrage des Skripts verdeckt einfügen; nicht in eine Datei oder Notiz kopieren.
 3. Probelauf, Korrektur, erneuter Probelauf bis ohne Fehler.
 4. `--run`, Rückfrage mit der Ref von PROD bestätigen.
 5. Abschlussbericht prüfen, Excel-Liste archivieren (B10 der Erhebung). CSV und Berichte bleiben lokal beim Admin (01-erhebung.md F).
