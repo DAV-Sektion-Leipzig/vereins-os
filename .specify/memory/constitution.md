@@ -1,6 +1,9 @@
 <!--
 Sync Impact Report
-- Version: 1.0.2 → 1.1.0 → 1.1.1 (20.10.2026)
+- Version: 1.0.2 → 1.1.0 → 1.1.1 (20.10.2026) → 1.2.0 (23.10.2026)
+  - 1.2.0 (MINOR): Governance – Claude Code legt Pull Requests an; Auto-Merge nur für Datenbank,
+    Tests und Umsetzungsdateien nach grünen Pflicht-Checks; Oberfläche und fachliche Dokumente
+    gibt weiterhin der Product Owner frei
   - 1.1.0 (MINOR): Prinzip V – eng gefasste Ausnahme für eigene Adressen des Product Owners in
     TEST (Abnahme der Mail-Abläufe, ad_test_login_domains nur per SQL-Editor, Aufräumen im
     Dashboard)
@@ -144,6 +147,8 @@ Begründung: Betrieb mit 0 €/Monat (Ziel Z4) und kleine Nutzergruppe ohne Schu
    Rechtevorlage mit den Testzugängen geprüft. Die fachliche Abnahme läuft in Supabase TEST.
 5. Arbeit auf eigenem Branch je Story bzw. Aufgabe (z. B. `us-ad-01-ersteinrichtung`);
    Abnahme im Cloudflare-Vorschau-Deployment (gegen TEST), Produktion nur über `main`.
+   Pull Requests mit ausschließlich Migrationen, Tests, Seed oder Umsetzungsdateien werden nach
+   grünen Pflicht-Checks (`db-tests`, Cloudflare-Build) automatisch gemergt; Details in CLAUDE.md.
 
 ## Governance
 
@@ -151,11 +156,13 @@ Begründung: Betrieb mit 0 €/Monat (Ziel Z4) und kleine Nutzergruppe ohne Schu
   docs/tech-stack.md und CLAUDE.md abgeleitet; ändert sich eine dieser Quellen, wird die
   Constitution nachgezogen. Widersprechen sich Quelle und Constitution, gilt Prinzip II.
 - Änderungen nur per Pull Request: Arbeit auf eigenem Branch je Story bzw. Aufgabe
-  (z. B. `us-ad-01-ersteinrichtung`), Freigabe durch den Product Owner (Toni Werner) nach
-  Prüfung der Cloudflare-Vorschau. Nie direkt auf `main` committen oder pushen.
+  (z. B. `us-ad-01-ersteinrichtung`). Oberfläche, Edge Functions und fachliche Dokumente gibt
+  der Product Owner (Toni Werner) nach Prüfung der Cloudflare-Vorschau frei; Datenbank, Tests
+  und Umsetzungsdateien per Auto-Merge nach grünen Pflicht-Checks (CLAUDE.md, Git-Workflow).
+  Nie direkt auf `main` committen oder pushen.
 - Versionierung nach SemVer: MAJOR bei Entfernen oder Umdeuten eines Prinzips, MINOR bei
   neuem Prinzip oder Abschnitt bzw. wesentlicher Erweiterung, PATCH bei Klarstellungen.
 - Jeder Plan (Constitution Check) und jeder Pull Request MUSS die Einhaltung prüfen.
 - Laufende Arbeitsanweisungen für den Agenten stehen in [CLAUDE.md](../../CLAUDE.md).
 
-**Version**: 1.1.1 | **Ratified**: 2026-10-19 | **Last Amended**: 2026-10-20
+**Version**: 1.2.0 | **Ratified**: 2026-10-19 | **Last Amended**: 2026-10-23
