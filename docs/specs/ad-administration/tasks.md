@@ -381,8 +381,8 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 **Unabhängiger Test**: Anlegen mit Hinweis Art. 9 DSGVO; Art „Lizenz (Test)“ mit drei Feldern (Qualifikationsart nur Typ Lizenz); Meldungen zu R9, R29, R36 und doppeltem Namen; test.geschaeftsstelle sieht „vertraulich“ nicht als Option und keine vertraulichen Arten (US-AD-12, US-AD-19 AK1, US-AD-22).
 
-- [ ] T080 [P] [US-AD-22] (spec T46) `src/features/ad/eigenschaftsarten/EigenschaftsartenListe.tsx` (/ad/eigenschaftsarten): Name, Kategorie, Lesestufe, Bezug, Anzahl Felder, sichtbar in; „Noch keine Eigenschaftsarten.“
-- [ ] T081 [US-AD-22] (spec T46) `src/features/ad/eigenschaftsarten/EigenschaftsartBearbeiten.tsx` (/ad/eigenschaftsarten/neu und /:id):
+- [x] T080 [P] [US-AD-22] (spec T46) `src/features/ad/eigenschaftsarten/EigenschaftsartenListe.tsx` (/ad/eigenschaftsarten): Name, Kategorie, Lesestufe, Bezug, Anzahl Felder, sichtbar in; „Noch keine Eigenschaftsarten.“
+- [x] T081 [US-AD-22] (spec T46) `src/features/ad/eigenschaftsarten/EigenschaftsartBearbeiten.tsx` (/ad/eigenschaftsarten/neu und /:id):
   - Name, Zweck, Kategorie, Lesestufe (drei Optionen mit Erklärung; „vertraulich“ nur mit AD ≥ bearbeiten), Bezug (kein / Referat / Gremium; „Gruppe“ nur mit GR = verwalten), Bezug Pflicht, mehrere gültige Einträge erlaubt, sichtbar in (Mehrfachauswahl aus `ad_modules`).
   - Felder als Liste: Bezeichnung, Schlüssel (aus der Bezeichnung vorgeschlagen, nach Anlage nicht änderbar), Datentyp (Text, Zahl, Datum, Jahr, Ja/Nein, Auswahlliste, Qualifikationsart), Pflicht, Auswahlwerte bzw. erlaubte Typen (Mehrfachauswahl, leer = alle), Reihenfolge per Auf/Ab; vorhandene Auswahlwerte nicht entfernbar; Datentyp gesperrt, wenn Eigenschaften existieren.
   - Beim Anlegen der Hinweis „Erfasse keine Gesundheitsdaten, Religion, politische Meinung oder andere besondere Kategorien nach Art. 9 DSGVO.“

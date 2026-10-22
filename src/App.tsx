@@ -5,6 +5,9 @@ import { ProtectedLayout } from '@/components/layout/ProtectedLayout'
 import type { RouteHandle } from '@/components/layout/AppHeader'
 import { loadAdAccess, requireAdEdit } from '@/features/ad/access'
 import { AdLayout } from '@/features/ad/AdLayout'
+import { loadNewPropertyType, loadPropertyType, loadPropertyTypes } from '@/features/ad/eigenschaftsarten/data'
+import { EigenschaftsartBearbeiten } from '@/features/ad/eigenschaftsarten/EigenschaftsartBearbeiten'
+import { EigenschaftsartenListe } from '@/features/ad/eigenschaftsarten/EigenschaftsartenListe'
 import { loadPersonDetail, loadPersonOverview } from '@/features/ad/personen/data'
 import { PersonDetail } from '@/features/ad/personen/PersonDetail'
 import { PersonenUebersicht } from '@/features/ad/personen/PersonenUebersicht'
@@ -62,7 +65,9 @@ export const router = createBrowserRouter([
           { path: 'rechtevorlagen', loader: loadTemplateList, element: <RechtevorlagenListe /> },
           { path: 'rechtevorlagen/neu', loader: loadNewTemplate, element: <RechtevorlageBearbeiten /> },
           { path: 'rechtevorlagen/:id', loader: loadTemplate, element: <RechtevorlageBearbeiten /> },
-          { path: 'eigenschaftsarten', element: <PlaceholderPage title="Eigenschaftsarten" /> },
+          { path: 'eigenschaftsarten', loader: loadPropertyTypes, element: <EigenschaftsartenListe /> },
+          { path: 'eigenschaftsarten/neu', loader: loadNewPropertyType, element: <EigenschaftsartBearbeiten /> },
+          { path: 'eigenschaftsarten/:id', loader: loadPropertyType, element: <EigenschaftsartBearbeiten /> },
           { path: 'qualifikationsarten', loader: loadQualificationTypes, element: <QualifikationsartenListe /> },
           { path: 'qualifikationsarten/neu', loader: loadNewQualificationType, element: <QualifikationsartFormular /> },
           { path: 'qualifikationsarten/:id', loader: loadQualificationType, element: <QualifikationsartFormular /> },
