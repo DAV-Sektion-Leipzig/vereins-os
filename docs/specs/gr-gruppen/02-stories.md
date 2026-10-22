@@ -1,6 +1,7 @@
 # User Stories: Gruppen (GR)
 
-Stand: 22.10.2026 · Version 0.7 · Status: Entwurf · Product Owner: Toni Werner
+Stand: 22.10.2026 · Version 0.8 · Status: Ready · Product Owner: Toni Werner
+Änderungen v0.8: Abgleich mit Administration v0.7.2 und Ehrenamtsmanagement v0.2 und Entscheidungen des Product Owners vom 22.10.2026 (spec.md Gruppen v0.2): A11, A12 und „Gruppe nicht gefunden.“ bestätigt; Dublettenwarnung nach R40 (Geburtsjahr nur mit Gruppen verwalten) und Übernahme nicht sichtbarer Treffer (US-GR-06); kein Alter und Geburtsdatum bei „Gruppen lesen“ (US-GR-05); Zwischenspeichern „Aufnahme offen“ (US-GR-06); Telefon mobil und Festnetz (US-GR-07, -09, -14); Einwilligung zu Gesundheitsangaben als Feld mit Historie, Widerruf (US-GR-12); Ehrenamtsstatus „aktiv“ durch Gruppen (US-GR-13); beendete Personen nur für den Admin sichtbar (US-GR-01, -05); Seed mit Testzugang Referent:in Kinder und Jugend (US-GR-17); Regeln R21–R29 in der Spec.
 Änderungen v0.7: US-GR-19 um AK8 ergänzt: Lesefunktion `gr_groups_for_attendance(p_date)` liefert der Anwesenheitserfassung die wählbaren Gruppen (ID, Name, Referat) ohne Personendaten; Anforderung aus spec.md Anwesenheitserfassung v0.1, direkt aus dem Chat Anwesenheitserfassung eingearbeitet.
 Änderungen v0.6: Neue Story US-GR-20 „Eigene Gruppen für den Vorschlag in der Anwesenheitserfassung“ mit Lesefunktion `gr_my_groups(date)` (nur eigene Funktionen des angemeldeten Nutzers); Anforderung aus der Anwesenheitserfassung (US-EZ-19, R18; Product Owner, 22.10.2026), direkt aus dem Chat Anwesenheitserfassung eingearbeitet.
 Änderungen v0.5: A13 bestätigt (Product Owner, 22.10.2026): Trainingszeiten pflegt die Geschäftsstelle fest in Gruppen; Wochentag, Beginn und Ende sind nach dem Speichern nicht änderbar, nur „Ändern ab“ oder „Beenden“; keine eigene Korrekturfunktion. Abgestimmt aus dem Chat Anwesenheitserfassung.
@@ -47,12 +48,13 @@ Empfohlene Umsetzungsreihenfolge: 01 → 17 → 02 → 03 → 18 → 05 → 06 �
 **Priorität:** Must · **Regeln:** R11, R14 · **Abhängig von:** Nachtrag Administration (RLS für ea_persons und ea_properties nach Zugehörigkeit)
 **Akzeptanzkriterien**
 - AK1: Gegeben die Migration läuft, wenn sie fertig ist, dann hat die Vorlage Admin für Gruppen die Stufe „lesen“; Geschäftsstelle „verwalten“ und Vorstand „kein Zugriff“ bleiben unverändert.
-- AK2: Gegeben eine Teilnehmer:in ohne Amt, Funktion oder Einsatz, wenn ein Nutzer nur mit Rechten auf das Ehrenamtsmanagement Personen liest (Oberfläche oder Datenbankabfrage), dann erhält er diese Person und ihre Eigenschaften nicht (Rechte-Fall).
+- AK2: Gegeben eine Teilnehmer:in ohne Ehrenamtsstatus, wenn ein Nutzer nur mit Rechten auf das Ehrenamtsmanagement Personen liest (Oberfläche oder Datenbankabfrage), dann erhält er diese Person und ihre Eigenschaften nicht (Rechte-Fall).
 - AK3: Gegeben eine Person ist Erziehungsberechtigte:r und zugleich Trainer:in, wenn ein Nutzer mit Rechten auf das Ehrenamtsmanagement sie liest, dann sieht er sie als Aktive:n, aber keine gruppenspezifischen Angaben (Teilnahmen der Kinder, Verträge, Notfallkontakte).
 - AK4: Gegeben ein Nutzer mit der Vorlage Vorstand ohne Rechte auf Gruppen, wenn er Gruppen-Tabellen abfragt oder eine Gruppen-Seite aufruft, dann erhält er keine Daten bzw. „Für diesen Bereich hast du keine Rechte.“ (Rechte-Fall).
 - AK5: Gegeben ein Nutzer mit „Gruppen lesen“, wenn er Daten ändern will, dann lehnt die Datenbank ab (Fehlerfall).
 - AK6: Gegeben eine Teilnehmer:in ohne Ehrenamtsstatus, wenn der Admin die Personenübersicht der Administration öffnet, dann sieht er sie mit ihren Personendaten und kann z. B. die Adresse ändern; die Änderung ist sofort in Gruppen sichtbar. Gesundheitsangaben, Verträge und Teilnahmen sieht er dort nicht (nur über Gruppen mit den Rechten aus A).
 - AK7: Gegeben ein Nutzer mit Rechten nur auf die Anwesenheitserfassung (z. B. Referent:in), wenn er `gr_`-Tabellen direkt abfragt, dann erhält er keine Daten; Namen von Teilnehmer:innen erhält er nur über US-GR-19 (Rechte-Fall, R20).
+- AK8: Gegeben eine Person, deren Teilnahme, Vertrag, Zuordnung und Funktion in Gruppen beendet sind, wenn die Geschäftsstelle Gruppen öffnet, dann ist die Person dort nicht mehr sichtbar; der Admin sieht sie über die Administration und mit „Gruppen lesen“ ihre beendeten Teilnahmen (Rechte-Fall, Entscheidung Product Owner 22.10.2026).
 **Nicht Teil dieser Story:** Reichweite „Gruppe“ und Zugang für Gruppenleitungen und Trainer:innen (nach MVP); Rechte je Objekt.
 
 ### US-GR-02: Gruppenübersicht
@@ -99,11 +101,11 @@ Empfohlene Umsetzungsreihenfolge: 01 → 17 → 02 → 03 → 18 → 05 → 06 �
 **damit** ich erkenne, wo etwas zu tun ist.
 **Priorität:** Must · **Regeln:** R7, R17, R19 · **Abhängig von:** US-GR-03, US-GR-18
 **Akzeptanzkriterien**
-- AK1: Gegeben eine Gruppe mit Teilnahmen, wenn ich sie öffne, dann sehe ich Kopf (Name, Referat, heute gültige Trainingszeiten, Gruppenleitung, Trainer:innen, Helfer:innen) und je aktiver Teilnahme Vorname, Nachname, Alter (aus Geburtsdatum berechnet), Eintrittsdatum, Vertragsstatus (aktiv / gekündigt zum … / beendet) und Fotoerlaubnis ja/nein.
+- AK1: Gegeben eine Gruppe mit Teilnahmen, wenn ich sie öffne, dann sehe ich Kopf (Name, Referat, heute gültige Trainingszeiten, Gruppenleitung, Trainer:innen, Helfer:innen) und je aktiver Teilnahme Vorname, Nachname, Alter (aus Geburtsdatum berechnet; nur mit Gruppen verwalten bzw. für den Admin), Eintrittsdatum, Vertragsstatus (aktiv / gekündigt zum … / beendet) und Fotoerlaubnis ja/nein.
 - AK2: Gegeben das Vertragsende einer offenen Teilnahme ist erreicht, wenn ich die Gruppe öffne, dann steht an der Teilnahme „Vertrag beendet am TT.MM.JJJJ – Teilnahme klären.“; der Filter „Teilnahme klären“ zeigt nur diese Teilnahmen (R17).
 - AK3: Gegeben eine aktive Teilnahme ohne Notfallkontakt, wenn ich die Gruppe öffne, dann steht an der Teilnahme „Kein Notfallkontakt hinterlegt.“ (R7).
-- AK4: Gegeben die Gruppe hat keine aktive Teilnahme, wenn ich sie öffne, dann erscheint „Noch keine Teilnehmer:innen.“; beendete Teilnahmen zeigt der Filter „beendet“ (leerer Zustand).
-- AK5: Gegeben ich habe „Gruppen lesen“, wenn ich die Gruppe öffne, dann sehe ich die Liste, aber keine Gesundheitsangaben und keine Bearbeiten-Schaltflächen (Rechte-Fall, R11).
+- AK4: Gegeben die Gruppe hat keine aktive Teilnahme, wenn ich sie öffne, dann erscheint „Noch keine Teilnehmer:innen.“; beendete Teilnahmen zeigt der Filter „beendet“ nur dem Admin (US-GR-01 AK8) (leerer Zustand).
+- AK5: Gegeben ich habe „Gruppen lesen“, wenn ich die Gruppe öffne, dann sehe ich die Liste ohne Alter und Geburtsdatum, ohne Gesundheitsangaben und ohne Bearbeiten-Schaltflächen (Rechte-Fall, R11; W2).
 **Nicht Teil dieser Story:** Anzahl Trainings und Anwesenheit (Anwesenheitserfassung).
 
 ### US-GR-06: Teilnehmer:in anlegen oder vorhandene Person wählen
@@ -113,11 +115,12 @@ Empfohlene Umsetzungsreihenfolge: 01 → 17 → 02 → 03 → 18 → 05 → 06 �
 **Priorität:** Must · **Regeln:** R2, R10 · **Abhängig von:** US-GR-05
 **Akzeptanzkriterien**
 - AK1: Gegeben ich gebe Vorname, Nachname, Geburtsdatum und Adresse (Straße und Hausnummer, PLZ, Ort) ein, wenn ich speichere, dann ist die Person angelegt; die Mitgliedsnummer ist optional.
-- AK2: Gegeben eine ähnliche Person existiert (Dublettenprüfung der Administration), wenn ich speichere, dann erscheint die Warnung mit „Trotzdem anlegen“ / „Vorhandene Person übernehmen“ / „Abbrechen“; angezeigt werden nur Vorname, Nachname und Geburtsjahr, keine Angaben aus dem Ehrenamtsmanagement.
+- AK2: Gegeben eine ähnliche Person existiert (Dublettenprüfung der Administration), wenn ich speichere, dann erscheint die Warnung mit „Trotzdem anlegen“ / „Vorhandene Person übernehmen“ / „Abbrechen“; angezeigt werden nur die Daten nach R40 der Administration (Vorname, Rufname, Nachname, bei Ausgeschiedenen „ausgeschieden seit“, Geburtsjahr nur mit Gruppen verwalten), keine Eigenschaften, Kontaktdaten oder Zugehörigkeiten. „Vorhandene Person übernehmen“ gilt auch für Treffer, die ich in Gruppen nicht sehe; danach ist die Person in Gruppen sichtbar (ab „Gruppen bearbeiten“).
 - AK3: Gegeben ein Pflichtfeld fehlt, wenn ich speichere, dann erscheint „Bitte Vorname, Nachname, Geburtsdatum und Adresse angeben.“ (Fehlerfall, R2).
 - AK4: Gegeben die Person ist schon in einer anderen Gruppe, wenn ich sie übernehme, dann werden Stammdaten, Erziehungsberechtigte, Notfallkontakte, Fotoerlaubnis und Gesundheitsangaben nicht erneut abgefragt; ist sie bereits aktiv in dieser Gruppe, erscheint „Diese Person ist bereits in der Gruppe.“ (Fehlerfall, R10).
 - AK5: Gegeben eine Teilnehmer:in unter 18 ohne erziehungsberechtigte Person, wenn ich die Person ansehe, dann erscheint der Hinweis „Bitte mindestens eine erziehungsberechtigte Person angeben.“ (R2).
 - AK6: Gegeben ein Nutzer mit „Gruppen lesen“, wenn er eine Person anlegen will, dann lehnt die Datenbank ab (Rechte-Fall).
+- AK7: Gegeben ich speichere die neue Person, wenn ich die Aufnahme vor dem Vertrag unterbreche, dann steht sie unter „Aufnahmen offen“ und ich kann später fortsetzen; „Aufnahme abbrechen“ entfernt sie aus Gruppen (danach nur für den Admin sichtbar). Gegeben die Gruppe hat eine offene Aufnahme, wenn ich die Gruppe auflösen will, dann „Die Gruppe hat noch offene Aufnahmen.“ (Fehlerfall).
 **Nicht Teil dieser Story:** Teilnahme und Vertrag (US-GR-08); Zusammenführen von Dubletten; Abgleich mit der Mitgliederverwaltung.
 
 ### US-GR-07: Erziehungsberechtigte pflegen
@@ -126,11 +129,12 @@ Empfohlene Umsetzungsreihenfolge: 01 → 17 → 02 → 03 → 18 → 05 → 06 �
 **damit** ich weiß, wer Vertragspartner:in und Ansprechperson ist.
 **Priorität:** Must · **Regeln:** R3 · **Abhängig von:** US-GR-06
 **Akzeptanzkriterien**
-- AK1: Gegeben eine Teilnehmer:in, wenn ich eine vorhandene Person wähle oder eine neue mit Vorname, Nachname und Adresse (Telefon und E-Mail optional) anlege, dann ist sie als erziehungsberechtigt zugeordnet.
+- AK1: Gegeben eine Teilnehmer:in, wenn ich eine vorhandene Person wähle oder eine neue mit Vorname, Nachname und Adresse (Telefon mobil, Telefon Festnetz und E-Mail optional) anlege, dann ist sie als erziehungsberechtigt zugeordnet.
 - AK2: Gegeben Geschwister, wenn ich für das zweite Kind dieselbe erziehungsberechtigte Person wähle, dann wird sie nicht doppelt angelegt; Änderungen an Adresse oder Kontaktdaten gelten für beide Kinder.
 - AK3: Gegeben bereits zwei erziehungsberechtigte Personen, wenn ich eine dritte zuordnen will, dann erscheint „Es können höchstens zwei erziehungsberechtigte Personen angegeben werden.“ (Fehlerfall, R3).
 - AK4: Gegeben eine erziehungsberechtigte Person, wenn ich an der Teilnehmer:in „Adresse übernehmen“ wähle, dann wird deren Adresse in die Adresse der Teilnehmer:in kopiert; spätere Änderungen werden nicht mitgezogen.
 - AK5: Gegeben ein Nutzer mit „Gruppen lesen“, wenn er eine Zuordnung ändern will, dann lehnt die Datenbank ab (Rechte-Fall).
+- AK6: Gegeben die erziehungsberechtigte Person ist Vertragsinhaber:in eines nicht beendeten Vertrags des Kindes, wenn ich sie entfernen will, dann „Diese Person ist Vertragsinhaber:in. Bitte zuerst den Vertrag ändern.“ (Fehlerfall, R22).
 **Nicht Teil dieser Story:** Geburtsdatum von Erziehungsberechtigten (wird nicht erfasst); Mitgliedschaft der Erziehungsberechtigten.
 
 ### US-GR-08: Vertrag erfassen und Teilnahme anlegen
@@ -154,8 +158,8 @@ Empfohlene Umsetzungsreihenfolge: 01 → 17 → 02 → 03 → 18 → 05 → 06 �
 **Priorität:** Must · **Regeln:** R7 · **Abhängig von:** US-GR-06
 **Akzeptanzkriterien**
 - AK1: Gegeben eine Teilnehmer:in, wenn ich eine erziehungsberechtigte Person als Notfallkontakt markiere, dann erscheint sie mit ihren Kontaktdaten in der Liste der Notfallkontakte.
-- AK2: Gegeben ich lege einen weiteren Notfallkontakt mit Vorname, Nachname und Telefon oder E-Mail an, wenn ich speichere, dann steht er in der Liste; die Reihenfolge kann ich ändern.
-- AK3: Gegeben weder Telefon noch E-Mail sind angegeben, wenn ich speichere, dann erscheint „Bitte Telefon oder E-Mail angeben.“ (Fehlerfall, R7).
+- AK2: Gegeben ich lege einen weiteren Notfallkontakt mit Vorname, Nachname und Telefon mobil, Telefon Festnetz oder E-Mail an, wenn ich speichere, dann steht er in der Liste; die Reihenfolge kann ich ändern.
+- AK3: Gegeben weder Telefon (mobil oder Festnetz) noch E-Mail sind angegeben, wenn ich speichere, dann erscheint „Bitte Telefon oder E-Mail angeben.“ (Fehlerfall, R7).
 - AK4: Gegeben ich entferne den letzten Notfallkontakt einer aktiven Teilnahme, wenn ich speichere, dann ist es erlaubt, aber Gruppe und Teilnehmer:in zeigen „Kein Notfallkontakt hinterlegt.“ (R7).
 - AK5: Gegeben ein Nutzer mit „Gruppen lesen“, wenn er Notfallkontakte ändern will, dann lehnt die Datenbank ab (Rechte-Fall).
 **Nicht Teil dieser Story:** Beziehung zum Kind (z. B. Oma); Benachrichtigung aus dem System.
@@ -168,7 +172,7 @@ Empfohlene Umsetzungsreihenfolge: 01 → 17 → 02 → 03 → 18 → 05 → 06 �
 **Akzeptanzkriterien**
 - AK1: Gegeben eine neu angelegte Teilnehmer:in, wenn ich sie ansehe, dann ist die Fotoerlaubnis „nein“.
 - AK2: Gegeben ich setze die Fotoerlaubnis auf „ja“ mit Datum, wenn ich speichere, dann sind Wert, Datum und ändernde Person gespeichert; frühere Werte bleiben in der Historie sichtbar (Widerruf nachvollziehbar).
-- AK3: Gegeben kein Datum ist angegeben, wenn ich „ja“ speichere, dann erscheint „Bitte das Datum der Erlaubnis angeben.“ (Fehlerfall).
+- AK3: Gegeben kein Datum ist angegeben, wenn ich „ja“ oder „nein“ speichere, dann erscheint „Bitte das Datum angeben.“ (Fehlerfall, R12).
 - AK4: Gegeben ein Nutzer mit „Gruppen lesen“, wenn er die Fotoerlaubnis sieht, dann kann er sie nicht ändern (Rechte-Fall).
 **Nicht Teil dieser Story:** abgestufte Erlaubnis; Nutzung in der Öffentlichkeitsarbeit.
 
@@ -192,12 +196,14 @@ Empfohlene Umsetzungsreihenfolge: 01 → 17 → 02 → 03 → 18 → 05 → 06 �
 **damit** sie bei Training und Ausfahrten berücksichtigt werden können.
 **Priorität:** Must · **Regeln:** R11 · **Abhängig von:** US-GR-06
 **Akzeptanzkriterien**
-- AK1: Gegeben ich habe „Gruppen bearbeiten“ oder „verwalten“, wenn ich an der Teilnehmer:in Text zu gesundheitlichen Einschränkungen eingebe und speichere, dann ist er gespeichert und an der Teilnehmer:in sichtbar.
+- AK1: Gegeben ich habe „Gruppen bearbeiten“ oder „verwalten“ und die Einwilligung der Erziehungsberechtigten ist mit „ja“ und Datum erfasst, wenn ich Text zu gesundheitlichen Einschränkungen eingebe und speichere, dann ist er gespeichert und sichtbar; jede Änderung bleibt in der Historie.
+- AK1a: Gegeben die Einwilligung ist nicht „ja“, wenn ich Gesundheitsangaben speichern will, dann „Bitte zuerst die Einwilligung der Erziehungsberechtigten erfassen.“ (Fehlerfall, R24).
+- AK1b: Gegeben ich setze die Einwilligung auf „nein“ (Widerruf), wenn ich speichere, dann bleiben die Angaben gespeichert, sind aber für niemanden mehr lesbar, bis wieder „ja“ erfasst wird (R24; Datenschutzhinweis spec.md Abschnitt 11).
 - AK2: Gegeben ich habe nur „Gruppen lesen“ (z. B. Admin), wenn ich die Teilnehmer:in öffne oder die Tabelle per Datenbankabfrage lese, dann erhalte ich keine Gesundheitsangaben; die Oberfläche zeigt den Abschnitt nicht (Rechte-Fall, R11).
 - AK3: Gegeben ein Nutzer mit Rechten nur auf das Ehrenamtsmanagement, die Anwesenheitserfassung oder die Administration, wenn er Gesundheitsangaben abfragt, dann erhält er keine Daten (Rechte-Fall).
 - AK4: Beim Erfassen erscheint der Hinweis „Nur erfassen, wenn eine schriftliche Einwilligung der Erziehungsberechtigten vorliegt. Nur Angaben, die für Training und Ausfahrten nötig sind.“
 - AK5: Gesundheitsangaben erscheinen nicht in der E-Mail-Liste, nicht in der Anwesenheitsliste (US-GR-19), in keinem Export und nicht in E-Mails (Fehlerfall-Absicherung).
-**Nicht Teil dieser Story:** Lesen durch Gruppenleitung und Trainer:innen der eigenen Gruppe (nach MVP mit Zugang und Reichweite „Gruppe“); Erfassung der Einwilligung als eigenes Feld [OFFEN].
+**Nicht Teil dieser Story:** Lesen durch Gruppenleitung und Trainer:innen der eigenen Gruppe (nach MVP mit Zugang und Reichweite „Gruppe“); Löschen von Gesundheitsangaben.
 
 ### US-GR-13: Gruppenleitung, Trainer:innen und Helfer:innen festlegen
 **Als** Mitarbeiter:in der Geschäftsstelle
@@ -205,7 +211,7 @@ Empfohlene Umsetzungsreihenfolge: 01 → 17 → 02 → 03 → 18 → 05 → 06 �
 **damit** klar ist, wer die Gruppe betreut, und das Ehrenamtsmanagement diese Personen als Aktive zeigt.
 **Priorität:** Must · **Regeln:** R14 · **Abhängig von:** US-GR-03
 **Akzeptanzkriterien**
-- AK1: Gegeben eine Gruppe, wenn ich eine Person wähle (oder anlege), Funktion (Gruppenleitung / Trainer:in / Helfer:in) und gültig von angebe und speichere, dann steht sie im Kopf der Gruppe; mehrere Personen je Funktion sind möglich.
+- AK1: Gegeben eine Gruppe, wenn ich eine Person wähle (oder anlege), Funktion (Gruppenleitung / Trainer:in / Helfer:in) und gültig von angebe und speichere, dann steht sie im Kopf der Gruppe; mehrere Personen je Funktion sind möglich. Hat die Person keinen Ehrenamtsstatus, erhält sie „aktiv“ ab „seit“; ist sie ruhend oder ausgeschieden, erscheint „Die Person ist im Ehrenamtsmanagement ruhend.“ bzw. „… ausgeschieden.“ und der Status bleibt (R29).
 - AK2: Gegeben ich setze gültig bis, wenn das Datum erreicht ist, dann erscheint die Person nicht mehr im Kopf der Gruppe; die frühere Zuordnung bleibt in der Historie und wird für Einsätze vor diesem Datum weiter in der Anwesenheitsliste geliefert (US-GR-19).
 - AK3: Gegeben eine Funktion mit Bezug auf die Gruppe, wenn ein Nutzer mit Rechten auf das Ehrenamtsmanagement die Person öffnet, dann sieht er die Funktion mit Gruppenname, kann sie dort aber nicht ändern: „Diese Funktion wird im Modul Gruppen gepflegt.“ (R14).
 - AK4: Gegeben gültig bis liegt vor gültig von, wenn ich speichere, dann erscheint „‚Gültig bis‘ darf nicht vor ‚gültig von‘ liegen.“ (Fehlerfall).
@@ -218,7 +224,7 @@ Empfohlene Umsetzungsreihenfolge: 01 → 17 → 02 → 03 → 18 → 05 → 06 �
 **damit** ich bei einem Unfall schnell handeln kann.
 **Priorität:** Must · **Regeln:** R7, R11 · **Abhängig von:** US-GR-09
 **Akzeptanzkriterien**
-- AK1: Gegeben ich bin in einer Gruppe, wenn ich ein Kind antippe, dann sehe ich seine Notfallkontakte in der festgelegten Reihenfolge mit Telefonnummer als Anruf-Link (`tel:`) und E-Mail als `mailto:`-Link.
+- AK1: Gegeben ich bin in einer Gruppe, wenn ich ein Kind antippe, dann sehe ich seine Notfallkontakte in der festgelegten Reihenfolge mit Telefon mobil und Festnetz als Anruf-Link (`tel:`) und E-Mail als `mailto:`-Link.
 - AK2: Die Ansicht ist ab 375 px Breite ohne horizontales Scrollen nutzbar; Telefonnummern sind ohne Zoomen antippbar.
 - AK3: Gegeben das Kind hat keinen Notfallkontakt, wenn ich die Ansicht öffne, dann erscheint „Kein Notfallkontakt hinterlegt.“ und darunter die Erziehungsberechtigten mit Kontaktdaten (Fehlerfall).
 - AK4: Gegeben ich habe nur „Gruppen lesen“, wenn ich die Ansicht öffne, dann sehe ich keine Gesundheitsangaben (Rechte-Fall, R11).
@@ -261,7 +267,7 @@ Empfohlene Umsetzungsreihenfolge: 01 → 17 → 02 → 03 → 18 → 05 → 06 �
 - AK2: Trainingszeiten im Seed: eine Gruppe mit zwei Trainingstagen, eine Gruppe mit geänderter Trainingszeit (alte mit „gültig bis“, neue mit „gültig von“), eine Gruppe ohne Trainingszeit; eine Teilnahme mit „Teilnahme bis“ in der Vergangenheit und eine beendete Trainer:innen-Funktion (für Stichtagstests von US-GR-19).
 - AK3: IBANs im Seed sind gültige Test-IBANs ohne Bezug zu echten Konten; alle Namen, Adressen und Telefonnummern sind fiktiv.
 - AK4: Gegeben der Testzugang Admin („Gruppen lesen“), wenn er das Kind mit Gesundheitsangabe öffnet, dann sieht er sie nicht; der Testzugang Geschäftsstelle sieht sie (Rechte-Fall).
-- AK5: Gegeben der Testzugang Referent:in Kinder und Jugend aus der Administration (Anwesenheitserfassung „bearbeiten“, Reichweite Referat), wenn er `gr_group_roster` für eine Gruppe seines Referats bzw. eines anderen Referats aufruft, dann erhält er die Namen bzw. `GR_ROSTER_FORBIDDEN` (Rechte-Fall).
+- AK5: Gegeben der Testzugang Referent:in Kinder und Jugend aus dem Seed von Gruppen (Kim Kinderjugend) (Anwesenheitserfassung „bearbeiten“, Reichweite Referat), wenn er `gr_group_roster` für eine Gruppe seines Referats bzw. eines anderen Referats aufruft, dann erhält er die Namen bzw. `GR_ROSTER_FORBIDDEN` (Rechte-Fall).
 - AK6: Gegeben jemand startet den Seed gegen PROD, dann bricht er mit „Seed in PROD nicht erlaubt.“ ab (Fehlerfall).
 **Nicht Teil dieser Story:** Testzugänge für Gruppenleitung und Trainer:innen (nach MVP).
 
@@ -336,25 +342,35 @@ Bestätigt vom Product Owner am 22.10.2026:
 | A13 | Wochentag, Beginn und Ende einer Trainingszeit sind nach dem Speichern nicht änderbar (nur „Ändern ab“ oder „Beenden“); keine eigene Korrekturfunktion. Die Geschäftsstelle pflegt Trainingszeiten fest in Gruppen. | US-GR-18 |
 | – | Stichtag: Die Anwesenheitsliste liefert Teilnehmer:innen und Trainer:innen, Helfer:innen, Gruppenleitung, die am Datum des Einsatzes in der Gruppe waren. | US-GR-19 |
 
-Neu in v0.4, **noch zu bestätigen**:
+Ebenfalls bestätigt am 22.10.2026 (Chat Gruppen):
 
-| Nr | Annahme | Story |
+| Nr | Annahme / Entscheidung | Story |
 |---|---|---|
 | A11 | Import: „gültig von“ der Trainingszeiten = Importdatum; nicht lesbare Trainingszeiten brechen den Import nicht ab. | US-GR-16 |
 | A12 | Auflösen einer Gruppe beendet ihre offenen Trainingszeiten zum Auflösungsdatum. | US-GR-04 |
 | – | Fehler „Gruppe nicht gefunden.“ bei unbekannter oder am Datum aufgelöster Gruppe. | US-GR-19 |
+| – | Kein Alter, kein Geburtsdatum bei nur „Gruppen lesen“. | US-GR-05 |
+| – | „Aufnahme offen“ mit Zwischenspeichern; Abbrechen entfernt aus Gruppen. | US-GR-06 |
+| – | Übernahme nicht sichtbarer Dublettentreffer ab „Gruppen bearbeiten“. | US-GR-06 |
+| – | Telefon mobil und Festnetz getrennt. | US-GR-07, -09, -14 |
+| – | Einwilligung Gesundheitsangaben als Feld; Widerruf: behalten, nicht anzeigen; Historie aufbewahren. | US-GR-12 |
+| – | Gruppen setzt „aktiv“ für Gruppenleitung, Trainer:in, Helfer:in ohne Status; sonst nur Hinweis. | US-GR-13 |
+| – | Funktionen aus der Aktivenliste werden nicht importiert. | US-GR-16 |
+| – | Personen ohne laufenden Bezug nur für den Admin sichtbar. | US-GR-01, -05 |
 
-## Prüfung Definition of Ready (Stand 22.10.2026)
+Weitere Annahmen der Spec: spec.md Gruppen Abschnitt 11.
+
+## Prüfung Definition of Ready (Stand 22.10.2026, v0.8)
 
 | Kriterium | Status |
 |---|---|
 | Rechtevorlage, Ziel und Nutzen benannt | erfüllt |
 | Akzeptanzkriterien testbar (Given-When-Then) | erfüllt |
 | Fehlerfall und Rechte-Fall je Story | erfüllt |
-| Begriffe im Glossar | erfüllt (Referat, Trainingszeit, Teilnahme, Anwesenheit in glossar.md v1.6) |
-| Datenfelder im Datenmodell der Spec | offen – spec.md Gruppen noch nicht erstellt |
+| Begriffe im Glossar | erfüllt (glossar.md v1.5; Ergänzungen „Aufnahme offen“, „Einwilligung Gesundheitsangaben“ und Präzisierung „Teilnahme“, „Trainingszeit“ vorgeschlagen) |
+| Datenfelder im Datenmodell der Spec | erfüllt (spec.md v0.1, Abschnitt 2) |
 | Regeln per ID referenziert | erfüllt (R1–R20) |
-| Keine [OFFEN]-Punkte, Annahmen sichtbar | A1–A10 und A13 bestätigt; **offen:** A11, A12, „Gruppe nicht gefunden.“, Einwilligung als eigenes Feld (US-GR-12) |
+| Keine [OFFEN]-Punkte, Annahmen sichtbar | erfüllt: A1–A13, Entscheidungen und Annahmen der Spec (Abschnitt 11) am 22.10.2026 bestätigt |
 | „Nicht Teil dieser Story“ ausgefüllt | erfüllt |
 
-Blocker außerhalb dieses Moduls: Nachtrag RLS in der Administration (US-GR-01), Referate aus dem Ehrenamtsmanagement (US-GR-03), Modul Anwesenheitserfassung und Reichweite Referat in der Administration v0.8 (US-GR-19), `ad_me()` mit Person-ID (US-GR-20, vorhanden).
+Blocker außerhalb dieses Moduls: Kern der Administration (T1–T49) inkl. Ü2 aus dem Ehrenamtsmanagement; erste Migration des Ehrenamtsmanagements (System-Eigenschaftsarten, IBAN-Prüfung); Übergabe an die Administration specs/gr-gruppen/uebergabe-administration.md v1.0 (Ü1–Ü3, Ü5: T50 und Reichweite Referat für EZ vor US-GR-19); `ad_me()` (vorhanden).
