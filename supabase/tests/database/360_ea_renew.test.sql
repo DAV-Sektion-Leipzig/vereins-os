@@ -17,10 +17,11 @@ create function pg_temp.qual(p_code text) returns text language sql as $$
   select id::text from public.ad_qualification_types where code = p_code
 $$;
 
--- Toni TCSPI verlängern ab 01.11.2027 mit Fortbildung (AK3)
-select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
 create temp table renewed (id uuid);
 grant all on renewed to authenticated;
+
+-- Toni TCSPI verlängern ab 01.11.2027 mit Fortbildung (AK3)
+select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
 select lives_ok($$ insert into renewed select public.ea_renew_property('e0000000-0000-4000-8000-000000000003', '2027-11-01',
   '{"valid_until": "2031-12-31", "last_training": "2027-11-01"}', '{"year": 2027, "title": "Fortbildung Sportklettern"}') $$,
   'Geschäftsstelle verlängert Toni');
@@ -61,7 +62,7 @@ select throws_ok($$ select public.ea_renew_property('e0000000-0000-4000-8000-000
 select throws_ok($$ select public.ea_renew_property('e0000000-0000-4000-8000-000000000002', current_date + 1, '{}') $$,
   'P0001', 'EA_RENEW_INVALID', 'Funktion ist keine Lizenz oder Qualifikation');
 select pg_temp.as_owner();
-update public.ea_properties set valid_to = '2019-12-31' where id = 'e0000000-0000-4000-8000-000000000018';
+update public.ea_properties set valid_to = '2024-12-31' where id = 'e0000000-0000-4000-8000-000000000018';
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
 select throws_ok($$ select public.ea_renew_property('e0000000-0000-4000-8000-000000000018', current_date + 1, '{}') $$,
   'P0001', 'EA_RENEW_INVALID', 'beendete Lizenz nicht verlängerbar');
