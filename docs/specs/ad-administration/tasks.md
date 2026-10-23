@@ -469,6 +469,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 - [x] T107 [US-AD-03] [US-AD-09] `supabase/functions/ad-invite/handler.ts`, `ad-access/handler.ts`, `_shared/db.ts`, `ad-access/index.test.ts`: Rechteprüfung vor der Body-Validierung, Datenbankfehler in `hasAdEdit` → 500, Fehler beim Aufräumen des Auth-Eintrags im Log; Tests 401/404/403-vor-400
 - [x] T108 [US-AD-07] [US-AD-12] [US-AD-17] Frontend: `PersonNeu.tsx`/`personen/data.ts` prüfen R1 vor dem Anlegen (`checkLoginEmail`), `eigenschaftsarten/data.ts` schickt `allowed_qualification_kinds: []` zum Zurücksetzen (R28), `lib/functions.ts` leitet bei 401 zu /login, `DublettenDialog.tsx` ohne hängendes „ · “, `NotfallHinweis.tsx` „n-mal“, `QualifikationsartFormular.tsx` prüft Sparte/Aussteller, `lib/errors.ts` mit Constraints `ea_property_types_valid_from_label_length`/`…_to_label_length`, `ea_referate_name_key`, `ea_gremien_name_key`, `ad_qualification_types_discipline_not_blank`/`…_issuer_not_blank`
 - [x] T109 [P] Doku: spec.md v0.9.3 (Abschnitt 2, 4, 5 R1/R42, 11), 02-stories.md v0.8.2 (US-AD-06 AK5, US-AD-07 AK5), contracts/error-codes.md (Status „umgesetzt“ für Edge-Codes, R26-Hinweis, `AD_SCOPE_NOT_ALLOWED`; Frontend-Meldungen als [ANNAHME]), data-model.md
+- [x] T110 (spec T9, T10) Nach TEST ausrollen (23.10.2026, nach Merge von PR #31): `npx supabase db push --linked` (`20261023001800_ad_review_1.sql`), `npx supabase functions deploy ad-invite ad-access`
 
 ---
 
