@@ -51,6 +51,13 @@ export const MESSAGES = {
   issuerRequired: 'Bitte einen Aussteller angeben.',
   referatNameTaken: 'Ein Referat mit dieser Bezeichnung gibt es bereits.',
   gremiumNameTaken: 'Ein Gremium mit dieser Bezeichnung gibt es bereits.',
+  ibanInvalid: 'Die IBAN ist ungültig.',
+  statusDate: 'Bitte ein Datum bis spätestens <TT.MM.JJJJ> wählen.',
+  statusUnchanged: 'Die Person hat diesen Status bereits.',
+  leaveProperty: 'Diese Angabe kann hier nicht beendet werden.',
+  renewInvalid:
+    'Nur aktuelle Lizenzen und Qualifikationen können verlängert werden; das neue Datum muss nach dem bisherigen liegen.',
+  createReferatRequired: 'Bitte eine Funktion oder ein Amt in deinem Referat angeben.',
   forbidden: 'Für diesen Bereich hast du keine Rechte.',
   unexpected: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
   loginFailed: 'Anmeldung fehlgeschlagen. Bitte E-Mail-Adresse und Passwort prüfen.',
@@ -90,6 +97,13 @@ const CODE_MESSAGES: Record<string, string> = {
   EA_GROUP_RELATION_ONLY_GR: MESSAGES.groupRelationOnlyGr,
   EA_RELATION_FOREIGN_REFERAT: MESSAGES.relationForeignReferat,
   EA_STATUS_FORBIDDEN: MESSAGES.statusForbidden,
+  EA_IBAN_INVALID: MESSAGES.ibanInvalid,
+  EA_STATUS_DATE: MESSAGES.statusDate,
+  EA_STATUS_UNCHANGED: MESSAGES.statusUnchanged,
+  EA_LEAVE_PROPERTY: MESSAGES.leaveProperty,
+  EA_RENEW_INVALID: MESSAGES.renewInvalid,
+  EA_CREATE_FORBIDDEN: MESSAGES.forbidden,
+  EA_CREATE_REFERAT_REQUIRED: MESSAGES.createReferatRequired,
   AD_CONFIDENTIAL_ONLY_AD: MESSAGES.confidentialOnlyAd,
   AD_SCOPE_NOT_ALLOWED: MESSAGES.scopeNotAllowed,
   AD_REFERAT_REQUIRED: MESSAGES.referatRequired,
@@ -140,9 +154,12 @@ function asErrorLike(value: unknown): ErrorLike {
   return typeof value === 'object' && value !== null ? (value as ErrorLike) : {}
 }
 
-/** Setzt den Feldnamen aus dem detail des Datenbankfehlers in den Platzhalter „<Feld>“ ein (R35). */
-function withField(text: string, details: string): string {
-  return text.replace('<Feld>', details || 'Feld')
+/**
+ * Setzt das detail des Datenbankfehlers in den Platzhalter ein: Feldname für „<Feld>“ (R35),
+ * Grenzdatum für „<TT.MM.JJJJ>“ (EA_STATUS_DATE, R18 EA).
+ */
+function withDetail(text: string, details: string): string {
+  return text.replace('<Feld>', details || 'Feld').replace('<TT.MM.JJJJ>', details || 'heute')
 }
 
 function findConstraint(text: string): string | undefined {
@@ -153,7 +170,7 @@ function findConstraint(text: string): string | undefined {
 export function toMessage(errorOrCode: unknown): AppMessage {
   if (typeof errorOrCode === 'string') {
     if (errorOrCode in INFO_CODES) return { kind: 'info', text: INFO_CODES[errorOrCode] }
-    return { kind: 'error', text: withField(CODE_MESSAGES[errorOrCode] ?? MESSAGES.unexpected, '') }
+    return { kind: 'error', text: withDetail(CODE_MESSAGES[errorOrCode] ?? MESSAGES.unexpected, '') }
   }
 
   const error = asErrorLike(errorOrCode)
@@ -164,7 +181,7 @@ export function toMessage(errorOrCode: unknown): AppMessage {
   // Codes aus der Datenbank kommen als Meldungstext (raise exception '<CODE>'), aus Edge Functions als code
   for (const candidate of [message, code]) {
     if (candidate in INFO_CODES) return { kind: 'info', text: INFO_CODES[candidate] }
-    if (candidate in CODE_MESSAGES) return { kind: 'error', text: withField(CODE_MESSAGES[candidate], details) }
+    if (candidate in CODE_MESSAGES) return { kind: 'error', text: withDetail(CODE_MESSAGES[candidate], details) }
   }
 
   const constraint = findConstraint(`${message} ${details}`)

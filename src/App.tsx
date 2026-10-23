@@ -23,6 +23,8 @@ import { RechtevorlagenListe } from '@/features/ad/rechtevorlagen/Rechtevorlagen
 import { LoginPage } from '@/features/auth/LoginPage'
 import { PasswortSetzenPage } from '@/features/auth/PasswortSetzenPage'
 import { PasswortVergessenPage } from '@/features/auth/PasswortVergessenPage'
+import { loadEaAccess, requireEaManage } from '@/features/ea/access'
+import { EaLayout } from '@/features/ea/EaLayout'
 import { KeinZugriffPage } from '@/features/start/KeinZugriffPage'
 import { loadMyModules } from '@/features/start/modules'
 import { StartPage } from '@/features/start/StartPage'
@@ -77,6 +79,25 @@ export const router = createBrowserRouter([
           { path: 'qualifikationsarten/:id', loader: loadQualificationType, element: <QualifikationsartFormular /> },
           { path: 'protokoll', loader: loadAuditLog, element: <ProtokollPage /> },
           { path: '*', element: <PlaceholderPage title="Administration" /> },
+        ],
+      },
+      {
+        // EA mit EA ≥ lesen in irgendeiner Reichweite; sonst /kein-zugriff ohne Datenabfrage (US-EA-01 AK4)
+        id: 'ea',
+        path: 'ea',
+        loader: loadEaAccess,
+        element: <EaLayout />,
+        handle: { moduleName: 'Ehrenamtsmanagement' } satisfies RouteHandle,
+        children: [
+          { index: true, loader: () => redirect('/ea/aktive') },
+          { path: 'aktive/*', element: <PlaceholderPage title="Aktive" /> },
+          { path: 'ablauf', element: <PlaceholderPage title="Ablauf" /> },
+          // nur mit verwalten (US-EA-01 AK5)
+          { path: 'gremien', loader: requireEaManage, element: <PlaceholderPage title="Gremien" /> },
+          { path: 'eigenschaftsarten/*', loader: requireEaManage, element: <PlaceholderPage title="Eigenschaftsarten" /> },
+          { path: 'qualifikationsarten/*', loader: requireEaManage, element: <PlaceholderPage title="Qualifikationsarten" /> },
+          { path: 'stammdaten', loader: requireEaManage, element: <PlaceholderPage title="Referate und Gremien" /> },
+          { path: '*', loader: () => redirect('/ea/aktive') },
         ],
       },
     ],
