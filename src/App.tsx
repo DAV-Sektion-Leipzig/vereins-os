@@ -25,7 +25,8 @@ import { PasswortSetzenPage } from '@/features/auth/PasswortSetzenPage'
 import { PasswortVergessenPage } from '@/features/auth/PasswortVergessenPage'
 import { loadEaAccess, requireEaManage } from '@/features/ea/access'
 import { AktivePage } from '@/features/ea/aktive/AktivePage'
-import { loadVolunteers } from '@/features/ea/aktive/data'
+import { loadVolunteerDetail, loadVolunteers } from '@/features/ea/aktive/data'
+import { PersonDetailPage } from '@/features/ea/aktive/PersonDetailPage'
 import { EaLayout } from '@/features/ea/EaLayout'
 import { KeinZugriffPage } from '@/features/start/KeinZugriffPage'
 import { loadMyModules } from '@/features/start/modules'
@@ -93,7 +94,8 @@ export const router = createBrowserRouter([
         children: [
           { index: true, loader: () => redirect('/ea/aktive') },
           { path: 'aktive', loader: loadVolunteers, element: <AktivePage /> },
-          { path: 'aktive/*', element: <PlaceholderPage title="Aktive" /> },
+          { path: 'aktive/neu', element: <PlaceholderPage title="Person anlegen" /> },
+          { path: 'aktive/:id', loader: loadVolunteerDetail, element: <PersonDetailPage /> },
           { path: 'ablauf', element: <PlaceholderPage title="Ablauf" /> },
           // nur mit verwalten (US-EA-01 AK5)
           { path: 'gremien', loader: requireEaManage, element: <PlaceholderPage title="Gremien" /> },

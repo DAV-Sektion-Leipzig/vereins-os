@@ -2,6 +2,7 @@
 // (R32 AD); ea_volunteer_list filtert nur innerhalb davon. Filter und Seite stehen in der URL (A5).
 import type { LoaderFunctionArgs } from 'react-router-dom'
 import { PAGE_SIZE } from '@/components/Pagination'
+import { loadPersonProperties, loadUserNames, type PropertiesData } from '@/features/ad/personen/data'
 import { loadEaAccess, type EaAccess } from '@/features/ea/access'
 import type { ExpiryStatus } from '@/features/ea/shared/AblaufBadge'
 import { supabase } from '@/lib/supabase'
@@ -207,4 +208,97 @@ export async function loadVolunteers({ request }: LoaderFunctionArgs): Promise<V
   if (list.error || !Array.isArray(list.data)) return { filter, options, rows: [], total: 0, failed: true }
   const rows = list.data as VolunteerRow[]
   return { filter, options, rows, total: rows[0]?.total_count ?? 0, failed: false }
+}
+
+// --- Person im Detail (US-EA-04, US-EA-11; T038)
+
+export type VolunteerPerson = {
+  id: string
+  first_name: string
+  preferred_name: string | null
+  last_name: string
+  volunteer_status: VolunteerStatus | null
+  volunteer_status_since: string | null
+}
+
+export type StatusHistoryEntry = {
+  id: number
+  status: VolunteerStatus
+  valid_from: string
+  set_at: string
+  set_by: string | null
+}
+
+export type ExpiryRow = {
+  property_id: string
+  kind: 'license' | 'qualification' | 'police_clearance'
+  valid_until: string | null
+  expiry_status: ExpiryStatus
+}
+
+export type VolunteerDetailResult =
+  | { state: 'not_found' }
+  | { state: 'failed' }
+  | {
+      state: 'ok'
+      person: VolunteerPerson
+      history: StatusHistoryEntry[]
+      /** Anzeigename je Auth-Nutzer (gesetzt von) */
+      historyNames: Record<string, string>
+      properties: PropertiesData | null
+      /** Ablaufstatus je Eigenschaft aus ea_v_expiry (nur lesbare, aktuelle Eigenschaften aktiver und ruhender Personen) */
+      expiry: Record<string, ExpiryStatus>
+      trainerWithoutLicense: boolean
+    }
+
+export const NOT_FOUND_MESSAGE = 'Diese Person wurde nicht gefunden oder du hast keine Rechte.'
+
+const isoToday = () => new Date().toISOString().slice(0, 10)
+
+/** R14: aktuelle Funktion Trainer:in und keine Lizenz mit „gültig bis“ ≥ heute. */
+function isTrainerWithoutLicense(properties: PropertiesData, expiry: ExpiryRow[]): boolean {
+  const today = isoToday()
+  const functionType = properties.types.find((t) => t.system_key === 'function')
+  const isTrainer = properties.properties.some(
+    (p) =>
+      p.property_type_id === functionType?.id &&
+      p.field_values.function === 'Trainer:in' &&
+      p.valid_from <= today &&
+      (!p.valid_to || p.valid_to >= today),
+  )
+  return isTrainer && !expiry.some((e) => e.kind === 'license' && e.valid_until !== null && e.valid_until >= today)
+}
+
+export async function loadVolunteerDetail({ params }: LoaderFunctionArgs): Promise<VolunteerDetailResult> {
+  // Rechte vor jeder Datenabfrage (US-EA-01 AK4)
+  await loadEaAccess()
+  const id = params.id!
+
+  const [person, history, properties, expiry] = await Promise.all([
+    supabase
+      .from('ea_persons')
+      .select('id, first_name, preferred_name, last_name, volunteer_status, volunteer_status_since')
+      .eq('id', id)
+      .maybeSingle(),
+    supabase.from('ea_volunteer_status_history').select('id, status, valid_from, set_at, set_by').eq('person_id', id).order('set_at', { ascending: false }),
+    loadPersonProperties(id, 'EA'),
+    supabase.from('ea_v_expiry').select('property_id, kind, valid_until, expiry_status').eq('person_id', id),
+  ])
+
+  // Ungültige ID (22P02) wie eine nicht lesbare Person behandeln (US-EA-04 AK5)
+  if (person.error?.code === '22P02') return { state: 'not_found' }
+  if (person.error || history.error || expiry.error) return { state: 'failed' }
+  if (!person.data) return { state: 'not_found' }
+
+  const entries = history.data as StatusHistoryEntry[]
+  const expiryRows = expiry.data as ExpiryRow[]
+  return {
+    state: 'ok',
+    person: person.data as VolunteerPerson,
+    history: entries,
+    historyNames: await loadUserNames(entries.map((h) => h.set_by ?? '')),
+    properties,
+    expiry: Object.fromEntries(expiryRows.map((e) => [e.property_id, e.expiry_status])),
+    trainerWithoutLicense: properties ? isTrainerWithoutLicense(properties, expiryRows) : false,
+  }
 }
