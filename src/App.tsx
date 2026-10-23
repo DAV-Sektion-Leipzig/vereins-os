@@ -31,6 +31,8 @@ import { loadNewVolunteer, loadVolunteerDetail, loadVolunteers } from '@/feature
 import { PersonDetailPage } from '@/features/ea/aktive/PersonDetailPage'
 import { PersonNeuPage } from '@/features/ea/aktive/PersonNeuPage'
 import { EaLayout } from '@/features/ea/EaLayout'
+import { loadGremien } from '@/features/ea/gremien/data'
+import { GremienPage } from '@/features/ea/gremien/GremienPage'
 import { KeinZugriffPage } from '@/features/start/KeinZugriffPage'
 import { loadMyModules } from '@/features/start/modules'
 import { StartPage } from '@/features/start/StartPage'
@@ -101,7 +103,7 @@ export const router = createBrowserRouter([
           { path: 'aktive/:id', loader: loadVolunteerDetail, element: <PersonDetailPage /> },
           { path: 'ablauf', loader: loadExpiryList, element: <AblaufPage /> },
           // nur mit verwalten (US-EA-01 AK5)
-          { path: 'gremien', loader: requireEaManage, element: <PlaceholderPage title="Gremien" /> },
+          { path: 'gremien', loader: loadGremien, element: <GremienPage /> },
           { path: 'eigenschaftsarten/*', loader: requireEaManage, element: <PlaceholderPage title="Eigenschaftsarten" /> },
           { path: 'qualifikationsarten/*', loader: requireEaManage, element: <PlaceholderPage title="Qualifikationsarten" /> },
           { path: 'stammdaten', loader: requireEaManage, element: <PlaceholderPage title="Referate und Gremien" /> },
