@@ -4,7 +4,7 @@
 
 **Input**: [spec.md](spec.md) v0.2.1 (führend), [02-stories.md](02-stories.md) v0.2.1, [01-erhebung.md](01-erhebung.md) v0.5, [00-steckbrief.md](00-steckbrief.md) v0.7, [migration-aktivenliste.md](migration-aktivenliste.md) v0.5, [uebergabe-administration.md](uebergabe-administration.md) v1.1, [spec.md Administration](../ad-administration/spec.md) v0.9.2, [plan.md Administration](../ad-administration/plan.md), [arbeitsplan.md](../../arbeitsplan.md) v0.3, [Constitution](../../../.specify/memory/constitution.md) v1.2.0
 
-**Artefakte**: [research.md](research.md) · [data-model.md](data-model.md) · [contracts/](contracts/) · [quickstart.md](quickstart.md) · tasks.md (folgt mit `/speckit-tasks`)
+**Artefakte**: [research.md](research.md) · [data-model.md](data-model.md) · [contracts/](contracts/) · [quickstart.md](quickstart.md) · [tasks.md](tasks.md)
 
 ## Summary
 
@@ -15,7 +15,7 @@ Technisch baut das Modul vollständig auf dem Kern der Administration auf: Perso
 - 4 Migrationen mit View, Funktionen und Trigger: Ablauf, Liste, IBAN, Status, Verlängern, Import.
 - 1 Migration zum Freischalten nach der Abnahme.
 - die Seed-Umstellung auf System-Eigenschaftsarten (Ü3) und die Testpersonen 19–22.
-- pgTAP-Tests ab Nummer 200 inklusive Mengentest.
+- pgTAP-Tests ab Nummer 300 inklusive Mengentest.
 - die Oberflächen unter /ea, die die Komponenten der Administration einhängen.
 - das lokale Migrationsskript `scripts/ea-migrate/` mit Datenbankfunktion `ea_import_volunteers` (nur `service_role`).
 
@@ -24,7 +24,7 @@ Technisch baut das Modul vollständig auf dem Kern der Administration auf: Perso
 **Language/Version**: SQL (PostgreSQL 17, Supabase); TypeScript (Frontend, Vite); TypeScript mit `tsx` (Migrationsskript, Node); Bash (`seed.sh`, unverändert)
 **Primary Dependencies**: wie Administration (Supabase, React 19, react-router-dom 7, @supabase/supabase-js 2, shadcn/ui, Tailwind v4, sonner). Neu nur für das Skript: `tsx`, `csv-parse` (devDependencies, kostenfrei)
 **Storage**: Tabellen der Administration in Schema `public`; keine neuen Tabellen
-**Testing**: pgTAP in der GitHub Action `db-tests.yml` (lokaler Stack, Seed), Dateien ab `210_`; Mengentest 1.000 Personen × 30 Eigenschaften; Probelauf des Skripts gegen TEST mit fiktiven Beispieldateien; fachliche Abnahme in TEST (T21); keine Frontend-Unit-Tests gefordert
+**Testing**: pgTAP in der GitHub Action `db-tests.yml` (lokaler Stack, Seed), Dateien ab `300_`; Mengentest 1.000 Personen × 30 Eigenschaften; Probelauf des Skripts gegen TEST mit fiktiven Beispieldateien; fachliche Abnahme in TEST (T21); keine Frontend-Unit-Tests gefordert
 **Target Platform**: Browser, mobil ab 375 px; Cloudflare Workers mit Static Assets; Supabase Free-Plan EU; Skript lokal beim Admin
 **Project Type**: Web-Anwendung (statische SPA, Supabase als einziges Backend) plus lokales Kommandozeilen-Skript
 **Performance Goals**: `ea_volunteer_list` (Referent:in, alle Filter) < 1 s, `ea_v_expiry` für ein Jahr < 2 s, Detail < 1 s bei 1.000 Personen × 30 Eigenschaften; Import von 300 Zeilen < 60 s (spec.md Abschnitt 8)
@@ -108,9 +108,9 @@ src/
 | AD T35, T36, T38, T39, T41, T43 (Eigenschaftsarten, Eigenschaften, Sichtbarkeit, EA-Funktionen, Dubletten) | erledigt (`20261023000800`–`1400`, PR #15) | – |
 | AD T48 (Seed Personen 1–12 mit Eigenschaften) | erledigt (AD tasks.md T061) | – |
 | Ü1, Ü2, R3a (AD v0.7.2/v0.7.3), Datenbank | erledigt (`…000800` Bezeichnungen, `…001300` Geburtsjahr nach Lesestufe und `ad_first_names_match`) | T0a, T0b entfallen |
-| Ü1, Ü2, Oberfläche | Dublettendialog (T073) und Formular der Eigenschaftsart (T081) mit Ü1/Ü2 auf den Branches `us-ad-07-person-anlegen` bzw. `us-ad-12-eigenschaftsarten` (noch nicht gemergt); Bezeichnungen im Eigenschaftsformular und in der Anzeige (T082, T083) offen | Teil der AD-Komponenten, siehe H1 |
-| AD T30, T46, T47, T49 (Komponenten: Auswahlfeld Qualifikationsart, Eigenschaftsarten, Eigenschaftsformular, Dublettendialog) | offen (AD tasks.md T073, T076, T081, T082) | blockiert T12–T15, T19 |
-| AD-Migrationen `…001500`–`…001700` (Zugang, Protokoll) | offen | vor der ersten EA-Migration nach TEST bringen oder einmal `--include-all` (research.md R-EA-01) |
+| Ü1, Ü2, Oberfläche | erledigt (AD T073, T081, T082, T083 auf `main`, Stand 23.10.2026) | – |
+| AD T30, T46, T47, T49 (Komponenten: Auswahlfeld Qualifikationsart, Eigenschaftsarten, Eigenschaftsformular, Dublettendialog) | erledigt (AD tasks.md T073, T076, T081–T083 auf `main`, Stand 23.10.2026) | – |
+| AD-Migrationen `…001500`–`…001700` (Zugang, Protokoll) | erledigt (auf `main` und in TEST, AD T098, 23.10.2026) | – |
 | TEST zurücksetzen vor der ersten EA-Migration | Entscheidung Product Owner (spec.md AD Abschnitt 9) | quickstart.md B, durch den Product Owner oder auf Auftrag |
 
 Der Datenbankteil des Ehrenamtsmanagements (Branch `ea-datenbank`, ohne T20) kann beginnen, sobald TEST zurückgesetzt ist bzw. der Product Owner das freigibt (quickstart.md B). Die Oberflächen warten auf die Komponenten der Administration. arbeitsplan.md Schritt 8 sieht EA nach der Abnahme des Kerns (Schritt 7) vor; ob der Datenbankteil vorgezogen wird, entscheidet der Product Owner.
@@ -122,8 +122,8 @@ Nach CLAUDE.md: je Story bzw. Aufgabe ein Branch. Was sich gegenseitig bedingt, 
 | # | Branch | Spec-Tasks | Stories | Inhalt | hängt ab von |
 |---|---|---|---|---|---|
 | 1 | `claude/beautiful-shannon-667zkn` | – | – | plan.md, research.md, data-model.md, contracts/, quickstart.md; danach tasks.md | – |
-| 2 | `ea-datenbank` | T1–T6, T8, T9 (ohne Import); Fehlercodes beim Anlegen (O3) | 16, 19; Datenbankteil von 02, 03, 06–09, 11, 12 | Migrationen …000100–…000500, Fehlercodes, Seed, pgTAP 210–270, 290 | AD-Kern Datenbank (erledigt) |
-| 3 | `us-ea-17-import` | T7, T9 (Import), T20 | 17, 18 | `ea_import_volunteers`, pgTAP 280, Skript | 2 |
+| 2 | `ea-datenbank` | T1–T6, T8, T9 (ohne Import); Fehlercodes beim Anlegen (O3) | 16, 19; Datenbankteil von 02, 03, 06–09, 11, 12 | Migrationen …002100–…002600 (inkl. O3), Fehlercodes, Seed, pgTAP 300–360, 380 | AD-Kern Datenbank (erledigt) |
+| 3 | `us-ea-17-import` | T7, T9 (Import), T20 | 17, 18 | `ea_import_volunteers` (…002700), pgTAP 370, Skript | 2 |
 | 4 | `us-ea-01-navigation` | T10 | 01 | Routen, EaLayout, Routenschutz | 2 |
 | 5 | `us-ea-02-aktive` | T11 | 02, 03 | Übersicht, Filter, URL, Karten | 4 |
 | 6 | `us-ea-04-detail` | T12 | 04, 11 | Detail, Historie, Bezeichnungen, Ablauf-Badges | 4, AD T47 |
@@ -135,7 +135,7 @@ Nach CLAUDE.md: je Story bzw. Aufgabe ein Branch. Was sich gegenseitig bedingt, 
 | 12 | `us-ea-14-stammdaten` | T18 | 14 | Referate und Gremien | 4 |
 | 13 | `us-ea-15-arten` | T19 | 15 | Einhängen der AD-Seiten | 4, AD T30, T46 |
 | 14 | `ea-abnahme` | T21 | alle | Abnahme nach quickstart.md D; Anpassungen aus der Abnahme | 2–13 |
-| 15 | `ea-freischalten` | T22 | 01 (AK1) | Migration …000700 | 14 |
+| 15 | `ea-freischalten` | T22 | 01 (AK1) | Migration …002800 | 14 |
 
 Reihenfolge: 1 → 2 → (3 parallel) → 4 → 5, 6, 10–13 → 7, 8, 9 → 14 → 15. T23 (Lauf gegen PROD) macht der Admin nach 15 und nach Klärung von O1 der Administration (Weg der Migrationen nach PROD).
 

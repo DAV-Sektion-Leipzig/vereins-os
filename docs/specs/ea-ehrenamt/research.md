@@ -131,17 +131,17 @@ Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spe
 
 ## R-EA-12 Tests (T9)
 
-- **Dateien:** pgTAP-Dateien ab `210_` unter `supabase/tests/database/` (`200_seed` gehört der Administration), damit sie nach den Tests der Administration laufen. Je Bereich eine Datei; je Datei `begin; … rollback;` und Rollenwechsel über die Seed-Testzugänge (R-11 AD).
-  - `210_ea_system_types.test.sql`: 25 Arten, Felder, Bezeichnungen; zweiter Lauf ohne Änderung; Namenskonflikt bricht ab.
-  - `220_ea_qualification_types.test.sql`: 10 Einträge; idempotent.
-  - `230_ea_expiry.test.sql`: `ea_expiry_status` Grenzfälle; `ea_default_valid_until` (US-EA-07 AK1, AK2, AK5); `ea_v_expiry` je Testzugang.
-  - `240_ea_volunteer_list.test.sql`: Tabelle „Erwartete Ergebnisse“ (spec.md Abschnitt 9), Filter, Status `{left}`, Person 12 nie.
-  - `250_ea_iban.test.sql`: Prüfsumme, Normalisierung, Trigger.
-  - `260_ea_status.test.sql`: R18–R20, R33 AD, Vorstand; `ea_leave` als Referent:in bei Karl Zweireferat (fremdes Referat → `EA_LEAVE_PROPERTY`, nichts geändert).
-  - `270_ea_renew.test.sql`: R6 (US-EA-07 AK3), `EA_RENEW_INVALID`.
-  - `280_ea_import.test.sql`: Rechte (authenticated abgelehnt), Probelauf schreibt nichts, Fehler- und Warnfälle, Lauf schreibt alles.
-  - `290_ea_volume.test.sql`: Mengentest nach spec.md Abschnitt 8 (Muster R-27 AD), misst `ea_volunteer_list` als Referent:in mit allen Filtern, `ea_v_expiry` für ein Jahr und ein Personendetail.
-- **Bestehende Tests:** Die Tests der Administration (010–200) laufen nach der Seed-Umstellung unverändert grün (spec.md T3). `200_seed.test.sql` prüft die Testarten des Seeds der Administration; zählt er Eigenschaftsarten, wird er mit der Seed-Umstellung angepasst (gleicher Pull Request).
+- **Dateien:** pgTAP-Dateien ab `300_` unter `supabase/tests/database/` (`200_seed` bis `230_audit_view` gehören der Administration; Stand 23.10.2026), damit sie nach den Tests der Administration laufen. Je Bereich eine Datei; je Datei `begin; … rollback;` und Rollenwechsel über die Seed-Testzugänge (R-11 AD).
+  - `300_ea_system_types.test.sql`: 25 Arten, Felder, Bezeichnungen; zweiter Lauf ohne Änderung; Namenskonflikt bricht ab.
+  - `310_ea_qualification_types.test.sql`: 10 Einträge; idempotent.
+  - `320_ea_expiry.test.sql`: `ea_expiry_status` Grenzfälle; `ea_default_valid_until` (US-EA-07 AK1, AK2, AK5); `ea_v_expiry` je Testzugang.
+  - `330_ea_volunteer_list.test.sql`: Tabelle „Erwartete Ergebnisse“ (spec.md Abschnitt 9), Filter, Status `{left}`, Person 12 nie.
+  - `340_ea_iban.test.sql`: Prüfsumme, Normalisierung, Trigger.
+  - `350_ea_status.test.sql`: R18–R20, R33 AD, Vorstand; `ea_leave` als Referent:in bei Karl Zweireferat (fremdes Referat → `EA_LEAVE_PROPERTY`, nichts geändert).
+  - `360_ea_renew.test.sql`: R6 (US-EA-07 AK3), `EA_RENEW_INVALID`.
+  - `370_ea_import.test.sql`: Rechte (authenticated abgelehnt), Probelauf schreibt nichts, Fehler- und Warnfälle, Lauf schreibt alles.
+  - `380_ea_volume.test.sql`: Mengentest nach spec.md Abschnitt 8 (Muster R-27 AD), misst `ea_volunteer_list` als Referent:in mit allen Filtern, `ea_v_expiry` für ein Jahr und ein Personendetail.
+- **Bestehende Tests:** Die Tests der Administration (010–230) laufen nach der Seed-Umstellung unverändert grün (spec.md T3). `200_seed.test.sql` prüft die Testarten des Seeds der Administration; zählt er Eigenschaftsarten, wird er mit der Seed-Umstellung angepasst (gleicher Pull Request).
 
 ## R-EA-13 Frontend
 
