@@ -480,7 +480,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 - [ ] T102 [US-AD-25] (spec T25 Teil) Dublettenschwelle in TEST abnehmen (quickstart.md C: Toni/Anton/Tony Muster, Tippfehler) und das Ergebnis in `docs/specs/ad-administration/abnahme-test.md` festhalten (ohne private Adressen); bei Bedarf Schwelle per neuer Migration anpassen (Rückfrage beim Product Owner)
 - [ ] T103 [US-AD-08] (spec T25 Teil) Abnahmeablauf C1 vorbereiten: TEST auf Stand (`db push`, `functions deploy`, Seed; Auth-Einstellungen hat der Product Owner nach `supabase/setup/README.md` gesetzt). Danach führt **der Product Owner selbst** C1 durch (Domain per SQL-Editor, Personen mit eigenen Adressen, Einladung, Adressänderung, Passwort setzen, Passwort vergessen) und räumt nach C2 auf. Claude Code trägt keine Domain und keine Adresse ein. Ergebnis ohne Adressen in `abnahme-test.md`. Betrifft US-AD-03, US-AD-04, US-AD-08
 - [ ] T104 [US-AD-26] (spec T25 Teil, T32, T49) Szenarien aus quickstart.md C und C3 mit den Testzugängen Admin, Geschäftsstelle, Referent:in, Vorstand und test.notfall abnehmen, auch bei 375 px; offene `[PRÜFEN T25]`-Punkte aus research.md abhaken bzw. melden; Ergebnis in `abnahme-test.md`
-- [ ] T105 [P] (spec T12 Teil) Querschnitt: `npm run lint` und `npm run build` ohne Fehler; `npm audit` und Ergebnis melden; keine Secrets oder realen Adressen im Diff (`git grep` auf `@` außerhalb von `@dav-leipzig.de`, `example.test`, `example.org`)
+- [x] T105 [P] (spec T12 Teil) Querschnitt: `npm run lint` und `npm run build` ohne Fehler; `npm audit` und Ergebnis melden; keine Secrets oder realen Adressen im Diff (`git grep` auf `@` außerhalb von `@dav-leipzig.de`, `example.test`, `example.org`)
 
 ---
 
