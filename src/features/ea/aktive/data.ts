@@ -249,6 +249,12 @@ export type VolunteerDetailResult =
       /** Ablaufstatus je Eigenschaft aus ea_v_expiry (nur lesbare, aktuelle Eigenschaften aktiver und ruhender Personen) */
       expiry: Record<string, ExpiryStatus>
       trainerWithoutLicense: boolean
+      /** Schreibrecht je Eigenschaft nach ea_property_writable (T042) */
+      writable: Record<string, boolean>
+      /** Arten für „Eigenschaft hinzufügen“: schreibbar, Referent:in nur Lesestufe „alle“ (US-EA-06 AK5) */
+      addableTypeIds: string[]
+      /** Referent:in: nur eigene Referate im Bezug (US-EA-06 AK4) */
+      restrictReferate: string[] | null
     }
 
 export const NOT_FOUND_MESSAGE = 'Diese Person wurde nicht gefunden oder du hast keine Rechte.'
@@ -269,9 +275,45 @@ function isTrainerWithoutLicense(properties: PropertiesData, expiry: ExpiryRow[]
   return isTrainer && !expiry.some((e) => e.kind === 'license' && e.valid_until !== null && e.valid_until >= today)
 }
 
+async function isWritable(typeId: string, personId: string, referatId: string | null): Promise<boolean> {
+  const { data, error } = await supabase.rpc('ea_property_writable', {
+    p_property_type: typeId,
+    p_person: personId,
+    p_referat: referatId,
+  })
+  return !error && data === true
+}
+
+/**
+ * Schreibrechte für das Detail (T042). Die Datenbank entscheidet (ea_property_writable, R12, R41 AD);
+ * das Frontend blendet nur Knöpfe aus. Eine Art ist hinzufügbar, wenn sie ohne Bezug oder mit einem
+ * eigenen Referat schreibbar ist.
+ */
+async function loadWriteRights(personId: string, properties: PropertiesData, access: EaAccess) {
+  const own = restrictedReferate(access)
+  const candidates = properties.types.filter((t) => (own ? t.read_level === 'all' : true) && t.relation_kind !== 'group')
+  const [perProperty, perType] = await Promise.all([
+    Promise.all(
+      properties.properties.map(async (p) => [p.id, await isWritable(p.property_type_id, personId, p.related_referat_id)] as const),
+    ),
+    Promise.all(
+      candidates.map(async (t) => {
+        if (await isWritable(t.id, personId, null)) return t.id
+        if (t.relation_kind === 'referat' && own?.length && (await isWritable(t.id, personId, own[0]))) return t.id
+        return null
+      }),
+    ),
+  ])
+  return {
+    writable: Object.fromEntries(perProperty),
+    addableTypeIds: perType.filter((id): id is string => id !== null),
+    restrictReferate: own,
+  }
+}
+
 export async function loadVolunteerDetail({ params }: LoaderFunctionArgs): Promise<VolunteerDetailResult> {
   // Rechte vor jeder Datenabfrage (US-EA-01 AK4)
-  await loadEaAccess()
+  const access = await loadEaAccess()
   const id = params.id!
 
   const [person, history, properties, expiry] = await Promise.all([
@@ -292,11 +334,18 @@ export async function loadVolunteerDetail({ params }: LoaderFunctionArgs): Promi
 
   const entries = history.data as StatusHistoryEntry[]
   const expiryRows = expiry.data as ExpiryRow[]
+  const [historyNames, rights] = await Promise.all([
+    loadUserNames(entries.map((h) => h.set_by ?? '')),
+    properties
+      ? loadWriteRights(id, properties, access)
+      : Promise.resolve({ writable: {}, addableTypeIds: [], restrictReferate: restrictedReferate(access) }),
+  ])
   return {
     state: 'ok',
     person: person.data as VolunteerPerson,
     history: entries,
-    historyNames: await loadUserNames(entries.map((h) => h.set_by ?? '')),
+    historyNames,
+    ...rights,
     properties,
     expiry: Object.fromEntries(expiryRows.map((e) => [e.property_id, e.expiry_status])),
     trainerWithoutLicense: properties ? isTrainerWithoutLicense(properties, expiryRows) : false,
@@ -390,5 +439,44 @@ export async function createVolunteer(input: VolunteerInput): Promise<{ id: stri
 /** Rückkehr (ausgeschieden) bzw. Übernahme (ohne Ehrenamtsstatus) mit der eingegebenen Zuordnung (US-EA-10). */
 export async function activatePerson(personId: string, input: VolunteerInput) {
   const { error } = await supabase.rpc('ea_activate_person', { p_person: personId, ...assignmentArgs(input) })
+  return error ?? null
+}
+
+// --- Lizenz und Qualifikation: Vorbelegung und Verlängern (US-EA-07; T043, T044)
+
+/** R5: „gültig bis“ aus Qualifikationsart, „gültig von“ und „letzte Fortbildung“; null ohne Gültigkeitsdauer. */
+export async function deriveValidUntil(input: {
+  qualificationType: string
+  validFrom: string
+  lastTraining: string | null
+}): Promise<string | null> {
+  const { data, error } = await supabase.rpc('ea_default_valid_until', {
+    p_qualification_type: input.qualificationType,
+    p_valid_from: input.validFrom,
+    p_last_training: input.lastTraining,
+  })
+  if (error) throw error
+  return (data as string | null) ?? null
+}
+
+export type RenewInput = {
+  validFrom: string
+  lastTraining: string
+  validUntil: string
+  /** Optional: Fortbildung mit Jahr und Titel anlegen */
+  training: { year: number; title: string } | null
+}
+
+/** R6: neue Eigenschaft ab „erworben bzw. verlängert am“, die bisherige endet am Vortag (ea_renew_property). */
+export async function renewProperty(propertyId: string, input: RenewInput) {
+  const fieldValues: Record<string, string> = {}
+  if (input.validUntil) fieldValues.valid_until = input.validUntil
+  if (input.lastTraining) fieldValues.last_training = input.lastTraining
+  const { error } = await supabase.rpc('ea_renew_property', {
+    p_property: propertyId,
+    p_valid_from: input.validFrom,
+    p_field_values: fieldValues,
+    p_training: input.training,
+  })
   return error ?? null
 }

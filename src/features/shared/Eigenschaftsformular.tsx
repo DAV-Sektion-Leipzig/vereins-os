@@ -1,4 +1,4 @@
-import { useId, useState, type FormEvent } from 'react'
+import { useEffect, useId, useState, type FormEvent } from 'react'
 import { CircleAlertIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -33,6 +33,12 @@ type Props = {
   onSubmit: (input: PropertyInput) => Promise<unknown>
   onCancel: () => void
   submitLabel?: string
+  /**
+   * Vorbelegung „gültig bis“ (EA R5, T043): wird bei Änderung von Qualifikationsart, „gültig von“ oder
+   * „letzte Fortbildung“ aufgerufen, solange der Nutzer „gültig bis“ nicht selbst geändert hat.
+   * Nur für Arten mit den Feldern qualification_type und valid_until; ohne die Prop keine Vorbelegung (/ad).
+   */
+  onDerive?: (input: { qualificationType: string; validFrom: string; lastTraining: string | null }) => Promise<string | null>
 }
 
 type Draft = Record<string, string>
@@ -81,6 +87,7 @@ export function Eigenschaftsformular({
   onSubmit,
   onCancel,
   submitLabel = 'Speichern',
+  onDerive,
 }: Props) {
   const id = useId()
   const [draft, setDraft] = useState<Draft>(() => toDraft(type.fields, initial?.field_values))
@@ -91,6 +98,25 @@ export function Eigenschaftsformular({
   const [error, setError] = useState<string | null>(null)
   const [errorField, setErrorField] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
+
+  // Bei bestehenden Einträgen gilt „gültig bis“ als vom Nutzer gesetzt (keine Vorbelegung beim Ändern)
+  const [validUntilTouched, setValidUntilTouched] = useState(() => Boolean(initial?.field_values?.valid_until))
+  const derives = Boolean(onDerive) && ['qualification_type', 'valid_until'].every((k) => type.fields.some((f) => f.key === k))
+  const qualificationType = draft.qualification_type ?? ''
+  const lastTraining = draft.last_training ?? ''
+
+  useEffect(() => {
+    if (!derives || validUntilTouched || !qualificationType || !validFrom) return
+    let current = true
+    onDerive!({ qualificationType, validFrom, lastTraining: lastTraining || null })
+      .then((value) => {
+        if (current) setDraft((d) => ({ ...d, valid_until: value ?? '' }))
+      })
+      .catch(() => undefined)
+    return () => {
+      current = false
+    }
+  }, [derives, validUntilTouched, qualificationType, validFrom, lastTraining, onDerive])
 
   const fromLabel = type.valid_from_label ?? 'gültig von'
   const toLabel = type.valid_to_label ?? 'gültig bis'
@@ -149,7 +175,10 @@ export function Eigenschaftsformular({
           )
           const common = { id: fid, required: f.is_required, 'aria-invalid': invalid || undefined, autoComplete: 'off' as const }
           const value = draft[f.key] ?? ''
-          const setValue = (v: string) => setDraft((d) => ({ ...d, [f.key]: v }))
+          const setValue = (v: string) => {
+            if (f.key === 'valid_until') setValidUntilTouched(true)
+            setDraft((d) => ({ ...d, [f.key]: v }))
+          }
 
           if (f.data_type === 'qualification_type') {
             return (

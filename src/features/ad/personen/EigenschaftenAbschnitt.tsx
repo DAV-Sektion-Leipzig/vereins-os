@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useState, type ComponentProps, type ReactNode } from 'react'
 import { PlusIcon } from 'lucide-react'
 import { useRevalidator } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
@@ -27,11 +27,32 @@ type Props = {
   canEdit: boolean
   module?: 'AD' | 'EA'
   renderExtra?: (property: PersonProperty, type: PropertyTypeWithFields) => ReactNode
+  /** T042: zusätzliche Aktionen je Eigenschaft, z. B. „Verlängern“ (EA) */
+  renderActions?: (property: PersonProperty, type: PropertyTypeWithFields) => ReactNode
+  /** T042: Schreibrecht je Eigenschaft (ea_property_writable); ohne die Prop gilt canEdit */
+  isWritable?: (property: PersonProperty) => boolean
+  /** T042: Arten, die „Eigenschaft hinzufügen“ anbietet; ohne die Prop alle */
+  addableTypeIds?: string[]
+  /** Nur diese Referate im Bezug wählbar (Reichweite Referat, R41) */
+  restrictReferate?: string[] | null
+  /** T043: Vorbelegung „gültig bis“ (EA R5) */
+  onDerive?: ComponentProps<typeof Eigenschaftsformular>['onDerive']
 }
 
 const today = () => new Date().toISOString().slice(0, 10)
 
-export function EigenschaftenAbschnitt({ personId, data, canEdit, module = 'AD', renderExtra }: Props) {
+export function EigenschaftenAbschnitt({
+  personId,
+  data,
+  canEdit,
+  module = 'AD',
+  renderExtra,
+  renderActions,
+  isWritable,
+  addableTypeIds,
+  restrictReferate = null,
+  onDerive,
+}: Props) {
   const revalidator = useRevalidator()
   const [adding, setAdding] = useState(false)
   const [newTypeId, setNewTypeId] = useState('')
@@ -61,6 +82,8 @@ export function EigenschaftenAbschnitt({ personId, data, canEdit, module = 'AD',
   }
 
   const newType = newTypeId ? typeById.get(newTypeId) : undefined
+  const addableTypes = addableTypeIds ? data.types.filter((t) => addableTypeIds.includes(t.id)) : data.types
+  const writable = (p: PersonProperty) => (isWritable ? isWritable(p) : canEdit)
 
   return (
     <Section id="eigenschaften" title="Eigenschaften">
@@ -81,6 +104,8 @@ export function EigenschaftenAbschnitt({ personId, data, canEdit, module = 'AD',
                       referate={data.referate}
                       gremien={data.gremien}
                       qualificationTypes={data.qualificationTypes}
+                      restrictReferate={restrictReferate}
+                      onDerive={onDerive}
                       initial={{
                         field_values: p.field_values,
                         related_referat_id: p.related_referat_id,
@@ -99,7 +124,7 @@ export function EigenschaftenAbschnitt({ personId, data, canEdit, module = 'AD',
                     {module === 'EA' && t.relation_kind === 'group' && (
                       <p className="text-sm text-muted-foreground">{MESSAGES.groupRelationOnlyGr}</p>
                     )}
-                    {canEdit && !(module === 'EA' && t.relation_kind === 'group') && (
+                    {writable(p) && !(module === 'EA' && t.relation_kind === 'group') && (
                       <div className="flex flex-wrap gap-2">
                         <Button variant="outline" size="sm" onClick={() => setEditing({ property: p, endOnly: false })}>
                           Ändern
@@ -109,6 +134,7 @@ export function EigenschaftenAbschnitt({ personId, data, canEdit, module = 'AD',
                             Beenden
                           </Button>
                         )}
+                        {renderActions?.(p, t)}
                       </div>
                     )}
                   </li>
@@ -118,7 +144,7 @@ export function EigenschaftenAbschnitt({ personId, data, canEdit, module = 'AD',
           </div>
         ))}
 
-      {canEdit && !adding && (
+      {canEdit && addableTypes.length > 0 && !adding && (
         <Button variant="outline" className="self-start" onClick={() => setAdding(true)}>
           <PlusIcon data-icon="inline-start" aria-hidden="true" />
           Eigenschaft hinzufügen
@@ -136,7 +162,7 @@ export function EigenschaftenAbschnitt({ personId, data, canEdit, module = 'AD',
               className="h-8 w-full rounded-lg border border-input bg-background px-2.5 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 sm:text-sm"
             >
               <option value="">– bitte wählen –</option>
-              {data.types.map((t) => (
+              {addableTypes.map((t) => (
                 <option key={t.id} value={t.id}>
                   {t.name} ({CATEGORY_LABELS[t.category]})
                 </option>
@@ -150,6 +176,8 @@ export function EigenschaftenAbschnitt({ personId, data, canEdit, module = 'AD',
               referate={data.referate}
               gremien={data.gremien}
               qualificationTypes={data.qualificationTypes}
+              restrictReferate={restrictReferate}
+              onDerive={onDerive}
               onSubmit={(input) => submit(null, newType.id, input)}
               onCancel={() => {
                 setAdding(false)
