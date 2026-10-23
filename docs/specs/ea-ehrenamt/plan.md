@@ -4,7 +4,7 @@
 
 **Input**: [spec.md](spec.md) v0.2.1 (führend), [02-stories.md](02-stories.md) v0.2.1, [01-erhebung.md](01-erhebung.md) v0.5, [00-steckbrief.md](00-steckbrief.md) v0.7, [migration-aktivenliste.md](migration-aktivenliste.md) v0.5, [uebergabe-administration.md](uebergabe-administration.md) v1.1, [spec.md Administration](../ad-administration/spec.md) v0.9.2, [plan.md Administration](../ad-administration/plan.md), [arbeitsplan.md](../../arbeitsplan.md) v0.3, [Constitution](../../../.specify/memory/constitution.md) v1.2.0
 
-**Artefakte**: [research.md](research.md) · [data-model.md](data-model.md) · [contracts/](contracts/) · [quickstart.md](quickstart.md) · tasks.md (folgt mit `/speckit-tasks`)
+**Artefakte**: [research.md](research.md) · [data-model.md](data-model.md) · [contracts/](contracts/) · [quickstart.md](quickstart.md) · [tasks.md](tasks.md)
 
 ## Summary
 
@@ -24,7 +24,7 @@ Technisch baut das Modul vollständig auf dem Kern der Administration auf: Perso
 **Language/Version**: SQL (PostgreSQL 17, Supabase); TypeScript (Frontend, Vite); TypeScript mit `tsx` (Migrationsskript, Node); Bash (`seed.sh`, unverändert)
 **Primary Dependencies**: wie Administration (Supabase, React 19, react-router-dom 7, @supabase/supabase-js 2, shadcn/ui, Tailwind v4, sonner). Neu nur für das Skript: `tsx`, `csv-parse` (devDependencies, kostenfrei)
 **Storage**: Tabellen der Administration in Schema `public`; keine neuen Tabellen
-**Testing**: pgTAP in der GitHub Action `db-tests.yml` (lokaler Stack, Seed), Dateien ab `210_`; Mengentest 1.000 Personen × 30 Eigenschaften; Probelauf des Skripts gegen TEST mit fiktiven Beispieldateien; fachliche Abnahme in TEST (T21); keine Frontend-Unit-Tests gefordert
+**Testing**: pgTAP in der GitHub Action `db-tests.yml` (lokaler Stack, Seed), Dateien ab `310_`; Mengentest 1.000 Personen × 30 Eigenschaften; Probelauf des Skripts gegen TEST mit fiktiven Beispieldateien; fachliche Abnahme in TEST (T21); keine Frontend-Unit-Tests gefordert
 **Target Platform**: Browser, mobil ab 375 px; Cloudflare Workers mit Static Assets; Supabase Free-Plan EU; Skript lokal beim Admin
 **Project Type**: Web-Anwendung (statische SPA, Supabase als einziges Backend) plus lokales Kommandozeilen-Skript
 **Performance Goals**: `ea_volunteer_list` (Referent:in, alle Filter) < 1 s, `ea_v_expiry` für ein Jahr < 2 s, Detail < 1 s bei 1.000 Personen × 30 Eigenschaften; Import von 300 Zeilen < 60 s (spec.md Abschnitt 8)
@@ -75,7 +75,7 @@ Die Fehlercodes stehen normativ in [error-codes.md der Administration](../ad-adm
 ```text
 supabase/
 ├── migrations/                         # …_ea_*.sql nach data-model.md
-├── tests/database/2xx_ea_*.test.sql    # T9 (research.md R-EA-12)
+├── tests/database/3x0_ea_*.test.sql    # T9 (research.md R-EA-12)
 └── seed.sql                            # T3: Umstellung Ü3, Personen 19–22
 
 scripts/ea-migrate/                     # T20
@@ -108,12 +108,12 @@ src/
 | AD T35, T36, T38, T39, T41, T43 (Eigenschaftsarten, Eigenschaften, Sichtbarkeit, EA-Funktionen, Dubletten) | erledigt (`20261023000800`–`1400`, PR #15) | – |
 | AD T48 (Seed Personen 1–12 mit Eigenschaften) | erledigt (AD tasks.md T061) | – |
 | Ü1, Ü2, R3a (AD v0.7.2/v0.7.3), Datenbank | erledigt (`…000800` Bezeichnungen, `…001300` Geburtsjahr nach Lesestufe und `ad_first_names_match`) | T0a, T0b entfallen |
-| Ü1, Ü2, Oberfläche | Dublettendialog (T073) und Formular der Eigenschaftsart (T081) mit Ü1/Ü2 auf den Branches `us-ad-07-person-anlegen` bzw. `us-ad-12-eigenschaftsarten` (noch nicht gemergt); Bezeichnungen im Eigenschaftsformular und in der Anzeige (T082, T083) offen | Teil der AD-Komponenten, siehe H1 |
-| AD T30, T46, T47, T49 (Komponenten: Auswahlfeld Qualifikationsart, Eigenschaftsarten, Eigenschaftsformular, Dublettendialog) | offen (AD tasks.md T073, T076, T081, T082) | blockiert T12–T15, T19 |
-| AD-Migrationen `…001500`–`…001700` (Zugang, Protokoll) | offen | vor der ersten EA-Migration nach TEST bringen oder einmal `--include-all` (research.md R-EA-01) |
+| AD T30, T46, T47, T49 (Komponenten: Auswahlfeld Qualifikationsart, Eigenschaftsarten, Eigenschaftsformular, Dublettendialog), mit Ü1/Ü2 in der Oberfläche | erledigt (AD tasks.md T073–T083 auf `main`, Stand 23.10.2026) | – |
+| AD-Migrationen `…001500`–`…001700` (Zugang, Protokoll) | erledigt (auf `main`) | EA-Migrationen beginnen mit `20261024000100` |
+| Seiten Eigenschafts- und Qualifikationsarten einhängbar unter /ea | Qualifikationsarten mit Prop `basePath`, Loader verlangen `AD ≥ read`; Eigenschaftsarten mit fest eingebautem Pfad `/ad/eigenschaftsarten` | kleine Anpassung in T19 (tasks.md) |
 | TEST zurücksetzen vor der ersten EA-Migration | Entscheidung Product Owner (spec.md AD Abschnitt 9) | quickstart.md B, durch den Product Owner oder auf Auftrag |
 
-Der Datenbankteil des Ehrenamtsmanagements (Branch `ea-datenbank`, ohne T20) kann beginnen, sobald TEST zurückgesetzt ist bzw. der Product Owner das freigibt (quickstart.md B). Die Oberflächen warten auf die Komponenten der Administration. arbeitsplan.md Schritt 8 sieht EA nach der Abnahme des Kerns (Schritt 7) vor; ob der Datenbankteil vorgezogen wird, entscheidet der Product Owner.
+Alle technischen Voraussetzungen sind erfüllt (Stand 23.10.2026). Der Datenbankteil kann beginnen; vor dem Ausrollen nach TEST wird TEST zurückgesetzt (quickstart.md B). arbeitsplan.md Schritt 8 sieht EA nach der Abnahme des Kerns (Schritt 7) vor; ob der Datenbankteil vorgezogen wird, entscheidet der Product Owner.
 
 ## Branches
 
@@ -122,8 +122,8 @@ Nach CLAUDE.md: je Story bzw. Aufgabe ein Branch. Was sich gegenseitig bedingt, 
 | # | Branch | Spec-Tasks | Stories | Inhalt | hängt ab von |
 |---|---|---|---|---|---|
 | 1 | `claude/beautiful-shannon-667zkn` | – | – | plan.md, research.md, data-model.md, contracts/, quickstart.md; danach tasks.md | – |
-| 2 | `ea-datenbank` | T1–T6, T8, T9 (ohne Import); Fehlercodes beim Anlegen (O3) | 16, 19; Datenbankteil von 02, 03, 06–09, 11, 12 | Migrationen …000100–…000500, Fehlercodes, Seed, pgTAP 210–270, 290 | AD-Kern Datenbank (erledigt) |
-| 3 | `us-ea-17-import` | T7, T9 (Import), T20 | 17, 18 | `ea_import_volunteers`, pgTAP 280, Skript | 2 |
+| 2 | `ea-datenbank` | T1–T6, T8, T9 (ohne Import); Fehlercodes beim Anlegen (O3) | 16, 19; Datenbankteil von 02, 03, 06–09, 11, 12 | Migrationen …000100–…000600, Fehlercodes, Seed, pgTAP 310–375, 390 | AD-Kern Datenbank (erledigt) |
+| 3 | `us-ea-17-import` | T7, T9 (Import), T20 | 17, 18 | `ea_import_volunteers`, pgTAP 380, Skript | 2 |
 | 4 | `us-ea-01-navigation` | T10 | 01 | Routen, EaLayout, Routenschutz | 2 |
 | 5 | `us-ea-02-aktive` | T11 | 02, 03 | Übersicht, Filter, URL, Karten | 4 |
 | 6 | `us-ea-04-detail` | T12 | 04, 11 | Detail, Historie, Bezeichnungen, Ablauf-Badges | 4, AD T47 |
@@ -135,7 +135,7 @@ Nach CLAUDE.md: je Story bzw. Aufgabe ein Branch. Was sich gegenseitig bedingt, 
 | 12 | `us-ea-14-stammdaten` | T18 | 14 | Referate und Gremien | 4 |
 | 13 | `us-ea-15-arten` | T19 | 15 | Einhängen der AD-Seiten | 4, AD T30, T46 |
 | 14 | `ea-abnahme` | T21 | alle | Abnahme nach quickstart.md D; Anpassungen aus der Abnahme | 2–13 |
-| 15 | `ea-freischalten` | T22 | 01 (AK1) | Migration …000700 | 14 |
+| 15 | `ea-freischalten` | T22 | 01 (AK1) | Migration …000800 | 14 |
 
 Reihenfolge: 1 → 2 → (3 parallel) → 4 → 5, 6, 10–13 → 7, 8, 9 → 14 → 15. T23 (Lauf gegen PROD) macht der Admin nach 15 und nach Klärung von O1 der Administration (Weg der Migrationen nach PROD).
 
@@ -152,7 +152,7 @@ Reihenfolge: 1 → 2 → (3 parallel) → 4 → 5, 6, 10–13 → 7, 8, 9 → 14
 Gemeldet an den Product Owner. Nichts davon hat Claude Code entschieden.
 
 - **O1 – Schlüssel des Migrationsskripts (entschieden, Product Owner 23.10.2026):** Das Skript fragt Projekt-URL und Secret Key beim Start ab; der Schlüssel wird verdeckt eingegeben, nur im Arbeitsspeicher gehalten und nie gespeichert oder ausgegeben. Keine `.env`-Datei. Probelauf und Lauf, auch gegen TEST, führt der Admin aus; Claude Code bekommt den Schlüssel nie. spec.md v0.2.1 Abschnitt 7 und US-EA-18 AK6 sind angepasst. T20 ist freigegeben.
-- **O2 – Verlängern bei historischer Qualifikationsart (entschieden, Product Owner 23.10.2026):** Der Knopf „Verlängern“ erscheint nur bei Lizenzen und Qualifikationen, deren Qualifikationsart den Status „aktuell“ hat. Bei historischen Arten fehlt er. Die Datenbank lehnt das Verlängern ohnehin ab (R27 AD). Umsetzung in T14 (Branch `us-ea-06-eigenschaften`). spec.md Abschnitt 6 (Dialog „Verlängern“) beschreibt das noch nicht; Nachtrag nur auf Auftrag (Branch `docs/…`).
+- **O2 – Verlängern bei historischer Qualifikationsart (entschieden, Product Owner 23.10.2026):** Der Knopf „Verlängern“ erscheint nur bei Lizenzen und Qualifikationen, deren Qualifikationsart den Status „aktuell“ hat. Bei historischen Arten fehlt er. Die Datenbank lehnt das Verlängern ohnehin ab (R27 AD). Umsetzung in T14 (Branch `us-ea-06-eigenschaften`). spec.md v0.2.1 Abschnitt 6 enthält die Regel.
 - **O3 – Fehlercodes beim Anlegen (entschieden, Product Owner 23.10.2026, wie vorgeschlagen):** Eine neue Migration auf dem Branch `ea-datenbank` (`…_ea_check_create.sql`, `create or replace` mit gleicher Signatur) ersetzt die Prüfung `ea_check_create` der Administration (Migration `20261023001100`, genutzt von `ea_create_volunteer` und `ea_activate_person`):
   - ohne EA-Recht (z. B. Vorstand): `EA_CREATE_FORBIDDEN` → „Für diesen Bereich hast du keine Rechte.“ (statt `AD_FORBIDDEN`; US-EA-05 AK6),
   - Referent:in ohne Funktion oder Amt: `EA_CREATE_REFERAT_REQUIRED` → „Bitte eine Funktion oder ein Amt in deinem Referat angeben.“ (statt `EA_RELATION_REQUIRED`; R3, US-EA-05 AK2, US-EA-10 AK5),
@@ -161,7 +161,7 @@ Gemeldet an den Product Owner. Nichts davon hat Claude Code entschieden.
 - Übernommen aus spec.md Abschnitt 11 (kein Blocker): Karteileichen; Fördergeber und Förderart; Jahreskarte, Forms, Redaktion, Mailingliste; Amtszeit Jugendausschuss; „Mitarbeiter:in Mitgliederverwaltung“; Regelwerk Führungszeugnis-Einsicht. Text und Link zu Art. 13 DSGVO betreffen die Anwesenheitserfassung.
 
 Hinweise (keine Entscheidung nötig):
-- **H1 – Übergabe Ü1/Ü2:** Datenbankteil mit PR #15 umgesetzt; T073 und T081 der Administration berücksichtigen Ü1/Ü2 bereits (Branches `us-ad-07-person-anlegen`, `us-ad-12-eigenschaftsarten`). Beim Bau von T082/T083 (Eigenschaftsformular, Anzeige im Personendetail) die Bezeichnungen „gültig von/bis“ der Eigenschaftsart verwenden (spec.md AD T47, R49). tasks.md der Administration wird hier nicht geändert, weil parallel daran gearbeitet wird. Die Datei uebergabe-administration.md steht noch auf „offen“; sie als erledigt zu markieren ist eine fachliche Änderung (Branch `docs/…`, Product Owner).
+- **H1 – Übergabe Ü1/Ü2 (erledigt):** Datenbank (PR #15) und Oberfläche (AD T073, T081–T083) sind auf `main` umgesetzt. Die Datei uebergabe-administration.md steht noch auf „offen“; sie als erledigt zu markieren ist eine fachliche Änderung (Branch `docs/…`, Product Owner).
 - **H2 – Erwartete Ergebnisse spec.md Abschnitt 9:** In der Spalte `ea_v_expiry` Jahr 2027 nennt die Zeile Referent:in „nur Personen 4, 10, 19, 22“. Personen 10 und 22 haben keine Lizenz oder Qualifikation, und Lena (19) läuft am 22.10.2026 noch im Jahr 2026 ab. Der Test prüft deshalb „nur Personen aus {4, 10, 19, 22}“ mit der Erwartung aus `current_date` (research.md R-EA-06). Keine Änderung der Spec nötig.
 
 ## Complexity Tracking
