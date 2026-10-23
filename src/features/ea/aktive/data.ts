@@ -1,6 +1,6 @@
 // Übersicht der Aktiven (US-EA-02, US-EA-03; T034). Welche Personen sichtbar sind, entscheidet die RLS
 // (R32 AD); ea_volunteer_list filtert nur innerhalb davon. Filter und Seite stehen in der URL (A5).
-import type { LoaderFunctionArgs } from 'react-router-dom'
+import { redirect, type LoaderFunctionArgs } from 'react-router-dom'
 import { PAGE_SIZE } from '@/components/Pagination'
 import { loadPersonProperties, loadUserNames, type PropertiesData } from '@/features/ad/personen/data'
 import { loadEaAccess, type EaAccess } from '@/features/ea/access'
@@ -301,4 +301,94 @@ export async function loadVolunteerDetail({ params }: LoaderFunctionArgs): Promi
     expiry: Object.fromEntries(expiryRows.map((e) => [e.property_id, e.expiry_status])),
     trainerWithoutLicense: properties ? isTrainerWithoutLicense(properties, expiryRows) : false,
   }
+}
+
+// --- Person anlegen, Rückkehr und Übernahme (US-EA-05, US-EA-10; T040, T041)
+
+export type AssignmentType = { id: string; systemKey: 'function' | 'position'; name: string; values: string[] }
+
+export type NewVolunteerData = {
+  /** Funktion und Amt (System-Eigenschaftsarten) mit ihren Auswahlwerten */
+  types: AssignmentType[]
+  /** Auswählbare Referate: Referent:in nur die eigenen */
+  referate: Option[]
+  /** Referent:in: Zuordnung in einem eigenen Referat ist Pflicht (R3) */
+  referatRequired: boolean
+}
+
+type AssignmentTypeRow = {
+  id: string
+  name: string
+  system_key: 'function' | 'position'
+  ea_property_fields: { key: string; choice_values: string[] | null }[]
+}
+
+export async function loadNewVolunteer(): Promise<NewVolunteerData> {
+  const access = await loadEaAccess()
+  // Anlegen mit EA ≥ bearbeiten (alle) oder in eigenen Referaten (US-EA-05 AK6)
+  if (!access.canEdit && access.myReferate.length === 0) throw redirect('/kein-zugriff')
+
+  const [types, referate] = await Promise.all([
+    supabase
+      .from('ea_property_types')
+      .select('id, name, system_key, ea_property_fields(key, choice_values)')
+      .in('system_key', ['function', 'position']),
+    supabase.from('ea_referate').select('id, name').eq('is_active', true).order('sort_order'),
+  ])
+  const own = restrictedReferate(access)
+  const allReferate = (referate.data ?? []) as Option[]
+
+  return {
+    types: ((types.data ?? []) as AssignmentTypeRow[])
+      .map((t) => ({
+        id: t.id,
+        systemKey: t.system_key,
+        name: t.name,
+        values: t.ea_property_fields.find((f) => f.key === t.system_key)?.choice_values ?? [],
+      }))
+      // Funktion vor Amt
+      .sort((a, b) => Number(a.systemKey !== 'function') - Number(b.systemKey !== 'function')),
+    referate: own ? allReferate.filter((r) => own.includes(r.id)) : allReferate,
+    referatRequired: own !== null,
+  }
+}
+
+export type VolunteerInput = {
+  first: string
+  preferred: string
+  last: string
+  /** Erste Zuordnung (Funktion oder Amt); leer = ohne Zuordnung (nur mit Reichweite alle, US-EA-05 AK3) */
+  typeId: string
+  systemKey: 'function' | 'position' | ''
+  value: string
+  referatId: string
+  since: string
+}
+
+function assignmentArgs(input: VolunteerInput) {
+  const withAssignment = input.typeId !== '' && input.systemKey !== ''
+  return {
+    p_property_type: withAssignment ? input.typeId : null,
+    p_referat: withAssignment && input.referatId ? input.referatId : null,
+    p_field_values: withAssignment ? { [input.systemKey]: input.value } : null,
+    p_valid_from: input.since || null,
+  }
+}
+
+/** Neue Person mit Status „aktiv“ ab „seit“ (R4) und erster Zuordnung; Rechte und R3 prüft ea_check_create. */
+export async function createVolunteer(input: VolunteerInput): Promise<{ id: string | null; error: unknown }> {
+  const { data, error } = await supabase.rpc('ea_create_volunteer', {
+    p_first: input.first.trim(),
+    p_last: input.last.trim(),
+    p_preferred: input.preferred.trim() || null,
+    ...assignmentArgs(input),
+  })
+  if (error) return { id: null, error }
+  return { id: data as string, error: null }
+}
+
+/** Rückkehr (ausgeschieden) bzw. Übernahme (ohne Ehrenamtsstatus) mit der eingegebenen Zuordnung (US-EA-10). */
+export async function activatePerson(personId: string, input: VolunteerInput) {
+  const { error } = await supabase.rpc('ea_activate_person', { p_person: personId, ...assignmentArgs(input) })
+  return error ?? null
 }
