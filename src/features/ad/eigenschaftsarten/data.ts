@@ -233,8 +233,8 @@ export async function savePropertyType(id: string | null, type: TypeInput, field
     data_type: f.data_type,
     is_required: f.is_required,
     choice_values: f.data_type === 'choice' ? f.choice_values : undefined,
-    allowed_qualification_kinds:
-      f.data_type === 'qualification_type' && f.allowed_qualification_kinds.length > 0 ? f.allowed_qualification_kinds : undefined,
+    // leere Liste = alle Typen; sie wird mitgeschickt, damit sich eine Einschränkung zurücksetzen lässt (R28)
+    allowed_qualification_kinds: f.data_type === 'qualification_type' ? f.allowed_qualification_kinds : undefined,
   }))
   const { data, error } = await supabase.rpc('ea_save_property_type', { p_type, p_fields })
   return { id: (data as string | null) ?? id, error }

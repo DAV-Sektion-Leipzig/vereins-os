@@ -11,7 +11,13 @@ export async function handleAccess(req: Request, deps: Deps): Promise<Response> 
   if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders(origin) })
 
   try {
+    // Recht des Aufrufers zuerst (contracts/edge-functions.md); ohne gültiges JWT 401
     const jwt = bearerToken(req)
+    const caller = deps.caller(jwt)
+    const actor = await caller.userId()
+    if (!actor) throw new FunctionError(401, 'AD_UNAUTHENTICATED')
+    if (!(await caller.hasAdEdit())) throw new FunctionError(403, 'AD_FORBIDDEN')
+
     const body = await readJsonBody(req)
     const action = body.action as Action
     if (!isUuid(body.person_id) || !ACTIONS.includes(action)) throw new FunctionError(400, 'AD_BAD_REQUEST')
@@ -19,11 +25,6 @@ export async function handleAccess(req: Request, deps: Deps): Promise<Response> 
     const newEmail = typeof body.login_email === 'string' ? body.login_email.trim() : ''
     // login_email nur bei change_email (contracts/edge-functions.md)
     if ((action === 'change_email') !== (newEmail !== '')) throw new FunctionError(400, 'AD_BAD_REQUEST')
-
-    const caller = deps.caller(jwt)
-    const actor = await caller.userId()
-    if (!actor) throw new FunctionError(401, 'AD_UNAUTHENTICATED')
-    if (!(await caller.hasAdEdit())) throw new FunctionError(403, 'AD_FORBIDDEN')
 
     if (!(await deps.db.personExists(personId))) throw new FunctionError(404, 'AD_PERSON_NOT_FOUND')
     const access = await deps.db.getAccess(personId)

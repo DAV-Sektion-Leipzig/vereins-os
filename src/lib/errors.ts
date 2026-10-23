@@ -47,6 +47,10 @@ export const MESSAGES = {
   qualificationValidity: 'Bitte eine Gültigkeitsdauer in Jahren angeben (1–10).',
   qualificationHistoric: 'Diese Qualifikationsart ist historisch und kann nicht neu vergeben werden.',
   qualificationKind: 'Dieser Typ von Qualifikation ist hier nicht erlaubt.',
+  disciplineRequired: 'Bitte eine Sparte angeben.',
+  issuerRequired: 'Bitte einen Aussteller angeben.',
+  referatNameTaken: 'Ein Referat mit dieser Bezeichnung gibt es bereits.',
+  gremiumNameTaken: 'Ein Gremium mit dieser Bezeichnung gibt es bereits.',
   forbidden: 'Für diesen Bereich hast du keine Rechte.',
   unexpected: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
   loginFailed: 'Anmeldung fehlgeschlagen. Bitte E-Mail-Adresse und Passwort prüfen.',
@@ -118,6 +122,12 @@ const CONSTRAINT_MESSAGES: Record<string, string> = {
   ad_template_rights_scope_allowed: MESSAGES.scopeNotAllowed,
   ad_qualification_types_name_key: MESSAGES.qualificationNameTaken,
   ad_qualification_types_code_key: MESSAGES.qualificationCodeTaken,
+  ad_qualification_types_discipline_not_blank: MESSAGES.disciplineRequired,
+  ad_qualification_types_issuer_not_blank: MESSAGES.issuerRequired,
+  ea_property_types_valid_from_label_length: MESSAGES.labelTooLong,
+  ea_property_types_valid_to_label_length: MESSAGES.labelTooLong,
+  ea_referate_name_key: MESSAGES.referatNameTaken,
+  ea_gremien_name_key: MESSAGES.gremiumNameTaken,
 }
 
 type ErrorLike = {

@@ -13,6 +13,23 @@ async function run(body: unknown, options: Parameters<typeof makeFakeDeps>[0] = 
   return { status: res.status, body: await res.json(), ...fake }
 }
 
+Deno.test('401 ohne JWT und bei ungültigem JWT', async () => {
+  const ohne = await run({ person_id: ACCESS_ACTIVE.person_id, action: 'lock' }, {}, null)
+  assertEquals([ohne.status, ohne.body.code], [401, 'AD_UNAUTHENTICATED'])
+  const schlecht = await run({ person_id: ACCESS_ACTIVE.person_id, action: 'lock' }, {}, 'bad')
+  assertEquals([schlecht.status, schlecht.body.code], [401, 'AD_UNAUTHENTICATED'])
+})
+
+Deno.test('404 bei unbekannter Person', async () => {
+  const r = await run({ person_id: '00000000-0000-4000-8000-000000000099', action: 'lock' })
+  assertEquals([r.status, r.body.code], [404, 'AD_PERSON_NOT_FOUND'])
+})
+
+Deno.test('403 vor 400: ohne Recht auch bei ungültigem Request keine Details', async () => {
+  const r = await run({ person_id: 'keine-uuid', action: 'delete' }, { adEdit: false })
+  assertEquals([r.status, r.body.code], [403, 'AD_FORBIDDEN'])
+})
+
 Deno.test('403 ohne Recht (US-AD-09 AK5)', async () => {
   const r = await run({ person_id: ACCESS_ACTIVE.person_id, action: 'lock' }, { adEdit: false })
   assertEquals([r.status, r.body.code], [403, 'AD_FORBIDDEN'])

@@ -20,6 +20,11 @@ export async function callFunction<T = Record<string, unknown>>(name: string, bo
       body: JSON.stringify(body),
     })
     const payload = (await response.json().catch(() => ({}))) as Record<string, unknown>
+    if (response.status === 401) {
+      // Sitzung abgelaufen oder ungültig: zur Anmeldung (contracts/error-codes.md: AD_UNAUTHENTICATED)
+      window.location.assign('/login')
+      return { ok: false, code: 'AD_UNAUTHENTICATED' }
+    }
     if (!response.ok) return { ok: false, code: typeof payload.code === 'string' ? payload.code : 'AD_UNEXPECTED' }
     return { ok: true, data: payload as T }
   } catch {

@@ -197,6 +197,13 @@ export async function findSimilarPersons(first: string, last: string, email: str
   return { hits: (data ?? []) as SimilarPerson[], error: null }
 }
 
+/** R1 vor dem Anlegen (spec v0.7.4, US-AD-07 AK5): true = erlaubt; null bei Fehler des Aufrufs. */
+export async function checkLoginEmail(email: string): Promise<boolean | null> {
+  const { data, error } = await supabase.rpc('ad_login_email_ok', { p_email: email.trim() })
+  if (error) return null
+  return data === true
+}
+
 export type CreateInput = { first: string; preferred: string; last: string; email: string }
 export type CreateResult = { id: string | null; error: unknown }
 
@@ -207,6 +214,9 @@ export type CreateResult = { id: string | null; error: unknown }
 export async function createPerson(input: CreateInput): Promise<CreateResult> {
   const email = input.email.trim()
   if (email) {
+    const allowed = await checkLoginEmail(email)
+    if (allowed === null) return { id: null, error: 'AD_UNEXPECTED' }
+    if (!allowed) return { id: null, error: 'AD_EMAIL_DOMAIN' }
     const taken = await supabase.from('ad_accesses').select('id').eq('login_email', email).maybeSingle()
     if (taken.error) return { id: null, error: taken.error }
     if (taken.data) return { id: null, error: 'AD_EMAIL_TAKEN' }

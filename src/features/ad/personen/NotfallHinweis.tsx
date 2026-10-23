@@ -24,7 +24,7 @@ export function NotfallHinweis({ notice }: { notice: EmergencyNotice }) {
     revalidator.revalidate()
   }
 
-  const count = notice.count === 1 ? 'einmal' : `${notice.count}-mal`
+  const count = `${notice.count}-mal`
   const when = notice.last_at ? `, zuletzt am ${formatDate(notice.last_at)} um ${formatTime(notice.last_at)}` : ''
 
   return (
