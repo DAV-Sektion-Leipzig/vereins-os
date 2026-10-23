@@ -24,6 +24,8 @@ import { LoginPage } from '@/features/auth/LoginPage'
 import { PasswortSetzenPage } from '@/features/auth/PasswortSetzenPage'
 import { PasswortVergessenPage } from '@/features/auth/PasswortVergessenPage'
 import { loadEaAccess, requireEaManage } from '@/features/ea/access'
+import { AktivePage } from '@/features/ea/aktive/AktivePage'
+import { loadVolunteers } from '@/features/ea/aktive/data'
 import { EaLayout } from '@/features/ea/EaLayout'
 import { KeinZugriffPage } from '@/features/start/KeinZugriffPage'
 import { loadMyModules } from '@/features/start/modules'
@@ -90,6 +92,7 @@ export const router = createBrowserRouter([
         handle: { moduleName: 'Ehrenamtsmanagement' } satisfies RouteHandle,
         children: [
           { index: true, loader: () => redirect('/ea/aktive') },
+          { path: 'aktive', loader: loadVolunteers, element: <AktivePage /> },
           { path: 'aktive/*', element: <PlaceholderPage title="Aktive" /> },
           { path: 'ablauf', element: <PlaceholderPage title="Ablauf" /> },
           // nur mit verwalten (US-EA-01 AK5)
