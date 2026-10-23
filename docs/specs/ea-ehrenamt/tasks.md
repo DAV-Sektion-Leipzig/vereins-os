@@ -176,9 +176,9 @@ description: "Tasks für das Modul Ehrenamtsmanagement (EA)"
 
 **Unabhängiger Test**: US-EA-06 AK1–AK6 und US-EA-07 AK1–AK6.
 
-- [ ] T042 [US-EA-06] (spec T14) Im Detail (T039) „Eigenschaft hinzufügen“, „Ändern“, „Beenden“ über `Eigenschaftsformular` und `saveProperty`: nur Arten mit `visible_in` ∋ `EA`; für Referent:innen nur `read_level = 'all'` (AK5) und `restrictReferate = myReferate` (AK4); Knöpfe nur, wenn `rpc('ea_property_writable', …)` wahr ist; „Beenden“ setzt `valid_to` (Datum, Standard heute).
-- [ ] T043 [US-EA-07] (spec T14) Vorbelegung „gültig bis“ (R5) im `Eigenschaftsformular` für `system_key` `license` und `qualification`: bei Änderung von Qualifikationsart, „gültig von“ oder „letzte Fortbildung“ `rpc('ea_default_valid_until')`, solange der Nutzer das Feld nicht selbst geändert hat; Umsetzung als optionale Prop des Formulars (z. B. `onDerive`), damit /ad unverändert bleibt.
-- [ ] T044 [US-EA-07] (spec T14) `src/features/ea/aktive/VerlaengernDialog.tsx`: „erworben bzw. verlängert am“ (Pflicht), „letzte Fortbildung“, „gültig bis“ (vorbelegt nach R5), optional „Fortbildung anlegen“ (Jahr, Titel) → `rpc('ea_renew_property')`; Knopf „Verlängern“ nur bei aktuellen `license`/`qualification`, deren Qualifikationsart `status = 'current'` hat (spec.md v0.2.1, O2).
+- [x] T042 [US-EA-06] (spec T14) Im Detail (T039) „Eigenschaft hinzufügen“, „Ändern“, „Beenden“ über `Eigenschaftsformular` und `saveProperty`: nur Arten mit `visible_in` ∋ `EA`; für Referent:innen nur `read_level = 'all'` (AK5) und `restrictReferate = myReferate` (AK4); Knöpfe nur, wenn `rpc('ea_property_writable', …)` wahr ist; „Beenden“ setzt `valid_to` (Datum, Standard heute).
+- [x] T043 [US-EA-07] (spec T14) Vorbelegung „gültig bis“ (R5) im `Eigenschaftsformular` für `system_key` `license` und `qualification`: bei Änderung von Qualifikationsart, „gültig von“ oder „letzte Fortbildung“ `rpc('ea_default_valid_until')`, solange der Nutzer das Feld nicht selbst geändert hat; Umsetzung als optionale Prop des Formulars (z. B. `onDerive`), damit /ad unverändert bleibt.
+- [x] T044 [US-EA-07] (spec T14) `src/features/ea/aktive/VerlaengernDialog.tsx`: „erworben bzw. verlängert am“ (Pflicht), „letzte Fortbildung“, „gültig bis“ (vorbelegt nach R5), optional „Fortbildung anlegen“ (Jahr, Titel) → `rpc('ea_renew_property')`; Knopf „Verlängern“ nur bei aktuellen `license`/`qualification`, deren Qualifikationsart `status = 'current'` hat (spec.md v0.2.1, O2).
 
 **Checkpoint**: Eigenschaften mit Historie pflegbar.
 
