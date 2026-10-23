@@ -34,13 +34,14 @@ const selectClassName =
   'h-8 w-full rounded-lg border border-input bg-background px-2.5 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-50 sm:text-sm'
 
 // T081 (US-AD-12, US-AD-19, US-AD-22): Eigenschaftsart mit Feldern anlegen (/neu) oder ändern (/:id).
-export function EigenschaftsartBearbeiten() {
+// T051: `basePath` erlaubt dieselbe Seite unter /ea/eigenschaftsarten (US-EA-15).
+export function EigenschaftsartBearbeiten({ basePath = '/ad/eigenschaftsarten' }: { basePath?: string }) {
   const data = useLoaderData() as EditResult
 
   if (data.failed) {
     return (
       <section className="flex flex-col gap-4">
-        <BackLink />
+        <BackLink basePath={basePath} />
         <p role="alert" className="flex items-center gap-2 text-sm text-destructive">
           <CircleAlertIcon aria-hidden="true" className="size-4 shrink-0" />
           {MESSAGES.unexpected}
@@ -52,7 +53,7 @@ export function EigenschaftsartBearbeiten() {
   return (
     <section className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <BackLink />
+        <BackLink basePath={basePath} />
         <h1 className="flex flex-wrap items-center gap-3 text-xl font-semibold">
           {data.item?.name ?? 'Neue Eigenschaftsart'}
           {data.item?.origin === 'system' && <Badge variant="outline">System</Badge>}
@@ -61,15 +62,15 @@ export function EigenschaftsartBearbeiten() {
           <p className="text-sm text-muted-foreground">Systemschlüssel {data.item.system_key}</p>
         )}
       </div>
-      {data.canEdit ? <TypeForm key={data.item?.id ?? 'neu'} data={data} /> : <ReadOnly data={data} />}
+      {data.canEdit ? <TypeForm key={data.item?.id ?? 'neu'} data={data} basePath={basePath} /> : <ReadOnly data={data} />}
     </section>
   )
 }
 
-function BackLink() {
+function BackLink({ basePath }: { basePath: string }) {
   return (
     <Link
-      to="/ad/eigenschaftsarten"
+      to={basePath}
       className="inline-flex items-center gap-1 self-start rounded-md text-sm text-muted-foreground underline-offset-4 outline-none hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring focus-visible:outline-solid"
     >
       <ChevronLeftIcon aria-hidden="true" className="size-4" />
@@ -144,7 +145,7 @@ function newField(): FieldRow {
   }
 }
 
-function TypeForm({ data }: { data: EditResult }) {
+function TypeForm({ data, basePath }: { data: EditResult; basePath: string }) {
   const navigate = useNavigate()
   const item = data.item
   const isNew = !item
@@ -224,7 +225,7 @@ function TypeForm({ data }: { data: EditResult }) {
         setError(toMessage(result.error).text)
         return
       }
-      navigate('/ad/eigenschaftsarten')
+      navigate(basePath)
     } catch (caught) {
       setError(toMessage(caught).text)
     } finally {
@@ -474,7 +475,7 @@ function TypeForm({ data }: { data: EditResult }) {
           {pending ? 'Speichern …' : 'Speichern'}
         </Button>
         <Button variant="outline" asChild>
-          <Link to="/ad/eigenschaftsarten">Abbrechen</Link>
+          <Link to={basePath}>Abbrechen</Link>
         </Button>
       </div>
     </form>

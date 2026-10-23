@@ -1,7 +1,7 @@
 // Qualifikationsarten (US-AD-17, US-AD-18; T077–T079) über PostgREST; Regeln R21–R26 prüft die Datenbank.
 // Die Komponenten sind so gebaut, dass /ea/qualifikationsarten sie mit EA ohne Änderung einhängt.
 import { redirect, type LoaderFunctionArgs } from 'react-router-dom'
-import { canEditQualificationTypes, requireLevel } from '@/lib/rights'
+import { canEditQualificationTypes, requireTypesAccess, type TypesGate } from '@/lib/rights'
 import { supabase } from '@/lib/supabase'
 
 export type QualificationKind = 'license' | 'add_on' | 'course' | 'training'
@@ -68,8 +68,20 @@ const COLUMNS =
 
 export type ListResult = { items: QualificationType[]; canEdit: boolean; failed: boolean }
 
-export async function loadQualificationTypes(): Promise<ListResult> {
-  await requireLevel('AD', 'read')
+/** Pfade je Modul (T052): unter /ad bzw. /ea dieselben Seiten. */
+export const QUALIFICATION_TYPES_PATH: Record<TypesGate, string> = {
+  AD: '/ad/qualifikationsarten',
+  EA: '/ea/qualifikationsarten',
+}
+
+export const loadQualificationTypes = qualificationTypesLoader('AD')
+
+export function qualificationTypesLoader(gate: TypesGate) {
+  return () => loadQualificationTypesFor(gate)
+}
+
+async function loadQualificationTypesFor(gate: TypesGate): Promise<ListResult> {
+  await requireTypesAccess(gate)
   const [list, canEdit] = await Promise.all([
     supabase.from('ad_qualification_types').select(COLUMNS).order('discipline').order('name'),
     canEditQualificationTypes(),
@@ -96,16 +108,28 @@ async function loadSuggestions() {
   return { disciplines, issuers }
 }
 
-export async function loadNewQualificationType(): Promise<EditResult> {
-  await requireLevel('AD', 'read')
+export const loadNewQualificationType = newQualificationTypeLoader('AD')
+
+export function newQualificationTypeLoader(gate: TypesGate) {
+  return () => loadNewQualificationTypeFor(gate)
+}
+
+async function loadNewQualificationTypeFor(gate: TypesGate): Promise<EditResult> {
+  await requireTypesAccess(gate)
   const canEdit = await canEditQualificationTypes()
   if (!canEdit) throw redirect('/kein-zugriff')
   const suggestions = await loadSuggestions()
   return { item: null, canEdit, usage: null, updatedByName: null, ...suggestions, failed: false }
 }
 
-export async function loadQualificationType({ params }: LoaderFunctionArgs): Promise<EditResult> {
-  await requireLevel('AD', 'read')
+export const loadQualificationType = qualificationTypeLoader('AD')
+
+export function qualificationTypeLoader(gate: TypesGate) {
+  return (args: LoaderFunctionArgs) => loadQualificationTypeFor(gate, args)
+}
+
+async function loadQualificationTypeFor(gate: TypesGate, { params }: LoaderFunctionArgs): Promise<EditResult> {
+  await requireTypesAccess(gate)
   const id = params.id!
   const [item, canEdit, suggestions] = await Promise.all([
     supabase.from('ad_qualification_types').select(COLUMNS).eq('id', id).maybeSingle(),
@@ -113,7 +137,7 @@ export async function loadQualificationType({ params }: LoaderFunctionArgs): Pro
     loadSuggestions(),
   ])
   if (item.error) return { item: null, canEdit, usage: null, updatedByName: null, disciplines: [], issuers: [], failed: true }
-  if (!item.data) throw redirect('/ad/qualifikationsarten')
+  if (!item.data) throw redirect(QUALIFICATION_TYPES_PATH[gate])
 
   const row = item.data as QualificationType
   const [usage, updatedByName] = await Promise.all([

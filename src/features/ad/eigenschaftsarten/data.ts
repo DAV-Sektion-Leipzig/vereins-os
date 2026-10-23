@@ -3,7 +3,7 @@
 // Lesestufe „vertraulich“ nur mit AD ≥ bearbeiten (R29), Bezug „Gruppe“ nur mit GR = verwalten.
 import { redirect, type LoaderFunctionArgs } from 'react-router-dom'
 import type { QualificationKind } from '@/features/ad/qualifikationsarten/data'
-import { hasLevel, requireLevel, type ModuleCode } from '@/lib/rights'
+import { hasLevel, requireTypesAccess, type ModuleCode, type TypesGate } from '@/lib/rights'
 import { supabase } from '@/lib/supabase'
 
 export type DataType = 'text' | 'number' | 'date' | 'year' | 'boolean' | 'choice' | 'qualification_type'
@@ -97,7 +97,16 @@ export type PropertyField = {
 export type Module = { code: ModuleCode; name: string }
 
 export type ListRow = PropertyType & { fieldCount: number }
-export type ListResult = { items: ListRow[]; modules: Module[]; failed: boolean }
+export type ListResult = {
+  items: ListRow[]
+  modules: Module[]
+  /** Unter /ea gesetzt (EA = verwalten); unter /ad gilt das Recht aus dem Rahmen (useAdAccess) */
+  canEdit?: boolean
+  failed: boolean
+}
+
+/** Pfade je Modul (T051): unter /ad bzw. /ea dieselben Seiten. */
+export const TYPES_PATH: Record<TypesGate, string> = { AD: '/ad/eigenschaftsarten', EA: '/ea/eigenschaftsarten' }
 
 const TYPE_COLUMNS =
   'id, name, purpose, category, read_level, relation_kind, relation_required, allow_multiple, system_key, visible_in, origin, valid_from_label, valid_to_label'
@@ -107,8 +116,14 @@ async function loadModules() {
   return error ? null : (data as Module[])
 }
 
-export async function loadPropertyTypes(): Promise<ListResult> {
-  await requireLevel('AD', 'read')
+export const loadPropertyTypes = propertyTypesLoader('AD')
+
+export function propertyTypesLoader(gate: TypesGate) {
+  return () => loadPropertyTypesFor(gate)
+}
+
+async function loadPropertyTypesFor(gate: TypesGate): Promise<ListResult> {
+  await requireTypesAccess(gate)
   const [types, modules] = await Promise.all([
     supabase.from('ea_property_types').select(`${TYPE_COLUMNS}, ea_property_fields(count)`).order('name'),
     loadModules(),
@@ -117,7 +132,7 @@ export async function loadPropertyTypes(): Promise<ListResult> {
   const items = (types.data as (PropertyType & { ea_property_fields: { count: number }[] })[]).map(
     ({ ea_property_fields, ...t }) => ({ ...t, fieldCount: ea_property_fields[0]?.count ?? 0 }),
   )
-  return { items, modules, failed: false }
+  return { items, modules, ...(gate === 'EA' ? { canEdit: true } : {}), failed: false }
 }
 
 export type EditResult = {
@@ -141,16 +156,28 @@ async function loadFlags() {
   return { canEdit, canConfidential, canGroup }
 }
 
-export async function loadNewPropertyType(): Promise<EditResult> {
-  await requireLevel('AD', 'read')
+export const loadNewPropertyType = newPropertyTypeLoader('AD')
+
+export function newPropertyTypeLoader(gate: TypesGate) {
+  return () => loadNewPropertyTypeFor(gate)
+}
+
+async function loadNewPropertyTypeFor(gate: TypesGate): Promise<EditResult> {
+  await requireTypesAccess(gate)
   const [modules, flags] = await Promise.all([loadModules(), loadFlags()])
   if (!flags.canEdit) throw redirect('/kein-zugriff')
   if (!modules) return { item: null, fields: [], modules: [], inUse: false, ...flags, failed: true }
   return { item: null, fields: [], modules, inUse: false, ...flags, failed: false }
 }
 
-export async function loadPropertyType({ params }: LoaderFunctionArgs): Promise<EditResult> {
-  await requireLevel('AD', 'read')
+export const loadPropertyType = propertyTypeLoader('AD')
+
+export function propertyTypeLoader(gate: TypesGate) {
+  return (args: LoaderFunctionArgs) => loadPropertyTypeFor(gate, args)
+}
+
+async function loadPropertyTypeFor(gate: TypesGate, { params }: LoaderFunctionArgs): Promise<EditResult> {
+  await requireTypesAccess(gate)
   const id = params.id!
   const [item, fields, modules, inUse, flags] = await Promise.all([
     supabase.from('ea_property_types').select(TYPE_COLUMNS).eq('id', id).maybeSingle(),
@@ -162,7 +189,7 @@ export async function loadPropertyType({ params }: LoaderFunctionArgs): Promise<
   if (item.error || fields.error || !modules) {
     return { item: null, fields: [], modules: [], inUse: false, ...flags, failed: true }
   }
-  if (!item.data) throw redirect('/ad/eigenschaftsarten')
+  if (!item.data) throw redirect(TYPES_PATH[gate])
   return {
     item: item.data as PropertyType,
     fields: fields.data as PropertyField[],

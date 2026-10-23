@@ -58,6 +58,18 @@ export async function hasAnyLevel(module: ModuleCode, min: Level): Promise<boole
   return !error && data === true
 }
 
+/**
+ * Zugang zu den Seiten Eigenschafts- und Qualifikationsarten (US-EA-15, T051): unter /ad mit AD ≥ lesen,
+ * unter /ea mit EA = verwalten; sonst /kein-zugriff, bevor Daten geladen werden.
+ */
+export type TypesGate = 'AD' | 'EA'
+
+export async function requireTypesAccess(gate: TypesGate) {
+  if (gate === 'AD') return requireLevel('AD', 'read')
+  await requireSession()
+  if (!(await hasLevel('EA', 'manage'))) throw redirect('/kein-zugriff')
+}
+
 /** Qualifikationsarten pflegen: Admin oder Geschäftsstelle (AD ≥ bearbeiten oder EA = verwalten). */
 export async function canEditQualificationTypes(): Promise<boolean> {
   const { data, error } = await supabase.rpc('ad_can_edit_qualification_types')

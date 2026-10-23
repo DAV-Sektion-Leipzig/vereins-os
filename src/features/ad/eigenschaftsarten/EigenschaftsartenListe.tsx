@@ -14,9 +14,11 @@ import {
 import { MESSAGES } from '@/lib/errors'
 
 // T080 (US-AD-12, US-AD-22): Liste der Eigenschaftsarten mit Kategorie, Lesestufe, Bezug, Anzahl Felder, sichtbar in.
-export function EigenschaftsartenListe() {
-  const { items, modules, failed } = useLoaderData() as ListResult
-  const { canEdit } = useAdAccess()
+// T051: `basePath` erlaubt dieselbe Seite unter /ea/eigenschaftsarten (US-EA-15).
+export function EigenschaftsartenListe({ basePath = '/ad/eigenschaftsarten' }: { basePath?: string }) {
+  const { items, modules, canEdit: canEditHere, failed } = useLoaderData() as ListResult
+  const adAccess = useAdAccess()
+  const canEdit = canEditHere ?? adAccess.canEdit
   const revalidator = useRevalidator()
 
   const moduleName = (code: string) => modules.find((m) => m.code === code)?.name ?? code
@@ -27,7 +29,7 @@ export function EigenschaftsartenListe() {
       header: 'Name',
       cell: (t) => (
         <span className="flex flex-wrap items-center gap-2">
-          <Link to={`/ad/eigenschaftsarten/${t.id}`} className="font-medium underline-offset-4 hover:underline">
+          <Link to={`${basePath}/${t.id}`} className="font-medium underline-offset-4 hover:underline">
             {t.name}
           </Link>
           {t.origin === 'system' && <Badge variant="outline">System</Badge>}
@@ -52,7 +54,7 @@ export function EigenschaftsartenListe() {
         <h1 className="text-xl font-semibold">Eigenschaftsarten</h1>
         {canEdit && (
           <Button asChild>
-            <Link to="/ad/eigenschaftsarten/neu">
+            <Link to={`${basePath}/neu`}>
               <PlusIcon data-icon="inline-start" aria-hidden="true" />
               Neu
             </Link>
@@ -80,7 +82,7 @@ export function EigenschaftsartenListe() {
           caption="Eigenschaftsarten"
           card={(t) => (
             <div className="flex flex-col gap-1">
-              <Link to={`/ad/eigenschaftsarten/${t.id}`} className="font-medium underline-offset-4 hover:underline">
+              <Link to={`${basePath}/${t.id}`} className="font-medium underline-offset-4 hover:underline">
                 {t.name}
               </Link>
               <span className="text-sm text-muted-foreground">
