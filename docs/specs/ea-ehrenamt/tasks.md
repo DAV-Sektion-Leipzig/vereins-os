@@ -165,8 +165,8 @@ description: "Tasks für das Modul Ehrenamtsmanagement (EA)"
 
 **Unabhängiger Test**: US-EA-05 AK1–AK6 und US-EA-10 AK1–AK5.
 
-- [ ] T040 [US-EA-05] (spec T13) `src/features/ea/aktive/PersonNeuPage.tsx` (/ea/aktive/neu, Loader prüft `canEdit` oder eigene Referate): Vorname, Nachname, Rufname; erste Zuordnung Art (Funktion oder Amt über `system_key` `function`/`position`), Wert (Auswahlwerte der Art), Referat (Referent:in: nur `myReferate`, Pflicht; Geschäftsstelle/Admin: optional), „seit“ (Standard heute); R4 und R3 vor dem Aufruf prüfen; Speichern → `findSimilarPersons` → bei Treffern `DublettenDialog`, sonst `rpc('ea_create_volunteer')` → Detail.
-- [ ] T041 [US-EA-10] (spec T13) Aktionen im `DublettenDialog` über `hitAction`: „Vorhandene Person öffnen“ (`is_visible`, Link /ea/aktive/:id), „Wieder aktivieren“ (`volunteer_status = 'left'`), „Ins Ehrenamtsmanagement übernehmen“ (ohne Status) → `rpc('ea_activate_person')` mit der eingegebenen Zuordnung; danach Detail; Fehler über `toMessage` (u. a. `EA_CREATE_REFERAT_REQUIRED`).
+- [x] T040 [US-EA-05] (spec T13) `src/features/ea/aktive/PersonNeuPage.tsx` (/ea/aktive/neu, Loader prüft `canEdit` oder eigene Referate): Vorname, Nachname, Rufname; erste Zuordnung Art (Funktion oder Amt über `system_key` `function`/`position`), Wert (Auswahlwerte der Art), Referat (Referent:in: nur `myReferate`, Pflicht; Geschäftsstelle/Admin: optional), „seit“ (Standard heute); R4 und R3 vor dem Aufruf prüfen; Speichern → `findSimilarPersons` → bei Treffern `DublettenDialog`, sonst `rpc('ea_create_volunteer')` → Detail.
+- [x] T041 [US-EA-10] (spec T13) Aktionen im `DublettenDialog` über `hitAction`: „Vorhandene Person öffnen“ (`is_visible`, Link /ea/aktive/:id), „Wieder aktivieren“ (`volunteer_status = 'left'`), „Ins Ehrenamtsmanagement übernehmen“ (ohne Status) → `rpc('ea_activate_person')` mit der eingegebenen Zuordnung; danach Detail; Fehler über `toMessage` (u. a. `EA_CREATE_REFERAT_REQUIRED`).
 
 **Checkpoint**: Anlegen ohne Dubletten.
 
