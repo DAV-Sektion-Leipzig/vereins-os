@@ -122,9 +122,9 @@ select is((select array_agg(right(l.id::text, 2)::int order by l.id)
   array[4, 19], 'Ablaufstatus mehrfach');
 select is((select array_agg(right(l.id::text, 2)::int order by l.id)
              from public.ea_volunteer_list(p_trainer_without_license => true) l),
-  array[5, 20], 'Trainer:in ohne gültige Lizenz: Max (AK2) und Anton (R14, plan.md H3), nicht Lena');
-select is_empty($$ select 1 from public.ea_volunteer_list(p_referate => array[pg_temp.referat('Klettern')], p_trainer_without_license => true) $$,
-  'Schnittmenge Referat Klettern und ohne gültige Lizenz leer (AK1)');
+  array[5, 10, 20], 'Trainer:in ohne gültige Lizenz: Max (AK2), Anton und Karl (R14, plan.md H3), nicht Lena');
+select results_eq($$ select right(id::text, 2)::int from public.ea_volunteer_list(p_referate => array[pg_temp.referat('Klettern')], p_trainer_without_license => true) $$,
+  $$ values (10) $$, 'Schnittmenge Referat Klettern und ohne gültige Lizenz: nur Karl (AK1, Schnittmenge je Person, plan.md H3)');
 
 -- aktiv ohne Funktion oder Amt
 select is_empty($$ select 1 from public.ea_volunteer_list(p_without_assignment => true) $$, 'im Seed niemand ohne Zuordnung');
@@ -147,8 +147,8 @@ select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
 select is((select coalesce(array_agg(right(l.id::text, 2)::int order by l.id), '{}') from public.ea_volunteer_list() l),
   array[4, 9, 10, 19, 22], 'Referent:in: 4, 9, 10, 19, 22 (AK2)');
 select is((select l.total_count from public.ea_volunteer_list() l limit 1), 5::bigint, 'Referent:in total_count');
-select is_empty($$ select 1 from public.ea_volunteer_list(p_trainer_without_license => true) $$,
-  'Referent:in: Trainer:in ohne Lizenz leer (Anton und Max nicht sichtbar)');
+select results_eq($$ select right(id::text, 2)::int from public.ea_volunteer_list(p_trainer_without_license => true) $$,
+  $$ values (10) $$, 'Referent:in: Trainer:in ohne Lizenz nur Karl (Anton und Max nicht sichtbar)');
 select is_empty($$ select 1 from public.ea_volunteer_list(p_status => '{left}') $$, 'Referent:in: ausgeschieden leer');
 select is_empty($$ select 1 from public.ea_volunteer_list(p_gremium => pg_temp.gremium('Beirat')) $$, 'Referent:in: Greta unsichtbar');
 select results_eq(

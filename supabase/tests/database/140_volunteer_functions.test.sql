@@ -119,8 +119,8 @@ select ok(exists (select 1 from public.ea_persons where id = 'a0000000-0000-4000
 select throws_ok($$ select public.ea_activate_person('a0000000-0000-4000-8000-000000000011', null, null, null, current_date) $$,
   'P0001', 'EA_CREATE_REFERAT_REQUIRED', 'Referent:in aktiviert nicht ohne Funktion oder Amt (US-EA-10 AK5)');
 select throws_ok(format($$ select public.ea_activate_person('a0000000-0000-4000-8000-000000000011',
-                    (select id from public.ea_property_types where system_key = 'license'), %L,
-                    '{"qualification_type": "x"}', current_date) $$, pg_temp.referat('Klettern')),
+                    (select id from public.ea_property_types where system_key = 'license'), null,
+                    '{"qualification_type": "x"}', current_date) $$),
   'P0001', 'EA_CREATE_REFERAT_REQUIRED', 'erste Zuordnung muss Funktion oder Amt sein (R3 EA)');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
 select throws_ok($$ select public.ea_activate_person('a0000000-0000-4000-8000-000000000011', null, null, null, current_date) $$,

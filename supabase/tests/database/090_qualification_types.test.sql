@@ -15,12 +15,12 @@ begin
 end $$;
 
 -- Startbestand (US-AD-18)
-select is((select count(*)::int from public.ad_qualification_types), 47, '47 Qualifikationsarten');
+select is((select count(*)::int from public.ad_qualification_types), 57, '57 Qualifikationsarten (47 AD, 10 EA)');
 select is((select count(*)::int from public.ad_qualification_types where status = 'historic'), 11, '11 historisch');
 select is((select status::text from public.ad_qualification_types where code = 'PSA'), 'historic', 'PSA historisch, bis entschieden');
 select results_eq(
   $$ select discipline, count(*)::int from public.ad_qualification_types group by discipline order by discipline $$,
-  $$ values ('Berg- und Klettersport Winter'::text, 11), ('Bergsport Sommer', 18), ('Jugend und Familie', 2),
+  $$ values ('Allgemein'::text, 2), ('Berg- und Klettersport Winter', 11), ('Bergsport Sommer', 18), ('Jugend und Familie', 10),
             ('Klettersport', 16) $$,
   'Anzahl je Sparte');
 select results_eq(
@@ -36,9 +36,9 @@ select results_eq(
 
 -- Lesen mit aktivem Zugang
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
-select is((select count(*)::int from public.ad_qualification_types), 47, 'Vorstand liest');
+select is((select count(*)::int from public.ad_qualification_types), 57, 'Vorstand liest');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
-select is((select count(*)::int from public.ad_qualification_types), 47, 'Referent:in liest');
+select is((select count(*)::int from public.ad_qualification_types), 57, 'Referent:in liest');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000006');
 select is((select count(*)::int from public.ad_qualification_types), 0, 'eingeladen: liest nicht');
 

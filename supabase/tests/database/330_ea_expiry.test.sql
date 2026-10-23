@@ -28,8 +28,8 @@ select is(public.ea_expiry_status(current_date - 1), 'expired', 'gestern: expire
 select is(public.ea_expiry_status(current_date), 'expiring', 'heute: expiring');
 select is(public.ea_expiry_status((current_date + interval '3 months')::date), 'expiring', 'heute + 3 Monate: expiring');
 select is(public.ea_expiry_status((current_date + interval '3 months')::date + 1), 'valid', 'heute + 3 Monate + 1 Tag: valid');
-select is(public.ea_expiry_status('2026-03-31', '2026-01-01'), 'expiring', 'fester Stichtag');
-select is(public.ea_expiry_status('2026-04-01', '2026-01-01'), 'valid', 'fester Stichtag, ein Tag später');
+select is(public.ea_expiry_status('2026-04-01', '2026-01-01'), 'expiring', 'fester Stichtag, genau 3 Monate');
+select is(public.ea_expiry_status('2026-04-02', '2026-01-01'), 'valid', 'fester Stichtag, ein Tag später');
 
 -- Vorbelegung „gültig bis“ (R5, US-EA-07 AK1, AK2, AK5)
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
