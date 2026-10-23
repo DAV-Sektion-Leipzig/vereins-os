@@ -33,6 +33,8 @@ import { PersonNeuPage } from '@/features/ea/aktive/PersonNeuPage'
 import { EaLayout } from '@/features/ea/EaLayout'
 import { loadGremien } from '@/features/ea/gremien/data'
 import { GremienPage } from '@/features/ea/gremien/GremienPage'
+import { loadStammdaten } from '@/features/ea/stammdaten/data'
+import { StammdatenPage } from '@/features/ea/stammdaten/StammdatenPage'
 import { KeinZugriffPage } from '@/features/start/KeinZugriffPage'
 import { loadMyModules } from '@/features/start/modules'
 import { StartPage } from '@/features/start/StartPage'
@@ -106,7 +108,7 @@ export const router = createBrowserRouter([
           { path: 'gremien', loader: loadGremien, element: <GremienPage /> },
           { path: 'eigenschaftsarten/*', loader: requireEaManage, element: <PlaceholderPage title="Eigenschaftsarten" /> },
           { path: 'qualifikationsarten/*', loader: requireEaManage, element: <PlaceholderPage title="Qualifikationsarten" /> },
-          { path: 'stammdaten', loader: requireEaManage, element: <PlaceholderPage title="Referate und Gremien" /> },
+          { path: 'stammdaten', loader: loadStammdaten, element: <StammdatenPage /> },
           { path: '*', loader: () => redirect('/ea/aktive') },
         ],
       },

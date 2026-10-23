@@ -49,8 +49,9 @@ export const MESSAGES = {
   qualificationKind: 'Dieser Typ von Qualifikation ist hier nicht erlaubt.',
   disciplineRequired: 'Bitte eine Sparte angeben.',
   issuerRequired: 'Bitte einen Aussteller angeben.',
-  referatNameTaken: 'Ein Referat mit dieser Bezeichnung gibt es bereits.',
-  gremiumNameTaken: 'Ein Gremium mit dieser Bezeichnung gibt es bereits.',
+  // US-EA-14 AK3 (ersetzt die [ANNAHME] der Administration, contracts/error-codes.md)
+  masterDataNameTaken: 'Diese Bezeichnung gibt es bereits.',
+  nameRequiredSingle: 'Bitte eine Bezeichnung angeben.',
   ibanInvalid: 'Die IBAN ist ungültig.',
   statusDate: 'Bitte ein Datum bis spätestens <TT.MM.JJJJ> wählen.',
   statusUnchanged: 'Die Person hat diesen Status bereits.',
@@ -140,8 +141,10 @@ const CONSTRAINT_MESSAGES: Record<string, string> = {
   ad_qualification_types_issuer_not_blank: MESSAGES.issuerRequired,
   ea_property_types_valid_from_label_length: MESSAGES.labelTooLong,
   ea_property_types_valid_to_label_length: MESSAGES.labelTooLong,
-  ea_referate_name_key: MESSAGES.referatNameTaken,
-  ea_gremien_name_key: MESSAGES.gremiumNameTaken,
+  ea_referate_name_key: MESSAGES.masterDataNameTaken,
+  ea_gremien_name_key: MESSAGES.masterDataNameTaken,
+  ea_referate_name_not_blank: MESSAGES.nameRequiredSingle,
+  ea_gremien_name_not_blank: MESSAGES.nameRequiredSingle,
 }
 
 type ErrorLike = {
