@@ -57,3 +57,11 @@ Thumbs.db
 
 # Impeccable: plattformabhängiges Programm, lädt der Starter bei Bedarf selbst
 .claude/skills/impeccable/scripts/bin/
+
+# Migration der Aktivenliste (US-EA-18 AK5): befüllte CSV und Berichte nie im Repository
+scripts/ea-migrate/*.csv
+!scripts/ea-migrate/vorlage.csv
+!scripts/ea-migrate/beispiel.csv
+!scripts/ea-migrate/beispiel-fehler.csv
+*.pruefbericht.md
+*.abschlussbericht.md
