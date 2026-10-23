@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ChevronLeftIcon, CircleAlertIcon, CircleCheckIcon, CircleDashedIcon, CircleMinusIcon, TriangleAlertIcon, type LucideIcon } from 'lucide-react'
-import { Link, useLoaderData, useRevalidator } from 'react-router-dom'
+import { Link, useLoaderData, useNavigate, useRevalidator } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { PersonProperty, PropertyTypeWithFields } from '@/features/ad/personen/data'
@@ -16,6 +16,7 @@ import {
   type VolunteerDetailResult,
   type VolunteerStatus,
 } from '@/features/ea/aktive/data'
+import { StatusDialog } from '@/features/ea/aktive/StatusDialog'
 import { VerlaengernDialog } from '@/features/ea/aktive/VerlaengernDialog'
 import { AblaufBadge } from '@/features/ea/shared/AblaufBadge'
 import { MESSAGES } from '@/lib/errors'
@@ -40,8 +41,10 @@ const today = () => new Date().toISOString().slice(0, 10)
 export function PersonDetailPage() {
   const result = useLoaderData() as VolunteerDetailResult
   const revalidator = useRevalidator()
+  const navigate = useNavigate()
   const { canEdit, myReferate } = useEaAccess()
   const [renewing, setRenewing] = useState<{ property: PersonProperty; type: PropertyTypeWithFields } | null>(null)
+  const [changingStatus, setChangingStatus] = useState(false)
 
   if (result.state !== 'ok') {
     return (
@@ -85,6 +88,11 @@ export function PersonDetailPage() {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <StatusBadge status={person.volunteer_status} since={person.volunteer_status_since} />
+          {person.volunteer_status && (canEdit || myReferate.length > 0) && (
+            <Button variant="outline" size="sm" onClick={() => setChangingStatus(true)}>
+              Status ändern
+            </Button>
+          )}
           {trainerWithoutLicense && (
             <Badge className="bg-destructive/10 text-destructive">
               <TriangleAlertIcon data-icon="inline-start" aria-hidden="true" />
@@ -123,6 +131,24 @@ export function PersonDetailPage() {
             {MESSAGES.unexpected}
           </p>
         </Section>
+      )}
+
+      {changingStatus && person.volunteer_status && (
+        <StatusDialog
+          personId={person.id}
+          personName={personName(person)}
+          current={person.volunteer_status}
+          properties={properties}
+          writable={writable}
+          ownReferate={restrictReferate}
+          onClose={() => setChangingStatus(false)}
+          onDone={(status) => {
+            setChangingStatus(false)
+            // Ausgeschiedene sieht die Referent:in nicht mehr (US-EA-09 AK5): zurück zur Übersicht
+            if (status === 'left' && restrictReferate) navigate('/ea/aktive', { replace: true })
+            else revalidator.revalidate()
+          }}
+        />
       )}
 
       {renewing && properties && (
