@@ -480,3 +480,32 @@ export async function renewProperty(propertyId: string, input: RenewInput) {
   })
   return error ?? null
 }
+
+// --- Status ändern und Ausscheiden (US-EA-08, US-EA-09; T045, T046)
+
+/** Referate der Person aus aktuellen Zuordnungen (ea_person_referate, R7). */
+export async function loadPersonReferate(personId: string): Promise<Option[] | null> {
+  const { data, error } = await supabase.rpc('ea_person_referate', { p_person: personId })
+  if (error || !Array.isArray(data)) return null
+  return data as Option[]
+}
+
+/** aktiv bzw. ruhend (R18, R19); „ausgeschieden“ läuft über leaveVolunteer. */
+export async function changeVolunteerStatus(personId: string, status: Exclude<VolunteerStatus, 'left'>, validFrom: string) {
+  const { error } = await supabase.rpc('ea_change_volunteer_status', {
+    p_person: personId,
+    p_status: status,
+    p_valid_from: validFrom,
+  })
+  return error ?? null
+}
+
+/** Ausscheiden und Beenden der gewählten Eigenschaften in einer Transaktion (R8, R20). */
+export async function leaveVolunteer(personId: string, validFrom: string, endPropertyIds: string[]) {
+  const { error } = await supabase.rpc('ea_leave', {
+    p_person: personId,
+    p_valid_from: validFrom,
+    p_end_property_ids: endPropertyIds,
+  })
+  return error ?? null
+}

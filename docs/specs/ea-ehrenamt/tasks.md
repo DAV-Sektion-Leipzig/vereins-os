@@ -188,8 +188,8 @@ description: "Tasks für das Modul Ehrenamtsmanagement (EA)"
 
 **Unabhängiger Test**: US-EA-08 AK1–AK5 und US-EA-09 AK1–AK6.
 
-- [ ] T045 [US-EA-08] (spec T15) `src/features/ea/aktive/StatusDialog.tsx`: Auswahl aktiv/ruhend/ausgeschieden ohne den aktuellen Status, Datum (Standard heute); vor dem Speichern `rpc('ea_person_referate')` und Bestätigung nach R7 („Die Person ist auch in <Referate> tätig. Der Status gilt für alle Referate.“), wenn Referate außerhalb von `myReferate` liegen (Reichweite „alle“: mehr als ein Referat); Speichern → `rpc('ea_change_volunteer_status')`.
-- [ ] T046 [US-EA-09] (spec T15) `src/features/ea/aktive/AusscheidenSchritt.tsx` (zweiter Schritt bei „ausgeschieden“, R8): aktuelle `function`, `position`, `committee` mit `ea_property_writable` vorausgewählt (abwählbar); nicht schreibbare als „wird nicht beendet (anderes Referat)“; Bezug Gruppe als „im Modul Gruppen beenden“; aktuelle `issued_item` und `external_access` als Hinweise; Speichern → `rpc('ea_leave')`; Fehler „Etwas ist schiefgelaufen. Bitte versuche es erneut.“ bzw. `toMessage`.
+- [x] T045 [US-EA-08] (spec T15) `src/features/ea/aktive/StatusDialog.tsx`: Auswahl aktiv/ruhend/ausgeschieden ohne den aktuellen Status, Datum (Standard heute); vor dem Speichern `rpc('ea_person_referate')` und Bestätigung nach R7 („Die Person ist auch in <Referate> tätig. Der Status gilt für alle Referate.“), wenn Referate außerhalb von `myReferate` liegen (Reichweite „alle“: mehr als ein Referat); Speichern → `rpc('ea_change_volunteer_status')`.
+- [x] T046 [US-EA-09] (spec T15) `src/features/ea/aktive/AusscheidenSchritt.tsx` (zweiter Schritt bei „ausgeschieden“, R8): aktuelle `function`, `position`, `committee` mit `ea_property_writable` vorausgewählt (abwählbar); nicht schreibbare als „wird nicht beendet (anderes Referat)“; Bezug Gruppe als „im Modul Gruppen beenden“; aktuelle `issued_item` und `external_access` als Hinweise; Speichern → `rpc('ea_leave')`; Fehler „Etwas ist schiefgelaufen. Bitte versuche es erneut.“ bzw. `toMessage`.
 
 **Checkpoint**: Statuswechsel vollständig.
 
