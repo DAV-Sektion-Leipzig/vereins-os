@@ -10,16 +10,16 @@ export async function handleInvite(req: Request, deps: Deps): Promise<Response> 
   if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders(origin) })
 
   try {
+    // Recht des Aufrufers zuerst (contracts/edge-functions.md, AK6); ohne gültiges JWT 401
     const jwt = bearerToken(req)
-    const body = await readJsonBody(req)
-    if (!isUuid(body.person_id)) throw new FunctionError(400, 'AD_BAD_REQUEST')
-    const personId = body.person_id
-
-    // Recht des Aufrufers zuerst (AK6); ohne gültiges JWT 401
     const caller = deps.caller(jwt)
     const actor = await caller.userId()
     if (!actor) throw new FunctionError(401, 'AD_UNAUTHENTICATED')
     if (!(await caller.hasAdEdit())) throw new FunctionError(403, 'AD_FORBIDDEN')
+
+    const body = await readJsonBody(req)
+    if (!isUuid(body.person_id)) throw new FunctionError(400, 'AD_BAD_REQUEST')
+    const personId = body.person_id
 
     if (!(await deps.db.personExists(personId))) throw new FunctionError(404, 'AD_PERSON_NOT_FOUND')
     const access = await deps.db.getAccess(personId)
@@ -38,7 +38,11 @@ export async function handleInvite(req: Request, deps: Deps): Promise<Response> 
       // Neu angelegten Auth-Eintrag entfernen; der Insert-Trigger hat den Zugang ggf. schon verknüpft
       if (!before.auth_user_id) {
         const created = invite.userId ?? (await deps.auth.findUserIdByEmail(access.login_email))
-        if (created) await deps.auth.deleteUser(created)
+        if (created) {
+          const deleteError = await deps.auth.deleteUser(created)
+          // Verwaister Auth-Eintrag würde die nächste Einladung mit AD_EMAIL_TAKEN blockieren: im Log sichtbar machen
+          if (deleteError) console.error('ad-invite: Aufräumen des Auth-Eintrags fehlgeschlagen', { personId, deleteError })
+        }
       }
       await deps.db.rpc('ad_revert_invite', {
         p_person: personId,

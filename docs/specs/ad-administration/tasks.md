@@ -461,6 +461,17 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 ---
 
+## Phase 13a: Review des Kerns (Branch `ad-kern-review-1`, spec v0.9.3 / Kern v0.7.4)
+
+**Zweck**: Bestätigte Befunde aus dem Review-Workflow und die vier Entscheidungen des Product Owners vom 23.10.2026 (spec.md Abschnitt 11) umsetzen.
+
+- [x] T106 [US-AD-07] (spec T5 Teil, T4 Teil, T39 Teil) `supabase/tests/database/240_review_1.test.sql` und Migration `supabase/migrations/20261023001800_ad_review_1.sql`: `ad_login_email_ok` (R1 im Frontend), Protokolleintrag `invited` ohne Akteur bei Einladung über das Dashboard (Trigger) und Vervollständigung in `ad_apply_invite`, `ea_check_create` prüft Lesestufe/Bezugsart (R29, R39, R41), `ea_person_in_referate` ohne Grant an `authenticated`
+- [x] T107 [US-AD-03] [US-AD-09] `supabase/functions/ad-invite/handler.ts`, `ad-access/handler.ts`, `_shared/db.ts`, `ad-access/index.test.ts`: Rechteprüfung vor der Body-Validierung, Datenbankfehler in `hasAdEdit` → 500, Fehler beim Aufräumen des Auth-Eintrags im Log; Tests 401/404/403-vor-400
+- [x] T108 [US-AD-07] [US-AD-12] [US-AD-17] Frontend: `PersonNeu.tsx`/`personen/data.ts` prüfen R1 vor dem Anlegen (`checkLoginEmail`), `eigenschaftsarten/data.ts` schickt `allowed_qualification_kinds: []` zum Zurücksetzen (R28), `lib/functions.ts` leitet bei 401 zu /login, `DublettenDialog.tsx` ohne hängendes „ · “, `NotfallHinweis.tsx` „n-mal“, `QualifikationsartFormular.tsx` prüft Sparte/Aussteller, `lib/errors.ts` mit Constraints `ea_property_types_valid_from_label_length`/`…_to_label_length`, `ea_referate_name_key`, `ea_gremien_name_key`, `ad_qualification_types_discipline_not_blank`/`…_issuer_not_blank`
+- [x] T109 [P] Doku: spec.md v0.9.3 (Abschnitt 2, 4, 5 R1/R42, 11), 02-stories.md v0.8.2 (US-AD-06 AK5, US-AD-07 AK5), contracts/error-codes.md (Status „umgesetzt“ für Edge-Codes, R26-Hinweis, `AD_SCOPE_NOT_ALLOWED`; Frontend-Meldungen als [ANNAHME]), data-model.md
+
+---
+
 ## Phase 14: Abnahme und Querschnitt (Branch `ad-kern-abnahme`)
 
 **Zweck**: Fachliche Abnahme des Kerns in TEST (spec T25, T32, T49) und Abschluss.

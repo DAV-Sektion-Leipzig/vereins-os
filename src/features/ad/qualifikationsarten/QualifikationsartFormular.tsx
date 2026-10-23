@@ -159,6 +159,8 @@ function Form({ data, basePath }: { data: EditResult; basePath: string }) {
     setError(null)
     // R21, R23, R24 vorab im Frontend; die Datenbank prüft erneut
     if (!input.name.trim()) return setError(MESSAGES.qualificationNameRequired)
+    if (!input.discipline.trim()) return setError(MESSAGES.disciplineRequired)
+    if (!input.issuer.trim()) return setError(MESSAGES.issuerRequired)
     if (input.kind === 'license' && !input.level) return setError(MESSAGES.qualificationLevelRequired)
     const validity = input.validity_years.trim()
     if (rule !== 'hidden' && validity !== '' && !/^(10|[1-9])$/.test(validity)) return setError(MESSAGES.qualificationValidity)

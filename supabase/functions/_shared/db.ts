@@ -19,7 +19,9 @@ export function makeCaller(jwt: string): Caller {
     },
     async hasAdEdit() {
       const { data, error } = await client.rpc('ad_has_level', { p_module: 'AD', p_min: 'edit' })
-      return !error && data === true
+      // Datenbankfehler sind 500, nicht „kein Recht“
+      if (error) throw new Error(error.message)
+      return data === true
     },
   }
 }
