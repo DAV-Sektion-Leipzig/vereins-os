@@ -1,6 +1,7 @@
 # User Stories: Administration (AD)
 
-Stand: 21.10.2026 · Version 0.8.1 · Status: Ready (Nachtrag freigegeben am 21.10.2026) · Product Owner: Toni Werner
+Stand: 23.10.2026 · Version 0.8.2 · Status: Ready (Nachtrag freigegeben am 21.10.2026) · Product Owner: Toni Werner
+Änderungen v0.8.2 (23.10.2026): US-AD-06 AK5 an R32 angeglichen; US-AD-07 AK5 mit Vorabprüfung der Login-Adresse (Entscheidungen Product Owner aus dem Review des Kerns, spec.md v0.9.3).
 Grundlage: 00-steckbrief.md v1.1, 01-erhebung.md v0.7 (Regeln R1–R20), spec.md v0.7.1 (Regeln R21–R42), glossar.md v1.1, rollen.md v0.8
 Änderungen v0.7 (21.10.2026): US-AD-17 bis US-AD-19 (Qualifikationsarten) ergänzt.
 Änderungen v0.8 (21.10.2026): Nachtrag Personenmodell aus EA und GR: US-AD-20 bis US-AD-26; Hinweise in US-AD-12, US-AD-13, US-AD-19.
@@ -120,7 +121,7 @@ Nachtrag v0.7: Da `ea_property_types` und `ea_properties` noch nicht umgesetzt s
 - AK2: Gegeben die Übersicht, wenn ich nach Zugangsstatus filtere oder einen Namensteil eingebe, dann sehe ich nur passende Personen.
 - AK3: Gegeben die Funktionsperson „Geschäftsstelle“, wenn ich die Übersicht öffne, dann ist sie als „Funktionsperson“ gekennzeichnet.
 - AK4: Gegeben keine Person passt zum Filter, wenn ich suche, dann erscheint „Keine Personen gefunden.“ (leerer Zustand / Fehlerfall).
-- AK5: Gegeben ein Nutzer mit der Vorlage Geschäftsstelle, wenn er die Übersicht aufruft oder Zugänge per Datenbankabfrage liest, dann erhält er keine Daten (Rechte-Fall).
+- AK5: Gegeben ein Nutzer mit der Vorlage Geschäftsstelle, wenn er die Übersicht /ad aufruft, dann landet er auf /kein-zugriff ohne Datenabfrage; liest er `ad_v_person_overview` oder Zugänge per Datenbankabfrage, dann erhält er nur Personen seines Pfads (EA, R32) und keine Zugangsdaten (Rechte-Fall). (v0.9.3: an R32 angeglichen, Entscheidung Product Owner 23.10.2026.)
 **Nicht Teil dieser Story:** Filter aktiv/ausgeschieden nach Eigenschaften (EA); Export.
 
 ### US-AD-07: Person anlegen mit Dublettenwarnung
@@ -133,7 +134,7 @@ Nachtrag v0.7: Da `ea_property_types` und `ea_properties` noch nicht umgesetzt s
 - AK2: Gegeben Vorname oder Nachname fehlt, wenn ich speichere, dann erscheint „Bitte Vorname und Nachname angeben.“ und nichts wird gespeichert (Fehlerfall).
 - AK3: Gegeben es existiert „Toni Werner“, wenn ich „Anton Werner“ anlege oder eine bereits vorkommende E-Mail-Adresse eingebe, dann erscheint eine Warnung mit den ähnlichen Personen und den Optionen „Trotzdem anlegen“, „Vorhandene Person öffnen“ und „Abbrechen“. (v0.7: Trefferdaten und Optionen nach US-AD-25.)
 - AK4: Gegeben ich wähle „Trotzdem anlegen“, wenn ich bestätige, dann wird die Person angelegt.
-- AK5: Gegeben ich gebe optional eine Login-Adresse ein, wenn sie nicht auf @dav-leipzig.de endet oder bereits vergeben ist, dann erscheinen die Meldungen aus R1 bzw. R2 (Fehlerfall).
+- AK5: Gegeben ich gebe optional eine Login-Adresse ein, wenn sie nicht auf @dav-leipzig.de endet oder bereits vergeben ist, dann erscheinen die Meldungen aus R1 bzw. R2 und die Person wird nicht angelegt (Prüfung vor dem Anlegen über `ad_login_email_ok`, v0.9.3) (Fehlerfall).
 - AK6: Gegeben ein Nutzer ohne AD-Rechte, wenn er per Datenbankaufruf eine Person über AD anlegen will, dann lehnt die Datenbank ab; Personen anlegen ist nur mit AD- oder EA-Rechten mindestens „bearbeiten“ erlaubt (Rechte-Fall). (v0.7: zusätzlich GR ≥ bearbeiten über die GR-Funktion; Referent:innen nur über `ea_create_volunteer`.)
 **Nicht Teil dieser Story:** Excel-Import, Dublettenprüfliste und Zusammenführen (EA); Löschen.
 

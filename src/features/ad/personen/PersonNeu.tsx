@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { createPerson, findSimilarPersons } from '@/features/ad/personen/data'
+import { checkLoginEmail, createPerson, findSimilarPersons } from '@/features/ad/personen/data'
 import { DublettenDialog, type SimilarPerson } from '@/features/shared/DublettenDialog'
 import { MESSAGES, toMessage } from '@/lib/errors'
 
@@ -55,6 +55,12 @@ export function PersonNeu() {
     setPending(true)
     setError(null)
     try {
+      // R1 und R2 vor der Dublettenprüfung, damit keine Person ohne Zugang stehen bleibt (AK5)
+      if (email.trim()) {
+        const allowed = await checkLoginEmail(email)
+        if (allowed === null) return setError(MESSAGES.unexpected)
+        if (!allowed) return setError(MESSAGES.emailDomain)
+      }
       const similar = await findSimilarPersons(first, last, email)
       if (similar.error) {
         setError(toMessage(similar.error).text)

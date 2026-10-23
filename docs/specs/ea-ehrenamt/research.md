@@ -10,6 +10,7 @@ Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spe
 
 - **Entscheidung:** Das Ehrenamtsmanagement beginnt mit der Datenbank erst, wenn der Datenbankteil des Kerns der Administration auf `main` liegt: T35–T41, T43, T48 (Branch `ad-kern-datenbank`, Migrationen bis `20261023001400`). Die Oberflächen beginnen, wenn die Komponenten der Administration vorliegen: Auswahlfeld Qualifikationsart (T30), Eigenschaftsarten (T46), Eigenschaftsformular (T47), Dublettendialog (T49).
 - **Dateinamen:** Die Migrationen des Ehrenamtsmanagements tragen den Zeitstempel ihres Anlagetags und das Präfix `ea_` (spec.md Abschnitt 2), z. B. `2026MMDD000100_ea_system_property_types.sql`. Sie müssen nach allen Kern-Migrationen der Administration sortieren.
+- **Stand 23.10.2026:** Die AD-Migrationen `…001500`–`…001700` liegen auf `main`; EA-Migrationen beginnen mit `20261024000100`.
 - **Achtung bei `db push`:** `supabase db push` bricht ab, wenn lokal eine Migration liegt, die älter ist als die letzte schon in TEST angewendete. Die noch offenen AD-Migrationen `…001500`–`…001700` (Branches `us-ad-08-zugang`, `us-ad-14-protokoll`) sollten deshalb vor der ersten EA-Migration in TEST sein. Sonst ist für sie einmal `supabase db push --linked --include-all` nötig. Das geht, weil sie nur neue Funktionen und Views anlegen, die von keiner EA-Migration abhängen.
 - **Begründung:** Das Ehrenamtsmanagement legt keine Tabellen an (spec.md Abschnitt 2). Alle Objekte, auf die es schreibt oder Policies stützt, entstehen im Kern.
 
@@ -25,6 +26,7 @@ Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spe
   1. Namenskonflikt prüfen (A7): Gibt es eine Art mit gleichem `lower(name)` ohne `system_key`, folgt `raise exception 'Eigenschaftsart % existiert bereits ohne system_key.'` Eine Art mit gleichem Namen *und* gleichem `system_key` ist kein Konflikt (zweiter Lauf).
   2. Arten einfügen: `insert into ea_property_types … on conflict (system_key) do nothing returning id, system_key`, als CTE.
   3. Felder nur für die in Schritt 2 neu eingefügten Arten (Join auf das CTE): `sort_order` = Position im Array (`with ordinality`).
+- **Testbarkeit:** Die Daten stehen in einer internen Funktion `ea_seed_system_property_types()` (security definer, ohne Grant), die die Migration einmal aufruft. So kann pgTAP den zweiten Lauf und den Namenskonflikt prüfen. Gleiches Muster für die Qualifikationsarten (`ea_seed_qualification_types()`).
 - **Ohne Nutzerkontext:** Die Migration läuft als Eigentümer ohne `auth.uid()`. Die Trigger der Administration erlauben dann `system_key` und `read_level = 'confidential'` (Nr. 24 Hauptamt) (R-21 AD). `ea_save_property_type` wird nicht genutzt, weil es RLS und Nutzerkontext voraussetzt. R9 (mindestens ein Feld) ist durch die Daten erfüllt; pgTAP prüft das.
 - **Werte:**
   - `origin = 'system'`.
@@ -131,16 +133,17 @@ Hier steht nur, *wie* umgesetzt wird. Was fachlich entschieden ist, steht in spe
 
 ## R-EA-12 Tests (T9)
 
-- **Dateien:** pgTAP-Dateien ab `300_` unter `supabase/tests/database/` (`200_seed` bis `230_audit_view` gehören der Administration; Stand 23.10.2026), damit sie nach den Tests der Administration laufen. Je Bereich eine Datei; je Datei `begin; … rollback;` und Rollenwechsel über die Seed-Testzugänge (R-11 AD).
-  - `300_ea_system_types.test.sql`: 25 Arten, Felder, Bezeichnungen; zweiter Lauf ohne Änderung; Namenskonflikt bricht ab.
-  - `310_ea_qualification_types.test.sql`: 10 Einträge; idempotent.
-  - `320_ea_expiry.test.sql`: `ea_expiry_status` Grenzfälle; `ea_default_valid_until` (US-EA-07 AK1, AK2, AK5); `ea_v_expiry` je Testzugang.
-  - `330_ea_volunteer_list.test.sql`: Tabelle „Erwartete Ergebnisse“ (spec.md Abschnitt 9), Filter, Status `{left}`, Person 12 nie.
-  - `340_ea_iban.test.sql`: Prüfsumme, Normalisierung, Trigger.
-  - `350_ea_status.test.sql`: R18–R20, R33 AD, Vorstand; `ea_leave` als Referent:in bei Karl Zweireferat (fremdes Referat → `EA_LEAVE_PROPERTY`, nichts geändert).
-  - `360_ea_renew.test.sql`: R6 (US-EA-07 AK3), `EA_RENEW_INVALID`.
-  - `370_ea_import.test.sql`: Rechte (authenticated abgelehnt), Probelauf schreibt nichts, Fehler- und Warnfälle, Lauf schreibt alles.
-  - `380_ea_volume.test.sql`: Mengentest nach spec.md Abschnitt 8 (Muster R-27 AD), misst `ea_volunteer_list` als Referent:in mit allen Filtern, `ea_v_expiry` für ein Jahr und ein Personendetail.
+- **Dateien:** pgTAP-Dateien ab `310_` unter `supabase/tests/database/` (010–230 gehören der Administration), damit sie nach den Tests der Administration laufen. Je Bereich eine Datei; je Datei `begin; … rollback;` und Rollenwechsel über die Seed-Testzugänge (R-11 AD).
+  - `310_ea_system_types.test.sql`: 25 Arten, Felder, Bezeichnungen; zweiter Lauf ohne Änderung; Namenskonflikt bricht ab.
+  - `320_ea_qualification_types.test.sql`: 10 Einträge; idempotent.
+  - `330_ea_expiry.test.sql`: `ea_expiry_status` Grenzfälle; `ea_default_valid_until` (US-EA-07 AK1, AK2, AK5); `ea_v_expiry` je Testzugang.
+  - `340_ea_volunteer_list.test.sql`: Tabelle „Erwartete Ergebnisse“ (spec.md Abschnitt 9), Filter, Status `{left}`, Person 12 nie.
+  - `350_ea_iban.test.sql`: Prüfsumme, Normalisierung, Trigger.
+  - `360_ea_status.test.sql`: R18–R20, R33 AD, Vorstand; `ea_leave` als Referent:in bei Karl Zweireferat (fremdes Referat → `EA_LEAVE_PROPERTY`, nichts geändert).
+  - `370_ea_renew.test.sql`: R6 (US-EA-07 AK3), `EA_RENEW_INVALID`.
+  - `375_ea_create.test.sql`: neue Codes beim Anlegen (O3): Vorstand → `EA_CREATE_FORBIDDEN`, Referent:in ohne Zuordnung → `EA_CREATE_REFERAT_REQUIRED`, fremdes Referat → `EA_RELATION_FOREIGN_REFERAT`.
+  - `380_ea_import.test.sql`: Rechte (authenticated abgelehnt), Probelauf schreibt nichts, Fehler- und Warnfälle, Lauf schreibt alles.
+  - `390_ea_volume.test.sql`: Mengentest nach spec.md Abschnitt 8 (Muster R-27 AD), misst `ea_volunteer_list` als Referent:in mit allen Filtern, `ea_v_expiry` für ein Jahr und ein Personendetail.
 - **Bestehende Tests:** Die Tests der Administration (010–230) laufen nach der Seed-Umstellung unverändert grün (spec.md T3). `200_seed.test.sql` prüft die Testarten des Seeds der Administration; zählt er Eigenschaftsarten, wird er mit der Seed-Umstellung angepasst (gleicher Pull Request).
 
 ## R-EA-13 Frontend

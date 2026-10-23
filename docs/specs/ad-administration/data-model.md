@@ -135,7 +135,10 @@ Bestehend (T1): `ad_level` (`none` < `read` < `edit` < `manage`), `ad_access_sta
 | `ad_pending_emergency_logins()`, `ad_acknowledge_emergency()` | security definer | authenticated | T4 (`…001400`) |
 | `ad_apply_invite`, `ad_revert_invite`, `ad_apply_email_change`, `ad_apply_lock`, `ad_apply_unlock` | security definer | service_role | T4 (`…001500`, `…001600`) |
 | `ad_login_email_allowed(citext)` | security definer, stable | service_role | T5 |
+| `ad_login_email_ok(citext)` (v0.7.4, R1 im Frontend; AD/EA/GR ≥ edit) | security definer, stable | authenticated | T106 (`…001800`) |
 | Trigger-Funktionen | security definer bzw. invoker | keiner | je Migration |
+
+`ea_check_create` seit v0.7.4 (`…001800`): Eigenschaftsart mit Lesestufe „vertraulich“ nur mit AD ≥ edit, Bezug „Gruppe“ nie, `p_referat` nur bei Bezug „Referat“; mit Reichweite Referat nur Arten mit Bezug „Referat“. `ea_person_in_referate` ist seit `…001800` nur intern (kein Grant an `authenticated`). Der Insert-Trigger `ad_auth_user_created` protokolliert `none → invited` ohne Akteur (Dashboard-Einladung); `ad_apply_invite` vervollständigt diesen Eintrag.
 
 `ea_create_volunteer` im Kern: erlaubt mit `ad_has_level('EA','edit')` oder `p_referat = any(ad_my_referate('EA','edit'))`; mit Reichweite „alle“ sind `p_property_type` und `p_referat` optional, mit Reichweite Referat Pflicht; `created_in = 'EA'`. Die Erweiterung um EZ (`p_contact_email`, `created_in = 'EZ'`) folgt mit T53 per neuer Migration.
 

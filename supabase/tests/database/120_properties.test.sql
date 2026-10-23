@@ -1,6 +1,6 @@
 -- US-AD-13, US-AD-19 (spec T7 Teil, T36): Eigenschaften – R35, R37, R38, R27, R28, Gültigkeit, Historie.
 -- Arten: d…02 T-Shirt-Größe (Seed, ein Eintrag) sowie die System-Eigenschaftsarten function, committee (Bezug Gremium
--- Pflicht) und license (EA-Migration 20261023002100, Ü3). Als test.admin (AD verwalten), sofern nicht anders angegeben.
+-- Pflicht) und license (EA-Migration 20261024000100, Ü3). Als test.admin (AD verwalten), sofern nicht anders angegeben.
 begin;
 create extension if not exists pgtap with schema extensions;
 select * from no_plan();

@@ -14,13 +14,13 @@ Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnun
 | Code / Constraint | Meldung | Regel | Status |
 |---|---|---|---|
 | `AD_EMAIL_DOMAIN` (Trigger `ad_accesses_guard`, Edge Functions) | Zugang nur mit Adresse @dav-leipzig.de möglich. | R1 | umgesetzt |
-| `AD_EMAIL_MISSING` | Zugang nur mit Adresse @dav-leipzig.de möglich. | R1 | geplant (T9) |
+| `AD_EMAIL_MISSING` | Zugang nur mit Adresse @dav-leipzig.de möglich. | R1 | umgesetzt |
 | `AD_EMAIL_TAKEN` / `ad_accesses_login_email_key` | Diese Login-Adresse ist bereits vergeben. | R2 | umgesetzt |
 | `AD_EMAIL_LOCKED` | Die Login-Adresse kann nur vor der Aktivierung des Zugangs geändert werden. | R20 | umgesetzt |
 | `AD_EMAIL_CHANGE_VIA_FUNCTION` (direktes Update bei Status `invited`, nur bei Umgehung der Oberfläche) | Etwas ist schiefgelaufen. Bitte versuche es erneut. | R20 | umgesetzt |
 | `AD_NAME_REQUIRED` / `ea_persons_first_name_not_blank`, `ea_persons_last_name_not_blank` | Bitte Vorname und Nachname angeben. | R4 | umgesetzt |
-| `AD_NO_TEMPLATE` | Bitte zuerst mindestens eine Rechtevorlage zuweisen. | R17 | geplant (T9) |
-| `AD_MAIL_FAILED` | Die Einladung konnte nicht verschickt werden. Bitte später erneut versuchen. | – | geplant (T9) |
+| `AD_NO_TEMPLATE` | Bitte zuerst mindestens eine Rechtevorlage zuweisen. | R17 | umgesetzt |
+| `AD_MAIL_FAILED` | Die Einladung konnte nicht verschickt werden. Bitte später erneut versuchen. | – | umgesetzt |
 | `AD_TEMPLATE_NAME_TAKEN` / `ad_templates_name_key` | Eine Rechtevorlage mit diesem Namen gibt es bereits. | – | umgesetzt |
 | `AD_SCOPE_NOT_ALLOWED` / `ad_template_rights_scope_allowed` | Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement möglich. | R30 | umgesetzt |
 | `AD_REFERAT_REQUIRED` | Bitte mindestens ein Referat auswählen. | R31 | umgesetzt |
@@ -38,8 +38,10 @@ Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnun
 | `AD_SEARCH_TOO_SHORT` | Bitte mindestens 2 Zeichen eingeben. | R44 | geplant (T52) |
 | `AD_TOO_MANY_IDS` | [OFFEN] Meldung fehlt in spec.md | – | geplant (T52) |
 | `AD_FORBIDDEN`, SQLSTATE `42501` | Für diesen Bereich hast du keine Rechte. | R8, R43 | umgesetzt |
-| `AD_UNAUTHENTICATED` | weiter zu /login (keine Meldung) | – | geplant (T9, T10) |
-| `AD_PERSON_NOT_FOUND`, `AD_INVALID_STATUS`, `AD_BAD_REQUEST`, `AD_UNEXPECTED`, unbekannt | Etwas ist schiefgelaufen. Bitte versuche es erneut. | – | geplant (T9, T10) |
+| Constraint `ea_referate_name_key` bzw. `ea_gremien_name_key` (kein Code, [ANNAHME]) | Ein Referat mit dieser Bezeichnung gibt es bereits. / Ein Gremium mit dieser Bezeichnung gibt es bereits. | – | umgesetzt (Oberfläche folgt mit EA) |
+| Constraint `ad_qualification_types_discipline_not_blank` / `…_issuer_not_blank` (kein Code, [ANNAHME]) | Bitte eine Sparte angeben. / Bitte einen Aussteller angeben. | US-AD-17 AK2 | umgesetzt |
+| `AD_UNAUTHENTICATED` (Edge Functions, HTTP 401) | weiter zu /login (keine Meldung) | – | umgesetzt |
+| `AD_PERSON_NOT_FOUND`, `AD_INVALID_STATUS`, `AD_BAD_REQUEST`, `AD_UNEXPECTED`, unbekannt | Etwas ist schiefgelaufen. Bitte versuche es erneut. | – | umgesetzt |
 
 `AD_EMAIL_DOMAIN` meldet in TEST denselben Text, wenn die Domain nicht in `ad_test_login_domains` freigegeben ist (R1).
 
@@ -60,7 +62,7 @@ Soweit in spec.md Administration definiert (Personenmodell, Eigenschaftsarten, E
 | `EA_CHOICE_VALUES_REQUIRED` | Bitte mindestens einen Auswahlwert angeben. | R9 | umgesetzt |
 | `EA_NO_FIELDS` | Bitte mindestens ein Feld anlegen. | R9 | umgesetzt |
 | `EA_DATA_TYPE_LOCKED` | Der Datentyp kann nicht geändert werden, solange Eigenschaften dieser Art existieren. | R36 | umgesetzt |
-| `EA_FIELD_LOCKED` | Der Datentyp kann nicht geändert werden, solange Eigenschaften dieser Art existieren. [OFFEN] Abgrenzung zu `EA_DATA_TYPE_LOCKED` | R36 | geplant (T35) |
+| `EA_FIELD_LOCKED` | Der Datentyp kann nicht geändert werden, solange Eigenschaften dieser Art existieren. [OFFEN] Abgrenzung zu `EA_DATA_TYPE_LOCKED` | R36 | nicht umgesetzt, bis [OFFEN] entschieden (der Kern wirft `EA_DATA_TYPE_LOCKED`) |
 | `EA_FIELD_NEW_REQUIRED` | Neue Felder können nur optional angelegt werden, solange es Eigenschaften dieser Art gibt. | R36 | umgesetzt |
 | `EA_CHOICE_VALUE_REMOVED` | Auswahlwerte können ergänzt, aber nicht entfernt werden. | R36 | umgesetzt |
 | `EA_RELATION_LOCKED` | Der Bezug kann nicht geändert werden, solange Eigenschaften dieser Art existieren. | – | umgesetzt |
@@ -78,13 +80,13 @@ Soweit in spec.md Administration definiert (Personenmodell, Eigenschaftsarten, E
 | `EA_CONFIDENTIAL_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. [OFFEN] gilt nach R29 noch? | R8 | [OFFEN] |
 | `EA_STATUS_FORBIDDEN` | Du darfst den Status dieser Person nicht ändern. | R33 | umgesetzt |
 | `EA_CREATE_FOREIGN_REFERAT` | Du kannst nur Personen für deine Referate anlegen. | R45 | geplant (T53) |
-| `EA_CREATE_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | R41, R45 | umgesetzt (EA, `20261023002600_ea_check_create`; Entscheidung Product Owner 23.10.2026, plan.md EA O3) |
-| `EA_CREATE_REFERAT_REQUIRED` | Bitte eine Funktion oder ein Amt in deinem Referat angeben. | R3 EA | umgesetzt (EA, `20261023002600_ea_check_create`; Entscheidung Product Owner 23.10.2026, plan.md EA O3) |
-| `EA_IBAN_INVALID` | Die IBAN ist ungültig. | R13 EA | umgesetzt (EA, `20261023002400_ea_iban`, Trigger `ea_properties_iban`) |
-| `EA_STATUS_DATE` | Bitte ein Datum bis spätestens <TT.MM.JJJJ> wählen. | R18 EA | umgesetzt (EA, `20261023002500_ea_status_renew`; Grenzdatum im `detail`) |
-| `EA_STATUS_UNCHANGED` | Die Person hat diesen Status bereits. | R19 EA | umgesetzt (EA, `20261023002500_ea_status_renew`) |
-| `EA_LEAVE_PROPERTY` | Diese Angabe kann hier nicht beendet werden. | R20 EA | umgesetzt (EA, `20261023002500_ea_status_renew`) |
-| `EA_RENEW_INVALID` | Nur aktuelle Lizenzen und Qualifikationen können verlängert werden; das neue Datum muss nach dem bisherigen liegen. | R6 EA | umgesetzt (EA, `20261023002500_ea_status_renew`) |
+| `EA_CREATE_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | R41, R45 | umgesetzt (EA, `20261024000600_ea_check_create`; Entscheidung Product Owner 23.10.2026, plan.md EA O3) |
+| `EA_CREATE_REFERAT_REQUIRED` | Bitte eine Funktion oder ein Amt in deinem Referat angeben. | R3 EA | umgesetzt (EA, `20261024000600_ea_check_create`; Entscheidung Product Owner 23.10.2026, plan.md EA O3) |
+| `EA_IBAN_INVALID` | Die IBAN ist ungültig. | R13 EA | umgesetzt (EA, `20261024000400_ea_iban`, Trigger `ea_properties_iban`) |
+| `EA_STATUS_DATE` | Bitte ein Datum bis spätestens <TT.MM.JJJJ> wählen. | R18 EA | umgesetzt (EA, `20261024000500_ea_status_renew`; Grenzdatum im `detail`) |
+| `EA_STATUS_UNCHANGED` | Die Person hat diesen Status bereits. | R19 EA | umgesetzt (EA, `20261024000500_ea_status_renew`) |
+| `EA_LEAVE_PROPERTY` | Diese Angabe kann hier nicht beendet werden. | R20 EA | umgesetzt (EA, `20261024000500_ea_status_renew`) |
+| `EA_RENEW_INVALID` | Nur aktuelle Lizenzen und Qualifikationen können verlängert werden; das neue Datum muss nach dem bisherigen liegen. | R6 EA | umgesetzt (EA, `20261024000500_ea_status_renew`) |
 | Constraints `ea_referate_name_key`, `ea_gremien_name_key` (kein Code) | Diese Bezeichnung gibt es bereits. | US-EA-14 AK3 | umgesetzt (Index aus `20261023000200`) |
 
 `EA_VALUE_TYPE`, `EA_FIELD_REQUIRED`, `EA_FIELD_CHOICE`, `AD_QUALIFICATION_HISTORIC` und `AD_QUALIFICATION_KIND` liefern die Feldbezeichnung im `detail` des Fehlers; `src/lib/errors.ts` setzt sie für „<Feld>“ ein. `EA_STATUS_DATE` liefert das Grenzdatum `TT.MM.JJJJ` im `detail` für „<TT.MM.JJJJ>“. „R… EA“ verweist auf docs/specs/ea-ehrenamt/spec.md Abschnitt 5. Der frühere Text von `EA_VALUE_TYPE` „Der Wert passt nicht zum Datentyp der Eigenschaftsart.“ entfällt.
@@ -132,8 +134,8 @@ Diese Codes bzw. Fälle melden einen **erfolgreichen** Vorgang. Das Frontend zei
 
 | Code / Fall | Hinweis | Regel | Status |
 |---|---|---|---|
-| `AD_EMAIL_CHANGED` (Antwort von `ad-access` `change_email`, HTTP 200) | Die Login-Adresse wurde geändert. Bitte die Einladung erneut senden. | R20 | geplant (T10) |
-| Gültigkeitsdauer einer Qualifikationsart geändert (kein Code) | Die Änderung gilt für neue Einträge. Vorhandene Ablaufdaten bleiben unverändert. | R26 | geplant (T30) |
+| `AD_EMAIL_CHANGED` (Antwort von `ad-access` `change_email`, HTTP 200) | Die Login-Adresse wurde geändert. Bitte die Einladung erneut senden. | R20 | umgesetzt |
+| Gültigkeitsdauer einer Qualifikationsart geändert (kein Code) | Die Änderung gilt für neue Einträge. Vorhandene Ablaufdaten bleiben unverändert. | R26 | umgesetzt |
 
 ## Nur Frontend
 
@@ -147,6 +149,14 @@ Diese Codes bzw. Fälle melden einen **erfolgreichen** Vorgang. Das Frontend zei
 | Eingaben verschieden | Die Passwörter stimmen nicht überein. | R19 |
 | Link ungültig, `type=invite` | Der Link ist abgelaufen oder ungültig. Bitte wende dich an den Admin. | – |
 | Link ungültig, `type=recovery` | Der Link ist abgelaufen oder ungültig. Bitte fordere einen neuen an. | – |
+
+### Administration, Formulare ([ANNAHME], ohne Quelle in spec.md)
+
+| Fall | Meldung | Regel |
+|---|---|---|
+| Vorlage zuweisen ohne Auswahl | Bitte eine Vorlage wählen. | US-AD-11 |
+| Feld einer Eigenschaftsart ohne Bezeichnung | Bitte jedem Feld eine Bezeichnung geben. | US-AD-22 |
+| Eigenschaftsart ohne Modul unter „sichtbar in“ | Bitte mindestens ein Modul unter „sichtbar in“ wählen. | US-AD-12 AK1 |
 
 ### Anwesenheitserfassung
 

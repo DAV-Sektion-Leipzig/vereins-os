@@ -1,6 +1,5 @@
--- US-EA-16 (EA spec T9 Teil, T1): 25 System-Eigenschaftsarten mit Feldern und Bezeichnungen nach 01-erhebung.md C2/C2a.
--- AK5 (Abbruch bei Namenskonflikt) prüft der do-Block der Migration beim Anlegen; pgTAP prüft hier die Daten,
--- die Idempotenz über system_key und dass gleiche Namen ohne system_key nicht nebenher entstehen können.
+-- US-EA-16 (EA spec T9 Teil, T1): 25 System-Eigenschaftsarten mit Feldern und Bezeichnungen nach 01-erhebung.md C2/C2a;
+-- zweiter Lauf (AK2) und Abbruch bei Namenskonflikt (AK5, A7) über die interne Funktion ea_seed_system_property_types().
 begin;
 create extension if not exists pgtap with schema extensions;
 select * from no_plan();
@@ -120,17 +119,26 @@ select is((pg_temp.field('qualification', 'qualification_type')).allowed_qualifi
 select is((pg_temp.field('further_training', 'qualification_type')).allowed_qualification_kinds, '{license}'::public.ad_qualification_kind[],
   'Fortbildung: verlängerte Lizenz nur Typ Lizenz');
 
--- Idempotenz über system_key (AK2): ein erneuter Insert überschreibt keine Änderung aus der Oberfläche
-update public.ea_property_types set purpose = 'geändert' where system_key = 'member';
-insert into public.ea_property_types (name, purpose, system_key, category, read_level, visible_in, origin)
-values ('Mitglied', 'Abgleich mit der Mitgliederverwaltung', 'member', 'master_data', 'all', '{AD,EA,GR}', 'system')
-on conflict (system_key) do nothing;
-select is((select purpose from public.ea_property_types where system_key = 'member'), 'geändert', 'zweiter Lauf überschreibt nicht');
-select is((select count(*)::int from public.ea_property_types where origin = 'system'), 25, 'zweiter Lauf legt nichts doppelt an');
+-- Idempotenz über system_key (AK2): zweiter Lauf legt nichts an und überschreibt keine Änderung aus der Oberfläche
+update public.ea_property_types set valid_from_label = 'Mitglied seit', purpose = 'geändert' where system_key = 'member';
+select lives_ok($$ select public.ea_seed_system_property_types() $$, 'zweiter Lauf ohne Fehler');
+select is((select count(*)::int from public.ea_property_types where origin = 'system'), 25, 'weiterhin 25 Arten');
+select is((select count(*)::int from public.ea_property_fields f
+            join public.ea_property_types t on t.id = f.property_type_id where t.origin = 'system'), 47, 'keine doppelten Felder');
+select results_eq($$ select valid_from_label, purpose from public.ea_property_types where system_key = 'member' $$,
+  $$ values ('Mitglied seit'::text, 'geändert'::text) $$, 'geänderte Bezeichnung und Zweck bleiben erhalten');
 
--- gleicher Name ohne system_key ist ausgeschlossen (Grundlage für A7)
-select throws_ok($$ insert into public.ea_property_types (name, purpose, visible_in) values ('mitglied', 'Test', '{AD}') $$,
-  '23505', null, 'Name ist ohne Groß-/Kleinschreibung eindeutig');
+-- Konflikt (AK5, A7): Art „Mitglied“ ohne system_key → Abbruch mit klarer Meldung
+delete from public.ea_property_fields where property_type_id = (select id from public.ea_property_types where system_key = 'member');
+delete from public.ea_property_types where system_key = 'member';
+insert into public.ea_property_types (name, purpose, visible_in) values ('Mitglied', 'Test', '{AD}');
+select throws_ok($$ select public.ea_seed_system_property_types() $$, 'P0001',
+  'Eigenschaftsart Mitglied existiert bereits ohne system_key.', 'Namenskonflikt bricht ab (A7)');
+select ok(not exists (select 1 from public.ea_property_types where system_key = 'member'), 'nichts angelegt');
+
+-- interne Funktion nicht für Nutzer
+select ok(not has_function_privilege('authenticated', 'public.ea_seed_system_property_types()', 'EXECUTE'),
+  'ea_seed_system_property_types nicht für authenticated');
 
 select * from finish();
 rollback;

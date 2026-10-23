@@ -7,7 +7,7 @@
 -- Nachträgen v0.8/v0.9 der Administration.
 -- Läuft ohne Nutzerkontext: Ehrenamtsstatus und historische Qualifikationsarten sind dadurch setzbar.
 --   Testarten d…02 (T-Shirt-Größe) und d…03 (Erste-Hilfe-Kurs am); alle übrigen Eigenschaften verweisen auf die
---   System-Eigenschaftsarten der Migration 20261023002100 (Auflösung über system_key, Ü3 nach
+--   System-Eigenschaftsarten der Migration 20261024000100 (Auflösung über system_key, Ü3 nach
 --   docs/specs/ea-ehrenamt/uebergabe-administration.md). Eigenschaften e…01–e…24.
 --   Datumswerte der Personen 19–22 relativ zu current_date (EA spec.md Abschnitt 9).
 

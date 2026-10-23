@@ -1,5 +1,5 @@
 -- US-AD-23 (spec T7 Teil, T39): Ehrenamtsstatus setzen (R33), Referate einer Person, Person anlegen und übernehmen.
--- Fehlercodes beim Anlegen nach EA-Migration 20261023002600 (plan.md EA O3): EA_CREATE_FORBIDDEN, EA_CREATE_REFERAT_REQUIRED.
+-- Fehlercodes beim Anlegen nach EA-Migration 20261024000600 (plan.md EA O3): EA_CREATE_FORBIDDEN, EA_CREATE_REFERAT_REQUIRED.
 begin;
 create extension if not exists pgtap with schema extensions;
 select * from no_plan();

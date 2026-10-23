@@ -29,8 +29,8 @@ Entscheidung des Product Owners (spec.md AD Abschnitt 9). Ausführung durch den 
 |---|---|---|
 | 1 | Pull Request des Branches `ea-datenbank` öffnen | Workflow `db-tests.yml` startet |
 | 2 | Seed gegen den lokalen Stack | 25 System-Eigenschaftsarten, 57 Qualifikationsarten (47 + 10), Personen 1–12 und 19–22 |
-| 3 | `supabase test db` | alle Tests grün, die der Administration (010–200) und die neuen ab 210 (research.md R-EA-12) |
-| 4 | Mengentest `290_ea_volume` | `ea_volunteer_list` (Referent:in, alle Filter) < 1 s, `ea_v_expiry` ein Jahr < 2 s, Detail < 1 s |
+| 3 | `supabase test db` | alle Tests grün, die der Administration (010–230) und die neuen ab 310 (research.md R-EA-12) |
+| 4 | Mengentest `390_ea_volume` | `ea_volunteer_list` (Referent:in, alle Filter) < 1 s, `ea_v_expiry` ein Jahr < 2 s, Detail < 1 s |
 
 ## D. Fachliche Abnahme in TEST (T21)
 

@@ -26,6 +26,15 @@ type Props = {
   hitAction?: (hit: SimilarPerson) => ReactNode
 }
 
+/** Zusatzangaben je Treffer nach R40: Vorname (bei Rufname), Jahrgang, „ausgeschieden seit“. */
+function hitDetails(hit: SimilarPerson): string[] {
+  const parts: string[] = []
+  if (hit.preferred_name && hit.preferred_name !== hit.first_name) parts.push(`Vorname ${hit.first_name}`)
+  if (hit.birth_year !== null) parts.push(`Jahrgang ${hit.birth_year}`)
+  if (hit.left_since) parts.push(`ausgeschieden seit ${formatDate(hit.left_since)}`)
+  return parts
+}
+
 export function DublettenDialog({ open, hits, pending = false, onCreateAnyway, onCancel, hitAction }: Props) {
   return (
     <Dialog open={open} onOpenChange={(next) => !next && !pending && onCancel()}>
@@ -43,13 +52,7 @@ export function DublettenDialog({ open, hits, pending = false, onCreateAnyway, o
             <li key={hit.person_id} className="flex flex-col gap-2 px-3 py-2.5">
               <div className="flex flex-col gap-0.5">
                 <span className="font-medium">{personName(hit)}</span>
-                <span className="text-muted-foreground">
-                  {hit.preferred_name && hit.preferred_name !== hit.first_name && <>Vorname {hit.first_name} · </>}
-                  {hit.birth_year !== null && <>Jahrgang {hit.birth_year}</>}
-                  {hit.birth_year !== null && hit.left_since && ' · '}
-                  {hit.left_since && <>ausgeschieden seit {formatDate(hit.left_since)}</>}
-                  {hit.birth_year === null && !hit.left_since && !(hit.preferred_name && hit.preferred_name !== hit.first_name) && '–'}
-                </span>
+                <span className="text-muted-foreground">{hitDetails(hit).join(' · ') || '–'}</span>
               </div>
               {hitAction && <div className="flex flex-wrap gap-2">{hitAction(hit)}</div>}
             </li>
