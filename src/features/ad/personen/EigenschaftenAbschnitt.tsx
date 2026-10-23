@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { PlusIcon } from 'lucide-react'
 import { useRevalidator } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { CATEGORY_LABELS, type Category, type PropertyField } from '@/features/ad/eigenschaftsarten/data'
+import { CATEGORIES, CATEGORY_LABELS, type Category, type PropertyField } from '@/features/ad/eigenschaftsarten/data'
 import { Section } from '@/features/ad/personen/Section'
 import {
   saveProperty,
@@ -14,15 +14,24 @@ import {
 } from '@/features/ad/personen/data'
 import { qualificationLabel, type QualificationType } from '@/features/ad/qualifikationsarten/data'
 import { Eigenschaftsformular, type FieldValues, type PropertyInput } from '@/features/shared/Eigenschaftsformular'
+import { MESSAGES } from '@/lib/errors'
 import { formatDate, formatDateTime } from '@/lib/format'
 
 // T083 (US-AD-13, US-AD-19, US-AD-22): Eigenschaften nach Kategorie; aktuelle oben, beendete als „beendet“;
 // Historie je Eigenschaft aufklappbar; Hinzufügen, Ändern und Beenden über das Eigenschaftsformular.
-type Props = { personId: string; data: PropertiesData; canEdit: boolean }
+// T037: Unter /ea mit module = 'EA' – Kategorien in der Reihenfolge des Enums (US-EA-04 AK1), Gruppen-Bezug nur lesen
+// (AK6) und renderExtra für Ablauf-Badge und zusätzliche Aktionen. Unter /ad unverändert.
+type Props = {
+  personId: string
+  data: PropertiesData
+  canEdit: boolean
+  module?: 'AD' | 'EA'
+  renderExtra?: (property: PersonProperty, type: PropertyTypeWithFields) => ReactNode
+}
 
 const today = () => new Date().toISOString().slice(0, 10)
 
-export function EigenschaftenAbschnitt({ personId, data, canEdit }: Props) {
+export function EigenschaftenAbschnitt({ personId, data, canEdit, module = 'AD', renderExtra }: Props) {
   const revalidator = useRevalidator()
   const [adding, setAdding] = useState(false)
   const [newTypeId, setNewTypeId] = useState('')
@@ -37,6 +46,10 @@ export function EigenschaftenAbschnitt({ personId, data, canEdit }: Props) {
     groups.set(t.category, [...(groups.get(t.category) ?? []), p])
   }
   const order = (p: PersonProperty) => (isEnded(p) ? 1 : 0)
+  const categoryOrder = ([a]: [Category, unknown], [b]: [Category, unknown]) =>
+    module === 'EA'
+      ? CATEGORIES.indexOf(a) - CATEGORIES.indexOf(b)
+      : CATEGORY_LABELS[a].localeCompare(CATEGORY_LABELS[b], 'de')
 
   async function submit(property: PersonProperty | null, typeId: string, input: PropertyInput) {
     const err = await saveProperty(property?.id ?? null, personId, typeId, input)
@@ -54,7 +67,7 @@ export function EigenschaftenAbschnitt({ personId, data, canEdit }: Props) {
       {data.properties.length === 0 && !adding && <p className="text-sm text-muted-foreground">Noch keine Eigenschaften.</p>}
 
       {[...groups.entries()]
-        .sort(([a], [b]) => CATEGORY_LABELS[a].localeCompare(CATEGORY_LABELS[b], 'de'))
+        .sort(categoryOrder)
         .map(([category, props]) => (
           <div key={category} className="flex flex-col gap-2">
             <h3 className="text-sm font-medium text-muted-foreground">{CATEGORY_LABELS[category]}</h3>
@@ -82,8 +95,11 @@ export function EigenschaftenAbschnitt({ personId, data, canEdit }: Props) {
                   </li>
                 ) : (
                   <li key={p.id} className="flex flex-col gap-2 px-4 py-3">
-                    <PropertyView property={p} type={t} data={data} />
-                    {canEdit && (
+                    <PropertyView property={p} type={t} data={data} extra={renderExtra?.(p, t)} />
+                    {module === 'EA' && t.relation_kind === 'group' && (
+                      <p className="text-sm text-muted-foreground">{MESSAGES.groupRelationOnlyGr}</p>
+                    )}
+                    {canEdit && !(module === 'EA' && t.relation_kind === 'group') && (
                       <div className="flex flex-wrap gap-2">
                         <Button variant="outline" size="sm" onClick={() => setEditing({ property: p, endOnly: false })}>
                           Ändern
@@ -214,7 +230,9 @@ function Relation({ p, data }: { p: PersonProperty; data: PropertiesData }) {
   return null
 }
 
-function PropertyView({ property: p, type: t, data }: { property: PersonProperty; type: PropertyTypeWithFields; data: PropertiesData }) {
+type PropertyViewProps = { property: PersonProperty; type: PropertyTypeWithFields; data: PropertiesData; extra?: ReactNode }
+
+function PropertyView({ property: p, type: t, data, extra }: PropertyViewProps) {
   const history = [...(p.ea_property_history ?? [])].sort((a, b) => b.changed_at.localeCompare(a.changed_at))
   return (
     <div className="flex flex-col gap-1">
@@ -225,6 +243,7 @@ function PropertyView({ property: p, type: t, data }: { property: PersonProperty
             beendet
           </Badge>
         )}
+        {extra}
       </div>
       <Values fields={t.fields} values={p.field_values} qualificationTypes={data.qualificationTypes} />
       <div className="flex flex-wrap gap-x-4 gap-y-1">

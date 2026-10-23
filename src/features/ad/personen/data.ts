@@ -7,7 +7,7 @@ import type { QualificationType } from '@/features/ad/qualifikationsarten/data'
 import type { SimilarPerson } from '@/features/shared/DublettenDialog'
 import type { FieldValues, NamedOption, PropertyInput } from '@/features/shared/Eigenschaftsformular'
 import { personName } from '@/lib/format'
-import { requireLevel, type AccessStatus } from '@/lib/rights'
+import { requireLevel, type AccessStatus, type ModuleCode } from '@/lib/rights'
 import { supabase } from '@/lib/supabase'
 
 export type VolunteerStatus = 'active' | 'dormant' | 'left'
@@ -274,7 +274,7 @@ export type PersonProperty = {
 }
 
 export type PropertiesData = {
-  /** Eigenschaftsarten mit „sichtbar in“ AD, mit Feldern */
+  /** Eigenschaftsarten mit „sichtbar in“ des Moduls (AD bzw. EA), mit Feldern */
   types: PropertyTypeWithFields[]
   properties: PersonProperty[]
   referate: NamedOption[]
@@ -288,7 +288,7 @@ const TYPE_COLUMNS =
   'id, name, purpose, category, read_level, relation_kind, relation_required, allow_multiple, system_key, visible_in, origin, valid_from_label, valid_to_label'
 
 // Namen zu Auth-Nutzern über Zugang → Person; nur lesbar, soweit die RLS es erlaubt
-async function loadUserNames(userIds: string[]): Promise<Record<string, string>> {
+export async function loadUserNames(userIds: string[]): Promise<Record<string, string>> {
   const ids = [...new Set(userIds.filter(Boolean))]
   if (ids.length === 0) return {}
   const accesses = await supabase.from('ad_accesses').select('auth_user_id, person_id').in('auth_user_id', ids)
@@ -304,9 +304,10 @@ async function loadUserNames(userIds: string[]): Promise<Record<string, string>>
   )
 }
 
-export async function loadPersonProperties(personId: string): Promise<PropertiesData | null> {
+/** Eigenschaften einer Person; nur Arten, deren „sichtbar in“ das Modul enthält (T037: AD und EA). */
+export async function loadPersonProperties(personId: string, module: ModuleCode = 'AD'): Promise<PropertiesData | null> {
   const [types, properties, referate, gremien, qualificationTypes] = await Promise.all([
-    supabase.from('ea_property_types').select(`${TYPE_COLUMNS}, ea_property_fields(*)`).contains('visible_in', ['AD']).order('name'),
+    supabase.from('ea_property_types').select(`${TYPE_COLUMNS}, ea_property_fields(*)`).contains('visible_in', [module]).order('name'),
     supabase.from('ea_properties').select('*, ea_property_history(*)').eq('person_id', personId).order('valid_from', { ascending: false }),
     supabase.from('ea_referate').select('id, name, is_active').order('sort_order'),
     supabase.from('ea_gremien').select('id, name, is_active').order('sort_order'),
