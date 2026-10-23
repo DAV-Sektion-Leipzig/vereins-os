@@ -112,7 +112,7 @@ description: "Tasks für das Modul Ehrenamtsmanagement (EA)"
 - [x] T026 [P] [US-EA-17] (spec T20 Teil) `scripts/ea-migrate/beispiel.csv` (5 fiktive Zeilen nach spec.md Abschnitt 9) und `scripts/ea-migrate/beispiel-fehler.csv` (unbekanntes Kürzel, ungültige IBAN); Namen fiktiv, E-Mail `@example.test`, IBAN nur `DE89370400440532013000`.
 - [x] T027 [P] [US-EA-17] (spec T20 Teil) Unit-Tests `scripts/ea-migrate/*.test.ts` mit `node:test`: Kopfzeile ohne Pflichtspalte, Datumsumwandlung, ja/nein, Liste `qualifikationen`, Jahresspalten, Formatfehler mit Zeilennummer, Bericht ohne Schlüssel; RPC-Aufruf durch eine Ersatzfunktion.
 - [x] T028 [US-EA-18] (spec T20 Teil) `package.json`: devDependencies `tsx`, `csv-parse`; Skripte `"ea:migrate": "tsx scripts/ea-migrate/index.ts"`, `"ea:migrate:test": "tsx --test scripts/ea-migrate/"`; `.gitignore`: `scripts/ea-migrate/*.csv`, `!scripts/ea-migrate/vorlage.csv`, `!scripts/ea-migrate/beispiel.csv`, `!scripts/ea-migrate/beispiel-fehler.csv`, `*.pruefbericht.md`, `*.abschlussbericht.md` (US-EA-18 AK5); `npm run lint` ohne Fehler.
-- [ ] T029 [US-EA-17] Pull Request `us-ea-17-import` (kein Auto-Merge, weil `package.json` und Skript); im PR die Anleitung für den Admin: Probelauf und Lauf gegen TEST mit `beispiel.csv` und `beispiel-fehler.csv` (quickstart.md D 11–12). Claude Code führt das Skript nicht gegen eine Datenbank aus.
+- [x] T029 [US-EA-17] Pull Request `us-ea-17-import` (kein Auto-Merge, weil `package.json` und Skript); im PR die Anleitung für den Admin: Probelauf und Lauf gegen TEST mit `beispiel.csv` und `beispiel-fehler.csv` (quickstart.md D 11–12). Claude Code führt das Skript nicht gegen eine Datenbank aus.
 
 **Checkpoint**: Migration der Aktivenliste ist in TEST geprüft.
 
