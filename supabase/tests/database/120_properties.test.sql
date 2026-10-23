@@ -1,6 +1,6 @@
 -- US-AD-13, US-AD-19 (spec T7 Teil, T36): Eigenschaften – R35, R37, R38, R27, R28, Gültigkeit, Historie.
--- Seed-Testarten: d…02 T-Shirt-Größe (ein Eintrag), d…04 Lizenz (Test), d…05 Funktion (Test, Bezug Referat Pflicht),
--- d…07 Geburtsdatum (Test). Als test.admin (AD verwalten), sofern nicht anders angegeben.
+-- Arten: d…02 T-Shirt-Größe (Seed, ein Eintrag) sowie die System-Eigenschaftsarten function, committee (Bezug Gremium
+-- Pflicht) und license (EA-Migration 20261024000100, Ü3). Als test.admin (AD verwalten), sofern nicht anders angegeben.
 begin;
 create extension if not exists pgtap with schema extensions;
 select * from no_plan();
@@ -72,14 +72,15 @@ select is(pg_temp.error_detail($$ select pg_temp.prop('{"zahl": 1}') $$), 'Pflic
 
 -- R38: Bezug Pflicht, inaktives Referat
 select throws_ok($$ insert into public.ea_properties (person_id, property_type_id, field_values, valid_from)
-                    values ('a0000000-0000-4000-8000-000000000004', 'd0000000-0000-4000-8000-000000000005',
-                            '{"function": "Helfer:in"}', current_date) $$,
-  'P0001', 'EA_RELATION_REQUIRED', 'Bezug Pflicht ohne Referat (R38)');
+                    values ('a0000000-0000-4000-8000-000000000004',
+                            (select id from public.ea_property_types where system_key = 'committee'),
+                            '{"role": "Mitglied"}', current_date) $$,
+  'P0001', 'EA_RELATION_REQUIRED', 'Bezug Pflicht ohne Gremium (R38)');
 select pg_temp.as_owner();
 update public.ea_referate set is_active = false where name = 'Leistungssport';
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
 select throws_ok(format($$ insert into public.ea_properties (person_id, property_type_id, field_values, related_referat_id, valid_from)
-                    values ('a0000000-0000-4000-8000-000000000004', 'd0000000-0000-4000-8000-000000000005',
+                    values ('a0000000-0000-4000-8000-000000000004', (select id from public.ea_property_types where system_key = 'function'),
                             '{"function": "Helfer:in"}', %L, current_date) $$, pg_temp.referat('Leistungssport')),
   'P0001', 'EA_RELATION_REQUIRED', 'inaktives Referat nicht neu wählbar (R38)');
 
@@ -97,15 +98,15 @@ select lives_ok($$ insert into public.ea_properties (person_id, property_type_id
 
 -- R27, R28: Qualifikationsart als Feld
 select throws_ok(format($$ insert into public.ea_properties (person_id, property_type_id, field_values, valid_from)
-                    values ('a0000000-0000-4000-8000-000000000010', 'd0000000-0000-4000-8000-000000000004',
+                    values ('a0000000-0000-4000-8000-000000000010', (select id from public.ea_property_types where system_key = 'license'),
                             jsonb_build_object('qualification_type', %L), current_date) $$, pg_temp.qual('TCSP')),
   'P0001', 'AD_QUALIFICATION_HISTORIC', 'historische Qualifikationsart nicht neu vergeben (R27)');
 select throws_ok(format($$ insert into public.ea_properties (person_id, property_type_id, field_values, valid_from)
-                    values ('a0000000-0000-4000-8000-000000000010', 'd0000000-0000-4000-8000-000000000004',
+                    values ('a0000000-0000-4000-8000-000000000010', (select id from public.ea_property_types where system_key = 'license'),
                             jsonb_build_object('qualification_type', %L), current_date) $$, pg_temp.qual('ZQOS')),
   'P0001', 'AD_QUALIFICATION_KIND', 'Zusatzqualifikation im Lizenzfeld (R28)');
 select throws_ok($$ insert into public.ea_properties (person_id, property_type_id, field_values, valid_from)
-                    values ('a0000000-0000-4000-8000-000000000010', 'd0000000-0000-4000-8000-000000000004',
+                    values ('a0000000-0000-4000-8000-000000000010', (select id from public.ea_property_types where system_key = 'license'),
                             '{"qualification_type": "00000000-0000-4000-8000-000000000000"}', current_date) $$,
   'P0001', 'EA_VALUE_TYPE', 'nicht vorhandene Qualifikationsart');
 select lives_ok($$ update public.ea_properties set field_values = field_values || '{"license_number": "TEST-0002"}'
@@ -113,8 +114,8 @@ select lives_ok($$ update public.ea_properties set field_values = field_values |
   'andere Werte einer Eigenschaft mit historischer Qualifikationsart änderbar (R27)');
 select pg_temp.as_owner();
 select lives_ok(format($$ insert into public.ea_properties (person_id, property_type_id, field_values, valid_from)
-                   values ('a0000000-0000-4000-8000-000000000010', 'd0000000-0000-4000-8000-000000000004',
-                           jsonb_build_object('qualification_type', %L), '2010-01-01') $$, pg_temp.qual('TCSP')),
+                   values ('a0000000-0000-4000-8000-000000000010', (select id from public.ea_property_types where system_key = 'license'),
+                           jsonb_build_object('qualification_type', %L, 'valid_until', '2015-12-31'), '2010-01-01') $$, pg_temp.qual('TCSP')),
   'ohne Nutzerkontext historische Qualifikationsart erlaubt (Altbestand)');
 
 -- Gültigkeit und Historie

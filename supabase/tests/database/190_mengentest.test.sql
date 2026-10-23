@@ -25,7 +25,7 @@ select gen_random_uuid(), 'Vorname' || g, 'Nachname' || lpad(g::text, 4, '0'), '
 
 -- je Person: eine Funktion mit Bezug auf ein Referat (jede vierte im Referat Klettern), 29 weitere Eigenschaften
 insert into public.ea_properties (person_id, property_type_id, field_values, related_referat_id, valid_from)
-select p.id, 'd0000000-0000-4000-8000-000000000005', '{"function": "Helfer:in"}',
+select p.id, (select id from public.ea_property_types where system_key = 'function'), '{"function": "Helfer:in"}',
        (select r.id from public.ea_referate r
          where r.name = case when right(p.last_name, 1) in ('0', '4', '8') then 'Klettern' else 'Touren' end),
        date '2024-01-01'

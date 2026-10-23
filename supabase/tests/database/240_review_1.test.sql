@@ -76,10 +76,10 @@ select lives_ok($$ select public.ea_create_volunteer('Neu', 'Shirt', null, 'd000
   'Geschäftsstelle: Art ohne Bezug ohne Referat erlaubt (Reichweite alle)');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
 select throws_ok($$ select public.ea_create_volunteer('Neu', 'Ohne', null, 'd0000000-0000-4000-8000-000000000002', null, '{"size": "M"}', null) $$,
-  'P0001', 'EA_RELATION_REQUIRED', 'Referent:in: Art ohne Referatsbezug abgelehnt (R41)');
+  'P0001', 'EA_CREATE_REFERAT_REQUIRED', 'Referent:in: Art ohne Referatsbezug abgelehnt (R41; Code nach EA O3)');
 select throws_ok(format($$ select public.ea_activate_person('a0000000-0000-4000-8000-000000000011', 'd0000000-0000-4000-8000-0000000000cc', %L, '{"note": "x"}', null) $$,
   pg_temp.referat('Klettern')), 'P0001', 'AD_CONFIDENTIAL_ONLY_AD', 'Referent:in: vertrauliche Art auch beim Übernehmen abgelehnt');
-select lives_ok(format($$ select public.ea_create_volunteer('Neu', 'Richtig', null, 'd0000000-0000-4000-8000-000000000005', %L, '{"function": "Helfer:in"}', null) $$,
+select lives_ok(format($$ select public.ea_create_volunteer('Neu', 'Richtig', null, (select id from public.ea_property_types where system_key = 'function'), %L, '{"function": "Helfer:in"}', null) $$,
   pg_temp.referat('Klettern')), 'Referent:in: Funktion mit eigenem Referat weiterhin erlaubt');
 
 select pg_temp.as_owner();

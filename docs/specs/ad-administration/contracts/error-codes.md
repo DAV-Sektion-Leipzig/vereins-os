@@ -1,6 +1,6 @@
 # Contract: Fehlercodes → Meldungen
 
-Stand: 22.10.2026 · Grundlage: [spec.md Administration](../spec.md) v0.9 (Abschnitt 5 und Abschnitt 2; umgesetzt wird zunächst der Kern bis v0.7.1, siehe [plan.md](../plan.md)), [02-stories.md Gruppen](../../gr-gruppen/02-stories.md) v0.7 (US-GR-19), [spec.md Anwesenheitserfassung](../../ez-einsaetze/spec.md) v0.1 (Abschnitt 5)
+Stand: 23.10.2026 · Grundlage: [spec.md Administration](../spec.md) v0.9 (Abschnitt 5 und Abschnitt 2; umgesetzt wird zunächst der Kern bis v0.7.1, siehe [plan.md](../plan.md)), [02-stories.md Gruppen](../../gr-gruppen/02-stories.md) v0.7 (US-GR-19), [spec.md Anwesenheitserfassung](../../ez-einsaetze/spec.md) v0.1 (Abschnitt 5)
 
 Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnung Code → Meldung auf sie. Die Meldungstexte stehen wörtlich in der jeweiligen Spec. Das Frontend bildet die Codes in `src/lib/errors.ts` auf die Meldungen ab.
 
@@ -80,10 +80,16 @@ Soweit in spec.md Administration definiert (Personenmodell, Eigenschaftsarten, E
 | `EA_CONFIDENTIAL_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. [OFFEN] gilt nach R29 noch? | R8 | [OFFEN] |
 | `EA_STATUS_FORBIDDEN` | Du darfst den Status dieser Person nicht ändern. | R33 | umgesetzt |
 | `EA_CREATE_FOREIGN_REFERAT` | Du kannst nur Personen für deine Referate anlegen. | R45 | geplant (T53) |
-| `EA_CREATE_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | R41, R45 | geplant (Ehrenamtsmanagement, Branch `ea-datenbank`; Entscheidung Product Owner 23.10.2026, plan.md EA O3) |
-| `EA_CREATE_REFERAT_REQUIRED` | Bitte eine Funktion oder ein Amt in deinem Referat angeben. | R3 EA | geplant (Ehrenamtsmanagement, Branch `ea-datenbank`; Entscheidung Product Owner 23.10.2026, plan.md EA O3) |
+| `EA_CREATE_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | R41, R45 | umgesetzt (EA, `20261024000600_ea_check_create`; Entscheidung Product Owner 23.10.2026, plan.md EA O3) |
+| `EA_CREATE_REFERAT_REQUIRED` | Bitte eine Funktion oder ein Amt in deinem Referat angeben. | R3 EA | umgesetzt (EA, `20261024000600_ea_check_create`; Entscheidung Product Owner 23.10.2026, plan.md EA O3) |
+| `EA_IBAN_INVALID` | Die IBAN ist ungültig. | R13 EA | umgesetzt (EA, `20261024000400_ea_iban`, Trigger `ea_properties_iban`) |
+| `EA_STATUS_DATE` | Bitte ein Datum bis spätestens <TT.MM.JJJJ> wählen. | R18 EA | umgesetzt (EA, `20261024000500_ea_status_renew`; Grenzdatum im `detail`) |
+| `EA_STATUS_UNCHANGED` | Die Person hat diesen Status bereits. | R19 EA | umgesetzt (EA, `20261024000500_ea_status_renew`) |
+| `EA_LEAVE_PROPERTY` | Diese Angabe kann hier nicht beendet werden. | R20 EA | umgesetzt (EA, `20261024000500_ea_status_renew`) |
+| `EA_RENEW_INVALID` | Nur aktuelle Lizenzen und Qualifikationen können verlängert werden; das neue Datum muss nach dem bisherigen liegen. | R6 EA | umgesetzt (EA, `20261024000500_ea_status_renew`) |
+| Constraints `ea_referate_name_key`, `ea_gremien_name_key` (kein Code) | Diese Bezeichnung gibt es bereits. | US-EA-14 AK3 | umgesetzt (Index aus `20261023000200`) |
 
-`EA_VALUE_TYPE`, `EA_FIELD_REQUIRED`, `EA_FIELD_CHOICE`, `AD_QUALIFICATION_HISTORIC` und `AD_QUALIFICATION_KIND` liefern die Feldbezeichnung im `detail` des Fehlers; `src/lib/errors.ts` setzt sie für „<Feld>“ ein. Der frühere Text von `EA_VALUE_TYPE` „Der Wert passt nicht zum Datentyp der Eigenschaftsart.“ entfällt.
+`EA_VALUE_TYPE`, `EA_FIELD_REQUIRED`, `EA_FIELD_CHOICE`, `AD_QUALIFICATION_HISTORIC` und `AD_QUALIFICATION_KIND` liefern die Feldbezeichnung im `detail` des Fehlers; `src/lib/errors.ts` setzt sie für „<Feld>“ ein. `EA_STATUS_DATE` liefert das Grenzdatum `TT.MM.JJJJ` im `detail` für „<TT.MM.JJJJ>“. „R… EA“ verweist auf docs/specs/ea-ehrenamt/spec.md Abschnitt 5. Der frühere Text von `EA_VALUE_TYPE` „Der Wert passt nicht zum Datentyp der Eigenschaftsart.“ entfällt.
 
 `EA_VALID_RANGE` (Constraint `ea_properties_valid_range`): Die Oberfläche nennt statt „Gültig bis“/„gültig von“ die Bezeichnungen der Eigenschaftsart, falls gesetzt (R49), z. B. „‚Beendet am‘ darf nicht vor ‚erworben bzw. verlängert am‘ liegen.“ [ANNAHME spec v0.7.2].
 
