@@ -24,7 +24,7 @@ Claude Code hat weder eine Domain noch eine Adresse eingetragen.
 | `npm run build` | ohne Fehler; Hinweis auf Chunk-Größe > 500 kB (bekannt) |
 | `npm audit --omit=dev` | 0 Schwachstellen im Produktivcode |
 | `npm audit` (mit Entwicklungsabhängigkeiten) | 7 „hoch“: `braces` → `micromatch` → `fast-glob` → `@shadcn/registry`/`shadcn` und `@ts-morph/common`/`ts-morph`. Nur Werkzeuge der shadcn-CLI, nicht im Bundle. Behebung hängt an einem Update der shadcn-CLI |
-| Adressen im Repo (`git grep` auf `@`) | nur `@dav-leipzig.de`, `example.test`, `example.org`, `rita@woanders.test` (reservierte Testdomain in `supabase/tests/database/030_auth_triggers.test.sql`) und das auskommentierte Supabase-Beispiel `admin@email.com` in `supabase/config.toml` |
+| Adressen im Repo (`git grep` auf `@`) | nur `@dav-leipzig.de`, `example.test`, `example.org`, eine Adresse mit der reservierten Endung `.test` in `supabase/tests/database/030_auth_triggers.test.sql` und das auskommentierte Supabase-Beispiel für `admin_email` in `supabase/config.toml` |
 | Secrets im Diff | keine; Frontend-Bundle enthält nur die TEST-URL und den Publishable Key (öffentlich, gewollt) |
 
 ## 3. Prüfungen ohne Anmeldung gegen TEST (T104, Teil) – erledigt
