@@ -199,8 +199,8 @@ description: "Tasks für das Modul Ehrenamtsmanagement (EA)"
 
 **Unabhängiger Test**: US-EA-12 AK1–AK5; die exportierte Datei öffnet sich in Excel mit Umlauten und Spalten.
 
-- [ ] T047 [US-EA-12] (spec T16) `src/features/ea/ablauf/AblaufPage.tsx` mit Loader: Jahr aus der URL (Standard Folgejahr, Auswahl aktuelles Jahr bis +3); `ea_v_expiry` mit `kind=in.(license,qualification)` und `valid_until` im Jahr; Referate über `ea_volunteer_list` (research.md R-EA-06); Spalten Name, Referate, „Kürzel – Bezeichnung“, gültig bis, `AblaufBadge`; sortiert nach gültig bis, Name; leer: „Im Jahr <jahr> läuft keine Qualifikation ab.“
-- [ ] T048 [P] [US-EA-12] (spec T16) `src/features/ea/ablauf/csv.ts`: `ablauf-<jahr>.csv`, UTF-8 mit BOM, Semikolon, Spalten Nachname; Vorname; Rufname; Referate; Kürzel; Bezeichnung; gültig bis (TT.MM.JJJJ); Werte mit Semikolon oder Anführungszeichen quoten; Knopf „CSV exportieren“ nur mit `canManage`.
+- [x] T047 [US-EA-12] (spec T16) `src/features/ea/ablauf/AblaufPage.tsx` mit Loader: Jahr aus der URL (Standard Folgejahr, Auswahl aktuelles Jahr bis +3); `ea_v_expiry` mit `kind=in.(license,qualification)` und `valid_until` im Jahr; Referate über `ea_volunteer_list` (research.md R-EA-06); Spalten Name, Referate, „Kürzel – Bezeichnung“, gültig bis, `AblaufBadge`; sortiert nach gültig bis, Name; leer: „Im Jahr <jahr> läuft keine Qualifikation ab.“
+- [x] T048 [P] [US-EA-12] (spec T16) `src/features/ea/ablauf/csv.ts`: `ablauf-<jahr>.csv`, UTF-8 mit BOM, Semikolon, Spalten Nachname; Vorname; Rufname; Referate; Kürzel; Bezeichnung; gültig bis (TT.MM.JJJJ); Werte mit Semikolon oder Anführungszeichen quoten; Knopf „CSV exportieren“ nur mit `canManage`.
 
 ---
 
