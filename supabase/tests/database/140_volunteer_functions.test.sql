@@ -1,4 +1,5 @@
 -- US-AD-23 (spec T7 Teil, T39): Ehrenamtsstatus setzen (R33), Referate einer Person, Person anlegen und übernehmen.
+-- Fehlercodes beim Anlegen nach EA-Migration 20261023002600 (plan.md EA O3): EA_CREATE_FORBIDDEN, EA_CREATE_REFERAT_REQUIRED.
 begin;
 create extension if not exists pgtap with schema extensions;
 select * from no_plan();
@@ -68,7 +69,7 @@ select is_empty($$ select 1 from public.ea_person_referate('a0000000-0000-4000-8
 -- Person anlegen (R41)
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
 select lives_ok(format($$ select public.ea_create_volunteer('Neu', 'Klettrerin', 'Nele',
-                   'd0000000-0000-4000-8000-000000000005', %L, '{"function": "Helfer:in"}', '2026-10-01') $$,
+                   (select id from public.ea_property_types where system_key = 'function'), %L, '{"function": "Helfer:in"}', '2026-10-01') $$,
                    pg_temp.referat('Klettern')),
   'Referent:in legt Person mit Funktion im eigenen Referat an');
 select pg_temp.as_owner();
@@ -85,17 +86,17 @@ select is((select count(*)::int from public.ea_volunteer_status_history h join p
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
 select ok(exists (select 1 from public.ea_persons where last_name = 'Klettrerin'), 'angelegte Person sofort sichtbar');
 select throws_ok(format($$ select public.ea_create_volunteer('Fremd', 'Person', null,
-                    'd0000000-0000-4000-8000-000000000005', %L, '{"function": "Helfer:in"}', null) $$,
+                    (select id from public.ea_property_types where system_key = 'function'), %L, '{"function": "Helfer:in"}', null) $$,
                     pg_temp.referat('Ausbildung')),
   'P0001', 'EA_RELATION_FOREIGN_REFERAT', 'fremdes Referat abgelehnt (R41)');
 select throws_ok($$ select public.ea_create_volunteer('Ohne', 'Bezug', null, null, null, null, null) $$,
-  'P0001', 'EA_RELATION_REQUIRED', 'Referent:in nur mit erster Zuordnung');
+  'P0001', 'EA_CREATE_REFERAT_REQUIRED', 'Referent:in nur mit erster Zuordnung (R3 EA, plan.md EA O3)');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
 select lives_ok($$ select public.ea_create_volunteer('Gremium', 'Mitglied', null, null, null, null, null) $$,
   'Geschäftsstelle ohne Art und Referat');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
 select throws_ok($$ select public.ea_create_volunteer('Kein', 'Recht', null, null, null, null, null) $$,
-  'P0001', 'AD_FORBIDDEN', 'Vorstand legt nicht an');
+  'P0001', 'EA_CREATE_FORBIDDEN', 'Vorstand legt nicht an (US-EA-05 AK6, plan.md EA O3)');
 
 -- Übernahme bzw. Rückkehr (E1)
 select pg_temp.as_owner();
@@ -105,18 +106,28 @@ update public.ea_persons set volunteer_status = 'left', volunteer_status_since =
 select set_config('ea.status_change', '', true);
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
 select lives_ok(format($$ select public.ea_activate_person('a0000000-0000-4000-8000-000000000011',
-                   'd0000000-0000-4000-8000-000000000005', %L, '{"function": "Trainer:in"}', current_date) $$,
+                   (select id from public.ea_property_types where system_key = 'function'), %L, '{"function": "Trainer:in"}', current_date) $$,
                    pg_temp.referat('Klettern')),
   'Referent:in übernimmt Ausgeschiedene mit Zuordnung zum eigenen Referat');
 select ok(exists (select 1 from public.ea_persons where id = 'a0000000-0000-4000-8000-000000000011'
                    and volunteer_status = 'active'), 'wieder aktiv und sichtbar, keine neue Person');
 select lives_ok(format($$ select public.ea_activate_person('a0000000-0000-4000-8000-000000000012',
-                   'd0000000-0000-4000-8000-000000000005', %L, '{"function": "Helfer:in"}', current_date) $$,
+                   (select id from public.ea_property_types where system_key = 'function'), %L, '{"function": "Helfer:in"}', current_date) $$,
                    pg_temp.referat('Klettern')),
   'Referent:in übernimmt Person aus Gruppen (v0.7.1)');
 select ok(exists (select 1 from public.ea_persons where id = 'a0000000-0000-4000-8000-000000000012'), 'Person 12 jetzt sichtbar');
+select throws_ok($$ select public.ea_activate_person('a0000000-0000-4000-8000-000000000011', null, null, null, current_date) $$,
+  'P0001', 'EA_CREATE_REFERAT_REQUIRED', 'Referent:in aktiviert nicht ohne Funktion oder Amt (US-EA-10 AK5)');
+select throws_ok(format($$ select public.ea_activate_person('a0000000-0000-4000-8000-000000000011',
+                    (select id from public.ea_property_types where system_key = 'license'), %L,
+                    '{"qualification_type": "x"}', current_date) $$, pg_temp.referat('Klettern')),
+  'P0001', 'EA_CREATE_REFERAT_REQUIRED', 'erste Zuordnung muss Funktion oder Amt sein (R3 EA)');
+select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
+select throws_ok($$ select public.ea_activate_person('a0000000-0000-4000-8000-000000000011', null, null, null, current_date) $$,
+  'P0001', 'EA_CREATE_FORBIDDEN', 'Vorstand übernimmt nicht');
+select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
 select throws_ok(format($$ select public.ea_activate_person('a0000000-0000-4000-8000-000000000008',
-                    'd0000000-0000-4000-8000-000000000005', %L, '{"function": "Helfer:in"}', current_date) $$,
+                    (select id from public.ea_property_types where system_key = 'function'), %L, '{"function": "Helfer:in"}', current_date) $$,
                     pg_temp.referat('Klettern')),
   'P0001', 'AD_BAD_REQUEST', 'Funktionsperson nicht übernehmbar');
 

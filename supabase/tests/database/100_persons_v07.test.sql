@@ -28,9 +28,13 @@ select results_eq(
             ('a0000000-0000-4000-8000-000000000005', 'dormant', date '2026-01-01'),
             ('a0000000-0000-4000-8000-000000000009', 'active', date '2024-01-01'),
             ('a0000000-0000-4000-8000-000000000010', 'active', date '2023-01-01'),
-            ('a0000000-0000-4000-8000-000000000011', 'left', date '2025-06-30') $$,
-  'Ehrenamtsstatus nach spec.md Abschnitt 9');
-select is((select count(*)::int from public.ea_volunteer_status_history), 5, 'je Status ein Eintrag in der Historie');
+            ('a0000000-0000-4000-8000-000000000011', 'left', date '2025-06-30'),
+            ('a0000000-0000-4000-8000-000000000019', 'active', date '2024-01-01'),
+            ('a0000000-0000-4000-8000-000000000020', 'active', date '2020-01-01'),
+            ('a0000000-0000-4000-8000-000000000021', 'active', date '2023-01-01'),
+            ('a0000000-0000-4000-8000-000000000022', 'active', date '2025-01-01') $$,
+  'Ehrenamtsstatus nach spec.md Abschnitt 9 (AD) und EA spec.md Abschnitt 9 (19–22)');
+select is((select count(*)::int from public.ea_volunteer_status_history), 9, 'je Status ein Eintrag in der Historie');
 
 -- Rufname getrimmt, leer → null (US-AD-24)
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
@@ -80,7 +84,7 @@ select throws_ok($$ insert into public.ea_persons (first_name, last_name, create
 
 -- Historie nur lesbar
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
-select is((select count(*)::int from public.ea_volunteer_status_history), 5, 'Admin liest die Historie');
+select is((select count(*)::int from public.ea_volunteer_status_history), 9, 'Admin liest die Historie');
 select throws_ok($$ insert into public.ea_volunteer_status_history (person_id, status, valid_from)
                    values ('a0000000-0000-4000-8000-000000000004', 'left', current_date) $$,
   '42501', null, 'Historie nicht direkt schreibbar');

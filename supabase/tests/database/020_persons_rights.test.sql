@@ -138,8 +138,8 @@ select is((select count(*)::int from public.ea_persons where kind = 'function'),
 select ok((select count(*) from public.ea_persons) > 0, 'Geschäftsstelle (EA) sieht Menschen');
 select throws_ok($$ insert into public.ea_persons (first_name, last_name) values ('Erika', 'Neu') $$,
   '42501', null, 'EA verwalten legt Personen nur über ea_create_volunteer an (spec v0.7, Abschnitt 3)');
-select is((select count(*)::int from public.ea_persons), 5,
-  'Geschäftsstelle sieht nur Personen mit Ehrenamtsstatus (R32: 4, 5, 9, 10, 11)');
+select is((select count(*)::int from public.ea_persons), 9,
+  'Geschäftsstelle sieht nur Personen mit Ehrenamtsstatus (R32: 4, 5, 9, 10, 11, 19–22)');
 select throws_ok($$ insert into public.ea_persons (first_name, last_name, kind) values ('Funktion', 'Test', 'function') $$,
   '42501', null, 'Funktionsperson nur durch AD');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');

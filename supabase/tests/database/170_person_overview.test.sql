@@ -15,7 +15,7 @@ begin
 end $$;
 
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
-select is((select count(*)::int from public.ad_v_person_overview), 12, 'Admin: 12 Personen');
+select is((select count(*)::int from public.ad_v_person_overview), 16, 'Admin: 16 Personen (1–12, 19–22)');
 select results_eq(
   $$ select access_status::text, volunteer_status::text, templates from public.ad_v_person_overview
       where person_id = 'a0000000-0000-4000-8000-000000000009' $$,
@@ -44,7 +44,7 @@ select results_eq($$ select person_id from public.ad_v_person_overview where pre
   $$ values ('a0000000-0000-4000-8000-000000000004'::uuid) $$, 'Suche über den Rufnamen');
 
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
-select is((select count(*)::int from public.ad_v_person_overview), 5, 'Geschäftsstelle: nur Personen im Pfad EA');
+select is((select count(*)::int from public.ad_v_person_overview), 9, 'Geschäftsstelle: nur Personen im Pfad EA');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
 select is((select count(*)::int from public.ad_v_person_overview), 0, 'Vorstand: keine Zeilen');
 

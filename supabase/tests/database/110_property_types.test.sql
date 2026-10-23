@@ -13,6 +13,10 @@ begin
   execute 'reset role';
   perform set_config('request.jwt.claims', '', true);
 end $$;
+-- ID der vertraulichen System-Eigenschaftsart Hauptamt, unabhängig von der RLS des aktuellen Nutzers
+create function pg_temp.employment() returns uuid language sql security definer as $$
+  select id from public.ea_property_types where system_key = 'employment'
+$$;
 
 -- Anlegen mit Feldern (US-AD-22 AK1, US-AD-19 AK1)
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
@@ -74,9 +78,9 @@ select lives_ok($$ select public.ea_save_property_type('{"name": "Schuhgröße",
 select is_empty($$ select 1 from public.ea_property_types where read_level = 'confidential' $$,
   'Geschäftsstelle sieht keine vertraulichen Arten');
 select is_empty($$ select 1 from public.ea_property_fields f
-                     where f.property_type_id = 'd0000000-0000-4000-8000-000000000001' $$,
+                     where f.property_type_id = pg_temp.employment() $$,
   'Geschäftsstelle sieht keine Felder vertraulicher Arten');
-update public.ea_property_types set name = 'Hauptamt neu' where id = 'd0000000-0000-4000-8000-000000000001';
+update public.ea_property_types set name = 'Hauptamt neu' where id = pg_temp.employment();
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
 select ok((select count(*) from public.ea_property_types) > 0, 'Referent:in liest Eigenschaftsarten');
 select is_empty($$ select 1 from public.ea_property_types where read_level = 'confidential' $$,
@@ -84,11 +88,11 @@ select is_empty($$ select 1 from public.ea_property_types where read_level = 'co
 select throws_ok($$ select public.ea_save_property_type('{"name": "Referent neu", "purpose": "x", "visible_in": ["EA"]}',
   '[{"key": "a", "label": "A", "data_type": "text"}]') $$,
   '42501', null, 'Referent:in legt keine Art an');
-update public.ea_property_types set valid_to_label = 'bis' where id = 'd0000000-0000-4000-8000-000000000005';
+update public.ea_property_types set valid_to_label = 'bis' where id = (select id from public.ea_property_types where system_key = 'function');
 select pg_temp.as_owner();
-select is((select name from public.ea_property_types where id = 'd0000000-0000-4000-8000-000000000001'), 'Hauptamt',
+select is((select name from public.ea_property_types where id = pg_temp.employment()), 'Hauptamt',
   'Geschäftsstelle ändert keine vertrauliche Art (RLS)');
-select is((select valid_to_label from public.ea_property_types where id = 'd0000000-0000-4000-8000-000000000005'), null,
+select is((select valid_to_label from public.ea_property_types where id = (select id from public.ea_property_types where system_key = 'function')), null,
   'Referent:in ändert keine Bezeichnung (R49, Rechte wie die übrigen Spalten)');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
 select is_empty($$ select 1 from public.ea_property_types $$, 'Vorstand liest keine Eigenschaftsarten');
@@ -99,7 +103,7 @@ select throws_ok($$ update public.ea_property_fields set data_type = 'text'
                     where property_type_id = 'd0000000-0000-4000-8000-000000000002' and key = 'size' $$,
   'P0001', 'EA_DATA_TYPE_LOCKED', 'Datentyp gesperrt bei vorhandenen Eigenschaften (R36)');
 select throws_ok($$ update public.ea_property_types set relation_kind = 'gremium', relation_required = false
-                    where id = 'd0000000-0000-4000-8000-000000000005' $$,
+                    where id = (select id from public.ea_property_types where system_key = 'function') $$,
   'P0001', 'EA_RELATION_LOCKED', 'Bezug gesperrt bei vorhandenen Eigenschaften');
 select throws_ok($$ select public.ea_save_property_type('{"id": "d0000000-0000-4000-8000-000000000002"}',
   (select jsonb_agg(jsonb_build_object('id', id)) from public.ea_property_fields
