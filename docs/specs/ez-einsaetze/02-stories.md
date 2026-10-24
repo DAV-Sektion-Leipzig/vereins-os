@@ -64,7 +64,7 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 **Akzeptanzkriterien**
 - AK1: Gegeben die Gruppe „Gruppe 1“ hat die Trainingszeit dienstags 17:00–19:00, wenn ich „Training“ und „Gruppe 1“ wähle und das Datum Dienstag, 13.10.2026 eingebe, dann wird „Trainingszeit: Di 17:00–19:00“ angezeigt; eine Uhrzeit wird nicht abgefragt (R28).
 - AK2: Gegeben ich habe Gruppe, Datum und einen aktiven Ort gewählt, wenn ich speichere, dann entsteht ein Einsatz „Training“ mit Referat der Gruppe, „erfasst von“ = ich und „erfasst am“ = jetzt.
-- AK3: Gegeben die Gruppe hat für den gewählten Wochentag keine Trainingszeit, wenn ich das Datum eingebe, dann erscheint der Hinweis „Für diesen Wochentag ist keine Trainingszeit hinterlegt.“; speichern ist trotzdem möglich [ANNAHME].
+- AK3: Gegeben die Gruppe hat für den gewählten Wochentag keine Trainingszeit, wenn ich das Datum eingebe, dann erscheint der Hinweis „Für diesen Wochentag ist keine Trainingszeit hinterlegt.“; speichern ist trotzdem möglich (Product Owner 24.10.2026). Je Gruppe und Wochentag gibt es höchstens eine Trainingszeit (Übergabe an Gruppen v1.0).
 - AK4 (Fehler): Gegeben der Ort ist nicht gewählt, wenn ich speichere, dann wird nicht gespeichert und es erscheint „Bitte Ort wählen.“
 - AK5 (Rechte): Gegeben ich habe die Vorlage Referent:in mit Referat Klettern, wenn ich eine Gruppe wählen will, dann werden nur Gruppen des Referats Klettern angeboten.
 - AK6: In der Ortsauswahl erscheinen nur aktive Orte.

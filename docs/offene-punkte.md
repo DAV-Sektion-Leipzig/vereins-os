@@ -89,10 +89,11 @@ Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) ·
   - [ANNAHME] A11: Import – „gültig von“ der Trainingszeiten = Importdatum; nicht lesbare Trainingszeiten brechen den Import nicht ab.
   - [ANNAHME] A12: Auflösen einer Gruppe beendet ihre offenen Trainingszeiten zum Auflösungsdatum.
   - [ANNAHME] Fehler „Gruppe nicht gefunden.“ bei unbekannter oder am Datum aufgelöster Gruppe (US-GR-19).
+- **Übergabe aus der Anwesenheitserfassung (offen, v1.0, 24.10.2026):** specs/ez-einsaetze/uebergabe-gruppen.md – höchstens eine Trainingszeit je Gruppe und Wochentag (Product Owner 24.10.2026); [OFFEN] Widerspruch zu spec.md GR R19 und US-GR-18 AK1/AK5 (mehrere Trainingszeiten am selben Wochentag erlaubt, Überschneidung nur als Hinweis); braucht eine Migration in Gruppen.
 
 ## EZ – Anwesenheitserfassung (Priorität 2b – nach Gruppen, vor Finanzen)
 
-Steckbrief: docs/specs/ez-einsaetze/00-steckbrief.md (Version 0.8, abgeschlossen) · Erhebung: 01-erhebung.md (Version 0.4, 24.10.2026) · Stories: 02-stories.md (Version 0.4, 24.10.2026; Training, Fahrten, Wettkampfbetreuung, Trainingslager, Arbeitseinsätze, Kurs, Tour, Absage) · Spec: spec.md (Version 0.2, Entwurf, 24.10.2026) · Übergaben: uebergabe-rechte-administration.md (v1.3, erledigt), uebergabe-trainingszeiten.md (v1.3, erledigt), uebergabe-ehrenamtsmanagement.md (v1.3, erledigt), uebergabe-finanzen.md (v1.6, offen)
+Steckbrief: docs/specs/ez-einsaetze/00-steckbrief.md (Version 0.8, abgeschlossen) · Erhebung: 01-erhebung.md (Version 0.4, 24.10.2026) · Stories: 02-stories.md (Version 0.4, 24.10.2026; Training, Fahrten, Wettkampfbetreuung, Trainingslager, Arbeitseinsätze, Kurs, Tour, Absage) · Spec: spec.md (Version 0.2, Entwurf, 24.10.2026) · Übergaben: uebergabe-rechte-administration.md (v1.3, erledigt), uebergabe-trainingszeiten.md (v1.3, erledigt), uebergabe-ehrenamtsmanagement.md (v1.3, erledigt), uebergabe-finanzen.md (v1.6, offen), uebergabe-gruppen.md (v1.0, offen)
 
 Keine Blocker vor der Spec. Kurs, Tour, Trainingslager und Absage:
 - **Übergabe aus der Planungshilfe Touren und Kurse (v1.2) eingearbeitet am 24.10.2026** in spec.md v0.2 und 02-stories.md v0.4 (US-EZ-20 bis US-EZ-23, R22–R27, `ez_events.tk_plan_id`, `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`; Umsetzung T19–T21 zusammen mit TK T13). Die Datei liegt in specs/tk-touren-kurse/ und wird dort im Chat Planungshilfe als erledigt markiert.
@@ -101,7 +102,8 @@ Keine Blocker vor der Spec. Kurs, Tour, Trainingslager und Absage:
 - [OFFEN] Doppelte Erfassung von Kurs und Tour (von Hand und später aus der Planungshilfe): nur Hinweis im Formular oder Warnung bei gleichem Referat, Datum und Einsatzart? (spec.md v0.2 Abschnitt 11)
 - [OFFEN] Lehreinheiten bei Kursen erfassen (hier oder aus der Planungshilfe; mit Finanzen).
 - Entschieden 24.10.2026 (Product Owner, Abgleich mit dem Forms-Formular): Training ohne Uhrzeit (R28); Beginn und Ende mehrtägiger Einsätze optional; mindestens eine Teilnehmer:in auch bei Fahrten, Trainingslager und Wettkampfbetreuung (R5); Kinder mit Vor- und Nachname (bestätigt); Einsatzart heißt Wettkampfbetreuung; kein Hilfe- oder Kontakthinweis; Erfassung durch Trainer:innen erst in Iteration 1 (Ablösung des Formulars dann).
-- [OFFEN] Training bei mehreren Trainingszeiten der Gruppe am selben Wochentag; Abrechnung mehrtägiger Einsätze ohne Beginn bzw. Ende (mit Finanzen).
+- Entschieden 24.10.2026 (Product Owner): Je Gruppe und Wochentag höchstens eine Trainingszeit; eine Gruppe kann an mehreren Tagen trainieren (z. B. Leistungssport). **Übergabe an Gruppen (offen, v1.0):** specs/ez-einsaetze/uebergabe-gruppen.md. Training ohne Trainingszeit am Wochentag mit Hinweis speicherbar; abweichende Dauer nur in der Bemerkung (vorläufig).
+- [OFFEN] Beginn und Ende mehrtägiger Einsätze und ihre Abrechnung – vom Product Owner noch einmal in Ruhe anzusehen (mit Finanzen).
 - Hinweis an Gruppen (24.10.2026, nur zur Kenntnis): Die Gruppenlisten der beiden Forms-Formulare weichen voneinander ab (z. B. „Gruppe 4“ / „Gruppe 4 Senioren“ und „Gruppe 4 Junioren“, „Gruppe 5a“, „Gruppe 10“); beim Import der Gruppen beachten.
 - Hinweis aus dem Arbeitsplan (22.10.2026): Vor Status „Ready“ der Spec und vor Umsetzung des Nachtrags v0.8 der Administration müssen Q1 (Freigaben) und Q2 (Namenszugriff) aus dem Querschnitts-Check entschieden sein.
 

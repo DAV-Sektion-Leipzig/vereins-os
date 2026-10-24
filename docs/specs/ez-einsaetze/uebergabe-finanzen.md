@@ -20,7 +20,7 @@ Die Anwesenheitserfassung erhebt und speichert nur. Die Vergütung wird in Finan
 
 | Einsatzart (Oberfläche) | Abrechnungsart (Vergütungsordnung) |
 |---|---|
-| Training | Trainingseinheiten (Dauer aus der Trainingszeit der Gruppe am Datum, Modul Gruppen [ANNAHME]; mehrere Trainingszeiten am selben Wochentag [OFFEN]) |
+| Training | Trainingseinheiten (Dauer aus der Trainingszeit der Gruppe am Wochentag des Datums, Modul Gruppen; höchstens eine je Gruppe und Wochentag; Product Owner 24.10.2026) |
 | Tagesausflug, Mehrtagesfahrt | Kinder- und Jugendfahrten, Gruppenfahrten |
 | Ausbildungsfahrt (ein- oder mehrtägig) | Mehrtageskurse [ANNAHME; eintägig: [OFFEN]] |
 | Wettkampfbetreuung (ein- oder mehrtägig) | Wettkampfbetreuung [OFFEN: Satz je Tag?] |

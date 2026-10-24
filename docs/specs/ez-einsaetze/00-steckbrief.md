@@ -97,4 +97,4 @@ Trainer:innen erfassen Trainings und Fahrten mobil im Microsoft-Forms-Formular â
 - v0.2 bis v0.5 (21.10.2026): siehe Versionen der jeweiligen Dateien.
 - v0.6 (22.10.2026): 01-erhebung.md v0.2; modul-landkarte.md v1.5; offene-punkte.md v2.4; uebergabe-rechte-administration.md v1.2; uebergabe-finanzen.md v1.4; uebergabe-ehrenamtsmanagement.md v1.2.
 - v0.7 (22.10.2026): 01-erhebung.md v0.3; glossar.md v1.5 (Punkt 7 gestrichen; Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt, Ort, Kalkulation; Kurs und Tour mit Abgrenzung); modul-landkarte.md v1.6 (Touren und Kurse als Planungstool); offene-punkte.md v2.5; uebergabe-finanzen.md v1.5.
-- v0.8 (24.10.2026): 01-erhebung.md v0.4; 02-stories.md v0.4; spec.md v0.2; uebergabe-finanzen.md v1.6; glossar.md v1.6 (Absage); modul-landkarte.md v2.7; offene-punkte.md v4.9.
+- v0.8 (24.10.2026): 01-erhebung.md v0.4; 02-stories.md v0.4; spec.md v0.2; uebergabe-finanzen.md v1.6; uebergabe-gruppen.md v1.0 (neu); glossar.md v1.6 (Absage); modul-landkarte.md v2.7; offene-punkte.md v4.9.

@@ -247,7 +247,7 @@ R1–R12 aus 01-erhebung.md, R13–R18 und R22–R27 aus 02-stories.md, hier mit
 - R25: Einsätze aus der Planungshilfe Touren und Kurse: Kopf (Titel, Zeiten, organisierende Person), Personen aus der Planung und ihre Rolle, Absage und Löschen nur über die Planungshilfe; in der Anwesenheitserfassung nur Stand der Personen, weitere Personen und Bemerkung [ANNAHME]. Sonst „Dieser Einsatz kommt aus der Planungshilfe Touren und Kurse. Bitte dort ändern.“ (`EZ_TK_MANAGED`).
 - R26: Die Planungshilfe aktualisiert ihren Einsatz nur, solange niemand „anwesend“ ist, sonst `EZ_EVENT_LOCKED` („Der Einsatz ist schon erfasst und wurde nicht geändert.“; die Planungshilfe zeigt `TK_EZ_LOCKED`).
 - R27: Sagt die Planungshilfe ab, wird der Einsatz „abgesagt“ mit dem Grund der Planung; mit anwesenden Personen `EZ_EVENT_LOCKED` [ANNAHME].
-- R28: Ein Training wird ohne Uhrzeit erfasst; Beginn und Ende ergeben sich aus der Trainingszeit der Gruppe am Datum (Gruppen, `gr_training_times`), die beim Erfassen nur angezeigt wird (Product Owner 24.10.2026).
+- R28: Ein Training wird ohne Uhrzeit erfasst; Beginn und Ende ergeben sich aus der Trainingszeit der Gruppe am Wochentag des Datums (Gruppen, `gr_training_times`), die beim Erfassen nur angezeigt wird. Je Gruppe und Wochentag gibt es höchstens eine Trainingszeit; eine Gruppe kann an mehreren Wochentagen trainieren (Product Owner 24.10.2026; Übergabe an Gruppen v1.0, G6). Hat die Gruppe am Wochentag keine Trainingszeit, erscheint der Hinweis „Für diesen Wochentag ist keine Trainingszeit hinterlegt.“; speichern ist möglich.
 - Längen: Titel 1–90 Zeichen, sonst „Bitte einen Titel mit höchstens 90 Zeichen eingeben.“ (`EZ_TITLE_LENGTH`).
 - Weitere Meldungen: Netzfehler „Die Eingabe wurde nicht gesendet. Bitte bei Verbindung erneut speichern.“; Sitzung abgelaufen „Bitte erneut anmelden.“; Löschen fehlgeschlagen „Der Einsatz konnte nicht gelöscht werden. Bitte erneut versuchen.“; Suche ohne Treffer „Keine aktive Person gefunden.“; unerwartet „Etwas ist schiefgelaufen. Bitte versuche es erneut.“
 
@@ -297,6 +297,7 @@ Navigation EZ: Einsätze · Kontrolle Kletterhalle (nur mit `ad_has_any_level('E
 |---|---|---|
 | Administration | AD → EZ | `ad_has_level`, `ad_my_referate`, `ad_has_any_level`, `ad_me`, `ad_modules` (EZ, `is_available` setzt die letzte EZ-Migration bzw. das Freigabeskript), `ad_locations`, `ea_referate`, `ea_person_names`, `ea_search_active_persons`, `ad_find_similar_persons`, `ea_create_volunteer`; Komponenten „Personensuche Aktive“, „Auswahlfeld Ort“, Dublettendialog |
 | Administration | EZ → AD | ersetzt `ez_person_visible` (gleiche Signatur); ergänzt Fehlercodes in contracts/error-codes.md |
+| Gruppen | EZ → GR | Übergabe v1.0 (`uebergabe-gruppen.md`): höchstens eine Trainingszeit je Gruppe und Wochentag (G6–G9) |
 | Gruppen | GR → EZ | `gr_groups_for_attendance(p_date)` (wählbare Gruppen: id, Name, Referat), `gr_group_roster(group_id, date)` (Trainingszeiten, Namen, Rollen zum Stichtag), `gr_my_groups(p_date)` (eigene Gruppen für den Vorschlag); FK `ez_events.group_id → gr_groups(id)` |
 | Ehrenamtsmanagement | EZ → EA | neue Aktive aus Arbeitseinsätzen über `ea_create_volunteer` (`created_in = 'EZ'`); später Einsatzhistorie (E2, Iteration 2, liest `ez_attendances`) |
 | Finanzen | EZ → FI | liest später `ez_events`, `ez_attendances` (F1) über eigene Lesefunktionen bzw. Rechte; keine Umsetzung in dieser Spec |
@@ -376,6 +377,8 @@ Anbindung der Planungshilfe Touren und Kurse (erst zusammen mit TK T13, weil `tk
 
 Bestätigt vom Product Owner (21./22.10.2026): Modulname und Kürzel; Einsatzarten und Bezeichnungen wie im Forms-Formular; Erfassung je Gruppe; Kinder mit Vor- bzw. Rufname und Nachname; organisierende Person aus allen Aktiven; Zeiten eintägig über Dauer-Kategorie, mehrtägig mit Start und Ende (ab Startort); Orte als Stammdaten, nur Admin pflegt, Startliste bei der Umsetzung; Kontrolle Punktekonto nur Kinder; Löschen nur Geschäftsstelle; Einsatzart und Gruppe nicht änderbar; Standardrolle Helfer:in beim Arbeitseinsatz; keine organisierende Person bei der Wettkampfbetreuung; Stichtag (mehrtägig: Startdatum); Feldlängen; Vorschlag der eigenen Gruppe ohne Rechte; kein Offline-Betrieb.
 
+Bestätigt vom Product Owner (24.10.2026, Abgleich mit dem Forms-Formular): Training ohne Uhrzeit; Dauer eines Trainings für die Abrechnung = gültige Trainingszeit der Gruppe am Wochentag des Datums, ein kürzeres oder längeres Training nur in der Bemerkung (vorläufig); Training ohne Trainingszeit am Wochentag mit Hinweis speicherbar (vorläufig); höchstens eine Trainingszeit je Gruppe und Wochentag (Übergabe an Gruppen v1.0); mindestens eine Teilnehmer:in auch bei Fahrten, Trainingslager und Wettkampfbetreuung; Einsatzart Wettkampfbetreuung; Anmeldung von Fahrten als eigene Spezifikation.
+
 Bestätigt vom Product Owner (24.10.2026, Übergabe der Planungshilfe Touren und Kurse v1.2): Die Planungshilfe erzeugt den Einsatz Kurs bzw. Tour bei „in Yolawo angelegt“ und sagt ihn bei Absage ab (Stand „abgesagt“ statt Löschen); Kurs, Tour und Trainingslager sind im MVP auch von Hand anlegbar; Kurs und Tour ohne Gruppe, mit Referat, Titel, organisierender Person, Zeiten und nur Trainer:innen und Helfer:innen (keine Teilnehmenden); Trainingslager wie Mehrtagesfahrt (mit Gruppe und Teilnehmer:innen); Titel 1–90 Zeichen für alle Einsatzarten (die Planungshilfe muss nicht mehr kürzen); „abgesagt“ für alle Einsatzarten, mit Grund, durch Nutzer mit Schreibrecht, zurücknehmbar, nur ohne anwesende Personen; Einsätze aus der Planungshilfe: Kopf, Absage und Löschen nur über die Planungshilfe, in der Anwesenheitserfassung nur die Anwesenheit; Stände „eingetragen / anwesend / nicht erschienen“ bei Kurs und Tour wie beim Arbeitseinsatz.
 
 Annahmen (bei Abnahme bestätigen):
@@ -392,7 +395,6 @@ Annahmen (bei Abnahme bestätigen):
 - [ANNAHME] Mengengerüst und Antwortzeiten aus Abschnitt 8.
 - [ANNAHME] `ez_person_visible` enger als in spec.md AD v0.8 beschrieben (nur Personen gespeicherter, lesbarer Einsätze).
 - [ANNAHME] Namen der Testgruppen werden an den Seed Gruppen angepasst.
-- [ANNAHME] Dauer eines Trainings für die Abrechnung = gültige Trainingszeit der Gruppe am Wochentag des Datums (Finanzen liest sie aus Gruppen); ein kürzeres oder längeres Training wird nur in der Bemerkung festgehalten.
 - [ANNAHME] Spaltenname `ez_events.tk_plan_id` ohne FK auf `tk_plans` (wie `tk_plans.ez_event_id` in spec.md TK).
 - [ANNAHME] Bei Einsätzen aus der Planungshilfe ist in der Anwesenheitserfassung neben der Anwesenheit auch die Bemerkung änderbar; Personen aus der Planung behalten ihre Rolle und können nur über die Planungshilfe entfernt werden (`from_plan`).
 - [ANNAHME] Absage aus der Planungshilfe mit anwesenden Personen wird abgelehnt (`EZ_EVENT_LOCKED`), wie das Absagen in der Anwesenheitserfassung (R23, R27).
@@ -404,8 +406,7 @@ Annahmen (bei Abnahme bestätigen):
 Offen (kein Blocker für den MVP):
 - [OFFEN] Lehreinheiten bei Kursen: erfassen in der Anwesenheitserfassung oder aus der Planungshilfe (Übergabe an Finanzen).
 - [OFFEN] Doppelte Erfassung von Kurs und Tour: Ein von Hand angelegter Kurs und ein später aus der Planungshilfe erzeugter Einsatz für dieselbe Veranstaltung werden nicht erkannt (R8 gilt nur für Einsätze mit Gruppe). Hinweis im Formular reicht [ANNAHME], oder Warnung bei gleichem Referat, Datum und Einsatzart?
-- [OFFEN] Training einer Gruppe mit mehreren Trainingszeiten am selben Wochentag (z. B. zwei Termine dienstags): Welche Zeit gilt, und wie wird das zweite Training am selben Tag erfasst (R8 warnt)? Auswahl der Trainingszeit beim Erfassen?
-- [OFFEN] Abrechnung mehrtägiger Einsätze ohne Beginn bzw. Ende (erster und letzter Tag als Tages- oder Halbtagessatz) – mit Finanzen.
+- [OFFEN] Beginn und Ende mehrtägiger Einsätze und ihre Abrechnung (erster und letzter Tag als Tages- oder Halbtagessatz) – vom Product Owner noch einmal in Ruhe anzusehen, mit Finanzen.
 - [OFFEN] Löschfrist der Einsätze und Anwesenheiten (mit Finanzen; Aufbewahrung für Abrechnung).
 - [OFFEN] Information nach Art. 13 DSGVO an Personen, die beim Arbeitseinsatz angelegt werden.
 - [OFFEN] Sperre nach Abgabe des Halbjahres (Finanzen).
