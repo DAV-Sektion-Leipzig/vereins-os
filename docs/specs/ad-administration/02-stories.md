@@ -1,6 +1,7 @@
 # User Stories: Administration (AD)
 
-Stand: 23.10.2026 · Version 0.8.2 · Status: Ready (Nachtrag freigegeben am 21.10.2026) · Product Owner: Toni Werner
+Stand: 24.10.2026 · Version 0.9 · Status: Ready (Nachtrag freigegeben am 21.10.2026; Nachtrag v0.8 Anwesenheitserfassung freigegeben am 24.10.2026) · Product Owner: Toni Werner
+Änderungen v0.9 (24.10.2026): Nachtrag Anwesenheitserfassung (spec.md v0.9.4, Nachtrag v0.8.1): US-AD-27 bis US-AD-30 (Orte, Rechte EZ in Rechtevorlagen, Namen für die Anwesenheitserfassung, Helfer:innen beim Arbeitseinsatz anlegen oder wieder aktiv eintragen).
 Änderungen v0.8.2 (23.10.2026): US-AD-06 AK5 an R32 angeglichen; US-AD-07 AK5 mit Vorabprüfung der Login-Adresse (Entscheidungen Product Owner aus dem Review des Kerns, spec.md v0.9.3).
 Grundlage: 00-steckbrief.md v1.1, 01-erhebung.md v0.7 (Regeln R1–R20), spec.md v0.7.1 (Regeln R21–R42), glossar.md v1.1, rollen.md v0.8
 Änderungen v0.7 (21.10.2026): US-AD-17 bis US-AD-19 (Qualifikationsarten) ergänzt.
@@ -39,6 +40,10 @@ Oberflächentexte in der Ansprache „du“.
 | US-AD-24 | Rufname | Should | US-AD-07 |
 | US-AD-25 | Dublettenwarnung modulübergreifend | Must | US-AD-07, US-AD-23 |
 | US-AD-26 | Testzugang Referent:in und Seed v0.7 | Must | US-AD-16, US-AD-23 |
+| US-AD-27 | Orte pflegen (v0.8) | Must | US-AD-01 |
+| US-AD-28 | Rechte für die Anwesenheitserfassung in Rechtevorlagen (v0.8) | Must | US-AD-20, US-AD-21 |
+| US-AD-29 | Namen von Personen für die Anwesenheitserfassung (v0.8) | Must | US-AD-23, US-AD-28 |
+| US-AD-30 | Helfer:innen beim Arbeitseinsatz anlegen oder wieder aktiv eintragen (v0.8) | Must | US-AD-25, US-AD-28 |
 
 Empfohlene Umsetzungsreihenfolge: 01 → 02 → 05 → 10 → 06 → 07 → 12 → 13 → 11 → 08 → 03 → 04 → 09 → 14 → 15 → 16 → 17 → 18 → 19. Die Datenbankteile von US-AD-10 und US-AD-11 entstehen bereits mit US-AD-01; Login und Grundgerüst (US-AD-02, US-AD-05) kommen vor den Oberflächen der übrigen Stories. US-AD-17 bis US-AD-19 können nach US-AD-13 jederzeit folgen; sie müssen vor der Migration der Aktivenliste (EA) fertig sein.
 Nachtrag v0.7: Da `ea_property_types` und `ea_properties` noch nicht umgesetzt sind, werden US-AD-12, US-AD-13 und US-AD-19 direkt in der Form von US-AD-22 gebaut. Reihenfolge ab dem aktuellen Stand (US-AD-01, 02, 05 erledigt): 20 → 10 → 21 → 11 → 22 (mit 12, 19) → 23 → 13 → 24 → 06 → 07 mit 25 → 08 → 03 → 04 → 09 → 14 → 15 → 16 mit 26 → 17 → 18. US-AD-23 muss vor der ersten GR-Migration fertig sein.
@@ -395,6 +400,63 @@ Aktionen im Protokoll: eingeladen, Login-Adresse geändert, Vorlage zugewiesen, 
 - AK3: Gegeben der Testzugang Referent:in, wenn er AD-Seiten aufruft, dann erscheint „Für diesen Bereich hast du keine Rechte.“ (Rechte-Fall).
 - AK4: Gegeben jemand versucht, den Seed gegen PROD auszuführen, wenn das Skript startet, dann bricht es mit „Seed in PROD nicht erlaubt.“ ab (Fehlerfall).
 **Nicht Teil dieser Story:** Abnahme der EA-Oberflächen; Testzugang Gruppenleitung.
+
+### US-AD-27: Orte pflegen
+**Als** Admin
+**möchte ich** Orte anlegen, ändern und inaktiv setzen,
+**damit** die Anwesenheitserfassung beim Training einen Ort aus einer gepflegten Liste anbietet und die Anwesenheit an Kletterhallen mit Punktekonto auswerten kann.
+**Priorität:** Must · **Regeln:** R43 · **Abhängig von:** US-AD-01 · **Nachtrag:** v0.8 (Übergabe EZ A8)
+**Akzeptanzkriterien**
+- AK1: Gegeben keine Orte, wenn ich /ad/orte öffne, dann erscheint „Noch keine Orte angelegt.“
+- AK2: Gegeben ich lege „Kletterhalle Test“ mit „Punktekonto Kletterhalle“ = Ja an, wenn ich speichere, dann steht der Ort aktiv in der Liste.
+- AK3: Gegeben ich lasse die Bezeichnung leer, wenn ich speichere, dann erscheint „Bitte eine Bezeichnung angeben.“ (Fehlerfall).
+- AK4: Gegeben „Kletterhalle Test“ existiert, wenn ich „kletterhalle test“ anlege, dann erscheint „Einen Ort mit dieser Bezeichnung gibt es bereits.“ (Fehlerfall).
+- AK5: Gegeben ein aktiver Ort, wenn ich ihn auf „inaktiv“ setze, dann blendet ihn der Filter „aktiv“ aus und das Auswahlfeld „Ort“ bietet ihn nicht mehr an; vorhandene Einsätze behalten ihn. Löschen gibt es nicht.
+- AK6: Gegeben die Geschäftsstelle, wenn sie einen Ort per Datenbankaufruf anlegen oder ändern will, dann lehnt die Datenbank ab; lesen darf jeder Nutzer mit aktivem Zugang (Rechte-Fall).
+**Nicht Teil dieser Story:** Startbestand der Orte (vor der Freigabe der Anwesenheitserfassung); Pflege durch die Geschäftsstelle; Auswertung des Punktekontos (Anwesenheitserfassung).
+
+### US-AD-28: Rechte für die Anwesenheitserfassung in Rechtevorlagen
+**Als** Admin
+**möchte ich** in den Rechtevorlagen die Zeile Anwesenheitserfassung mit Reichweite „alle“ oder „Referat“ sehen und setzen,
+**damit** Referent:innen Einsätze nur in ihren Referaten erfassen und die Geschäftsstelle alle Einsätze verwaltet.
+**Priorität:** Must · **Regeln:** R30, R31 · **Abhängig von:** US-AD-20, US-AD-21 · **Nachtrag:** v0.8 (Übergabe EZ A1, A2, A5)
+**Akzeptanzkriterien**
+- AK1: Gegeben die Startvorlagen, wenn ich sie öffne, dann steht die Zeile Anwesenheitserfassung direkt nach Gruppen mit: Admin „lesen“, Geschäftsstelle „verwalten“, Referent:in „bearbeiten“ mit Reichweite „Referat“, Vorstand „kein Zugriff“.
+- AK2: Gegeben die Vorlage Referent:in, wenn ich für die Anwesenheitserfassung die Reichweite „Referat“ speichere, dann wird sie gespeichert; für Gruppen erscheint „Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement und in der Anwesenheitserfassung möglich.“ (Fehlerfall, R30).
+- AK3: Gegeben Rita Referentin hat die Vorlage Referent:in mit Referat Klettern, wenn die Anwesenheitserfassung ihre Referate abfragt, dann gilt Klettern; die Referate der Zuweisung gelten für Ehrenamtsmanagement und Anwesenheitserfassung gemeinsam (R31).
+- AK4: Gegeben ich lege eine neue Vorlage an, wenn ich sie speichere, dann hat sie für die Anwesenheitserfassung „kein Zugriff“; Änderungen des Admins an den Startvorlagen überschreibt die Migration nicht.
+- AK5: Gegeben die Anwesenheitserfassung ist noch nicht freigegeben, wenn sich ein Nutzer mit EZ-Rechten anmeldet, dann erscheint keine Kachel Anwesenheitserfassung.
+- AK6: Gegeben ein Nutzer ohne AD-Rechte, wenn er die Rechte einer Vorlage per Datenbankaufruf ändern will, dann lehnt die Datenbank ab (Rechte-Fall).
+**Nicht Teil dieser Story:** Reichweite „Gruppe“ und Vorlage Gruppenleitung (Iteration 1 der Anwesenheitserfassung); Freigabe des Moduls.
+
+### US-AD-29: Namen von Personen für die Anwesenheitserfassung
+**Als** Referent:in mit Rechten in der Anwesenheitserfassung
+**möchte ich** Aktive über ihren Namen finden und die Namen der Personen in meinen Einsätzen sehen,
+**damit** ich organisierende Personen und Vertretungen eintragen kann, ohne weitere Daten der Personen zu sehen.
+**Priorität:** Must · **Regeln:** R44 · **Abhängig von:** US-AD-23, US-AD-28 · **Nachtrag:** v0.8 (Übergabe EZ A3)
+**Akzeptanzkriterien**
+- AK1: Gegeben die Geschäftsstelle sucht „Muster“, wenn die Suche über alle Aktiven läuft, dann erscheint Toni Muster (aktiv), nicht Anton Muster (ruhend); angezeigt werden nur Vorname, Rufname und Nachname.
+- AK2: Gegeben ich gebe „M“ ein, wenn die Suche startet, dann erscheint „Bitte mindestens 2 Zeichen eingeben.“ (Fehlerfall).
+- AK3: Gegeben mehr als 50 passende Aktive, wenn ich suche, dann erscheinen höchstens 50 Treffer.
+- AK4: Gegeben eine Liste von Personen-IDs, wenn die Anwesenheitserfassung ihre Namen abfragt, dann liefert die Datenbank nur Namen von Personen, die ich über einen Pfad oder über meine Einsätze sehen darf; andere IDs werden ohne Fehler ausgelassen, Funktionspersonen nie geliefert.
+- AK5: Gegeben der Admin (Anwesenheitserfassung nur lesen) oder der Vorstand, wenn er die Suche über alle Aktiven aufruft, dann lehnt die Datenbank ab (Rechte-Fall).
+- AK6: Gegeben 300 Aktive, wenn ich suche, dann kommt das Ergebnis in weniger als 300 ms.
+**Nicht Teil dieser Story:** Oberfläche der Anwesenheitserfassung; Inhalt von `ez_person_visible` (legt die Anwesenheitserfassung fest); Eigenschaften, Kontaktdaten, Ehrenamtsstatus.
+
+### US-AD-30: Helfer:innen beim Arbeitseinsatz anlegen oder wieder aktiv eintragen
+**Als** Referent:in mit Rechten in der Anwesenheitserfassung
+**möchte ich** beim Arbeitseinsatz neue Helfer:innen anlegen und ruhende, ausgeschiedene oder bisher nicht aktive Personen direkt wieder aktiv eintragen,
+**damit** alle Helfer:innen eines Einsatzes erfasst sind und ein Mensch nur einmal existiert.
+**Priorität:** Must · **Regeln:** R3, R40, R45, R45a · **Abhängig von:** US-AD-25, US-AD-28 · **Nachtrag:** v0.8 (Übergabe EZ A4, A9)
+**Akzeptanzkriterien**
+- AK1: Gegeben Rita Referentin (Klettern), wenn sie beim Arbeitseinsatz im Referat Klettern eine neue Person mit Vor- und Nachname anlegt, dann hat die Person Ehrenamtsstatus „aktiv“, die Funktion Helfer:in im Referat Klettern und als Anlagemodul die Anwesenheitserfassung; eine Kontakt-E-Mail ist optional.
+- AK2: Gegeben eine ähnliche Person existiert, wenn Rita die neue Person anlegen will, dann zeigt der Dublettendialog die Treffer nach R40 mit „Diese Person eintragen“.
+- AK3: Gegeben Olga Ausgeschieden, wenn Rita sie beim Arbeitseinsatz im Referat Klettern einträgt, dann ist Olga „aktiv“ mit Eintrag in der Historie und hat die Funktion Helfer:in im Referat Klettern; das gilt auch, wenn sie zuletzt in einem anderen Referat aktiv war.
+- AK4: Gegeben Paul Nurgruppe ohne Ehrenamtsstatus, wenn Rita ihn beim Arbeitseinsatz einträgt, dann ist er „aktiv“ mit der Funktion Helfer:in im Referat Klettern.
+- AK5: Gegeben ein Arbeitseinsatz im Referat Ausbildung, wenn Rita dort eine Person anlegt oder wieder aktiv einträgt, dann erscheint „Du kannst nur Zuordnungen zu deinen Referaten pflegen.“ (Fehlerfall).
+- AK6: Gegeben Rita will über die Anwesenheitserfassung eine andere Funktion als Helfer:in setzen (z. B. Trainer:in), wenn sie speichert, dann erscheint „Für diesen Bereich hast du keine Rechte.“ (Fehlerfall).
+- AK7: Gegeben der Vorstand ohne Rechte in der Anwesenheitserfassung, wenn er eine Person anlegen oder wieder aktiv eintragen will, dann lehnt die Datenbank ab (Rechte-Fall).
+**Nicht Teil dieser Story:** Oberfläche der Anwesenheitserfassung; Bestätigung „Person informiert“ (spec.md EZ R29); Anwesenheit am Einsatz.
 
 ---
 
