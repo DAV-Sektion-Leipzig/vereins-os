@@ -95,9 +95,7 @@ Soweit in spec.md Administration definiert (Personenmodell, Eigenschaftsarten, E
 
 ## Gruppen (GR)
 
-| Code / Constraint | Meldung | Regel | Status |
-|---|---|---|---|
-| `GR_ROSTER_FORBIDDEN` (`gr_group_roster`) | Für diesen Bereich hast du keine Rechte. | US-GR-19 AK5 | geplant (US-GR-19; Gruppen hat noch keine spec.md) |
+Die Codes von Gruppen stehen normativ in [contracts/error-codes.md Gruppen](../../gr-gruppen/contracts/error-codes.md) (spec.md Gruppen v0.2, Abschnitt 5 und T2), dort auch `GR_ROSTER_FORBIDDEN` und `GR_GROUP_NOT_FOUND` für die Anwesenheitserfassung.
 
 ## Anwesenheitserfassung (EZ)
 
