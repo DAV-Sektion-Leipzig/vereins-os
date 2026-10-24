@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 22.10.2026 · Version 4.8
+Stand: 24.10.2026 · Version 4.9
+Änderungen v4.9: Anwesenheitserfassung: Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet (spec.md EZ v0.2); Entscheidungen des Product Owners vom 24.10.2026 zu Kurs, Tour, Trainingslager, Titellänge und Absage; Hinweise an die Planungshilfe.
 Änderungen v4.8: Namensregel der Dublettenprüfung R3a (spec.md AD v0.9.2, Kern v0.7.3).
 Änderungen v4.7: Übergabe aus dem Ehrenamtsmanagement (Ü1–Ü3) in spec.md AD v0.9.1 (Kern v0.7.2) und 02-stories.md AD v0.8.2 eingearbeitet; Geburtsjahr an Lesestufe gekoppelt; TEST wird vor der ersten EA-Migration zurückgesetzt; Feldschlüssel der Nachträge v0.8/v0.9 angeglichen.
 Änderungen v4.6: Spec Ehrenamtsmanagement v0.2 Ready (Freigabe Product Owner); Annahmen der Spec bestätigt; Ü1/Ü2 dürfen von Claude Code aus der Übergabe umgesetzt werden (T0a, T0b).
@@ -91,12 +92,14 @@ Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) ·
 
 ## EZ – Anwesenheitserfassung (Priorität 2b – nach Gruppen, vor Finanzen)
 
-Steckbrief: docs/specs/ez-einsaetze/00-steckbrief.md (Version 0.7, abgeschlossen) · Erhebung: 01-erhebung.md (Version 0.3, 22.10.2026) · Stories: 02-stories.md (Version 0.3, 22.10.2026; Training, Fahrten, Wettkampfbegleitung, Arbeitseinsätze) · Spec: spec.md (Version 0.1, Entwurf, 22.10.2026) · Übergaben: uebergabe-rechte-administration.md (v1.3, erledigt), uebergabe-trainingszeiten.md (v1.3, erledigt), uebergabe-ehrenamtsmanagement.md (v1.3, erledigt), uebergabe-finanzen.md (v1.5, offen)
+Steckbrief: docs/specs/ez-einsaetze/00-steckbrief.md (Version 0.8, abgeschlossen) · Erhebung: 01-erhebung.md (Version 0.4, 24.10.2026) · Stories: 02-stories.md (Version 0.4, 24.10.2026; Training, Fahrten, Wettkampfbegleitung, Trainingslager, Arbeitseinsätze, Kurs, Tour, Absage) · Spec: spec.md (Version 0.2, Entwurf, 24.10.2026) · Übergaben: uebergabe-rechte-administration.md (v1.3, erledigt), uebergabe-trainingszeiten.md (v1.3, erledigt), uebergabe-ehrenamtsmanagement.md (v1.3, erledigt), uebergabe-finanzen.md (v1.6, offen)
 
-Keine Blocker vor der Spec. Für Kurs und Tour:
-- Entschieden 22.10.2026 (Product Owner, Chat Planungshilfe Touren und Kurse): Die Planungshilfe Touren und Kurse **erzeugt** den Einsatz Kurs bzw. Tour, sobald die Planung den Status „in Yolawo angelegt“ hat (Referat Touren bzw. Ausbildung, Titel, Zeiten, organisierende Person, Leitung und Helfende mit Rolle, Stand „eingetragen“). Die bisherige Annahme „EZ legt Kurse und Touren selbst an“ entfällt.
-- **Übergabe aus der Planungshilfe Touren und Kurse (offen, v1.2):** specs/tk-touren-kurse/uebergabe-anwesenheitserfassung.md – neuer Stand „abgesagt“ für Einsätze (bei Absage markieren statt löschen; Product Owner 22.10.2026; [OFFEN] auch für andere Einsatzarten?); Einsatzarten `course`, `tour` freischalten und ihre Form festlegen; `ez_events.tk_plan_id`; Funktion zum Anlegen/Aktualisieren (`ez_upsert_planned_event`) und Absagen (`ez_cancel_planned_event`), gesperrt ab erster Anwesenheit „anwesend“; Lesefunktion Stand „durchgeführt“; Titellänge 60 gegenüber 90 Zeichen.
-- [OFFEN] Teilnehmende bei Kurs und Tour erfassen (Anmeldung liegt in Yolawo) oder nur Leitung? Kurse außerhalb der Planungshilfe; Trainingslager über die Planungshilfe?
+Keine Blocker vor der Spec. Kurs, Tour, Trainingslager und Absage:
+- **Übergabe aus der Planungshilfe Touren und Kurse (v1.2) eingearbeitet am 24.10.2026** in spec.md v0.2 und 02-stories.md v0.4 (US-EZ-20 bis US-EZ-23, R22–R27, `ez_events.tk_plan_id`, `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`; Umsetzung T19–T21 zusammen mit TK T13). Die Datei liegt in specs/tk-touren-kurse/ und wird dort im Chat Planungshilfe als erledigt markiert.
+- Entschieden 24.10.2026 (Product Owner): Kurs, Tour und Trainingslager im MVP, auch von Hand; Kurs und Tour ohne Gruppe und ohne Teilnehmende (nur Trainer:innen und Helfer:innen); Trainingslager wie Mehrtagesfahrt; Titel 1–90 Zeichen für alle Einsatzarten; „abgesagt“ für alle Einsatzarten, mit Grund, durch Nutzer mit Schreibrecht, zurücknehmbar, nur ohne anwesende Personen; Einsätze aus der Planungshilfe in der Anwesenheitserfassung nur für die Anwesenheit (Kopf, Absage, Löschen über die Planungshilfe).
+- [ANNAHME] aus spec.md v0.2 Abschnitt 11: Bemerkung bei Einsätzen aus der Planungshilfe änderbar; Personen aus der Planung behalten ihre Rolle (`from_plan`); Absage aus der Planungshilfe mit anwesenden Personen abgelehnt (`EZ_EVENT_LOCKED`); „durchgeführt“ = mindestens eine Trainer:in oder Helfer:in anwesend; Rücknahme der Absage ohne erneute Doppel-Warnung; Rolle Trainer:in vorbelegt bei Kurs und Tour; Darstellung „abgesagt“.
+- [OFFEN] Doppelte Erfassung von Kurs und Tour (von Hand und später aus der Planungshilfe): nur Hinweis im Formular oder Warnung bei gleichem Referat, Datum und Einsatzart? (spec.md v0.2 Abschnitt 11)
+- [OFFEN] Lehreinheiten bei Kursen erfassen (hier oder aus der Planungshilfe; mit Finanzen).
 - Hinweis aus dem Arbeitsplan (22.10.2026): Vor Status „Ready“ der Spec und vor Umsetzung des Nachtrags v0.8 der Administration müssen Q1 (Freigaben) und Q2 (Namenszugriff) aus dem Querschnitts-Check entschieden sein.
 
 Vor Status „Ready“ der Spec zu bestätigen (02-stories.md v0.3, spec.md v0.1 Abschnitt 11):
@@ -122,6 +125,7 @@ Entschieden 22.10.2026 (Product Owner, zweiter Block): Kurse gehören zum Refera
 
 Entschieden 22.10.2026 (Product Owner, dritter Block): Stichtag ist der erste Tag; läuft die Lizenz während der Tour ab, gilt der Trainersatz für die ganze Tour (keine tageweise Rechnung). Freigabe von Touren und Kursen liegt bei den Referent:innen und ist delegierbar. Einreichungen gehen weiter per PDF an tourenreferat@dav-leipzig.de, auch für Kurse. Bei Absage wird der Einsatz als „abgesagt“ markiert. Ziel: HTML-Formular ablösen, alle Einreichungen strukturiert in der Datenbank für Auswertungen (CO2, Einsätze) speichern.
 
+- Hinweis aus EZ (24.10.2026, spec.md EZ v0.2): Übergabe v1.2 ist in der Anwesenheitserfassung eingearbeitet; uebergabe-anwesenheitserfassung.md bitte als erledigt markieren. Folgen für TK: (1) Titel bis 90 Zeichen in der Anwesenheitserfassung, die Kürzung in TK R9 (A4) entfällt; (2) `ez_cancel_planned_event` lehnt die Absage mit anwesenden Personen ab (`EZ_EVENT_LOCKED`) [ANNAHME] – `tk_change_status` (cancel) braucht dafür eine Meldung; (3) `ez_planned_event_state` liefert `is_done` und Anzahlen ohne Namen; (4) Kurse und Touren ohne Planung legt die Anwesenheitserfassung von Hand an, Trainingslager werden nicht über TK geplant (Product Owner 24.10.2026); (5) EZ nutzt `tk_can_write` und `tk_can_read`, deshalb wird EZ T19 zusammen mit TK T13 umgesetzt.
 - [OFFEN] Wer setzt „in Yolawo angelegt“, wenn die Tourenleitung das Angebot selbst anlegt?
 Entschieden 22.10.2026 (Product Owner, vierter Block): Das Freigaberecht vergibt der Admin. Iterationen: MVP = Erhebungsformular vollständig im Vereins OS mit Kalkulation und Kostenauswertung, CO2-Daten werden von Anfang an erfasst; Iteration 1 = CO2-Auswertung; Iteration 2 = Ablösung des HTML-Formulars mit Eingabe durch Tourenleitende (öffentliche Integration oder Zugang).
 
