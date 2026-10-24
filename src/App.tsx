@@ -60,6 +60,10 @@ import { GruppeDetailPage } from '@/features/gr/gruppen/GruppeDetailPage'
 import { GruppeNeuPage } from '@/features/gr/gruppen/GruppeFormular'
 import { GruppenPage } from '@/features/gr/gruppen/GruppenPage'
 import { loadStammdaten } from '@/features/ea/stammdaten/data'
+import { loadEzAccess } from '@/features/ez/access'
+import { EzLayout } from '@/features/ez/EzLayout'
+import { EinsaetzePage } from '@/features/ez/liste/EinsaetzePage'
+import { loadEventList } from '@/features/ez/liste/data'
 import { StammdatenPage } from '@/features/ea/stammdaten/StammdatenPage'
 import { KeinZugriffPage } from '@/features/start/KeinZugriffPage'
 import { loadMyModules } from '@/features/start/modules'
@@ -163,6 +167,19 @@ export const router = createBrowserRouter([
           },
           { path: 'personen/:id', loader: loadPersonPage, element: <PersonPage /> },
           { path: '*', loader: () => redirect('/gr') },
+        ],
+      },
+      {
+        // EZ mit EZ ≥ lesen in irgendeiner Reichweite; sonst /kein-zugriff ohne Datenabfrage (EZ spec.md 3,
+        // contracts/routes.md). Weitere Seiten folgen je Story auf eigenen Branches (plan.md „Branches“).
+        id: 'ez',
+        path: 'ez',
+        loader: loadEzAccess,
+        element: <EzLayout />,
+        handle: { moduleName: 'Anwesenheitserfassung' } satisfies RouteHandle,
+        children: [
+          { index: true, loader: loadEventList, element: <EinsaetzePage /> },
+          { path: '*', loader: () => redirect('/ez') },
         ],
       },
     ],
