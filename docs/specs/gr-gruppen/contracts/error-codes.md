@@ -1,6 +1,6 @@
 # Contract: Fehlercodes → Meldungen Gruppen
 
-Stand: 24.10.2026 · Grundlage: [spec.md](../spec.md) v0.2, Abschnitt 5 und 2.3
+Stand: 24.10.2026 · Grundlage: [spec.md](../spec.md) v0.3, Abschnitt 5 und 2.3
 
 Diese Liste ist normativ für Gruppen (spec.md 5, T2). Die Meldungstexte stehen wörtlich in spec.md. Die Datenbank meldet `raise exception '<CODE>' using errcode = 'P0001'`; das Frontend bildet die Codes in `src/lib/errors.ts` auf die Meldungen ab. Codes der Administration und des Ehrenamtsmanagements: [error-codes.md Administration](../../ad-administration/contracts/error-codes.md).
 
@@ -24,6 +24,7 @@ Diese Liste ist normativ für Gruppen (spec.md 5, T2). Die Meldungstexte stehen 
 | `GR_TRAINING_TIME_END` | Das Ende muss nach dem Beginn liegen. | R18 | Trainingszeit-Funktionen | umgesetzt |
 | `GR_VALID_TO_BEFORE_FROM` | ‚Gültig bis‘ darf nicht vor ‚gültig von‘ liegen. | R18 | `gr_add_training_time`, `gr_end_training_time` | umgesetzt |
 | `GR_CHANGE_DATE_INVALID` | Das Datum muss nach ‚gültig von‘ und innerhalb der Gültigkeit der bisherigen Trainingszeit liegen. | R19 | `gr_change_training_time` | umgesetzt |
+| `GR_TRAINING_TIME_WEEKDAY_EXISTS` | Für diesen Wochentag gibt es bereits eine Trainingszeit. Bitte die bestehende mit ‚Ändern ab‘ anpassen. [OFFEN: Wortlaut, spec.md 11] | R19 (v0.3) | `gr_add_training_time`, `gr_change_training_time`, `gr_end_training_time` | umgesetzt (T20) |
 | `GR_TRAINING_TIME_LOCKED` | Wochentag und Uhrzeit können nicht geändert werden. Bitte ‚Ändern ab‘ verwenden. | R19, A13 | Trigger `gr_training_times_guard` | umgesetzt |
 | `GR_PERSON_INVALID` | Bitte eine vorhandene Person wählen oder eine neue anlegen. | spec.md 2.3 | Funktionen mit `p_person_id`/`p_new_person` | umgesetzt |
 | `GR_BIRTH_DATE_FORBIDDEN` | Das Geburtsdatum kann nur die Geschäftsstelle erfassen. | spec.md 2.3 | `gr_start_admission`, `gr_update_person` | umgesetzt |
@@ -63,7 +64,6 @@ Weiterverwendete Codes anderer Module: `AD_NAME_REQUIRED` (R4 AD, neue Person), 
 | unter 18 ohne Erziehungsberechtigte | Bitte mindestens eine erziehungsberechtigte Person angeben. | R2 | `gr_needs_guardian`, `gr_v_memberships.needs_guardian` |
 | kein Notfallkontakt | Kein Notfallkontakt hinterlegt. | R7 | `gr_v_memberships.has_emergency_contact`, `gr_group_overview.no_emergency_count` |
 | Teilnahme klären | Vertrag beendet am TT.MM.JJJJ – Teilnahme klären. | R17 | `gr_v_memberships.needs_clarification` |
-| Trainingszeit überschneidet sich | Diese Trainingszeit überschneidet sich mit einer anderen. | R19 | Rückgabe `overlap` |
 | Status ruhend/ausgeschieden | Die Person ist im Ehrenamtsmanagement ruhend. / … ausgeschieden. | R29 | Rückgabe `status_hint` von `gr_add_group_function` |
 | E-Mail-Liste leer | Keine E-Mail-Adressen vorhanden. | R13 | leere Menge von `gr_guardian_emails` |
 | E-Mail-Liste kopiert | N Adressen kopiert. Bitte in Blindkopie (BCC) einfügen. | spec.md 6 | Frontend |

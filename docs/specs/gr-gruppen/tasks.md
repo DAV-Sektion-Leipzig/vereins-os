@@ -175,7 +175,7 @@ description: "Tasks für das Modul Gruppen (GR)"
 **Unabhängiger Test**: quickstart.md D 3.
 
 - [x] T028 [US-GR-03] (spec T12) `src/features/gr/gruppen/GruppeFormDialog.tsx` und Route /gr/gruppen/neu: Name, Referat (nur aktive), optional erste Trainingszeit; `gr_save_group`, `gr_add_training_time`; Meldungen R1, R21.
-- [x] T029 [US-GR-18] (spec T12) `src/features/gr/gruppen/TrainingszeitDialog.tsx`: Hinzufügen, „Ändern ab“, Beenden; Hinweis bei `overlap`; Kernfelder nach dem Speichern nicht editierbar (A13).
+- [x] T029 [US-GR-18] (spec T12) `src/features/gr/gruppen/TrainingszeitDialog.tsx`: Hinzufügen, „Ändern ab“, Beenden; Hinweis bei `overlap` (entfällt mit spec.md v0.3, siehe T056); Kernfelder nach dem Speichern nicht editierbar (A13).
 - [x] T030 [US-GR-04] (spec T12) `src/features/gr/gruppen/AufloesenDialog.tsx`: Datum (≤ heute), Bestätigung, Anzeige der Rückgabeliste „beginnt nach Auflösung“, Meldungen R9.
 - [x] T031 PR `us-gr-03-gruppe`; Merge durch den Product Owner.
 
@@ -226,8 +226,8 @@ description: "Tasks für das Modul Gruppen (GR)"
 ## Phase 10: Import (Branch `us-gr-16-import`) – US-GR-16 ⛔ gesperrt bis O1
 
 - [ ] T046 [P] [US-GR-16] (spec T10 Teil) `supabase/tests/database/495_gr_import.test.sql`: `authenticated` kann `gr_import_groups` nicht ausführen; Probelauf schreibt nichts; Fehler (fehlende Pflichtfelder, ohne Vertrag, ungültige IBAN, doppelte Mandatsreferenz, unbekanntes Referat) blockieren; gleiche Person in zwei Blättern → eine Person, zwei Teilnahmen; `created_in = 'script'`.
-- [ ] T047 [US-GR-16] (spec T18) `supabase/migrations/20261025000900_gr_import.sql`: `gr_import_groups` nach contracts/import-script.md, Grant nur `service_role`.
-- [ ] T048 [US-GR-16] (spec T18) `scripts/gr-import/` nach contracts/import-script.md (Schlüsseleingabe nach Entscheidung O1); `package.json` Scripts `gr:import`, `gr:import:test`, devDependency `exceljs`; `.gitignore`; `beispiel.xlsx` mit Erzeugungsskript; Unit-Tests für Trainingszeit-Muster, Namensteilung, Telefonzuordnung, Bericht (IBAN gekürzt, keine Gesundheitsangaben).
+- [ ] T047 [US-GR-16] (spec T18) `supabase/migrations/2026…_gr_import.sql` (Nummer nach `20261027000100`): `gr_import_groups` nach contracts/import-script.md, Grant nur `service_role`.
+- [ ] T048 [US-GR-16] (spec T18) `scripts/gr-import/` nach contracts/import-script.md (Schlüsseleingabe nach Entscheidung O1; zwei Zeiten am selben Wochentag nach spec.md v0.3 Abschnitt 7, G8); `package.json` Scripts `gr:import`, `gr:import:test`, devDependency `exceljs`; `.gitignore`; `beispiel.xlsx` mit Erzeugungsskript; Unit-Tests für Trainingszeit-Muster, Namensteilung, Telefonzuordnung, Bericht (IBAN gekürzt, keine Gesundheitsangaben).
 - [ ] T049 PR `us-gr-16-import`; Merge durch den Product Owner. Probelauf gegen TEST macht der Admin.
 
 ---
@@ -240,10 +240,23 @@ description: "Tasks für das Modul Gruppen (GR)"
 
 ---
 
+## Phase 12: Eine Trainingszeit je Wochentag (Branch `gr-trainingszeit-wochentag`) – US-GR-16, 18, 19
+
+Übergabe aus der Anwesenheitserfassung `docs/specs/ez-einsaetze/uebergabe-gruppen.md` v1.0 (G6–G9), spec.md v0.3, Spec-Task T20, research.md R-GR-17.
+
+- [x] T053 [P] [US-GR-18] (spec T20) `supabase/tests/database/410_gr_groups.test.sql`: zweite Trainingszeit am selben Wochentag → `GR_TRAINING_TIME_WEEKDAY_EXISTS` (auch mit anderer Uhrzeit, späterem Beginn, in der Vergangenheit); nichts gespeichert; zweiter Wochentag erlaubt, Rückgabe nur `id`; gleicher Wochentag vor der bisherigen Gültigkeit erlaubt; „Ändern ab“ am selben Wochentag möglich, auf belegten Wochentag abgelehnt, auf freien erlaubt; Verlängern von „gültig bis“ in eine spätere Trainingszeit abgelehnt; direkter Insert scheitert am Constraint (`23P01`); `gr_training_time_overlaps` entfernt.
+- [x] T054 [P] [US-GR-19] (spec T20) `supabase/tests/database/480_gr_read_functions.test.sql`: `gr_group_roster` liefert an jedem Tag seit 01.01.2025 höchstens einen Eintrag in `training_times` (G9).
+- [x] T055 [US-GR-18] (spec T20) `supabase/migrations/20261027000100_gr_training_time_weekday.sql` nach R-GR-17; Seed geprüft (keine Änderung nötig).
+- [ ] T056 [US-GR-18] (spec T20, Branch `gr-trainingszeit-dialog` nach dem Merge von T057) `src/features/gr/gruppen/TrainingszeitDialog.tsx`: Hinweis bei `overlap` entfernen; `src/lib/errors.ts`: `GR_TRAINING_TIME_WEEKDAY_EXISTS` mit dem Wortlaut aus contracts/error-codes.md (nach Entscheidung spec.md 11); Merge durch den Product Owner.
+- [ ] T057 PR `gr-trainingszeit-wochentag` (Migration, pgTAP, Umsetzungsdateien); Auto-Merge nach grünen Checks; danach Migration nach TEST, vorher lesende Prüfung auf Verstöße.
+
+---
+
 ## Abhängigkeiten
 
 - Phase 2 → Phase 3 → Phase 4 → Phasen 5 und 6 → Phasen 7, 8, 9 → Phase 11.
-- Phase 10 nach Phase 2, sobald O1 entschieden ist.
+- Phase 10 nach Phase 2 und Phase 12 (Migrationsnummer, G8).
+- Phase 12 nach dem Merge von spec.md v0.3; T056 nach T057.
 - Innerhalb Phase 2: Tests T003–T009 zuerst (parallel); dann T010 → T011 → T013–T017 (in Nummernfolge, je Migration); T018 nach T011; T012 laufend.
 - Nach O2 (Variante a oder Umsetzung AD v0.8): `todo`-Tests in T020 scharf schalten, Seed um EZ-Rechte von Admin, Rita und Kim ergänzen.
 

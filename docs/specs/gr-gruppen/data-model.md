@@ -14,7 +14,9 @@ Stand: 24.10.2026 · Normativ für Spalten, Typen, Checks und Regeln ist [spec.m
 | 6 | `20261025000600_gr_consents_health.sql` | T6 | `gr_set_photo_consent`, `gr_set_health_consent`, `gr_save_health_note` |
 | 7 | `20261025000700_gr_volunteer_functions.sql` | T7 | Ü1 `ea_set_status_from_group`; `gr_add_group_function`, `gr_end_group_function` |
 | 8 | `20261025000800_gr_read_functions.sql` | T8 | Views `gr_v_memberships`, `gr_v_pending_admissions`; `gr_group_overview`, `gr_guardian_emails`, `gr_group_roster`, `gr_groups_for_attendance`, `gr_my_groups` |
-| 9 | `20261025000900_gr_import.sql` | T18 | `gr_import_groups` (nur `service_role`) |
+| 9a | `20261025000900_ea_volunteer_list_group_function.sql` | H6 | `ea_volunteer_list`: `group_function` zählt als Zuordnung |
+| 9b | `20261027000100_gr_training_time_weekday.sql` | T20 | `btree_gist`; Ausschluss-Constraint `gr_training_times_one_per_weekday`; interne Prüfung `gr_training_time_weekday_taken`; neue Fassungen von `gr_add_training_time`, `gr_change_training_time`, `gr_end_training_time` (`GR_TRAINING_TIME_WEEKDAY_EXISTS`, Rückgabe ohne `overlap`); `gr_training_time_overlaps` entfernt |
+| 9c | `2026…_gr_import.sql` (Nummer nach 9b) | T18 | `gr_import_groups` (nur `service_role`) |
 | 10 | `2026…_gr_module_available.sql` | T19 | `update ad_modules set is_available = true where code = 'GR'` nach Abnahme |
 
 Jede Migration: `revoke all … from public, anon, authenticated` und danach ausdrückliche Grants nur an `authenticated` (Ausnahmen unten).
@@ -24,7 +26,7 @@ Jede Migration: `revoke all … from public, anon, authenticated` und danach aus
 | Tabelle | PK | Wichtigste Regeln | Select-Policy (spec.md 3) | Grant |
 |---|---|---|---|---|
 | `gr_groups` | `id` uuid | unique `lower(name)` where `dissolved_on is null` (R1); FK `referat_id` restrict | `ad_has_level('GR','read') or ad_has_any_level('EA','read')` | select |
-| `gr_training_times` | `id` uuid | `weekday` 1–7; `ends_at > starts_at`; `valid_to >= valid_from`; Kernfelder gesperrt (Trigger) | `ad_has_level('GR','read')` | select |
+| `gr_training_times` | `id` uuid | `weekday` 1–7; `ends_at > starts_at`; `valid_to >= valid_from`; Kernfelder gesperrt (Trigger); je `group_id`, `weekday` keine sich überschneidende Gültigkeit (Ausschluss-Constraint, R19 v0.3) | `ad_has_level('GR','read')` | select |
 | `gr_pending_admissions` | `person_id` | eine je Person | `ad_has_level('GR','read')` | select |
 | `gr_memberships` | `id` uuid | `left_on >= joined_on`; keine Überschneidung je Person und Gruppe (R10, in `gr_admit`) | `gr_row_visible(person_id)` | select |
 | `gr_contracts` | `id` uuid | `ends_on >= starts_on`; `ends_on` ⇒ `cancelled_on`; `monthly_amount > 0`; unique `lower(mandate_reference)`; Längen und Zeichensatz SEPA (Checks) | `gr_row_visible(<Teilnehmer:in der Teilnahme>)` | select |

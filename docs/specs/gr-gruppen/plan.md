@@ -125,9 +125,11 @@ Nach CLAUDE.md: je Story bzw. Aufgabe ein Branch. Was sich gegenseitig bedingt, 
 | 7 | `us-gr-06-aufnahme` | T14 | 06–10, 12 | Aufnahme-Assistent, /gr/aufnahmen, Dublettendialog (Ü2) | 6 | PO |
 | 8 | `us-gr-14-person` | T15 | 07–12, 14 | Personendetail, Notfallansicht mobil, Verträge, Gesundheit | 6 | PO |
 | 9 | `us-gr-13-betreuung` | T16, T17 | 13 | Betreuung, Anzeige im Ehrenamtsmanagement | 6 | PO |
-| 10 | `us-gr-16-import` | T18 | 16 | `gr_import_groups` (Migration `…000900`), pgTAP 495, Skript | 2; **O1** | PO (Skript ist kein reiner DB-PR) |
+| 10 | `us-gr-16-import` | T18 | 16 | `gr_import_groups` (Migration nach `20261027000100`), pgTAP 495, Skript inkl. G8 | 2, 13 | PO (Skript ist kein reiner DB-PR) |
 | 11 | `gr-abnahme` | – | alle | Abnahme nach quickstart.md D; Anpassungen | 4–9 | PO |
 | 12 | `gr-freischalten` | T19 | 02 | Migration `ad_modules.is_available = true` für GR | 11, Freigabe PO | Auto |
+| 13 | `gr-trainingszeit-wochentag` | T20 | 16, 18, 19 | Übergabe EZ G6–G9: Migration `20261027000100`, pgTAP 410/480, Umsetzungsdateien | spec.md v0.3 | Auto |
+| 14 | `gr-trainingszeit-dialog` | T20 (Oberfläche) | 18 | `TrainingszeitDialog.tsx` ohne Hinweis, `errors.ts` mit `GR_TRAINING_TIME_WEEKDAY_EXISTS` | 13 | PO |
 
 Reihenfolge: 1 → 2 → 3 → 4 → 5, 6 → 7, 8, 9 → 11 → 12. Branch 10 parallel nach 2, sobald O1 entschieden ist.
 
@@ -157,6 +159,7 @@ Hinweise (keine Entscheidung nötig):
 - **H3 – `search_path`:** spec.md 2.3 nennt `search_path = public`. Alle Funktionen im Repository nutzen `''` mit vollständig qualifizierten Namen (AD research.md R-19). Gruppen folgt dem Repository; fachlich ohne Wirkung.
 - **H4 – Technische Hilfsfunktionen ohne Nennung in der Spec:** `gr_person_has_group_relation` (Ü3, R-GR-05), `gr_needs_guardian` (R2, R-GR-09), `gr_v_pending_admissions` (Liste /gr/aufnahmen, R-GR-09) mit `gr_user_name` (Name der anlegenden Person), `gr_weekday_label`. Sie geben nichts preis, was die Spec nicht ohnehin zeigt.
 - **H6 – Filter „aktiv ohne Funktion oder Amt“ im Ehrenamtsmanagement (entschieden, Product Owner 24.10.2026, wie vorgeschlagen; Migration `20261025000900`):** `ea_volunteer_list` zählt nur die Arten `function`, `position`, `committee` als Zuordnung. Betreuer:innen, die nur eine Funktion in einer Gruppe haben (Seed: Lars Lehrer, Sam Sechzehn), erscheinen deshalb unter „aktiv ohne Funktion oder Amt“. Quelle: EA spec.md (Filter, US-EA-03); GR spec.md R29 (Gruppen setzt „aktiv“). Vorschlag: `group_function` als Zuordnung mitzählen (EA-Migration, gleiche Signatur).
+- **H7 – Übergabe aus der Anwesenheitserfassung (uebergabe-gruppen.md v1.0, spec.md v0.3, T20):** höchstens eine Trainingszeit je Gruppe und Wochentag; Umsetzung nach R-GR-17 (Ausschluss-Constraint und Prüfung in den Funktionen). Seed und Mengentest erfüllen die Regel bereits (Test 2: Mittwoch bis 31.12.2025 und ab 01.01.2026 nacheinander). Vor `db push` nach TEST wird lesend geprüft, ob dort Zeilen gegen die Regel verstoßen; sonst scheitert der Constraint. Offen in spec.md 11: Wortlaut (betrifft nur `errors.ts` und error-codes.md), Verlängern von „gültig bis“ (umgesetzt wie vorgeschlagen, weil G6 es ohnehin ausschließt), Import (G8, betrifft T048).
 - **H5 – Rückgabe von `gr_dissolve_group`:** spec.md 2.3 nennt „Rückgabe `void`“ und zugleich, dass Funktionen und Trainingszeiten, die erst nach der Auflösung beginnen, „im Bericht zurückgegeben“ werden. Umgesetzt als jsonb mit dieser Liste (im Normalfall leer); contracts/database-api.md. Wenn die Spec `void` ohne Liste meint, genügt ein Hinweis an Claude Code.
 
 ## Complexity Tracking
