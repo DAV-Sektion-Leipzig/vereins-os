@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 24.10.2026 · Version 5.0
+Stand: 24.10.2026 · Version 5.1
+Änderungen v5.1: Anwesenheitserfassung: neue Annahmen der Spec v0.3 bestätigt; Reaktivieren auch referatsübergreifend (Übergabe an die Administration v1.5).
 Änderungen v5.0: Anwesenheitserfassung: Annahmen durchgegangen (spec.md EZ v0.3); Q1 (eigene Aktion „freigeben“) und Q2 (je Modul erweitern) entschieden; Übergabe an die Administration v1.4 (A9, Reaktivieren).
 Änderungen v4.9: Anwesenheitserfassung: Übergabe aus EA (Art. 13 DSGVO, Bestätigung gespeichert) eingearbeitet; höchstens eine Trainingszeit je Gruppe und Wochentag (Übergabe an Gruppen v1.0); Abgleich mit dem Forms-Formular (Training ohne Uhrzeit, Zeiten mehrtägig optional, Wettkampfbetreuung, Fahrtanmeldung als eigene Spezifikation); Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet (spec.md EZ v0.2); Entscheidungen des Product Owners vom 24.10.2026 zu Kurs, Tour, Trainingslager, Titellänge und Absage; Hinweise an die Planungshilfe.
 Änderungen v4.8: Namensregel der Dublettenprüfung R3a (spec.md AD v0.9.2, Kern v0.7.3).
@@ -55,7 +56,7 @@ Jeder Abschnitt wird beim Steckbrief des Moduls in „Offene Fragen“ übernomm
 - [ANNAHME] Annahmen v0.7.2/v0.9.1 bei Abnahme bestätigen (spec.md AD Abschnitt 11): Meldung „gültig bis vor gültig von“ mit Bezeichnungen, Code `EA_LABEL_TOO_LONG`; Geburtsjahr aus heute gültiger Eigenschaft, ohne Prüfung der Sichtbarkeit des Treffers; E-Mail-Dublettenprüfung über `contact.email` und `contact.dav_email`; Feldschlüssel aus EA C2 schon im Kern-Seed, `system_key = 'contact'` schon im Kern, Person 5 mit „gültig bis 31.12.2019“; `ea_create_volunteer` über EZ nur `{"function":"Helfer:in"}`; `ea_person_licenses` ohne Rückfall auf `valid_to`.
 - Feldschlüssel der Nachträge v0.8 und v0.9 an 01-erhebung.md EA C2 angeglichen (`contact.email`, `function.function` = „Helfer:in“, `license.qualification_type`/`valid_until`); T57 und T66 nutzen die System-Eigenschaftsarten statt Testarten mit `system_key` (spec.md AD v0.9.1).
 - Entschieden 24.10.2026 (Product Owner, Chat Anwesenheitserfassung) zum Querschnitts-Check (querschnitt-administration.md): **Q1 – eigene Aktion „freigeben“ im Rechtemodell** (statt Muster „Modul ohne Seiten“ wie TKF; abweichend vom Vorschlag) – Folge: spec.md AD Nachtrag v0.9 (TKF) und Planungshilfe Touren und Kurse sind anzupassen, im Chat Administration bzw. Planungshilfe [OFFEN]; **Q2 – `ea_person_names` je Modul erweitern** (wie vorgeschlagen).
-- **Übergabe aus der Anwesenheitserfassung (offen, v1.4, A9):** specs/ez-einsaetze/uebergabe-rechte-administration.md – `ea_activate_person` für den Pfad der Anwesenheitserfassung erweitern (ruhende und ausgeschiedene Personen beim Arbeitseinsatz wieder aktiv eintragen, Product Owner 24.10.2026); widerspricht der Annahme bei `ea_activate_person` in spec.md AD v0.8.
+- **Übergabe aus der Anwesenheitserfassung (offen, v1.5, A9, auch referatsübergreifend):** specs/ez-einsaetze/uebergabe-rechte-administration.md – `ea_activate_person` für den Pfad der Anwesenheitserfassung erweitern (ruhende und ausgeschiedene Personen beim Arbeitseinsatz wieder aktiv eintragen, Product Owner 24.10.2026); widerspricht der Annahme bei `ea_activate_person` in spec.md AD v0.8.
 
 ## EA – Ehrenamtsmanagement (Priorität 1)
 
@@ -97,7 +98,7 @@ Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) ·
 
 ## EZ – Anwesenheitserfassung (Priorität 2b – nach Gruppen, vor Finanzen)
 
-Steckbrief: docs/specs/ez-einsaetze/00-steckbrief.md (Version 0.9, abgeschlossen) · Erhebung: 01-erhebung.md (Version 0.5, 24.10.2026) · Stories: 02-stories.md (Version 0.5, 24.10.2026; Training, Fahrten, Wettkampfbetreuung, Trainingslager, Arbeitseinsätze, Kurs, Tour, Absage) · Spec: spec.md (Version 0.3, Entwurf, 24.10.2026) · Übergaben: uebergabe-rechte-administration.md (v1.4, offen: A9), uebergabe-trainingszeiten.md (v1.3, erledigt), uebergabe-ehrenamtsmanagement.md (v1.3, erledigt), uebergabe-finanzen.md (v1.6, offen), uebergabe-gruppen.md (v1.0, offen)
+Steckbrief: docs/specs/ez-einsaetze/00-steckbrief.md (Version 0.9, abgeschlossen) · Erhebung: 01-erhebung.md (Version 0.5, 24.10.2026) · Stories: 02-stories.md (Version 0.5, 24.10.2026; Training, Fahrten, Wettkampfbetreuung, Trainingslager, Arbeitseinsätze, Kurs, Tour, Absage) · Spec: spec.md (Version 0.4, Entwurf, 24.10.2026) · Übergaben: uebergabe-rechte-administration.md (v1.5, offen: A9), uebergabe-trainingszeiten.md (v1.3, erledigt), uebergabe-ehrenamtsmanagement.md (v1.3, erledigt), uebergabe-finanzen.md (v1.6, offen), uebergabe-gruppen.md (v1.0, offen)
 
 Keine Blocker vor der Spec. Kurs, Tour, Trainingslager und Absage:
 - **Übergabe aus der Planungshilfe Touren und Kurse (v1.2) eingearbeitet am 24.10.2026** in spec.md v0.2 und 02-stories.md v0.4 (US-EZ-20 bis US-EZ-23, R22–R27, `ez_events.tk_plan_id`, `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`; Umsetzung T19–T21 zusammen mit TK T13). Die Datei liegt in specs/tk-touren-kurse/ und wird dort im Chat Planungshilfe als erledigt markiert.
@@ -110,7 +111,7 @@ Keine Blocker vor der Spec. Kurs, Tour, Trainingslager und Absage:
 - Hinweis an Gruppen (24.10.2026, nur zur Kenntnis): Die Gruppenlisten der beiden Forms-Formulare weichen voneinander ab (z. B. „Gruppe 4“ / „Gruppe 4 Senioren“ und „Gruppe 4 Junioren“, „Gruppe 5a“, „Gruppe 10“); beim Import der Gruppen beachten.
 - Erledigt 24.10.2026: Q1 und Q2 aus dem Querschnitts-Check entschieden (siehe Abschnitt AD); Q1 betrifft die Anwesenheitserfassung nicht, Q2 bestätigt `ez_person_visible`.
 
-- Annahmen durchgegangen am 24.10.2026 (Product Owner, Chat Anwesenheitserfassung): alle bestätigt außer vier Änderungen – Wettkampfbetreuung mit einer oder mehreren Gruppen (R30); Referat bei Einsätzen ohne Gruppe änderbar (R19); ruhende und ausgeschiedene Dublettentreffer direkt wieder aktiv eintragen (R31, **Übergabe an die Administration v1.4, A9, offen**); bei mehreren eigenen Gruppen keine Vorauswahl (R18). Neue Annahmen: spec.md v0.3 Abschnitt 11.
+- Annahmen durchgegangen am 24.10.2026 (Product Owner, Chat Anwesenheitserfassung): alle bestätigt außer vier Änderungen – Wettkampfbetreuung mit einer oder mehreren Gruppen (R30); Referat bei Einsätzen ohne Gruppe änderbar (R19); ruhende und ausgeschiedene Dublettentreffer direkt wieder aktiv eintragen (R31, **Übergabe an die Administration v1.4, A9, offen**); bei mehreren eigenen Gruppen keine Vorauswahl (R18). Die neuen Annahmen der v0.3 sind ebenfalls bestätigt; Reaktivieren gilt auch referatsübergreifend (Product Owner 24.10.2026). Offen ist nur noch die technische Annahme zur Länge von `notice_version`.
 
 In der Spec oder später:
 - Entschieden 22.10.2026 (Product Owner, Chat Ehrenamtsmanagement): Information nach Art. 13 DSGVO beim Anlegen über ein Pflicht-Häkchen mit Link auf die Datenschutzhinweise; [OFFEN] Text und Link liefert der Product Owner.
