@@ -6,5 +6,7 @@
   // Nur statische Auslieferung des Frontends, kein Worker-Code (tech-stack.md, Abschnitt 3).
   "assets": {
     "not_found_handling": "single-page-application"
-  }
+  },
+  // Vorschau je Branch über `npx wrangler preview` (Workers Builds); der Block darf leer sein.
+  "previews": {}
 }
