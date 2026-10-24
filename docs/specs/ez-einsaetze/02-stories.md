@@ -1,8 +1,9 @@
 # Stories: Anwesenheitserfassung
 
-Stand: 22.10.2026 · Version 0.3 · Kürzel: EZ · Status: Entwurf
-Quellen: 00-steckbrief.md (v0.7), 01-erhebung.md (v0.3, Regeln R1–R12), rollen.md (v1.0), glossar.md (v1.5), Übergaben an AD (v1.3, eingearbeitet in spec.md AD v0.8), GR (v1.3, eingearbeitet in Gruppen 02-stories.md v0.4; Nachtrag `gr_my_groups` in v0.6), EA (v1.2), FI (v1.5)
-Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wettkampfbegleitung, Arbeitseinsatz, Listen. Kurs, Tour und Trainingslager folgen nach Klärung der Übernahme aus dem Modul Touren und Kurse.
+Stand: 24.10.2026 · Version 0.4 · Kürzel: EZ · Status: Entwurf
+Quellen: 00-steckbrief.md (v0.8), 01-erhebung.md (v0.4, Regeln R1–R12), rollen.md (v1.0), glossar.md (v1.6), Übergaben an AD (v1.3, eingearbeitet in spec.md AD v0.8), GR (v1.3, eingearbeitet in Gruppen 02-stories.md v0.4; Nachtrag `gr_my_groups` in v0.6), EA (v1.2), FI (v1.6); Übergabe aus der Planungshilfe Touren und Kurse (v1.2, `tk-touren-kurse/uebergabe-anwesenheitserfassung.md`)
+Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wettkampfbegleitung, Trainingslager, Arbeitseinsatz, Kurs, Tour, Absage, Übernahme aus der Planungshilfe Touren und Kurse, Listen.
+Änderungen v0.4: Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet (Product Owner, 24.10.2026): neue Stories US-EZ-20 (Kurs oder Tour von Hand erfassen), US-EZ-21 (Trainingslager erfassen), US-EZ-22 (Einsatz absagen und Absage zurücknehmen), US-EZ-23 (Kurs oder Tour aus der Planungshilfe übernehmen); neue Regeln R22–R27; Titel bis 90 Zeichen (US-EZ-05 AK4); Stände „eingetragen“ auch bei Kurs und Tour.
 Änderungen v0.3: Neue Story US-EZ-19 und Regel R18: Wer selbst Gruppenleitung, Trainer:in oder Helfer:in ist, bekommt beim Erfassen seine eigene Gruppe vorgeschlagen (Vorbelegung); der Vorschlag gibt keine zusätzlichen Rechte (Product Owner, 22.10.2026). Bestätigt: Gruppe nach dem Speichern nicht änderbar; Stichtag bei mehrtägigen Einsätzen = Startdatum; Orte pflegt nur der Admin.
 Änderungen v0.2: Annahmen bestätigt (Product Owner, 22.10.2026): Löschen nur durch die Geschäftsstelle (R15), Stichtag für Teilnehmer:innen und Trainer:innen (R16), Einsatzart nicht änderbar, Standardrolle Helfer:in beim Arbeitseinsatz, keine organisierende Person bei der Wettkampfbegleitung, Feldlängen Titel 60, Probetraining 30, Bemerkung 500 Zeichen. Verweise auf die Lesefunktion `gr_group_roster` (Gruppen) und die Startliste der Orte ergänzt.
 Änderungen v0.1: Erster Entwurf.
@@ -15,6 +16,12 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 - **R16:** In der Anwesenheitsliste erscheinen Teilnehmer:innen mit gültiger Teilnahme am Datum des Einsatzes sowie Trainer:innen, Helfer:innen und Gruppenleitung der Gruppe mit gültiger Funktion an diesem Datum (Stichtag, bestätigt 22.10.2026). Quelle: `gr_group_roster(group_id, date)` (Gruppen, US-GR-19). Bei mehrtägigen Einsätzen gilt das Startdatum (bestätigt 22.10.2026).
 - **R17:** Eine Person kann je Einsatz nur einmal in der Anwesenheit stehen.
 - **R18:** Ist die erfassende Person am Datum des Einsatzes Gruppenleitung, Trainer:in oder Helfer:in einer Gruppe, wird diese Gruppe beim Erfassen vorgeschlagen (Vorbelegung, änderbar). Der Vorschlag ist eine Eingabehilfe gegen Fehleingaben, kein Recht: Wählbar sind nur Gruppen, für die die Rechtevorlage der Person das Erfassen erlaubt (R13; ab Iteration 1 Reichweite „Gruppe“). Quelle: `gr_my_groups(date)` (Gruppen, US-GR-20).
+- **R22:** Jeder Einsatz kann abgesagt werden (alle Einsatzarten, Product Owner 24.10.2026). Ein abgesagter Einsatz bleibt in Liste und Detail sichtbar (mit Grund), ist nicht änderbar und zählt nicht für Abrechnung, Kontrollliste Kletterhalle und Warnung bei doppelter Erfassung.
+- **R23:** Absagen darf, wer den Einsatz ändern darf (R13), nur mit Grund und nur, solange niemand „anwesend“ ist (Product Owner 24.10.2026).
+- **R24:** Eine Absage kann von Nutzern mit Schreibrecht zurückgenommen werden; danach ist der Einsatz wieder änderbar (Product Owner 24.10.2026).
+- **R25:** Einsätze, die die Planungshilfe Touren und Kurse erzeugt hat: Kopf (Titel, Zeiten, organisierende Person), Personen aus der Planung, Absage und Löschen nur über die Planungshilfe; in der Anwesenheitserfassung nur die Anwesenheit (Stand setzen, Personen ergänzen) (Product Owner 24.10.2026).
+- **R26:** Die Planungshilfe legt den Einsatz Kurs bzw. Tour an, sobald die Planung den Status „in Yolawo angelegt“ hat, und aktualisiert ihn nur, solange niemand „anwesend“ ist (Übergabe TK v1.2).
+- **R27:** Sagt die Planungshilfe die Planung ab, wird der Einsatz als „abgesagt“ markiert, nicht gelöscht (Übergabe TK v1.2).
 
 ## Übersicht
 
@@ -39,6 +46,10 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 | US-EZ-17 | Warnung bei doppelter Erfassung | Should | Geschäftsstelle, Referent:in |
 | US-EZ-18 | Eingabe bei fehlgeschlagenem Speichern behalten | Must | Geschäftsstelle, Referent:in |
 | US-EZ-19 | Eigene Gruppe beim Erfassen vorschlagen | Must | Referent:in (MVP), Gruppenleitung und Trainer:innen (Iteration 1) |
+| US-EZ-20 | Kurs oder Tour von Hand erfassen | Must | Geschäftsstelle, Referent:in |
+| US-EZ-21 | Trainingslager erfassen | Must | Geschäftsstelle, Referent:in |
+| US-EZ-22 | Einsatz absagen und Absage zurücknehmen | Must | Geschäftsstelle, Referent:in |
+| US-EZ-23 | Kurs oder Tour aus der Planungshilfe übernehmen | Must | Planungshilfe Touren und Kurse (System); Geschäftsstelle, Referent:in (Anwesenheit) |
 
 ---
 
@@ -126,7 +137,7 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 - AK1: Gegeben ich wähle „Tagesausflug“ und „Gruppe 1“, dann muss ich Titel, organisierende Person, Datum und Dauer („unter 8 Stunden“ / „mindestens 8 Stunden“) angeben; Uhrzeiten werden nicht abgefragt.
 - AK2: Gegeben ich wähle „Ausbildungsfahrt“ und „eintägig“, dann gelten dieselben Felder wie beim Tagesausflug.
 - AK3: Gegeben alle Pflichtfelder und die Anwesenheit sind ausgefüllt, wenn ich speichere, dann entsteht ein Einsatz mit Einsatzart, Gruppe, Referat der Gruppe, Titel, organisierender Person, Datum und Dauer-Kategorie.
-- AK4 (Fehler): Gegeben der Titel fehlt oder ist länger als 60 Zeichen, wenn ich speichere, dann erscheint „Bitte einen Titel mit höchstens 60 Zeichen eingeben.“
+- AK4 (Fehler): Gegeben der Titel fehlt oder ist länger als 90 Zeichen (Product Owner 24.10.2026), wenn ich speichere, dann erscheint „Bitte einen Titel mit höchstens 90 Zeichen eingeben.“
 - AK5 (Rechte): Gegeben ich habe die Vorlage Referent:in mit Referat Kinder und Jugend, dann kann ich Fahrten nur für Gruppen dieses Referats anlegen.
 
 **Nicht Teil dieser Story:** Anmeldung und Planung der Fahrt (Modul Touren und Kurse); Erwachsenenfahrten; Berechnung der Vergütung (Finanzen).
@@ -383,6 +394,82 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 
 ---
 
+### US-EZ-20: Kurs oder Tour von Hand erfassen
+
+**Als** Mitarbeiter:in der Geschäftsstelle oder Referent:in
+**möchte ich** einen Kurs oder eine Tour, die nicht über die Planungshilfe geplant wurde, direkt anlegen und Leitung und Helfende eintragen,
+**damit** auch diese Einsätze erfasst und abgerechnet werden können.
+**Priorität:** Must · **Regeln:** R1, R2, R3, R11, R13, R17, R20, R21 · **Abhängig von:** US-EZ-07 (Personensuche), US-EZ-09/-10 (Eintragen und Bestätigen wie beim Arbeitseinsatz)
+
+**Akzeptanzkriterien**
+- AK1: Gegeben ich wähle „Kurs“ oder „Tour“, dann muss ich Referat, Titel, organisierende Person und Zeiten angeben (eintägig: Datum und Dauer-Kategorie; mehrtägig: Start und Ende am Startort); eine Gruppe und ein Ort werden nicht abgefragt (Product Owner 24.10.2026).
+- AK2: Gegeben ich trage Personen über die Suche „Aktive“ ein, dann stehen sie mit Stand „eingetragen“ und Rolle Trainer:in [ANNAHME: vorbelegt] oder Helfer:in im Einsatz; am Termin setze ich „anwesend“ oder „nicht erschienen“ wie beim Arbeitseinsatz.
+- AK3: Gegeben ich speichere Kurs „Toprope-Kurs“ im Referat Klettern am 21.11.2026 mit Dauer „mindestens 8 Stunden“ und zwei eingetragenen Personen, dann entsteht ein Einsatz „Kurs“ mit diesen Angaben und ohne Teilnehmende.
+- AK4 (Fehler): Gegeben ich versuche, eine Person mit Rolle Teilnehmer:in einzutragen, dann erscheint „Bei dieser Einsatzart gibt es keine Teilnehmer:innen.“ (Teilnehmende sind in Yolawo angemeldet, Product Owner 24.10.2026).
+- AK5 (Rechte): Gegeben ich habe die Vorlage Referent:in mit Referat Klettern, dann kann ich als Referat nur Klettern wählen.
+
+**Nicht Teil dieser Story:** Teilnehmende und Anmeldung (Yolawo); Lehreinheiten [OFFEN]; Planung und Kalkulation (Planungshilfe Touren und Kurse); neue Personen anlegen (nur beim Arbeitseinsatz).
+
+---
+
+### US-EZ-21: Trainingslager erfassen
+
+**Als** Mitarbeiter:in der Geschäftsstelle oder Referent:in
+**möchte ich** ein Trainingslager einer Gruppe mit Start und Ende erfassen,
+**damit** Finanzen es nach dem Satz für Mehrtageskurse/Trainingslager abrechnen kann.
+**Priorität:** Must · **Regeln:** R1, R2, R4, R5, R8, R11, R13, R16, R18 · **Abhängig von:** US-EZ-02, US-EZ-06, US-EZ-07
+
+**Akzeptanzkriterien**
+- AK1: Gegeben ich wähle „Trainingslager“, dann sind die Felder wie bei der Mehrtagesfahrt: Gruppe, Titel, organisierende Person, Startdatum mit Beginn („Abfahrt am Startort“), Enddatum mit Ende („Rückkehr am Startort“) (Product Owner 24.10.2026).
+- AK2: Die Anwesenheitsliste der Gruppe zum Startdatum ist vorbelegt; Trainer:innen, Helfer:innen und Teilnehmer:innen werden angekreuzt (wie US-EZ-02).
+- AK3: Gegeben Trainingslager „Frankenjura“ der Gruppe 1 vom 28.12.2026 09:00 bis 02.01.2027 17:00, wenn ich speichere, dann entsteht ein Einsatz „Trainingslager“ und erscheint in Listen als „28.12.2026–02.01.2027“.
+- AK4 (Fehler): Gegeben das Enddatum liegt nicht nach dem Startdatum, dann erscheint die Fehlermeldung aus R2.
+- AK5 (Rechte): Gegeben ich habe die Vorlage Referent:in mit Referat Leistungssport, dann kann ich Trainingslager nur für Gruppen dieses Referats anlegen.
+
+**Nicht Teil dieser Story:** Planung des Trainingslagers in der Planungshilfe; eintägige Trainingslager.
+
+---
+
+### US-EZ-22: Einsatz absagen und Absage zurücknehmen
+
+**Als** Mitarbeiter:in der Geschäftsstelle oder Referent:in
+**möchte ich** einen Einsatz, der nicht stattfindet, mit Grund absagen und eine irrtümliche Absage zurücknehmen,
+**damit** nachvollziehbar bleibt, was geplant war, ohne dass der Einsatz abgerechnet wird.
+**Priorität:** Must · **Regeln:** R13, R14, R22, R23, R24, R25 · **Abhängig von:** US-EZ-01 bis US-EZ-09, US-EZ-20, US-EZ-21
+
+**Akzeptanzkriterien**
+- AK1: Gegeben ein Einsatz meines Referats ohne anwesende Personen, wenn ich „Absagen“ wähle und den Grund „Wetter“ eingebe, dann ist der Einsatz „abgesagt“; Liste und Detail zeigen das Kennzeichen „abgesagt“ und im Detail „Abgesagt am TT.MM.JJJJ von <Name>: Wetter“.
+- AK2: Gegeben der Einsatz ist abgesagt, dann kann ich ihn nicht bearbeiten; angezeigt werden nur „Absage zurücknehmen“ und (für die Geschäftsstelle) „Löschen“.
+- AK3: Gegeben ich wähle „Absage zurücknehmen“ und bestätige die Rückfrage, dann ist der Einsatz wieder „erfasst“ und änderbar; eingetragene Personen sind unverändert.
+- AK4: Gegeben ein abgesagtes Training am Ort mit Punktekonto, dann erscheint es nicht in der Kontrollliste Kletterhalle und löst keine Warnung bei doppelter Erfassung aus.
+- AK5 (Fehler): Gegeben eine Person steht mit „anwesend“ im Einsatz, wenn ich absagen will, dann erscheint „Der Einsatz hat schon anwesende Personen und kann nicht abgesagt werden.“; gegeben der Grund fehlt, dann erscheint „Bitte einen Grund mit höchstens 500 Zeichen angeben.“
+- AK6 (Rechte): Gegeben ich habe nur Leserechte (Admin, Vorstand), dann sehe ich Absage und Grund, aber keine Schaltflächen „Absagen“ oder „Absage zurücknehmen“.
+- AK7 (Planungshilfe): Gegeben der Einsatz kommt aus der Planungshilfe, dann werden „Absagen“ und „Löschen“ nicht angezeigt; Absagen geht nur über die Planungshilfe (R25).
+
+**Nicht Teil dieser Story:** Benachrichtigung der eingetragenen Personen; Absage einzelner Tage eines mehrtägigen Einsatzes.
+
+---
+
+### US-EZ-23: Kurs oder Tour aus der Planungshilfe übernehmen
+
+**Als** Referent:in Touren oder Ausbildung bzw. Mitarbeiter:in der Geschäftsstelle
+**möchte ich**, dass ein geplanter Kurs bzw. eine geplante Tour automatisch als Einsatz in der Anwesenheitserfassung entsteht, sobald das Angebot in Yolawo angelegt ist,
+**damit** Leitung und Helfende nicht doppelt erfasst werden und am Termin nur noch die Anwesenheit bestätigt wird.
+**Priorität:** Must · **Regeln:** R17, R20, R21, R22, R25, R26, R27 · **Abhängig von:** US-EZ-20; Planungshilfe Touren und Kurse US-TK-16, US-TK-17 (spec.md TK R15, T13)
+
+**Akzeptanzkriterien**
+- AK1: Gegeben eine Tour mit zwei Leitenden erhält in der Planungshilfe den Status „in Yolawo angelegt“, dann entsteht ein Einsatz „Tour“ mit Referat, Titel (bis 90 Zeichen, ungekürzt), Zeiten und organisierender Person aus der Planung; die Leitenden stehen mit Stand „eingetragen“ und Rolle Trainer:in bzw. Helfer:in im Einsatz.
+- AK2: Gegeben die Planung wird geändert und noch niemand ist „anwesend“, dann übernimmt der Einsatz die Änderung; in der Anwesenheitserfassung ergänzte Personen bleiben erhalten.
+- AK3: Gegeben mindestens eine Person ist „anwesend“, wenn die Planung geändert wird, dann bleibt der Einsatz unverändert und die Planungshilfe zeigt „Der Einsatz ist schon erfasst und wurde nicht geändert. Bitte in der Anwesenheitserfassung anpassen.“
+- AK4: Gegeben die Planung wird abgesagt und niemand ist „anwesend“, dann ist der Einsatz „abgesagt“ mit dem Grund aus der Planung und bleibt sichtbar.
+- AK5: Gegeben ich öffne den Einsatz in der Anwesenheitserfassung, dann sehe ich den Hinweis „Aus der Planungshilfe Touren und Kurse. Kopf und Personen aus der Planung werden dort geändert.“; ich kann den Stand setzen und weitere Personen ergänzen, aber Kopf und Personen aus der Planung nicht ändern; „Absagen“ und „Löschen“ werden nicht angezeigt.
+- AK6 (Rechte): Gegeben eine Person ohne Schreibrecht in der Planungshilfe für das Referat, dann kann sie keinen Einsatz über die Planungshilfe anlegen oder ändern; die Datenbank lehnt den Aufruf ab.
+- AK7: Die Planungshilfe kann abfragen, ob der Einsatz durchgeführt ist (mindestens eine Leitung oder Helfer:in „anwesend“ [ANNAHME]); sie erhält dabei keine Namen.
+
+**Nicht Teil dieser Story:** Teilnehmende aus Yolawo; Rücknahme einer Absage aus der Planungshilfe (Status „abgesagt“ ist dort endgültig); Planung, Kalkulation und Freigabe (Planungshilfe).
+
+---
+
 ## Prüfung gegen die Definition of Ready
 
 - Rechtevorlage, Ziel, Nutzen, Akzeptanzkriterien (Given-When-Then, Fehler- und Rechte-Fall) und „Nicht Teil dieser Story“: in allen Stories enthalten.
@@ -391,5 +478,7 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 - Keine [OFFEN]-Punkte in den Stories: **nicht erfüllt** für US-EZ-11 (Art. 13 DSGVO, als „Nicht Teil“ ausgelagert) und US-EZ-12 (Sperre nach Halbjahr, ausgelagert). Beide blockieren die Umsetzung nicht.
 - Bestätigt vom Product Owner (22.10.2026): R15 (Löschen nur Geschäftsstelle), R16 (Stichtag für Teilnehmer:innen und Trainer:innen; bei mehrtägigen Einsätzen Startdatum), R18 (Vorschlag der eigenen Gruppe ohne zusätzliche Rechte), Rolle „Helfer:in“ als Standard beim Arbeitseinsatz, keine organisierende Person bei Wettkampfbegleitung, Einsatzart und Gruppe nach dem Speichern nicht änderbar, Feldlängen (Titel 60, Probetraining 30, Bemerkung 500 Zeichen), Orte pflegt nur der Admin.
 - Noch offene Annahmen (bei der Spec bestätigen): Wettkampfbegleitung nur mit Gruppe; „alle anwesend“ lässt „nicht erschienen“ unverändert; Probetrainings nicht in der Summe der Kontrollliste; Warnung ohne Link bei nicht lesbarem Einsatz; Schutz gegen Doppel-Speichern; Eingaben bei abgelaufener Sitzung im Browser behalten; Vorauswahl bei mehreren eigenen Gruppen über den Wochentag der Trainingszeit (US-EZ-19 AK2).
-- Voraussetzungen aus anderen Modulen: eingearbeitet in Gruppen (US-GR-18, US-GR-19, US-GR-20) und Administration (spec.md v0.8, T50–T58); müssen vor der Anwesenheitserfassung umgesetzt sein.
+- Bestätigt vom Product Owner (24.10.2026): Kurs, Tour und Trainingslager auch von Hand; Kurs und Tour ohne Gruppe und ohne Teilnehmende; Trainingslager wie Mehrtagesfahrt; Titel bis 90 Zeichen; Absage für alle Einsatzarten mit Grund, durch Nutzer mit Schreibrecht, zurücknehmbar; Einsätze aus der Planungshilfe in der Anwesenheitserfassung nur für die Anwesenheit.
+- Noch offene Annahmen aus v0.4: Rolle Trainer:in vorbelegt bei Kurs und Tour (US-EZ-20 AK2); „durchgeführt“ = mindestens eine Leitung oder Helfer:in anwesend (US-EZ-23 AK7).
+- Voraussetzungen aus anderen Modulen: eingearbeitet in Gruppen (US-GR-18, US-GR-19, US-GR-20) und Administration (spec.md v0.8, T50–T58); müssen vor der Anwesenheitserfassung umgesetzt sein. US-EZ-23 zusätzlich: Planungshilfe Touren und Kurse (spec.md TK T1–T8), umgesetzt zusammen mit TK T13.
 - Startbestand der Orte: liefert der Product Owner bei der Umsetzung (Migration der Administration, T51).

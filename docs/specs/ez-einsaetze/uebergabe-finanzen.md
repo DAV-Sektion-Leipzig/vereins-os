@@ -1,7 +1,8 @@
 # Übergabe an Finanzen: Trainerabrechnung, Vergütungsordnung, Kontrolle Kletterhalle
 
-Stand: 22.10.2026 · Version 1.5 · Von: Anwesenheitserfassung (EZ) · An: Finanzen (FI) · Status: offen
-Quelle: specs/ez-einsaetze/00-steckbrief.md (v0.7), 01-erhebung.md (v0.3); Vergütungsordnung der Sektion (2025_DAV_Leipzig_FO_VGO, Beschluss 21.11.2023, ergänzt 11.12.2025; vom Product Owner am 21.10.2026 geliefert)
+Stand: 24.10.2026 · Version 1.6 · Von: Anwesenheitserfassung (EZ) · An: Finanzen (FI) · Status: offen
+Quelle: specs/ez-einsaetze/00-steckbrief.md (v0.8), 01-erhebung.md (v0.4), spec.md (v0.2); Vergütungsordnung der Sektion (2025_DAV_Leipzig_FO_VGO, Beschluss 21.11.2023, ergänzt 11.12.2025; vom Product Owner am 21.10.2026 geliefert)
+Änderungen v1.6: Abgesagte Einsätze zählen nicht für die Abrechnung; Kurs und Tour nur mit Trainer:innen und Helfer:innen (keine Teilnehmenden), auch aus der Planungshilfe Touren und Kurse erzeugt; Trainingslager mit Gruppe wie Mehrtagesfahrt (Product Owner 24.10.2026).
 Änderungen v1.5: Hinweis auf Abweichung von Vergütungsordnung Punkt 7 und Vorstandsbeschluss gestrichen (Product Owner 22.10.2026: Fehlinterpretation); Abgrenzung zum Modul Touren und Kurse (Kalkulation dort, Vergütung hier [ANNAHME]).
 Änderungen v1.4: Mehrtägige Einsätze mit Enduhrzeit; Wettkampfbegleitung ein- oder mehrtägig; Erwachsenenfahrten nicht im Scope; Reihenfolge Gruppen → Anwesenheitserfassung → Finanzen; Idee eines eigenen Abrechnungsmoduls.
 Änderungen v1.3: Zeiten bei Fahrten wie im Forms-Formular; Ausbildungsfahrt; Ort beim Training; Zuordnung der Einsatzarten.
@@ -27,6 +28,8 @@ Die Anwesenheitserfassung erhebt und speichert nur. Die Vergütung wird in Finan
 | Tour | Führungstour wie Mehrtageskurs; Gemeinschaftstour nur Organisationspauschale |
 | Trainingslager | Mehrtageskurse/Trainingslager |
 | Arbeitseinsatz | keine Übungsleiterpauschale |
+
+  Abgesagte Einsätze (Stand „abgesagt“, `ez_events.cancelled_at`) zählen nicht. Bei Kurs und Tour erfasst die Anwesenheitserfassung nur Trainer:innen und Helfer:innen mit Stand „anwesend“, keine Teilnehmenden; Einsätze aus der Planungshilfe Touren und Kurse sind an `ez_events.tk_plan_id` erkennbar (Planwerte als Vorbelegung liefert die Planungshilfe, Übergabe TK → FI v1.3).
 
   TJB-Vorbereitungswochenende und Alpinfahrt gelten als Mehrtageskurs (Ausbildungsfahrt). Unterschieden nach Trainer:in und Helfer:in. Erwachsenenfahrten sind nicht im Scope.
 - **F3 – Sätze (Stand Anhang 1), pflegbar ohne Code-Änderung, mit gültig ab:**

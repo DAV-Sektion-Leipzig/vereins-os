@@ -1,7 +1,8 @@
 # Erhebung: Anwesenheitserfassung
 
-Datum: 22.10.2026 · Version 0.3 · Beteiligte: Toni Werner (Product Owner), Claude (Requirements Engineer)
+Datum: 24.10.2026 · Version 0.4 · Beteiligte: Toni Werner (Product Owner), Claude (Requirements Engineer)
 Quellen: Microsoft-Forms-Formular „Anwesenheitserfassung – Jugend“ (Screenshots des Product Owners, 21.10.2026; nicht im Projekt abgelegt, weil sie echte Namen von Kindern und Trainer:innen zeigen); Steckbrief v0.7; Vergütungsordnung der Sektion (2025_DAV_Leipzig_FO_VGO).
+Änderungen v0.4: Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet (Product Owner 24.10.2026): Kurs und Tour entstehen aus der Planungshilfe oder von Hand, ohne Gruppe und ohne Teilnehmende; Trainingslager wie Mehrtagesfahrt (B3); organisierende Person Pflicht bei Kurs, Tour, Trainingslager; Titel bis 90 Zeichen; neuer Ablauf B8 Absagen; offene Frage zur Übernahme erledigt.
 Änderungen v0.3: Kein Vorstandsbeschluss zu Vergütungsordnung Punkt 7 nötig (R4); Kurs und Tour: Planung und Kalkulation im Modul Touren und Kurse, Durchführung hier; im MVP Anlegen in der Anwesenheitserfassung [ANNAHME]; Glossarbegriffe ergänzt (glossar.md v1.5).
 Änderungen v0.2: Orte in der Administration; Enduhrzeit bei mehrtägigen Einsätzen; Wettkampfbegleitung ein- oder mehrtägig; organisierende Person aus allen Aktiven; Erfassung immer je Gruppe; Kinder mit Vor- und Nachname; Erwachsenenfahrten nicht im Scope; Reihenfolge Gruppen → Anwesenheitserfassung → Finanzen.
 Änderungen v0.1: Ist-Formular ausgewertet; Entscheidungen vom 21.10.2026.
@@ -26,13 +27,14 @@ Orte (Trainingsorte) pflegt der Admin in der Administration. Quelle: Steckbrief 
 
 - **B1 Training erfassen:** Einsatzart „Training“ → Gruppe → Datum → Beginn und Ende aus der Trainingszeit (änderbar) → Ort → Anwesenheit: Teilnehmer:innen und Trainer:innen/Helfer:innen der Gruppe ankreuzen (Rolle vorbelegt) → optional Vertretung hinzufügen, Probetraining (Vorname), Bemerkung → Speichern.
 - **B2 Eintägigen Einsatz erfassen** (Tagesausflug, Ausbildungsfahrt eintägig, Wettkampfbegleitung eintägig): Einsatzart → Gruppe → Titel, organisierende Person (bei Fahrten) → Datum, Dauer „unter 8 Stunden“ / „mindestens 8 Stunden“ → Anwesenheit → Bemerkung → Speichern.
-- **B3 Mehrtägigen Einsatz erfassen** (Mehrtagesfahrt, Ausbildungsfahrt mehrtägig, Wettkampfbegleitung mehrtägig): Einsatzart → Gruppe → Titel, organisierende Person (bei Fahrten) → Startdatum, Beginn (Abfahrt am Startort), Enddatum, Ende (Rückkehr am Startort) → Anwesenheit → Bemerkung → Speichern.
-- **B4 Kurs, Tour, Trainingslager erfassen:** Einsatzart → Referat → Titel → Zeiten (eintägig Datum und Dauer-Kategorie, mehrtägig Start und Ende) → Personen eintragen (Leitung, Trainer:innen, Helfer:innen, Teilnehmende [ANNAHME]) → Anwesenheit bestätigen → Speichern. Planung und Kalkulation im Modul Touren und Kurse; Übernahme von dort [OFFEN], bis dahin Anlegen hier [ANNAHME]. Lehreinheiten bei Kursen: [OFFEN].
+- **B3 Mehrtägigen Einsatz erfassen** (Mehrtagesfahrt, Ausbildungsfahrt mehrtägig, Wettkampfbegleitung mehrtägig, Trainingslager): Einsatzart → Gruppe → Titel, organisierende Person (bei Fahrten und Trainingslager) → Startdatum, Beginn (Abfahrt am Startort), Enddatum, Ende (Rückkehr am Startort) → Anwesenheit → Bemerkung → Speichern.
+- **B4 Kurs, Tour erfassen:** Einsatzart → Referat → Titel → organisierende Person → Zeiten (eintägig Datum und Dauer-Kategorie, mehrtägig Start und Ende) → Personen eintragen (Trainer:innen, Helfer:innen; keine Teilnehmenden, die Anmeldung liegt in Yolawo) → Anwesenheit bestätigen → Speichern. Planung und Kalkulation in der Planungshilfe Touren und Kurse; diese erzeugt den Einsatz bei „in Yolawo angelegt“ und sagt ihn bei Absage ab; Kurse und Touren ohne Planung werden hier von Hand angelegt (Product Owner 24.10.2026). Trainingslager: wie Mehrtagesfahrt (B3). Lehreinheiten bei Kursen: [OFFEN].
 - **B5 Arbeitseinsatz:** anlegen (Titel, Referat, Datum, Dauer) → Personen eintragen („eingetragen“) → nach dem Einsatz „anwesend“ bzw. „nicht erschienen“ setzen; neue Personen anlegen (Aktive, Funktion Helfer:in).
 - **B6 Korrigieren:** gespeicherten Einsatz öffnen, Felder und Anwesenheit ändern [ANNAHME: Änderung mit „geändert von / am“].
 - **B7 Organisierende Person wählen:** Suchfeld über alle Aktiven (Ehrenamtsstatus „aktiv“); ist eine Gruppe gewählt, stehen deren Gruppenleitung, Trainer:innen und Helfer:innen oben.
+- **B8 Absagen:** Einsatz öffnen → „Absagen“ mit Grund (nur ohne anwesende Personen) → Einsatz bleibt mit Kennzeichen „abgesagt“ sichtbar; Absage zurücknehmen möglich; gilt für alle Einsatzarten; Einsätze aus der Planungshilfe nur dort (Product Owner 24.10.2026).
 
-**Zustände Einsatz:** [ANNAHME] nur „erfasst“; keine Freigabe im MVP. Sperre nach Abgabe des Halbjahres: [OFFEN] (Finanzen).
+**Zustände Einsatz:** „erfasst“ oder „abgesagt“ (B8, Product Owner 24.10.2026); keine Freigabe im MVP. Sperre nach Abgabe des Halbjahres: [OFFEN] (Finanzen).
 **Zustände Anwesenheit:** eingetragen · anwesend · nicht erschienen (bei Training direkt „anwesend“ beim Ankreuzen).
 
 ## C. Daten (Feld | Typ | Pflicht | Beispiel | Quelle)
@@ -44,9 +46,9 @@ Orte (Trainingsorte) pflegt der Admin in der Administration. Quelle: Steckbrief 
 | Einsatzart | Auswahl: Training, Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt, Wettkampfbegleitung, Kurs, Tour, Trainingslager, Arbeitseinsatz | ja | Training | Forms „Art“ (erweitert) |
 | Ein-/mehrtägig | Auswahl | ja bei Ausbildungsfahrt, Wettkampfbegleitung, Kurs, Tour | mehrtägig | Product Owner 21./22.10.2026 |
 | Referat | Verweis Referat | ja | Kinder und Jugend | über Gruppe oder Auswahl |
-| Gruppe | Verweis Gruppe | ja bei Training, Fahrten und Wettkampfbegleitung | Gruppe 1 | Forms „Gruppe“; Erfassung immer je Gruppe |
-| Titel | Text, 1–2 Schlagwörter | ja außer bei Training | Kletterwochenende Elbsandstein | Forms „Titel“ |
-| Organisierende Person | Verweis Person (Aktive:r) mit Suche | ja bei Fahrten; optional bei Tour und Trainingslager [ANNAHME] | Trainerin der Gruppe | Forms „Wer hat die Ausfahrt organisiert?“ |
+| Gruppe | Verweis Gruppe | ja bei Training, Fahrten, Trainingslager und Wettkampfbegleitung; nicht bei Kurs, Tour, Arbeitseinsatz | Gruppe 1 | Forms „Gruppe“; Erfassung immer je Gruppe |
+| Titel | Text, 1–2 Schlagwörter, höchstens 90 Zeichen | ja außer bei Training | Kletterwochenende Elbsandstein | Forms „Titel“ |
+| Organisierende Person | Verweis Person (Aktive:r) mit Suche | ja bei Fahrten, Trainingslager, Kurs und Tour (Product Owner 24.10.2026) | Trainerin der Gruppe | Forms „Wer hat die Ausfahrt organisiert?“ |
 | Datum | Datum | ja bei Training und eintägig | 14.10.2026 | Forms |
 | Beginn, Ende (Training) | Uhrzeit | ja | 17:00–19:00 | Trainingszeit (Gruppen) als Vorschlag |
 | Ort (Training) | Verweis Ort (Stammdaten der Administration) | ja | [Werte pflegt der Admin] | Forms „Ort“ |
@@ -93,7 +95,7 @@ Orte (Trainingsorte) pflegt der Admin in der Administration. Quelle: Steckbrief 
 
 - Keine externen Schnittstellen im MVP. Das Forms-Formular läuft bis Iteration 1 parallel; keine Übernahme der Altdaten.
 - Intern: Gruppen (Gruppen, Teilnehmer:innen, Funktionen, Trainingszeiten), Ehrenamtsmanagement (Aktive, Funktionen), Administration (Rechte, Stammdaten Orte), Finanzen (liest Einsätze und Anwesenheit).
-- Modul Touren und Kurse (eigenständiges Planungstool: Erstellung, Planung, Kalkulation inkl. Deckungsbeitrag, Material, CO2; Anmeldung von Fahrten): Übernahme eines geplanten Kurses, einer Tour oder einer angemeldeten Fahrt als Einsatz [OFFEN].
+- Modul Touren und Kurse (eigenständiges Planungstool: Erstellung, Planung, Kalkulation inkl. Deckungsbeitrag, Material, CO2; Anmeldung von Fahrten): erzeugt den Einsatz Kurs bzw. Tour bei „in Yolawo angelegt“ und sagt ihn ab (Übergabe TK v1.2, eingearbeitet in spec.md v0.2); Übernahme angemeldeter Fahrten [OFFEN].
 
 ## F. Datenschutz
 
@@ -113,7 +115,8 @@ Orte (Trainingsorte) pflegt der Admin in der Administration. Quelle: Steckbrief 
 
 | Frage | Wer klärt | bis wann |
 |---|---|---|
-| Übernahme geplanter Kurse und Touren sowie angemeldeter Fahrten aus dem Modul Touren und Kurse; Lehreinheiten bei Kursen | Product Owner (Chat Touren und Kurse) | vor den Stories für Kurs und Tour |
+| Übernahme angemeldeter Fahrten aus der Planungshilfe Touren und Kurse; Lehreinheiten bei Kursen | Product Owner (Chat Touren und Kurse), Finanzen | vor Spec Finanzen |
 | Welcher Satz gilt für eine eintägige Ausbildungsfahrt? Satz der Wettkampfbegleitung je Tag? | Finanzen | vor Spec Finanzen |
 | Einsätze nach Abgabe des Halbjahres sperren? | Finanzen | vor Spec Finanzen |
 | Erledigt 22.10.2026: Ortsliste (Administration), Enduhrzeit mehrtägig, Wettkampfbegleitung mehrtägig, organisierende Person, Anzeige der Kinder, Erwachsenenfahrten, Reihenfolge, Vorstandsbeschluss Punkt 7 (nicht nötig), Glossarbegriffe | – | – |
+| Erledigt 24.10.2026: Übernahme geplanter Kurse und Touren (Planungshilfe erzeugt den Einsatz), Teilnehmende bei Kurs und Tour (nicht erfasst), Kurse ohne Planung und Trainingslager (von Hand), „abgesagt“ für alle Einsatzarten | – | – |
