@@ -1,6 +1,6 @@
 # Übergabe: Seed der Anwesenheitserfassung und Tests anderer Module
 
-Version 1.0 · Stand 24.10.2026 · von: Umsetzung Anwesenheitserfassung (Claude Code) · an: Product Owner; betrifft Administration, Ehrenamtsmanagement, Gruppen (Umsetzung)
+Version 1.1 (erledigt) · Stand 24.10.2026 · von: Umsetzung Anwesenheitserfassung (Claude Code) · an: Product Owner; betrifft Administration, Ehrenamtsmanagement, Gruppen (Umsetzung)
 Bezug: spec.md EZ v0.5 Abschnitt 9 und T8, plan.md O3, tasks.md T017/T018, Draft-PR #42 (Branch `ez-seed`)
 
 ## Anlass
@@ -30,4 +30,4 @@ Die EZ-Tests 510–590 sind davon unabhängig: Sie legen dieselben Daten mit den
 - **(b) Tests anderer Module anpassen:** Die 39 Prüfungen werden an den erweiterten Seed angepasst, durch die jeweilige Umsetzung (Administration, Ehrenamtsmanagement, Gruppen) oder durch Claude Code nach deinem ausdrücklichen Auftrag. Aufwand höher; jede künftige Seed-Ergänzung wiederholt das Problem.
 - **(c) Seed ohne Gruppendaten:** nur Einsätze mit vorhandenen Personen. Erfüllt spec.md 9 nicht (Teilnehmer:innen, Funktionen, Trainingszeit fehlen).
 
-Bis zur Entscheidung bleibt PR #42 ein Entwurf; `db-tests` ist dort erwartungsgemäß rot.
+**Entschieden (Product Owner 24.10.2026): Vorschlag (a).** Umgesetzt auf `ez-seed`: `supabase/seed-ez.sql`, `seed.sh` lädt die Datei mit `SEED_WITH_EZ=1`. Die Tests der anderen Module bleiben unverändert; für Administration, Ehrenamtsmanagement und Gruppen ist nichts zu tun.

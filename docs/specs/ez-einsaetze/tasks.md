@@ -8,7 +8,7 @@ description: "Tasks für das Modul Anwesenheitserfassung (EZ)"
 
 **Voraussetzungen**: AD Nachtrag v0.8.2 (Datenbank) und Gruppen bis v0.3.1 auf `main` (plan.md „Voraussetzungen und Stand“). Für die Oberfläche fehlen die Komponenten aus AD T120 (plan.md O2); für die Abnahme AD T120 und T121.
 
-**Zurückgestellt**: Spec T19–T21 (Anbindung der Planungshilfe) bis TK T13. **Wartet auf den Product Owner**: T8 (Seed, plan.md O3 b) und T17 (Freischalten).
+**Zurückgestellt**: Spec T19–T21 (Anbindung der Planungshilfe) bis TK T13. **Wartet auf den Product Owner**: T17 (Freischalten).
 
 **Tests**: Die Constitution verlangt test- und spec-getriebene Umsetzung mit pgTAP je Rechtevorlage. Vor jeder Migration steht eine Test-Task. Dateien 510–590 (research.md R-EZ-15); die Testdaten aus spec.md 9 legt jede Datei in ihrer Transaktion selbst an (plan.md O3 a). Für das Frontend gilt die Abnahme in TEST (quickstart.md D, abnahme-test.md) sowie `npm run lint` und `npm run build`.
 
@@ -96,10 +96,10 @@ description: "Tasks für das Modul Anwesenheitserfassung (EZ)"
 
 ---
 
-## Phase 3: Seed (Branch `ez-seed`) – wartet auf den Product Owner (plan.md O3 b)
+## Phase 3: Seed (Branch `ez-seed`, PR #42) – entschieden 24.10.2026 (plan.md O3)
 
-- [ ] T017 [US-EZ-01] (spec T8) `supabase/seed.sql` Abschnitt „9. Anwesenheitserfassung“ nach spec.md 9 und research.md R-EZ-16 (gleiche Daten und UUIDs wie T004); Nutzerkontext Geschäftsstelle für `created_by`.
-- [ ] T018 Übergabe `docs/specs/ez-einsaetze/uebergabe-gruppen-umsetzung.md`: welche Zähler in `200_seed.test.sql`, `420_gr_visibility.test.sql`, `480_gr_read_functions.test.sql` sich durch den EZ-Seed ändern, mit Vorschlag; angepasste Tests auf demselben Branch; PR ohne Auto-Merge, Product Owner entscheidet.
+- [x] T017 [US-EZ-01] (spec T8) `supabase/seed-ez.sql` (statt Abschnitt in `seed.sql`; `seed.sh` lädt sie mit `SEED_WITH_EZ=1`) nach spec.md 9 und research.md R-EZ-16 (gleiche Daten und UUIDs wie T004); Nutzerkontext Geschäftsstelle für `created_by`.
+- [x] T018 Übergabe `docs/specs/ez-einsaetze/uebergabe-seed-umsetzung.md` (39 Prüfungen in 10 Dateien anderer Module); entschieden: Vorschlag (a), keine Änderung an fremden Tests; PR ohne Auto-Merge (`seed.sh`).
 
 ---
 
