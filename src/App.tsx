@@ -52,6 +52,7 @@ import { GrLayout } from '@/features/gr/GrLayout'
 import { loadGroupOverview } from '@/features/gr/gruppen/data'
 import { loadGroupDetail } from '@/features/gr/gruppen/detail'
 import { GruppeDetailPage } from '@/features/gr/gruppen/GruppeDetailPage'
+import { GruppeNeuPage } from '@/features/gr/gruppen/GruppeFormular'
 import { GruppenPage } from '@/features/gr/gruppen/GruppenPage'
 import { loadStammdaten } from '@/features/ea/stammdaten/data'
 import { StammdatenPage } from '@/features/ea/stammdaten/StammdatenPage'
@@ -148,7 +149,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, loader: loadGroupOverview, element: <GruppenPage /> },
           { path: 'aufnahmen', element: <PlaceholderPage title="Aufnahmen offen" /> },
-          { path: 'gruppen/neu', loader: requireGrEdit, element: <PlaceholderPage title="Gruppe anlegen" /> },
+          { path: 'gruppen/neu', loader: requireGrEdit, element: <GruppeNeuPage /> },
           { path: 'gruppen/:id', loader: loadGroupDetail, element: <GruppeDetailPage /> },
           { path: 'gruppen/:id/aufnehmen', loader: requireGrEdit, element: <PlaceholderPage title="Teilnehmer:in aufnehmen" /> },
           { path: 'personen/:id', element: <PlaceholderPage title="Person" /> },
