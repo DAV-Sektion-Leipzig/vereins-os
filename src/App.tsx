@@ -5,7 +5,14 @@ import { ProtectedLayout } from '@/components/layout/ProtectedLayout'
 import type { RouteHandle } from '@/components/layout/AppHeader'
 import { loadAdAccess, requireAdEdit } from '@/features/ad/access'
 import { AdLayout } from '@/features/ad/AdLayout'
-import { loadNewPropertyType, loadPropertyType, loadPropertyTypes } from '@/features/ad/eigenschaftsarten/data'
+import {
+  loadNewPropertyType,
+  loadPropertyType,
+  loadPropertyTypes,
+  newPropertyTypeLoader,
+  propertyTypeLoader,
+  propertyTypesLoader,
+} from '@/features/ad/eigenschaftsarten/data'
 import { EigenschaftsartBearbeiten } from '@/features/ad/eigenschaftsarten/EigenschaftsartBearbeiten'
 import { EigenschaftsartenListe } from '@/features/ad/eigenschaftsarten/EigenschaftsartenListe'
 import { loadPersonDetail, loadPersonOverview } from '@/features/ad/personen/data'
@@ -14,7 +21,14 @@ import { PersonenUebersicht } from '@/features/ad/personen/PersonenUebersicht'
 import { PersonNeu } from '@/features/ad/personen/PersonNeu'
 import { loadAuditLog } from '@/features/ad/protokoll/data'
 import { ProtokollPage } from '@/features/ad/protokoll/ProtokollPage'
-import { loadNewQualificationType, loadQualificationType, loadQualificationTypes } from '@/features/ad/qualifikationsarten/data'
+import {
+  loadNewQualificationType,
+  loadQualificationType,
+  loadQualificationTypes,
+  newQualificationTypeLoader,
+  qualificationTypeLoader,
+  qualificationTypesLoader,
+} from '@/features/ad/qualifikationsarten/data'
 import { QualifikationsartenListe } from '@/features/ad/qualifikationsarten/QualifikationsartenListe'
 import { QualifikationsartFormular } from '@/features/ad/qualifikationsarten/QualifikationsartFormular'
 import { loadNewTemplate, loadTemplate, loadTemplateList } from '@/features/ad/rechtevorlagen/data'
@@ -23,7 +37,7 @@ import { RechtevorlagenListe } from '@/features/ad/rechtevorlagen/Rechtevorlagen
 import { LoginPage } from '@/features/auth/LoginPage'
 import { PasswortSetzenPage } from '@/features/auth/PasswortSetzenPage'
 import { PasswortVergessenPage } from '@/features/auth/PasswortVergessenPage'
-import { loadEaAccess, requireEaManage } from '@/features/ea/access'
+import { loadEaAccess } from '@/features/ea/access'
 import { AblaufPage } from '@/features/ea/ablauf/AblaufPage'
 import { loadExpiryList } from '@/features/ea/ablauf/data'
 import { AktivePage } from '@/features/ea/aktive/AktivePage'
@@ -106,8 +120,13 @@ export const router = createBrowserRouter([
           { path: 'ablauf', loader: loadExpiryList, element: <AblaufPage /> },
           // nur mit verwalten (US-EA-01 AK5)
           { path: 'gremien', loader: loadGremien, element: <GremienPage /> },
-          { path: 'eigenschaftsarten/*', loader: requireEaManage, element: <PlaceholderPage title="Eigenschaftsarten" /> },
-          { path: 'qualifikationsarten/*', loader: requireEaManage, element: <PlaceholderPage title="Qualifikationsarten" /> },
+          // Seiten der Administration unter /ea (US-EA-15, T052)
+          { path: 'eigenschaftsarten', loader: propertyTypesLoader('EA'), element: <EigenschaftsartenListe basePath="/ea/eigenschaftsarten" /> },
+          { path: 'eigenschaftsarten/neu', loader: newPropertyTypeLoader('EA'), element: <EigenschaftsartBearbeiten basePath="/ea/eigenschaftsarten" /> },
+          { path: 'eigenschaftsarten/:id', loader: propertyTypeLoader('EA'), element: <EigenschaftsartBearbeiten basePath="/ea/eigenschaftsarten" /> },
+          { path: 'qualifikationsarten', loader: qualificationTypesLoader('EA'), element: <QualifikationsartenListe basePath="/ea/qualifikationsarten" /> },
+          { path: 'qualifikationsarten/neu', loader: newQualificationTypeLoader('EA'), element: <QualifikationsartFormular basePath="/ea/qualifikationsarten" /> },
+          { path: 'qualifikationsarten/:id', loader: qualificationTypeLoader('EA'), element: <QualifikationsartFormular basePath="/ea/qualifikationsarten" /> },
           { path: 'stammdaten', loader: loadStammdaten, element: <StammdatenPage /> },
           { path: '*', loader: () => redirect('/ea/aktive') },
         ],

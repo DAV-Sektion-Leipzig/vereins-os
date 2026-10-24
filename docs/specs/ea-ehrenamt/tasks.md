@@ -224,8 +224,8 @@ description: "Tasks für das Modul Ehrenamtsmanagement (EA)"
 
 **Unabhängiger Test**: US-EA-15 AK1–AK5; unter /ad bleibt alles unverändert.
 
-- [ ] T051 [US-EA-15] (spec T19) `src/features/ad/eigenschaftsarten/`: Prop `basePath` (Standard `/ad/eigenschaftsarten`) in `EigenschaftsartenListe.tsx` und `EigenschaftsartBearbeiten.tsx` statt der fest eingebauten Pfade (Zeilen mit `/ad/eigenschaftsarten`); Loader in `data.ts` mit Parameter für die Rechteprüfung (`AD ≥ read` bzw. `EA = manage`), `redirect` auf `basePath`.
-- [ ] T052 [US-EA-15] (spec T19) `src/features/ad/qualifikationsarten/data.ts`: Loader mit Parameter für die Rechteprüfung wie T051; Routen in `src/App.tsx` unter `ea`: `eigenschaftsarten`, `eigenschaftsarten/neu`, `eigenschaftsarten/:id`, `qualifikationsarten`, `qualifikationsarten/neu`, `qualifikationsarten/:id` mit `basePath = '/ea/…'` und Prüfung `EA = manage`.
+- [x] T051 [US-EA-15] (spec T19) `src/features/ad/eigenschaftsarten/`: Prop `basePath` (Standard `/ad/eigenschaftsarten`) in `EigenschaftsartenListe.tsx` und `EigenschaftsartBearbeiten.tsx` statt der fest eingebauten Pfade (Zeilen mit `/ad/eigenschaftsarten`); Loader in `data.ts` mit Parameter für die Rechteprüfung (`AD ≥ read` bzw. `EA = manage`), `redirect` auf `basePath`.
+- [x] T052 [US-EA-15] (spec T19) `src/features/ad/qualifikationsarten/data.ts`: Loader mit Parameter für die Rechteprüfung wie T051; Routen in `src/App.tsx` unter `ea`: `eigenschaftsarten`, `eigenschaftsarten/neu`, `eigenschaftsarten/:id`, `qualifikationsarten`, `qualifikationsarten/neu`, `qualifikationsarten/:id` mit `basePath = '/ea/…'` und Prüfung `EA = manage`.
 
 ---
 
