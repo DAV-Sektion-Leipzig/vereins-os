@@ -1,6 +1,7 @@
 # Steckbrief: Anwesenheitserfassung
 
-Stand: 24.10.2026 · Version 0.8 · Kürzel: EZ [ANNAHME: bleibt] · Priorität: nach Gruppen, vor Finanzen · Ablage: docs/specs/ez-einsaetze/ [ANNAHME: bleibt] · Status: abgeschlossen, bereit für Stories
+Stand: 24.10.2026 · Version 0.9 · Kürzel: EZ · Priorität: nach Gruppen, vor Finanzen · Ablage: docs/specs/ez-einsaetze/ · Status: abgeschlossen, bereit für Stories
+Änderungen v0.9: Annahmen bestätigt (Product Owner 24.10.2026): Kürzel EZ und Ablage, Bezeichnungen, Rolle vorbelegt und änderbar, Warnung bei doppelter Erfassung, Eingaben bleiben bei Fehlern erhalten, Funktion Helfer:in für neue Personen.
 Änderungen v0.8: Art. 13 DSGVO entschieden (Übergabe aus dem Ehrenamtsmanagement v1.0). Abgleich mit dem Forms-Formular: Training ohne Uhrzeit; Anmeldung von Fahrten als eigene Spezifikation; Einsatzart Wettkampfbetreuung. Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet (Product Owner 24.10.2026): Planungshilfe erzeugt und sagt Kurse und Touren ab; Kurs, Tour und Trainingslager auch von Hand; Kurs und Tour ohne Gruppe und ohne Teilnehmende; Trainingslager wie Mehrtagesfahrt; Stand „abgesagt“ für alle Einsatzarten; offene Frage zur Übernahme erledigt.
 Änderungen v0.7: Abweichung von Vergütungsordnung Punkt 7 gestrichen (kein Vorstandsbeschluss nötig, Product Owner 22.10.2026); Abgrenzung zum Modul Touren und Kurse festgelegt (dort Erstellung, Planung und Kalkulation; hier Durchführung und Anwesenheit).
 Änderungen v0.6: Reihenfolge Gruppen → Anwesenheitserfassung → Finanzen; Orte als Stammdaten in der Administration; Enduhrzeit bei mehrtägigen Einsätzen; Wettkampfbegleitung ein- oder mehrtägig; Erfassung immer je Gruppe; organisierende Person aus allen Aktiven mit Suche; Kinder mit Vor- und Nachname; Erwachsenenfahrten nicht im Scope; Idee eines eigenen Abrechnungsmoduls.
@@ -26,19 +27,19 @@ Trainer:innen erfassen Trainings und Fahrten mobil im Microsoft-Forms-Formular �
 - Anlegen von Einsätzen ist ein Recht aus der Rechtevorlage, kein Automatismus aus Amt oder Funktion.
 
 **Im Scope (MVP):**
-- Einsatzarten (Bezeichnungen wie im heutigen Formular [ANNAHME]): Training; Tagesausflug und Mehrtagesfahrt (Ausfahrt); Ausbildungsfahrt (ein- oder mehrtägig; Mehrtageskurs nach Vergütungsordnung [ANNAHME]); Wettkampfbetreuung (ein- oder mehrtägig); Kurs; Tour; Trainingslager; Arbeitseinsatz. Veranstaltungen wie Europacup und Bergfilmfestival sind Arbeitseinsätze; keine Rechte für Projektteams.
+- Einsatzarten (Bezeichnungen wie im heutigen Formular): Training; Tagesausflug und Mehrtagesfahrt (Ausfahrt); Ausbildungsfahrt (ein- oder mehrtägig; Mehrtageskurs nach Vergütungsordnung); Wettkampfbetreuung (ein- oder mehrtägig); Kurs; Tour; Trainingslager; Arbeitseinsatz. Veranstaltungen wie Europacup und Bergfilmfestival sind Arbeitseinsätze; keine Rechte für Projektteams.
 - Einsätze mit Gruppenbezug (Training, Fahrten, Trainingslager, Wettkampfbetreuung) werden immer je Gruppe erfasst; das Referat ergibt sich aus der Gruppe. Kurs, Tour und Arbeitseinsatz gehören direkt zu einem Referat (Product Owner 24.10.2026).
 - Kurs und Tour: Durchführung und Anwesenheit von Trainer:innen und Helfer:innen, keine Teilnehmenden (Anmeldung in Yolawo). Die Planungshilfe Touren und Kurse erzeugt den Einsatz, sobald das Angebot in Yolawo angelegt ist, und sagt ihn bei Absage ab; Kurse und Touren ohne Planung werden hier von Hand angelegt (Product Owner 24.10.2026). Trainingslager wie Mehrtagesfahrt.
 - Absage: Jeder Einsatz kann mit Grund abgesagt werden und bleibt sichtbar; die Absage ist zurücknehmbar (Product Owner 24.10.2026).
 - Training: Datum und Ort aus den Stammdaten der Administration, keine Uhrzeit; die Zeit ergibt sich aus der Trainingszeit der Gruppe (Product Owner 24.10.2026). Ein Training entsteht erst mit der Erfassung; nicht erfasste Termine (z. B. Ferien) sind keine Trainings.
 - Fahrten und Wettkampfbetreuung: Titel (1–2 Schlagwörter), organisierende Person (bei Fahrten; Organisationspauschale); eintägig Datum und Dauer „unter 8 Stunden“ / „mindestens 8 Stunden“; mehrtägig Startdatum, Beginn, Enddatum und Ende (Abfahrt und Rückkehr am Startort; Reisezeit = Arbeitszeit). Tages- bzw. Halbtagessätze berechnet Finanzen.
 - Organisierende Person: Auswahl aus allen Aktiven mit Suche; ist eine Gruppe gewählt, stehen deren Gruppenleitung, Trainer:innen und Helfer:innen oben.
-- Anwesenheit mit Rolle: Trainer:in, Helfer:in oder Teilnehmer:in; Rolle vorbelegt aus der Funktion in der Gruppe bzw. im Referat, je Einsatz änderbar [ANNAHME]. Ob eine Trainer:in als Trainer:in vergütet wird (förderfähige Lizenz), prüft Finanzen.
+- Anwesenheit mit Rolle: Trainer:in, Helfer:in oder Teilnehmer:in; Rolle vorbelegt aus der Funktion in der Gruppe bzw. im Referat, je Einsatz änderbar. Ob eine Trainer:in als Trainer:in vergütet wird (förderfähige Lizenz), prüft Finanzen.
 - Anwesenheitsliste: Trainer:innen, Helfer:innen und Teilnehmer:innen der Gruppe vorbelegt zum Ankreuzen, angezeigt mit Vorname (bzw. Rufname) und Nachname; weitere Trainer:innen und Helfer:innen (Vertretung) hinzufügbar; Probetraining als Freitext (nur Vorname); Bemerkung als Freitext mit Hinweis, keine sensiblen Angaben über Kinder einzutragen.
-- Arbeitseinsatz (und sinngemäß Kurs, Tour): Personen vorab eintragen („eingetragen“), weitere hinzufügen, am Einsatz „anwesend“ bzw. „nicht erschienen“ bestätigen. Beim Arbeitseinsatz können neue Personen angelegt werden und werden als Aktive geführt (Ehrenamtsstatus „aktiv“, Funktion Helfer:in mit Bezug auf das Referat des Einsatzes [ANNAHME]), mit Dublettenwarnung.
-- „Erfasst von“ und „erfasst am“ automatisch; Warnung bei doppelter Erfassung (gleiche Gruppe, Datum, Einsatzart) [ANNAHME].
+- Arbeitseinsatz (und sinngemäß Kurs, Tour): Personen vorab eintragen („eingetragen“), weitere hinzufügen, am Einsatz „anwesend“ bzw. „nicht erschienen“ bestätigen. Beim Arbeitseinsatz können neue Personen angelegt werden und werden als Aktive geführt (Ehrenamtsstatus „aktiv“, Funktion Helfer:in mit Bezug auf das Referat des Einsatzes), mit Dublettenwarnung.
+- „Erfasst von“ und „erfasst am“ automatisch; Warnung bei doppelter Erfassung (gleiche Gruppe, Datum, Einsatzart).
 - Einfache Listen: Einsätze je Gruppe bzw. Referat und Zeitraum (auch je Abrechnungshalbjahr); Anwesenheit je Einsatz; Anzahl anwesender Teilnehmer:innen (Kinder) je Training, Ort und Zeitraum als Kontrollliste für das Punktekonto der Kletterhalle.
-- Erfassung mobil ab 375 px. Kein Offline-Betrieb: Schlägt das Speichern fehl, erscheint ein Hinweis; die Eingabe bleibt im Formular erhalten [ANNAHME].
+- Erfassung mobil ab 375 px. Kein Offline-Betrieb: Schlägt das Speichern fehl, erscheint ein Hinweis; die Eingabe bleibt im Formular erhalten.
 - Erfassung im MVP durch Geschäftsstelle und Referent:innen.
 
 **Nicht im Scope:**
@@ -91,7 +92,7 @@ Trainer:innen erfassen Trainings und Fahrten mobil im Microsoft-Forms-Formular �
 - [OFFEN] Text und Link der Datenschutzhinweise für das Pflicht-Häkchen beim Anlegen neuer Aktiver aus Arbeitseinsätzen (Product Owner).
 - [OFFEN] Löschfrist und Aufbewahrung (gemeinsam mit Finanzen).
 - [OFFEN] Eigenes Abrechnungsmodul, das in Finanzen aufgeht? (Struktur und Navigation später)
-- [ANNAHME] bestätigen: Kürzel EZ und Ablage bleiben; Rolle vorbelegt und änderbar; Stände „eingetragen / anwesend / nicht erschienen“; Bezeichnungen wie im Forms-Formular; Ausbildungsfahrt = Mehrtageskurs; Warnung bei doppelter Erfassung.
+- Bestätigt (24.10.2026): Kürzel EZ und Ablage bleiben; Rolle vorbelegt und änderbar; Stände „eingetragen / anwesend / nicht erschienen“; Bezeichnungen wie im Forms-Formular; Ausbildungsfahrt = Mehrtageskurs; Warnung bei doppelter Erfassung.
 
 **Folgeänderungen in anderen Dokumenten (ausgeführt):**
 - v0.2 bis v0.5 (21.10.2026): siehe Versionen der jeweiligen Dateien.

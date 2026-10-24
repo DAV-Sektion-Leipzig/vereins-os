@@ -1,7 +1,8 @@
 # Erhebung: Anwesenheitserfassung
 
-Datum: 24.10.2026 · Version 0.4 · Beteiligte: Toni Werner (Product Owner), Claude (Requirements Engineer)
+Datum: 24.10.2026 · Version 0.5 · Beteiligte: Toni Werner (Product Owner), Claude (Requirements Engineer)
 Quellen: Microsoft-Forms-Formular „Anwesenheitserfassung – Jugend“ (Screenshots des Product Owners, 21.10.2026; nicht im Projekt abgelegt, weil sie echte Namen von Kindern und Trainer:innen zeigen); Steckbrief v0.7; Vergütungsordnung der Sektion (2025_DAV_Leipzig_FO_VGO).
+Änderungen v0.5: Annahmen R8, R10 und Ziel „unter 1 Minute“ bestätigt (Product Owner 24.10.2026).
 Änderungen v0.4: Abgleich mit dem Forms-Formular (Product Owner 24.10.2026): Training ohne Uhrzeit; Beginn und Ende mehrtägiger Einsätze optional; mindestens eine Teilnehmer:in auch bei Fahrten, Trainingslager und Wettkampfbetreuung (R5); Einsatzart heißt Wettkampfbetreuung; Fahrtanmeldung als eigene Spezifikation. Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet (Product Owner 24.10.2026): Kurs und Tour entstehen aus der Planungshilfe oder von Hand, ohne Gruppe und ohne Teilnehmende; Trainingslager wie Mehrtagesfahrt (B3); organisierende Person Pflicht bei Kurs, Tour, Trainingslager; Titel bis 90 Zeichen; neuer Ablauf B8 Absagen; offene Frage zur Übernahme erledigt.
 Änderungen v0.3: Kein Vorstandsbeschluss zu Vergütungsordnung Punkt 7 nötig (R4); Kurs und Tour: Planung und Kalkulation im Modul Touren und Kurse, Durchführung hier; im MVP Anlegen in der Anwesenheitserfassung [ANNAHME]; Glossarbegriffe ergänzt (glossar.md v1.5).
 Änderungen v0.2: Orte in der Administration; Enduhrzeit bei mehrtägigen Einsätzen; Wettkampfbegleitung ein- oder mehrtägig; organisierende Person aus allen Aktiven; Erfassung immer je Gruppe; Kinder mit Vor- und Nachname; Erwachsenenfahrten nicht im Scope; Reihenfolge Gruppen → Anwesenheitserfassung → Finanzen.
@@ -84,9 +85,9 @@ Orte (Trainingsorte) pflegt der Admin in der Administration. Quelle: Steckbrief 
 - **R5:** Bei Training, Fahrten, Trainingslager und Wettkampfbetreuung mindestens eine anwesende Person mit Rolle Trainer:in oder Helfer:in und mindestens eine anwesende Teilnehmer:in (wie Pflichtfelder im Forms; Product Owner 24.10.2026). Nicht bei Arbeitseinsatz, Kurs und Tour.
 - **R6:** Probetraining nur Vorname; keine weiteren Angaben.
 - **R7:** Bemerkung ist optional; Hinweis am Feld: „Keine Angaben zu Gesundheit oder anderen sensiblen Daten von Kindern.“
-- **R8:** Gibt es für dieselbe Gruppe, dasselbe Datum und dieselbe Einsatzart bereits einen Einsatz, erscheint die Warnung „Für diese Gruppe ist an diesem Tag bereits ein Einsatz dieser Art erfasst. Trotzdem speichern?“ [ANNAHME].
+- **R8:** Gibt es für dieselbe Gruppe, dasselbe Datum und dieselbe Einsatzart bereits einen Einsatz, erscheint die Warnung „Für diese Gruppe ist an diesem Tag bereits ein Einsatz dieser Art erfasst. Trotzdem speichern?“.
 - **R9:** „Erfasst von“ und „erfasst am“ setzt das System; nicht änderbar.
-- **R10:** Bezeichnungen der Einsatzarten in der Oberfläche wie im Forms-Formular (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt …) [ANNAHME].
+- **R10:** Bezeichnungen der Einsatzarten in der Oberfläche wie im Forms-Formular (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt …).
 - **R11:** Organisierende Person: Auswahl nur aus Personen mit Ehrenamtsstatus „aktiv“, per Suche; bei gewählter Gruppe werden deren Gruppenleitung, Trainer:innen und Helfer:innen zuerst angezeigt.
 - **R12:** Auswahl des Orts nur aus aktiven Orten der Stammdaten.
 
@@ -105,7 +106,7 @@ Orte (Trainingsorte) pflegt der Admin in der Administration. Quelle: Steckbrief 
 
 ## G. Nicht-funktional
 
-- Mobil ab 375 px; Erfassung eines Trainings mit wenigen Schritten, Ziel unter 1 Minute [ANNAHME].
+- Mobil ab 375 px; Erfassung eines Trainings mit wenigen Schritten, Ziel unter 1 Minute.
 - Kein Offline-Betrieb; bei fehlgeschlagenem Speichern Hinweis, Eingaben bleiben erhalten.
 - Ablauf wie im Forms-Formular (Art → Details → Gruppe → Anwesenheit) [ANNAHME].
 - Suche nach Personen ab 2 Zeichen, Ergebnis sofort [ANNAHME].
