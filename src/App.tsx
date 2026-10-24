@@ -61,6 +61,8 @@ import { GruppeNeuPage } from '@/features/gr/gruppen/GruppeFormular'
 import { GruppenPage } from '@/features/gr/gruppen/GruppenPage'
 import { loadStammdaten } from '@/features/ea/stammdaten/data'
 import { loadEzAccess } from '@/features/ez/access'
+import { loadEventDetail } from '@/features/ez/detail/data'
+import { EinsatzDetailPage } from '@/features/ez/detail/EinsatzDetailPage'
 import { EzLayout } from '@/features/ez/EzLayout'
 import { EinsaetzePage } from '@/features/ez/liste/EinsaetzePage'
 import { loadEventList } from '@/features/ez/liste/data'
@@ -179,6 +181,7 @@ export const router = createBrowserRouter([
         handle: { moduleName: 'Anwesenheitserfassung' } satisfies RouteHandle,
         children: [
           { index: true, loader: loadEventList, element: <EinsaetzePage /> },
+          { path: ':id', loader: loadEventDetail, element: <EinsatzDetailPage /> },
           { path: '*', loader: () => redirect('/ez') },
         ],
       },
