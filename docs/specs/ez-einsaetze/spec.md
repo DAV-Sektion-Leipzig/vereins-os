@@ -2,8 +2,8 @@
 
 Version: 0.2 · Status: Entwurf · Stand: 24.10.2026 · Product Owner: Toni Werner
 Stories: docs/specs/ez-einsaetze/02-stories.md (US-EZ-01 bis US-EZ-23, v0.4)
-Grundlage: 00-steckbrief.md v0.8, 01-erhebung.md v0.4 (R1–R12), 02-stories.md v0.4 (R13–R18, R22–R27), glossar.md v1.6, rollen.md v1.0, tech-stack.md v0.6, spec.md Administration v0.8 (R30, R43–R45, `ea_person_names`, `ea_search_active_persons`, `ez_person_visible`, `ea_create_volunteer`, `ad_locations`), Gruppen 02-stories.md v0.7 (US-GR-19 `gr_group_roster`, US-GR-20 `gr_my_groups`, US-GR-19 AK8 `gr_groups_for_attendance`), Übergaben an Finanzen v1.6 und Ehrenamtsmanagement v1.2, Übergabe aus der Planungshilfe Touren und Kurse v1.2 (`tk-touren-kurse/uebergabe-anwesenheitserfassung.md`; Gegenstück spec.md TK v0.2 R9, R15, T13)
-Änderungen v0.2: Abgleich mit dem Forms-Formular (Product Owner 24.10.2026): Training ohne Uhrzeit (R28, Dauer aus der Trainingszeit der Gruppe); Beginn und Ende mehrtägiger Einsätze optional (R4); mindestens eine Teilnehmer:in auch bei Fahrten, Trainingslager und Wettkampfbetreuung (R5); Einsatzart heißt Wettkampfbetreuung (glossar.md v1.6); `EZ_END_TIME` entfällt. Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet, Entscheidungen des Product Owners vom 24.10.2026: Kurs, Tour und Trainingslager im MVP freigeschaltet und auch von Hand anlegbar; Kurs und Tour ohne Gruppe, nur mit Trainer:innen und Helfer:innen (keine Teilnehmenden); Trainingslager wie Mehrtagesfahrt; Titel 1–90 Zeichen für alle Einsatzarten; Stand „abgesagt“ für alle Einsatzarten mit Grund, durch Nutzer mit Schreibrecht, zurücknehmbar, nur ohne anwesende Personen; Einsätze aus der Planungshilfe: Kopf, Absage und Löschen nur über die Planungshilfe, in der Anwesenheitserfassung nur die Anwesenheit. Neu: Spalten `tk_plan_id`, `cancelled_*`, `ez_attendances.from_plan`; Funktionen `ez_cancel_event`, `ez_restore_event`, `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`; Regeln R22–R27; Tasks T18–T21.
+Grundlage: 00-steckbrief.md v0.8, 01-erhebung.md v0.4 (R1–R12), 02-stories.md v0.4 (R13–R18, R22–R27), glossar.md v1.6, rollen.md v1.0, tech-stack.md v0.6, spec.md Administration v0.8 (R30, R43–R45, `ea_person_names`, `ea_search_active_persons`, `ez_person_visible`, `ea_create_volunteer`, `ad_locations`), Gruppen 02-stories.md v0.7 (US-GR-19 `gr_group_roster`, US-GR-20 `gr_my_groups`, US-GR-19 AK8 `gr_groups_for_attendance`), Übergaben an Finanzen v1.6, Ehrenamtsmanagement v1.2 und Gruppen v1.0, Übergabe aus dem Ehrenamtsmanagement v1.0 (`ea-ehrenamt/uebergabe-anwesenheitserfassung.md`), Übergabe aus der Planungshilfe Touren und Kurse v1.2 (`tk-touren-kurse/uebergabe-anwesenheitserfassung.md`; Gegenstück spec.md TK v0.2 R9, R15, T13)
+Änderungen v0.2: Übergabe aus dem Ehrenamtsmanagement v1.0 eingearbeitet (Product Owner 24.10.2026): Pflicht-Häkchen „Person informiert“ nach Art. 13 DSGVO beim Anlegen neuer Personen im Arbeitseinsatz, Bestätigung wird gespeichert (Tabelle `ez_privacy_confirmations`, R29, `EZ_PRIVACY_NOT_CONFIRMED`); Text und Link [OFFEN]. Abgleich mit dem Forms-Formular (Product Owner 24.10.2026): Training ohne Uhrzeit (R28, Dauer aus der Trainingszeit der Gruppe); Beginn und Ende mehrtägiger Einsätze optional (R4); mindestens eine Teilnehmer:in auch bei Fahrten, Trainingslager und Wettkampfbetreuung (R5); Einsatzart heißt Wettkampfbetreuung (glossar.md v1.6); `EZ_END_TIME` entfällt. Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet, Entscheidungen des Product Owners vom 24.10.2026: Kurs, Tour und Trainingslager im MVP freigeschaltet und auch von Hand anlegbar; Kurs und Tour ohne Gruppe, nur mit Trainer:innen und Helfer:innen (keine Teilnehmenden); Trainingslager wie Mehrtagesfahrt; Titel 1–90 Zeichen für alle Einsatzarten; Stand „abgesagt“ für alle Einsatzarten mit Grund, durch Nutzer mit Schreibrecht, zurücknehmbar, nur ohne anwesende Personen; Einsätze aus der Planungshilfe: Kopf, Absage und Löschen nur über die Planungshilfe, in der Anwesenheitserfassung nur die Anwesenheit. Neu: Spalten `tk_plan_id`, `cancelled_*`, `ez_attendances.from_plan`; Funktionen `ez_cancel_event`, `ez_restore_event`, `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`; Regeln R22–R27; Tasks T18–T21.
 Änderungen v0.1: Erster Entwurf.
 
 **Voraussetzungen für die Umsetzung:** Administration Nachtrag v0.8 (T50–T58) und Gruppen bis US-GR-20 sind umgesetzt. Die Anwesenheitserfassung legt keine Tabellen oder Funktionen anderer Module an; sie ersetzt nur den Platzhalter `ez_person_visible` (gleiche Signatur). Die Anbindung der Planungshilfe Touren und Kurse (T19–T21) wird erst zusammen mit TK T13 umgesetzt, weil sie `tk_can_write` der Planungshilfe nutzt; bis dahin bleibt `tk_plan_id` leer.
@@ -115,6 +115,18 @@ Bei Training, Fahrten, Trainingslager und Wettkampfbetreuung werden nur angekreu
 
 Probetrainings nur bei Einsätzen mit Gruppe [ANNAHME: auch bei Fahrten möglich, in der Oberfläche nur beim Training angeboten].
 
+### ez_privacy_confirmations (Bestätigung „Person informiert“, R29)
+
+| Spalte | Typ | Pflicht | Default | Beschreibung |
+|---|---|---|---|---|
+| id | uuid | ja | gen_random_uuid() | PK |
+| person_id | uuid | ja | – | FK ea_persons(id) on delete cascade; die beim Arbeitseinsatz neu angelegte Person |
+| event_id | uuid | nein | – | FK ez_events(id) on delete set null; Arbeitseinsatz, bei dem die Person angelegt wurde (bleibt als Nachweis, auch wenn der Einsatz gelöscht wird) |
+| notice_version | text | ja | – | Kennung der Datenschutzhinweise, auf die hingewiesen wurde (z. B. Stand-Datum), aus der Konfiguration des Frontends; 1–50 Zeichen [ANNAHME] |
+| confirmed_at / confirmed_by / confirmed_by_person_id | timestamptz / uuid / uuid | ja / ja / nein | now() / auth.uid() / – | bestätigt am / von; vom System gesetzt |
+
+Nur `ez_create_helper` schreibt (keine Grants für Insert/Update/Delete). Lesen per RLS nur mit „EZ verwalten“ (`ez_can_delete()`) [ANNAHME]. Gelöscht wird die Bestätigung mit der Person (Löschfrist der Person, rollen.md).
+
 ### Views (security_invoker = true)
 
 - `ez_v_events`: alle Spalten von `ez_events` plus `is_cancelled` (`cancelled_at is not null`), Anzahl `present` je Rolle, Anzahl `registered` und `absent` sowie Anzahl Probetrainings. Gruppen- und Ortsnamen ergänzen `ez_list_events` und `ez_get_event`, weil `gr_groups` für Nutzer der Anwesenheitserfassung nicht direkt lesbar ist.
@@ -150,7 +162,7 @@ Schreiben (direkte Insert/Update/Delete auf `ez_`-Tabellen sind für `authentica
 - `ez_delete_event(p_id uuid)` – nur `ez_can_delete()`, sonst `EZ_DELETE_FORBIDDEN`; Einsatz aus der Planungshilfe → `EZ_TK_MANAGED` (R25); löscht Einsatz mit Anwesenheiten und Probetrainings (cascade); Personen bleiben (R15). Auch abgesagte Einsätze sind löschbar.
 - `ez_cancel_event(p_id uuid, p_reason text)` – Absagen (R22, R23): nur `ez_can_write(referat_id)` (`EZ_FORBIDDEN`); Einsatz aus der Planungshilfe → `EZ_TK_MANAGED`; schon abgesagt → `EZ_EVENT_CANCELLED`; Grund leer oder länger als 500 Zeichen → `EZ_CANCEL_REASON`; mindestens eine Anwesenheit `present` → `EZ_CANCEL_NOT_ALLOWED`. Setzt `cancelled_at`, `cancelled_by`, `cancelled_by_person_id`, `cancel_reason`; Anwesenheiten (`registered`, `absent`) und Probetrainings bleiben gespeichert.
 - `ez_restore_event(p_id uuid)` – Absage zurücknehmen (R24): nur `ez_can_write(referat_id)`; Einsatz aus der Planungshilfe → `EZ_TK_MANAGED`; nicht abgesagt → ohne Wirkung; leert die `cancelled_*`-Spalten und `cancel_reason`; setzt updated_*. Keine erneute Prüfung auf doppelte Erfassung (R8) [ANNAHME].
-- `ez_create_helper(p_event uuid, p_first text, p_last text, p_preferred text default null, p_email text default null) returns uuid` – nur für Arbeitseinsätze (`EZ_KIND_NOT_ALLOWED`) mit `ez_can_write(referat)`; ruft `ea_create_volunteer` mit der Eigenschaftsart `system_key = 'function'` und dem Wert Helfer:in in `p_field_values` [ANNAHME: Feldschlüssel legt die erste EA-Migration fest], Referat des Einsatzes, `p_valid_from = start_date`, `p_contact_email`; legt die Anwesenheit (Rolle Helfer:in, Status `present`) an; gibt die person_id zurück. Fehler aus `ea_create_volunteer` werden durchgereicht (R45 der Administration). Die Dublettenprüfung ruft das Frontend vorher über `ad_find_similar_persons` auf.
+- `ez_create_helper(p_event uuid, p_first text, p_last text, p_preferred text default null, p_email text default null, p_privacy_confirmed boolean default false, p_notice_version text default null) returns uuid` – nur für Arbeitseinsätze (`EZ_KIND_NOT_ALLOWED`) mit `ez_can_write(referat)`; ohne `p_privacy_confirmed = true` und `p_notice_version` → `EZ_PRIVACY_NOT_CONFIRMED` (R29), es wird nichts angelegt; ruft `ea_create_volunteer` mit der Eigenschaftsart `system_key = 'function'` und dem Wert Helfer:in in `p_field_values` [ANNAHME: Feldschlüssel legt die erste EA-Migration fest], Referat des Einsatzes, `p_valid_from = start_date`, `p_contact_email`; legt die Anwesenheit (Rolle Helfer:in, Status `present`) und die Zeile in `ez_privacy_confirmations` in derselben Transaktion an; gibt die person_id zurück. Fehler aus `ea_create_volunteer` werden durchgereicht (R45 der Administration). Die Dublettenprüfung ruft das Frontend vorher über `ad_find_similar_persons` auf.
 
 Anbindung der Planungshilfe Touren und Kurse (Übergabe TK v1.2; aufgerufen aus `tk_save_plan` und `tk_change_status`, spec.md TK R15; umgesetzt mit TK T13):
 - `ez_upsert_planned_event(p_tk_plan_id uuid, p_kind ez_event_kind, p_referat_id uuid, p_title text, p_span ez_span, p_start_date date, p_start_time time, p_end_date date, p_end_time time, p_day_category ez_day_category, p_organizer_person_id uuid, p_persons jsonb) returns uuid` – legt den Einsatz zur Planung an oder aktualisiert ihn (R26):
@@ -186,6 +198,7 @@ Einsätze aus der Planungshilfe: Kopf, Absage und Löschen nur über die Planung
 |---|---|---|---|---|
 | ez_events | `ez_can_read(referat_id)` | `ez_save_event`, `ez_upsert_planned_event` | `ez_save_event`, `ez_cancel_event`, `ez_restore_event`, `ez_upsert_planned_event`, `ez_cancel_planned_event` | `ez_delete_event` |
 | ez_attendances | Einsatz lesbar | `ez_save_event`, `ez_create_helper`, `ez_upsert_planned_event` | `ez_save_event`, `ez_upsert_planned_event` | `ez_save_event` (Ersetzen), `ez_upsert_planned_event`, cascade |
+| ez_privacy_confirmations | `ez_can_delete()` (Geschäftsstelle) | `ez_create_helper` | – | mit der Person (cascade) |
 | ez_trial_participants | Einsatz lesbar | `ez_save_event` | `ez_save_event` | `ez_save_event`, cascade |
 
 Gruppen und Anwesenheitslisten: über `gr_groups_for_attendance`, `gr_group_roster`, `gr_my_groups` (Rechteprüfung in Gruppen). Orte: `ad_locations` (lesbar mit aktivem Zugang). Referate: `ea_referate`.
@@ -248,10 +261,11 @@ R1–R12 aus 01-erhebung.md, R13–R18 und R22–R27 aus 02-stories.md, hier mit
 - R26: Die Planungshilfe aktualisiert ihren Einsatz nur, solange niemand „anwesend“ ist, sonst `EZ_EVENT_LOCKED` („Der Einsatz ist schon erfasst und wurde nicht geändert.“; die Planungshilfe zeigt `TK_EZ_LOCKED`).
 - R27: Sagt die Planungshilfe ab, wird der Einsatz „abgesagt“ mit dem Grund der Planung; mit anwesenden Personen `EZ_EVENT_LOCKED` [ANNAHME].
 - R28: Ein Training wird ohne Uhrzeit erfasst; Beginn und Ende ergeben sich aus der Trainingszeit der Gruppe am Wochentag des Datums (Gruppen, `gr_training_times`), die beim Erfassen nur angezeigt wird. Je Gruppe und Wochentag gibt es höchstens eine Trainingszeit; eine Gruppe kann an mehreren Wochentagen trainieren (Product Owner 24.10.2026; Übergabe an Gruppen v1.0, G6). Hat die Gruppe am Wochentag keine Trainingszeit, erscheint der Hinweis „Für diesen Wochentag ist keine Trainingszeit hinterlegt.“; speichern ist möglich.
+- R29: Beim Anlegen einer neuen Person im Arbeitseinsatz muss bestätigt werden, dass die Person über die Speicherung ihrer Daten informiert und auf die Datenschutzhinweise hingewiesen wurde (Art. 13 DSGVO; Übergabe EA v1.0, Product Owner 22.10.2026). Ohne Häkchen ist „Anlegen“ nicht möglich: „Bitte bestätige, dass die Person informiert wurde.“ (`EZ_PRIVACY_NOT_CONFIRMED`) [ANNAHME: Wortlaut aus EA]. Die Bestätigung wird mit Zeitpunkt, bestätigender Person und Version der Datenschutzhinweise gespeichert (Product Owner 24.10.2026).
 - Längen: Titel 1–90 Zeichen, sonst „Bitte einen Titel mit höchstens 90 Zeichen eingeben.“ (`EZ_TITLE_LENGTH`).
 - Weitere Meldungen: Netzfehler „Die Eingabe wurde nicht gesendet. Bitte bei Verbindung erneut speichern.“; Sitzung abgelaufen „Bitte erneut anmelden.“; Löschen fehlgeschlagen „Der Einsatz konnte nicht gelöscht werden. Bitte erneut versuchen.“; Suche ohne Treffer „Keine aktive Person gefunden.“; unerwartet „Etwas ist schiefgelaufen. Bitte versuche es erneut.“
 
-Fehlercodes neu: `EZ_FORBIDDEN`, `EZ_NOT_FOUND`, `EZ_DELETE_FORBIDDEN`, `EZ_FIELD_REQUIRED`, `EZ_FIELD_LOCKED`, `EZ_END_DATE`, `EZ_TITLE_LENGTH`, `EZ_TRIAL_NAME`, `EZ_REMARK_LENGTH`, `EZ_LOCATION_INACTIVE`, `EZ_LOCATION_NO_POINTS`, `EZ_ORGANIZER_NOT_ACTIVE`, `EZ_PERSON_NOT_ACTIVE`, `EZ_PARTICIPANT_NOT_IN_GROUP`, `EZ_DUPLICATE_PERSON`, `EZ_DUPLICATE_EVENT`, `EZ_MIN_ATTENDANCE`, `EZ_STATUS_NOT_ALLOWED`, `EZ_ROLE_NOT_ALLOWED`, `EZ_KIND_NOT_ALLOWED`, `EZ_EVENT_CANCELLED`, `EZ_CANCEL_REASON`, `EZ_CANCEL_NOT_ALLOWED`, `EZ_TK_MANAGED`, `EZ_EVENT_LOCKED`. `EZ_KIND_NOT_AVAILABLE` entfällt (v0.2). Ergänzung in `docs/specs/ad-administration/contracts/error-codes.md` (gemeinsame Liste) mit deutschem Text je Code.
+Fehlercodes neu: `EZ_FORBIDDEN`, `EZ_NOT_FOUND`, `EZ_DELETE_FORBIDDEN`, `EZ_FIELD_REQUIRED`, `EZ_FIELD_LOCKED`, `EZ_END_DATE`, `EZ_TITLE_LENGTH`, `EZ_TRIAL_NAME`, `EZ_REMARK_LENGTH`, `EZ_LOCATION_INACTIVE`, `EZ_LOCATION_NO_POINTS`, `EZ_ORGANIZER_NOT_ACTIVE`, `EZ_PERSON_NOT_ACTIVE`, `EZ_PARTICIPANT_NOT_IN_GROUP`, `EZ_DUPLICATE_PERSON`, `EZ_DUPLICATE_EVENT`, `EZ_MIN_ATTENDANCE`, `EZ_STATUS_NOT_ALLOWED`, `EZ_ROLE_NOT_ALLOWED`, `EZ_KIND_NOT_ALLOWED`, `EZ_EVENT_CANCELLED`, `EZ_CANCEL_REASON`, `EZ_CANCEL_NOT_ALLOWED`, `EZ_TK_MANAGED`, `EZ_EVENT_LOCKED`, `EZ_PRIVACY_NOT_CONFIRMED`. `EZ_KIND_NOT_AVAILABLE` entfällt (v0.2). Ergänzung in `docs/specs/ad-administration/contracts/error-codes.md` (gemeinsame Liste) mit deutschem Text je Code.
 
 ## 6. Screens und Interaktionen
 
@@ -282,7 +296,7 @@ Anwesenheit (Training, Fahrt, Trainingslager, Wettkampfbetreuung):
 
 Organisierende Person: Komponente „Personensuche Aktive“ der Administration; vor der Eingabe Liste der Gruppenleitung, Trainer:innen und Helfer:innen aus dem Roster („Aus der Gruppe“), darunter Suchergebnisse („Alle Aktiven“).
 
-Neue Person beim Arbeitseinsatz (nur in /ez/:id, nach dem ersten Speichern): Dialog Vorname, Nachname, Rufname (optional), E-Mail (optional) → `ad_find_similar_persons` → bei Treffern Dublettendialog der Administration mit „Diese Person eintragen“ (nur Treffer mit Ehrenamtsstatus „aktiv“; sonst Hinweis „Diese Person ist nicht aktiv. Bitte an die Geschäftsstelle wenden.“ [ANNAHME]) / „Trotzdem anlegen“ / „Abbrechen“ → `ez_create_helper`.
+Neue Person beim Arbeitseinsatz (nur in /ez/:id, nach dem ersten Speichern): Dialog Vorname, Nachname, Rufname (optional), E-Mail (optional), Pflicht-Häkchen „Ich habe die Person über die Speicherung ihrer Daten informiert und auf die Datenschutzhinweise der Sektion hingewiesen.“ mit Link auf die Datenschutzhinweise (R29; Text und Link [OFFEN], Link und `notice_version` als Konfiguration im Frontend) → `ad_find_similar_persons` → bei Treffern Dublettendialog der Administration mit „Diese Person eintragen“ (nur Treffer mit Ehrenamtsstatus „aktiv“; sonst Hinweis „Diese Person ist nicht aktiv. Bitte an die Geschäftsstelle wenden.“ [ANNAHME]) / „Trotzdem anlegen“ / „Abbrechen“ → `ez_create_helper`. „Diese Person eintragen“ (vorhandene Person) braucht kein Häkchen.
 
 Speichern und Netz (US-EZ-18):
 - Das Formular erzeugt beim Öffnen eine `client_request_id` und behält sie bis zum Erfolg.
@@ -312,7 +326,7 @@ Navigation EZ: Einsätze · Kontrolle Kletterhalle (nur mit `ad_has_any_level('E
 - Datum und Zeit ohne Zeitzone, immer Ortszeit Leipzig.
 - Keine Personendaten im Browser-Speicher außer Person-IDs im Entwurf (gelöscht nach Speichern bzw. Abmelden).
 - Kosten 0 €.
-- Datenschutz: Verarbeitungsverzeichnis „Anwesenheitserfassung“ (Zweck: Nachweis, Abrechnung, Kontrolle Punktekonto; Kategorien: Namen, Anwesenheit, Rolle; Minderjährige: nur Name). Löschfrist [OFFEN] mit Finanzen; kein Löschlauf im MVP. Information neuer Personen nach Art. 13 DSGVO [OFFEN].
+- Datenschutz: Verarbeitungsverzeichnis „Anwesenheitserfassung“ (Zweck: Nachweis, Abrechnung, Kontrolle Punktekonto; Kategorien: Namen, Anwesenheit, Rolle; Minderjährige: nur Name). Löschfrist [OFFEN] mit Finanzen; kein Löschlauf im MVP. Information neuer Personen nach Art. 13 DSGVO über das Pflicht-Häkchen mit gespeicherter Bestätigung (R29); Text und Link [OFFEN].
 
 ## 9. Testdaten (supabase/seed.sql, nur TEST, nach den Seeds von Administration und Gruppen)
 
@@ -353,11 +367,11 @@ Voraussetzung: Administration T50–T58, Gruppen US-GR-18 bis US-GR-20 (inkl. `g
 - [ ] T2: Migration Rechte- und Sichtbarkeitsfunktionen: `ez_can_read`, `ez_can_write`, `ez_can_delete`, `ez_person_visible` (ersetzt Platzhalter) (US-EZ-14, -15, R13, R14)
 - [ ] T3: Migration Trigger: Referat aus Gruppe, Audit inkl. `*_person_id`, Sperre unveränderlicher Felder (R9, R19)
 - [ ] T4: Migration `ez_save_event` mit allen Prüfungen aus Abschnitt 2 (Schritte 1–11) und Fehlercodes (US-EZ-01 bis -12, -17, -18)
-- [ ] T5: Migration `ez_delete_event`, `ez_create_helper`, `ez_cancel_event`, `ez_restore_event` (US-EZ-11, -13, -22)
+- [ ] T5: Migration `ez_privacy_confirmations` (RLS, Select-Policy), `ez_delete_event`, `ez_create_helper` mit Bestätigung (R29), `ez_cancel_event`, `ez_restore_event` (US-EZ-11, -13, -22)
 - [ ] T6: Migration Lesefunktionen `ez_list_events`, `ez_get_event`, `ez_climbing_points_report`, View `ez_v_events` (US-EZ-14, -15, -16)
 - [ ] T7: Fehlercodes in contracts/error-codes.md (Abschnitt 5)
 - [ ] T8: Seed nach Abschnitt 9 (US-EZ alle)
-- [ ] T9: pgTAP: Sichtbarkeitsmatrix Abschnitt 9; jede Regel R1–R25 mit mindestens einem Fehlerfall (R25 mit einem im Test gesetzten `tk_plan_id`); Idempotenz `client_request_id`; Stichtag (Einsatz 8); direkte Insert/Update/Delete auf `ez_`-Tabellen abgelehnt; `ez_person_visible` nur Namen lesbarer Einsätze; Mengentest Abschnitt 8
+- [ ] T9: pgTAP: Sichtbarkeitsmatrix Abschnitt 9; jede Regel R1–R25, R28 und R29 mit mindestens einem Fehlerfall (R25 mit einem im Test gesetzten `tk_plan_id`; R29: ohne Häkchen nichts angelegt, mit Häkchen Zeile in `ez_privacy_confirmations`, Referent:in kann sie nicht lesen); Idempotenz `client_request_id`; Stichtag (Einsatz 8); direkte Insert/Update/Delete auf `ez_`-Tabellen abgelehnt; `ez_person_visible` nur Namen lesbarer Einsätze; Mengentest Abschnitt 8
 - [ ] T10: Frontend Liste /ez mit Filtern und Paginierung (US-EZ-14, -15)
 - [ ] T11: Frontend Formular Einsatzart-Auswahl und Formulare je Einsatzart inkl. Gruppenvorschlag (R18) und Anzeige der Trainingszeit (R28) (US-EZ-01, -05, -06, -08, -09, -19, -20, -21)
 - [ ] T12: Frontend Anwesenheitsliste aus `gr_group_roster`, Vertretung, Probetraining, Bemerkung (US-EZ-02, -03, -04)
@@ -395,6 +409,7 @@ Annahmen (bei Abnahme bestätigen):
 - [ANNAHME] Mengengerüst und Antwortzeiten aus Abschnitt 8.
 - [ANNAHME] `ez_person_visible` enger als in spec.md AD v0.8 beschrieben (nur Personen gespeicherter, lesbarer Einsätze).
 - [ANNAHME] Namen der Testgruppen werden an den Seed Gruppen angepasst.
+- [ANNAHME] Bestätigung „Person informiert“ in einer eigenen Tabelle der Anwesenheitserfassung (keine Änderung an Administration oder Ehrenamtsmanagement); lesbar nur für die Geschäftsstelle; gelöscht mit der Person; Wortlaut der Meldung aus der Übergabe EA.
 - [ANNAHME] Spaltenname `ez_events.tk_plan_id` ohne FK auf `tk_plans` (wie `tk_plans.ez_event_id` in spec.md TK).
 - [ANNAHME] Bei Einsätzen aus der Planungshilfe ist in der Anwesenheitserfassung neben der Anwesenheit auch die Bemerkung änderbar; Personen aus der Planung behalten ihre Rolle und können nur über die Planungshilfe entfernt werden (`from_plan`).
 - [ANNAHME] Absage aus der Planungshilfe mit anwesenden Personen wird abgelehnt (`EZ_EVENT_LOCKED`), wie das Absagen in der Anwesenheitserfassung (R23, R27).
@@ -408,5 +423,5 @@ Offen (kein Blocker für den MVP):
 - [OFFEN] Doppelte Erfassung von Kurs und Tour: Ein von Hand angelegter Kurs und ein später aus der Planungshilfe erzeugter Einsatz für dieselbe Veranstaltung werden nicht erkannt (R8 gilt nur für Einsätze mit Gruppe). Hinweis im Formular reicht [ANNAHME], oder Warnung bei gleichem Referat, Datum und Einsatzart?
 - [OFFEN] Beginn und Ende mehrtägiger Einsätze und ihre Abrechnung (erster und letzter Tag als Tages- oder Halbtagessatz) – vom Product Owner noch einmal in Ruhe anzusehen, mit Finanzen.
 - [OFFEN] Löschfrist der Einsätze und Anwesenheiten (mit Finanzen; Aufbewahrung für Abrechnung).
-- [OFFEN] Information nach Art. 13 DSGVO an Personen, die beim Arbeitseinsatz angelegt werden.
+- [OFFEN] Text des Hinweises und Link auf die Datenschutzhinweise der Sektion (Product Owner, vor dem Start der Anwesenheitserfassung); Kennung `notice_version`.
 - [OFFEN] Sperre nach Abgabe des Halbjahres (Finanzen).

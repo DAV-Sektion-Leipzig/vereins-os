@@ -1,7 +1,7 @@
 # Steckbrief: Anwesenheitserfassung
 
 Stand: 24.10.2026 · Version 0.8 · Kürzel: EZ [ANNAHME: bleibt] · Priorität: nach Gruppen, vor Finanzen · Ablage: docs/specs/ez-einsaetze/ [ANNAHME: bleibt] · Status: abgeschlossen, bereit für Stories
-Änderungen v0.8: Abgleich mit dem Forms-Formular: Training ohne Uhrzeit; Anmeldung von Fahrten als eigene Spezifikation; Einsatzart Wettkampfbetreuung. Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet (Product Owner 24.10.2026): Planungshilfe erzeugt und sagt Kurse und Touren ab; Kurs, Tour und Trainingslager auch von Hand; Kurs und Tour ohne Gruppe und ohne Teilnehmende; Trainingslager wie Mehrtagesfahrt; Stand „abgesagt“ für alle Einsatzarten; offene Frage zur Übernahme erledigt.
+Änderungen v0.8: Art. 13 DSGVO entschieden (Übergabe aus dem Ehrenamtsmanagement v1.0). Abgleich mit dem Forms-Formular: Training ohne Uhrzeit; Anmeldung von Fahrten als eigene Spezifikation; Einsatzart Wettkampfbetreuung. Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet (Product Owner 24.10.2026): Planungshilfe erzeugt und sagt Kurse und Touren ab; Kurs, Tour und Trainingslager auch von Hand; Kurs und Tour ohne Gruppe und ohne Teilnehmende; Trainingslager wie Mehrtagesfahrt; Stand „abgesagt“ für alle Einsatzarten; offene Frage zur Übernahme erledigt.
 Änderungen v0.7: Abweichung von Vergütungsordnung Punkt 7 gestrichen (kein Vorstandsbeschluss nötig, Product Owner 22.10.2026); Abgrenzung zum Modul Touren und Kurse festgelegt (dort Erstellung, Planung und Kalkulation; hier Durchführung und Anwesenheit).
 Änderungen v0.6: Reihenfolge Gruppen → Anwesenheitserfassung → Finanzen; Orte als Stammdaten in der Administration; Enduhrzeit bei mehrtägigen Einsätzen; Wettkampfbegleitung ein- oder mehrtägig; Erfassung immer je Gruppe; organisierende Person aus allen Aktiven mit Suche; Kinder mit Vor- und Nachname; Erwachsenenfahrten nicht im Scope; Idee eines eigenen Abrechnungsmoduls.
 Änderungen v0.5: Forms-Formular ausgewertet (01-erhebung.md); Zeiten wie heute; Ausbildungsfahrt ein- und mehrtägig; Ort beim Training; Bemerkungsfeld; Anmeldung von Fahrten ins Modul Touren und Kurse.
@@ -81,14 +81,14 @@ Trainer:innen erfassen Trainings und Fahrten mobil im Microsoft-Forms-Formular �
 - **Vergütungsordnung uneindeutig:** „Referate Jugend und Leistung“ [ANNAHME: Kinder und Jugend, Leistungssport]; „förderfähige Lizenz“ [ANNAHME: DOSB-lizenzfähig]; Satz für eine eintägige Ausbildungsfahrt [OFFEN] (Finanzen).
 - **Trainings nur als Vorschlag:** Fehlende Erfassung ist nicht von „kein Training“ zu unterscheiden; Vollständigkeit liegt bei den Erfassenden.
 - **Freitext Probetraining:** nur Vorname, Hinweis in der Oberfläche; Löschung mit dem Einsatz [ANNAHME].
-- **Anlegen von Personen aus dem Arbeitseinsatz:** Dublettengefahr; Information nach Art. 13 DSGVO an die neue Person [OFFEN: wie, durch wen].
+- **Anlegen von Personen aus dem Arbeitseinsatz:** Dublettengefahr; Information nach Art. 13 DSGVO durch die erfassende Person, bestätigt per Pflicht-Häkchen mit gespeicherter Bestätigung (Product Owner 22./24.10.2026); Text und Link der Datenschutzhinweise [OFFEN].
 - **Löschfrist:** 5 Jahre (rollen.md) gegenüber gesetzlichen Aufbewahrungsfristen für Abrechnungsgrundlagen; Klärung gemeinsam mit Finanzen.
 - **Reihenfolge:** Gruppen (inkl. Trainingszeiten) und die Rechte in der Administration müssen vorher umgesetzt sein.
 - **Mobile Nutzung** in Halle oder am Fels mit schwachem Netz: kein Offline-Betrieb, Eingaben dürfen bei Fehlern nicht verloren gehen.
 - **Kosten:** keine zusätzlichen [ANNAHME].
 
 **Offene Fragen:**
-- [OFFEN] Information neuer Aktiver aus Arbeitseinsätzen nach Art. 13 DSGVO.
+- [OFFEN] Text und Link der Datenschutzhinweise für das Pflicht-Häkchen beim Anlegen neuer Aktiver aus Arbeitseinsätzen (Product Owner).
 - [OFFEN] Löschfrist und Aufbewahrung (gemeinsam mit Finanzen).
 - [OFFEN] Eigenes Abrechnungsmodul, das in Finanzen aufgeht? (Struktur und Navigation später)
 - [ANNAHME] bestätigen: Kürzel EZ und Ablage bleiben; Rolle vorbelegt und änderbar; Stände „eingetragen / anwesend / nicht erschienen“; Bezeichnungen wie im Forms-Formular; Ausbildungsfahrt = Mehrtageskurs; Warnung bei doppelter Erfassung.
