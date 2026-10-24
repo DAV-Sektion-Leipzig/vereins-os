@@ -1,6 +1,6 @@
 # Übergabe: Planungshilfe Touren und Kurse → Finanzen
 
-Stand: 22.10.2026 · Version 1.3 · Status: offen · Von: Planungshilfe Touren und Kurse (TK) · An: Finanzen (FI)
+Stand: 22.10.2026 · Version 1.3 · Status: eingearbeitet (24.10.2026) · Von: Planungshilfe Touren und Kurse (TK) · An: Finanzen (FI)
 Änderungen v1.3: Satztabelle liegt in der Administration; Gemeinschaftstour mit Organisationspauschale (Vergütungsordnung Ziff. 9.2) (Product Owner 22.10.2026).
 Änderungen v1.2: Lizenz-Stichtag = Startdatum, Trainersatz für die ganze Tour; abgesagte Einsätze zählen nicht (Product Owner 22.10.2026).
 Änderungen v1.1: Satzart Trainer:in nur mit Lizenz, die am letzten Tag der Tour bzw. des Kurses gültig ist (Product Owner 22.10.2026); Kurse im Referat Ausbildung.
@@ -39,4 +39,4 @@ Finanzen nutzt diese Werte als **Vorschlag**; maßgeblich sind Anwesenheit (Anwe
 
 ## Einarbeitung
 
-- [ ] eingearbeitet in Finanzen (Datei, Version): –
+- [x] eingearbeitet in Finanzen (Datei, Version): specs/fi-finanzen/00-steckbrief.md v0.1 (24.10.2026). Punkte 1, 2, 4, 6, 7 in Iteration 1 (Kurs und Tour, Reisekosten, Kosten bei Absage von Hand, Liste nach 4 Wochen); Punkt 3 übernommen; Punkt 5: Trainersatz bei Lizenz am Startdatum oder Erwerb im selben Abrechnungshalbjahr (Product Owner 24.10.2026). Antwort an die Planungshilfe: specs/fi-finanzen/uebergabe-planungshilfe.md v1.0.
