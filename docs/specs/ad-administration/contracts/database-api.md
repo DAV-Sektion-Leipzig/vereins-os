@@ -51,9 +51,19 @@ Eigenschaftsarten werden nicht direkt geschrieben, sondern über `ea_save_proper
 | `ea_save_property_type` | `p_type` (jsonb), `p_fields` (jsonb-Array) | uuid | US-AD-12, US-AD-19, US-AD-22 |
 | `ea_set_volunteer_status` | `p_person, p_status, p_valid_from?` | void | US-AD-23 (Oberfläche in EA) |
 | `ea_person_referate` | `p_person` | `id, name` | US-AD-23 (Oberfläche in EA) |
-| `ea_create_volunteer` | `p_first, p_last, p_preferred, p_property_type, p_referat, p_field_values, p_valid_from` | uuid | US-AD-23 (Oberfläche in EA) |
-| `ea_activate_person` | `p_person, p_property_type, p_referat, p_field_values, p_valid_from` | void | US-AD-23, US-AD-25 |
+| `ea_create_volunteer` | `p_first, p_last, p_preferred, p_property_type, p_referat, p_field_values, p_valid_from, p_contact_email?` (seit v0.8.1) | uuid | US-AD-23 (Oberfläche in EA), US-AD-30 |
+| `ea_activate_person` | `p_person, p_property_type, p_referat, p_field_values, p_valid_from` | void | US-AD-23, US-AD-25, US-AD-30 (EZ-Weg seit v0.8.1) |
 | `ad_pending_emergency_logins` | – | `count, last_at` | US-AD-15 |
 | `ad_acknowledge_emergency` | – | void | US-AD-15 |
 
-Nicht im Kern (Nachträge v0.8/v0.9): `ea_person_names`, `ea_search_active_persons`, `ea_person_licenses`, `ad_rates_at`, `ad_can_edit_locations`, `ad_can_edit_rates`, `ad_can_read_rates`.
+Nachtrag v0.8 (seit 24.10.2026, tasks.md Phase 15):
+
+| Objekt | Parameter / Spalten | Rückgabe | Story |
+|---|---|---|---|
+| `ad_locations` (Tabelle) | `id, name, has_climbing_points, is_active, created_*, updated_*`; schreiben `name, has_climbing_points, is_active` | – | US-AD-27 |
+| `ad_can_edit_locations` | – | boolean | US-AD-27 |
+| `ea_person_names` | `p_ids` (höchstens 500) | `id, first_name, preferred_name, last_name` | US-AD-29 |
+| `ea_search_active_persons` | `p_query` (≥ 2 Zeichen), `p_limit` (1–50, Standard 20) | `id, first_name, preferred_name, last_name` | US-AD-29 |
+| `ez_person_visible` | `p_person` | boolean (Platzhalter false) | US-AD-29 |
+
+Nicht umgesetzt (Nachtrag v0.9): `ea_person_licenses`, `ad_rates_at`, `ad_can_edit_rates`, `ad_can_read_rates`.

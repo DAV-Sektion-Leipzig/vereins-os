@@ -19,10 +19,10 @@ create function pg_temp.referat(p_name text) returns uuid language sql as $$
 $$;
 
 -- Kern-Signatur ohne Erweiterung für die Anwesenheitserfassung
-select has_function('public', 'ea_create_volunteer', array['text', 'text', 'text', 'uuid', 'uuid', 'jsonb', 'date'],
-  'ea_create_volunteer mit sieben Parametern');
+select has_function('public', 'ea_create_volunteer', array['text', 'text', 'text', 'uuid', 'uuid', 'jsonb', 'date', 'text'],
+  'ea_create_volunteer mit p_contact_email (Nachtrag v0.8)');
 select hasnt_function('public', 'ea_create_volunteer',
-  array['text', 'text', 'text', 'uuid', 'uuid', 'jsonb', 'date', 'text'], 'kein p_contact_email (Nachtrag v0.8)');
+  array['text', 'text', 'text', 'uuid', 'uuid', 'jsonb', 'date'], 'alte Signatur mit sieben Parametern entfällt');
 
 -- Status setzen (R33)
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');

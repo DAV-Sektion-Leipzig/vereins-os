@@ -506,3 +506,11 @@ select gen_random_uuid(), u.id, u.id::text, 'email',
   from auth.users u
  where u.id = 'b0000000-0000-4000-8000-000000000032'
 on conflict (provider_id, provider) do nothing;
+
+-- Nachtrag v0.8 (spec.md AD v0.9.4, Abschnitt 9; spec T57): Testorte, solange es keinen Startbestand gibt.
+-- Die Testzugänge erhalten die EZ-Startwerte über ihre Vorlagen (Migration 20261026000100).
+insert into public.ad_locations (id, name, has_climbing_points, is_active) values
+  ('e1000000-0000-4000-8000-000000000001', 'Kletterhalle Test', true, true),
+  ('e1000000-0000-4000-8000-000000000002', 'Fels Test', false, true),
+  ('e1000000-0000-4000-8000-000000000003', 'Halle alt Test', false, false)
+on conflict (id) do nothing;

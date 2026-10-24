@@ -8,7 +8,7 @@ description: "Tasks für das Modul Administration (AD), Kern bis v0.7.1"
 
 **Stand**: Phasen 1–3 (T001–T031) sind erledigt und bleiben mit Nummer und Text unverändert, weil spec.md und querschnitt-administration.md darauf verweisen. Die Tasks ab T032 ersetzen die offenen Tasks der Fassung vom 20.10.2026 (Grundlage spec.md v0.5); deren Nummern T032–T079 sind damit neu belegt.
 
-**Abgrenzung**: Nicht umgesetzt werden die Nachträge v0.8 (spec T50–T58) und v0.9 (spec T59–T67); Einzelheiten in plan.md, Abschnitt „Abgrenzung“. Insbesondere: R30 nur für EA; `ad_modules` ohne EZ, TK, TKF und ohne `is_hidden`; keine `ad_locations`, `ad_rates`; keine Namens-, Lizenz- und Satzfunktionen; `ea_create_volunteer` und `ad_find_similar_persons` ohne EZ-Erweiterung; Seed nur Personen 1–12.
+**Abgrenzung**: Der Nachtrag v0.8 (spec T50–T58) folgt in Phase 15 (seit 24.10.2026). Nicht umgesetzt wird der Nachtrag v0.9 (spec T59–T67); bis Phase 14 galt auch für v0.8: Einzelheiten in plan.md, Abschnitt „Abgrenzung“. Insbesondere: R30 nur für EA; `ad_modules` ohne EZ, TK, TKF und ohne `is_hidden`; keine `ad_locations`, `ad_rates`; keine Namens-, Lizenz- und Satzfunktionen; `ea_create_volunteer` und `ad_find_similar_persons` ohne EZ-Erweiterung; Seed nur Personen 1–12.
 
 **Tests**: Die Constitution verlangt eine test- und spec-getriebene Umsetzung mit pgTAP-Tests der RLS je Rechtevorlage (Arbeitsablauf Nr. 4). Vor jeder Migration und jeder Edge Function steht eine Test-Task; die Tests müssen zuerst fehlschlagen. Für das Frontend gilt die Abnahme in TEST (spec T25, T32, T49).
 
@@ -483,6 +483,24 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 - [x] T105 [P] (spec T12 Teil) Querschnitt: `npm run lint` und `npm run build` ohne Fehler; `npm audit` und Ergebnis melden; keine Secrets oder realen Adressen im Diff (`git grep` auf `@` außerhalb von `@dav-leipzig.de`, `example.test`, `example.org`)
 
 ---
+
+## Phase 15: Nachtrag v0.8 Anwesenheitserfassung (Branch `ad-nachtrag-v08`, spec v0.9.4 / Nachtrag v0.8.1)
+
+**Zweck**: spec T50–T58 inklusive Übergabe EZ A9 (US-AD-27 bis US-AD-30). Datenbank, pgTAP und Seed; die Oberfläche (spec T55) ist zurückgestellt, weil `src/` für die Sitzung vom 24.10.2026 ausgeschlossen war. `ad_modules.is_available` für EZ bleibt `false`.
+
+**Unabhängiger Test**: pgTAP 250–280 grün; bestehende Tests an das neue Modul angepasst; die EZ-Pfade in `480_gr_read_functions.test.sql` (`todo`) laufen durch.
+
+- [x] T111 [US-AD-28] (spec T50, T56 Teil) `supabase/tests/database/250_ez_module.test.sql` und `supabase/migrations/20261026000100_ad_ez_module.sql`: Modul EZ direkt nach GR (`is_available = false`), Zeile EZ je Vorlage, Startwerte Admin `read`, Geschäftsstelle `manage`, Referent:in `edit`/`referat`, Vorstand `none` ohne Änderungen des Admins zu überschreiben, Check und Trigger R30 für EA und EZ, `ea_persons.created_in` mit `EZ`
+- [x] T112 [US-AD-27] (spec T51, T56 Teil) `supabase/tests/database/260_ad_locations.test.sql` und `supabase/migrations/20261026000200_ad_locations.sql`: Tabelle `ad_locations`, „Bezeichnung getrimmt, nicht leer; eindeutig ohne Groß-/Kleinschreibung“ (R43, `AD_LOCATION_NAME_REQUIRED`, `AD_LOCATION_NAME_TAKEN`), `ad_can_edit_locations()` = nur Admin, RLS lesen mit aktivem Zugang, kein Delete
+- [x] T113 [US-AD-29] (spec T52, T56 Teil, Abschnitt 8) `supabase/tests/database/270_name_functions.test.sql` und `supabase/migrations/20261026000300_ad_name_functions.sql`: `ez_person_visible` (Platzhalter), `ea_person_names` (höchstens 500 IDs, `AD_TOO_MANY_IDS`), `ea_search_active_persons` (EZ ≥ bearbeiten, ≥ 2 Zeichen, 1–50 Treffer, nur „aktiv“); Mengentest 300 Aktive / 50 IDs je < 300 ms
+- [x] T114 [US-AD-30] (spec T53, T56 Teil; A4, A9) `supabase/tests/database/280_ez_create.test.sql` und `supabase/migrations/20261026000400_ad_ez_create.sql`: `ea_create_path` (research.md R-30), `ea_create_volunteer` mit `p_contact_email` und `created_in = 'EZ'`, `ea_activate_person` mit EZ-Weg (ruhend, ausgeschieden, ohne Status, auch referatsübergreifend; R45a), `ad_find_similar_persons` mit EZ ≥ bearbeiten; Test mit einem Nutzer nur mit EZ-Rechten (Entscheidung Product Owner 24.10.2026)
+- [x] T115 Bestehende pgTAP-Tests an das Modul EZ angepasst: `010_foundation` (10 Module, Reihenfolge), `020_persons_rights` (Startvorlagen, 10 Zeilen je Vorlage), `050_policies` und `140_volunteer_functions` (neue Signatur), `100_persons_v07` (`created_in` EZ zulässig), `150_start_templates` (Referent:in EZ)
+- [x] T116 [US-AD-27] (spec T57) `supabase/seed.sql`: Testorte „Kletterhalle Test“ (Punktekonto, aktiv), „Fels Test“, „Halle alt Test“ (inaktiv); Testzugänge erhalten die EZ-Startwerte über ihre Vorlagen
+- [x] T117 [P] (spec T54) `contracts/error-codes.md` (Status v0.8, `EA_CREATE_FOREIGN_REFERAT` entfällt, `AD_TOO_MANY_IDS` allgemeine Meldung, Text `AD_SCOPE_NOT_ALLOWED`), `contracts/database-api.md`
+- [x] T118 [P] `plan.md` (Abschnitt Nachtrag v0.8), `research.md` (R-30, R-31), `data-model.md`, `quickstart.md` (C4)
+- [ ] T119 Übergabe an Gruppen `docs/specs/ad-administration/uebergabe-gruppen-v08.md` und Hinweis in `docs/offene-punkte.md` (Abschnitt Gruppen): EZ-Pfade in `480_gr_read_functions.test.sql` aktivieren (eigener Doku-PR, Product Owner mergt)
+- [ ] T120 [US-AD-27] [US-AD-28] [US-AD-29] (spec T55) Oberfläche: Zeile Anwesenheitserfassung und Reichweite „Referat“ für EZ in der Vorlagen-Matrix (R30, neuer Meldungstext in `src/lib/errors.ts`), /ad/orte Liste und Formular mit Navigationseintrag, Komponenten „Personensuche Aktive“ und „Auswahlfeld Ort“ – **zurückgestellt** (src/ nicht Teil der Sitzung vom 24.10.2026)
+- [ ] T121 (spec T58) Nach Freigabe des Product Owners nach TEST ausrollen (`npx supabase db push --linked`, Seed-Ergänzung Orte) und quickstart.md C4 mit den Testzugängen abnehmen
 
 ## Abhängigkeiten und Reihenfolge
 

@@ -21,15 +21,16 @@ select results_eq(
   $$ select t.name, r.module_code, r.level::text
      from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
      where r.level <> 'none' order by t.name, r.module_code $$,
-  $$ values ('Admin'::text, 'AD'::text, 'manage'::text), ('Admin', 'EA', 'manage'), ('Admin', 'GR', 'read'),
-            ('Admin', 'SC', 'manage'),
-            ('Geschäftsstelle', 'AM', 'manage'), ('Geschäftsstelle', 'EA', 'manage'), ('Geschäftsstelle', 'FI', 'manage'),
+  $$ values ('Admin'::text, 'AD'::text, 'manage'::text), ('Admin', 'EA', 'manage'), ('Admin', 'EZ', 'read'),
+            ('Admin', 'GR', 'read'), ('Admin', 'SC', 'manage'),
+            ('Geschäftsstelle', 'AM', 'manage'), ('Geschäftsstelle', 'EA', 'manage'), ('Geschäftsstelle', 'EZ', 'manage'),
+            ('Geschäftsstelle', 'FI', 'manage'),
             ('Geschäftsstelle', 'GR', 'manage'), ('Geschäftsstelle', 'GS', 'manage'), ('Geschäftsstelle', 'OA', 'manage'),
-            ('Geschäftsstelle', 'PM', 'manage'), ('Referent:in', 'EA', 'edit') $$,
-  'Startvorlagen nach spec.md Abschnitt 3 (Kern v0.7); Vorstand ohne Rechte'
+            ('Geschäftsstelle', 'PM', 'manage'), ('Referent:in', 'EA', 'edit'), ('Referent:in', 'EZ', 'edit') $$,
+  'Startvorlagen nach spec.md Abschnitt 3 (Kern v0.7, Nachtrag v0.8); Vorstand ohne Rechte'
 );
 select is((select count(*)::int from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
-           where t.name = 'Vorstand'), 9, 'Vorstand hat je Modul eine Zeile');
+           where t.name = 'Vorstand'), 10, 'Vorstand hat je Modul eine Zeile');
 
 -- ad_user_level je Testzugang
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
@@ -72,12 +73,12 @@ select is((select r.level from public.ad_template_rights r join public.ad_templa
            where t.name = 'Admin' and r.module_code = 'AD'), 'manage'::public.ad_level,
   'Vorlage Admin unverändert nach Änderungsversuch ohne AD-Rechte');
 
--- Admin legt Vorlage an: Trigger legt 9 Zeilen an; Name eindeutig ohne Groß-/Kleinschreibung
+-- Admin legt Vorlage an: Trigger legt 10 Zeilen an; Name eindeutig ohne Groß-/Kleinschreibung
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
 select lives_ok($$ insert into public.ad_templates (name, description) values ('Testvorlage', 'nur Test') $$,
   'Admin legt Vorlage an');
 select is((select count(*)::int from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
-           where t.name = 'Testvorlage' and r.level = 'none'), 9, 'neue Vorlage hat 9 Zeilen kein Zugriff');
+           where t.name = 'Testvorlage' and r.level = 'none'), 10, 'neue Vorlage hat 10 Zeilen kein Zugriff (auch EZ)');
 select throws_ok($$ insert into public.ad_templates (name) values ('testvorlage') $$, '23505',
   null, 'Vorlagenname doppelt (ad_templates_name_key)');
 

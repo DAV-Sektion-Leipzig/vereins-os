@@ -22,7 +22,7 @@ Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnun
 | `AD_NO_TEMPLATE` | Bitte zuerst mindestens eine Rechtevorlage zuweisen. | R17 | umgesetzt |
 | `AD_MAIL_FAILED` | Die Einladung konnte nicht verschickt werden. Bitte später erneut versuchen. | – | umgesetzt |
 | `AD_TEMPLATE_NAME_TAKEN` / `ad_templates_name_key` | Eine Rechtevorlage mit diesem Namen gibt es bereits. | – | umgesetzt |
-| `AD_SCOPE_NOT_ALLOWED` / `ad_template_rights_scope_allowed` | Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement möglich. | R30 | umgesetzt |
+| `AD_SCOPE_NOT_ALLOWED` / `ad_template_rights_scope_allowed` | Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement und in der Anwesenheitserfassung möglich. | R30 | Datenbank umgesetzt (v0.8, `20261026000100`); Text in der Oberfläche folgt mit T120 (bis dahin der Kerntext) |
 | `AD_REFERAT_REQUIRED` | Bitte mindestens ein Referat auswählen. | R31 | umgesetzt |
 | `AD_CONFIDENTIAL_ONLY_AD` | Nur mit Rechten auf die Administration möglich. | R29 | umgesetzt |
 | `AD_QUALIFICATION_NAME_REQUIRED` | Bitte eine Bezeichnung angeben. | R21 | umgesetzt |
@@ -33,10 +33,10 @@ Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnun
 | `AD_QUALIFICATION_VALIDITY` | Bitte eine Gültigkeitsdauer in Jahren angeben (1–10). | R24 | umgesetzt |
 | `AD_QUALIFICATION_HISTORIC` | Diese Qualifikationsart ist historisch und kann nicht neu vergeben werden. | R27 | umgesetzt |
 | `AD_QUALIFICATION_KIND` | Dieser Typ von Qualifikation ist hier nicht erlaubt. | R28 | umgesetzt |
-| `AD_LOCATION_NAME_REQUIRED` | Bitte eine Bezeichnung angeben. | R43 | geplant (T51) |
-| `AD_LOCATION_NAME_TAKEN` | Einen Ort mit dieser Bezeichnung gibt es bereits. | R43 | geplant (T51) |
-| `AD_SEARCH_TOO_SHORT` | Bitte mindestens 2 Zeichen eingeben. | R44 | geplant (T52) |
-| `AD_TOO_MANY_IDS` | [OFFEN] Meldung fehlt in spec.md | – | geplant (T52) |
+| `AD_LOCATION_NAME_REQUIRED` | Bitte eine Bezeichnung angeben. | R43 | Datenbank umgesetzt (`20261026000200`); Oberfläche T120 |
+| `AD_LOCATION_NAME_TAKEN` | Einen Ort mit dieser Bezeichnung gibt es bereits. | R43 | Datenbank umgesetzt (`20261026000200`); Oberfläche T120 |
+| `AD_SEARCH_TOO_SHORT` | Bitte mindestens 2 Zeichen eingeben. | R44 | Datenbank umgesetzt (`20261026000300`) |
+| `AD_TOO_MANY_IDS` | Etwas ist schiefgelaufen. Bitte versuche es erneut. (allgemeine Meldung, Programmierfehler; Product Owner 24.10.2026) | R44 | Datenbank umgesetzt (`20261026000300`) |
 | `AD_FORBIDDEN`, SQLSTATE `42501` | Für diesen Bereich hast du keine Rechte. | R8, R43 | umgesetzt |
 | Constraint `ea_referate_name_key` bzw. `ea_gremien_name_key` (kein Code, [ANNAHME]) | ~~Ein Referat mit dieser Bezeichnung gibt es bereits. / Ein Gremium mit dieser Bezeichnung gibt es bereits.~~ ersetzt durch „Diese Bezeichnung gibt es bereits.“ (EA spec.md Abschnitt 6, US-EA-14 AK3; Zeile im Abschnitt EA) | – | umgesetzt (Oberfläche: `/ea/stammdaten`) |
 | Constraint `ad_qualification_types_discipline_not_blank` / `…_issuer_not_blank` (kein Code, [ANNAHME]) | Bitte eine Sparte angeben. / Bitte einen Aussteller angeben. | US-AD-17 AK2 | umgesetzt |
@@ -49,7 +49,7 @@ Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnun
 
 `AD_FORBIDDEN` meldet auch `ea_search_active_persons` ohne EZ ≥ bearbeiten (spec.md Abschnitt 2).
 
-`AD_SCOPE_NOT_ALLOWED`: Im Kern (bis v0.7.1) gilt der Text aus 02-stories.md US-AD-20 AK3. Mit dem Nachtrag v0.8 (T50, T54) wird er ersetzt durch „Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement und in der Anwesenheitserfassung möglich.“ (spec.md R30).
+`AD_SCOPE_NOT_ALLOWED`: Im Kern (bis v0.7.1) gilt der Text aus 02-stories.md US-AD-20 AK3. Mit dem Nachtrag v0.8 (T50, T54) wird er ersetzt durch „Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement und in der Anwesenheitserfassung möglich.“ (spec.md R30). Umgesetzt in der Datenbank mit `20261026000100`; die Oberfläche zeigt den neuen Text mit T120.
 
 ## Ehrenamtsmanagement (EA)
 
@@ -76,11 +76,11 @@ Soweit in spec.md Administration definiert (Personenmodell, Eigenschaftsarten, E
 | `EA_RELATION_REQUIRED` | Bitte ein Referat (bzw. Gremium, Gruppe) wählen. | R38 | umgesetzt |
 | `EA_VALID_RANGE` / `ea_properties_valid_range` | ‚Gültig bis‘ darf nicht vor ‚gültig von‘ liegen. | – | umgesetzt |
 | `EA_GROUP_RELATION_ONLY_GR` | Diese Angabe wird im Modul Gruppen gepflegt. | R39 | umgesetzt |
-| `EA_RELATION_FOREIGN_REFERAT` | Du kannst nur Zuordnungen zu deinen Referaten pflegen. | R41 | umgesetzt |
+| `EA_RELATION_FOREIGN_REFERAT` | Du kannst nur Zuordnungen zu deinen Referaten pflegen. | R41, R45, R45a | umgesetzt; auch EZ-Weg (`20261026000400`) |
 | `EA_CONFIDENTIAL_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. [OFFEN] gilt nach R29 noch? | R8 | [OFFEN] |
 | `EA_STATUS_FORBIDDEN` | Du darfst den Status dieser Person nicht ändern. | R33 | umgesetzt |
-| `EA_CREATE_FOREIGN_REFERAT` | Du kannst nur Personen für deine Referate anlegen. | R45 | geplant (T53) |
-| `EA_CREATE_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | R41, R45 | umgesetzt (EA, `20261024000600_ea_check_create`; Entscheidung Product Owner 23.10.2026, plan.md EA O3) |
+| `EA_CREATE_FOREIGN_REFERAT` | – | R45 | **entfällt** (spec.md v0.9.4, Nachtrag v0.8.1): fremdes Referat meldet auch über die Anwesenheitserfassung `EA_RELATION_FOREIGN_REFERAT` |
+| `EA_CREATE_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | R41, R45, R45a | umgesetzt (EA, `20261024000600_ea_check_create`; Entscheidung Product Owner 23.10.2026, plan.md EA O3); EZ-Weg `20261026000400` |
 | `EA_CREATE_REFERAT_REQUIRED` | Bitte eine Funktion oder ein Amt in deinem Referat angeben. | R3 EA | umgesetzt (EA, `20261024000600_ea_check_create`; Entscheidung Product Owner 23.10.2026, plan.md EA O3) |
 | `EA_IBAN_INVALID` | Die IBAN ist ungültig. | R13 EA | umgesetzt (EA, `20261024000400_ea_iban`, Trigger `ea_properties_iban`) |
 | `EA_STATUS_DATE` | Bitte ein Datum bis spätestens <TT.MM.JJJJ> wählen. | R18 EA | umgesetzt (EA, `20261024000500_ea_status_renew`; Grenzdatum im `detail`) |
@@ -168,7 +168,7 @@ Diese Codes bzw. Fälle melden einen **erfolgreichen** Vorgang. Das Frontend zei
 
 ## Offene Punkte
 
-- [OFFEN] Meldungstext fehlt in der Spec für `AD_TOO_MANY_IDS` (Quelle: docs/specs/ad-administration/spec.md v0.8, Abschnitt 2) sowie `EZ_STATUS_NOT_ALLOWED`, `EZ_KIND_NOT_AVAILABLE`, `EZ_KIND_NOT_ALLOWED`, `EZ_LOCATION_NO_POINTS` (Quelle: docs/specs/ez-einsaetze/spec.md v0.1, Abschnitte 2 und 5). Bis zur Klärung zeigt das Frontend die Meldung für unerwartete Fehler.
+- Erledigt 24.10.2026: `AD_TOO_MANY_IDS` nutzt die allgemeine Meldung (spec.md v0.9.4). [OFFEN] Meldungstext fehlt in der Spec für `EZ_STATUS_NOT_ALLOWED`, `EZ_KIND_NOT_AVAILABLE`, `EZ_KIND_NOT_ALLOWED`, `EZ_LOCATION_NO_POINTS` (Quelle: docs/specs/ez-einsaetze/spec.md v0.1, Abschnitte 2 und 5). Bis zur Klärung zeigt das Frontend die Meldung für unerwartete Fehler.
 - [OFFEN] `EA_FIELD_LOCKED` und `EA_DATA_TYPE_LOCKED`: Beide stehen für R36. Ist `EA_FIELD_LOCKED` der Nachfolger (Datentyp je Feld seit v0.7) oder ein eigener Fall? (Quelle: docs/specs/ad-administration/spec.md v0.8, R36 und Abschnitt 5)
 - [OFFEN] `EA_CONFIDENTIAL_FORBIDDEN`: Seit R29 regelt die Lesestufe „vertraulich“ den Lesezugriff, beim Setzen gilt `AD_CONFIDENTIAL_ONLY_AD`. Bleibt der Code? (Quelle: docs/specs/ad-administration/spec.md v0.8, R8, R29)
 - [OFFEN] Ohne Code in der Spec: „Ein Feld mit dieser Bezeichnung gibt es bereits.“ (spec.md Administration, Abschnitt 5, „Weitere Meldungen“) und „Gruppe nicht gefunden.“ (gr-gruppen/02-stories.md v0.7, US-GR-19 AK6).

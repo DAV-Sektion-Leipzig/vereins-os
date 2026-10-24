@@ -17,6 +17,21 @@ Technisch kommen dazu:
 - der Seed für die Personen 1–12.
 - die Oberflächen unter /ad und die wiederverwendbaren Komponenten Eigenschaftsformular, Dublettendialog und Auswahlfeld „Qualifikationsart“.
 
+## Nachtrag v0.8 (Umsetzung ab 24.10.2026, Branch `ad-nachtrag-v08`)
+
+Grundlage: spec.md v0.9.4 (Nachtrag v0.8.1, Ready seit 24.10.2026), 02-stories.md v0.9 (US-AD-27 bis US-AD-30). Damit gilt die Tabelle „Abgrenzung“ unten für EZ nicht mehr; für TK, TKF und v0.9 gilt sie weiter. Tasks: tasks.md Phase 15 (T111–T121).
+
+| Thema | Umsetzung | Migration |
+|---|---|---|
+| Modul EZ, Startwerte, R30 für EA und EZ, `created_in = 'EZ'` | spec T50; EZ direkt nach GR, `is_available = false` | `20261026000100_ad_ez_module.sql` |
+| Orte | spec T51; ohne Startbestand, Testorte im Seed | `20261026000200_ad_locations.sql` |
+| Namensfunktionen | spec T52; Trigramm-Index auf `last_name` | `20261026000300_ad_name_functions.sql` |
+| Anlegen und Wieder-aktiv-Eintragen über EZ | spec T53, A9; interne Funktion `ea_create_path` (research.md R-30) | `20261026000400_ad_ez_create.sql` |
+| Oberfläche (Vorlagen-Matrix, /ad/orte, Komponenten) | spec T55; **zurückgestellt**, `src/` war für die Sitzung vom 24.10.2026 ausgeschlossen | – |
+| Abnahme in TEST | spec T58; erst nach Ausrollen nach TEST mit Freigabe des Product Owners | – |
+
+`ad_modules.is_available` für EZ bleibt `false`; das setzt die Anwesenheitserfassung mit ihrer Freigabe. Gruppen kann die EZ-Pfade in `480_gr_read_functions.test.sql` (heute `todo`, GR plan.md O2) aktivieren; Übergabe in [uebergabe-gruppen-v08.md](uebergabe-gruppen-v08.md).
+
 ## Abgrenzung: Kern ohne Nachträge v0.8 und v0.9
 
 Nicht umgesetzt werden der Nachtrag v0.8 (T50–T58) und der Nachtrag v0.9 (T59–T67) ([arbeitsplan.md](../../arbeitsplan.md) 4.1, [querschnitt-administration.md](../../querschnitt-administration.md) Abschnitt 2). Wo spec.md v0.9 in den Kernabschnitten Text mit „v0.8“ oder „v0.9“ markiert, gilt die Fassung ohne diese Ergänzung. Für den Kern heißt das:

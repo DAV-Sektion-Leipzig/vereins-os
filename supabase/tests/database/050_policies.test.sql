@@ -145,7 +145,7 @@ select ok(has_function_privilege('authenticated', 'public.ea_save_property_type(
   'ea_save_property_type');
 select ok(has_function_privilege('authenticated', 'public.ad_find_similar_persons(text, text, text)', 'EXECUTE'),
   'ad_find_similar_persons');
-select ok(has_function_privilege('authenticated', 'public.ea_create_volunteer(text, text, text, uuid, uuid, jsonb, date)', 'EXECUTE'),
+select ok(has_function_privilege('authenticated', 'public.ea_create_volunteer(text, text, text, uuid, uuid, jsonb, date, text)', 'EXECUTE'),
   'ea_create_volunteer');
 select ok(not has_function_privilege('authenticated', 'public.ea_check_create(uuid, uuid)', 'EXECUTE'), 'ea_check_create intern');
 select ok(not has_function_privilege('authenticated', 'public.ea_property_type_in_use(uuid)', 'EXECUTE'),

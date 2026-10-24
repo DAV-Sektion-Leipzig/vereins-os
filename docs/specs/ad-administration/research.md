@@ -227,3 +227,15 @@ Ersetzt durch plan.md, Abschnitt „Branches“: Die Datenbankteile des Kerns h�
 ## R-29 Meldung für R30 im Kern
 
 - Ohne Nachtrag v0.8 gilt der Text aus 02-stories.md US-AD-20 AK3: „Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement möglich.“ contracts/error-codes.md führt diesen Text; der Text aus v0.8 („… und in der Anwesenheitserfassung …“) folgt mit T50.
+
+## R-30 EA- oder EZ-Weg beim Anlegen und Wieder-aktiv-Eintragen (Nachtrag v0.8.1, T53)
+
+- Entscheidung: Eine interne Funktion `ea_create_path(p_property_type, p_referat, p_field_values)` prüft zuerst den EA-Weg über `ea_check_create` (alle Prüfungen und Codes des Ehrenamtsmanagements). Scheitert er mit `EA_CREATE_FORBIDDEN` (kein EA-Recht) oder mit `EA_RELATION_FOREIGN_REFERAT` und deckt ein EZ-Recht das Referat, gilt der EZ-Weg: Referat Pflicht, Eigenschaftsart `function`, Wert genau `{"function": "Helfer:in"}`, sonst `EA_CREATE_FORBIDDEN`; fremdes Referat `EA_RELATION_FOREIGN_REFERAT`. Andere Fehler des EA-Wegs (z. B. `AD_CONFIDENTIAL_ONLY_AD`, `EA_CREATE_REFERAT_REQUIRED`) bleiben bestehen, damit Nutzer mit EA-Rechten die genaue Meldung sehen.
+- Begründung: spec.md Abschnitt 2 („`created_in = 'EZ'`, wenn der Aufruf nur über EZ-Rechte erlaubt ist“). Die Vorlage Referent:in hat EA und EZ im selben Referat; Referent:innen nutzen deshalb den EA-Weg (`created_in = 'EA'`, auch Trainer:in erlaubt). Den EZ-Weg nutzen Nutzer mit EZ- ohne passende EA-Rechte (Entscheidung Product Owner 24.10.2026: Regel gilt, Tests mit einem Nutzer nur mit EZ-Rechten).
+- Bekannte Grenze: Ein Nutzer mit EA-Rechten im Referat A und EZ-Rechten nur im Referat B (zwei Zuweisungen) scheitert beim Anlegen für B am Trigger `ea_properties_validate` (R41 prüft nur EA-Referate). Mit den Startvorlagen kommt das nicht vor; Lösung bei Bedarf über den Trigger.
+- `ea_create_volunteer` hat eine neue Signatur mit `p_contact_email text default null`; die alte Fassung mit sieben Parametern ist entfernt, damit Aufrufe nicht mehrdeutig werden. Aufrufe mit benannten Parametern (Frontend EA) bleiben gültig.
+
+## R-31 Namensfunktionen (Nachtrag v0.8.1, T52)
+
+- `ea_search_active_persons`: jedes Wort des Suchbegriffs muss als Teilwort in Vor-, Ruf- oder Nachname vorkommen (`ilike`, Platzhalter maskiert); Trigramm-Indizes auf allen drei Spalten. `p_limit` außerhalb 1–50 → `AD_BAD_REQUEST`.
+- `ea_person_names` prüft je ID `ea_person_visible or ez_person_visible`; höchstens 500 IDs. Mengentest (270): 300 Aktive bzw. 50 IDs je < 300 ms als Anhaltspunkt aus CI.
