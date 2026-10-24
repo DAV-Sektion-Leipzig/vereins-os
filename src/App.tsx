@@ -50,6 +50,8 @@ import { GremienPage } from '@/features/ea/gremien/GremienPage'
 import { loadGrAccess, requireGrEdit } from '@/features/gr/access'
 import { GrLayout } from '@/features/gr/GrLayout'
 import { loadGroupOverview } from '@/features/gr/gruppen/data'
+import { loadGroupDetail } from '@/features/gr/gruppen/detail'
+import { GruppeDetailPage } from '@/features/gr/gruppen/GruppeDetailPage'
 import { GruppenPage } from '@/features/gr/gruppen/GruppenPage'
 import { loadStammdaten } from '@/features/ea/stammdaten/data'
 import { StammdatenPage } from '@/features/ea/stammdaten/StammdatenPage'
@@ -147,7 +149,7 @@ export const router = createBrowserRouter([
           { index: true, loader: loadGroupOverview, element: <GruppenPage /> },
           { path: 'aufnahmen', element: <PlaceholderPage title="Aufnahmen offen" /> },
           { path: 'gruppen/neu', loader: requireGrEdit, element: <PlaceholderPage title="Gruppe anlegen" /> },
-          { path: 'gruppen/:id', element: <PlaceholderPage title="Gruppe" /> },
+          { path: 'gruppen/:id', loader: loadGroupDetail, element: <GruppeDetailPage /> },
           { path: 'gruppen/:id/aufnehmen', loader: requireGrEdit, element: <PlaceholderPage title="Teilnehmer:in aufnehmen" /> },
           { path: 'personen/:id', element: <PlaceholderPage title="Person" /> },
           { path: '*', loader: () => redirect('/gr') },
