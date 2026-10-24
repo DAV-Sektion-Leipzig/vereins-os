@@ -12,7 +12,7 @@ description: "Tasks für das Modul Anwesenheitserfassung (EZ)"
 
 **Tests**: Die Constitution verlangt test- und spec-getriebene Umsetzung mit pgTAP je Rechtevorlage. Vor jeder Migration steht eine Test-Task. Dateien 510–590 (research.md R-EZ-15); die Testdaten aus spec.md 9 legt jede Datei in ihrer Transaktion selbst an (plan.md O3 a). Für das Frontend gilt die Abnahme in TEST (quickstart.md D, abnahme-test.md) sowie `npm run lint` und `npm run build`.
 
-**Organisation**: Phasen nach den Branches aus plan.md. Die Oberfläche (Phasen 5–10) entsteht als Stapel: jeder Branch baut auf dem vorigen auf; der Pull Request zielt auf den Vorgänger, bis dieser gemergt ist.
+**Organisation**: Phasen nach den Branches aus plan.md. Die Oberfläche (Phasen 4–9) entsteht als Stapel auf vier Branches (plan.md „Branches“): `us-ez-14-liste` (T019–T021), `us-ez-10-detail` (T022 Teil, T029–T031), `us-ez-01-erfassen` (T022–T028), `us-ez-16-kletterhalle` (T032); der Pull Request zielt auf den Vorgänger, bis dieser gemergt ist.
 
 ## Format: `- [ ] T### [P?] [US-EZ-xx] (spec Tn) Beschreibung`
 
@@ -92,7 +92,7 @@ description: "Tasks für das Modul Anwesenheitserfassung (EZ)"
 ### Fehlercodes
 
 - [x] T015 [P] (spec T7) `docs/specs/ad-administration/contracts/error-codes.md`: Abschnitt „Anwesenheitserfassung (EZ)“ durch die vollständige Liste nach spec.md v0.5 mit Verweis auf [contracts/error-codes.md](contracts/error-codes.md) ersetzen; `EZ_END_TIME`, `EZ_KIND_NOT_AVAILABLE` entfernen; offenen Punkt zu fehlenden Meldungen aktualisieren. Sonst nichts in `ad-administration/` ändern. Status in contracts/error-codes.md auf „umgesetzt“.
-- [x] T016 Personendaten-Prüfung nach CLAUDE.md; PR `ez-kern-datenbank` mit Stories, Spec-Tasks T1–T7, T9; Auto-Merge nach grünen Checks; rote Checks nicht neu anstoßen, Ursache suchen. Erledigt: PR #37.
+- [x] T016 Personendaten-Prüfung nach CLAUDE.md; PR `ez-kern-datenbank` (#37) mit Stories, Spec-Tasks T1–T7, T9; Auto-Merge nach grünen Checks (gemergt 24.10.2026, 1.363 Tests grün).
 
 ---
 
@@ -107,9 +107,9 @@ description: "Tasks für das Modul Anwesenheitserfassung (EZ)"
 
 **Unabhängiger Test**: /ez in der Vorschau mit allen Testzugängen (quickstart.md D 1, 11).
 
-- [x] T019 [US-EZ-14] (spec T10 Teil) `src/lib/errors.ts`: EZ-Codes aus contracts/error-codes.md; `toMessage` mit `details` für `EZ_FIELD_REQUIRED`. Umgesetzt in `src/features/ez/errors.ts` (nutzt `toMessage` aus `src/lib/errors.ts`).
+- [x] T019 [US-EZ-14] (spec T10 Teil) `src/lib/errors.ts`: EZ-Codes aus contracts/error-codes.md; `toMessage` mit `details` für `EZ_FIELD_REQUIRED`.
 - [x] T020 [US-EZ-14] (spec T10 Teil) `src/features/ez/access.ts`, `labels.ts` (Einsatzarten, Rollen, Stände, Dauer), `EzLayout.tsx` (Navigation „Einsätze“, „Kontrolle Kletterhalle“), Routen in `src/App.tsx` mit Routenschutz nach contracts/routes.md.
-- [x] T021 [US-EZ-14] [US-EZ-15] (spec T10) `src/features/ez/liste/EinsaetzePage.tsx`, `data.ts`: `ez_list_events` mit Filtern (Halbjahr Standard, Referat, Gruppe, Einsatzart), 50 je Seite (`Pagination`), mobil Karten, Zähler „2 T · 1 H · 9 TN“, Kennzeichen „abgesagt“, Leerzustand; „Neuer Einsatz“ nur mit `ad_has_any_level('EZ','edit')`. Erledigt: PR #38.
+- [x] T021 [US-EZ-14] [US-EZ-15] (spec T10) `src/features/ez/liste/EinsaetzePage.tsx`, `data.ts`: `ez_list_events` mit Filtern (Halbjahr Standard, Referat, Gruppe, Einsatzart), 50 je Seite (`Pagination`), mobil Karten, Zähler „2 T · 1 H · 9 TN“, Kennzeichen „abgesagt“, Leerzustand; „Neuer Einsatz“ nur mit `ad_has_any_level('EZ','edit')`.
 
 ---
 
@@ -119,7 +119,7 @@ description: "Tasks für das Modul Anwesenheitserfassung (EZ)"
 
 - [x] T022 [US-EZ-01] (O2) `src/features/ez/shared/OrtAuswahl.tsx` (aktive Orte aus `ad_locations`, gespeicherter inaktiver Ort bleibt angezeigt) und `AktivenSuche.tsx` (`ea_search_active_persons` ab 2 Zeichen, Vorschlagsliste „Aus der Gruppe“, „Keine aktive Person gefunden.“).
 - [x] T023 [US-EZ-01] [US-EZ-19] (spec T11 Teil) `src/features/ez/erfassen/EinsatzNeuPage.tsx`, `EinsatzartAuswahl.tsx`, `EinsatzFormular.tsx` (Training): Gruppe aus `gr_groups_for_attendance` gefiltert auf beschreibbare Referate, Vorschlag nach `gr_my_groups` (R18), Datum Standard heute, Anzeige „Trainingszeit: Di 17:00–19:00“ bzw. Hinweis R28, Ort, Bemerkung mit Hinweis R7.
-- [x] T024 [US-EZ-02] [US-EZ-03] [US-EZ-04] (spec T12) `src/features/ez/erfassen/Anwesenheit.tsx`, `Probetrainings.tsx`: Roster laden und bei Datumswechsel neu laden (Hinweis), Mehrfachzeilen zusammenfassen (plan.md H1), zwei Abschnitte mit Zähler, Rolle nur bei angehakten Betreuer:innen, Vertretung über `AktivenSuche`, Probetrainings mit Hinweis R6. Probetrainings in `EinsatzFormular.tsx` umgesetzt; erledigt: PR #40.
+- [x] T024 [US-EZ-02] [US-EZ-03] [US-EZ-04] (spec T12) `src/features/ez/erfassen/Anwesenheit.tsx`, `Probetrainings.tsx`: Roster laden und bei Datumswechsel neu laden (Hinweis), Mehrfachzeilen zusammenfassen (plan.md H1), zwei Abschnitte mit Zähler, Rolle nur bei angehakten Betreuer:innen, Vertretung über `AktivenSuche`, Probetrainings mit Hinweis R6.
 - [x] T025 [US-EZ-17] [US-EZ-18] (spec T15) `src/features/ez/erfassen/draft.ts` und Speichern: `client_request_id` je Formular, Entwurf nach research.md R-EZ-18 mit Rückfrage „Fortsetzen?“, Netzfehler-Meldung, R8-Rückfrage mit Link nur bei `existing_id`, „Trotzdem speichern“.
 
 ---
@@ -133,7 +133,7 @@ description: "Tasks für das Modul Anwesenheitserfassung (EZ)"
 
 ## Phase 7: Arbeitseinsatz, Kurs, Tour, Detail (Branch `us-ez-09-arbeitseinsatz`) – US-EZ-09–13, 20
 
-- [x] T028 [US-EZ-09] [US-EZ-20] (spec T11 Teil) `EinsatzFormular.tsx`, `PersonenEintragen.tsx`: Arbeitseinsatz, Kurs, Tour mit Referat (nur beschreibbare, bei einem vorausgewählt), Personen eintragen (Rolle Helfer:in bzw. Trainer:in vorbelegt, Stand „eingetragen“), Hinweis Planungshilfe bei Kurs/Tour. Personen eintragen in `EinsatzFormular.tsx` umgesetzt; erledigt: PR #40.
+- [x] T028 [US-EZ-09] [US-EZ-20] (spec T11 Teil) `EinsatzFormular.tsx`, `PersonenEintragen.tsx`: Arbeitseinsatz, Kurs, Tour mit Referat (nur beschreibbare, bei einem vorausgewählt), Personen eintragen (Rolle Helfer:in bzw. Trainer:in vorbelegt, Stand „eingetragen“), Hinweis Planungshilfe bei Kurs/Tour.
 - [x] T029 [US-EZ-10] [US-EZ-12] [US-EZ-13] [US-EZ-15] (spec T14) `src/features/ez/detail/EinsatzDetailPage.tsx`, `EinsatzBearbeitenPage.tsx`: Kopf mit Namen über `ea_person_names`, Anwesenheit nach Rolle mit Kennzeichen „Vertretung“, Stände „anwesend“/„nicht erschienen“ direkt, „alle anwesend“ (nur `registered` → `present`), „Person hinzufügen“; Bearbeiten mit gesperrter Einsatzart und Gruppe; Löschen mit Rückfrage nur bei `can_delete`; nur lesen ohne `can_write`.
 - [x] T030 [US-EZ-11] (spec T14 Teil) `src/features/ez/detail/NeuePersonDialog.tsx`, `src/features/ez/config.ts` (Link und `notice_version`, plan.md O4): Dialog mit Pflicht-Häkchen R29 → `ad_find_similar_persons` → `DublettenDialog` mit „Diese Person eintragen“ (aktiv: `ez_save_event`; ruhend/ausgeschieden/ohne Status: Rückfrage R31 → `ez_reactivate_helper`) / „Trotzdem anlegen“ → `ez_create_helper`.
 
@@ -141,19 +141,19 @@ description: "Tasks für das Modul Anwesenheitserfassung (EZ)"
 
 ## Phase 8: Absage (Branch `us-ez-22-absage`) – US-EZ-22, 23 (Anzeige)
 
-- [x] T031 [US-EZ-22] [US-EZ-23] (spec T18) `src/features/ez/detail/AbsageDialog.tsx`, Detail und Liste: Absagen mit Pflichtfeld Grund, Absage zurücknehmen mit Rückfrage, Hinweis „Abgesagt am … von …: …“, abgesagt nur Rücknahme und Löschen; Einsätze aus der Planungshilfe mit Hinweis, gesperrtem Kopf außer Bemerkung, Kennzeichen „aus der Planung“, ohne Absagen und Löschen. Erledigt: PR #39.
+- [x] T031 [US-EZ-22] [US-EZ-23] (spec T18) `src/features/ez/detail/AbsageDialog.tsx`, Detail und Liste: Absagen mit Pflichtfeld Grund, Absage zurücknehmen mit Rückfrage, Hinweis „Abgesagt am … von …: …“, abgesagt nur Rücknahme und Löschen; Einsätze aus der Planungshilfe mit Hinweis, gesperrtem Kopf außer Bemerkung, Kennzeichen „aus der Planung“, ohne Absagen und Löschen.
 
 ---
 
 ## Phase 9: Kontrollliste (Branch `us-ez-16-kletterhalle`) – US-EZ-16
 
-- [ ] T032 [US-EZ-16] (spec T16) `src/features/ez/kletterhalle/KletterhallePage.tsx`: Ort (aktive und inaktive mit Punktekonto), Zeitraum Standard Vormonat, Tabelle Datum, Gruppe, Teilnehmer:innen, Probetrainings, Summenzeile, Leerzustand.
+- [x] T032 [US-EZ-16] (spec T16) `src/features/ez/kletterhalle/KletterhallePage.tsx`: Ort (aktive und inaktive mit Punktekonto), Zeitraum Standard Vormonat, Tabelle Datum, Gruppe, Teilnehmer:innen, Probetrainings, Summenzeile, Leerzustand.
 
 ---
 
 ## Phase 10: Abschluss
 
-- [ ] T033 [P] Querschnitt je Oberflächen-PR: `npm run lint`, `npm run build` ohne Fehler; Personendaten-Prüfung nach CLAUDE.md.
+- [x] T033 [P] Querschnitt je Oberflächen-PR: `npm run lint`, `npm run build` ohne Fehler; Personendaten-Prüfung nach CLAUDE.md.
 - [ ] T034 (spec T17, Branch `ez-abnahme`) nach AD T120/T121 und Freigabe des Product Owners: Migrationen und Seed nach TEST (quickstart.md B), Abnahme nach quickstart.md D mit den Testzugängen auf dem Telefon; Ergebnisse in abnahme-test.md.
 - [ ] T035 (spec T17, Branch `ez-freischalten`) Migration `…_ez_module_available.sql`: `update public.ad_modules set is_available = true where code = 'EZ'` mit Test; nur nach ausdrücklicher Freigabe des Product Owners.
 

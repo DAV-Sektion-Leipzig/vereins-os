@@ -73,7 +73,8 @@ Die Fehlercodes stehen normativ in [contracts/error-codes.md](contracts/error-co
 supabase/
 ├── migrations/                          # 20261028000100_ez_*.sql ff. nach data-model.md
 ├── tests/database/5x0_ez_*.test.sql     # T9 (research.md R-EZ-15)
-└── seed.sql                             # T8: Abschnitt 9 „Anwesenheitserfassung“, Personen ab 33, Einsätze f…
+├── seed.sh                              # T8: lädt seed-ez.sql nur mit SEED_WITH_EZ=1 (O3)
+└── seed-ez.sql                          # T8: Testdaten nach spec.md 9, Personen ab 33, Einsätze f0…
 
 src/
 ├── App.tsx                              # Routen /ez (Einbindung)
@@ -120,16 +121,14 @@ Nach CLAUDE.md: je Story bzw. Aufgabe ein Branch, jeweils vom aktuellen `origin/
 | 1 | `ez-plan` | – | – | plan.md, research.md, data-model.md, contracts/, quickstart.md, tasks.md, abnahme-test.md | – | Auto |
 | 2 | `ez-kern-datenbank` | T1–T7, T9 | alle (Datenbankteil) | Migrationen `20261028000100`–`…000600`, pgTAP 510–590 (Testdaten in der Transaktion, O3 a), EZ-Codes in `ad-administration/contracts/error-codes.md` | 1 | Auto |
 | 2a | `ez-seed` (PR #42) | T8 | alle | `supabase/seed-ez.sql`, Schalter `SEED_WITH_EZ` in `seed.sh` (O3), Übergabe | 2 | PO (`seed.sh`) |
-| 3 | `us-ez-14-liste` | T10 | 14, 15 | Routen, Navigation, Routenschutz, /ez, Fehlercodes in `errors.ts` | 2 | PO |
-| 4 | `us-ez-01-training` | T11 (Auswahl, Training), T12, T15 | 01–04, 17, 18, 19 | /ez/neu mit Training, Anwesenheit, Vertretung, Probetraining, Doppel-Warnung, Entwurf | 3 | PO |
-| 5 | `us-ez-05-fahrten` | T11 (Fahrten, Wettkampfbetreuung, Trainingslager), T13 | 05–08, 21 | Formulare mit Gruppe und organisierender Person, mehrere Gruppen (R30) | 4 | PO |
-| 6 | `us-ez-09-arbeitseinsatz` | T11 (Arbeitseinsatz, Kurs, Tour), T14 | 09–13, 20 | Formulare ohne Gruppe, /ez/:id, Stände, neue Person, Bearbeiten, Löschen | 5 | PO |
-| 7 | `us-ez-22-absage` | T18 | 22, 23 (Anzeige) | Absagen, Rücknahme, Kennzeichen; Anzeige von Einsätzen aus der Planungshilfe | 6 | PO |
-| 8 | `us-ez-16-kletterhalle` | T16 | 16 | /ez/kletterhalle | 3 | PO |
-| 9 | `ez-freischalten` | T17 | alle | Migration `ad_modules.is_available = true` für EZ | AD T120, T121, Abnahme, Freigabe PO | Auto (erst nach Freigabe) |
+| 3 | `us-ez-14-liste` (PR #38) | T10 | 14, 15 | Routen, Navigation, Routenschutz, /ez, Kachel, EZ-Fehlermeldungen | 2 | PO |
+| 4 | `us-ez-10-detail` (PR #39) | T14 (ohne Formular), T18 | 10, 11, 13, 15, 22, 23 | /ez/:id mit Ständen, Person hinzufügen, neue Person (R29, R31), Absage, Löschen; vorläufige Komponenten (O2) | 3 | PO |
+| 5 | `us-ez-01-erfassen` (PR #40) | T11, T12, T13, T14 (Bearbeiten), T15 | 01–09, 12, 17–21 | /ez/neu und /ez/:id/bearbeiten für alle Einsatzarten mit Anwesenheit, Entwurf, Doppel-Warnung | 4 | PO |
+| 6 | `us-ez-16-kletterhalle` (PR #41) | T16 | 16 | /ez/kletterhalle; Umsetzungsdateien nachgezogen | 5 | PO |
+| 7 | `ez-freischalten` | T17 | alle | Migration `ad_modules.is_available = true` für EZ | AD T120, T121, Abnahme, Freigabe PO | Auto (erst nach Freigabe) |
 | – | (später) | T19–T21 | 23 | Anbindung Planungshilfe | TK T13 | – |
 
-Die Oberflächen-Branches bauen aufeinander auf (Stapel). Solange der Vorgänger nicht gemergt ist, zielt der Pull Request auf den Vorgänger-Branch; nach dessen Merge wird er auf `main` umgestellt.
+Die Oberflächen-Branches bauen aufeinander auf (Stapel). Abweichend vom ersten Plan (sechs Branches) sind es vier: Die Detailseite kommt vor dem Formular, weil das Formular nach dem Speichern dorthin führt; alle Formulare je Einsatzart teilen sich eine Komponente und stehen deshalb auf einem Branch. Solange der Vorgänger nicht gemergt ist, zielt der Pull Request auf den Vorgänger-Branch; nach dessen Merge wird er auf `main` umgestellt.
 
 ## Umsetzungsentscheidungen (Kurzfassung, Details in research.md)
 

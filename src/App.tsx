@@ -66,6 +66,8 @@ import { EinsatzDetailPage } from '@/features/ez/detail/EinsatzDetailPage'
 import { EinsatzBearbeitenPage } from '@/features/ez/erfassen/EinsatzBearbeitenPage'
 import { EinsatzNeuPage } from '@/features/ez/erfassen/EinsatzNeuPage'
 import { loadEditEvent, loadNewEvent } from '@/features/ez/erfassen/data'
+import { loadReport } from '@/features/ez/kletterhalle/data'
+import { KletterhallePage } from '@/features/ez/kletterhalle/KletterhallePage'
 import { EzLayout } from '@/features/ez/EzLayout'
 import { EinsaetzePage } from '@/features/ez/liste/EinsaetzePage'
 import { loadEventList } from '@/features/ez/liste/data'
@@ -185,6 +187,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, loader: loadEventList, element: <EinsaetzePage /> },
           { path: 'neu', loader: loadNewEvent, element: <EinsatzNeuPage /> },
+          { path: 'kletterhalle', loader: loadReport, element: <KletterhallePage /> },
           { path: ':id', loader: loadEventDetail, element: <EinsatzDetailPage /> },
           { path: ':id/bearbeiten', loader: loadEditEvent, element: <EinsatzBearbeitenPage /> },
           { path: '*', loader: () => redirect('/ez') },
