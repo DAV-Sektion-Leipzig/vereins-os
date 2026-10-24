@@ -1,6 +1,7 @@
 # User Stories: Gruppen (GR)
 
-Stand: 22.10.2026 · Version 0.8 · Status: Ready · Product Owner: Toni Werner
+Stand: 24.10.2026 · Version 0.9 · Status: Ready · Product Owner: Toni Werner
+Änderungen v0.9: Übergabe aus der Anwesenheitserfassung (uebergabe-gruppen.md v1.0, G6–G9) eingearbeitet: höchstens eine Trainingszeit je Gruppe und Wochentag (Product Owner, 24.10.2026); US-GR-18 Story, AK1, AK5 (Ablehnung statt Hinweis), neues AK8; US-GR-16 AK1 und neues AK8 (zwei Zeiten am selben Wochentag im Import); US-GR-19 AK1 (höchstens eine Trainingszeit). Offene Punkte zu Wortlaut, Verlängern von „gültig bis“ und Import als [OFFEN].
 Änderungen v0.8: Abgleich mit Administration v0.7.2 und Ehrenamtsmanagement v0.2 und Entscheidungen des Product Owners vom 22.10.2026 (spec.md Gruppen v0.2): A11, A12 und „Gruppe nicht gefunden.“ bestätigt; Dublettenwarnung nach R40 (Geburtsjahr nur mit Gruppen verwalten) und Übernahme nicht sichtbarer Treffer (US-GR-06); kein Alter und Geburtsdatum bei „Gruppen lesen“ (US-GR-05); Zwischenspeichern „Aufnahme offen“ (US-GR-06); Telefon mobil und Festnetz (US-GR-07, -09, -14); Einwilligung zu Gesundheitsangaben als Feld mit Historie, Widerruf (US-GR-12); Ehrenamtsstatus „aktiv“ durch Gruppen (US-GR-13); beendete Personen nur für den Admin sichtbar (US-GR-01, -05); Seed mit Testzugang Referent:in Kinder und Jugend (US-GR-17); Regeln R21–R29 in der Spec.
 Änderungen v0.7: US-GR-19 um AK8 ergänzt: Lesefunktion `gr_groups_for_attendance(p_date)` liefert der Anwesenheitserfassung die wählbaren Gruppen (ID, Name, Referat) ohne Personendaten; Anforderung aus spec.md Anwesenheitserfassung v0.1, direkt aus dem Chat Anwesenheitserfassung eingearbeitet.
 Änderungen v0.6: Neue Story US-GR-20 „Eigene Gruppen für den Vorschlag in der Anwesenheitserfassung“ mit Lesefunktion `gr_my_groups(date)` (nur eigene Funktionen des angemeldeten Nutzers); Anforderung aus der Anwesenheitserfassung (US-EZ-19, R18; Product Owner, 22.10.2026), direkt aus dem Chat Anwesenheitserfassung eingearbeitet.
@@ -8,7 +9,7 @@ Stand: 22.10.2026 · Version 0.8 · Status: Ready · Product Owner: Toni Werner
 Änderungen v0.4: Übergabe aus der Anwesenheitserfassung (uebergabe-trainingszeiten.md v1.2) eingearbeitet: Trainingszeiten strukturiert mit Historie statt Textfeld (US-GR-02, -03, -04, -05, -16, -17 angepasst; neu US-GR-18 Trainingszeiten pflegen, US-GR-19 Anwesenheitsliste für die Anwesenheitserfassung); Regeln R18–R20; Annahmen A11–A13; Definition of Ready aktualisiert (Referat jetzt im Glossar).
 Änderungen v0.3: US-GR-01 um AK6 ergänzt: Admin sieht in der Administration alle Personen, auch Teilnehmer:innen, Erziehungsberechtigte und Notfallkontakte, und pflegt ihre Personendaten (Name, Rufname, Geburtsdatum, Kontaktdaten, Mitgliedsnummer) zentral; Änderungen gelten in allen Modulen (Product Owner, 21.10.2026).
 Änderungen v0.2: Annahmen A1–A10 bestätigt (Product Owner, 21.10.2026); R8a präzisiert; Mengengerüst.
-Grundlage: 00-steckbrief.md v0.7, 01-erhebung.md v0.7 (Regeln R1–R20), glossar.md v1.5, rollen.md v1.0, spec.md Administration v0.8, specs/ez-einsaetze/uebergabe-trainingszeiten.md v1.3
+Grundlage: 00-steckbrief.md v0.7, 01-erhebung.md v0.7 (Regeln R1–R20), glossar.md v1.5, rollen.md v1.0, spec.md Administration v0.8, specs/ez-einsaetze/uebergabe-trainingszeiten.md v1.3, specs/ez-einsaetze/uebergabe-gruppen.md v1.0
 
 Oberflächentexte in der Ansprache „du“. „Lesen“, „bearbeiten“, „verwalten“ meinen die Stufe der Rechtevorlage für das Modul Gruppen. Startwerte: Geschäftsstelle „verwalten“, Admin „lesen“, Vorstand „kein Zugriff“.
 
@@ -246,15 +247,16 @@ Empfohlene Umsetzungsreihenfolge: 01 → 17 → 02 → 03 → 18 → 05 → 06 �
 **Als** Admin (Product Owner)
 **möchte ich** die Bestands-Excel einmalig per Skript übernehmen, mit Probelauf und Prüfbericht vorab,
 **damit** die Excel abgelöst wird, ohne Daten von Hand abzutippen.
-**Priorität:** Must · **Regeln:** R2, R3, R5, R6, R7, R16, R18 · **Abhängig von:** US-GR-08, US-GR-09, US-GR-10, US-GR-12, US-GR-18
+**Priorität:** Must · **Regeln:** R2, R3, R5, R6, R7, R16, R18, R19 · **Abhängig von:** US-GR-08, US-GR-09, US-GR-10, US-GR-12, US-GR-18
 **Akzeptanzkriterien**
-- AK1: Gegeben eine Excel mit einem Tabellenblatt je Gruppe (Kopf: Gruppenname, Trainingszeit als Text; Spalten wie in 01-erhebung.md C), wenn ich den Probelauf starte, dann wird nichts geschrieben und ein Prüfbericht nennt je Blatt und Zeile: fehlende Pflichtfelder, Zeilen ohne Vertragsdaten (R16), ungültige IBAN, doppelte Mandatsreferenz, nicht teilbare Namen der Erziehungsberechtigten, nicht zuordenbare Notfallkontakt-Zellen (L–O), nicht eindeutig lesbare Trainingszeiten und Dublettenverdacht über alle Blätter.
+- AK1: Gegeben eine Excel mit einem Tabellenblatt je Gruppe (Kopf: Gruppenname, Trainingszeit als Text; Spalten wie in 01-erhebung.md C), wenn ich den Probelauf starte, dann wird nichts geschrieben und ein Prüfbericht nennt je Blatt und Zeile: fehlende Pflichtfelder, Zeilen ohne Vertragsdaten (R16), ungültige IBAN, doppelte Mandatsreferenz, nicht teilbare Namen der Erziehungsberechtigten, nicht zuordenbare Notfallkontakt-Zellen (L–O), nicht eindeutig lesbare Trainingszeiten, zwei Zeiten am selben Wochentag (AK8) und Dublettenverdacht über alle Blätter.
 - AK2: Gegeben der Probelauf ist fehlerfrei, wenn ich den Lauf starte, dann entstehen je Blatt eine Gruppe (Referat aus dem Kopf zugeordnet) mit ihren Trainingszeiten, je Zeile Person, Erziehungsberechtigte:r, Notfallkontakte, Fotoerlaubnis, Gesundheitsangaben, Teilnahme (Eintrittsdatum = Vertragsbeginn) und Vertrag; ein Kind in zwei Blättern wird eine Person mit zwei Teilnahmen und zwei Verträgen; die Adresse des Kindes wird von der erziehungsberechtigten Person übernommen.
 - AK3: Gegeben die Trainingszeit im Kopf ist lesbar (z. B. „Mi 18–20 Uhr“ oder „Di + Do 16:30–18:00“), wenn der Lauf sie überführt, dann entsteht je Wochentag eine Trainingszeit mit Beginn, Ende und „gültig von“ = Importdatum [ANNAHME A11]; nicht lesbare Angaben führen nicht zum Abbruch, sondern die Gruppe wird ohne Trainingszeit angelegt und im Bericht zur Nacharbeit durch die Geschäftsstelle (US-GR-18) aufgeführt.
 - AK4: Gegeben der Lauf bricht bei einer Zeile ab, wenn das passiert, dann wird nichts aus diesem Lauf gespeichert (alles oder nichts) und der Bericht nennt die Zeile (Fehlerfall).
 - AK5: Gegeben das Skript wird gegen ein anderes Projekt als das konfigurierte Ziel gestartet oder die Datei liegt im Repository, dann bricht es ab (Fehlerfall); Entwicklung und Test nur mit fiktiver Datei in TEST.
 - AK6: Gegeben das Skript, wenn es ausgeführt wird, dann nur lokal durch den Admin mit technischem Vollzugriff; die Geschäftsstelle kann es nicht auslösen (Rechte-Fall).
 - AK7: Der Prüfbericht enthält keine Gesundheitsangaben und keine vollständigen IBANs (nur letzte 4 Stellen).
+- AK8 (neu v0.9): Gegeben der Kopf nennt für denselben Wochentag zwei Zeiten (z. B. „Mi 16–17 + Mi 18–19“), wenn der Lauf sie überführt, dann wird für diesen Wochentag keine Trainingszeit übernommen und das Tabellenblatt im Prüfbericht zur Nacharbeit durch die Geschäftsstelle (US-GR-18) aufgeführt; der Import bricht nicht ab (R19, Übergabe G8) [OFFEN: Entfällt nur dieser Wochentag (andere Wochentage desselben Kopfs werden übernommen) oder wird die ganze Gruppe ohne Trainingszeit angelegt? Vorschlag: nur dieser Wochentag].
 **Nicht Teil dieser Story:** Importfunktion in der Oberfläche; Spalten „Bedarf“ und „IBAN Korrekt“; Zuordnung von Gruppenleitung, Trainer:innen und Helfer:innen (Nacharbeit über US-GR-13); frühere Trainingszeiten vor dem Import.
 
 ### US-GR-17: Testdaten in TEST
@@ -273,16 +275,17 @@ Empfohlene Umsetzungsreihenfolge: 01 → 17 → 02 → 03 → 18 → 05 → 06 �
 
 ### US-GR-18: Trainingszeiten pflegen
 **Als** Mitarbeiter:in der Geschäftsstelle
-**möchte ich** je Gruppe eine oder mehrere Trainingszeiten mit Wochentag, Beginn, Ende und Gültigkeit pflegen,
+**möchte ich** je Gruppe die Trainingstage mit je einer Trainingszeit (Wochentag, Beginn, Ende und Gültigkeit) pflegen,
 **damit** die Anwesenheitserfassung beim Erfassen eines Trainings Datum und Uhrzeit vorschlagen kann und frühere Zeiten nachvollziehbar bleiben.
 **Priorität:** Must · **Regeln:** R18, R19 · **Abhängig von:** US-GR-03
 **Akzeptanzkriterien**
-- AK1: Gegeben eine Gruppe, wenn ich Wochentag, Beginn, Ende und „gültig von“ angebe und speichere, dann ist die Trainingszeit angelegt und erscheint, sobald „gültig von“ erreicht ist, in Übersicht und Gruppenkopf (z. B. „Mi 18:00–20:00“); mehrere Trainingszeiten je Gruppe sind möglich.
+- AK1: Gegeben eine Gruppe, wenn ich Wochentag, Beginn, Ende und „gültig von“ angebe und speichere, dann ist die Trainingszeit angelegt und erscheint, sobald „gültig von“ erreicht ist, in Übersicht und Gruppenkopf (z. B. „Mi 18:00–20:00“); mehrere Wochentage je Gruppe sind möglich, je Wochentag aber höchstens eine gültige Trainingszeit (R19, v0.9).
 - AK2: Gegeben eine bestehende Trainingszeit, wenn ich „Ändern ab“ mit Datum und neuen Werten speichere, dann setzt das System an der alten Trainingszeit „gültig bis“ auf den Vortag und legt eine neue mit „gültig von“ = Datum an; die alte erscheint unter „Frühere Trainingszeiten“ (R19).
 - AK3: Gegeben eine Trainingszeit, wenn ich „Beenden“ mit Datum wähle, dann ist „gültig bis“ gesetzt; ab dem Folgetag erscheint sie nicht mehr als gültig.
 - AK4: Gegeben Ende liegt nicht nach Beginn, „gültig bis“ liegt vor „gültig von“ oder ein Pflichtfeld fehlt, wenn ich speichere, dann erscheint „Das Ende muss nach dem Beginn liegen.“, „‚Gültig bis‘ darf nicht vor ‚gültig von‘ liegen.“ bzw. „Bitte Wochentag, Beginn, Ende und ‚gültig von‘ angeben.“ und nichts wird gespeichert (Fehlerfall, R18).
-- AK5: Gegeben eine gültige Trainingszeit derselben Gruppe am selben Wochentag überschneidet sich zeitlich, wenn ich speichere, dann erscheint „Diese Trainingszeit überschneidet sich mit einer anderen.“; Speichern bleibt möglich (R19).
+- AK5 (geändert v0.9): Gegeben die Gruppe hat am selben Wochentag eine Trainingszeit, deren Gültigkeit sich mit der neuen überschneidet (unabhängig von der Uhrzeit), wenn ich eine Trainingszeit hinzufüge oder mit „Ändern ab“ auf diesen Wochentag wechsle und speichere, dann erscheint „Für diesen Wochentag gibt es bereits eine Trainingszeit. Bitte die bestehende mit ‚Ändern ab‘ anpassen.“ und nichts wird gespeichert (Fehlerfall, R19) [OFFEN: Wortlaut legt der Product Owner fest].
 - AK6: Gegeben ein Nutzer mit „Gruppen lesen“, wenn er Trainingszeiten anlegen, ändern oder beenden will, dann lehnt die Datenbank ab (Rechte-Fall); Wochentag, Beginn und Ende einer bestehenden Trainingszeit lassen sich auch per Datenbankaufruf nicht überschreiben, nur „gültig bis“ setzen (A13, bestätigt 22.10.2026).
+- AK8 (neu v0.9): Gegeben eine Trainingszeit mit „gültig bis“ und eine spätere Trainingszeit derselben Gruppe am selben Wochentag, wenn ich das „gültig bis“ der ersten über den Beginn der späteren hinaus verschiebe, dann wird abgelehnt wie in AK5 (R19) [OFFEN: Übergabe G7 nennt nur Anlegen und „Ändern ab“; Vorschlag: gleiche Ablehnung].
 - AK7: Die Pflege ist ab 375 px Breite nutzbar; Wochentag als Auswahl, Uhrzeiten als Zeitfelder.
 **Nicht Teil dieser Story:** Ausfallzeiten (Ferien, Hallenschließung) – werden nicht gepflegt; Ort der Trainingszeit (Stammdaten Orte der Administration, in der Anwesenheitserfassung gewählt); automatisches Erzeugen von Trainings (Anwesenheitserfassung erzeugt nichts vorab); eigene Korrekturfunktion für Trainingszeiten (A13).
 
@@ -292,7 +295,7 @@ Empfohlene Umsetzungsreihenfolge: 01 → 17 → 02 → 03 → 18 → 05 → 06 �
 **damit** ich nur Anwesenheit abhaken muss und keine Kinderdaten außerhalb von Gruppen sichtbar werden.
 **Priorität:** Must · **Regeln:** R20 · **Abhängig von:** US-GR-08, US-GR-13, US-GR-18; Administration v0.8 (Modul Anwesenheitserfassung in `ad_modules`, Reichweite Referat für EZ, `ad_my_referate('EZ', …)`)
 **Akzeptanzkriterien**
-- AK1: Gegeben eine Gruppe meines Referats, wenn die Anwesenheitserfassung `gr_group_roster(group_id, date)` aufruft, dann erhält sie Gruppenname, Referat, die am Datum gültigen Trainingszeiten für dessen Wochentag sowie je Person mit am Datum gültiger Teilnahme oder Funktion: Person-ID, Vorname, Rufname, Nachname und Rolle (`participant`, `group_lead`, `trainer`, `helper`).
+- AK1: Gegeben eine Gruppe meines Referats, wenn die Anwesenheitserfassung `gr_group_roster(group_id, date)` aufruft, dann erhält sie Gruppenname, Referat, die am Datum gültige Trainingszeit für dessen Wochentag (höchstens ein Eintrag in `training_times`, R19, v0.9) sowie je Person mit am Datum gültiger Teilnahme oder Funktion: Person-ID, Vorname, Rufname, Nachname und Rolle (`participant`, `group_lead`, `trainer`, `helper`).
 - AK2: Gegeben eine Person war am Datum Teilnehmer:in und ist heute ausgetreten bzw. eine Trainer:innen-Funktion begann erst nach dem Datum, wenn die Funktion für das Datum aufgerufen wird, dann ist die erste Person enthalten und die zweite nicht (Stichtag, R20; vom Product Owner für Teilnehmer:innen und Trainer:innen bestätigt 22.10.2026).
 - AK3: Gegeben eine Person ist Teilnehmer:in und zugleich Helfer:in derselben Gruppe, wenn die Liste geliefert wird, dann erscheint sie je Rolle einmal; die Anwesenheitserfassung entscheidet über die Darstellung.
 - AK4: Die Rückgabe enthält nie Geburtsdatum, Alter, Adresse, Kontaktdaten, Erziehungsberechtigte, Notfallkontakte, Verträge, Bankdaten, Gesundheitsangaben oder Fotoerlaubnis; ein pgTAP-Test prüft die Spaltenliste (R20).
@@ -360,7 +363,7 @@ Ebenfalls bestätigt am 22.10.2026 (Chat Gruppen):
 
 Weitere Annahmen der Spec: spec.md Gruppen Abschnitt 11.
 
-## Prüfung Definition of Ready (Stand 22.10.2026, v0.8)
+## Prüfung Definition of Ready (Stand 24.10.2026, v0.9)
 
 | Kriterium | Status |
 |---|---|
@@ -370,7 +373,7 @@ Weitere Annahmen der Spec: spec.md Gruppen Abschnitt 11.
 | Begriffe im Glossar | erfüllt (glossar.md v1.5; Ergänzungen „Aufnahme offen“, „Einwilligung Gesundheitsangaben“ und Präzisierung „Teilnahme“, „Trainingszeit“ vorgeschlagen) |
 | Datenfelder im Datenmodell der Spec | erfüllt (spec.md v0.1, Abschnitt 2) |
 | Regeln per ID referenziert | erfüllt (R1–R20) |
-| Keine [OFFEN]-Punkte, Annahmen sichtbar | erfüllt: A1–A13, Entscheidungen und Annahmen der Spec (Abschnitt 11) am 22.10.2026 bestätigt |
+| Keine [OFFEN]-Punkte, Annahmen sichtbar | erfüllt: A1–A13, Entscheidungen und Annahmen der Spec (Abschnitt 11) am 22.10.2026 bestätigt; v0.9: offen für US-GR-16 AK8 und US-GR-18 AK5 (Wortlaut), AK8 – vor der Umsetzung der Migration bzw. des Imports zu klären |
 | „Nicht Teil dieser Story“ ausgefüllt | erfüllt |
 
 Blocker außerhalb dieses Moduls: Kern der Administration (T1–T49) inkl. Ü2 aus dem Ehrenamtsmanagement; erste Migration des Ehrenamtsmanagements (System-Eigenschaftsarten, IBAN-Prüfung); Übergabe an die Administration specs/gr-gruppen/uebergabe-administration.md v1.0 (Ü1–Ü3, Ü5: T50 und Reichweite Referat für EZ vor US-GR-19); `ad_me()` (vorhanden).

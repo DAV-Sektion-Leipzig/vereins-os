@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 24.10.2026 · Version 5.3
+Stand: 24.10.2026 · Version 5.4
+Änderungen v5.4: Gruppen: Übergabe aus der Anwesenheitserfassung (uebergabe-gruppen.md v1.0, eine Trainingszeit je Wochentag) eingearbeitet (spec.md GR v0.3); drei Detailfragen offen.
 Änderungen v5.3: Gruppen: Übergabe aus der Administration (uebergabe-gruppen-v08.md, EZ-Pfade nicht mehr als todo); Administration: Korrektur des Nachtrags v0.8 (spec.md AD v0.9.5).
 Änderungen v5.2: Administration: Nachtrag v0.8 Ready (spec.md AD v0.9.4, Nachtrag v0.8.1), Übergabe der Anwesenheitserfassung A9 eingearbeitet, Stories US-AD-27 bis US-AD-30, Orte ohne Startbestand im Nachtrag; Q1 für den Nachtrag v0.9 weiter offen.
 Änderungen v5.1: Anwesenheitserfassung: neue Annahmen der Spec v0.3 bestätigt; Reaktivieren auch referatsübergreifend (Übergabe an die Administration v1.5).
@@ -98,7 +99,7 @@ Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) ·
   - [ANNAHME] A11: Import – „gültig von“ der Trainingszeiten = Importdatum; nicht lesbare Trainingszeiten brechen den Import nicht ab.
   - [ANNAHME] A12: Auflösen einer Gruppe beendet ihre offenen Trainingszeiten zum Auflösungsdatum.
   - [ANNAHME] Fehler „Gruppe nicht gefunden.“ bei unbekannter oder am Datum aufgelöster Gruppe (US-GR-19).
-- **Übergabe aus der Anwesenheitserfassung (offen, v1.0, 24.10.2026):** specs/ez-einsaetze/uebergabe-gruppen.md – höchstens eine Trainingszeit je Gruppe und Wochentag (Product Owner 24.10.2026); [OFFEN] Widerspruch zu spec.md GR R19 und US-GR-18 AK1/AK5 (mehrere Trainingszeiten am selben Wochentag erlaubt, Überschneidung nur als Hinweis); braucht eine Migration in Gruppen.
+- **Übergabe aus der Anwesenheitserfassung (eingearbeitet, v1.0, 24.10.2026):** specs/ez-einsaetze/uebergabe-gruppen.md – höchstens eine Trainingszeit je Gruppe und Wochentag (Product Owner 24.10.2026); eingearbeitet in 01-erhebung.md v0.8, 02-stories.md v0.9, spec.md GR v0.3 (R19, US-GR-16, -18, -19); Umsetzung: spec.md T20. Noch [OFFEN] (spec.md GR Abschnitt 11): Wortlaut der Ablehnung; Ablehnung auch beim Verlängern von „gültig bis“; Import bei zwei Zeiten am selben Wochentag nur diesen Wochentag oder die ganze Gruppe ohne Trainingszeit.
 
 ## EZ – Anwesenheitserfassung (Priorität 2b – nach Gruppen, vor Finanzen)
 
