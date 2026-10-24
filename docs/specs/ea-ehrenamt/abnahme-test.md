@@ -1,6 +1,6 @@
 # Abnahme-Test: Ehrenamtsmanagement
 
-Umsetzungsdatei (Phase 14 und 15 in [tasks.md](tasks.md), T053–T055). Grundlage: [quickstart.md](quickstart.md) Abschnitt D. Stand: 24.10.2026. Ohne Personendaten außer den fiktiven Seed-Namen.
+Umsetzungsdatei (Phase 14 und 15 in [tasks.md](tasks.md), T053–T055). Grundlage: [quickstart.md](quickstart.md) Abschnitt D. Stand: 24.10.2026, Abnahme in TEST abgeschlossen. Ohne Personendaten außer den fiktiven Seed-Namen.
 
 Legende: **bestanden** = vom Product Owner in TEST geprüft · **erledigt** = von Claude Code geprüft · **offen (PO)** = führt der Product Owner aus.
 
@@ -29,7 +29,7 @@ Legende: **bestanden** = vom Product Owner in TEST geprüft · **erledigt** = vo
 | 11 | US-EA-17 | Admin, Skript gegen TEST | bestanden (24.10.2026): Prüfbericht für `beispiel.csv` ohne Fehler, für `beispiel-fehler.csv` mit den zwei erwarteten Fehlern |
 | 12 | US-EA-18 | Admin, Skript gegen TEST | bestanden (24.10.2026): Abschlussbericht, 5 Personen angelegt |
 | 13 | US-EA-19 | – | erledigt: Seed nur mit fiktiven Namen, Adressen `example.test`, Beispiel-IBAN (Personendaten-Prüfung ohne Treffer) |
-| 14 | US-EA-01 AK1 | Geschäftsstelle | offen (PO): nach T055 in TEST, Startseite zeigt die Kachel „Ehrenamtsmanagement“ |
+| 14 | US-EA-01 AK1 | Geschäftsstelle | bestanden (24.10.2026): nach T055 zeigt die Startseite die Kachel „Ehrenamtsmanagement“ |
 
 Anpassungen aus der Abnahme: keine.
 
@@ -52,5 +52,5 @@ Geprüft auf `main` nach PR #7 (24.10.2026).
 |---|---|
 | Migration `20261024000800_ea_module_available.sql` | setzt `ad_modules.is_available = true` für EA |
 | Tests | `010_foundation` (verfügbar: AD und EA), `020_persons_rights` (Admin sieht AD und EA), `070_scope_referate` (Prüfung „keine Kachel“ blendet EA vorübergehend aus) |
-| TEST | offen (PO): nach dem Merge `npx supabase db push` gegen TEST, dann D 14 |
+| TEST | am 24.10.2026 per `npx supabase db push` eingespielt (Probelauf zeigte nur diese Datei); D 14 bestanden |
 | PROD | nicht Claude Code: Lauf nach quickstart.md Abschnitt E, nach Klärung des Wegs der Migrationen nach PROD (O1 der Administration) |
