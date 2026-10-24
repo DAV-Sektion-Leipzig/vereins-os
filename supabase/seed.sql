@@ -169,12 +169,19 @@ values
    'qualification', 'all', 'none', false, true, null, '{EA}')
 on conflict (id) do nothing;
 
+-- Vorhandene Felder vorher herausfiltern: der Trigger ea_property_fields_guard prüft vor „on conflict“ und lehnt
+-- Pflichtfelder für Arten mit Eigenschaften ab (zweiter Seed-Lauf in TEST)
 insert into public.ea_property_fields
   (property_type_id, key, label, data_type, is_required, choice_values, allowed_qualification_kinds, sort_order)
-values
-  ('d0000000-0000-4000-8000-000000000002', 'size', 'Größe', 'choice', true, '{S,M,L,XL}', null, 1),
-  ('d0000000-0000-4000-8000-000000000003', 'date', 'Datum', 'date', true, null, null, 1)
-on conflict (property_type_id, key) do nothing;
+select v.property_type_id, v.key, v.label, v.data_type::public.ea_data_type, v.is_required, v.choice_values,
+       v.allowed_qualification_kinds::public.ad_qualification_kind[], v.sort_order
+  from (values
+    ('d0000000-0000-4000-8000-000000000002'::uuid, 'size'::text, 'Größe'::text, 'choice'::text, true, '{S,M,L,XL}'::text[], null::text[], 1),
+    ('d0000000-0000-4000-8000-000000000003', 'date', 'Datum', 'date', true, null, null, 1)
+  ) as v (property_type_id, key, label, data_type, is_required, choice_values, allowed_qualification_kinds, sort_order)
+ where not exists (
+   select 1 from public.ea_property_fields f where f.property_type_id = v.property_type_id and f.key = v.key
+ );
 
 -- 7. Eigenschaften (ohne Nutzerkontext: historische Qualifikationsart von Person 5 erlaubt, R27).
 -- Art über system_key (System-Eigenschaftsarten, Ü3) oder feste ID (Testarten).
