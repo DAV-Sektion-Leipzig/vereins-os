@@ -83,8 +83,8 @@ select throws_ok($$ update public.ea_persons set volunteer_status_since = null w
 select throws_ok($$ update public.ea_persons set volunteer_status = 'active', volunteer_status_since = current_date
                    where id = 'a0000000-0000-4000-8000-000000000008' $$,
   '23514', null, 'Funktionsperson ohne Ehrenamtsstatus (R15)');
-select throws_ok($$ insert into public.ea_persons (first_name, last_name, created_in) values ('X', 'Y', 'EZ') $$,
-  '23514', null, 'created_in EZ erst mit Nachtrag v0.8');
+select throws_ok($$ insert into public.ea_persons (first_name, last_name, created_in) values ('X', 'Y', 'TK') $$,
+  '23514', null, 'created_in TK nicht zulässig (EZ seit Nachtrag v0.8)');
 
 -- Historie nur lesbar
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');

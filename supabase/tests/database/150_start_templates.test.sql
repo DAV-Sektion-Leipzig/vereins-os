@@ -8,9 +8,9 @@ select results_eq(
        from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
       where t.name = 'Referent:in' order by r.module_code $$,
   $$ values ('AD'::text, 'none'::text, 'all'::text), ('AM', 'none', 'all'), ('EA', 'edit', 'referat'),
-            ('FI', 'none', 'all'), ('GR', 'none', 'all'), ('GS', 'none', 'all'), ('OA', 'none', 'all'),
+            ('EZ', 'edit', 'referat'), ('FI', 'none', 'all'), ('GR', 'none', 'all'), ('GS', 'none', 'all'), ('OA', 'none', 'all'),
             ('PM', 'none', 'all'), ('SC', 'none', 'all') $$,
-  'Referent:in: EA bearbeiten mit Reichweite Referat, übrige Module kein Zugriff');
+  'Referent:in: EA und EZ bearbeiten mit Reichweite Referat, übrige Module kein Zugriff');
 select is(
   (select r.level::text from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
     where t.name = 'Admin' and r.module_code = 'GR'),

@@ -95,6 +95,20 @@ Testzugänge Admin, Geschäftsstelle, Referent:in (Klettern) und Vorstand; Erwar
 | Rufname | Rufname an Person 4 setzen | Anzeige „Rufname Nachname“ in Übersicht, Detail und Kopfzeile | US-AD-24 |
 | Mobil | alle neuen Screens bei 375 px | kein horizontales Scrollen | spec.md Abschnitt 6 |
 
+## C4. Nachtrag v0.8 in TEST (spec T58, tasks.md T121)
+
+Erst nach dem Ausrollen der Migrationen `20261026000100`–`0400` nach TEST (Freigabe des Product Owners) und nach dem Seed. Solange die Oberfläche fehlt (T120), per SQL-Aufruf bzw. REST mit dem JWT des Testzugangs.
+
+| Szenario | Zugang | Erwartet | Story |
+|---|---|---|---|
+| Startwerte EZ | test.admin, Vorlagen | Admin lesen, Geschäftsstelle verwalten, Referent:in bearbeiten (Referat), Vorstand kein Zugriff; keine Kachel EZ | US-AD-28 |
+| Reichweite | test.admin setzt „Referat“ für GR | `AD_SCOPE_NOT_ALLOWED` | US-AD-28 |
+| Orte lesen | test.referent | drei Testorte | US-AD-27 |
+| Orte pflegen | test.admin legt „kletterhalle test“ an | `AD_LOCATION_NAME_TAKEN`; test.geschaeftsstelle: abgelehnt | US-AD-27 |
+| Suche Aktive | test.geschaeftsstelle `ea_search_active_persons('Muster')` | nur Toni Muster; „M“ → `AD_SEARCH_TOO_SHORT`; test.admin → `AD_FORBIDDEN` | US-AD-29 |
+| Anlegen über EZ | test.referent `ea_create_volunteer` mit Funktion Helfer:in, Referat Klettern | Person aktiv, `created_in = 'EA'` (EA-Weg, research.md R-30) | US-AD-30 |
+| Wieder aktiv | test.referent `ea_activate_person` für Olga Ausgeschieden, Helfer:in, Klettern | aktiv mit Historie | US-AD-30 |
+
 ## D. Ersteinrichtung PROD (nur Dokumentation)
 
 Ausführung nur durch den Product Owner, nie durch den Agenten. Der Weg nach PROD ist [OFFEN] (O1).

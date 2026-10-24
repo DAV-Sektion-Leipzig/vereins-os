@@ -140,7 +140,7 @@ Bestehend (T1): `ad_level` (`none` < `read` < `edit` < `manage`), `ad_access_sta
 
 `ea_check_create` seit v0.7.4 (`…001800`): Eigenschaftsart mit Lesestufe „vertraulich“ nur mit AD ≥ edit, Bezug „Gruppe“ nie, `p_referat` nur bei Bezug „Referat“; mit Reichweite Referat nur Arten mit Bezug „Referat“. `ea_person_in_referate` ist seit `…001800` nur intern (kein Grant an `authenticated`). Der Insert-Trigger `ad_auth_user_created` protokolliert `none → invited` ohne Akteur (Dashboard-Einladung); `ad_apply_invite` vervollständigt diesen Eintrag.
 
-`ea_create_volunteer` im Kern: erlaubt mit `ad_has_level('EA','edit')` oder `p_referat = any(ad_my_referate('EA','edit'))`; mit Reichweite „alle“ sind `p_property_type` und `p_referat` optional, mit Reichweite Referat Pflicht; `created_in = 'EA'`. Die Erweiterung um EZ (`p_contact_email`, `created_in = 'EZ'`) folgt mit T53 per neuer Migration.
+`ea_create_volunteer` im Kern: erlaubt mit `ad_has_level('EA','edit')` oder `p_referat = any(ad_my_referate('EA','edit'))`; mit Reichweite „alle“ sind `p_property_type` und `p_referat` optional, mit Reichweite Referat Pflicht; `created_in = 'EA'`. Seit dem Nachtrag v0.8.1 (`…20261026000400`) mit `p_contact_email` und dem EZ-Weg (`created_in = 'EZ'`, research.md R-30); `ea_activate_person` ebenso (A9, R45a).
 
 ## Zustände
 
@@ -156,3 +156,22 @@ Nach spec.md Abschnitt 9, Personen 1–12 (research.md R-10, R-26). Erwartete Si
 | Geschäftsstelle | 4, 5, 9, 10, 11; Lesestufen „alle mit Zugriff“ und „nur Geschäftsstelle und Admin“ | 1–3, 6–8, 12; vertrauliche Eigenschaften |
 | Referent:in (Klettern) | 4, 9, 10 (bei 10 auch die Funktion im Referat Ausbildung, nur lesen) | 5, 11, 12, alle ohne Ehrenamtsstatus; Geburtsdatum; vertrauliche Eigenschaften |
 | Vorstand | niemanden | alle |
+
+## Nachtrag v0.8 (spec.md v0.9.4, Nachtrag v0.8.1; tasks.md Phase 15)
+
+| Datei | spec-Task | Inhalt |
+|---|---|---|
+| `20261026000100_ad_ez_module.sql` | T50 | `ad_modules` Zeile EZ „Anwesenheitserfassung“ direkt nach GR (`is_available = false`); `ad_template_rights` je Vorlage um EZ; Startwerte Admin `read`, Geschäftsstelle `manage`, Referent:in `edit`/`referat`, Vorstand `none`; Check und Trigger R30 für EA und EZ; `ea_persons.created_in` mit `EZ` |
+| `20261026000200_ad_locations.sql` | T51 | Tabelle `ad_locations` (Unique-Index `lower(name)`, Trigger `ad_locations_guard` mit `AD_LOCATION_NAME_REQUIRED`/`_TAKEN` und updated_*), `ad_can_edit_locations()` = AD ≥ edit; RLS: lesen `ad_has_active_access()`, anlegen/ändern `ad_can_edit_locations()`, kein Delete |
+| `20261026000300_ad_name_functions.sql` | T52 | `ez_person_visible` (Platzhalter false), `ea_person_names(uuid[])`, `ea_search_active_persons(text, int)`; Index `ea_persons_last_name_trgm` |
+| `20261026000400_ad_ez_create.sql` | T53, A9 | `ea_create_path` (intern), `ea_create_volunteer` (8 Parameter), `ea_activate_person` (EZ-Weg), `ad_find_similar_persons` auch mit EZ ≥ edit |
+
+| Funktion | Art | Grant | Task |
+|---|---|---|---|
+| `ad_can_edit_locations()` | security definer, stable | authenticated | T112 |
+| `ez_person_visible(uuid)` | security definer, stable; Platzhalter | authenticated | T113 |
+| `ea_person_names(uuid[])` | security definer, stable | authenticated | T113 |
+| `ea_search_active_persons(text, int)` | security definer, stable | authenticated | T113 |
+| `ea_create_path(uuid, uuid, jsonb)` | security definer, stable | keiner (intern) | T114 |
+
+Testdaten v0.8: Orte „Kletterhalle Test“ (Punktekonto, aktiv), „Fels Test“ (aktiv), „Halle alt Test“ (inaktiv). Die Testzugänge erhalten die EZ-Startwerte über ihre Vorlagen. Erwartete Namensergebnisse: Test 270; Ergebnis der Geschäftsstelle bei `ea_person_names([4,5,12])` = 4, 5 (Person 12 hat im Seed keinen laufenden Gruppenbezug).
