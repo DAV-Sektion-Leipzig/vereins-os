@@ -50,17 +50,17 @@ description: "Tasks für das Modul Gruppen (GR)"
 
 ### Vorbereitung
 
-- [ ] T002 Branch `gr-kern-datenbank` von aktuellem `main` anlegen. Prüfen und im PR festhalten, dass vorhanden sind: `gr_person_visible` (Platzhalter), `gr_person_ids`, `ea_property_writable(uuid, uuid, uuid)`, `ea_properties_validate`, `ea_properties_history`, `ad_v_person_overview`, `ea_iban_valid`, `ea_iban_normalize`, `ad_first_names_match`, System-Eigenschaftsarten `birth_date`, `contact`, `member`; Referat „Kinder und Jugend“ in `ea_referate`; letzte Migration `20261024000700`. Fehlt etwas: anhalten und melden.
+- [x] T002 Branch `gr-kern-datenbank` von aktuellem `main` anlegen. Prüfen und im PR festhalten, dass vorhanden sind: `gr_person_visible` (Platzhalter), `gr_person_ids`, `ea_property_writable(uuid, uuid, uuid)`, `ea_properties_validate`, `ea_properties_history`, `ad_v_person_overview`, `ea_iban_valid`, `ea_iban_normalize`, `ad_first_names_match`, System-Eigenschaftsarten `birth_date`, `contact`, `member`; Referat „Kinder und Jugend“ in `ea_referate`; letzte Migration `20261024000700`. Fehlt etwas: anhalten und melden.
 
 ### Tests (zuerst schreiben, müssen fehlschlagen) ⚠️
 
-- [ ] T003 [P] [US-GR-03] (spec T10 Teil) `supabase/tests/database/410_gr_groups.test.sql`:
+- [x] T003 [P] [US-GR-03] (spec T10 Teil) `supabase/tests/database/410_gr_groups.test.sql`:
   - Tabellen `gr_groups`, `gr_training_times` mit RLS, `has_table_privilege('authenticated', …, 'INSERT')` = false für beide;
   - `gr_today()` = `(now() at time zone 'Europe/Berlin')::date`;
   - `gr_save_group` als Geschäftsstelle: anlegen, ändern; Name leer → `GR_GROUP_FIELDS_REQUIRED`; „jugendgruppe test 1“ → `GR_GROUP_NAME_TAKEN`; Name einer aufgelösten Gruppe erlaubt; inaktives Referat → `GR_REFERAT_INACTIVE`; Admin (GR lesen) → `GR_FORBIDDEN`; Änderung an „Altgruppe Test“ → `GR_GROUP_DISSOLVED`;
   - `gr_dissolve_group`: Test 1 → `GR_GROUP_HAS_MEMBERS`; Test 2 (Paula offen) nach Beenden der Teilnahmen → `GR_GROUP_HAS_PENDING`; Datum morgen → `GR_DATE_IN_FUTURE`; leere Gruppe → `dissolved_on` gesetzt, offene Trainingszeiten und `group_function` mit `valid_from <= Datum` enden zum Datum, später beginnende bleiben und stehen in der Rückgabe (A12, plan.md H5);
   - Trainingszeiten: fehlende Felder → `GR_TRAINING_TIME_REQUIRED`; Ende ≤ Beginn → `GR_TRAINING_TIME_END`; „gültig bis“ < „gültig von“ → `GR_VALID_TO_BEFORE_FROM`; Überschneidung Di 17:00–18:00 in Test 1 → `overlap = true`, gespeichert; `gr_change_training_time` mit Datum ≤ `valid_from` bzw. > `valid_to` → `GR_CHANGE_DATE_INVALID`; gültiges „Ändern ab“ → alte endet am Vortag, neue beginnt am Datum mit altem `valid_to`; direktes `update … set weekday` als Eigentümer → `GR_TRAINING_TIME_LOCKED`; `gr_end_training_time` setzt und ändert `valid_to`.
-- [ ] T004 [P] [US-GR-01] (spec T10 Teil) `supabase/tests/database/420_gr_visibility.test.sql` – Tabelle „Erwartete Ergebnisse“ spec.md 9 je Testzugang:
+- [x] T004 [P] [US-GR-01] (spec T10 Teil) `supabase/tests/database/420_gr_visibility.test.sql` – Tabelle „Erwartete Ergebnisse“ spec.md 9 je Testzugang:
   - Admin: sieht Kinder 23, 25, 28, 30 und 27 (Pfad AD), Geburtsdatum Kind ja, `gr_health_notes`/`gr_health_note_history`/`gr_health_consents` 0 Zeilen;
   - Geschäftsstelle: sieht 23, 25, 28, 30, nicht 27; Geburtsdatum ja; Gesundheit 23 ja, 25 nein (Widerruf);
   - Rita Referentin, Kim Kinderjugend, Vorstand: keine Zeile aus `gr_memberships`, `gr_guardians`, `gr_emergency_contacts`, `gr_contracts`, `gr_photo_consents`, `gr_pending_admissions`, `gr_training_times`; Kinder nicht in `ea_persons`;
@@ -68,7 +68,7 @@ description: "Tasks für das Modul Gruppen (GR)"
   - `gr_person_ids('read')` = Menge der Personen mit `gr_person_visible` für alle Seed-Personen (research.md R-GR-06);
   - Person mit nur beendeten Bezügen (27, 31) nur für den Admin sichtbar (Ü4);
   - Teilnehmer:in nicht über EA lesbar (23 für Geschäftsstelle nur über Pfad GR: `ea_person_visible_ea` = false); Erziehungsberechtigter zugleich Trainer (26) im Pfad EA ohne gruppenspezifische Daten (keine Zeile aus `gr_guardians` über EA-Recht allein); nur „Gruppen lesen“ liest Kontaktdaten, nicht Geburtsdatum (Tests aus AD T45).
-- [ ] T005 [P] [US-GR-06] (spec T10 Teil) `supabase/tests/database/430_gr_admission.test.sql`:
+- [x] T005 [P] [US-GR-06] (spec T10 Teil) `supabase/tests/database/430_gr_admission.test.sql`:
   - `gr_start_admission` neue Person als Geschäftsstelle → `ea_persons.created_in = 'GR'`, Eigenschaften `birth_date` (`valid_from` = Geburtsdatum), `contact` (`valid_from` = heute), `member` nur mit Nummer; ohne Geburtsdatum/Adresse → `GR_PARTICIPANT_FIELDS_REQUIRED`; beide Parameter bzw. keiner → `GR_PERSON_INVALID`; zweite offene Aufnahme → `GR_PENDING_EXISTS`; Person mit laufender Teilnahme an derselben Gruppe → `GR_ALREADY_MEMBER`; aufgelöste Gruppe → `GR_GROUP_DISSOLVED`;
   - mit GR bearbeiten (Testvorlage in der Transaktion) neue Person mit Geburtsdatum → `GR_BIRTH_DATE_FORBIDDEN`;
   - Übernahme einer nicht sichtbaren Person (Person 12 ohne Bezug) mit GR bearbeiten → danach im Pfad GR sichtbar (Ü2); Person `kind = 'function'` → `GR_PERSON_INVALID`;
@@ -77,7 +77,7 @@ description: "Tasks für das Modul Gruppen (GR)"
   - `gr_copy_address` kopiert Straße, PLZ, Ort in `contact` des Kindes (Historie in `ea_property_history`);
   - `gr_add_emergency_contact`: ohne Telefon/E-Mail → `GR_CONTACT_REACHABILITY`; doppelt → `GR_EMERGENCY_EXISTS`; `sort_order` = höchste + 1; `gr_reorder_emergency_contacts` mit unvollständiger Liste → `GR_ORDER_INVALID`, vollständig → 1…n;
   - `gr_update_person`: Mitgliedsnummer leeren → `member` endet zum Vortag (R25); Notfallkontakt ohne Erreichbarkeit → `GR_CONTACT_REACHABILITY`; ohne Pfad-GR-Sichtbarkeit → `GR_FORBIDDEN`.
-- [ ] T006 [P] [US-GR-08] (spec T10 Teil) `supabase/tests/database/440_gr_membership_contract.test.sql`:
+- [x] T006 [P] [US-GR-08] (spec T10 Teil) `supabase/tests/database/440_gr_membership_contract.test.sql`:
   - `gr_admit` legt Teilnahme und Vertrag an und löscht die offene Aufnahme; ohne Vertrag → `GR_CONTRACT_REQUIRED`; fehlendes Vertragsfeld → `GR_CONTRACT_FIELDS_REQUIRED`; nichts gespeichert bei Fehler;
   - R4: Inhaber:in nicht erziehungsberechtigt → `GR_HOLDER_INVALID`; volljährige Teilnehmer:in (am Vertragsbeginn) als eigene Inhaber:in erlaubt;
   - R5 `DE00 1234` → `GR_IBAN_INVALID`; IBAN wird normalisiert gespeichert; R6 Mandatsreferenz in anderer Schreibweise vorhanden → `GR_MANDATE_TAKEN`; „ABC#1“ → `GR_MANDATE_FORMAT`; 36 Zeichen → `GR_MANDATE_FORMAT`; Kontoinhaber:in 71 Zeichen → `GR_TEXT_TOO_LONG` mit `detail` 70; Verwendungszweck 141 → `GR_TEXT_TOO_LONG` (140); Betrag 0 → `GR_AMOUNT_INVALID`; Unterschriftsdatum morgen → `GR_DATE_IN_FUTURE`;
@@ -87,18 +87,18 @@ description: "Tasks für das Modul Gruppen (GR)"
   - `gr_contract_status`: offen → `active`; Ende ≥ D → `cancelled`; Ende < D → `ended`;
   - `gr_end_membership` vor Eintritt → `GR_LEFT_BEFORE_JOINED`; Vertrag bleibt unverändert;
   - `gr_update_contract` ändert nur die erlaubten Felder; Vertragsbeginn bleibt.
-- [ ] T007 [P] [US-GR-12] (spec T10 Teil) `supabase/tests/database/450_gr_consents_health.test.sql`:
+- [x] T007 [P] [US-GR-12] (spec T10 Teil) `supabase/tests/database/450_gr_consents_health.test.sql`:
   - Fotoerlaubnis ohne Eintrag = nein; `gr_set_photo_consent` ohne Datum → `GR_CONSENT_DATE_REQUIRED`; Zukunft → `GR_DATE_IN_FUTURE`; gleicher Wert → `GR_CONSENT_UNCHANGED`; Historie bleibt (zwei Zeilen);
   - `gr_save_health_note` ohne Einwilligung → `GR_HEALTH_CONSENT_REQUIRED`; mit „ja“ speichern; Änderung erzeugt Zeile in `gr_health_note_history`; 2001 Zeichen bzw. leer → `GR_HEALTH_NOTE_INVALID`;
   - Widerruf „nein“: Text und Historie bleiben (als Eigentümer zählen), Geschäftsstelle liest 0 Zeilen; erneut „ja“ → wieder lesbar (R24);
   - Admin, Vorstand mit GR lesen, Rita, Kim: `gr_save_health_note` → `GR_FORBIDDEN`; 0 Zeilen aus allen drei Gesundheitstabellen (R11).
-- [ ] T008 [P] [US-GR-13] (spec T10 Teil) `supabase/tests/database/460_gr_group_functions.test.sql`:
+- [x] T008 [P] [US-GR-13] (spec T10 Teil) `supabase/tests/database/460_gr_group_functions.test.sql`:
   - `ea_set_status_from_group` ist für `authenticated` nicht ausführbar (`has_function_privilege` = false);
   - `gr_add_group_function` neue Person → Status `active` seit „seit“, Zeile in `ea_volunteer_status_history`, `status_set = true`; Person ruhend → Status unverändert, `status_hint = 'dormant'`; ausgeschieden → `'left'` (R29);
   - gleiche Funktion, gleiche Person, gleiche Gruppe, überschneidend → `GR_FUNCTION_OVERLAP`; andere Funktion gleichzeitig erlaubt (R28); „bis“ vor „seit“ → `EA_VALID_RANGE`; aufgelöste Gruppe → `GR_GROUP_DISSOLVED`; Funktion außerhalb der Auswahl → `EA_FIELD_CHOICE`;
   - `gr_end_group_function` nur für Art `group_function` (andere Eigenschaft → `GR_FORBIDDEN`), Status bleibt;
   - Person 26 erscheint für die Geschäftsstelle im Ehrenamtsmanagement mit Eigenschaft `group_function` „Trainer:in“ und lesbarem `gr_groups.name`; direktes `update` dieser Eigenschaft als Geschäftsstelle scheitert (R14).
-- [ ] T009 [P] [US-GR-01] (spec T10 Teil) `supabase/tests/database/470_gr_admin_objects.test.sql`:
+- [x] T009 [P] [US-GR-01] (spec T10 Teil) `supabase/tests/database/470_gr_admin_objects.test.sql`:
   - `ea_properties.related_group_id` FK auf `gr_groups`; Art `group_function` mit Werten aus spec.md 2.2 (`category = 'assignment'`, `read_level = 'all'`, `relation_kind = 'group'`, `relation_required`, `allow_multiple`, `visible_in = {AD,EA,GR}`, `origin = 'system'`, Feld `function` choice mit `{Gruppenleitung,Trainer:in,Helfer:in}`, Pflicht);
   - Trigger R38: Art `group_function` ohne `related_group_id` (als Eigentümer) → `EA_RELATION_REQUIRED`; aufgelöste Gruppe mit `valid_from` nach `dissolved_on` → `GR_GROUP_DISSOLVED`; bei Art mit Bezug Referat wird `related_group_id` auf null gesetzt;
   - Historie schreibt `related_group_id` mit;
@@ -108,28 +108,28 @@ description: "Tasks für das Modul Gruppen (GR)"
 
 ### Migrationen
 
-- [ ] T010 [US-GR-03] (spec T1) `supabase/migrations/20261025000100_gr_groups.sql` nach data-model.md Nr. 1 und spec.md 2.1/2.2:
+- [x] T010 [US-GR-03] (spec T1) `supabase/migrations/20261025000100_gr_groups.sql` nach data-model.md Nr. 1 und spec.md 2.1/2.2:
   - `gr_today()`;
   - `gr_groups` („name text, getrimmt, 1–80 Zeichen“; `referat_id` FK `ea_referate(id) on delete restrict`; `dissolved_on date`; Audit); unique `(lower(name)) where dissolved_on is null`; Index `(referat_id)`; Trigger `ad_set_updated`;
   - `gr_training_times` (Check `weekday between 1 and 7`, `ends_at > starts_at`, `valid_to is null or valid_to >= valid_from`; Index `(group_id, weekday)`), Trigger `gr_training_times_guard` (`GR_TRAINING_TIME_LOCKED`) und `ad_set_updated`;
   - RLS: `gr_groups` select `ad_has_level('GR','read') or ad_has_any_level('EA','read')`; `gr_training_times` select `ad_has_level('GR','read')`;
   - `ea_properties.related_group_id`, `ea_property_history.related_group_id`, Teilindex; neue Fassungen `ea_properties_validate`, `ea_properties_history`, `ea_property_writable` (research.md R-GR-07);
   - Art `group_function` mit Feld über eine interne Funktion ohne Nutzerkontext, idempotent `on conflict (system_key) do nothing` (Muster `ea_seed_system_property_types`).
-- [ ] T011 [US-GR-01] (spec T2) `supabase/migrations/20261025000200_gr_relations.sql` nach data-model.md Nr. 2:
+- [x] T011 [US-GR-01] (spec T2) `supabase/migrations/20261025000200_gr_relations.sql` nach data-model.md Nr. 2:
   - Tabellen `gr_pending_admissions`, `gr_memberships` (Check `left_on >= joined_on`), `gr_contracts` (Checks: `ends_on >= starts_on`; `ends_on is null or cancelled_on is not null`; `monthly_amount > 0`; `char_length(account_holder) between 1 and 70`; `mandate_reference ~ '^[A-Za-z0-9+?/:().,'' -]{1,35}$'`; `char_length(purpose) between 1 and 140`; unique `lower(mandate_reference)`), `gr_guardians` (Check Kind ≠ Person, unique; Trigger höchstens zwei → `GR_GUARDIAN_LIMIT`), `gr_emergency_contacts`, `gr_photo_consents`, `gr_health_consents`, `gr_health_notes` (Check 1–2000 Zeichen), `gr_health_note_history` mit Trigger `gr_health_notes_history` (after update);
   - Funktionen `gr_has_current_relation`, `gr_person_visible` (Ersatz), `gr_person_ids` (Ersatz, mengenbasiert), `gr_row_visible`, `gr_is_adult`, `gr_can_read_health`, `gr_contract_status`, `gr_needs_guardian`, `gr_person_has_group_relation`;
   - neue Fassung `ad_v_person_overview` (gleiche Spalten, `has_group_relation` über `gr_person_has_group_relation`);
   - Select-Policies nach data-model.md „Tabellen“.
 - [ ] T012 [P] (spec T2 Teil) `docs/specs/gr-gruppen/contracts/error-codes.md`: Status je Code auf „umgesetzt“ setzen, sobald die Migration ihn auslöst (laufend mit T010–T016).
-- [ ] T013 [US-GR-03] (spec T3) `supabase/migrations/20261025000300_gr_group_functions.sql`: `gr_save_group`, `gr_dissolve_group` (Rückgabe jsonb, plan.md H5), `gr_add_training_time`, `gr_change_training_time`, `gr_end_training_time` nach contracts/database-api.md.
-- [ ] T014 [US-GR-06] (spec T4) `supabase/migrations/20261025000400_gr_person_functions.sql`: interne `gr_create_person(p_new_person jsonb, p_require text)` und `gr_take_person(p_person uuid)`; `gr_start_admission`, `gr_cancel_admission`, `gr_update_person`, `gr_copy_address`, `gr_add_guardian`, `gr_remove_guardian`, `gr_add_emergency_contact`, `gr_remove_emergency_contact`, `gr_reorder_emergency_contacts`. Kontaktdaten nur anlegen, wenn mindestens ein Kontaktfeld gesetzt ist; eine `contact`-Eigenschaft je Person, Änderungen als Update.
-- [ ] T015 [US-GR-08] (spec T5) `supabase/migrations/20261025000500_gr_membership_contract.sql`: interne `gr_check_contract(p_membership uuid, p_person uuid, p_contract jsonb)` (R4–R6, R27; IBAN über `ea_iban_normalize`/`ea_iban_valid`); `gr_admit`, `gr_add_contract`, `gr_update_contract`, `gr_cancel_contract`, `gr_end_membership`.
-- [ ] T016 [US-GR-12] (spec T6) `supabase/migrations/20261025000600_gr_consents_health.sql`: `gr_set_photo_consent`, `gr_set_health_consent`, `gr_save_health_note` (Insert oder Update).
-- [ ] T017 [US-GR-13] (spec T7) `supabase/migrations/20261025000700_gr_volunteer_functions.sql`: Ü1 `ea_set_status_from_group` (Kennzeichen `ea.status_change`, research.md R-GR-04, ohne Grant); `gr_add_group_function`, `gr_end_group_function` (R28 per `daterange(…,'[]') &&`).
+- [x] T013 [US-GR-03] (spec T3) `supabase/migrations/20261025000300_gr_group_functions.sql`: `gr_save_group`, `gr_dissolve_group` (Rückgabe jsonb, plan.md H5), `gr_add_training_time`, `gr_change_training_time`, `gr_end_training_time` nach contracts/database-api.md.
+- [x] T014 [US-GR-06] (spec T4) `supabase/migrations/20261025000400_gr_person_functions.sql`: interne `gr_create_person(p_new_person jsonb, p_require text)` und `gr_take_person(p_person uuid)`; `gr_start_admission`, `gr_cancel_admission`, `gr_update_person`, `gr_copy_address`, `gr_add_guardian`, `gr_remove_guardian`, `gr_add_emergency_contact`, `gr_remove_emergency_contact`, `gr_reorder_emergency_contacts`. Kontaktdaten nur anlegen, wenn mindestens ein Kontaktfeld gesetzt ist; eine `contact`-Eigenschaft je Person, Änderungen als Update.
+- [x] T015 [US-GR-08] (spec T5) `supabase/migrations/20261025000500_gr_membership_contract.sql`: interne `gr_check_contract(p_membership uuid, p_person uuid, p_contract jsonb)` (R4–R6, R27; IBAN über `ea_iban_normalize`/`ea_iban_valid`); `gr_admit`, `gr_add_contract`, `gr_update_contract`, `gr_cancel_contract`, `gr_end_membership`.
+- [x] T016 [US-GR-12] (spec T6) `supabase/migrations/20261025000600_gr_consents_health.sql`: `gr_set_photo_consent`, `gr_set_health_consent`, `gr_save_health_note` (Insert oder Update).
+- [x] T017 [US-GR-13] (spec T7) `supabase/migrations/20261025000700_gr_volunteer_functions.sql`: Ü1 `ea_set_status_from_group` (Kennzeichen `ea.status_change`, research.md R-GR-04, ohne Grant); `gr_add_group_function`, `gr_end_group_function` (R28 per `daterange(…,'[]') &&`).
 
 ### Seed
 
-- [ ] T018 [US-GR-17] (spec T9) `supabase/seed.sql` nach spec.md 9 und research.md R-GR-15:
+- [x] T018 [US-GR-17] (spec T9) `supabase/seed.sql` nach spec.md 9 und research.md R-GR-15:
   - Gruppen `c0000000-…-000000000001`–`…04`: „Jugendgruppe Test 1“ (Kinder und Jugend; Di 16:30–18:00, Do 17:00–18:30 seit 01.09.2025), „Jugendgruppe Test 2“ (Mi 17:00–18:30 bis 31.12.2025, Mi 18:00–19:30 seit 01.01.2026), „Klettergruppe Test“ (Klettern, ohne Trainingszeit), „Altgruppe Test“ (aufgelöst 30.06.2025);
   - Personen 23–32 mit allen Besonderheiten der Tabelle in spec.md 9 (Daten relativ zu `current_date`), Gesundheitsangabe 25 mit Einwilligung „ja“, danach „nein“;
   - Testzugang Kim Kinderjugend `test.kiju@dav-leipzig.de` (Person 32, Auth-Nutzer `b0000000-0000-4000-8000-000000000032`), Vorlage Referent:in mit Referat Kinder und Jugend, Amt Referent:in K+J;
