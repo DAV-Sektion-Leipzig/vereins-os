@@ -38,7 +38,7 @@ Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnun
 | `AD_SEARCH_TOO_SHORT` | Bitte mindestens 2 Zeichen eingeben. | R44 | geplant (T52) |
 | `AD_TOO_MANY_IDS` | [OFFEN] Meldung fehlt in spec.md | – | geplant (T52) |
 | `AD_FORBIDDEN`, SQLSTATE `42501` | Für diesen Bereich hast du keine Rechte. | R8, R43 | umgesetzt |
-| Constraint `ea_referate_name_key` bzw. `ea_gremien_name_key` (kein Code, [ANNAHME]) | Ein Referat mit dieser Bezeichnung gibt es bereits. / Ein Gremium mit dieser Bezeichnung gibt es bereits. | – | umgesetzt (Oberfläche folgt mit EA) |
+| Constraint `ea_referate_name_key` bzw. `ea_gremien_name_key` (kein Code, [ANNAHME]) | ~~Ein Referat mit dieser Bezeichnung gibt es bereits. / Ein Gremium mit dieser Bezeichnung gibt es bereits.~~ ersetzt durch „Diese Bezeichnung gibt es bereits.“ (EA spec.md Abschnitt 6, US-EA-14 AK3; Zeile im Abschnitt EA) | – | umgesetzt (Oberfläche: `/ea/stammdaten`) |
 | Constraint `ad_qualification_types_discipline_not_blank` / `…_issuer_not_blank` (kein Code, [ANNAHME]) | Bitte eine Sparte angeben. / Bitte einen Aussteller angeben. | US-AD-17 AK2 | umgesetzt |
 | `AD_UNAUTHENTICATED` (Edge Functions, HTTP 401) | weiter zu /login (keine Meldung) | – | umgesetzt |
 | `AD_PERSON_NOT_FOUND`, `AD_INVALID_STATUS`, `AD_BAD_REQUEST`, `AD_UNEXPECTED`, unbekannt | Etwas ist schiefgelaufen. Bitte versuche es erneut. | – | umgesetzt |

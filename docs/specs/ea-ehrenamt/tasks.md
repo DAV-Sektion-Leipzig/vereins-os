@@ -216,7 +216,7 @@ description: "Tasks für das Modul Ehrenamtsmanagement (EA)"
 
 **Unabhängiger Test**: US-EA-14 AK1–AK5.
 
-- [ ] T050 [US-EA-14] (spec T18) `src/features/ea/stammdaten/StammdatenPage.tsx` (/ea/stammdaten, Loader `requireEaManage`): zwei Listen Referate und Gremien mit Bezeichnung, Reihenfolge, Status; „Neu“ und „Bearbeiten“ (Bezeichnung, Reihenfolge, aktiv) per Insert/Update auf `ea_referate`/`ea_gremien`; Unique-Verletzung `ea_referate_name_key`/`ea_gremien_name_key` → „Diese Bezeichnung gibt es bereits.“ (Eintrag in `src/lib/errors.ts`, falls noch nicht vorhanden).
+- [x] T050 [US-EA-14] (spec T18) `src/features/ea/stammdaten/StammdatenPage.tsx` (/ea/stammdaten, Loader `requireEaManage`): zwei Listen Referate und Gremien mit Bezeichnung, Reihenfolge, Status; „Neu“ und „Bearbeiten“ (Bezeichnung, Reihenfolge, aktiv) per Insert/Update auf `ea_referate`/`ea_gremien`; Unique-Verletzung `ea_referate_name_key`/`ea_gremien_name_key` → „Diese Bezeichnung gibt es bereits.“ (Eintrag in `src/lib/errors.ts`, falls noch nicht vorhanden).
 
 ---
 
