@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 24.10.2026 · Version 5.4.1
+Stand: 24.10.2026 · Version 5.5
+Änderungen v5.5: Anwesenheitserfassung: Spec v0.5 Ready; Übergaben an Administration (A9) und Gruppen (G6–G9) erledigt.
 Änderungen v5.4.1: Gruppen: Wortlaut der Ablehnung bei zweiter Trainingszeit am selben Wochentag festgelegt.
 Änderungen v5.4: Gruppen: Übergabe aus der Anwesenheitserfassung (uebergabe-gruppen.md v1.0, eine Trainingszeit je Wochentag) eingearbeitet (spec.md GR v0.3); drei Detailfragen offen.
 Änderungen v5.3: Gruppen: Übergabe aus der Administration (uebergabe-gruppen-v08.md, EZ-Pfade nicht mehr als todo); Administration: Korrektur des Nachtrags v0.8 (spec.md AD v0.9.5).
@@ -104,7 +105,7 @@ Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) ·
 
 ## EZ – Anwesenheitserfassung (Priorität 2b – nach Gruppen, vor Finanzen)
 
-Steckbrief: docs/specs/ez-einsaetze/00-steckbrief.md (Version 0.9, abgeschlossen) · Erhebung: 01-erhebung.md (Version 0.5, 24.10.2026) · Stories: 02-stories.md (Version 0.5, 24.10.2026; Training, Fahrten, Wettkampfbetreuung, Trainingslager, Arbeitseinsätze, Kurs, Tour, Absage) · Spec: spec.md (Version 0.4, Entwurf, 24.10.2026) · Übergaben: uebergabe-rechte-administration.md (v1.5, offen: A9), uebergabe-trainingszeiten.md (v1.3, erledigt), uebergabe-ehrenamtsmanagement.md (v1.3, erledigt), uebergabe-finanzen.md (v1.6, offen), uebergabe-gruppen.md (v1.0, offen)
+Steckbrief: docs/specs/ez-einsaetze/00-steckbrief.md (Version 0.9, abgeschlossen) · Erhebung: 01-erhebung.md (Version 0.5, 24.10.2026) · Stories: 02-stories.md (Version 0.6, 24.10.2026; Training, Fahrten, Wettkampfbetreuung, Trainingslager, Arbeitseinsätze, Kurs, Tour, Absage) · Spec: spec.md (Version 0.5, **Ready**, 24.10.2026) · Übergaben: uebergabe-rechte-administration.md (v1.6, erledigt), uebergabe-trainingszeiten.md (v1.3, erledigt), uebergabe-ehrenamtsmanagement.md (v1.3, erledigt), uebergabe-finanzen.md (v1.6, offen), uebergabe-gruppen.md (v1.1, erledigt)
 
 Keine Blocker vor der Spec. Kurs, Tour, Trainingslager und Absage:
 - **Übergabe aus der Planungshilfe Touren und Kurse (v1.2) eingearbeitet am 24.10.2026** in spec.md v0.2 und 02-stories.md v0.4 (US-EZ-20 bis US-EZ-23, R22–R27, `ez_events.tk_plan_id`, `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`; Umsetzung T19–T21 zusammen mit TK T13). Die Datei liegt in specs/tk-touren-kurse/ und wird dort im Chat Planungshilfe als erledigt markiert.
@@ -112,12 +113,13 @@ Keine Blocker vor der Spec. Kurs, Tour, Trainingslager und Absage:
 - [OFFEN] Doppelte Erfassung von Kurs und Tour (von Hand und später aus der Planungshilfe): nur Hinweis im Formular oder Warnung bei gleichem Referat, Datum und Einsatzart? (spec.md v0.2 Abschnitt 11)
 - [OFFEN] Lehreinheiten bei Kursen erfassen (hier oder aus der Planungshilfe; mit Finanzen).
 - Entschieden 24.10.2026 (Product Owner, Abgleich mit dem Forms-Formular): Training ohne Uhrzeit (R28); Beginn und Ende mehrtägiger Einsätze optional; mindestens eine Teilnehmer:in auch bei Fahrten, Trainingslager und Wettkampfbetreuung (R5); Kinder mit Vor- und Nachname (bestätigt); Einsatzart heißt Wettkampfbetreuung; kein Hilfe- oder Kontakthinweis; Erfassung durch Trainer:innen erst in Iteration 1 (Ablösung des Formulars dann).
-- Entschieden 24.10.2026 (Product Owner): Je Gruppe und Wochentag höchstens eine Trainingszeit; eine Gruppe kann an mehreren Tagen trainieren (z. B. Leistungssport). **Übergabe an Gruppen (offen, v1.0):** specs/ez-einsaetze/uebergabe-gruppen.md. Training ohne Trainingszeit am Wochentag mit Hinweis speicherbar; abweichende Dauer nur in der Bemerkung (vorläufig).
+- Entschieden 24.10.2026 (Product Owner): Je Gruppe und Wochentag höchstens eine Trainingszeit; eine Gruppe kann an mehreren Tagen trainieren (z. B. Leistungssport). **Übergabe an Gruppen (v1.1, erledigt):** specs/ez-einsaetze/uebergabe-gruppen.md, umgesetzt in Gruppen v0.3.1. Training ohne Trainingszeit am Wochentag mit Hinweis speicherbar; abweichende Dauer nur in der Bemerkung (vorläufig).
 - [OFFEN] Beginn und Ende mehrtägiger Einsätze und ihre Abrechnung – vom Product Owner noch einmal in Ruhe anzusehen (mit Finanzen).
 - Hinweis an Gruppen (24.10.2026, nur zur Kenntnis): Die Gruppenlisten der beiden Forms-Formulare weichen voneinander ab (z. B. „Gruppe 4“ / „Gruppe 4 Senioren“ und „Gruppe 4 Junioren“, „Gruppe 5a“, „Gruppe 10“); beim Import der Gruppen beachten.
 - Erledigt 24.10.2026: Q1 und Q2 aus dem Querschnitts-Check entschieden (siehe Abschnitt AD); Q1 betrifft die Anwesenheitserfassung nicht, Q2 bestätigt `ez_person_visible`.
 
-- Annahmen durchgegangen am 24.10.2026 (Product Owner, Chat Anwesenheitserfassung): alle bestätigt außer vier Änderungen – Wettkampfbetreuung mit einer oder mehreren Gruppen (R30); Referat bei Einsätzen ohne Gruppe änderbar (R19); ruhende und ausgeschiedene Dublettentreffer direkt wieder aktiv eintragen (R31, **Übergabe an die Administration v1.4, A9, offen**); bei mehreren eigenen Gruppen keine Vorauswahl (R18). Die neuen Annahmen der v0.3 sind ebenfalls bestätigt; Reaktivieren gilt auch referatsübergreifend (Product Owner 24.10.2026). Offen ist nur noch die technische Annahme zur Länge von `notice_version`.
+- **Spec v0.5 Ready (24.10.2026).** Die Umsetzung kann mit Spec Kit (plan.md, tasks.md) beginnen. Vor der Abnahme in TEST nötig: Administration T120 (Oberfläche EZ-Rechte) und T121 (Ausrollen nach TEST).
+- Annahmen durchgegangen am 24.10.2026 (Product Owner, Chat Anwesenheitserfassung): alle bestätigt außer vier Änderungen – Wettkampfbetreuung mit einer oder mehreren Gruppen (R30); Referat bei Einsätzen ohne Gruppe änderbar (R19); ruhende und ausgeschiedene Dublettentreffer direkt wieder aktiv eintragen (R31, **Übergabe an die Administration, A9, erledigt (spec.md AD Nachtrag v0.8.1/v0.8.2)**); bei mehreren eigenen Gruppen keine Vorauswahl (R18). Die neuen Annahmen der v0.3 sind ebenfalls bestätigt; Reaktivieren gilt auch referatsübergreifend (Product Owner 24.10.2026). Offen ist nur noch die technische Annahme zur Länge von `notice_version`.
 
 In der Spec oder später:
 - Entschieden 22.10.2026 (Product Owner, Chat Ehrenamtsmanagement): Information nach Art. 13 DSGVO beim Anlegen über ein Pflicht-Häkchen mit Link auf die Datenschutzhinweise; [OFFEN] Text und Link liefert der Product Owner.

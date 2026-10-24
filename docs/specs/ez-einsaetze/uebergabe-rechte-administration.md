@@ -1,7 +1,8 @@
 # Übergabe an die Administration: Rechte, Personen und Orte für die Anwesenheitserfassung
 
-Stand: 24.10.2026 · Version 1.5 · Von: Anwesenheitserfassung (EZ) · An: Administration (AD) · Status: **offen (A9)**; A1–A8 erledigt (eingearbeitet am 22.10.2026)
+Stand: 24.10.2026 · Version 1.6 · Von: Anwesenheitserfassung (EZ) · An: Administration (AD) · Status: **erledigt** (A1–A8 eingearbeitet am 22.10.2026, A9 am 24.10.2026)
 Quelle: specs/ez-einsaetze/00-steckbrief.md (v0.6), 01-erhebung.md (v0.2)
+Änderungen v1.6: Als erledigt markiert. A9 eingearbeitet in specs/ad-administration/spec.md v0.9.4/v0.9.5 (Nachtrag v0.8.1/v0.8.2, R45a; zusätzlich Personen ohne Ehrenamtsstatus) und umgesetzt (Migration `20261026000400_ad_ez_create.sql`).
 Änderungen v1.5: A9 gilt auch referatsübergreifend (Product Owner 24.10.2026).
 Änderungen v1.4: Nachtrag A9 – ruhende und ausgeschiedene Personen beim Arbeitseinsatz direkt wieder aktiv eintragen (Product Owner 24.10.2026; spec.md EZ v0.3 R31). Widerspricht der Annahme bei `ea_activate_person` in spec.md AD v0.8 („aus der Anwesenheitserfassung … nicht reaktiviert“).
 Änderungen v1.3: Als erledigt markiert. A1–A5 und A8 eingearbeitet in specs/ad-administration/spec.md v0.8 (R30 erweitert, R43–R45, Tabelle `ad_locations`, Funktionen `ez_person_visible`, `ea_person_names`, `ea_search_active_persons`, erweitertes `ea_create_volunteer`, Tasks T50–T58); A6–A7 dort in Abschnitt 11 für Iteration 1 vorgemerkt. Auf Wunsch des Product Owners direkt aus dem Chat Anwesenheitserfassung eingearbeitet.
@@ -24,7 +25,7 @@ Die Anwesenheitserfassung braucht Rechte je Referat, einen eigenen Sichtbarkeits
 | A8 | Stammdaten Orte, gepflegt vom Admin | `ad_locations`, R43, Screens /ad/orte, T51, T55 |
 | A6 | Reichweite „Gruppe“ (Iteration 1) | Abschnitt 11, vorgemerkt |
 | A7 | Rechtevorlage Gruppenleitung (Iteration 1) | Abschnitt 11, vorgemerkt |
-| A9 | **Neu v1.4 (offen):** `ea_activate_person` um den Pfad der Anwesenheitserfassung erweitern, wie `ea_create_volunteer` (R45): erlaubt auch mit `ez_can_write(p_referat)` bzw. Schreibrecht EZ im Referat, wenn die Eigenschaftsart die Funktion (`system_key = 'function'`) mit Wert Helfer:in ist; Person mit Ehrenamtsstatus „ruhend“ oder „ausgeschieden“, auch wenn sie zuletzt in einem anderen Referat aktiv war (Product Owner 24.10.2026); setzt Status „aktiv“ mit Historie und legt die Funktion mit Bezug auf das Referat an. Aufruf aus `ez_reactivate_helper` (spec.md EZ v0.3). Die Annahme in spec.md AD v0.8 zu `ea_activate_person` („aus der Anwesenheitserfassung … nicht reaktiviert“) entfällt. | – (Nachtrag v0.8, vor T53) |
+| A9 | **Neu v1.4 (offen):** `ea_activate_person` um den Pfad der Anwesenheitserfassung erweitern, wie `ea_create_volunteer` (R45): erlaubt auch mit `ez_can_write(p_referat)` bzw. Schreibrecht EZ im Referat, wenn die Eigenschaftsart die Funktion (`system_key = 'function'`) mit Wert Helfer:in ist; Person mit Ehrenamtsstatus „ruhend“ oder „ausgeschieden“, auch wenn sie zuletzt in einem anderen Referat aktiv war (Product Owner 24.10.2026); setzt Status „aktiv“ mit Historie und legt die Funktion mit Bezug auf das Referat an. Aufruf aus `ez_reactivate_helper` (spec.md EZ v0.3). Die Annahme in spec.md AD v0.8 zu `ea_activate_person` („aus der Anwesenheitserfassung … nicht reaktiviert“) entfällt. | spec.md AD v0.9.4 (Nachtrag v0.8.1, R45a), umgesetzt mit T53 |
 
 ## Folgen für die Anwesenheitserfassung
 
