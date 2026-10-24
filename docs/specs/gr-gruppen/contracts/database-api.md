@@ -27,9 +27,9 @@ Konventionen: Aufruf per `supabase.rpc('<name>', {…})`; Datum als `YYYY-MM-DD`
 |---|---|---|
 | `gr_save_group(p_id uuid, p_name text, p_referat_id uuid)` | uuid | `GR_FORBIDDEN`, `GR_GROUP_FIELDS_REQUIRED`, `GR_GROUP_NAME_TAKEN`, `GR_REFERAT_INACTIVE`, `GR_GROUP_DISSOLVED`, `GR_GROUP_NOT_FOUND` |
 | `gr_dissolve_group(p_id uuid, p_dissolved_on date)` | jsonb `{"starts_after_dissolution": [{"kind": "function"\|"training_time", "id"}]}` | `GR_FORBIDDEN`, `GR_GROUP_HAS_MEMBERS`, `GR_GROUP_HAS_PENDING`, `GR_DATE_IN_FUTURE`, `GR_GROUP_DISSOLVED` |
-| `gr_add_training_time(p_group uuid, p_weekday smallint, p_starts time, p_ends time, p_valid_from date, p_valid_to date default null)` | jsonb `{"id", "overlap"}` | `GR_FORBIDDEN`, `GR_TRAINING_TIME_REQUIRED`, `GR_TRAINING_TIME_END`, `GR_VALID_TO_BEFORE_FROM`, `GR_GROUP_DISSOLVED` |
-| `gr_change_training_time(p_id uuid, p_from date, p_weekday smallint, p_starts time, p_ends time)` | jsonb `{"id", "overlap"}` | wie oben, `GR_CHANGE_DATE_INVALID` |
-| `gr_end_training_time(p_id uuid, p_valid_to date)` | void | `GR_FORBIDDEN`, `GR_VALID_TO_BEFORE_FROM`, `GR_GROUP_DISSOLVED` |
+| `gr_add_training_time(p_group uuid, p_weekday smallint, p_starts time, p_ends time, p_valid_from date, p_valid_to date default null)` | jsonb `{"id"}` (v0.3 ohne `overlap`) | `GR_FORBIDDEN`, `GR_TRAINING_TIME_REQUIRED`, `GR_TRAINING_TIME_END`, `GR_VALID_TO_BEFORE_FROM`, `GR_GROUP_DISSOLVED` |
+| `gr_change_training_time(p_id uuid, p_from date, p_weekday smallint, p_starts time, p_ends time)` | jsonb `{"id"}` | wie oben, `GR_CHANGE_DATE_INVALID` |
+| `gr_end_training_time(p_id uuid, p_valid_to date)` | void | `GR_FORBIDDEN`, `GR_VALID_TO_BEFORE_FROM`, `GR_TRAINING_TIME_WEEKDAY_EXISTS`, `GR_GROUP_DISSOLVED` |
 
 Hinweis `gr_dissolve_group`: spec.md 2.3 nennt Rückgabe `void` und zugleich die Rückgabe „beginnt nach Auflösung“ im Bericht. Umgesetzt als jsonb mit leerer Liste im Normalfall; die Oberfläche zeigt die Liste nur, wenn sie nicht leer ist [ANNAHME Umsetzung, kommt laut Spec praktisch nicht vor].
 

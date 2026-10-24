@@ -18,7 +18,7 @@ npm run gr:import -- --file <pfad> --run [--import-date TT.MM.JJJJ]
 
 1. Excel mit `exceljs` lesen; je Tabellenblatt eine Gruppe (F1 Name, C1 Referat, H1 Trainingszeit).
 2. Zeilen ab der ersten Datenzeile [ANNAHME: Zeile 3] in Spalten B–X nach spec.md 7 zerlegen; Namen der Erziehungsberechtigten am letzten Leerzeichen teilen; Telefon nach Vorwahl mobil/Festnetz.
-3. Trainingszeit-Freitext nach den Mustern aus spec.md 7 in Wochentag, Beginn, Ende zerlegen; nicht eindeutig → Warnung, Gruppe ohne Trainingszeit.
+3. Trainingszeit-Freitext nach den Mustern aus spec.md 7 in Wochentag, Beginn, Ende zerlegen; nicht eindeutig → Warnung, Gruppe ohne Trainingszeit. Zwei Zeiten am selben Wochentag → für diesen Wochentag keine Trainingszeit, Warnung im Prüfbericht beim Tabellenblatt (spec.md v0.3 Abschnitt 7, G8) [OFFEN spec.md 11: nur dieser Wochentag oder ganze Gruppe ohne Trainingszeit].
 4. Strukturierte Zeilen an `gr_import_groups(p_rows, p_import_date, p_dry_run)` übergeben; die Datenbank prüft und schreibt alles in einer Transaktion.
 5. Bericht `<datei>.pruefbericht.md` bzw. `<datei>.abschlussbericht.md` neben der Excel schreiben.
 

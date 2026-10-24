@@ -111,6 +111,10 @@ select is(public.gr_group_roster('c0000000-0000-4000-8000-000000000002', date '2
   '[{"starts_at": "18:00", "ends_at": "19:30"}]'::jsonb, 'Test 2 an einem Mittwoch 2026');
 select is(public.gr_group_roster('c0000000-0000-4000-8000-000000000003', public.gr_today()) -> 'training_times',
   '[]'::jsonb, 'leere Liste statt Fehler');
+select is((select max(jsonb_array_length(public.gr_group_roster(g.id, d::date) -> 'training_times'))
+             from public.gr_groups g, generate_series(date '2025-01-01', public.gr_today(), interval '1 day') d
+            where g.dissolved_on is null),
+  1, 'höchstens eine Trainingszeit je Tag (R19, Übergabe EZ G9)');
 select throws_ok($$ select public.gr_group_roster('c0000000-0000-4000-8000-000000000004', public.gr_today()) $$,
   'P0001', 'GR_GROUP_NOT_FOUND', 'aufgelöste Gruppe');
 select throws_ok($$ select public.gr_group_roster('c0000000-0000-4000-8000-0000000000ee', public.gr_today()) $$,

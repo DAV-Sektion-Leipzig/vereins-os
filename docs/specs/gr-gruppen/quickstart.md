@@ -42,7 +42,7 @@ Frontend über die Cloudflare-Vorschau des jeweiligen Branches. Testzugänge: Ad
 |---|---|---|---|---|
 | 1 | US-GR-01, 02 | alle | /gr öffnen | Geschäftsstelle und Admin sehen die Übersicht; Vorstand, Rita, Kim → /kein-zugriff ohne Datenabfrage |
 | 2 | US-GR-02 | Geschäftsstelle | Übersicht, Filter Referat, „aufgelöst“, 375 px | Zähler „Teilnahme klären“ (Ben), „Kein Notfallkontakt“ (Ben), „Aufnahme offen“ (Paula); Karten ohne horizontales Scrollen |
-| 3 | US-GR-03, 04, 18 | Geschäftsstelle | Gruppe anlegen (doppelter Name, inaktives Referat); Trainingszeit „Ändern ab“; Gruppe mit Teilnehmer:innen auflösen | Meldungen R1, R21, R19, R9; Auflösen einer leeren Gruppe beendet Funktionen und Trainingszeiten |
+| 3 | US-GR-03, 04, 18 | Geschäftsstelle | Gruppe anlegen (doppelter Name, inaktives Referat); Trainingszeit „Ändern ab“; zweite Trainingszeit am selben Wochentag (wird abgelehnt), zweiter Wochentag (wird gespeichert); Gruppe mit Teilnehmer:innen auflösen | Meldungen R1, R21, R19, R9; Auflösen einer leeren Gruppe beendet Funktionen und Trainingszeiten |
 | 4 | US-GR-05, 15 | Geschäftsstelle, Admin | Jugendgruppe Test 1 öffnen; E-Mail-Adressen kopieren | Admin ohne Alter und Geburtsdatum nur, wenn ohne Lesestufe; Janas Adresse genau einmal |
 | 5 | US-GR-06–10, 12 | Geschäftsstelle | Kind aufnehmen: Dublette „Mia Fiktiv“; Abbruch nach Schritt 2; fortsetzen; Vertrag mit ungültiger IBAN, doppelter Mandatsreferenz | Dublettendialog mit „Vorhandene Person übernehmen“; Person unter „Aufnahmen offen“; Meldungen R5, R6, R27 |
 | 6 | US-GR-11 | Geschäftsstelle | Vertrag von Mia kündigen (Rückfrage „Endet auch die Teilnahme …?“); Folgevertrag für Ben | Status „gekündigt zum …“; Ben ohne Hinweis „Teilnahme klären“ |

@@ -1,5 +1,5 @@
 -- US-GR-03, US-GR-04, US-GR-18 (GR spec T1, T3, T10): Gruppen anlegen, ändern, auflösen; Trainingszeiten
--- (R1, R9, R18, R19, R21, A12, A13) mit dem Seed aus GR spec.md Abschnitt 9.
+-- (R1, R9, R18, R19 v0.3, R21, A12, A13) mit dem Seed aus GR spec.md Abschnitt 9.
 begin;
 create extension if not exists pgtap with schema extensions;
 select * from no_plan();
@@ -71,11 +71,23 @@ select throws_ok($$ select public.gr_add_training_time('c0000000-0000-4000-8000-
 select throws_ok($$ select public.gr_add_training_time('c0000000-0000-4000-8000-000000000003', 1::smallint, '17:00', '18:00',
                                                         public.gr_today(), public.gr_today() - 1) $$,
   'P0001', 'GR_VALID_TO_BEFORE_FROM', '„gültig bis“ nicht vor „gültig von“ (R18)');
-select is((public.gr_add_training_time('c0000000-0000-4000-8000-000000000001', 2::smallint, '17:00', '18:30',
-                                       public.gr_today()) ->> 'overlap')::boolean, true,
-  'Überschneidung mit Di 16:30–18:00 wird gemeldet, gespeichert wird trotzdem (R19)');
-select is((public.gr_add_training_time('c0000000-0000-4000-8000-000000000001', 5::smallint, '17:00', '18:30',
-                                       public.gr_today()) ->> 'overlap')::boolean, false, 'keine Überschneidung');
+select throws_ok($$ select public.gr_add_training_time('c0000000-0000-4000-8000-000000000001', 2::smallint, '17:00', '18:30',
+                                                        public.gr_today()) $$,
+  'P0001', 'GR_TRAINING_TIME_WEEKDAY_EXISTS', 'zweite Trainingszeit am Dienstag abgelehnt (R19)');
+select throws_ok($$ select public.gr_add_training_time('c0000000-0000-4000-8000-000000000001', 2::smallint, '10:00', '11:00',
+                                                        public.gr_today() + 400) $$,
+  'P0001', 'GR_TRAINING_TIME_WEEKDAY_EXISTS', 'auch ohne Überschneidung der Uhrzeit und mit späterem Beginn (R19)');
+select throws_ok($$ select public.gr_add_training_time('c0000000-0000-4000-8000-000000000002', 3::smallint, '10:00', '11:00',
+                                                        date '2025-06-01', date '2025-06-30') $$,
+  'P0001', 'GR_TRAINING_TIME_WEEKDAY_EXISTS', 'auch in der Vergangenheit (Mi 2025 von Test 2)');
+select is((select count(*)::int from public.gr_training_times where group_id = 'c0000000-0000-4000-8000-000000000001'), 2,
+  'nichts gespeichert');
+select is(public.gr_add_training_time('c0000000-0000-4000-8000-000000000001', 5::smallint, '17:00', '18:30',
+                                      public.gr_today()) - 'id', '{}'::jsonb,
+  'zweiter Wochentag erlaubt; Rückgabe nur id (ohne overlap)');
+select lives_ok($$ select public.gr_add_training_time('c0000000-0000-4000-8000-000000000002', 3::smallint, '10:00', '11:00',
+                                                       date '2024-01-01', date '2024-12-31') $$,
+  'gleicher Wochentag vor der bisherigen Gültigkeit erlaubt');
 
 select throws_ok($$ select public.gr_change_training_time('c1000000-0000-4000-8000-000000000001', date '2025-09-01',
                                                            2::smallint, '16:00', '17:30') $$,
@@ -83,8 +95,11 @@ select throws_ok($$ select public.gr_change_training_time('c1000000-0000-4000-80
 select throws_ok($$ select public.gr_change_training_time('c1000000-0000-4000-8000-000000000003', date '2026-02-01',
                                                            3::smallint, '16:00', '17:30') $$,
   'P0001', 'GR_CHANGE_DATE_INVALID', '„Ändern ab“ nicht nach „gültig bis“ (R19)');
+select throws_ok($$ select public.gr_change_training_time('c1000000-0000-4000-8000-000000000001', date '2026-03-01',
+                                                           4::smallint, '16:00', '17:30') $$,
+  'P0001', 'GR_TRAINING_TIME_WEEKDAY_EXISTS', '„Ändern ab“ auf den belegten Donnerstag abgelehnt (R19)');
 select lives_ok($$ select public.gr_change_training_time('c1000000-0000-4000-8000-000000000001', date '2026-03-01',
-                                                          2::smallint, '16:00', '17:30') $$, '„Ändern ab“');
+                                                          2::smallint, '16:00', '17:30') $$, '„Ändern ab“ am selben Wochentag');
 select is((select valid_to from public.gr_training_times where id = 'c1000000-0000-4000-8000-000000000001'), date '2026-02-28',
   'alte Trainingszeit endet am Vortag');
 select results_eq(
@@ -93,6 +108,11 @@ select results_eq(
   $$ values (time '16:00', time '17:30', null::date) $$,
   'neue Trainingszeit ab dem Datum mit altem „gültig bis“');
 
+select lives_ok($$ select public.gr_change_training_time('c1000000-0000-4000-8000-000000000003', date '2025-06-01',
+                                                          1::smallint, '17:00', '18:30') $$,
+  '„Ändern ab“ auf einen freien Wochentag');
+select throws_ok($$ select public.gr_end_training_time('c1000000-0000-4000-8000-000000000003', date '2026-02-01') $$,
+  'P0001', 'GR_TRAINING_TIME_WEEKDAY_EXISTS', '„gültig bis“ nicht in die spätere Mittwochszeit verlängern (R19)');
 select lives_ok($$ select public.gr_end_training_time('c1000000-0000-4000-8000-000000000002', date '2026-12-31') $$, 'beenden');
 select lives_ok($$ select public.gr_end_training_time('c1000000-0000-4000-8000-000000000002', date '2027-06-30') $$,
   '„gültig bis“ ändern');
@@ -102,6 +122,12 @@ select throws_ok($$ select public.gr_end_training_time('c1000000-0000-4000-8000-
 select pg_temp.as_owner();
 select throws_ok($$ update public.gr_training_times set weekday = 5 where id = 'c1000000-0000-4000-8000-000000000002' $$,
   'P0001', 'GR_TRAINING_TIME_LOCKED', 'Kernfelder gesperrt, auch für den Eigentümer (A13)');
+select throws_ok($$ insert into public.gr_training_times (group_id, weekday, starts_at, ends_at, valid_from)
+                    values ('c0000000-0000-4000-8000-000000000001', 4, '10:00', '11:00', date '2027-01-01') $$,
+  '23P01', null, 'Ausschluss-Constraint sichert R19 auch beim direkten Schreiben');
+select hasnt_function('public', 'gr_training_time_overlaps', array['uuid'], 'Hinweisfunktion entfernt');
+select ok(not has_function_privilege('authenticated',
+  'public.gr_training_time_weekday_taken(uuid, smallint, date, date, uuid)', 'EXECUTE'), 'Prüffunktion nur intern');
 
 -- Auflösen (R9, A12)
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
