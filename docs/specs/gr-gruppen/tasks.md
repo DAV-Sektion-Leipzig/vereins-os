@@ -248,7 +248,7 @@ description: "Tasks für das Modul Gruppen (GR)"
 - [x] T054 [P] [US-GR-19] (spec T20) `supabase/tests/database/480_gr_read_functions.test.sql`: `gr_group_roster` liefert an jedem Tag seit 01.01.2025 höchstens einen Eintrag in `training_times` (G9).
 - [x] T055 [US-GR-18] (spec T20) `supabase/migrations/20261027000100_gr_training_time_weekday.sql` nach R-GR-17; Seed geprüft (keine Änderung nötig).
 - [ ] T056 [US-GR-18] (spec T20, Branch `gr-trainingszeit-dialog` nach dem Merge von T057) `src/features/gr/gruppen/TrainingszeitDialog.tsx`: Hinweis bei `overlap` entfernen; `src/lib/errors.ts`: `GR_TRAINING_TIME_WEEKDAY_EXISTS` mit dem Wortlaut aus contracts/error-codes.md; Merge durch den Product Owner.
-- [ ] T057 PR `gr-trainingszeit-wochentag` (Migration, pgTAP, Umsetzungsdateien); Auto-Merge nach grünen Checks; danach Migration nach TEST, vorher lesende Prüfung auf Verstöße.
+- [x] T057 PR `gr-trainingszeit-wochentag` (#31) (Migration, pgTAP, Umsetzungsdateien); Auto-Merge nach grünen Checks; danach Migration nach TEST, vorher lesende Prüfung auf Verstöße. Erledigt 24.10.2026: keine Verstöße; Migration mit den AD-Migrationen `20261026000100`–`0400` in TEST, Seed nachgezogen.
 
 ---
 
