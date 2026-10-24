@@ -47,6 +47,18 @@ import { PersonNeuPage } from '@/features/ea/aktive/PersonNeuPage'
 import { EaLayout } from '@/features/ea/EaLayout'
 import { loadGremien } from '@/features/ea/gremien/data'
 import { GremienPage } from '@/features/ea/gremien/GremienPage'
+import { loadGrAccess, requireGrEdit } from '@/features/gr/access'
+import { AufnahmenPage } from '@/features/gr/aufnahme/AufnahmenPage'
+import { AufnahmePage } from '@/features/gr/aufnahme/AufnahmePage'
+import { loadAdmission, loadPendingAdmissions } from '@/features/gr/aufnahme/data'
+import { GrLayout } from '@/features/gr/GrLayout'
+import { loadGroupOverview } from '@/features/gr/gruppen/data'
+import { loadGroupDetail } from '@/features/gr/gruppen/detail'
+import { loadPersonPage } from '@/features/gr/personen/data'
+import { PersonPage } from '@/features/gr/personen/PersonPage'
+import { GruppeDetailPage } from '@/features/gr/gruppen/GruppeDetailPage'
+import { GruppeNeuPage } from '@/features/gr/gruppen/GruppeFormular'
+import { GruppenPage } from '@/features/gr/gruppen/GruppenPage'
 import { loadStammdaten } from '@/features/ea/stammdaten/data'
 import { StammdatenPage } from '@/features/ea/stammdaten/StammdatenPage'
 import { KeinZugriffPage } from '@/features/start/KeinZugriffPage'
@@ -129,6 +141,28 @@ export const router = createBrowserRouter([
           { path: 'qualifikationsarten/:id', loader: qualificationTypeLoader('EA'), element: <QualifikationsartFormular basePath="/ea/qualifikationsarten" /> },
           { path: 'stammdaten', loader: loadStammdaten, element: <StammdatenPage /> },
           { path: '*', loader: () => redirect('/ea/aktive') },
+        ],
+      },
+      {
+        // GR mit GR ≥ lesen; sonst /kein-zugriff ohne Datenabfrage (GR spec.md 3, contracts/routes.md).
+        // Seiten folgen je Story auf eigenen Branches (plan.md „Branches“); bis dahin Platzhalter.
+        id: 'gr',
+        path: 'gr',
+        loader: loadGrAccess,
+        element: <GrLayout />,
+        handle: { moduleName: 'Gruppen' } satisfies RouteHandle,
+        children: [
+          { index: true, loader: loadGroupOverview, element: <GruppenPage /> },
+          { path: 'aufnahmen', loader: loadPendingAdmissions, element: <AufnahmenPage /> },
+          { path: 'gruppen/neu', loader: requireGrEdit, element: <GruppeNeuPage /> },
+          { path: 'gruppen/:id', loader: loadGroupDetail, element: <GruppeDetailPage /> },
+          {
+            path: 'gruppen/:id/aufnehmen',
+            loader: async (args) => (await requireGrEdit(), loadAdmission(args)),
+            element: <AufnahmePage />,
+          },
+          { path: 'personen/:id', loader: loadPersonPage, element: <PersonPage /> },
+          { path: '*', loader: () => redirect('/gr') },
         ],
       },
     ],

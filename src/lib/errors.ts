@@ -59,6 +59,47 @@ export const MESSAGES = {
   renewInvalid:
     'Nur aktuelle Lizenzen und Qualifikationen können verlängert werden; das neue Datum muss nach dem bisherigen liegen.',
   createReferatRequired: 'Bitte eine Funktion oder ein Amt in deinem Referat angeben.',
+  // Gruppen (docs/specs/gr-gruppen/contracts/error-codes.md)
+  grGroupNotFound: 'Gruppe nicht gefunden.',
+  grGroupDissolved: 'Die Gruppe ist aufgelöst und kann nicht mehr geändert werden.',
+  grGroupNameTaken: 'Eine Gruppe mit diesem Namen gibt es bereits.',
+  grGroupFieldsRequired: 'Bitte Name und Referat angeben.',
+  grReferatInactive: 'Dieses Referat ist nicht mehr aktiv.',
+  grGroupHasMembers: 'Die Gruppe hat noch aktive Teilnehmer:innen.',
+  grGroupHasPending: 'Die Gruppe hat noch offene Aufnahmen.',
+  grDateInFuture: 'Das Datum darf nicht in der Zukunft liegen.',
+  grTrainingTimeRequired: 'Bitte Wochentag, Beginn, Ende und ‚gültig von‘ angeben.',
+  grTrainingTimeEnd: 'Das Ende muss nach dem Beginn liegen.',
+  grChangeDateInvalid: 'Das Datum muss nach ‚gültig von‘ und innerhalb der Gültigkeit der bisherigen Trainingszeit liegen.',
+  grTrainingTimeLocked: 'Wochentag und Uhrzeit können nicht geändert werden. Bitte ‚Ändern ab‘ verwenden.',
+  grPersonInvalid: 'Bitte eine vorhandene Person wählen oder eine neue anlegen.',
+  grBirthDateForbidden: 'Das Geburtsdatum kann nur die Geschäftsstelle erfassen.',
+  grParticipantFieldsRequired: 'Bitte Vorname, Nachname, Geburtsdatum und Adresse angeben.',
+  grPendingExists: 'Für diese Person gibt es schon eine offene Aufnahme.',
+  grAlreadyMember: 'Diese Person ist bereits in der Gruppe.',
+  grGuardianFieldsRequired: 'Bitte Vorname, Nachname und Adresse angeben.',
+  grGuardianLimit: 'Es können höchstens zwei erziehungsberechtigte Personen angegeben werden.',
+  grGuardianExists: 'Diese Person ist bereits erziehungsberechtigt.',
+  grGuardianIsHolder: 'Diese Person ist Vertragsinhaber:in. Bitte zuerst den Vertrag ändern.',
+  grContactReachability: 'Bitte Telefon oder E-Mail angeben.',
+  grEmergencyExists: 'Diese Person ist bereits Notfallkontakt.',
+  grOrderInvalid: 'Die Reihenfolge ist unvollständig. Bitte neu laden.',
+  grContractRequired: 'Eine Teilnahme kann nur mit einem aktiven Vertrag angelegt werden.',
+  grContractFieldsRequired: 'Bitte alle Vertragsangaben ausfüllen.',
+  grHolderInvalid: 'Vertragsinhaber:in muss eine erziehungsberechtigte Person sein.',
+  grMandateTaken: 'Diese Mandatsreferenz ist bereits vergeben.',
+  grMandateFormat:
+    'Die Mandatsreferenz darf höchstens 35 Zeichen haben und nur Buchstaben, Ziffern und + ? / - : ( ) . , \' enthalten.',
+  grTextTooLong: 'Der Text ist zu lang (höchstens <n> Zeichen).',
+  grAmountInvalid: 'Der Betrag muss größer als 0 sein.',
+  grContractExists: 'Für diese Teilnahme gibt es bereits einen Vertrag.',
+  grContractEndBeforeStart: 'Das Vertragsende darf nicht vor dem Vertragsbeginn liegen.',
+  grLeftBeforeJoined: '‚Teilnahme bis‘ darf nicht vor dem Eintrittsdatum liegen.',
+  grConsentDateRequired: 'Bitte das Datum angeben.',
+  grConsentUnchanged: 'Der Wert ist bereits so gespeichert.',
+  grHealthConsentRequired: 'Bitte zuerst die Einwilligung der Erziehungsberechtigten erfassen.',
+  grHealthNoteInvalid: 'Bitte einen Text mit höchstens 2000 Zeichen eingeben.',
+  grFunctionOverlap: 'Diese Person hat diese Funktion in der Gruppe bereits.',
   forbidden: 'Für diesen Bereich hast du keine Rechte.',
   unexpected: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
   loginFailed: 'Anmeldung fehlgeschlagen. Bitte E-Mail-Adresse und Passwort prüfen.',
@@ -118,6 +159,49 @@ const CODE_MESSAGES: Record<string, string> = {
   AD_QUALIFICATION_KIND: MESSAGES.qualificationKind,
   AD_FORBIDDEN: MESSAGES.forbidden,
   EA_CONFIDENTIAL_FORBIDDEN: MESSAGES.forbidden,
+  GR_FORBIDDEN: MESSAGES.forbidden,
+  GR_ROSTER_FORBIDDEN: MESSAGES.forbidden,
+  GR_GROUP_NOT_FOUND: MESSAGES.grGroupNotFound,
+  GR_GROUP_DISSOLVED: MESSAGES.grGroupDissolved,
+  GR_GROUP_NAME_TAKEN: MESSAGES.grGroupNameTaken,
+  GR_GROUP_FIELDS_REQUIRED: MESSAGES.grGroupFieldsRequired,
+  GR_REFERAT_INACTIVE: MESSAGES.grReferatInactive,
+  GR_GROUP_HAS_MEMBERS: MESSAGES.grGroupHasMembers,
+  GR_GROUP_HAS_PENDING: MESSAGES.grGroupHasPending,
+  GR_DATE_IN_FUTURE: MESSAGES.grDateInFuture,
+  GR_TRAINING_TIME_REQUIRED: MESSAGES.grTrainingTimeRequired,
+  GR_TRAINING_TIME_END: MESSAGES.grTrainingTimeEnd,
+  GR_VALID_TO_BEFORE_FROM: MESSAGES.validRange,
+  GR_CHANGE_DATE_INVALID: MESSAGES.grChangeDateInvalid,
+  GR_TRAINING_TIME_LOCKED: MESSAGES.grTrainingTimeLocked,
+  GR_PERSON_INVALID: MESSAGES.grPersonInvalid,
+  GR_BIRTH_DATE_FORBIDDEN: MESSAGES.grBirthDateForbidden,
+  GR_PARTICIPANT_FIELDS_REQUIRED: MESSAGES.grParticipantFieldsRequired,
+  GR_PENDING_EXISTS: MESSAGES.grPendingExists,
+  GR_ALREADY_MEMBER: MESSAGES.grAlreadyMember,
+  GR_GUARDIAN_FIELDS_REQUIRED: MESSAGES.grGuardianFieldsRequired,
+  GR_GUARDIAN_LIMIT: MESSAGES.grGuardianLimit,
+  GR_GUARDIAN_EXISTS: MESSAGES.grGuardianExists,
+  GR_GUARDIAN_IS_HOLDER: MESSAGES.grGuardianIsHolder,
+  GR_CONTACT_REACHABILITY: MESSAGES.grContactReachability,
+  GR_EMERGENCY_EXISTS: MESSAGES.grEmergencyExists,
+  GR_ORDER_INVALID: MESSAGES.grOrderInvalid,
+  GR_CONTRACT_REQUIRED: MESSAGES.grContractRequired,
+  GR_CONTRACT_FIELDS_REQUIRED: MESSAGES.grContractFieldsRequired,
+  GR_HOLDER_INVALID: MESSAGES.grHolderInvalid,
+  GR_IBAN_INVALID: MESSAGES.ibanInvalid,
+  GR_MANDATE_TAKEN: MESSAGES.grMandateTaken,
+  GR_MANDATE_FORMAT: MESSAGES.grMandateFormat,
+  GR_TEXT_TOO_LONG: MESSAGES.grTextTooLong,
+  GR_AMOUNT_INVALID: MESSAGES.grAmountInvalid,
+  GR_CONTRACT_EXISTS: MESSAGES.grContractExists,
+  GR_CONTRACT_END_BEFORE_START: MESSAGES.grContractEndBeforeStart,
+  GR_LEFT_BEFORE_JOINED: MESSAGES.grLeftBeforeJoined,
+  GR_CONSENT_DATE_REQUIRED: MESSAGES.grConsentDateRequired,
+  GR_CONSENT_UNCHANGED: MESSAGES.grConsentUnchanged,
+  GR_HEALTH_CONSENT_REQUIRED: MESSAGES.grHealthConsentRequired,
+  GR_HEALTH_NOTE_INVALID: MESSAGES.grHealthNoteInvalid,
+  GR_FUNCTION_OVERLAP: MESSAGES.grFunctionOverlap,
 }
 
 // Hinweise: erfolgreicher Vorgang, keine Fehlermeldung
@@ -159,10 +243,13 @@ function asErrorLike(value: unknown): ErrorLike {
 
 /**
  * Setzt das detail des Datenbankfehlers in den Platzhalter ein: Feldname für „<Feld>“ (R35),
- * Grenzdatum für „<TT.MM.JJJJ>“ (EA_STATUS_DATE, R18 EA).
+ * Grenzdatum für „<TT.MM.JJJJ>“ (EA_STATUS_DATE, R18 EA), Höchstlänge für „<n>“ (GR_TEXT_TOO_LONG, R27 GR).
  */
 function withDetail(text: string, details: string): string {
-  return text.replace('<Feld>', details || 'Feld').replace('<TT.MM.JJJJ>', details || 'heute')
+  return text
+    .replace('<Feld>', details || 'Feld')
+    .replace('<TT.MM.JJJJ>', details || 'heute')
+    .replace('<n>', details || '…')
 }
 
 function findConstraint(text: string): string | undefined {

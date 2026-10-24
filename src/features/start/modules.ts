@@ -6,7 +6,7 @@ export type MyModule = { code: ModuleCode; name: string; level: Level }
 export type MyModulesResult = { modules: MyModule[]; failed: boolean }
 
 // Einstieg je umgesetztem Modul; Module ohne Eintrag erscheinen nicht (US-AD-05 AK1)
-export const MODULE_PATHS: Partial<Record<ModuleCode, string>> = { AD: '/ad', EA: '/ea' }
+export const MODULE_PATHS: Partial<Record<ModuleCode, string>> = { AD: '/ad', EA: '/ea', GR: '/gr' }
 
 async function fetchMyModules(): Promise<MyModulesResult> {
   const { data, error } = await supabase.rpc('ad_my_modules')
