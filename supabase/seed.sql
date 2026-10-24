@@ -10,6 +10,8 @@
 --   System-Eigenschaftsarten der Migration 20261024000100 (Auflösung über system_key, Ü3 nach
 --   docs/specs/ea-ehrenamt/uebergabe-administration.md). Eigenschaften e…01–e…24.
 --   Datumswerte der Personen 19–22 relativ zu current_date (EA spec.md Abschnitt 9).
+-- Abschnitt 8: Gruppen (GR spec.md Abschnitt 9) – Gruppen c…01–c…04, Personen a…23–a…32, Eigenschaften e…25–e…41,
+--   Testzugang b…32 (Kim Kinderjugend, Referent:in Kinder und Jugend).
 
 -- 1. Personen
 insert into public.ea_persons (id, first_name, last_name, kind) values
@@ -265,3 +267,235 @@ select v.id, v.person_id,
      null, null, date '2025-01-01', null)
   ) as v (id, person_id, system_key, type_id, field_values, referat, gremium, valid_from, valid_to)
 on conflict (id) do nothing;
+
+-- 8. Gruppen (GR spec.md Abschnitt 9): Gruppen c…01–c…04, Personen 23–32, Testzugang Kim Kinderjugend (b…32).
+-- Ohne Nutzerkontext; Datumswerte relativ zu current_date, damit Status und Stichtage stabil bleiben.
+-- Abweichung zur Tabelle in spec.md 9: Jana Fiktiv (24) ist zusätzlich erziehungsberechtigt für Sam Sechzehn (28),
+-- damit dessen Vertrag eine gültige Vertragsinhaber:in hat (R4).
+insert into public.gr_groups (id, name, referat_id, dissolved_on)
+select v.id, v.name, r.id, v.dissolved_on
+  from (values
+    ('c0000000-0000-4000-8000-000000000001'::uuid, 'Jugendgruppe Test 1', 'Kinder und Jugend', null::date),
+    ('c0000000-0000-4000-8000-000000000002'::uuid, 'Jugendgruppe Test 2', 'Kinder und Jugend', null::date),
+    ('c0000000-0000-4000-8000-000000000003'::uuid, 'Klettergruppe Test', 'Klettern', null::date),
+    ('c0000000-0000-4000-8000-000000000004'::uuid, 'Altgruppe Test', 'Kinder und Jugend', date '2025-06-30')
+  ) as v (id, name, referat, dissolved_on)
+  join public.ea_referate r on r.name = v.referat
+on conflict (id) do nothing;
+
+insert into public.gr_training_times (id, group_id, weekday, starts_at, ends_at, valid_from, valid_to) values
+  ('c1000000-0000-4000-8000-000000000001', 'c0000000-0000-4000-8000-000000000001', 2, '16:30', '18:00', date '2025-09-01', null),
+  ('c1000000-0000-4000-8000-000000000002', 'c0000000-0000-4000-8000-000000000001', 4, '17:00', '18:30', date '2025-09-01', null),
+  ('c1000000-0000-4000-8000-000000000003', 'c0000000-0000-4000-8000-000000000002', 3, '17:00', '18:30', date '2025-01-01', date '2025-12-31'),
+  ('c1000000-0000-4000-8000-000000000004', 'c0000000-0000-4000-8000-000000000002', 3, '18:00', '19:30', date '2026-01-01', null),
+  ('c1000000-0000-4000-8000-000000000005', 'c0000000-0000-4000-8000-000000000004', 1, '16:00', '17:30', date '2024-01-01', date '2025-06-30')
+on conflict (id) do nothing;
+
+insert into public.ea_persons (id, first_name, last_name, kind, created_in) values
+  ('a0000000-0000-4000-8000-000000000023', 'Mia', 'Fiktiv', 'human', 'GR'),
+  ('a0000000-0000-4000-8000-000000000024', 'Jana', 'Fiktiv', 'human', 'GR'),
+  ('a0000000-0000-4000-8000-000000000025', 'Ben', 'Fiktiv', 'human', 'GR'),
+  ('a0000000-0000-4000-8000-000000000026', 'Lars', 'Lehrer', 'human', 'GR'),
+  ('a0000000-0000-4000-8000-000000000027', 'Lea', 'Lehrer', 'human', 'GR'),
+  ('a0000000-0000-4000-8000-000000000028', 'Sam', 'Sechzehn', 'human', 'GR'),
+  ('a0000000-0000-4000-8000-000000000029', 'Erika', 'Oma', 'human', 'GR'),
+  ('a0000000-0000-4000-8000-000000000030', 'Paula', 'Plan', 'human', 'GR'),
+  ('a0000000-0000-4000-8000-000000000031', 'Tom', 'Ehemals', 'human', 'GR'),
+  ('a0000000-0000-4000-8000-000000000032', 'Kim', 'Kinderjugend', 'human', 'AD')
+on conflict (id) do nothing;
+
+-- Ehrenamtsstatus der Betreuer:innen (R29) und von Kim Kinderjugend
+with v (person_id, status, since) as (values
+  ('a0000000-0000-4000-8000-000000000026'::uuid, 'active'::public.ea_volunteer_status, date '2025-09-01'),
+  ('a0000000-0000-4000-8000-000000000028'::uuid, 'active'::public.ea_volunteer_status, date '2026-01-01'),
+  ('a0000000-0000-4000-8000-000000000031'::uuid, 'active'::public.ea_volunteer_status, date '2024-01-01'),
+  ('a0000000-0000-4000-8000-000000000032'::uuid, 'active'::public.ea_volunteer_status, date '2024-01-01')
+), upd as (
+  update public.ea_persons p
+     set volunteer_status = v.status, volunteer_status_since = v.since
+    from v
+   where p.id = v.person_id and p.volunteer_status is null
+  returning p.id, p.volunteer_status, p.volunteer_status_since
+)
+insert into public.ea_volunteer_status_history (person_id, status, valid_from)
+select id, volunteer_status, volunteer_status_since from upd;
+
+-- Personenangaben (Geburtsdatum, Kontaktdaten) und Amt von Kim
+insert into public.ea_properties (id, person_id, property_type_id, field_values, related_referat_id, valid_from)
+select v.id, v.person_id, t.id, v.field_values, (select r.id from public.ea_referate r where r.name = v.referat),
+       coalesce(v.valid_from, (v.field_values ->> 'date')::date)
+  from (values
+    -- Mia Fiktiv (23): 12 Jahre
+    ('e0000000-0000-4000-8000-000000000025'::uuid, 'a0000000-0000-4000-8000-000000000023'::uuid, 'birth_date'::text,
+     jsonb_build_object('date', to_char(current_date - interval '12 years' + interval '10 days', 'YYYY-MM-DD')),
+     null::text, null::date),
+    ('e0000000-0000-4000-8000-000000000026', 'a0000000-0000-4000-8000-000000000023', 'contact',
+     '{"street": "Testweg 1", "postal_code": "04109", "city": "Leipzig"}', null, date '2025-09-01'),
+    -- Jana Fiktiv (24)
+    ('e0000000-0000-4000-8000-000000000027', 'a0000000-0000-4000-8000-000000000024', 'contact',
+     '{"street": "Testweg 1", "postal_code": "04109", "city": "Leipzig", "phone_mobile": "0151 0000024",
+       "email": "jana.fiktiv@example.test"}', null, date '2025-01-15'),
+    -- Ben Fiktiv (25): 9 Jahre
+    ('e0000000-0000-4000-8000-000000000028', 'a0000000-0000-4000-8000-000000000025', 'birth_date',
+     jsonb_build_object('date', to_char(current_date - interval '9 years', 'YYYY-MM-DD')), null, null),
+    ('e0000000-0000-4000-8000-000000000029', 'a0000000-0000-4000-8000-000000000025', 'contact',
+     '{"street": "Testweg 1", "postal_code": "04109", "city": "Leipzig"}', null, date '2025-01-15'),
+    -- Lars Lehrer (26)
+    ('e0000000-0000-4000-8000-000000000030', 'a0000000-0000-4000-8000-000000000026', 'contact',
+     '{"street": "Beispielstraße 26", "postal_code": "04103", "city": "Leipzig", "email": "lars.lehrer@example.test"}',
+     null, date '2025-09-01'),
+    -- Lea Lehrer (27): 10 Jahre
+    ('e0000000-0000-4000-8000-000000000031', 'a0000000-0000-4000-8000-000000000027', 'birth_date',
+     jsonb_build_object('date', to_char(current_date - interval '10 years', 'YYYY-MM-DD')), null, null),
+    ('e0000000-0000-4000-8000-000000000032', 'a0000000-0000-4000-8000-000000000027', 'contact',
+     '{"street": "Beispielstraße 26", "postal_code": "04103", "city": "Leipzig"}', null, date '2025-09-01'),
+    -- Sam Sechzehn (28): 16 Jahre
+    ('e0000000-0000-4000-8000-000000000033', 'a0000000-0000-4000-8000-000000000028', 'birth_date',
+     jsonb_build_object('date', to_char(current_date - interval '16 years' - interval '30 days', 'YYYY-MM-DD')), null, null),
+    ('e0000000-0000-4000-8000-000000000034', 'a0000000-0000-4000-8000-000000000028', 'contact',
+     '{"street": "Musterplatz 28", "postal_code": "04105", "city": "Leipzig", "phone_mobile": "0151 0000028"}',
+     null, date '2025-01-15'),
+    -- Erika Oma (29): nur Telefon mobil
+    ('e0000000-0000-4000-8000-000000000035', 'a0000000-0000-4000-8000-000000000029', 'contact',
+     '{"phone_mobile": "0151 0000029"}', null, date '2025-09-01'),
+    -- Paula Plan (30): 8 Jahre
+    ('e0000000-0000-4000-8000-000000000036', 'a0000000-0000-4000-8000-000000000030', 'birth_date',
+     jsonb_build_object('date', to_char(current_date - interval '8 years', 'YYYY-MM-DD')), null, null),
+    ('e0000000-0000-4000-8000-000000000037', 'a0000000-0000-4000-8000-000000000030', 'contact',
+     '{"street": "Planweg 30", "postal_code": "04107", "city": "Leipzig"}', null, current_date),
+    -- Kim Kinderjugend (32): Amt Referent:in Kinder und Jugend
+    ('e0000000-0000-4000-8000-000000000038', 'a0000000-0000-4000-8000-000000000032', 'position',
+     '{"position": "Referent:in"}', 'Kinder und Jugend', date '2024-01-01')
+  ) as v (id, person_id, system_key, field_values, referat, valid_from)
+  join public.ea_property_types t on t.system_key = v.system_key
+on conflict (id) do nothing;
+
+-- Funktionen in Gruppen
+insert into public.ea_properties (id, person_id, property_type_id, field_values, related_group_id, valid_from, valid_to)
+select v.id, v.person_id, t.id, v.field_values, v.group_id, v.valid_from, v.valid_to
+  from (values
+    -- Lars Lehrer (26): Trainer Test 1
+    ('e0000000-0000-4000-8000-000000000039'::uuid, 'a0000000-0000-4000-8000-000000000026'::uuid,
+     '{"function": "Trainer:in"}'::jsonb, 'c0000000-0000-4000-8000-000000000001'::uuid, date '2025-09-01', null::date),
+    -- Sam Sechzehn (28): Helfer Test 1
+    ('e0000000-0000-4000-8000-000000000040', 'a0000000-0000-4000-8000-000000000028',
+     '{"function": "Helfer:in"}', 'c0000000-0000-4000-8000-000000000001', date '2026-01-01', null),
+    -- Tom Ehemals (31): Trainer Test 2 bis vor 60 Tagen
+    ('e0000000-0000-4000-8000-000000000041', 'a0000000-0000-4000-8000-000000000031',
+     '{"function": "Trainer:in"}', 'c0000000-0000-4000-8000-000000000002', date '2024-01-01', current_date - 60)
+  ) as v (id, person_id, field_values, group_id, valid_from, valid_to)
+  join public.ea_property_types t on t.system_key = 'group_function'
+on conflict (id) do nothing;
+
+-- Erziehungsberechtigte und Notfallkontakte
+insert into public.gr_guardians (child_person_id, guardian_person_id) values
+  ('a0000000-0000-4000-8000-000000000023', 'a0000000-0000-4000-8000-000000000024'),
+  ('a0000000-0000-4000-8000-000000000025', 'a0000000-0000-4000-8000-000000000024'),
+  ('a0000000-0000-4000-8000-000000000027', 'a0000000-0000-4000-8000-000000000026'),
+  ('a0000000-0000-4000-8000-000000000028', 'a0000000-0000-4000-8000-000000000024')
+on conflict (child_person_id, guardian_person_id) do nothing;
+
+insert into public.gr_emergency_contacts (child_person_id, contact_person_id, sort_order) values
+  ('a0000000-0000-4000-8000-000000000023', 'a0000000-0000-4000-8000-000000000024', 1),
+  ('a0000000-0000-4000-8000-000000000023', 'a0000000-0000-4000-8000-000000000029', 2)
+on conflict (child_person_id, contact_person_id) do nothing;
+
+-- Teilnahmen
+insert into public.gr_memberships (id, group_id, person_id, joined_on, left_on) values
+  ('c2000000-0000-4000-8000-000000000001', 'c0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000023', date '2025-09-01', null),
+  ('c2000000-0000-4000-8000-000000000002', 'c0000000-0000-4000-8000-000000000003', 'a0000000-0000-4000-8000-000000000023', date '2026-01-01', null),
+  ('c2000000-0000-4000-8000-000000000003', 'c0000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000025', date '2025-01-15', null),
+  ('c2000000-0000-4000-8000-000000000004', 'c0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000027', date '2025-09-01', current_date - 30),
+  ('c2000000-0000-4000-8000-000000000005', 'c0000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000028', date '2025-01-15', null)
+on conflict (id) do nothing;
+
+-- Verträge (Beispiel-IBAN, fiktive Mandatsreferenzen)
+insert into public.gr_contracts (id, membership_id, holder_person_id, starts_on, cancelled_on, ends_on,
+                                 account_holder, iban, mandate_reference, mandate_signed_on, purpose, monthly_amount) values
+  ('c3000000-0000-4000-8000-000000000001', 'c2000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000024',
+   date '2025-09-01', null, null, 'Jana Fiktiv', 'DE89370400440532013000', 'TEST-GR-23-1', date '2025-08-20',
+   'Beitrag Jugendgruppe Test 1 Mia Fiktiv', 25.00),
+  ('c3000000-0000-4000-8000-000000000002', 'c2000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000024',
+   date '2026-01-01', null, null, 'Jana Fiktiv', 'DE89370400440532013000', 'TEST-GR-23-2', date '2025-12-15',
+   'Beitrag Klettergruppe Test Mia Fiktiv', 30.00),
+  ('c3000000-0000-4000-8000-000000000003', 'c2000000-0000-4000-8000-000000000003', 'a0000000-0000-4000-8000-000000000024',
+   date '2025-01-15', current_date - 40, current_date - 10, 'Jana Fiktiv', 'DE89370400440532013000', 'TEST-GR-25-1',
+   date '2025-01-10', 'Beitrag Jugendgruppe Test 2 Ben Fiktiv', 25.00),
+  ('c3000000-0000-4000-8000-000000000004', 'c2000000-0000-4000-8000-000000000004', 'a0000000-0000-4000-8000-000000000026',
+   date '2025-09-01', current_date - 60, current_date - 30, 'Lars Lehrer', 'DE89370400440532013000', 'TEST-GR-27-1',
+   date '2025-08-25', 'Beitrag Jugendgruppe Test 1 Lea Lehrer', 25.00),
+  ('c3000000-0000-4000-8000-000000000005', 'c2000000-0000-4000-8000-000000000005', 'a0000000-0000-4000-8000-000000000024',
+   date '2025-01-15', null, null, 'Jana Fiktiv', 'DE89370400440532013000', 'TEST-GR-28-1', date '2025-01-10',
+   'Beitrag Jugendgruppe Test 2 Sam Sechzehn', 25.00)
+on conflict (id) do nothing;
+
+-- Offene Aufnahme: Paula Plan (30) in Test 2
+insert into public.gr_pending_admissions (person_id, group_id) values
+  ('a0000000-0000-4000-8000-000000000030', 'c0000000-0000-4000-8000-000000000002')
+on conflict (person_id) do nothing;
+
+-- Fotoerlaubnis, Einwilligung, Gesundheitsangaben (Ben: Widerruf nach „ja“, Text bleibt gespeichert)
+insert into public.gr_photo_consents (person_id, granted, effective_on)
+select 'a0000000-0000-4000-8000-000000000023', true, date '2025-09-01'
+ where not exists (select 1 from public.gr_photo_consents where person_id = 'a0000000-0000-4000-8000-000000000023');
+
+insert into public.gr_health_consents (person_id, granted, effective_on)
+select v.person_id, v.granted, v.effective_on
+  from (values
+    ('a0000000-0000-4000-8000-000000000023'::uuid, true, date '2025-09-01'),
+    ('a0000000-0000-4000-8000-000000000025'::uuid, true, date '2025-01-15'),
+    ('a0000000-0000-4000-8000-000000000025'::uuid, false, current_date - 5)
+  ) as v (person_id, granted, effective_on)
+ where not exists (select 1 from public.gr_health_consents c where c.person_id = v.person_id);
+
+insert into public.gr_health_notes (person_id, note) values
+  ('a0000000-0000-4000-8000-000000000023', 'Asthma (fiktiv), Spray im Rucksack.'),
+  ('a0000000-0000-4000-8000-000000000025', 'Allergie gegen Testpollen (fiktiv).')
+on conflict (person_id) do nothing;
+
+-- Testzugang Kim Kinderjugend: Vorlage Referent:in, Referat Kinder und Jugend (EZ-Rechte folgen mit AD v0.8, plan.md O2)
+insert into public.ad_accesses (person_id, login_email, status, is_emergency, last_invited_at, locked_at) values
+  ('a0000000-0000-4000-8000-000000000032', 'test.kiju@dav-leipzig.de', 'active', false, now() - interval '30 days', null)
+on conflict (person_id) do nothing;
+
+insert into public.ad_template_assignments (person_id, template_id)
+select 'a0000000-0000-4000-8000-000000000032', t.id
+  from public.ad_templates t
+ where t.name = 'Referent:in'
+   and not exists (
+     select 1 from public.ad_template_assignments ta
+      where ta.person_id = 'a0000000-0000-4000-8000-000000000032' and ta.template_id = t.id and ta.revoked_at is null
+   );
+
+insert into public.ad_assignment_referate (assignment_id, referat_id)
+select ta.id, r.id
+  from public.ad_template_assignments ta
+  join public.ad_templates t on t.id = ta.template_id and t.name = 'Referent:in'
+  join public.ea_referate r on r.name = 'Kinder und Jugend'
+ where ta.person_id = 'a0000000-0000-4000-8000-000000000032' and ta.revoked_at is null
+on conflict do nothing;
+
+insert into auth.users (
+  instance_id, id, aud, role, email, encrypted_password,
+  email_confirmed_at, invited_at, banned_until,
+  raw_app_meta_data, raw_user_meta_data,
+  confirmation_token, recovery_token, email_change_token_new, email_change,
+  created_at, updated_at
+)
+values (
+  '00000000-0000-0000-0000-000000000000', 'b0000000-0000-4000-8000-000000000032', 'authenticated', 'authenticated',
+  'test.kiju@dav-leipzig.de', extensions.crypt(:'test_password', extensions.gen_salt('bf')),
+  now(), now() - interval '30 days', null,
+  '{"provider": "email", "providers": ["email"]}'::jsonb, '{}'::jsonb,
+  '', '', '', '',
+  now() - interval '30 days', now()
+)
+on conflict (id) do nothing;
+
+insert into auth.identities (id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at)
+select gen_random_uuid(), u.id, u.id::text, 'email',
+       jsonb_build_object('sub', u.id::text, 'email', u.email, 'email_verified', true),
+       null, now(), now()
+  from auth.users u
+ where u.id = 'b0000000-0000-4000-8000-000000000032'
+on conflict (provider_id, provider) do nothing;

@@ -4,7 +4,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 select * from no_plan();
 
-select is((select count(*)::int from public.ea_persons), 16, '16 Personen (1–12, 19–22)');
+select is((select count(*)::int from public.ea_persons), 26, '26 Personen (1–12, 19–32)');
 select is((select count(*)::int from public.ea_persons where kind = 'function'), 1, 'eine Funktionsperson');
 select results_eq(
   $$ select a.login_email::text, a.status::text from public.ad_accesses a order by a.login_email $$,
@@ -12,13 +12,14 @@ select results_eq(
             ('test.eingeladen@dav-leipzig.de', 'invited'),
             ('test.geschaeftsstelle@dav-leipzig.de', 'active'),
             ('test.gesperrt@dav-leipzig.de', 'locked'),
+            ('test.kiju@dav-leipzig.de', 'active'),
             ('test.notfall@dav-leipzig.de', 'active'),
             ('test.referent@dav-leipzig.de', 'active'),
             ('test.vorstand@dav-leipzig.de', 'active') $$,
-  'Zugänge mit Zielstatus; fünf aktive Testzugänge');
+  'Zugänge mit Zielstatus; sechs aktive Testzugänge (mit Kim Kinderjugend, GR spec.md 9)');
 
 -- Eigenschaftsarten: 25 System-Eigenschaftsarten (Migration) und 2 Testarten ohne system_key (Ü3)
-select is((select count(*)::int from public.ea_property_types), 27, '25 System-Eigenschaftsarten + 2 Testarten');
+select is((select count(*)::int from public.ea_property_types), 28, '26 System-Eigenschaftsarten (inkl. group_function) + 2 Testarten');
 select results_eq(
   $$ select name from public.ea_property_types where system_key is null order by name $$,
   $$ values ('Erste-Hilfe-Kurs am'::text), ('T-Shirt-Größe') $$,
@@ -39,7 +40,7 @@ select results_eq(
   'Hauptamt, Funktion, Lizenz, Geburtsdatum, Amt, Kontaktdaten über system_key');
 select is((select property_type_id from public.ea_properties where id = 'e0000000-0000-4000-8000-000000000004'),
   'd0000000-0000-4000-8000-000000000002'::uuid, 'T-Shirt-Größe bleibt Testart');
-select is((select count(*)::int from public.ea_properties), 24, '24 Eigenschaften');
+select is((select count(*)::int from public.ea_properties), 41, '41 Eigenschaften (24 + 17 aus Gruppen)');
 select is(
   (select q.code from public.ea_properties p join public.ad_qualification_types q on q.id = (p.field_values ->> 'qualification_type')::uuid
     where p.id = 'e0000000-0000-4000-8000-000000000007'), 'TCSP', 'Person 5 mit historischer Qualifikationsart (Altbestand)');
@@ -49,7 +50,8 @@ select is((select field_values ->> 'valid_until' from public.ea_properties where
 -- Personen 19–22 (AK2): relative Datumswerte, Beispiel-IBAN, Gremium
 select results_eq(
   $$ select right(id::text, 2)::int, first_name, last_name, volunteer_status::text, volunteer_status_since
-       from public.ea_persons where id > 'a0000000-0000-4000-8000-000000000012' order by id $$,
+       from public.ea_persons where id > 'a0000000-0000-4000-8000-000000000012'
+        and id < 'a0000000-0000-4000-8000-000000000023' order by id $$,
   $$ values (19, 'Lena'::text, 'Lizenz'::text, 'active'::text, date '2024-01-01'), (20, 'Max', 'Abgelaufen', 'active', date '2020-01-01'),
             (21, 'Greta', 'Gremium', 'active', date '2023-01-01'), (22, 'Sven', 'Schlüssel', 'active', date '2025-01-01') $$,
   'Lena Lizenz, Max Abgelaufen, Greta Gremium, Sven Schlüssel aktiv');
@@ -63,7 +65,7 @@ select is((select g.name from public.ea_properties p join public.ea_gremien g on
             where p.id = 'e0000000-0000-4000-8000-000000000020'), 'Beirat', 'Greta im Beirat');
 select is((select field_values ->> 'iban' from public.ea_properties where id = 'e0000000-0000-4000-8000-000000000024'),
   'DE89370400440532013000', 'Sven: Beispiel-IBAN normalisiert');
-select is((select count(*)::int from public.ea_volunteer_status_history), 9, 'Ehrenamtsstatus mit Historie (5 + 4)');
+select is((select count(*)::int from public.ea_volunteer_status_history), 13, 'Ehrenamtsstatus mit Historie (5 + 4 + 4 aus Gruppen)');
 
 select results_eq(
   $$ select r.name from public.ad_assignment_referate ar
@@ -74,7 +76,18 @@ select results_eq(
 select is((select count(*)::int from public.ad_audit_log), 4, '4 Protokolleinträge');
 select is((select details from public.ad_audit_log where action = 'template_assigned'), 'Referent:in (Referate: Klettern)',
   'template_assigned für Rita Referentin');
-select is((select count(*)::int from public.ea_persons where created_in = 'GR'), 1, 'Person 12 aus Gruppen');
+select is((select count(*)::int from public.ea_persons where created_in = 'GR'), 10, 'Person 12 und 23–31 aus Gruppen');
+
+-- Gruppen (GR spec.md 9)
+select results_eq(
+  $$ select name, dissolved_on is not null from public.gr_groups order by name $$,
+  $$ values ('Altgruppe Test'::text, true), ('Jugendgruppe Test 1', false), ('Jugendgruppe Test 2', false),
+            ('Klettergruppe Test', false) $$,
+  'vier Gruppen, Altgruppe aufgelöst');
+select is((select count(*)::int from public.gr_memberships), 5, 'fünf Teilnahmen');
+select is((select count(*)::int from public.gr_contracts), 5, 'fünf Verträge');
+select is((select count(*)::int from public.gr_pending_admissions), 1, 'eine offene Aufnahme (Paula Plan)');
+select is_empty($$ select 1 from public.gr_contracts where iban <> 'DE89370400440532013000' $$, 'nur Beispiel-IBAN');
 
 -- nur fiktive Daten (AK4)
 select is_empty($$ select 1 from public.ea_persons where last_name !~ '^[A-Za-zÄÖÜäöüß -]+$' $$, 'nur fiktive Nachnamen');

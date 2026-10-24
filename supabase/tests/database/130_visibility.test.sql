@@ -29,15 +29,17 @@ $$;
 
 -- Admin: alle Personen (Pfad AD, v0.7.1), alle Lesestufen
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
-select is(pg_temp.persons(), array[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 19, 20, 21, 22], 'Admin sieht 1–12 und 19–22');
+select is(pg_temp.persons(), array[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32],
+  'Admin sieht 1–12 und 19–32');
 select ok('Hauptamt' = any (pg_temp.types_of(2)), 'Admin liest vertrauliches Hauptamt');
 select ok('Geburtsdatum' = any (pg_temp.types_of(4)), 'Admin liest Geburtsdatum');
 select is(pg_temp.types_of(12), array['Kontaktdaten'], 'Admin liest Person 12 nur aus Gruppen');
-select is((select count(*)::int from public.ea_v_persons), 15, 'ea_v_persons ohne Funktionsperson (R15)');
+select is((select count(*)::int from public.ea_v_persons), 25, 'ea_v_persons ohne Funktionsperson (R15)');
 
 -- Geschäftsstelle: Pfad EA verwalten, Lesestufen „alle“ und „nur Geschäftsstelle und Admin“
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
-select is(pg_temp.persons(), array[4, 5, 9, 10, 11, 19, 20, 21, 22], 'Geschäftsstelle sieht 4, 5, 9, 10, 11, 19–22');
+select is(pg_temp.persons(), array[4, 5, 9, 10, 11, 19, 20, 21, 22, 23, 24, 25, 26, 28, 29, 30, 31, 32],
+  'Geschäftsstelle sieht 4, 5, 9, 10, 11, 19–22 und 26, 28, 31, 32 (Pfad EA) sowie 23–25, 29, 30 (Pfad GR)');
 select is(pg_temp.types_of(4), array['Funktion', 'Geburtsdatum', 'Lizenz', 'T-Shirt-Größe'],
   'Geschäftsstelle liest Geburtsdatum, keine vertraulichen Arten');
 select is(pg_temp.types_of(2), '{}'::text[], 'Geschäftsstelle liest kein Hauptamt (Person 2 ohne Ehrenamtsstatus)');
