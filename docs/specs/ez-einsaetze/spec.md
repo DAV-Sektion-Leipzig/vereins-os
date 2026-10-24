@@ -3,17 +3,17 @@
 Version: 0.2 · Status: Entwurf · Stand: 24.10.2026 · Product Owner: Toni Werner
 Stories: docs/specs/ez-einsaetze/02-stories.md (US-EZ-01 bis US-EZ-23, v0.4)
 Grundlage: 00-steckbrief.md v0.8, 01-erhebung.md v0.4 (R1–R12), 02-stories.md v0.4 (R13–R18, R22–R27), glossar.md v1.6, rollen.md v1.0, tech-stack.md v0.6, spec.md Administration v0.8 (R30, R43–R45, `ea_person_names`, `ea_search_active_persons`, `ez_person_visible`, `ea_create_volunteer`, `ad_locations`), Gruppen 02-stories.md v0.7 (US-GR-19 `gr_group_roster`, US-GR-20 `gr_my_groups`, US-GR-19 AK8 `gr_groups_for_attendance`), Übergaben an Finanzen v1.6 und Ehrenamtsmanagement v1.2, Übergabe aus der Planungshilfe Touren und Kurse v1.2 (`tk-touren-kurse/uebergabe-anwesenheitserfassung.md`; Gegenstück spec.md TK v0.2 R9, R15, T13)
-Änderungen v0.2: Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet, Entscheidungen des Product Owners vom 24.10.2026: Kurs, Tour und Trainingslager im MVP freigeschaltet und auch von Hand anlegbar; Kurs und Tour ohne Gruppe, nur mit Trainer:innen und Helfer:innen (keine Teilnehmenden); Trainingslager wie Mehrtagesfahrt; Titel 1–90 Zeichen für alle Einsatzarten; Stand „abgesagt“ für alle Einsatzarten mit Grund, durch Nutzer mit Schreibrecht, zurücknehmbar, nur ohne anwesende Personen; Einsätze aus der Planungshilfe: Kopf, Absage und Löschen nur über die Planungshilfe, in der Anwesenheitserfassung nur die Anwesenheit. Neu: Spalten `tk_plan_id`, `cancelled_*`, `ez_attendances.from_plan`; Funktionen `ez_cancel_event`, `ez_restore_event`, `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`; Regeln R22–R27; Tasks T18–T21.
+Änderungen v0.2: Abgleich mit dem Forms-Formular (Product Owner 24.10.2026): Training ohne Uhrzeit (R28, Dauer aus der Trainingszeit der Gruppe); Beginn und Ende mehrtägiger Einsätze optional (R4); mindestens eine Teilnehmer:in auch bei Fahrten, Trainingslager und Wettkampfbetreuung (R5); Einsatzart heißt Wettkampfbetreuung (glossar.md v1.6); `EZ_END_TIME` entfällt. Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet, Entscheidungen des Product Owners vom 24.10.2026: Kurs, Tour und Trainingslager im MVP freigeschaltet und auch von Hand anlegbar; Kurs und Tour ohne Gruppe, nur mit Trainer:innen und Helfer:innen (keine Teilnehmenden); Trainingslager wie Mehrtagesfahrt; Titel 1–90 Zeichen für alle Einsatzarten; Stand „abgesagt“ für alle Einsatzarten mit Grund, durch Nutzer mit Schreibrecht, zurücknehmbar, nur ohne anwesende Personen; Einsätze aus der Planungshilfe: Kopf, Absage und Löschen nur über die Planungshilfe, in der Anwesenheitserfassung nur die Anwesenheit. Neu: Spalten `tk_plan_id`, `cancelled_*`, `ez_attendances.from_plan`; Funktionen `ez_cancel_event`, `ez_restore_event`, `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`; Regeln R22–R27; Tasks T18–T21.
 Änderungen v0.1: Erster Entwurf.
 
 **Voraussetzungen für die Umsetzung:** Administration Nachtrag v0.8 (T50–T58) und Gruppen bis US-GR-20 sind umgesetzt. Die Anwesenheitserfassung legt keine Tabellen oder Funktionen anderer Module an; sie ersetzt nur den Platzhalter `ez_person_visible` (gleiche Signatur). Die Anbindung der Planungshilfe Touren und Kurse (T19–T21) wird erst zusammen mit TK T13 umgesetzt, weil sie `tk_can_write` der Planungshilfe nutzt; bis dahin bleibt `tk_plan_id` leer.
 
 ## 1. Ziel und Scope
 
-**Ziel:** Trainings, Fahrten, Wettkampfbegleitungen, Arbeitseinsätze, Kurse, Touren und Trainingslager mit Anwesenheit zentral und mobil erfassen; Ablösung der Forms-Erfassung durch Geschäftsstelle und Referent:innen. Erfolg: Geschäftsstelle und Referent:innen erfassen in PROD ein Training mit Anwesenheit auf dem Telefon in unter 1 Minute [ANNAHME]; Finanzen kann später alle Daten für die Trainerabrechnung lesen (Übergabe F1), ohne dass etwas nacherfasst werden muss.
+**Ziel:** Trainings, Fahrten, Wettkampfbetreuungen, Arbeitseinsätze, Kurse, Touren und Trainingslager mit Anwesenheit zentral und mobil erfassen; Ablösung der Forms-Erfassung durch Geschäftsstelle und Referent:innen. Erfolg: Geschäftsstelle und Referent:innen erfassen in PROD ein Training mit Anwesenheit auf dem Telefon in unter 1 Minute [ANNAHME]; Finanzen kann später alle Daten für die Trainerabrechnung lesen (Übergabe F1), ohne dass etwas nacherfasst werden muss.
 
 **Im Scope (MVP):**
-- Einsatzarten Training, Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt (ein- oder mehrtägig), Wettkampfbegleitung (ein- oder mehrtägig), Arbeitseinsatz, Kurs (ein- oder mehrtägig), Tour (ein- oder mehrtägig), Trainingslager (mehrtägig).
+- Einsatzarten Training, Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt (ein- oder mehrtägig), Wettkampfbetreuung (ein- oder mehrtägig), Arbeitseinsatz, Kurs (ein- oder mehrtägig), Tour (ein- oder mehrtägig), Trainingslager (mehrtägig).
 - Anwesenheit je Einsatz mit Rolle (Trainer:in, Helfer:in, Teilnehmer:in) und Stand (eingetragen, anwesend, nicht erschienen); Vorbelegung aus der Gruppe zum Stichtag; Vertretungen; Probetrainings (nur Vorname); Bemerkung. Bei Kurs und Tour nur Trainer:innen und Helfer:innen.
 - Organisierende Person bei Fahrten, Trainingslager, Kurs und Tour aus allen Aktiven per Suche.
 - Neue Personen beim Arbeitseinsatz anlegen (Aktive, Funktion Helfer:in).
@@ -29,7 +29,7 @@ Grundlage: 00-steckbrief.md v0.8, 01-erhebung.md v0.4 (R1–R12), 02-stories.md 
 - Lehreinheiten bei Kursen (Erfassung offen, Übergabe an Finanzen).
 - Erfassung durch Gruppenleitungen und Trainer:innen mit eigenem Zugang und Reichweite „Gruppe“ (Iteration 1); Ablösung des Forms-Formulars für sie.
 - Berechnung von Vergütung, Abrechnungsdokumente, Sperre nach Abgabe des Halbjahres (Finanzen).
-- Planung, Kalkulation und Anmeldung von Fahrten, Kursen, Touren (Modul Touren und Kurse).
+- Planung und Kalkulation von Kursen und Touren (Planungshilfe Touren und Kurse); Anmeldung von Fahrten (eigene Spezifikation, Product Owner 24.10.2026).
 - Auswertungen auf Gruppenebene, Betreuungsschlüssel (Iteration 2); Einsatzhistorie je Person (Ehrenamtsmanagement, Iteration 2).
 - Erwachsenenfahrten; Ausfallzeiten (Ferien); Altdaten aus der Forms-Excel; Abschalttermin des Forms-Formulars.
 - QR-Code-Check-in; Offline-Erfassung; Export; Löschlauf nach Frist.
@@ -39,7 +39,7 @@ Grundlage: 00-steckbrief.md v0.8, 01-erhebung.md v0.4 (R1–R12), 02-stories.md 
 Konventionen nach tech-stack.md: Schema `public`, Präfix `ez_`, snake_case, RLS auf jeder Tabelle. Datum und Uhrzeit sind lokale Werte (Europe/Berlin) ohne Zeitzone (`date`, `time`). Audit-Spalten `*_by` = `auth.uid()`, per Default bzw. Trigger, nie vom Frontend.
 
 Typen:
-- `ez_event_kind`: `training` (Training), `day_trip` (Tagesausflug), `multi_day_trip` (Mehrtagesfahrt), `training_trip` (Ausbildungsfahrt), `competition` (Wettkampfbegleitung), `work_assignment` (Arbeitseinsatz), `course` (Kurs), `tour` (Tour), `training_camp` (Trainingslager). Alle im MVP anlegbar (Product Owner 24.10.2026); der Check `ez_events_kind_mvp` entfällt.
+- `ez_event_kind`: `training` (Training), `day_trip` (Tagesausflug), `multi_day_trip` (Mehrtagesfahrt), `training_trip` (Ausbildungsfahrt), `competition` (Wettkampfbetreuung), `work_assignment` (Arbeitseinsatz), `course` (Kurs), `tour` (Tour), `training_camp` (Trainingslager). Alle im MVP anlegbar (Product Owner 24.10.2026); der Check `ez_events_kind_mvp` entfällt.
 - `ez_span`: `single` (eintägig), `multi` (mehrtägig).
 - `ez_day_category`: `under_8h` (unter 8 Stunden), `at_least_8h` (mindestens 8 Stunden).
 - `ez_role`: `trainer` (Trainer:in), `helper` (Helfer:in), `participant` (Teilnehmer:in).
@@ -51,15 +51,15 @@ Typen:
 |---|---|---|---|---|
 | id | uuid | ja | gen_random_uuid() | PK |
 | kind | ez_event_kind | ja | – | Einsatzart; nach Anlage nicht änderbar (R19) |
-| span | ez_span | ja | – | Training, Tagesausflug: immer `single`; Mehrtagesfahrt, Trainingslager: immer `multi`; Ausbildungsfahrt, Wettkampfbegleitung, Arbeitseinsatz, Kurs, Tour: wählbar (Check) |
+| span | ez_span | ja | – | Training, Tagesausflug: immer `single`; Mehrtagesfahrt, Trainingslager: immer `multi`; Ausbildungsfahrt, Wettkampfbetreuung, Arbeitseinsatz, Kurs, Tour: wählbar (Check) |
 | referat_id | uuid | ja | – | FK ea_referate(id). Bei Einsätzen mit Gruppe vom Trigger aus der Gruppe gesetzt (Stand bei Anlage); bei Arbeitseinsatz, Kurs und Tour gewählt (aus der Planungshilfe: Referat der Planung). Nach Anlage nicht änderbar (R19) |
 | group_id | uuid | nein | null | FK gr_groups(id) on delete restrict. Pflicht bei allen Einsatzarten außer Arbeitseinsatz, Kurs und Tour; dort null (Check). Nach Anlage nicht änderbar (R19) |
 | title | text | nein | null | getrimmt, 1–90 Zeichen (Product Owner 24.10.2026); Pflicht außer bei Training; bei Training null (Check) |
 | organizer_person_id | uuid | nein | null | FK ea_persons(id) on delete restrict. Pflicht bei Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt, Trainingslager, Kurs, Tour; sonst null (Check). Beim Setzen Ehrenamtsstatus „aktiv“ (R11) |
 | start_date | date | ja | – | Datum (Training, eintägig) bzw. Startdatum (mehrtägig); Stichtag für die Anwesenheitsliste (R16) |
-| start_time | time | nein | null | Training: Beginn; mehrtägig: Abfahrt am Startort; eintägig sonst null (R3) |
+| start_time | time | nein | null | mehrtägig: Abfahrt am Startort, optional; Training und eintägig: null (R3, R28) |
 | end_date | date | nein | null | nur mehrtägig, Pflicht, > start_date (R2) |
-| end_time | time | nein | null | Training: Ende (> start_time); mehrtägig: Rückkehr am Startort; eintägig sonst null |
+| end_time | time | nein | null | mehrtägig: Rückkehr am Startort, optional; Training und eintägig: null |
 | day_category | ez_day_category | nein | null | Pflicht bei eintägigen Einsätzen außer Training; sonst null |
 | location_id | uuid | nein | null | FK ad_locations(id) on delete restrict. Pflicht bei Training; sonst null |
 | remark | text | nein | null | Bemerkung, getrimmt, leer → null, max. 500 Zeichen |
@@ -75,13 +75,13 @@ Check `ez_events_shape` (R1–R3, je Einsatzart; „leer“ = null):
 
 | Einsatzart | span | group_id | title | organizer | start_time / end_time | end_date | day_category | location_id |
 |---|---|---|---|---|---|---|---|---|
-| training | single | Pflicht | leer | leer | Pflicht, end > start | leer | leer | Pflicht |
+| training | single | Pflicht | leer | leer | leer (R28) | leer | leer | Pflicht |
 | day_trip | single | Pflicht | Pflicht | Pflicht | leer | leer | Pflicht | leer |
-| multi_day_trip | multi | Pflicht | Pflicht | Pflicht | Pflicht | Pflicht, > start_date | leer | leer |
+| multi_day_trip | multi | Pflicht | Pflicht | Pflicht | optional | Pflicht, > start_date | leer | leer |
 | training_trip | single oder multi | Pflicht | Pflicht | Pflicht | wie day_trip bzw. multi_day_trip | | | leer |
 | competition | single oder multi | Pflicht [ANNAHME: nur mit Gruppe] | Pflicht | leer | wie day_trip bzw. multi_day_trip | | | leer |
 | work_assignment | single oder multi | leer | Pflicht | leer | wie day_trip bzw. multi_day_trip | | | leer |
-| training_camp | multi | Pflicht | Pflicht | Pflicht | Pflicht | Pflicht, > start_date | leer | leer |
+| training_camp | multi | Pflicht | Pflicht | Pflicht | optional | Pflicht, > start_date | leer | leer |
 | course | single oder multi | leer | Pflicht | Pflicht | wie day_trip bzw. multi_day_trip | | | leer |
 | tour | single oder multi | leer | Pflicht | Pflicht | wie day_trip bzw. multi_day_trip | | | leer |
 
@@ -102,7 +102,7 @@ Indizes: `(start_date desc)`, `(referat_id, start_date desc)`, `(group_id, start
 
 Unique `(event_id, person_id)` (R17). Index `(person_id)` (für spätere Einsatzhistorie und Löschprüfung).
 
-Bei Training, Fahrten, Trainingslager und Wettkampfbegleitung werden nur angekreuzte Personen gespeichert (Status `present`). Nicht angekreuzte Personen der Gruppe erscheinen nicht in der Tabelle. Bei Arbeitseinsatz, Kurs und Tour werden Personen eingetragen und ihr Stand bestätigt.
+Bei Training, Fahrten, Trainingslager und Wettkampfbetreuung werden nur angekreuzte Personen gespeichert (Status `present`). Nicht angekreuzte Personen der Gruppe erscheinen nicht in der Tabelle. Bei Arbeitseinsatz, Kurs und Tour werden Personen eingetragen und ihr Stand bestätigt.
 
 ### ez_trial_participants (Probetraining)
 
@@ -132,14 +132,14 @@ Sichtbarkeit von Namen:
 Lesen:
 - `ez_list_events(p_from date, p_to date, p_referat uuid default null, p_group uuid default null, p_kind ez_event_kind default null, p_limit int default 50, p_offset int default 0) returns setof (…)` – Zeilen aus `ez_v_events`, für die `ez_can_read` gilt, plus `group_name`; Filter auf start_date (bei mehrtägigen zählt der Beginn); Sortierung start_date desc, start_time desc; p_limit 1–200. Zusätzlich `total_count` je Zeile (für Paginierung). Abgesagte Einsätze sind enthalten und an `is_cancelled` erkennbar (R22).
 - `ez_get_event(p_id uuid) returns jsonb` – Einsatz mit Gruppenname, Ortsname, Absage (abgesagt am, von, Grund), Kennzeichen „aus der Planungshilfe“ (`tk_plan_id is not null`), Anwesenheiten (id, person_id, role, status, is_substitute, from_plan), Probetrainings; Fehler `EZ_NOT_FOUND`, wenn nicht vorhanden oder nicht lesbar (keine Unterscheidung, damit keine Existenz verraten wird). Namen holt das Frontend über `ea_person_names`.
-- `ez_climbing_points_report(p_location uuid, p_from date, p_to date) returns setof (event_id uuid, start_date date, start_time time, group_name text, participants_present int, trial_count int)` – nur nicht abgesagte Trainings am Ort mit `has_climbing_points = true` und lesbarem Referat; keine Namen (US-EZ-16). Fehler `EZ_LOCATION_NO_POINTS`, wenn der Ort das Kennzeichen nicht hat.
+- `ez_climbing_points_report(p_location uuid, p_from date, p_to date) returns setof (event_id uuid, start_date date, group_name text, participants_present int, trial_count int)` – nur nicht abgesagte Trainings am Ort mit `has_climbing_points = true` und lesbarem Referat; keine Namen (US-EZ-16). Fehler `EZ_LOCATION_NO_POINTS`, wenn der Ort das Kennzeichen nicht hat.
 
 Schreiben (direkte Insert/Update/Delete auf `ez_`-Tabellen sind für `authenticated` nicht erlaubt; alle Schreibvorgänge laufen über diese Funktionen):
 - `ez_save_event(p_event jsonb, p_attendances jsonb, p_trials jsonb, p_confirm_duplicate boolean default false) returns uuid` – legt an (ohne `id`) oder ändert (mit `id`), in einer Transaktion:
   1. Rechte: Anlegen nur mit `ez_can_write(referat)`; das Referat ist bei Einsätzen mit Gruppe das Referat der Gruppe (über `gr_groups_for_attendance`), sonst `p_event.referat_id`. Ändern nur, wenn `ez_can_write` für das gespeicherte Referat gilt. Sonst `EZ_FORBIDDEN`.
   2. Idempotenz: existiert ein Einsatz mit gleicher `client_request_id`, gibt die Funktion dessen id zurück, ohne zu schreiben (US-EZ-18 AK2).
   3. Unveränderliche Felder beim Ändern: kind, group_id, referat_id → `EZ_FIELD_LOCKED` (R19). `span` (eintägig/mehrtägig) bleibt änderbar [ANNAHME]; die Form wird erneut geprüft. Abgesagter Einsatz → `EZ_EVENT_CANCELLED` (R22). Einsatz aus der Planungshilfe (`tk_plan_id` gesetzt): jede Änderung an Feldern von `ez_events` außer `remark` [ANNAHME] → `EZ_TK_MANAGED` (R25).
-  4. Form nach `ez_events_shape`, Längen, R2, Ende nach Beginn → Fehlercodes aus Abschnitt 5.
+  4. Form nach `ez_events_shape`, Längen, R2 → Fehlercodes aus Abschnitt 5.
   5. Ort aktiv (nur bei Anlage oder Änderung des Orts) → `EZ_LOCATION_INACTIVE` (R12).
   6. Organisierende Person mit Ehrenamtsstatus „aktiv“ (nur bei Anlage oder Änderung) → `EZ_ORGANIZER_NOT_ACTIVE` (R11).
   7. Anwesenheiten (`p_attendances`: Liste von {person_id, role, status}) ersetzen die gespeicherten vollständig (fehlende werden gelöscht, vorhandene aktualisiert, neue angelegt). Prüfungen: R17 (`EZ_DUPLICATE_PERSON`); Teilnehmer:innen müssen am start_date laut `gr_group_roster(group_id, start_date)` Teilnehmer:in der Gruppe sein (`EZ_PARTICIPANT_NOT_IN_GROUP`); Trainer:innen und Helfer:innen müssen laut Roster eine Funktion in der Gruppe haben oder Ehrenamtsstatus „aktiv“ haben (`EZ_PERSON_NOT_ACTIVE`; beim Ändern bleiben bereits gespeicherte Personen erlaubt); `is_substitute` = nicht als Gruppenleitung/Trainer:in/Helfer:in im Roster (nur bei Einsätzen mit Gruppe); Status `registered` nur bei Arbeitseinsatz, Kurs und Tour (`EZ_STATUS_NOT_ALLOWED`); Rolle Teilnehmer:in nicht bei Arbeitseinsatz, Kurs und Tour (`EZ_ROLE_NOT_ALLOWED`). Bei Einsätzen aus der Planungshilfe: Personen mit `from_plan = true` bleiben in der Liste und behalten ihre Rolle, nur ihr Stand ist änderbar; sonst `EZ_TK_MANAGED` (R25) [ANNAHME].
@@ -207,7 +207,7 @@ Anwesenheit:
 
 | Von | Nach | Wer | Bedingung |
 |---|---|---|---|
-| – | anwesend | Nutzer mit Schreibrecht | Ankreuzen bei Training, Fahrt, Trainingslager, Wettkampfbegleitung; Hinzufügen bei Arbeitseinsatz, Kurs, Tour vor Ort; neue Person beim Arbeitseinsatz |
+| – | anwesend | Nutzer mit Schreibrecht | Ankreuzen bei Training, Fahrt, Trainingslager, Wettkampfbetreuung; Hinzufügen bei Arbeitseinsatz, Kurs, Tour vor Ort; neue Person beim Arbeitseinsatz |
 | – | eingetragen | Nutzer mit Schreibrecht; Planungshilfe (Personen aus der Planung) | nur Arbeitseinsatz, Kurs, Tour (vorab gemeldet) |
 | eingetragen | anwesend / nicht erschienen | Nutzer mit Schreibrecht | Arbeitseinsatz, Kurs, Tour; „alle anwesend“ setzt nur „eingetragen“ → „anwesend“ |
 | anwesend / nicht erschienen | eingetragen / anwesend / nicht erschienen | Nutzer mit Schreibrecht | Korrektur bei Arbeitseinsatz, Kurs, Tour |
@@ -223,13 +223,13 @@ R1–R12 aus 01-erhebung.md, R13–R18 und R22–R27 aus 02-stories.md, hier mit
 - R1 Pflichtfelder je Einsatzart (Tabelle `ez_events_shape`): Wenn ein Pflichtfeld fehlt, dann „Bitte ‚<Feld>‘ angeben.“ (`EZ_FIELD_REQUIRED`, Detail: Feld). Feldnamen: Gruppe, Referat, Titel, Organisierende Person, Datum, Startdatum, Enddatum, Beginn, Ende, Dauer, Ort, Grund.
 - R2: Wenn bei mehrtägigen Einsätzen das Enddatum nicht nach dem Startdatum liegt, dann „Das Enddatum muss nach dem Startdatum liegen. Für eintägige Einsätze bitte ‚eintägig‘ wählen.“ (`EZ_END_DATE`).
 - R3: Eintägige Einsätze außer Training speichern keine Uhrzeiten, nur die Dauer „unter 8 Stunden“ / „mindestens 8 Stunden“.
-- R4: Beginn und Ende mehrtägiger Einsätze sind Abfahrt und Rückkehr am Startort; Hinweise am Feld „Abfahrt am Startort“ / „Rückkehr am Startort“.
-- R5: Bei Training, Fahrt, Trainingslager und Wettkampfbegleitung mindestens eine anwesende Person mit Rolle Trainer:in oder Helfer:in; bei Training zusätzlich mindestens eine anwesende Teilnehmer:in. Sonst Training: „Bitte mindestens eine Trainer:in oder Helfer:in und eine Teilnehmer:in auswählen.“, andere: „Bitte mindestens eine Trainer:in oder Helfer:in auswählen.“ (`EZ_MIN_ATTENDANCE`). Gilt nicht bei Arbeitseinsatz, Kurs und Tour.
+- R4: Beginn und Ende mehrtägiger Einsätze sind Abfahrt und Rückkehr am Startort; beide optional (Product Owner 24.10.2026); Hinweise am Feld „Abfahrt am Startort“ / „Rückkehr am Startort“.
+- R5: Bei Training, Fahrt, Trainingslager und Wettkampfbetreuung mindestens eine anwesende Person mit Rolle Trainer:in oder Helfer:in und mindestens eine anwesende Teilnehmer:in (Product Owner 24.10.2026), sonst „Bitte mindestens eine Trainer:in oder Helfer:in und eine Teilnehmer:in auswählen.“ (`EZ_MIN_ATTENDANCE`). Gilt nicht bei Arbeitseinsatz, Kurs und Tour.
 - R6: Wenn das Probetraining leer oder länger als 30 Zeichen ist, dann „Bitte einen Vornamen eingeben.“ bzw. „Bitte höchstens 30 Zeichen eingeben.“ (`EZ_TRIAL_NAME`). Hinweis am Feld: „Nur Vorname eintragen.“
 - R7: Bemerkung optional, höchstens 500 Zeichen, sonst „Die Bemerkung darf höchstens 500 Zeichen haben.“ (`EZ_REMARK_LENGTH`). Hinweis am Feld: „Keine Angaben zu Gesundheit oder anderen sensiblen Daten von Kindern.“
 - R8: Wenn für dieselbe Gruppe, dasselbe Datum (start_date) und dieselbe Einsatzart schon ein nicht abgesagter Einsatz besteht, dann Rückfrage „Für diese Gruppe ist an diesem Tag bereits ein Einsatz dieser Art erfasst. Trotzdem speichern?“ (`EZ_DUPLICATE_EVENT`); „Trotzdem speichern“ ruft erneut mit `p_confirm_duplicate = true` auf. Link zum vorhandenen Einsatz nur, wenn lesbar.
 - R9: „Erfasst von/am“ und „geändert von/am“ setzt das System; nicht änderbar.
-- R10: Bezeichnungen der Einsatzarten in der Oberfläche: Training, Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt, Wettkampfbegleitung, Trainingslager, Arbeitseinsatz, Kurs, Tour.
+- R10: Bezeichnungen der Einsatzarten in der Oberfläche: Training, Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt, Wettkampfbetreuung, Trainingslager, Arbeitseinsatz, Kurs, Tour.
 - R11: Die organisierende Person muss beim Setzen Ehrenamtsstatus „aktiv“ haben, sonst „Bitte eine aktive Person auswählen.“ (`EZ_ORGANIZER_NOT_ACTIVE`). Auswahl per Suche ab 2 Zeichen; bei gewählter Gruppe stehen deren Gruppenleitung, Trainer:innen und Helfer:innen (aus dem Roster) oben; bei Kurs und Tour die bereits eingetragenen Personen [ANNAHME].
 - R12: Nur aktive Orte wählbar; beim Speichern eines inaktiven Orts „Dieser Ort ist nicht mehr aktiv. Bitte einen anderen Ort wählen.“ (`EZ_LOCATION_INACTIVE`). Gespeicherte Einsätze behalten einen inzwischen inaktiven Ort.
 - R13: Referent:innen sehen, legen an und ändern nur Einsätze ihrer Referate; bei Einsätzen mit Gruppe gilt das Referat der Gruppe. Sonst „Für diesen Bereich hast du keine Rechte.“ (`EZ_FORBIDDEN`); nicht lesbare Einsätze erscheinen als „Einsatz nicht gefunden.“ (`EZ_NOT_FOUND`).
@@ -247,10 +247,11 @@ R1–R12 aus 01-erhebung.md, R13–R18 und R22–R27 aus 02-stories.md, hier mit
 - R25: Einsätze aus der Planungshilfe Touren und Kurse: Kopf (Titel, Zeiten, organisierende Person), Personen aus der Planung und ihre Rolle, Absage und Löschen nur über die Planungshilfe; in der Anwesenheitserfassung nur Stand der Personen, weitere Personen und Bemerkung [ANNAHME]. Sonst „Dieser Einsatz kommt aus der Planungshilfe Touren und Kurse. Bitte dort ändern.“ (`EZ_TK_MANAGED`).
 - R26: Die Planungshilfe aktualisiert ihren Einsatz nur, solange niemand „anwesend“ ist, sonst `EZ_EVENT_LOCKED` („Der Einsatz ist schon erfasst und wurde nicht geändert.“; die Planungshilfe zeigt `TK_EZ_LOCKED`).
 - R27: Sagt die Planungshilfe ab, wird der Einsatz „abgesagt“ mit dem Grund der Planung; mit anwesenden Personen `EZ_EVENT_LOCKED` [ANNAHME].
-- Längen: Titel 1–90 Zeichen, sonst „Bitte einen Titel mit höchstens 90 Zeichen eingeben.“ (`EZ_TITLE_LENGTH`). Training: Ende nach Beginn, sonst „Das Ende muss nach dem Beginn liegen.“ (`EZ_END_TIME`).
+- R28: Ein Training wird ohne Uhrzeit erfasst; Beginn und Ende ergeben sich aus der Trainingszeit der Gruppe am Datum (Gruppen, `gr_training_times`), die beim Erfassen nur angezeigt wird (Product Owner 24.10.2026).
+- Längen: Titel 1–90 Zeichen, sonst „Bitte einen Titel mit höchstens 90 Zeichen eingeben.“ (`EZ_TITLE_LENGTH`).
 - Weitere Meldungen: Netzfehler „Die Eingabe wurde nicht gesendet. Bitte bei Verbindung erneut speichern.“; Sitzung abgelaufen „Bitte erneut anmelden.“; Löschen fehlgeschlagen „Der Einsatz konnte nicht gelöscht werden. Bitte erneut versuchen.“; Suche ohne Treffer „Keine aktive Person gefunden.“; unerwartet „Etwas ist schiefgelaufen. Bitte versuche es erneut.“
 
-Fehlercodes neu: `EZ_FORBIDDEN`, `EZ_NOT_FOUND`, `EZ_DELETE_FORBIDDEN`, `EZ_FIELD_REQUIRED`, `EZ_FIELD_LOCKED`, `EZ_END_DATE`, `EZ_END_TIME`, `EZ_TITLE_LENGTH`, `EZ_TRIAL_NAME`, `EZ_REMARK_LENGTH`, `EZ_LOCATION_INACTIVE`, `EZ_LOCATION_NO_POINTS`, `EZ_ORGANIZER_NOT_ACTIVE`, `EZ_PERSON_NOT_ACTIVE`, `EZ_PARTICIPANT_NOT_IN_GROUP`, `EZ_DUPLICATE_PERSON`, `EZ_DUPLICATE_EVENT`, `EZ_MIN_ATTENDANCE`, `EZ_STATUS_NOT_ALLOWED`, `EZ_ROLE_NOT_ALLOWED`, `EZ_KIND_NOT_ALLOWED`, `EZ_EVENT_CANCELLED`, `EZ_CANCEL_REASON`, `EZ_CANCEL_NOT_ALLOWED`, `EZ_TK_MANAGED`, `EZ_EVENT_LOCKED`. `EZ_KIND_NOT_AVAILABLE` entfällt (v0.2). Ergänzung in `docs/specs/ad-administration/contracts/error-codes.md` (gemeinsame Liste) mit deutschem Text je Code.
+Fehlercodes neu: `EZ_FORBIDDEN`, `EZ_NOT_FOUND`, `EZ_DELETE_FORBIDDEN`, `EZ_FIELD_REQUIRED`, `EZ_FIELD_LOCKED`, `EZ_END_DATE`, `EZ_TITLE_LENGTH`, `EZ_TRIAL_NAME`, `EZ_REMARK_LENGTH`, `EZ_LOCATION_INACTIVE`, `EZ_LOCATION_NO_POINTS`, `EZ_ORGANIZER_NOT_ACTIVE`, `EZ_PERSON_NOT_ACTIVE`, `EZ_PARTICIPANT_NOT_IN_GROUP`, `EZ_DUPLICATE_PERSON`, `EZ_DUPLICATE_EVENT`, `EZ_MIN_ATTENDANCE`, `EZ_STATUS_NOT_ALLOWED`, `EZ_ROLE_NOT_ALLOWED`, `EZ_KIND_NOT_ALLOWED`, `EZ_EVENT_CANCELLED`, `EZ_CANCEL_REASON`, `EZ_CANCEL_NOT_ALLOWED`, `EZ_TK_MANAGED`, `EZ_EVENT_LOCKED`. `EZ_KIND_NOT_AVAILABLE` entfällt (v0.2). Ergänzung in `docs/specs/ad-administration/contracts/error-codes.md` (gemeinsame Liste) mit deutschem Text je Code.
 
 ## 6. Screens und Interaktionen
 
@@ -259,21 +260,21 @@ Allgemein wie Administration: deutsch, „du“, Datum TT.MM.JJJJ, Zeit HH:MM, s
 | Route | Zeigt | Aktionen | Leer / Fehler | Story |
 |---|---|---|---|---|
 | /ez | Liste: Datum bzw. Zeitraum („07.–09.11.2026“), Einsatzart, Gruppe oder Titel, Referat, Anzahl anwesend je Rolle (z. B. „2 T · 1 H · 9 TN“), Kennzeichen „abgesagt“ (Titel durchgestrichen, Anzahl ausgegraut) [ANNAHME: Darstellung]; Filter Zeitraum (Standard: aktuelles Halbjahr; Auswahl „1. Halbjahr JJJJ“, „2. Halbjahr JJJJ“, frei), Referat (nur lesbare), Gruppe, Einsatzart; 50 je Seite; mobil als Karten | Neuer Einsatz; Einsatz öffnen | „Keine Einsätze gefunden.“ | US-EZ-14, -15 |
-| /ez/neu | Schritt 1: Einsatzart als große Schaltflächen (Training, Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt, Wettkampfbegleitung, Trainingslager, Arbeitseinsatz, Kurs, Tour). Schritt 2: Formular je Einsatzart (unten). Schritt 3 (gleiche Seite, unter dem Formular): Anwesenheit | Speichern; Abbrechen | Fehler je Feld; R8-Rückfrage | US-EZ-01, -05, -06, -08, -09, -19, -20, -21 |
+| /ez/neu | Schritt 1: Einsatzart als große Schaltflächen (Training, Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt, Wettkampfbetreuung, Trainingslager, Arbeitseinsatz, Kurs, Tour). Schritt 2: Formular je Einsatzart (unten). Schritt 3 (gleiche Seite, unter dem Formular): Anwesenheit | Speichern; Abbrechen | Fehler je Feld; R8-Rückfrage | US-EZ-01, -05, -06, -08, -09, -19, -20, -21 |
 | /ez/:id | Kopf (Einsatzart, Gruppe/Titel, Referat, Zeiten, Ort, organisierende Person, Bemerkung, erfasst von/am, geändert von/am; bei Absage Hinweis „Abgesagt am TT.MM.JJJJ von <Name>: <Grund>“; bei Einsätzen aus der Planungshilfe Hinweis „Aus der Planungshilfe Touren und Kurse. Kopf und Personen aus der Planung werden dort geändert.“), Anwesenheit nach Rolle mit Stand und Kennzeichen „Vertretung“ bzw. „aus der Planung“, Probetrainings | Bearbeiten; Absagen (Dialog mit Pflichtfeld „Grund“) bzw. Absage zurücknehmen (mit Rückfrage „Absage zurücknehmen?“); Löschen (nur Geschäftsstelle, mit Rückfrage); bei Arbeitseinsatz, Kurs und Tour direkt „anwesend“/„nicht erschienen“ je Person, „alle anwesend“, „Person hinzufügen“; „Neue Person anlegen“ nur beim Arbeitseinsatz. Abgesagt: nur Absage zurücknehmen und Löschen. Aus der Planungshilfe: kein Absagen, kein Löschen | „Einsatz nicht gefunden.“ | US-EZ-10, -12, -13, -15, -22, -23 |
 | /ez/:id/bearbeiten | wie /ez/neu Schritt 2–3, Einsatzart und Gruppe nur angezeigt; bei Einsätzen aus der Planungshilfe Kopf nur angezeigt (außer Bemerkung) | Speichern | wie oben | US-EZ-12, -23 |
-| /ez/kletterhalle | Ort (nur aktive und inaktive Orte mit Punktekonto), Zeitraum (Standard: Vormonat); Tabelle je Training: Datum, Beginn, Gruppe, anwesende Teilnehmer:innen, Probetrainings; Summenzeile | – | „Keine Trainings im Zeitraum.“ | US-EZ-16 |
+| /ez/kletterhalle | Ort (nur aktive und inaktive Orte mit Punktekonto), Zeitraum (Standard: Vormonat); Tabelle je Training: Datum, Gruppe, anwesende Teilnehmer:innen, Probetrainings; Summenzeile | – | „Keine Trainings im Zeitraum.“ | US-EZ-16 |
 
 Formular je Einsatzart:
-- **Training:** Gruppe (Auswahl, eigene Gruppe vorbelegt nach R18, eigene Gruppen oben) → Datum (Standard heute) → Beginn/Ende (aus `training_times` des Rosters für den Wochentag vorbelegt; bei keiner Trainingszeit leer; bei mehreren Trainingszeiten am Wochentag die erste, Auswahl der anderen per Knopf) → Ort (Auswahlfeld „Ort“ der Administration) → Anwesenheit → Probetraining (Liste, „Probetraining hinzufügen“) → Bemerkung.
+- **Training:** Gruppe (Auswahl, eigene Gruppe vorbelegt nach R18, eigene Gruppen oben) → Datum (Standard heute; keine Uhrzeit, R28; die Trainingszeit des Wochentags aus dem Roster wird nur angezeigt, z. B. „Trainingszeit: Di 17:00–19:00“) → Ort (Auswahlfeld „Ort“ der Administration) → Anwesenheit → Probetraining (Liste, „Probetraining hinzufügen“) → Bemerkung.
 - **Tagesausflug:** Gruppe → Titel → Organisierende Person → Datum → Dauer (zwei Optionen) → Anwesenheit → Bemerkung.
-- **Mehrtagesfahrt:** Gruppe → Titel → Organisierende Person → Startdatum, Beginn („Abfahrt am Startort“) → Enddatum, Ende („Rückkehr am Startort“) → Anwesenheit → Bemerkung.
-- **Ausbildungsfahrt, Wettkampfbegleitung:** zuerst „eintägig“ / „mehrtägig“, dann wie Tagesausflug bzw. Mehrtagesfahrt; Wettkampfbegleitung ohne organisierende Person.
+- **Mehrtagesfahrt:** Gruppe → Titel → Organisierende Person → Startdatum, Beginn optional („Abfahrt am Startort“) → Enddatum, Ende optional („Rückkehr am Startort“) → Anwesenheit → Bemerkung.
+- **Ausbildungsfahrt, Wettkampfbetreuung:** zuerst „eintägig“ / „mehrtägig“, dann wie Tagesausflug bzw. Mehrtagesfahrt; Wettkampfbetreuung ohne organisierende Person.
 - **Trainingslager:** wie Mehrtagesfahrt (Gruppe → Titel → Organisierende Person → Start → Ende → Anwesenheit → Bemerkung).
 - **Arbeitseinsatz:** Referat (nur beschreibbare; bei genau einem vorausgewählt) → Titel → eintägig/mehrtägig → Zeiten → Personen eintragen (Suche „Aktive“, Rolle Helfer:in vorbelegt und änderbar, Status „eingetragen“) → Bemerkung.
 - **Kurs, Tour:** Referat (nur beschreibbare; bei genau einem vorausgewählt) → Titel → Organisierende Person → eintägig/mehrtägig → Zeiten → Personen eintragen (Suche „Aktive“, Rolle Trainer:in vorbelegt [ANNAHME] und änderbar zu Helfer:in, Status „eingetragen“; keine Teilnehmenden) → Bemerkung. Hinweis oben: „Kurse und Touren aus der Planungshilfe Touren und Kurse werden automatisch angelegt.“ [ANNAHME: Text].
 
-Anwesenheit (Training, Fahrt, Trainingslager, Wettkampfbegleitung):
+Anwesenheit (Training, Fahrt, Trainingslager, Wettkampfbetreuung):
 - Lädt nach Wahl von Gruppe und Datum `gr_group_roster(group_id, start_date)`; bei Datumswechsel neu laden; bereits gesetzte Haken von Personen, die am neuen Datum nicht mehr in der Liste sind, werden entfernt und es erscheint „Die Liste wurde für das neue Datum aktualisiert.“
 - Zwei Abschnitte: „Trainer:innen und Helfer:innen“ (Gruppenleitung erscheint mit Rolle Trainer:in vorbelegt [ANNAHME], Trainer:in → Trainer:in, Helfer:in → Helfer:in) und „Teilnehmer:innen“; je Zeile Kontrollkästchen (Touch-Fläche mind. 44 px), Name, Rollenauswahl (nur bei angehakten Trainer:innen/Helfer:innen sichtbar). Alphabetisch nach Nachname. Zähler „n ausgewählt“ je Abschnitt.
 - „Person hinzufügen“ (Vertretung): Personensuche „Aktive“ der Administration; Rolle Trainer:in oder Helfer:in wählen; Kennzeichen „Vertretung“.
@@ -318,12 +319,12 @@ Voraussetzung: Seed Administration (Testzugänge Admin, Geschäftsstelle, Refere
 
 | # | Einsatz | Daten | Anwesenheit | Zweck |
 |---|---|---|---|---|
-| 1 | Training, Gruppe Test Klettern | 13.10.2026, 17:00–19:00, Kletterhalle Test | Toni Muster (Trainer:in), 5 Teilnehmer:innen; Probetraining „Lena“ | Normalfall, Kontrollliste |
-| 2 | Training, Gruppe Test Klettern | 20.10.2026, 17:00–19:00, Kletterhalle Test | Karl Zweireferat (Helfer:in, Vertretung), 4 Teilnehmer:innen | Vertretung, Summe Kontrollliste |
-| 3 | Training, Gruppe Test Jugend | 14.10.2026, 16:30–18:00, Fels Test | Trainer:in der Gruppe, 3 Teilnehmer:innen | anderes Referat: für Rita nicht sichtbar |
+| 1 | Training, Gruppe Test Klettern | 13.10.2026, Kletterhalle Test | Toni Muster (Trainer:in), 5 Teilnehmer:innen; Probetraining „Lena“ | Normalfall, Kontrollliste |
+| 2 | Training, Gruppe Test Klettern | 20.10.2026, Kletterhalle Test | Karl Zweireferat (Helfer:in, Vertretung), 4 Teilnehmer:innen | Vertretung, Summe Kontrollliste |
+| 3 | Training, Gruppe Test Jugend | 14.10.2026, Fels Test | Trainer:in der Gruppe, 3 Teilnehmer:innen | anderes Referat: für Rita nicht sichtbar |
 | 4 | Tagesausflug „Boulderfelsen“, Gruppe Test Klettern | 03.10.2026, mindestens 8 Stunden, organisiert von Toni Muster | 2 Trainer:innen, 6 Teilnehmer:innen | eintägig |
 | 5 | Mehrtagesfahrt „Elbsandstein“, Gruppe Test Jugend | 07.11.2026 16:00 – 09.11.2026 18:30, organisiert von Karl Zweireferat | 2 Trainer:innen, 8 Teilnehmer:innen | mehrtägig, Stichtag |
-| 6 | Wettkampfbegleitung „Jugendcup Test“, Gruppe Test Klettern | 24.10.2026, unter 8 Stunden | 1 Trainer:in, 3 Teilnehmer:innen | ohne organisierende Person |
+| 6 | Wettkampfbetreuung „Jugendcup Test“, Gruppe Test Klettern | 24.10.2026, unter 8 Stunden | 1 Trainer:in, 3 Teilnehmer:innen | ohne organisierende Person |
 | 7 | Arbeitseinsatz „Aufbau Test-Cup“, Referat Klettern | 17.10.2026, mindestens 8 Stunden | 3 eingetragen, 2 anwesend, 1 nicht erschienen | Stände |
 | 8 | Ausbildungsfahrt mehrtägig „Alpinfahrt Test“, Gruppe Test Klettern | 01.08.2026 08:00 – 08.08.2026 20:00 | 1 Trainer:in, 1 Helfer:in, 4 Teilnehmer:innen | 2. Halbjahr 2026; Stichtag: eine Teilnehmerin mit Eintrittsdatum 01.09.2026 erscheint nicht in der Anwesenheitsliste und wird beim Speichern mit `EZ_PARTICIPANT_NOT_IN_GROUP` abgelehnt |
 | 9 | Kurs „Toprope-Kurs Test“ (von Hand), Referat Klettern | 21.11.2026, mindestens 8 Stunden, organisiert von Toni Muster | Toni Muster (Trainer:in, eingetragen), Karl Zweireferat (Helfer:in, eingetragen) | Kurs ohne Gruppe, keine Teilnehmenden; Rolle Teilnehmer:in → `EZ_ROLE_NOT_ALLOWED` |
@@ -357,7 +358,7 @@ Voraussetzung: Administration T50–T58, Gruppen US-GR-18 bis US-GR-20 (inkl. `g
 - [ ] T8: Seed nach Abschnitt 9 (US-EZ alle)
 - [ ] T9: pgTAP: Sichtbarkeitsmatrix Abschnitt 9; jede Regel R1–R25 mit mindestens einem Fehlerfall (R25 mit einem im Test gesetzten `tk_plan_id`); Idempotenz `client_request_id`; Stichtag (Einsatz 8); direkte Insert/Update/Delete auf `ez_`-Tabellen abgelehnt; `ez_person_visible` nur Namen lesbarer Einsätze; Mengentest Abschnitt 8
 - [ ] T10: Frontend Liste /ez mit Filtern und Paginierung (US-EZ-14, -15)
-- [ ] T11: Frontend Formular Einsatzart-Auswahl und Formulare je Einsatzart inkl. Gruppenvorschlag (R18) und Vorbelegung der Zeiten (US-EZ-01, -05, -06, -08, -09, -19, -20, -21)
+- [ ] T11: Frontend Formular Einsatzart-Auswahl und Formulare je Einsatzart inkl. Gruppenvorschlag (R18) und Anzeige der Trainingszeit (R28) (US-EZ-01, -05, -06, -08, -09, -19, -20, -21)
 - [ ] T12: Frontend Anwesenheitsliste aus `gr_group_roster`, Vertretung, Probetraining, Bemerkung (US-EZ-02, -03, -04)
 - [ ] T13: Frontend organisierende Person (US-EZ-07)
 - [ ] T14: Frontend Detail /ez/:id inkl. Stände bei Arbeitseinsatz, Kurs und Tour, „alle anwesend“, neue Person anlegen (US-EZ-10, -11), Bearbeiten (US-EZ-12), Löschen (US-EZ-13)
@@ -373,18 +374,17 @@ Anbindung der Planungshilfe Touren und Kurse (erst zusammen mit TK T13, weil `tk
 
 ## 11. Annahmen und offene Punkte
 
-Bestätigt vom Product Owner (21./22.10.2026): Modulname und Kürzel; Einsatzarten und Bezeichnungen wie im Forms-Formular; Erfassung je Gruppe; Kinder mit Vor- bzw. Rufname und Nachname; organisierende Person aus allen Aktiven; Zeiten eintägig über Dauer-Kategorie, mehrtägig mit Start und Ende (ab Startort); Orte als Stammdaten, nur Admin pflegt, Startliste bei der Umsetzung; Kontrolle Punktekonto nur Kinder; Löschen nur Geschäftsstelle; Einsatzart und Gruppe nicht änderbar; Standardrolle Helfer:in beim Arbeitseinsatz; keine organisierende Person bei der Wettkampfbegleitung; Stichtag (mehrtägig: Startdatum); Feldlängen; Vorschlag der eigenen Gruppe ohne Rechte; kein Offline-Betrieb.
+Bestätigt vom Product Owner (21./22.10.2026): Modulname und Kürzel; Einsatzarten und Bezeichnungen wie im Forms-Formular; Erfassung je Gruppe; Kinder mit Vor- bzw. Rufname und Nachname; organisierende Person aus allen Aktiven; Zeiten eintägig über Dauer-Kategorie, mehrtägig mit Start und Ende (ab Startort); Orte als Stammdaten, nur Admin pflegt, Startliste bei der Umsetzung; Kontrolle Punktekonto nur Kinder; Löschen nur Geschäftsstelle; Einsatzart und Gruppe nicht änderbar; Standardrolle Helfer:in beim Arbeitseinsatz; keine organisierende Person bei der Wettkampfbetreuung; Stichtag (mehrtägig: Startdatum); Feldlängen; Vorschlag der eigenen Gruppe ohne Rechte; kein Offline-Betrieb.
 
 Bestätigt vom Product Owner (24.10.2026, Übergabe der Planungshilfe Touren und Kurse v1.2): Die Planungshilfe erzeugt den Einsatz Kurs bzw. Tour bei „in Yolawo angelegt“ und sagt ihn bei Absage ab (Stand „abgesagt“ statt Löschen); Kurs, Tour und Trainingslager sind im MVP auch von Hand anlegbar; Kurs und Tour ohne Gruppe, mit Referat, Titel, organisierender Person, Zeiten und nur Trainer:innen und Helfer:innen (keine Teilnehmenden); Trainingslager wie Mehrtagesfahrt (mit Gruppe und Teilnehmer:innen); Titel 1–90 Zeichen für alle Einsatzarten (die Planungshilfe muss nicht mehr kürzen); „abgesagt“ für alle Einsatzarten, mit Grund, durch Nutzer mit Schreibrecht, zurücknehmbar, nur ohne anwesende Personen; Einsätze aus der Planungshilfe: Kopf, Absage und Löschen nur über die Planungshilfe, in der Anwesenheitserfassung nur die Anwesenheit; Stände „eingetragen / anwesend / nicht erschienen“ bei Kurs und Tour wie beim Arbeitseinsatz.
 
 Annahmen (bei Abnahme bestätigen):
 - [ANNAHME] Schreiben nur über Datenbankfunktionen (keine direkten Insert/Update-Policies); fachlich keine Auswirkung.
-- [ANNAHME] Wettkampfbegleitung nur mit Gruppe.
+- [ANNAHME] Wettkampfbetreuung nur mit Gruppe.
 - [ANNAHME] Referat beim Arbeitseinsatz nach dem Speichern nicht änderbar (wie Gruppe).
 - [ANNAHME] „Eintägig/mehrtägig“ (span) nach dem Speichern änderbar, weil es nur die Zeitangaben betrifft; Prüfung der Form erneut.
 - [ANNAHME] Gruppenleitung erscheint in der Anwesenheit mit Rolle Trainer:in vorbelegt.
 - [ANNAHME] Probetrainings in der Oberfläche nur beim Training.
-- [ANNAHME] R5 nur Trainer:in/Helfer:in bei Fahrten und Wettkampfbegleitung; Teilnehmer:in nur beim Training Pflicht.
 - [ANNAHME] Neue Person beim Arbeitseinsatz erst nach dem ersten Speichern des Einsatzes (Referat und Datum stehen dann fest).
 - [ANNAHME] Dublettentreffer, die nicht aktiv sind, können nicht direkt eingetragen werden (Hinweis an die Geschäftsstelle); Reaktivierung im Ehrenamtsmanagement.
 - [ANNAHME] Liste Standard aktuelles Halbjahr; 50 je Seite.
@@ -392,6 +392,7 @@ Annahmen (bei Abnahme bestätigen):
 - [ANNAHME] Mengengerüst und Antwortzeiten aus Abschnitt 8.
 - [ANNAHME] `ez_person_visible` enger als in spec.md AD v0.8 beschrieben (nur Personen gespeicherter, lesbarer Einsätze).
 - [ANNAHME] Namen der Testgruppen werden an den Seed Gruppen angepasst.
+- [ANNAHME] Dauer eines Trainings für die Abrechnung = gültige Trainingszeit der Gruppe am Wochentag des Datums (Finanzen liest sie aus Gruppen); ein kürzeres oder längeres Training wird nur in der Bemerkung festgehalten.
 - [ANNAHME] Spaltenname `ez_events.tk_plan_id` ohne FK auf `tk_plans` (wie `tk_plans.ez_event_id` in spec.md TK).
 - [ANNAHME] Bei Einsätzen aus der Planungshilfe ist in der Anwesenheitserfassung neben der Anwesenheit auch die Bemerkung änderbar; Personen aus der Planung behalten ihre Rolle und können nur über die Planungshilfe entfernt werden (`from_plan`).
 - [ANNAHME] Absage aus der Planungshilfe mit anwesenden Personen wird abgelehnt (`EZ_EVENT_LOCKED`), wie das Absagen in der Anwesenheitserfassung (R23, R27).
@@ -403,6 +404,8 @@ Annahmen (bei Abnahme bestätigen):
 Offen (kein Blocker für den MVP):
 - [OFFEN] Lehreinheiten bei Kursen: erfassen in der Anwesenheitserfassung oder aus der Planungshilfe (Übergabe an Finanzen).
 - [OFFEN] Doppelte Erfassung von Kurs und Tour: Ein von Hand angelegter Kurs und ein später aus der Planungshilfe erzeugter Einsatz für dieselbe Veranstaltung werden nicht erkannt (R8 gilt nur für Einsätze mit Gruppe). Hinweis im Formular reicht [ANNAHME], oder Warnung bei gleichem Referat, Datum und Einsatzart?
+- [OFFEN] Training einer Gruppe mit mehreren Trainingszeiten am selben Wochentag (z. B. zwei Termine dienstags): Welche Zeit gilt, und wie wird das zweite Training am selben Tag erfasst (R8 warnt)? Auswahl der Trainingszeit beim Erfassen?
+- [OFFEN] Abrechnung mehrtägiger Einsätze ohne Beginn bzw. Ende (erster und letzter Tag als Tages- oder Halbtagessatz) – mit Finanzen.
 - [OFFEN] Löschfrist der Einsätze und Anwesenheiten (mit Finanzen; Aufbewahrung für Abrechnung).
 - [OFFEN] Information nach Art. 13 DSGVO an Personen, die beim Arbeitseinsatz angelegt werden.
 - [OFFEN] Sperre nach Abgabe des Halbjahres (Finanzen).

@@ -2,7 +2,7 @@
 
 Stand: 24.10.2026 · Version 1.6 · Von: Anwesenheitserfassung (EZ) · An: Finanzen (FI) · Status: offen
 Quelle: specs/ez-einsaetze/00-steckbrief.md (v0.8), 01-erhebung.md (v0.4), spec.md (v0.2); Vergütungsordnung der Sektion (2025_DAV_Leipzig_FO_VGO, Beschluss 21.11.2023, ergänzt 11.12.2025; vom Product Owner am 21.10.2026 geliefert)
-Änderungen v1.6: Abgesagte Einsätze zählen nicht für die Abrechnung; Kurs und Tour nur mit Trainer:innen und Helfer:innen (keine Teilnehmenden), auch aus der Planungshilfe Touren und Kurse erzeugt; Trainingslager mit Gruppe wie Mehrtagesfahrt (Product Owner 24.10.2026).
+Änderungen v1.6: Training ohne Uhrzeit (Dauer aus der Trainingszeit der Gruppe); Beginn und Ende mehrtägiger Einsätze optional; Einsatzart heißt Wettkampfbetreuung. Abgesagte Einsätze zählen nicht für die Abrechnung; Kurs und Tour nur mit Trainer:innen und Helfer:innen (keine Teilnehmenden), auch aus der Planungshilfe Touren und Kurse erzeugt; Trainingslager mit Gruppe wie Mehrtagesfahrt (Product Owner 24.10.2026).
 Änderungen v1.5: Hinweis auf Abweichung von Vergütungsordnung Punkt 7 und Vorstandsbeschluss gestrichen (Product Owner 22.10.2026: Fehlinterpretation); Abgrenzung zum Modul Touren und Kurse (Kalkulation dort, Vergütung hier [ANNAHME]).
 Änderungen v1.4: Mehrtägige Einsätze mit Enduhrzeit; Wettkampfbegleitung ein- oder mehrtägig; Erwachsenenfahrten nicht im Scope; Reihenfolge Gruppen → Anwesenheitserfassung → Finanzen; Idee eines eigenen Abrechnungsmoduls.
 Änderungen v1.3: Zeiten bei Fahrten wie im Forms-Formular; Ausbildungsfahrt; Ort beim Training; Zuordnung der Einsatzarten.
@@ -15,15 +15,15 @@ Die Anwesenheitserfassung erhebt und speichert nur. Die Vergütung wird in Finan
 
 ## Anforderungen
 
-- **F1 – Datengrundlage:** Finanzen liest aus der Anwesenheitserfassung: Einsatz (Einsatzart, Referat, Gruppe, Titel, organisierende Person; Training: Datum, Beginn, Ende, Ort; eintägig: Datum und Dauer-Kategorie „unter 8 Stunden“ / „mindestens 8 Stunden“; mehrtägig: Startdatum, Beginn, Enddatum, Ende) und Anwesenheit je Person mit Rolle (Trainer:in, Helfer:in, Teilnehmer:in). Finanzen pflegt diese Daten nicht.
+- **F1 – Datengrundlage:** Finanzen liest aus der Anwesenheitserfassung: Einsatz (Einsatzart, Referat, Gruppe, Titel, organisierende Person; Training: Datum, Ort – ohne Uhrzeit; eintägig: Datum und Dauer-Kategorie „unter 8 Stunden“ / „mindestens 8 Stunden“; mehrtägig: Startdatum, Enddatum, Beginn und Ende optional) und Anwesenheit je Person mit Rolle (Trainer:in, Helfer:in, Teilnehmer:in). Finanzen pflegt diese Daten nicht.
 - **F2 – Zuordnung Einsatzart → Abrechnungsart:**
 
 | Einsatzart (Oberfläche) | Abrechnungsart (Vergütungsordnung) |
 |---|---|
-| Training | Trainingseinheiten (Dauer aus Beginn und Ende) |
+| Training | Trainingseinheiten (Dauer aus der Trainingszeit der Gruppe am Datum, Modul Gruppen [ANNAHME]; mehrere Trainingszeiten am selben Wochentag [OFFEN]) |
 | Tagesausflug, Mehrtagesfahrt | Kinder- und Jugendfahrten, Gruppenfahrten |
 | Ausbildungsfahrt (ein- oder mehrtägig) | Mehrtageskurse [ANNAHME; eintägig: [OFFEN]] |
-| Wettkampfbegleitung (ein- oder mehrtägig) | Wettkampfbegleitung [OFFEN: Satz je Tag?] |
+| Wettkampfbetreuung (ein- oder mehrtägig) | Wettkampfbetreuung [OFFEN: Satz je Tag?] |
 | Kurs | Kurse (Lehreinheiten) [OFFEN: Erfassung der Lehreinheiten] |
 | Tour | Führungstour wie Mehrtageskurs; Gemeinschaftstour nur Organisationspauschale |
 | Trainingslager | Mehrtageskurse/Trainingslager |
@@ -40,14 +40,14 @@ Die Anwesenheitserfassung erhebt und speichert nur. Die Vergütung wird in Finan
 | Kinder- und Jugendfahrten, Gruppenfahrten | Tagessatz (ab 8 h) | 30,00 € | 20,00 € | – |
 | | Halbtagessatz (unter 8 h) | 15,00 € | 10,00 € | – |
 | | Organisationspauschale pro Tag | – | – | 10,00 € |
-| Wettkampfbegleitung | Satz [ANNAHME: je Wettkampf bzw. Tag] | 50,00 € | 40,00 € | – |
+| Wettkampfbetreuung | Satz [ANNAHME: je Wettkampf bzw. Tag] | 50,00 € | 40,00 € | – |
 | Kurse | Lehreinheit (1 h) | – | – | 15,00 € |
 | Mehrtageskurse, Führungstouren, Trainingslager | Tagessatz (ab 8 h) | 50,00 € | 40,00 € | – |
 | | Halbtagessatz (unter 8 h) | 25,00 € | 20,00 € | – |
 | | Organisationspauschale pro Tag | – | – | 10,00 € |
 
   Die Sätze könnte auch das Modul Touren und Kurse für die Kalkulation nutzen [ANNAHME]; gepflegt werden sie an einer Stelle.
-- **F4 – Tages- und Halbtagessatz:** Eintägig aus der erfassten Kategorie (unter 8 Stunden = Halbtagessatz, mindestens 8 Stunden = Tagessatz). Mehrtägig aus Startdatum/Beginn und Enddatum/Ende: erster Tag ab Beginn bis 24:00, letzter Tag ab 0:00 bis Ende, Zwischentage als Tagessatz [ANNAHME: Berechnungsweise]. Beginn und Ende sind Abfahrt und Rückkehr am Startort (Reisezeit = Arbeitszeit). Reisekosten nach Reisekostenordnung, nicht Teil dieser Abrechnung.
+- **F4 – Tages- und Halbtagessatz:** Eintägig aus der erfassten Kategorie (unter 8 Stunden = Halbtagessatz, mindestens 8 Stunden = Tagessatz). Mehrtägig aus Startdatum/Beginn und Enddatum/Ende: erster Tag ab Beginn bis 24:00, letzter Tag ab 0:00 bis Ende, Zwischentage als Tagessatz [ANNAHME: Berechnungsweise]. Beginn und Ende sind Abfahrt und Rückkehr am Startort (Reisezeit = Arbeitszeit); sie sind optional (Product Owner 24.10.2026) – [OFFEN] Satz für ersten und letzten Tag, wenn sie fehlen. Reisekosten nach Reisekostenordnung, nicht Teil dieser Abrechnung.
 - **F5 – Vergütung als Trainer:in:** nur mit förderfähiger Lizenz, ab dem Abrechnungshalbjahr des Lizenzerwerbs; Ausnahmen mit Begründung der verantwortlichen Referent:in. Prüfung gegen die Qualifikationen im Ehrenamtsmanagement [ANNAHME: förderfähig = Qualifikationsart DOSB-lizenzfähig]. Sonst Satz Helfer:in [ANNAHME].
 - **F6 – Voraussetzung der Auszahlung:** Bestätigung steuerfreie Einnahmen liegt vor der ersten Zahlung vor (Nachweis im Ehrenamtsmanagement). Steuerfreier Höchstbetrag je Kalenderjahr nach § 3 EStG; Überschreiten ist sichtbar zu machen [ANNAHME].
 - **F7 – Halbjährliche Abrechnung:** Für die Referate Kinder und Jugend und Leistungssport [ANNAHME: = „Jugend und Leistung“] je Halbjahr ein Abrechnungsdokument je Person zur Unterschrift; Abgabe bis 31.07. bzw. 15.12., danach erlischt der Anspruch. Andere Referate: [OFFEN].
@@ -58,7 +58,7 @@ Die Anwesenheitserfassung erhebt und speichert nur. Die Vergütung wird in Finan
 
 - [OFFEN] Rundung angebrochener Trainingseinheiten (z. B. 75 Minuten = 2 oder 3 TE?).
 - [OFFEN] Eintägige Ausbildungsfahrt: Halbtages- bzw. Tagessatz der Mehrtageskurse oder der Fahrten?
-- [OFFEN] Wettkampfbegleitung: Satz je Wettkampf, je Tag oder mit Tages-/Halbtagessatz – jetzt auch mehrtägig?
+- [OFFEN] Wettkampfbetreuung: Satz je Wettkampf, je Tag oder mit Tages-/Halbtagessatz – jetzt auch mehrtägig?
 - [OFFEN] Ort der Pflege der Sätze: Finanzen (Vorschlag) oder Administration.
 - [OFFEN] Eigenes Abrechnungsmodul, das in Finanzen aufgeht?
 - [OFFEN] Abgrenzung zum Modul Touren und Kurse: Kalkulation dort, Vergütung hier [ANNAHME]; Kostendeckung von Führungstouren (Punkt 9.1) eher dort?

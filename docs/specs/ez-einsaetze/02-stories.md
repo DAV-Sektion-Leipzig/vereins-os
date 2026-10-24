@@ -2,8 +2,8 @@
 
 Stand: 24.10.2026 · Version 0.4 · Kürzel: EZ · Status: Entwurf
 Quellen: 00-steckbrief.md (v0.8), 01-erhebung.md (v0.4, Regeln R1–R12), rollen.md (v1.0), glossar.md (v1.6), Übergaben an AD (v1.3, eingearbeitet in spec.md AD v0.8), GR (v1.3, eingearbeitet in Gruppen 02-stories.md v0.4; Nachtrag `gr_my_groups` in v0.6), EA (v1.2), FI (v1.6); Übergabe aus der Planungshilfe Touren und Kurse (v1.2, `tk-touren-kurse/uebergabe-anwesenheitserfassung.md`)
-Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wettkampfbegleitung, Trainingslager, Arbeitseinsatz, Kurs, Tour, Absage, Übernahme aus der Planungshilfe Touren und Kurse, Listen.
-Änderungen v0.4: Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet (Product Owner, 24.10.2026): neue Stories US-EZ-20 (Kurs oder Tour von Hand erfassen), US-EZ-21 (Trainingslager erfassen), US-EZ-22 (Einsatz absagen und Absage zurücknehmen), US-EZ-23 (Kurs oder Tour aus der Planungshilfe übernehmen); neue Regeln R22–R27; Titel bis 90 Zeichen (US-EZ-05 AK4); Stände „eingetragen“ auch bei Kurs und Tour.
+Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wettkampfbetreuung, Trainingslager, Arbeitseinsatz, Kurs, Tour, Absage, Übernahme aus der Planungshilfe Touren und Kurse, Listen.
+Änderungen v0.4: Abgleich mit dem Forms-Formular (Product Owner 24.10.2026): Training ohne Uhrzeit (R28, US-EZ-01); Beginn und Ende mehrtägiger Einsätze optional (US-EZ-06, -21); mindestens eine Teilnehmer:in auch bei Fahrten und Wettkampfbetreuung (AK in US-EZ-05, -08); Einsatzart heißt Wettkampfbetreuung. Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet (Product Owner, 24.10.2026): neue Stories US-EZ-20 (Kurs oder Tour von Hand erfassen), US-EZ-21 (Trainingslager erfassen), US-EZ-22 (Einsatz absagen und Absage zurücknehmen), US-EZ-23 (Kurs oder Tour aus der Planungshilfe übernehmen); neue Regeln R22–R27; Titel bis 90 Zeichen (US-EZ-05 AK4); Stände „eingetragen“ auch bei Kurs und Tour.
 Änderungen v0.3: Neue Story US-EZ-19 und Regel R18: Wer selbst Gruppenleitung, Trainer:in oder Helfer:in ist, bekommt beim Erfassen seine eigene Gruppe vorgeschlagen (Vorbelegung); der Vorschlag gibt keine zusätzlichen Rechte (Product Owner, 22.10.2026). Bestätigt: Gruppe nach dem Speichern nicht änderbar; Stichtag bei mehrtägigen Einsätzen = Startdatum; Orte pflegt nur der Admin.
 Änderungen v0.2: Annahmen bestätigt (Product Owner, 22.10.2026): Löschen nur durch die Geschäftsstelle (R15), Stichtag für Teilnehmer:innen und Trainer:innen (R16), Einsatzart nicht änderbar, Standardrolle Helfer:in beim Arbeitseinsatz, keine organisierende Person bei der Wettkampfbegleitung, Feldlängen Titel 60, Probetraining 30, Bemerkung 500 Zeichen. Verweise auf die Lesefunktion `gr_group_roster` (Gruppen) und die Startliste der Orte ergänzt.
 Änderungen v0.1: Erster Entwurf.
@@ -16,6 +16,7 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 - **R16:** In der Anwesenheitsliste erscheinen Teilnehmer:innen mit gültiger Teilnahme am Datum des Einsatzes sowie Trainer:innen, Helfer:innen und Gruppenleitung der Gruppe mit gültiger Funktion an diesem Datum (Stichtag, bestätigt 22.10.2026). Quelle: `gr_group_roster(group_id, date)` (Gruppen, US-GR-19). Bei mehrtägigen Einsätzen gilt das Startdatum (bestätigt 22.10.2026).
 - **R17:** Eine Person kann je Einsatz nur einmal in der Anwesenheit stehen.
 - **R18:** Ist die erfassende Person am Datum des Einsatzes Gruppenleitung, Trainer:in oder Helfer:in einer Gruppe, wird diese Gruppe beim Erfassen vorgeschlagen (Vorbelegung, änderbar). Der Vorschlag ist eine Eingabehilfe gegen Fehleingaben, kein Recht: Wählbar sind nur Gruppen, für die die Rechtevorlage der Person das Erfassen erlaubt (R13; ab Iteration 1 Reichweite „Gruppe“). Quelle: `gr_my_groups(date)` (Gruppen, US-GR-20).
+- **R28:** Ein Training wird ohne Uhrzeit erfasst; die Zeit ergibt sich aus der Trainingszeit der Gruppe (Product Owner 24.10.2026).
 - **R22:** Jeder Einsatz kann abgesagt werden (alle Einsatzarten, Product Owner 24.10.2026). Ein abgesagter Einsatz bleibt in Liste und Detail sichtbar (mit Grund), ist nicht änderbar und zählt nicht für Abrechnung, Kontrollliste Kletterhalle und Warnung bei doppelter Erfassung.
 - **R23:** Absagen darf, wer den Einsatz ändern darf (R13), nur mit Grund und nur, solange niemand „anwesend“ ist (Product Owner 24.10.2026).
 - **R24:** Eine Absage kann von Nutzern mit Schreibrecht zurückgenommen werden; danach ist der Einsatz wieder änderbar (Product Owner 24.10.2026).
@@ -34,7 +35,7 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 | US-EZ-05 | Eintägige Fahrt erfassen | Must | Geschäftsstelle, Referent:in |
 | US-EZ-06 | Mehrtägige Fahrt erfassen | Must | Geschäftsstelle, Referent:in |
 | US-EZ-07 | Organisierende Person suchen | Must | Geschäftsstelle, Referent:in |
-| US-EZ-08 | Wettkampfbegleitung erfassen | Must | Geschäftsstelle, Referent:in |
+| US-EZ-08 | Wettkampfbetreuung erfassen | Must | Geschäftsstelle, Referent:in |
 | US-EZ-09 | Arbeitseinsatz anlegen und Personen eintragen | Must | Geschäftsstelle, Referent:in |
 | US-EZ-10 | Anwesenheit beim Arbeitseinsatz bestätigen | Must | Geschäftsstelle, Referent:in |
 | US-EZ-11 | Neue Person beim Arbeitseinsatz anlegen | Must | Geschäftsstelle, Referent:in |
@@ -58,13 +59,13 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 **Als** Mitarbeiter:in der Geschäftsstelle oder Referent:in
 **möchte ich** für eine Gruppe ein Training mit Datum, Zeiten und Ort anlegen,
 **damit** das Training als Einsatz gespeichert ist und abgerechnet werden kann.
-**Priorität:** Must · **Regeln:** R1, R9, R10, R12, R13 · **Abhängig von:** Gruppen US-GR-18 (Trainingszeiten), US-GR-19 (`gr_group_roster`); Administration spec.md v0.8 (Rechte EZ, Orte `ad_locations`)
+**Priorität:** Must · **Regeln:** R1, R9, R10, R12, R13, R28 · **Abhängig von:** Gruppen US-GR-18 (Trainingszeiten), US-GR-19 (`gr_group_roster`); Administration spec.md v0.8 (Rechte EZ, Orte `ad_locations`)
 
 **Akzeptanzkriterien**
-- AK1: Gegeben die Gruppe „Gruppe 1“ hat die Trainingszeit dienstags 17:00–19:00, wenn ich „Training“ und „Gruppe 1“ wähle und das Datum Dienstag, 13.10.2026 eingebe, dann sind Beginn 17:00 und Ende 19:00 vorbelegt und änderbar.
-- AK2: Gegeben ich habe Gruppe, Datum, Beginn, Ende und einen aktiven Ort gewählt, wenn ich speichere, dann entsteht ein Einsatz „Training“ mit Referat der Gruppe, „erfasst von“ = ich und „erfasst am“ = jetzt.
-- AK3: Gegeben die Gruppe hat für den gewählten Wochentag keine Trainingszeit, wenn ich das Datum eingebe, dann bleiben Beginn und Ende leer und müssen eingegeben werden.
-- AK4 (Fehler): Gegeben der Ort ist nicht gewählt oder Ende liegt nicht nach Beginn, wenn ich speichere, dann wird nicht gespeichert und es erscheint „Bitte Ort wählen.“ bzw. „Das Ende muss nach dem Beginn liegen.“
+- AK1: Gegeben die Gruppe „Gruppe 1“ hat die Trainingszeit dienstags 17:00–19:00, wenn ich „Training“ und „Gruppe 1“ wähle und das Datum Dienstag, 13.10.2026 eingebe, dann wird „Trainingszeit: Di 17:00–19:00“ angezeigt; eine Uhrzeit wird nicht abgefragt (R28).
+- AK2: Gegeben ich habe Gruppe, Datum und einen aktiven Ort gewählt, wenn ich speichere, dann entsteht ein Einsatz „Training“ mit Referat der Gruppe, „erfasst von“ = ich und „erfasst am“ = jetzt.
+- AK3: Gegeben die Gruppe hat für den gewählten Wochentag keine Trainingszeit, wenn ich das Datum eingebe, dann erscheint der Hinweis „Für diesen Wochentag ist keine Trainingszeit hinterlegt.“; speichern ist trotzdem möglich [ANNAHME].
+- AK4 (Fehler): Gegeben der Ort ist nicht gewählt, wenn ich speichere, dann wird nicht gespeichert und es erscheint „Bitte Ort wählen.“
 - AK5 (Rechte): Gegeben ich habe die Vorlage Referent:in mit Referat Klettern, wenn ich eine Gruppe wählen will, dann werden nur Gruppen des Referats Klettern angeboten.
 - AK6: In der Ortsauswahl erscheinen nur aktive Orte.
 
@@ -139,6 +140,7 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 - AK3: Gegeben alle Pflichtfelder und die Anwesenheit sind ausgefüllt, wenn ich speichere, dann entsteht ein Einsatz mit Einsatzart, Gruppe, Referat der Gruppe, Titel, organisierender Person, Datum und Dauer-Kategorie.
 - AK4 (Fehler): Gegeben der Titel fehlt oder ist länger als 90 Zeichen (Product Owner 24.10.2026), wenn ich speichere, dann erscheint „Bitte einen Titel mit höchstens 90 Zeichen eingeben.“
 - AK5 (Rechte): Gegeben ich habe die Vorlage Referent:in mit Referat Kinder und Jugend, dann kann ich Fahrten nur für Gruppen dieses Referats anlegen.
+- AK6 (Fehler): Gegeben keine Teilnehmer:in oder keine Trainer:in bzw. Helfer:in ist angekreuzt, wenn ich speichere, dann erscheint „Bitte mindestens eine Trainer:in oder Helfer:in und eine Teilnehmer:in auswählen.“ (R5, Product Owner 24.10.2026).
 
 **Nicht Teil dieser Story:** Anmeldung und Planung der Fahrt (Modul Touren und Kurse); Erwachsenenfahrten; Berechnung der Vergütung (Finanzen).
 
@@ -152,7 +154,7 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 **Priorität:** Must · **Regeln:** R1, R2, R4, R5, R9, R13 · **Abhängig von:** US-EZ-02, US-EZ-07
 
 **Akzeptanzkriterien**
-- AK1: Gegeben ich wähle „Mehrtagesfahrt“, dann muss ich Titel, organisierende Person, Startdatum, Beginn, Enddatum und Ende angeben.
+- AK1: Gegeben ich wähle „Mehrtagesfahrt“, dann muss ich Titel, organisierende Person, Startdatum und Enddatum angeben; Beginn und Ende sind optional (Product Owner 24.10.2026).
 - AK2: Am Feld Beginn steht der Hinweis „Abfahrt am Startort“, am Feld Ende „Rückkehr am Startort“.
 - AK3: Gegeben Startdatum 07.11.2026 16:00 und Enddatum 09.11.2026 18:30, wenn ich speichere, dann wird der Einsatz mit beiden Zeitpunkten gespeichert und in Listen als „07.–09.11.2026“ angezeigt.
 - AK4 (Fehler): Gegeben das Enddatum liegt nicht nach dem Startdatum, wenn ich speichere, dann erscheint „Das Enddatum muss nach dem Startdatum liegen. Für eintägige Einsätze bitte ‚eintägig‘ wählen.“
@@ -176,25 +178,25 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 - AK4 (Fehler): Gegeben die Suche findet niemanden, dann erscheint „Keine aktive Person gefunden.“
 - AK5 (Rechte/Datenschutz): Gegeben ich habe die Vorlage Referent:in, dann zeigt die Suche auch Aktive anderer Referate, aber nur mit Namen.
 
-**Nicht Teil dieser Story:** Anlegen neuer Personen; organisierende Person bei Training, Wettkampfbegleitung und Arbeitseinsatz.
+**Nicht Teil dieser Story:** Anlegen neuer Personen; organisierende Person bei Training, Wettkampfbetreuung und Arbeitseinsatz.
 
 ---
 
-### US-EZ-08: Wettkampfbegleitung erfassen
+### US-EZ-08: Wettkampfbetreuung erfassen
 
 **Als** Mitarbeiter:in der Geschäftsstelle oder Referent:in
-**möchte ich** eine ein- oder mehrtägige Wettkampfbegleitung einer Gruppe erfassen,
+**möchte ich** eine ein- oder mehrtägige Wettkampfbetreuung einer Gruppe erfassen,
 **damit** die Begleitung nach dem Satz der Vergütungsordnung abgerechnet werden kann.
 **Priorität:** Must · **Regeln:** R1, R2, R3, R4, R5, R13 · **Abhängig von:** US-EZ-02, US-EZ-05, US-EZ-06
 
 **Akzeptanzkriterien**
-- AK1: Gegeben ich wähle „Wettkampfbegleitung“, dann muss ich „eintägig“ oder „mehrtägig“ wählen; die weiteren Felder entsprechen US-EZ-05 bzw. US-EZ-06, ohne organisierende Person (bestätigt 22.10.2026).
-- AK2: Gegeben eintägig mit Gruppe, Titel „Jugendcup Dresden“, Datum und Dauer-Kategorie, wenn ich speichere, dann entsteht ein Einsatz „Wettkampfbegleitung“.
-- AK3: In der Anwesenheit sind Trainer:innen, Helfer:innen und Teilnehmer:innen der Gruppe vorbelegt (wie US-EZ-02); begleitete Teilnehmer:innen werden angekreuzt.
+- AK1: Gegeben ich wähle „Wettkampfbetreuung“, dann muss ich „eintägig“ oder „mehrtägig“ wählen; die weiteren Felder entsprechen US-EZ-05 bzw. US-EZ-06, ohne organisierende Person (bestätigt 22.10.2026).
+- AK2: Gegeben eintägig mit Gruppe, Titel „Jugendcup Dresden“, Datum und Dauer-Kategorie, wenn ich speichere, dann entsteht ein Einsatz „Wettkampfbetreuung“.
+- AK3: In der Anwesenheit sind Trainer:innen, Helfer:innen und Teilnehmer:innen der Gruppe vorbelegt (wie US-EZ-02); betreute Teilnehmer:innen werden angekreuzt; mindestens eine Teilnehmer:in und eine Trainer:in oder Helfer:in sind Pflicht (R5, Product Owner 24.10.2026).
 - AK4 (Fehler): Gegeben „mehrtägig“ und Enddatum vor Startdatum, wenn ich speichere, dann erscheint die Fehlermeldung aus R2.
-- AK5 (Rechte): Gegeben ich habe die Vorlage Referent:in mit Referat Leistungssport, dann kann ich Wettkampfbegleitungen nur für Gruppen dieses Referats anlegen.
+- AK5 (Rechte): Gegeben ich habe die Vorlage Referent:in mit Referat Leistungssport, dann kann ich Wettkampfbetreuungen nur für Gruppen dieses Referats anlegen.
 
-**Nicht Teil dieser Story:** Wettkampfbegleitung ohne Gruppe [ANNAHME: nicht im MVP]; Arbeitseinsätze bei eigenen Wettkämpfen der Sektion (US-EZ-09).
+**Nicht Teil dieser Story:** Wettkampfbetreuung ohne Gruppe [ANNAHME: nicht im MVP]; Arbeitseinsätze bei eigenen Wettkämpfen der Sektion (US-EZ-09).
 
 ---
 
@@ -262,7 +264,7 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 **Akzeptanzkriterien**
 - AK1: Gegeben ich öffne einen Einsatz meines Referats, wenn ich „Bearbeiten“ wähle, dann kann ich alle Felder und die Anwesenheit ändern; Einsatzart und Gruppe sind nicht änderbar (bestätigt 22.10.2026).
 - AK2: Gegeben ich speichere eine Änderung, dann werden „geändert von“ und „geändert am“ gesetzt; „erfasst von“ und „erfasst am“ bleiben unverändert.
-- AK3 (Fehler): Gegeben die Änderung verletzt eine Pflichtregel (z. B. Ende vor Beginn), wenn ich speichere, dann erscheint die zugehörige Fehlermeldung und der alte Stand bleibt erhalten.
+- AK3 (Fehler): Gegeben die Änderung verletzt eine Pflichtregel (z. B. Enddatum vor Startdatum), wenn ich speichere, dann erscheint die zugehörige Fehlermeldung und der alte Stand bleibt erhalten.
 - AK4 (Rechte): Gegeben ich habe die Vorlage Vorstand oder Admin, dann sehe ich keine Schaltfläche „Bearbeiten“, und ein direkter Schreibversuch wird von der Datenbank abgelehnt.
 
 **Nicht Teil dieser Story:** Sperre nach Abgabe des Halbjahres [OFFEN, Finanzen]; Änderungsverlauf je Feld.
@@ -382,7 +384,7 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 **Priorität:** Must · **Regeln:** R13, R18 · **Abhängig von:** US-EZ-01, US-EZ-05, US-EZ-06, US-EZ-08; Gruppen US-GR-20 (`gr_my_groups`); Administration (`ad_me()` liefert die eigene Person)
 
 **Akzeptanzkriterien**
-- AK1: Gegeben ich bin am 13.10.2026 Trainer:in von genau einer Gruppe („Gruppe 1“), wenn ich einen Einsatz mit Gruppe (Training, Fahrt, Wettkampfbegleitung) für dieses Datum anlege, dann ist „Gruppe 1“ vorausgewählt und die Anwesenheitsliste von Gruppe 1 geladen.
+- AK1: Gegeben ich bin am 13.10.2026 Trainer:in von genau einer Gruppe („Gruppe 1“), wenn ich einen Einsatz mit Gruppe (Training, Fahrt, Wettkampfbetreuung) für dieses Datum anlege, dann ist „Gruppe 1“ vorausgewählt und die Anwesenheitsliste von Gruppe 1 geladen.
 - AK2: Gegeben ich bin in mehreren Gruppen eingetragen, dann stehen meine Gruppen oben in der Auswahl; vorausgewählt ist die Gruppe, deren Trainingszeit auf den Wochentag des Datums fällt, falls es genau eine solche gibt [ANNAHME]; sonst ist keine Gruppe vorausgewählt.
 - AK3: Gegeben ich bin in keiner Gruppe eingetragen (z. B. Mitarbeiter:in der Geschäftsstelle), dann ist keine Gruppe vorausgewählt und die Auswahl zeigt alle Gruppen, für die ich Rechte habe.
 - AK4: Gegeben eine Gruppe ist vorausgewählt, wenn ich eine andere Gruppe wähle, für die meine Rechtevorlage das Erfassen erlaubt, dann wird die Anwesenheitsliste der gewählten Gruppe geladen.
@@ -420,7 +422,7 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 **Priorität:** Must · **Regeln:** R1, R2, R4, R5, R8, R11, R13, R16, R18 · **Abhängig von:** US-EZ-02, US-EZ-06, US-EZ-07
 
 **Akzeptanzkriterien**
-- AK1: Gegeben ich wähle „Trainingslager“, dann sind die Felder wie bei der Mehrtagesfahrt: Gruppe, Titel, organisierende Person, Startdatum mit Beginn („Abfahrt am Startort“), Enddatum mit Ende („Rückkehr am Startort“) (Product Owner 24.10.2026).
+- AK1: Gegeben ich wähle „Trainingslager“, dann sind die Felder wie bei der Mehrtagesfahrt: Gruppe, Titel, organisierende Person, Startdatum mit optionalem Beginn („Abfahrt am Startort“), Enddatum mit optionalem Ende („Rückkehr am Startort“) (Product Owner 24.10.2026).
 - AK2: Die Anwesenheitsliste der Gruppe zum Startdatum ist vorbelegt; Trainer:innen, Helfer:innen und Teilnehmer:innen werden angekreuzt (wie US-EZ-02).
 - AK3: Gegeben Trainingslager „Frankenjura“ der Gruppe 1 vom 28.12.2026 09:00 bis 02.01.2027 17:00, wenn ich speichere, dann entsteht ein Einsatz „Trainingslager“ und erscheint in Listen als „28.12.2026–02.01.2027“.
 - AK4 (Fehler): Gegeben das Enddatum liegt nicht nach dem Startdatum, dann erscheint die Fehlermeldung aus R2.
@@ -476,8 +478,8 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 - Begriffe im Glossar (v1.5): erfüllt.
 - Datenfelder im Datenmodell der Spec: **offen**, entsteht mit spec.md.
 - Keine [OFFEN]-Punkte in den Stories: **nicht erfüllt** für US-EZ-11 (Art. 13 DSGVO, als „Nicht Teil“ ausgelagert) und US-EZ-12 (Sperre nach Halbjahr, ausgelagert). Beide blockieren die Umsetzung nicht.
-- Bestätigt vom Product Owner (22.10.2026): R15 (Löschen nur Geschäftsstelle), R16 (Stichtag für Teilnehmer:innen und Trainer:innen; bei mehrtägigen Einsätzen Startdatum), R18 (Vorschlag der eigenen Gruppe ohne zusätzliche Rechte), Rolle „Helfer:in“ als Standard beim Arbeitseinsatz, keine organisierende Person bei Wettkampfbegleitung, Einsatzart und Gruppe nach dem Speichern nicht änderbar, Feldlängen (Titel 60, Probetraining 30, Bemerkung 500 Zeichen), Orte pflegt nur der Admin.
-- Noch offene Annahmen (bei der Spec bestätigen): Wettkampfbegleitung nur mit Gruppe; „alle anwesend“ lässt „nicht erschienen“ unverändert; Probetrainings nicht in der Summe der Kontrollliste; Warnung ohne Link bei nicht lesbarem Einsatz; Schutz gegen Doppel-Speichern; Eingaben bei abgelaufener Sitzung im Browser behalten; Vorauswahl bei mehreren eigenen Gruppen über den Wochentag der Trainingszeit (US-EZ-19 AK2).
+- Bestätigt vom Product Owner (22.10.2026): R15 (Löschen nur Geschäftsstelle), R16 (Stichtag für Teilnehmer:innen und Trainer:innen; bei mehrtägigen Einsätzen Startdatum), R18 (Vorschlag der eigenen Gruppe ohne zusätzliche Rechte), Rolle „Helfer:in“ als Standard beim Arbeitseinsatz, keine organisierende Person bei Wettkampfbetreuung, Einsatzart und Gruppe nach dem Speichern nicht änderbar, Feldlängen (Titel 60, Probetraining 30, Bemerkung 500 Zeichen), Orte pflegt nur der Admin.
+- Noch offene Annahmen (bei der Spec bestätigen): Wettkampfbetreuung nur mit Gruppe; „alle anwesend“ lässt „nicht erschienen“ unverändert; Probetrainings nicht in der Summe der Kontrollliste; Warnung ohne Link bei nicht lesbarem Einsatz; Schutz gegen Doppel-Speichern; Eingaben bei abgelaufener Sitzung im Browser behalten; Vorauswahl bei mehreren eigenen Gruppen über den Wochentag der Trainingszeit (US-EZ-19 AK2).
 - Bestätigt vom Product Owner (24.10.2026): Kurs, Tour und Trainingslager auch von Hand; Kurs und Tour ohne Gruppe und ohne Teilnehmende; Trainingslager wie Mehrtagesfahrt; Titel bis 90 Zeichen; Absage für alle Einsatzarten mit Grund, durch Nutzer mit Schreibrecht, zurücknehmbar; Einsätze aus der Planungshilfe in der Anwesenheitserfassung nur für die Anwesenheit.
 - Noch offene Annahmen aus v0.4: Rolle Trainer:in vorbelegt bei Kurs und Tour (US-EZ-20 AK2); „durchgeführt“ = mindestens eine Leitung oder Helfer:in anwesend (US-EZ-23 AK7).
 - Voraussetzungen aus anderen Modulen: eingearbeitet in Gruppen (US-GR-18, US-GR-19, US-GR-20) und Administration (spec.md v0.8, T50–T58); müssen vor der Anwesenheitserfassung umgesetzt sein. US-EZ-23 zusätzlich: Planungshilfe Touren und Kurse (spec.md TK T1–T8), umgesetzt zusammen mit TK T13.
