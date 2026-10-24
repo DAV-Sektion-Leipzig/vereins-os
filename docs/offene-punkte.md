@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 24.10.2026 · Version 5.2
+Stand: 24.10.2026 · Version 5.3
+Änderungen v5.3: Gruppen: Übergabe aus der Administration (uebergabe-gruppen-v08.md, EZ-Pfade nicht mehr als todo); Administration: Korrektur des Nachtrags v0.8 (spec.md AD v0.9.5).
 Änderungen v5.2: Administration: Nachtrag v0.8 Ready (spec.md AD v0.9.4, Nachtrag v0.8.1), Übergabe der Anwesenheitserfassung A9 eingearbeitet, Stories US-AD-27 bis US-AD-30, Orte ohne Startbestand im Nachtrag; Q1 für den Nachtrag v0.9 weiter offen.
 Änderungen v5.1: Anwesenheitserfassung: neue Annahmen der Spec v0.3 bestätigt; Reaktivieren auch referatsübergreifend (Übergabe an die Administration v1.5).
 Änderungen v5.0: Anwesenheitserfassung: Annahmen durchgegangen (spec.md EZ v0.3); Q1 (eigene Aktion „freigeben“) und Q2 (je Modul erweitern) entschieden; Übergabe an die Administration v1.4 (A9, Reaktivieren).
@@ -84,6 +85,7 @@ Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) ·
 
 ## GR – Gruppen (Priorität 2)
 
+- **Übergabe aus der Administration (offen, v1.0, 24.10.2026):** specs/ad-administration/uebergabe-gruppen-v08.md – Modul EZ und Reichweite „Referat“ für EZ sind umgesetzt (AD Nachtrag v0.8); `todo` für die EZ-Pfade in `480_gr_read_functions.test.sql` entfernen, GR plan.md O2 abschließen (G1, G2).
 - [OFFEN] Welche Daten zu Teilnehmer:innen werden gespeichert (Minderjährige, ggf. Eltern als Kontakt)? (modul-landkarte.md)
 - [OFFEN] Nutzen FI und OA Gruppendaten, und welche? (modul-landkarte.md)
 - Hinweis aus EA: Gruppenleitungen sollen Kontaktdaten der Aktiven ihrer Gruppe sehen, aber nicht deren Zugehörigkeit zu anderen Gruppen.
