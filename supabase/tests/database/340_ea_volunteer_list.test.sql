@@ -130,12 +130,12 @@ select results_eq($$ select right(id::text, 2)::int from public.ea_volunteer_lis
 
 -- aktiv ohne Funktion oder Amt
 select results_eq($$ select last_name from public.ea_volunteer_list(p_without_assignment => true) $$,
-  $$ values ('Ehemals'::text), ('Lehrer'), ('Sechzehn') $$,
-  'im Seed ohne Funktion oder Amt: Tom, Lars, Sam (Funktion in Gruppe zählt nicht, plan.md H6)');
+  $$ values ('Ehemals'::text) $$,
+  'im Seed ohne Funktion oder Amt nur Tom (Funktion in Gruppe beendet; laufende zählt, GR plan.md H6)');
 select lives_ok($$ select public.ea_create_volunteer('Ohne', 'Zuordnung', null, null, null, null, null) $$,
   'Geschäftsstelle legt Person ohne Zuordnung an');
 select results_eq($$ select last_name from public.ea_volunteer_list(p_without_assignment => true) $$,
-  $$ values ('Ehemals'::text), ('Lehrer'), ('Sechzehn'), ('Zuordnung') $$, 'Filter „aktiv ohne Funktion oder Amt“');
+  $$ values ('Ehemals'::text), ('Zuordnung') $$, 'Filter „aktiv ohne Funktion oder Amt“');
 
 -- Paginierung
 select is((select count(*)::int from public.ea_volunteer_list(p_limit => 3)), 3, 'p_limit 3');
