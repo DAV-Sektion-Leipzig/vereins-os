@@ -72,7 +72,7 @@ select ok(not public.ea_property_writable(pg_temp.gf(), 'a0000000-0000-4000-8000
 select throws_ok(format($$ insert into public.ea_properties (person_id, property_type_id, field_values, related_group_id, valid_from)
                            values ('a0000000-0000-4000-8000-000000000024', %L, '{"function": "Helfer:in"}',
                                    'c0000000-0000-4000-8000-000000000001', current_date) $$, pg_temp.gf()),
-  'P0001', 'EA_GROUP_RELATION_ONLY_GR', 'Admin: Trigger meldet R39');
+  '42501', null, 'Admin: kein Spaltenrecht auf related_group_id, Schreiben nur über Gruppen (R39)');
 select ok(public.ea_property_writable((select id from public.ea_property_types where system_key = 'contact'),
                                       'a0000000-0000-4000-8000-000000000024', null),
   'andere Arten weiterhin nach den Regeln der Administration');

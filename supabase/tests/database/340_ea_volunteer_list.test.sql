@@ -74,7 +74,7 @@ select is((select array_agg(right(l.id::text, 2)::int order by l.id) from public
 select is((select array_agg(right(l.id::text, 2)::int order by l.id) from public.ea_volunteer_list(p_search => 'MUSTER') l),
   array[4, 5], 'Suche ohne Groß-/Kleinschreibung im Nachnamen');
 select is((select array_agg(right(l.id::text, 2)::int order by l.id) from public.ea_volunteer_list(p_search => '  ') l),
-  array[4, 5, 9, 10, 19, 20, 21, 22], 'leerer Suchbegriff = kein Filter');
+  array[4, 5, 9, 10, 19, 20, 21, 22, 26, 28, 31, 32], 'leerer Suchbegriff = kein Filter');
 select is_empty($$ select 1 from public.ea_volunteer_list(p_search => 'gibtesnicht') $$, 'Suche ohne Treffer (AK4)');
 select pg_temp.as_owner();
 update public.ea_persons set preferred_name = 'Zwerg' where id = 'a0000000-0000-4000-8000-000000000021';
@@ -130,11 +130,12 @@ select results_eq($$ select right(id::text, 2)::int from public.ea_volunteer_lis
 
 -- aktiv ohne Funktion oder Amt
 select results_eq($$ select last_name from public.ea_volunteer_list(p_without_assignment => true) $$,
-  $$ values ('Ehemals'::text) $$, 'im Seed nur Tom Ehemals ohne Zuordnung (Funktion in Gruppe beendet)');
+  $$ values ('Ehemals'::text), ('Lehrer'), ('Sechzehn') $$,
+  'im Seed ohne Funktion oder Amt: Tom, Lars, Sam (Funktion in Gruppe zählt nicht, plan.md H6)');
 select lives_ok($$ select public.ea_create_volunteer('Ohne', 'Zuordnung', null, null, null, null, null) $$,
   'Geschäftsstelle legt Person ohne Zuordnung an');
 select results_eq($$ select last_name from public.ea_volunteer_list(p_without_assignment => true) $$,
-  $$ values ('Ehemals'::text), ('Zuordnung') $$, 'Filter „aktiv ohne Funktion oder Amt“');
+  $$ values ('Ehemals'::text), ('Lehrer'), ('Sechzehn'), ('Zuordnung') $$, 'Filter „aktiv ohne Funktion oder Amt“');
 
 -- Paginierung
 select is((select count(*)::int from public.ea_volunteer_list(p_limit => 3)), 3, 'p_limit 3');

@@ -123,6 +123,8 @@ select 'a0000000-0000-4000-8000-000000000026', t.id, '{"function": "Helfer:in"}'
        public.gr_today() - 100
   from public.ea_property_types t where t.system_key = 'group_function';
 insert into public.gr_training_times (id, group_id, weekday, starts_at, ends_at, valid_from)
+values ('c1000000-0000-4000-8000-0000000000fe', 'c0000000-0000-4000-8000-000000000003', 3, '16:00', '17:00', public.gr_today() - 100);
+insert into public.gr_training_times (id, group_id, weekday, starts_at, ends_at, valid_from)
 values ('c1000000-0000-4000-8000-0000000000ff', 'c0000000-0000-4000-8000-000000000003', 6, '10:00', '11:00', public.gr_today() + 30);
 update public.gr_memberships set left_on = public.gr_today() - 10 where group_id = 'c0000000-0000-4000-8000-000000000003';
 
