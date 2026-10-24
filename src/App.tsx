@@ -48,6 +48,9 @@ import { EaLayout } from '@/features/ea/EaLayout'
 import { loadGremien } from '@/features/ea/gremien/data'
 import { GremienPage } from '@/features/ea/gremien/GremienPage'
 import { loadGrAccess, requireGrEdit } from '@/features/gr/access'
+import { AufnahmenPage } from '@/features/gr/aufnahme/AufnahmenPage'
+import { AufnahmePage } from '@/features/gr/aufnahme/AufnahmePage'
+import { loadAdmission, loadPendingAdmissions } from '@/features/gr/aufnahme/data'
 import { GrLayout } from '@/features/gr/GrLayout'
 import { loadGroupOverview } from '@/features/gr/gruppen/data'
 import { loadGroupDetail } from '@/features/gr/gruppen/detail'
@@ -148,10 +151,14 @@ export const router = createBrowserRouter([
         handle: { moduleName: 'Gruppen' } satisfies RouteHandle,
         children: [
           { index: true, loader: loadGroupOverview, element: <GruppenPage /> },
-          { path: 'aufnahmen', element: <PlaceholderPage title="Aufnahmen offen" /> },
+          { path: 'aufnahmen', loader: loadPendingAdmissions, element: <AufnahmenPage /> },
           { path: 'gruppen/neu', loader: requireGrEdit, element: <GruppeNeuPage /> },
           { path: 'gruppen/:id', loader: loadGroupDetail, element: <GruppeDetailPage /> },
-          { path: 'gruppen/:id/aufnehmen', loader: requireGrEdit, element: <PlaceholderPage title="Teilnehmer:in aufnehmen" /> },
+          {
+            path: 'gruppen/:id/aufnehmen',
+            loader: async (args) => (await requireGrEdit(), loadAdmission(args)),
+            element: <AufnahmePage />,
+          },
           { path: 'personen/:id', element: <PlaceholderPage title="Person" /> },
           { path: '*', loader: () => redirect('/gr') },
         ],
