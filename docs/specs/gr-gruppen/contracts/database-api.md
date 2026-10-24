@@ -15,6 +15,8 @@ Konventionen: Aufruf per `supabase.rpc('<name>', {…})`; Datum als `YYYY-MM-DD`
 | `gr_contract_status(p_ends_on date, p_date date)` | text `active`/`cancelled`/`ended` | authenticated | immutable |
 | `gr_needs_guardian(p_person uuid)` | boolean, null ohne Sichtbarkeit | authenticated | R2-Hinweis ohne Alter (research.md R-GR-09) |
 | `gr_person_has_group_relation(p_person uuid)` | boolean, null ohne AD ≥ read | authenticated | nur für `ad_v_person_overview` (Ü3) |
+| `gr_user_name(p_user uuid)` | text, null ohne GR lesen | authenticated | „angelegt von“ in `gr_v_pending_admissions` |
+| `gr_weekday_label(p_weekday smallint)` | text `Mo`…`So` | authenticated | immutable |
 | `gr_has_current_relation(p_person uuid)` | boolean | – | intern |
 | `gr_is_adult(p_person uuid, p_date date)` | boolean | – | intern |
 | `ea_set_status_from_group(p_person uuid, p_valid_from date)` | boolean (gesetzt) | – | intern (Ü1) |

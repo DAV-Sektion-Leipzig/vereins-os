@@ -145,7 +145,7 @@ description: "Tasks für das Modul Gruppen (GR)"
 
 **Unabhängiger Test**: pgTAP 480 und 490 grün; EZ-Pfade als `todo` (O2).
 
-- [ ] T020 [P] [US-GR-19] (spec T10 Teil) `supabase/tests/database/480_gr_read_functions.test.sql`:
+- [x] T020 [P] [US-GR-19] (spec T10 Teil) `supabase/tests/database/480_gr_read_functions.test.sql`:
   - `gr_v_memberships`: Spaltenliste exakt nach contracts/database-api.md; Ben (25) `needs_clarification = true`, `clarify_since` = Vertragsende, `has_emergency_contact = false`; Paula erscheint nicht (keine Teilnahme), aber in `gr_v_pending_admissions` mit `needs_guardian = true`;
   - `gr_group_overview()`: Zeilen ohne „Altgruppe Test“, mit `true` inklusive; `training_times_today` je nach Wochentag von `gr_today()`; Zähler aktiv, klären, kein Notfallkontakt, offen;
   - `gr_guardian_emails(Test 1)`: Janas Adresse genau einmal; Vorstand → `GR_FORBIDDEN`; volljährige Teilnehmer:in mit eigener Adresse (R13);
@@ -153,9 +153,9 @@ description: "Tasks für das Modul Gruppen (GR)"
   - `gr_groups_for_attendance`: mit GR lesen alle nicht aufgelösten Gruppen, sortiert; Vorstand leer;
   - `gr_my_groups` für Person 26 (per `set_config('request.jwt.claims', …)`): Test 1, `trainer`, `{2,4}`;
   - `todo` (O2): Rita → Klettergruppe Liste, Test 1 `GR_ROSTER_FORBIDDEN`; Kim → umgekehrt; Admin mit EZ lesen → beide; `gr_groups_for_attendance` je Referat.
-- [ ] T021 [P] [US-GR-01] (spec T10 Teil) `supabase/tests/database/490_gr_volume.test.sql`: in der Transaktion 20 Gruppen, 400 Teilnehmer:innen mit Vertrag, Erziehungsberechtigten und Notfallkontakt; Laufzeit per `clock_timestamp()`: `gr_group_overview` < 1 s, `gr_v_memberships` einer Gruppe < 1 s, `gr_group_roster` < 300 ms, `select … from ea_persons` als Geschäftsstelle (≥ 500 Personen) < 1 s.
-- [ ] T022 [US-GR-19] (spec T8) `supabase/migrations/20261025000800_gr_read_functions.sql`: `gr_v_memberships`, `gr_v_pending_admissions` (beide `security_invoker = true`), `gr_group_overview`, `gr_guardian_emails`, `gr_group_roster`, `gr_groups_for_attendance`, `gr_my_groups` nach contracts/database-api.md; EZ-Prüfungen nach research.md R-GR-11.
-- [ ] T023 PR `us-gr-19-lesefunktionen` (Spec-Tasks T8, T10 Teil; Hinweis auf O2); Auto-Merge nach grünen Checks.
+- [x] T021 [P] [US-GR-01] (spec T10 Teil) `supabase/tests/database/490_gr_volume.test.sql`: in der Transaktion 20 Gruppen, 400 Teilnehmer:innen mit Vertrag, Erziehungsberechtigten und Notfallkontakt; Laufzeit per `clock_timestamp()`: `gr_group_overview` < 1 s, `gr_v_memberships` einer Gruppe < 1 s, `gr_group_roster` < 300 ms, `select … from ea_persons` als Geschäftsstelle (≥ 500 Personen) < 1 s.
+- [x] T022 [US-GR-19] (spec T8) `supabase/migrations/20261025000800_gr_read_functions.sql`: `gr_v_memberships`, `gr_v_pending_admissions` (beide `security_invoker = true`), `gr_group_overview`, `gr_guardian_emails`, `gr_group_roster`, `gr_groups_for_attendance`, `gr_my_groups` nach contracts/database-api.md; EZ-Prüfungen nach research.md R-GR-11.
+- [x] T023 PR `us-gr-19-lesefunktionen` (Spec-Tasks T8, T10 Teil; Hinweis auf O2); Auto-Merge nach grünen Checks.
 
 ---
 

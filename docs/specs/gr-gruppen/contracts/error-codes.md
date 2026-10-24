@@ -10,10 +10,10 @@ Diese Liste ist normativ für Gruppen (spec.md 5, T2). Die Meldungstexte stehen 
 
 | Code | Meldung | Regel | Ausgelöst in | Status |
 |---|---|---|---|---|
-| `GR_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | spec.md 3 | alle Schreibfunktionen, `gr_guardian_emails` | umgesetzt (Lesefunktionen T8 folgen) |
-| `GR_ROSTER_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | R20, US-GR-19 AK5 | `gr_group_roster` | geplant (T8) |
-| `GR_GROUP_NOT_FOUND` | Gruppe nicht gefunden. | US-GR-19 AK6 | `gr_group_roster`; Funktionen mit unbekannter Gruppe | umgesetzt (Lesefunktionen T8 folgen) |
-| `GR_GROUP_DISSOLVED` | Die Gruppe ist aufgelöst und kann nicht mehr geändert werden. | spec.md 4, R38 | Gruppen-, Trainingszeit-, Aufnahme- und Funktionsfunktionen; `ea_properties_validate` | umgesetzt (Lesefunktionen T8 folgen) |
+| `GR_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | spec.md 3 | alle Schreibfunktionen, `gr_guardian_emails` | umgesetzt |
+| `GR_ROSTER_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | R20, US-GR-19 AK5 | `gr_group_roster` | umgesetzt |
+| `GR_GROUP_NOT_FOUND` | Gruppe nicht gefunden. | US-GR-19 AK6 | `gr_group_roster`; Funktionen mit unbekannter Gruppe | umgesetzt |
+| `GR_GROUP_DISSOLVED` | Die Gruppe ist aufgelöst und kann nicht mehr geändert werden. | spec.md 4, R38 | Gruppen-, Trainingszeit-, Aufnahme- und Funktionsfunktionen; `ea_properties_validate` | umgesetzt |
 | `GR_GROUP_NAME_TAKEN` | Eine Gruppe mit diesem Namen gibt es bereits. | R1 | `gr_save_group` | umgesetzt |
 | `GR_GROUP_FIELDS_REQUIRED` | Bitte Name und Referat angeben. | R1 | `gr_save_group` | umgesetzt |
 | `GR_REFERAT_INACTIVE` | Dieses Referat ist nicht mehr aktiv. | R21 | `gr_save_group` | umgesetzt |
