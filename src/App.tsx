@@ -47,6 +47,8 @@ import { PersonNeuPage } from '@/features/ea/aktive/PersonNeuPage'
 import { EaLayout } from '@/features/ea/EaLayout'
 import { loadGremien } from '@/features/ea/gremien/data'
 import { GremienPage } from '@/features/ea/gremien/GremienPage'
+import { loadGrAccess, requireGrEdit } from '@/features/gr/access'
+import { GrLayout } from '@/features/gr/GrLayout'
 import { loadStammdaten } from '@/features/ea/stammdaten/data'
 import { StammdatenPage } from '@/features/ea/stammdaten/StammdatenPage'
 import { KeinZugriffPage } from '@/features/start/KeinZugriffPage'
@@ -129,6 +131,24 @@ export const router = createBrowserRouter([
           { path: 'qualifikationsarten/:id', loader: qualificationTypeLoader('EA'), element: <QualifikationsartFormular basePath="/ea/qualifikationsarten" /> },
           { path: 'stammdaten', loader: loadStammdaten, element: <StammdatenPage /> },
           { path: '*', loader: () => redirect('/ea/aktive') },
+        ],
+      },
+      {
+        // GR mit GR ≥ lesen; sonst /kein-zugriff ohne Datenabfrage (GR spec.md 3, contracts/routes.md).
+        // Seiten folgen je Story auf eigenen Branches (plan.md „Branches“); bis dahin Platzhalter.
+        id: 'gr',
+        path: 'gr',
+        loader: loadGrAccess,
+        element: <GrLayout />,
+        handle: { moduleName: 'Gruppen' } satisfies RouteHandle,
+        children: [
+          { index: true, element: <PlaceholderPage title="Gruppen" /> },
+          { path: 'aufnahmen', element: <PlaceholderPage title="Aufnahmen offen" /> },
+          { path: 'gruppen/neu', loader: requireGrEdit, element: <PlaceholderPage title="Gruppe anlegen" /> },
+          { path: 'gruppen/:id', element: <PlaceholderPage title="Gruppe" /> },
+          { path: 'gruppen/:id/aufnehmen', loader: requireGrEdit, element: <PlaceholderPage title="Teilnehmer:in aufnehmen" /> },
+          { path: 'personen/:id', element: <PlaceholderPage title="Person" /> },
+          { path: '*', loader: () => redirect('/gr') },
         ],
       },
     ],

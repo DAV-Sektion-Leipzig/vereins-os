@@ -50,3 +50,35 @@ export type PersonNameParts = {
 export function personName({ first_name, preferred_name, last_name }: PersonNameParts): string {
   return `${preferred_name?.trim() || first_name} ${last_name}`
 }
+
+/** Wochentage nach ISO (1 = Montag), Kürzel und ausgeschrieben (Trainingszeiten, GR spec.md 2.1). */
+export const WEEKDAYS: { value: number; short: string; long: string }[] = [
+  { value: 1, short: 'Mo', long: 'Montag' },
+  { value: 2, short: 'Di', long: 'Dienstag' },
+  { value: 3, short: 'Mi', long: 'Mittwoch' },
+  { value: 4, short: 'Do', long: 'Donnerstag' },
+  { value: 5, short: 'Fr', long: 'Freitag' },
+  { value: 6, short: 'Sa', long: 'Samstag' },
+  { value: 7, short: 'So', long: 'Sonntag' },
+]
+
+export function weekdayShort(value: number): string {
+  return WEEKDAYS.find((d) => d.value === value)?.short ?? ''
+}
+
+/** Uhrzeit aus der Datenbank (`time`, z. B. „16:30:00“) als HH:MM. */
+export function formatClock(value: string): string {
+  return value.slice(0, 5)
+}
+
+/** Heute in Europe/Berlin als `YYYY-MM-DD` (wie gr_today in der Datenbank). */
+export function todayIso(): string {
+  return new Intl.DateTimeFormat('sv-SE', { timeZone: TIME_ZONE }).format(new Date())
+}
+
+/** Alter in vollen Jahren am Stichtag; nur bei lesbarem Geburtsdatum (W2 GR). */
+export function ageOn(birthDate: string, day: string = todayIso()): number {
+  const [by, bm, bd] = birthDate.split('-').map(Number)
+  const [y, m, d] = day.split('-').map(Number)
+  return y - by - (m < bm || (m === bm && d < bd) ? 1 : 0)
+}
