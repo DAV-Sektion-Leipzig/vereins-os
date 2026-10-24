@@ -44,6 +44,9 @@ lerna-debug.log*
 supabase/.temp/
 supabase/.branches/
 
+# Deno: Lockfile entsteht beim lokalen Lauf der Tests der Edge Functions
+deno.lock
+
 # Editor / OS
 .vscode/*
 !.vscode/extensions.json
