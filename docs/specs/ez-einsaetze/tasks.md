@@ -92,7 +92,7 @@ description: "Tasks für das Modul Anwesenheitserfassung (EZ)"
 ### Fehlercodes
 
 - [x] T015 [P] (spec T7) `docs/specs/ad-administration/contracts/error-codes.md`: Abschnitt „Anwesenheitserfassung (EZ)“ durch die vollständige Liste nach spec.md v0.5 mit Verweis auf [contracts/error-codes.md](contracts/error-codes.md) ersetzen; `EZ_END_TIME`, `EZ_KIND_NOT_AVAILABLE` entfernen; offenen Punkt zu fehlenden Meldungen aktualisieren. Sonst nichts in `ad-administration/` ändern. Status in contracts/error-codes.md auf „umgesetzt“.
-- [ ] T016 Personendaten-Prüfung nach CLAUDE.md; PR `ez-kern-datenbank` mit Stories, Spec-Tasks T1–T7, T9; Auto-Merge nach grünen Checks; rote Checks nicht neu anstoßen, Ursache suchen.
+- [x] T016 Personendaten-Prüfung nach CLAUDE.md; PR `ez-kern-datenbank` mit Stories, Spec-Tasks T1–T7, T9; Auto-Merge nach grünen Checks; rote Checks nicht neu anstoßen, Ursache suchen. Erledigt: PR #37.
 
 ---
 
@@ -107,9 +107,9 @@ description: "Tasks für das Modul Anwesenheitserfassung (EZ)"
 
 **Unabhängiger Test**: /ez in der Vorschau mit allen Testzugängen (quickstart.md D 1, 11).
 
-- [ ] T019 [US-EZ-14] (spec T10 Teil) `src/lib/errors.ts`: EZ-Codes aus contracts/error-codes.md; `toMessage` mit `details` für `EZ_FIELD_REQUIRED`.
-- [ ] T020 [US-EZ-14] (spec T10 Teil) `src/features/ez/access.ts`, `labels.ts` (Einsatzarten, Rollen, Stände, Dauer), `EzLayout.tsx` (Navigation „Einsätze“, „Kontrolle Kletterhalle“), Routen in `src/App.tsx` mit Routenschutz nach contracts/routes.md.
-- [ ] T021 [US-EZ-14] [US-EZ-15] (spec T10) `src/features/ez/liste/EinsaetzePage.tsx`, `data.ts`: `ez_list_events` mit Filtern (Halbjahr Standard, Referat, Gruppe, Einsatzart), 50 je Seite (`Pagination`), mobil Karten, Zähler „2 T · 1 H · 9 TN“, Kennzeichen „abgesagt“, Leerzustand; „Neuer Einsatz“ nur mit `ad_has_any_level('EZ','edit')`.
+- [x] T019 [US-EZ-14] (spec T10 Teil) `src/lib/errors.ts`: EZ-Codes aus contracts/error-codes.md; `toMessage` mit `details` für `EZ_FIELD_REQUIRED`. Umgesetzt in `src/features/ez/errors.ts` (nutzt `toMessage` aus `src/lib/errors.ts`).
+- [x] T020 [US-EZ-14] (spec T10 Teil) `src/features/ez/access.ts`, `labels.ts` (Einsatzarten, Rollen, Stände, Dauer), `EzLayout.tsx` (Navigation „Einsätze“, „Kontrolle Kletterhalle“), Routen in `src/App.tsx` mit Routenschutz nach contracts/routes.md.
+- [x] T021 [US-EZ-14] [US-EZ-15] (spec T10) `src/features/ez/liste/EinsaetzePage.tsx`, `data.ts`: `ez_list_events` mit Filtern (Halbjahr Standard, Referat, Gruppe, Einsatzart), 50 je Seite (`Pagination`), mobil Karten, Zähler „2 T · 1 H · 9 TN“, Kennzeichen „abgesagt“, Leerzustand; „Neuer Einsatz“ nur mit `ad_has_any_level('EZ','edit')`. Erledigt: PR #38.
 
 ---
 
@@ -117,31 +117,31 @@ description: "Tasks für das Modul Anwesenheitserfassung (EZ)"
 
 **Unabhängiger Test**: quickstart.md D 2, 3, 10.
 
-- [ ] T022 [US-EZ-01] (O2) `src/features/ez/shared/OrtAuswahl.tsx` (aktive Orte aus `ad_locations`, gespeicherter inaktiver Ort bleibt angezeigt) und `AktivenSuche.tsx` (`ea_search_active_persons` ab 2 Zeichen, Vorschlagsliste „Aus der Gruppe“, „Keine aktive Person gefunden.“).
-- [ ] T023 [US-EZ-01] [US-EZ-19] (spec T11 Teil) `src/features/ez/erfassen/EinsatzNeuPage.tsx`, `EinsatzartAuswahl.tsx`, `EinsatzFormular.tsx` (Training): Gruppe aus `gr_groups_for_attendance` gefiltert auf beschreibbare Referate, Vorschlag nach `gr_my_groups` (R18), Datum Standard heute, Anzeige „Trainingszeit: Di 17:00–19:00“ bzw. Hinweis R28, Ort, Bemerkung mit Hinweis R7.
-- [ ] T024 [US-EZ-02] [US-EZ-03] [US-EZ-04] (spec T12) `src/features/ez/erfassen/Anwesenheit.tsx`, `Probetrainings.tsx`: Roster laden und bei Datumswechsel neu laden (Hinweis), Mehrfachzeilen zusammenfassen (plan.md H1), zwei Abschnitte mit Zähler, Rolle nur bei angehakten Betreuer:innen, Vertretung über `AktivenSuche`, Probetrainings mit Hinweis R6.
-- [ ] T025 [US-EZ-17] [US-EZ-18] (spec T15) `src/features/ez/erfassen/draft.ts` und Speichern: `client_request_id` je Formular, Entwurf nach research.md R-EZ-18 mit Rückfrage „Fortsetzen?“, Netzfehler-Meldung, R8-Rückfrage mit Link nur bei `existing_id`, „Trotzdem speichern“.
+- [x] T022 [US-EZ-01] (O2) `src/features/ez/shared/OrtAuswahl.tsx` (aktive Orte aus `ad_locations`, gespeicherter inaktiver Ort bleibt angezeigt) und `AktivenSuche.tsx` (`ea_search_active_persons` ab 2 Zeichen, Vorschlagsliste „Aus der Gruppe“, „Keine aktive Person gefunden.“).
+- [x] T023 [US-EZ-01] [US-EZ-19] (spec T11 Teil) `src/features/ez/erfassen/EinsatzNeuPage.tsx`, `EinsatzartAuswahl.tsx`, `EinsatzFormular.tsx` (Training): Gruppe aus `gr_groups_for_attendance` gefiltert auf beschreibbare Referate, Vorschlag nach `gr_my_groups` (R18), Datum Standard heute, Anzeige „Trainingszeit: Di 17:00–19:00“ bzw. Hinweis R28, Ort, Bemerkung mit Hinweis R7.
+- [x] T024 [US-EZ-02] [US-EZ-03] [US-EZ-04] (spec T12) `src/features/ez/erfassen/Anwesenheit.tsx`, `Probetrainings.tsx`: Roster laden und bei Datumswechsel neu laden (Hinweis), Mehrfachzeilen zusammenfassen (plan.md H1), zwei Abschnitte mit Zähler, Rolle nur bei angehakten Betreuer:innen, Vertretung über `AktivenSuche`, Probetrainings mit Hinweis R6. Probetrainings in `EinsatzFormular.tsx` umgesetzt; erledigt: PR #40.
+- [x] T025 [US-EZ-17] [US-EZ-18] (spec T15) `src/features/ez/erfassen/draft.ts` und Speichern: `client_request_id` je Formular, Entwurf nach research.md R-EZ-18 mit Rückfrage „Fortsetzen?“, Netzfehler-Meldung, R8-Rückfrage mit Link nur bei `existing_id`, „Trotzdem speichern“.
 
 ---
 
 ## Phase 6: Fahrten (Branch `us-ez-05-fahrten`) – US-EZ-05–08, 21
 
-- [ ] T026 [US-EZ-05] [US-EZ-06] [US-EZ-08] [US-EZ-21] (spec T11 Teil) `EinsatzFormular.tsx`: Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt und Wettkampfbetreuung (eintägig/mehrtägig), Trainingslager; Hinweise R4; „Weitere Gruppe hinzufügen“ (nur gleiches Referat, R30) mit Anwesenheitsliste aller Gruppen, je Person einmal.
-- [ ] T027 [US-EZ-07] (spec T13) organisierende Person mit `AktivenSuche`: vor der Eingabe Gruppenleitung, Trainer:innen, Helfer:innen aus dem Roster („Aus der Gruppe“), darunter „Alle Aktiven“.
+- [x] T026 [US-EZ-05] [US-EZ-06] [US-EZ-08] [US-EZ-21] (spec T11 Teil) `EinsatzFormular.tsx`: Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt und Wettkampfbetreuung (eintägig/mehrtägig), Trainingslager; Hinweise R4; „Weitere Gruppe hinzufügen“ (nur gleiches Referat, R30) mit Anwesenheitsliste aller Gruppen, je Person einmal.
+- [x] T027 [US-EZ-07] (spec T13) organisierende Person mit `AktivenSuche`: vor der Eingabe Gruppenleitung, Trainer:innen, Helfer:innen aus dem Roster („Aus der Gruppe“), darunter „Alle Aktiven“.
 
 ---
 
 ## Phase 7: Arbeitseinsatz, Kurs, Tour, Detail (Branch `us-ez-09-arbeitseinsatz`) – US-EZ-09–13, 20
 
-- [ ] T028 [US-EZ-09] [US-EZ-20] (spec T11 Teil) `EinsatzFormular.tsx`, `PersonenEintragen.tsx`: Arbeitseinsatz, Kurs, Tour mit Referat (nur beschreibbare, bei einem vorausgewählt), Personen eintragen (Rolle Helfer:in bzw. Trainer:in vorbelegt, Stand „eingetragen“), Hinweis Planungshilfe bei Kurs/Tour.
-- [ ] T029 [US-EZ-10] [US-EZ-12] [US-EZ-13] [US-EZ-15] (spec T14) `src/features/ez/detail/EinsatzDetailPage.tsx`, `EinsatzBearbeitenPage.tsx`: Kopf mit Namen über `ea_person_names`, Anwesenheit nach Rolle mit Kennzeichen „Vertretung“, Stände „anwesend“/„nicht erschienen“ direkt, „alle anwesend“ (nur `registered` → `present`), „Person hinzufügen“; Bearbeiten mit gesperrter Einsatzart und Gruppe; Löschen mit Rückfrage nur bei `can_delete`; nur lesen ohne `can_write`.
-- [ ] T030 [US-EZ-11] (spec T14 Teil) `src/features/ez/detail/NeuePersonDialog.tsx`, `src/features/ez/config.ts` (Link und `notice_version`, plan.md O4): Dialog mit Pflicht-Häkchen R29 → `ad_find_similar_persons` → `DublettenDialog` mit „Diese Person eintragen“ (aktiv: `ez_save_event`; ruhend/ausgeschieden/ohne Status: Rückfrage R31 → `ez_reactivate_helper`) / „Trotzdem anlegen“ → `ez_create_helper`.
+- [x] T028 [US-EZ-09] [US-EZ-20] (spec T11 Teil) `EinsatzFormular.tsx`, `PersonenEintragen.tsx`: Arbeitseinsatz, Kurs, Tour mit Referat (nur beschreibbare, bei einem vorausgewählt), Personen eintragen (Rolle Helfer:in bzw. Trainer:in vorbelegt, Stand „eingetragen“), Hinweis Planungshilfe bei Kurs/Tour. Personen eintragen in `EinsatzFormular.tsx` umgesetzt; erledigt: PR #40.
+- [x] T029 [US-EZ-10] [US-EZ-12] [US-EZ-13] [US-EZ-15] (spec T14) `src/features/ez/detail/EinsatzDetailPage.tsx`, `EinsatzBearbeitenPage.tsx`: Kopf mit Namen über `ea_person_names`, Anwesenheit nach Rolle mit Kennzeichen „Vertretung“, Stände „anwesend“/„nicht erschienen“ direkt, „alle anwesend“ (nur `registered` → `present`), „Person hinzufügen“; Bearbeiten mit gesperrter Einsatzart und Gruppe; Löschen mit Rückfrage nur bei `can_delete`; nur lesen ohne `can_write`.
+- [x] T030 [US-EZ-11] (spec T14 Teil) `src/features/ez/detail/NeuePersonDialog.tsx`, `src/features/ez/config.ts` (Link und `notice_version`, plan.md O4): Dialog mit Pflicht-Häkchen R29 → `ad_find_similar_persons` → `DublettenDialog` mit „Diese Person eintragen“ (aktiv: `ez_save_event`; ruhend/ausgeschieden/ohne Status: Rückfrage R31 → `ez_reactivate_helper`) / „Trotzdem anlegen“ → `ez_create_helper`.
 
 ---
 
 ## Phase 8: Absage (Branch `us-ez-22-absage`) – US-EZ-22, 23 (Anzeige)
 
-- [ ] T031 [US-EZ-22] [US-EZ-23] (spec T18) `src/features/ez/detail/AbsageDialog.tsx`, Detail und Liste: Absagen mit Pflichtfeld Grund, Absage zurücknehmen mit Rückfrage, Hinweis „Abgesagt am … von …: …“, abgesagt nur Rücknahme und Löschen; Einsätze aus der Planungshilfe mit Hinweis, gesperrtem Kopf außer Bemerkung, Kennzeichen „aus der Planung“, ohne Absagen und Löschen.
+- [x] T031 [US-EZ-22] [US-EZ-23] (spec T18) `src/features/ez/detail/AbsageDialog.tsx`, Detail und Liste: Absagen mit Pflichtfeld Grund, Absage zurücknehmen mit Rückfrage, Hinweis „Abgesagt am … von …: …“, abgesagt nur Rücknahme und Löschen; Einsätze aus der Planungshilfe mit Hinweis, gesperrtem Kopf außer Bemerkung, Kennzeichen „aus der Planung“, ohne Absagen und Löschen. Erledigt: PR #39.
 
 ---
 

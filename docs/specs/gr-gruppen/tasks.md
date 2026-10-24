@@ -120,7 +120,7 @@ description: "Tasks für das Modul Gruppen (GR)"
   - Funktionen `gr_has_current_relation`, `gr_person_visible` (Ersatz), `gr_person_ids` (Ersatz, mengenbasiert), `gr_row_visible`, `gr_is_adult`, `gr_can_read_health`, `gr_contract_status`, `gr_needs_guardian`, `gr_person_has_group_relation`;
   - neue Fassung `ad_v_person_overview` (gleiche Spalten, `has_group_relation` über `gr_person_has_group_relation`);
   - Select-Policies nach data-model.md „Tabellen“.
-- [ ] T012 [P] (spec T2 Teil) `docs/specs/gr-gruppen/contracts/error-codes.md`: Status je Code auf „umgesetzt“ setzen, sobald die Migration ihn auslöst (laufend mit T010–T016).
+- [x] T012 [P] (spec T2 Teil) `docs/specs/gr-gruppen/contracts/error-codes.md`: Status je Code auf „umgesetzt“ setzen, sobald die Migration ihn auslöst (laufend mit T010–T016).
 - [x] T013 [US-GR-03] (spec T3) `supabase/migrations/20261025000300_gr_group_functions.sql`: `gr_save_group`, `gr_dissolve_group` (Rückgabe jsonb, plan.md H5), `gr_add_training_time`, `gr_change_training_time`, `gr_end_training_time` nach contracts/database-api.md.
 - [x] T014 [US-GR-06] (spec T4) `supabase/migrations/20261025000400_gr_person_functions.sql`: interne `gr_create_person(p_new_person jsonb, p_require text)` und `gr_take_person(p_person uuid)`; `gr_start_admission`, `gr_cancel_admission`, `gr_update_person`, `gr_copy_address`, `gr_add_guardian`, `gr_remove_guardian`, `gr_add_emergency_contact`, `gr_remove_emergency_contact`, `gr_reorder_emergency_contacts`. Kontaktdaten nur anlegen, wenn mindestens ein Kontaktfeld gesetzt ist; eine `contact`-Eigenschaft je Person, Änderungen als Update.
 - [x] T015 [US-GR-08] (spec T5) `supabase/migrations/20261025000500_gr_membership_contract.sql`: interne `gr_check_contract(p_membership uuid, p_person uuid, p_contract jsonb)` (R4–R6, R27; IBAN über `ea_iban_normalize`/`ea_iban_valid`); `gr_admit`, `gr_add_contract`, `gr_update_contract`, `gr_cancel_contract`, `gr_end_membership`.
@@ -135,7 +135,7 @@ description: "Tasks für das Modul Gruppen (GR)"
   - Testzugang Kim Kinderjugend `test.kiju@dav-leipzig.de` (Person 32, Auth-Nutzer `b0000000-0000-4000-8000-000000000032`), Vorlage Referent:in mit Referat Kinder und Jugend, Amt Referent:in K+J;
   - Kopfkommentar um Personen 23–32 und Gruppen ergänzen; Personen 1–22 unverändert;
   - `supabase/tests/database/200_seed.test.sql` um Zähler für Personen 23–32 und Gruppen erweitern.
-- [ ] T019 Personendaten-Prüfung nach CLAUDE.md über `docs`, `supabase/seed.sql`; PR `gr-kern-datenbank` mit Stories, Spec-Tasks T1–T7, T9, T10 (Teil) und Hinweis auf Ü1/Ü3; Auto-Merge nach grünen Checks.
+- [x] T019 Personendaten-Prüfung nach CLAUDE.md über `docs`, `supabase/seed.sql`; PR `gr-kern-datenbank` mit Stories, Spec-Tasks T1–T7, T9, T10 (Teil) und Hinweis auf Ü1/Ü3; Auto-Merge nach grünen Checks. Erledigt: PR #11.
 
 ---
 
@@ -247,7 +247,7 @@ description: "Tasks für das Modul Gruppen (GR)"
 - [x] T053 [P] [US-GR-18] (spec T20) `supabase/tests/database/410_gr_groups.test.sql`: zweite Trainingszeit am selben Wochentag → `GR_TRAINING_TIME_WEEKDAY_EXISTS` (auch mit anderer Uhrzeit, späterem Beginn, in der Vergangenheit); nichts gespeichert; zweiter Wochentag erlaubt, Rückgabe nur `id`; gleicher Wochentag vor der bisherigen Gültigkeit erlaubt; „Ändern ab“ am selben Wochentag möglich, auf belegten Wochentag abgelehnt, auf freien erlaubt; Verlängern von „gültig bis“ in eine spätere Trainingszeit abgelehnt; direkter Insert scheitert am Constraint (`23P01`); `gr_training_time_overlaps` entfernt.
 - [x] T054 [P] [US-GR-19] (spec T20) `supabase/tests/database/480_gr_read_functions.test.sql`: `gr_group_roster` liefert an jedem Tag seit 01.01.2025 höchstens einen Eintrag in `training_times` (G9).
 - [x] T055 [US-GR-18] (spec T20) `supabase/migrations/20261027000100_gr_training_time_weekday.sql` nach R-GR-17; Seed geprüft (keine Änderung nötig).
-- [ ] T056 [US-GR-18] (spec T20, Branch `gr-trainingszeit-dialog` nach dem Merge von T057) `src/features/gr/gruppen/TrainingszeitDialog.tsx`: Hinweis bei `overlap` entfernen; `src/lib/errors.ts`: `GR_TRAINING_TIME_WEEKDAY_EXISTS` mit dem Wortlaut aus contracts/error-codes.md; Merge durch den Product Owner.
+- [x] T056 [US-GR-18] (spec T20, Branch `gr-trainingszeit-dialog` nach dem Merge von T057) `src/features/gr/gruppen/TrainingszeitDialog.tsx`: Hinweis bei `overlap` entfernen; `src/lib/errors.ts`: `GR_TRAINING_TIME_WEEKDAY_EXISTS` mit dem Wortlaut aus contracts/error-codes.md; Merge durch den Product Owner. Erledigt: PR #33.
 - [x] T057 PR `gr-trainingszeit-wochentag` (#31) (Migration, pgTAP, Umsetzungsdateien); Auto-Merge nach grünen Checks; danach Migration nach TEST, vorher lesende Prüfung auf Verstöße. Erledigt 24.10.2026: keine Verstöße; Migration mit den AD-Migrationen `20261026000100`–`0400` in TEST, Seed nachgezogen.
 
 ---
