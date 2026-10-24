@@ -1,13 +1,14 @@
 # Erhebung: Gruppen
 
-Datum: 22.10.2026 · Version 0.7 · Beteiligte: Toni Werner (Product Owner), Claude (Requirements Engineering)
+Datum: 24.10.2026 · Version 0.8 · Beteiligte: Toni Werner (Product Owner), Claude (Requirements Engineering)
+Änderungen v0.8: Übergabe aus der Anwesenheitserfassung (uebergabe-gruppen.md v1.0, G6–G9) eingearbeitet: höchstens eine Trainingszeit je Gruppe und Wochentag (Product Owner, 24.10.2026); Verstoß wird abgelehnt statt Hinweis (B10, R19); Import bei zwei Zeiten am selben Wochentag (B9); `gr_group_roster` mit höchstens einer Trainingszeit (B11, C).
 Änderungen v0.7: Übergabe aus der Anwesenheitserfassung (uebergabe-trainingszeiten.md v1.2) eingearbeitet: Tabelle `gr_training_times` statt Textfeld (B10, C, R18–R19); Lesefunktion `gr_group_roster` je Gruppe und Stichtag für die Anwesenheitserfassung (B11, R20); Import der Trainingszeit; Schnittstelle zur Anwesenheitserfassung.
 Änderungen v0.6: Admin sieht in der Administration alle Personen, auch Teilnehmer:innen, Erziehungsberechtigte und Notfallkontakte, und pflegt ihre Personendaten (Name, Rufname, Geburtsdatum, Kontaktdaten, Mitgliedsnummer) zentral; Änderungen gelten in allen Modulen (Product Owner, 21.10.2026).
 Änderungen v0.5: Mengengerüst (ca. 13 Gruppen, 150–200 Teilnehmer:innen); Löschlauf nach MVP, Datenmodell vorbereitet; Annahmen A1–A10 aus 02-stories.md bestätigt (Product Owner, 21.10.2026).
 Änderungen v0.4: Teilnahme nur mit aktivem Vertrag anlegbar; nach Vertragsende sichtbarer Hinweis an der Teilnahme.
 Änderungen v0.3: Vertragsende und Ende der Teilnahme entkoppelt; Feld „Teilnahme bis“ statt „Austrittsdatum“; Referat bestätigt; Import-Regel Adresse bestätigt.
 Änderungen v0.2: Gesundheitsangaben Variante A, Trainer:innen lesen mit, Helfer:innen nie; Notfallkontakt-Spalten L–O; Fotoerlaubnis ja/nein; Vertrag je Teilnahme mit Kündigung; monatlicher Betrag.
-Grundlage: 00-steckbrief.md v0.7, Bestands-Excel „Vorlage_Gruppe.xlsx“ (nur Spaltenüberschriften), glossar.md v1.5, rollen.md v1.0, tech-stack.md v0.6, spec.md Administration v0.7.1, Steckbrief Ehrenamtsmanagement v0.6, specs/ez-einsaetze/uebergabe-trainingszeiten.md v1.2
+Grundlage: 00-steckbrief.md v0.7, Bestands-Excel „Vorlage_Gruppe.xlsx“ (nur Spaltenüberschriften), glossar.md v1.5, rollen.md v1.0, tech-stack.md v0.6, spec.md Administration v0.7.1, Steckbrief Ehrenamtsmanagement v0.6, specs/ez-einsaetze/uebergabe-trainingszeiten.md v1.2, specs/ez-einsaetze/uebergabe-gruppen.md v1.0
 
 ## A. Rechtevorlagen & Rechte
 
@@ -86,18 +87,18 @@ Zustände Vertrag: aktiv → gekündigt (Kündigungsdatum und Vertragsende geset
 2. Probelauf ohne Schreiben mit Prüfbericht: Zeilen ohne Vertragsdaten (R16), fehlende Pflichtfelder, ungültige IBAN, Dublettenverdacht über alle Tabellenblätter, nicht aufteilbare Namen, nicht lesbare Trainingszeit im Kopf.
 3. Lauf gegen PROD durch den Product Owner [ANNAHME]; Entwicklung und Test nur mit fiktiver Datei in TEST.
 4. Adresse der Teilnehmer:in wird von der ersten erziehungsberechtigten Person übernommen (bestätigt).
-5. Trainingszeit aus dem Kopf (Freitext, z. B. „Mittwochs 18:00 bis 20:00“) wird in eine oder mehrere Trainingszeiten (Wochentag, Beginn, Ende, gültig von = Importdatum [ANNAHME]) überführt; nicht eindeutig lesbare Angaben stehen im Prüfbericht und werden nicht angelegt.
+5. Trainingszeit aus dem Kopf (Freitext, z. B. „Mittwochs 18:00 bis 20:00“) wird in eine oder mehrere Trainingszeiten (Wochentag, Beginn, Ende, gültig von = Importdatum [ANNAHME]) überführt, je Wochentag höchstens eine (R19); nicht eindeutig lesbare Angaben stehen im Prüfbericht und werden nicht angelegt. Nennt der Kopf für denselben Wochentag zwei Zeiten, wird für diesen Wochentag keine Trainingszeit übernommen und das Tabellenblatt im Prüfbericht aufgeführt (v0.8) [OFFEN: nur dieser Wochentag entfällt oder die ganze Gruppe ohne Trainingszeit; Vorschlag: nur dieser Wochentag, Warnung ohne Abbruch].
 6. Nacharbeit in der Oberfläche durch die Geschäftsstelle: Adressen prüfen, Trainingszeiten ergänzen, Gruppenleitung/Trainer:innen/Helfer:innen zuordnen.
 
 **B10 Trainingszeiten pflegen (neu v0.7)**
-1. In der Gruppe „Trainingszeit hinzufügen“: Wochentag, Beginn, Ende, gültig von (Vorschlag: heute), gültig bis (optional). Mehrere Trainingszeiten je Gruppe möglich (z. B. dienstags und donnerstags).
+1. In der Gruppe „Trainingszeit hinzufügen“: Wochentag, Beginn, Ende, gültig von (Vorschlag: heute), gültig bis (optional). Je Wochentag höchstens eine gültige Trainingszeit; mehrere Wochentage je Gruppe möglich (z. B. dienstags und donnerstags). Gibt es für den Wochentag im Gültigkeitszeitraum schon eine Trainingszeit, wird abgelehnt; geändert wird die bestehende mit „Ändern ab“ (R19, v0.8).
 2. Ändern einer bestehenden Trainingszeit (z. B. neue Uhrzeit ab 01.01.2027): „Ändern ab“ mit Datum; das System setzt an der alten Trainingszeit „gültig bis“ auf den Vortag und legt eine neue mit „gültig von“ = Datum an (Historie, R19).
 3. Beenden: „gültig bis“ setzen.
 4. Anzeige: nur am heutigen Tag gültige Trainingszeiten; Historie aufklappbar.
 
 **B11 Anwesenheitsliste für die Anwesenheitserfassung (neu v0.7)**
 1. Die Anwesenheitserfassung ruft `gr_group_roster(group_id, date)` auf.
-2. Rückgabe: Gruppe (Name, Referat), am Datum gültige Trainingszeit(en) für den Wochentag, Teilnehmer:innen mit am Datum gültiger Teilnahme sowie Gruppenleitung, Trainer:innen und Helfer:innen mit am Datum gültiger Funktion – jeweils Person-ID, Vorname, Rufname, Nachname, Rolle.
+2. Rückgabe: Gruppe (Name, Referat), am Datum gültige Trainingszeit für den Wochentag (höchstens eine, v0.8), Teilnehmer:innen mit am Datum gültiger Teilnahme sowie Gruppenleitung, Trainer:innen und Helfer:innen mit am Datum gültiger Funktion – jeweils Person-ID, Vorname, Rufname, Nachname, Rolle.
 3. Rechteprüfung in der Funktion (R20).
 
 ## C. Daten
@@ -201,7 +202,7 @@ Import Excel L–O: Die Spalten haben keine Überschriften; jeder Notfallkontakt
 | Feld | Typ | Beschreibung |
 |---|---|---|
 | group_id, group_name, referat_id | uuid, Text, uuid | Gruppe |
-| training_times | Liste (Beginn, Ende) | am Datum gültige Trainingszeiten für den Wochentag des Datums; leer, wenn keine |
+| training_times | Liste (Beginn, Ende) | am Datum gültige Trainingszeit für den Wochentag des Datums, höchstens ein Eintrag (R19, v0.8); leer, wenn keine |
 | person_id | uuid | Person |
 | first_name, preferred_name, last_name | Text | nur Namen |
 | role | Auswahl: participant, group_lead, trainer, helper | Teilnehmer:in bzw. Funktion in der Gruppe |
@@ -230,7 +231,7 @@ Ablage der Personenangaben [ANNAHME]: Vorname und Nachname in `ea_persons`; Gebu
 - R16: Wenn eine Teilnahme ohne Vertrag gespeichert werden soll, dann Fehlermeldung „Eine Teilnahme kann nur mit einem aktiven Vertrag angelegt werden.“ (Product Owner, 21.10.2026)
 - R17: Wenn das Vertragsende einer offenen Teilnahme erreicht ist, dann Hinweis „Vertrag beendet am TT.MM.JJJJ – Teilnahme klären.“ in Gruppenliste und Detail; zusätzlich Filter „Teilnahme klären“ in der Gruppe [ANNAHME]. Kein automatisches Beenden der Teilnahme.
 - **R18 (neu v0.7):** Wenn das Ende einer Trainingszeit nicht nach dem Beginn liegt, dann „Das Ende muss nach dem Beginn liegen.“; wenn „gültig bis“ vor „gültig von“ liegt, dann „‚Gültig bis‘ darf nicht vor ‚gültig von‘ liegen.“; Wochentag, Beginn, Ende und gültig von sind Pflicht: „Bitte Wochentag, Beginn, Ende und ‚gültig von‘ angeben.“
-- **R19 (neu v0.7):** Trainingszeiten werden nicht überschrieben: Eine Änderung von Wochentag, Beginn oder Ende beendet die alte Trainingszeit zum Vortag und legt eine neue an. Überschneiden sich zwei gültige Trainingszeiten derselben Gruppe am selben Wochentag zeitlich, erscheint der Hinweis „Diese Trainingszeit überschneidet sich mit einer anderen.“ (Speichern bleibt möglich) [ANNAHME].
+- **R19 (neu v0.7, geändert v0.8):** Trainingszeiten werden nicht überschrieben: Eine Änderung von Wochentag, Beginn oder Ende beendet die alte Trainingszeit zum Vortag und legt eine neue an. Je Gruppe und Wochentag gibt es an jedem Datum höchstens eine gültige Trainingszeit (keine zwei Trainingszeiten derselben Gruppe am selben Wochentag mit sich überschneidender Gültigkeit, unabhängig von der Uhrzeit); mehrere Wochentage bleiben möglich (Product Owner, 24.10.2026). Wenn Anlegen oder „Ändern ab“ das verletzt, dann wird abgelehnt: „Für diesen Wochentag gibt es bereits eine Trainingszeit. Bitte die bestehende mit ‚Ändern ab‘ anpassen.“ [OFFEN: Wortlaut legt der Product Owner fest]. Der frühere Hinweis auf Überschneidung entfällt (v0.8). [OFFEN: Gilt die Ablehnung auch, wenn das „gültig bis“ einer Trainingszeit nachträglich so verlängert wird, dass sie sich mit einer späteren am selben Wochentag überschneidet? Vorschlag: ja, gleiche Ablehnung.]
 - **R20 (neu v0.7):** `gr_group_roster` liefert nur Namen und Rollen, nie Geburtsdatum, Kontaktdaten, Erziehungsberechtigte, Notfallkontakte, Verträge, Bankdaten, Gesundheitsangaben oder Fotoerlaubnis. Aufruf erlaubt, wenn der Nutzer `ad_has_level('GR','read')` oder `ad_has_level('EZ','read')` hat oder die Gruppe zu einem Referat aus `ad_my_referate('EZ','read')` gehört; sonst Fehler „Für diesen Bereich hast du keine Rechte.“ (Code `GR_ROSTER_FORBIDDEN`). Teilnahme gilt am Datum, wenn Eintrittsdatum ≤ Datum und („Teilnahme bis“ leer oder ≥ Datum); Funktionen und Trainingszeiten entsprechend über gültig von/bis.
 
 ## E. Schnittstellen
@@ -278,3 +279,6 @@ Ablage der Personenangaben [ANNAHME]: Vorname und Nachname in `ea_persons`; Gebu
 | Rechtsgrundlage für Notfallkontakte ohne Erziehungsberechtigung | Product Owner (Datenschutz) | vor Go-live |
 | Beginn der 5-Jahres-Frist, gesetzliche Aufbewahrung Vertrags-/Mandatsdaten, Löschung Gesundheitsangaben | Product Owner mit Finanzen | vor Einführung des Löschlaufs (nach MVP) |
 | Dublettenwarnung modulübergreifend ohne Datenpreisgabe | Claude (Spec) | spec.md |
+| Wortlaut der Ablehnung bei zweiter Trainingszeit am selben Wochentag (R19) | Product Owner | vor Umsetzung (Migration Gruppen) |
+| Ablehnung auch beim nachträglichen Verlängern von „gültig bis“ (R19)? | Product Owner | vor Umsetzung (Migration Gruppen) |
+| Import: bei zwei Zeiten am selben Wochentag nur diesen Wochentag oder die ganze Gruppe ohne Trainingszeit (B9)? | Product Owner | vor Import (US-GR-16) |
