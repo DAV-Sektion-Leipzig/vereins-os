@@ -63,6 +63,9 @@ import { loadStammdaten } from '@/features/ea/stammdaten/data'
 import { loadEzAccess } from '@/features/ez/access'
 import { loadEventDetail } from '@/features/ez/detail/data'
 import { EinsatzDetailPage } from '@/features/ez/detail/EinsatzDetailPage'
+import { EinsatzBearbeitenPage } from '@/features/ez/erfassen/EinsatzBearbeitenPage'
+import { EinsatzNeuPage } from '@/features/ez/erfassen/EinsatzNeuPage'
+import { loadEditEvent, loadNewEvent } from '@/features/ez/erfassen/data'
 import { EzLayout } from '@/features/ez/EzLayout'
 import { EinsaetzePage } from '@/features/ez/liste/EinsaetzePage'
 import { loadEventList } from '@/features/ez/liste/data'
@@ -181,7 +184,9 @@ export const router = createBrowserRouter([
         handle: { moduleName: 'Anwesenheitserfassung' } satisfies RouteHandle,
         children: [
           { index: true, loader: loadEventList, element: <EinsaetzePage /> },
+          { path: 'neu', loader: loadNewEvent, element: <EinsatzNeuPage /> },
           { path: ':id', loader: loadEventDetail, element: <EinsatzDetailPage /> },
+          { path: ':id/bearbeiten', loader: loadEditEvent, element: <EinsatzBearbeitenPage /> },
           { path: '*', loader: () => redirect('/ez') },
         ],
       },
