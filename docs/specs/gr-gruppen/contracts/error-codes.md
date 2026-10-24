@@ -24,7 +24,7 @@ Diese Liste ist normativ für Gruppen (spec.md 5, T2). Die Meldungstexte stehen 
 | `GR_TRAINING_TIME_END` | Das Ende muss nach dem Beginn liegen. | R18 | Trainingszeit-Funktionen | umgesetzt |
 | `GR_VALID_TO_BEFORE_FROM` | ‚Gültig bis‘ darf nicht vor ‚gültig von‘ liegen. | R18 | `gr_add_training_time`, `gr_end_training_time` | umgesetzt |
 | `GR_CHANGE_DATE_INVALID` | Das Datum muss nach ‚gültig von‘ und innerhalb der Gültigkeit der bisherigen Trainingszeit liegen. | R19 | `gr_change_training_time` | umgesetzt |
-| `GR_TRAINING_TIME_WEEKDAY_EXISTS` | Für diesen Wochentag gibt es bereits eine Trainingszeit. Bitte die bestehende mit ‚Ändern ab‘ anpassen. [OFFEN: Wortlaut, spec.md 11] | R19 (v0.3) | `gr_add_training_time`, `gr_change_training_time`, `gr_end_training_time` | umgesetzt (T20) |
+| `GR_TRAINING_TIME_WEEKDAY_EXISTS` | Für diesen Wochentag gibt es in diesem Zeitraum bereits eine Trainingszeit. Bitte die bestehende mit ‚Ändern ab‘ anpassen. | R19 (v0.3) | `gr_add_training_time`, `gr_change_training_time`, `gr_end_training_time` | umgesetzt (T20) |
 | `GR_TRAINING_TIME_LOCKED` | Wochentag und Uhrzeit können nicht geändert werden. Bitte ‚Ändern ab‘ verwenden. | R19, A13 | Trigger `gr_training_times_guard` | umgesetzt |
 | `GR_PERSON_INVALID` | Bitte eine vorhandene Person wählen oder eine neue anlegen. | spec.md 2.3 | Funktionen mit `p_person_id`/`p_new_person` | umgesetzt |
 | `GR_BIRTH_DATE_FORBIDDEN` | Das Geburtsdatum kann nur die Geschäftsstelle erfassen. | spec.md 2.3 | `gr_start_admission`, `gr_update_person` | umgesetzt |
