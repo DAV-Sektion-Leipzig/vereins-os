@@ -29,6 +29,10 @@ select is(public.ad_my_referate('EA', 'edit'), array[pg_temp.referat('Klettern')
 select is(public.ad_my_referate('EA', 'manage'), '{}'::uuid[], 'ad_my_referate(EA, manage) leer');
 select ok(public.ad_has_any_level('EA', 'read'), 'ad_has_any_level(EA, read)');
 select ok(not public.ad_has_any_level('AD', 'read'), 'kein Recht auf AD');
+-- EA ist seit T055 verfügbar; für diese Prüfung vorübergehend ausblenden
+select pg_temp.as_owner();
+update public.ad_modules set is_available = false where code = 'EA';
+select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
 select is_empty($$ select code from public.ad_my_modules() $$, 'keine Kachel, solange EA nicht verfügbar ist');
 
 select pg_temp.as_owner();

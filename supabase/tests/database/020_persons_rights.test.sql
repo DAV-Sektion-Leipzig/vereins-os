@@ -120,8 +120,8 @@ select throws_ok(
 
 -- Startseite
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
-select results_eq($$ select code from public.ad_my_modules() $$, $$ values ('AD'::text) $$,
-  'Admin sieht nur AD');
+select results_eq($$ select code from public.ad_my_modules() $$, $$ values ('AD'::text), ('EA') $$,
+  'Admin sieht AD und EA');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
 select is_empty($$ select code from public.ad_my_modules() $$, 'Vorstand sieht keine Module');
 

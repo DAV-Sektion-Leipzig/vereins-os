@@ -231,14 +231,14 @@ description: "Tasks für das Modul Ehrenamtsmanagement (EA)"
 
 ## Phase 14: Abnahme (Branch `ea-abnahme`)
 
-- [ ] T053 (spec T21) Abnahme in TEST nach quickstart.md D 1–13 mit Admin, Geschäftsstelle, Referent:in (Klettern), Vorstand, auch bei 375 px; Ergebnis in `docs/specs/ea-ehrenamt/abnahme-test.md` (ohne Personendaten außer Seed-Namen); Anpassungen aus der Abnahme auf diesem Branch.
-- [ ] T054 [P] Querschnitt: `npm run lint`, `npm run build`, `npm run ea:migrate:test` ohne Fehler; Personendaten-Prüfung nach CLAUDE.md über `docs`, `scripts`, `supabase/seed.sql`.
+- [x] T053 (spec T21) Abnahme in TEST nach quickstart.md D 1–13 mit Admin, Geschäftsstelle, Referent:in (Klettern), Vorstand, auch bei 375 px; Ergebnis in `docs/specs/ea-ehrenamt/abnahme-test.md` (ohne Personendaten außer Seed-Namen); Anpassungen aus der Abnahme auf diesem Branch.
+- [x] T054 [P] Querschnitt: `npm run lint`, `npm run build`, `npm run ea:migrate:test` ohne Fehler; Personendaten-Prüfung nach CLAUDE.md über `docs`, `scripts`, `supabase/seed.sql`.
 
 ---
 
 ## Phase 15: Freischalten (Branch `ea-freischalten`)
 
-- [ ] T055 [US-EA-01] (spec T22) Migration `…20261024000800_ea_module_available.sql`: `update public.ad_modules set is_available = true where code = 'EA'`; Test in `supabase/tests/database/010_foundation.test.sql` anpassen (nur AD und EA `is_available`); danach in TEST US-EA-01 AK1 prüfen (quickstart.md D 14).
+- [x] T055 [US-EA-01] (spec T22) Migration `…20261024000800_ea_module_available.sql`: `update public.ad_modules set is_available = true where code = 'EA'`; Test in `supabase/tests/database/010_foundation.test.sql` anpassen (nur AD und EA `is_available`); danach in TEST US-EA-01 AK1 prüfen (quickstart.md D 14).
 
 **Nicht Claude Code**: spec T23 – Lauf gegen PROD durch den Admin nach quickstart.md E, nach Klärung des Wegs der Migrationen nach PROD (O1 der Administration).
 
