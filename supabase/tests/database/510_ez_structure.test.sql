@@ -145,8 +145,8 @@ select throws_ok($$ select pg_temp.ins('{"kind": "course", "span": "single", "ti
   "day": "at_least_8h"}') $$, '23514', null, 'Titel nicht leer');
 
 -- Audit und Sperre (R9, R19)
-select is((select count(*)::int from public.ez_events where created_by = pg_temp.u(2)
-            and created_by_person_id = 'a0000000-0000-4000-8000-000000000002'), 8, 'erfasst von über Trigger');
+select is((select count(*)::int from public.ez_events where created_at = now() and created_by = pg_temp.u(2)
+            and created_by_person_id = 'a0000000-0000-4000-8000-000000000002'), 8, 'erfasst von über Trigger (ohne Seed-Einsätze)');
 select is((select count(*)::int from public.ez_events e join public.gr_groups g on g.id = e.group_id
             where e.referat_id <> g.referat_id), 0, 'Referat aus der Gruppe');
 select throws_ok($$ update public.ez_events set kind = 'training_trip' where kind = 'day_trip' $$,

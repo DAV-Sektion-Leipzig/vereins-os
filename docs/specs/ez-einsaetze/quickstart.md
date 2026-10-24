@@ -21,7 +21,7 @@ Ausführung durch den Product Owner oder auf seinen ausdrücklichen Auftrag.
 |---|---|---|
 | 1 | `npx supabase projects list`: verknüpftes Projekt prüfen | vereins-os-test, nicht PROD |
 | 2 | `npx supabase db push --linked --dry-run`, dann ohne `--dry-run` | nur die Migrationen `20261028…_ez_*` (und noch nicht ausgerollte anderer Module nach deren Freigabe) |
-| 3 | `supabase/seed.sh` | Einsätze 1–11 aus spec.md 9; Personen 33 ff.; Trainingszeit Di 17:00–19:00 der Klettergruppe Test |
+| 3 | `SEED_WITH_EZ=1 supabase/seed.sh` | zusätzlich `seed-ez.sql`: Einsätze 1–11 aus spec.md 9; Personen 33–49; Trainingszeit Di 17:00–19:00 der Klettergruppe Test |
 
 ## C. Datenbanktests (GitHub Action)
 
