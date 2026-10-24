@@ -266,6 +266,8 @@ export type PersonProperty = {
   field_values: FieldValues
   related_referat_id: string | null
   related_gremium_id: string | null
+  /** Bezug „Gruppe“ (Funktion in Gruppe, GR spec.md 2.2); nur lesbar, gepflegt im Modul Gruppen */
+  related_group_id: string | null
   valid_from: string
   valid_to: string | null
   updated_at: string
@@ -279,6 +281,8 @@ export type PropertiesData = {
   properties: PersonProperty[]
   referate: NamedOption[]
   gremien: NamedOption[]
+  /** Gruppen für den Bezug „Gruppe“ (lesbar mit GR lesen oder EA-Recht, GR spec.md 3) */
+  groups: NamedOption[]
   qualificationTypes: QualificationType[]
   /** Anzeigename je Auth-Nutzer (geändert von) */
   userNames: Record<string, string>
@@ -306,12 +310,13 @@ export async function loadUserNames(userIds: string[]): Promise<Record<string, s
 
 /** Eigenschaften einer Person; nur Arten, deren „sichtbar in“ das Modul enthält (T037: AD und EA). */
 export async function loadPersonProperties(personId: string, module: ModuleCode = 'AD'): Promise<PropertiesData | null> {
-  const [types, properties, referate, gremien, qualificationTypes] = await Promise.all([
+  const [types, properties, referate, gremien, qualificationTypes, groups] = await Promise.all([
     supabase.from('ea_property_types').select(`${TYPE_COLUMNS}, ea_property_fields(*)`).contains('visible_in', [module]).order('name'),
     supabase.from('ea_properties').select('*, ea_property_history(*)').eq('person_id', personId).order('valid_from', { ascending: false }),
     supabase.from('ea_referate').select('id, name, is_active').order('sort_order'),
     supabase.from('ea_gremien').select('id, name, is_active').order('sort_order'),
     supabase.from('ad_qualification_types').select('id, code, name, discipline, kind, status').order('name'),
+    supabase.from('gr_groups').select('id, name').order('name'),
   ])
   if (types.error || properties.error || referate.error || gremien.error || qualificationTypes.error) return null
 
@@ -329,6 +334,7 @@ export async function loadPersonProperties(personId: string, module: ModuleCode 
     properties: props,
     referate: referate.data as NamedOption[],
     gremien: gremien.data as NamedOption[],
+    groups: groups.error ? [] : (groups.data as NamedOption[]),
     qualificationTypes: qualificationTypes.data as QualificationType[],
     userNames,
   }
