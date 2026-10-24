@@ -498,7 +498,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 - [x] T116 [US-AD-27] (spec T57) `supabase/seed.sql`: Testorte „Kletterhalle Test“ (Punktekonto, aktiv), „Fels Test“, „Halle alt Test“ (inaktiv); Testzugänge erhalten die EZ-Startwerte über ihre Vorlagen
 - [x] T117 [P] (spec T54) `contracts/error-codes.md` (Status v0.8, `EA_CREATE_FOREIGN_REFERAT` entfällt, `AD_TOO_MANY_IDS` allgemeine Meldung, Text `AD_SCOPE_NOT_ALLOWED`), `contracts/database-api.md`
 - [x] T118 [P] `plan.md` (Abschnitt Nachtrag v0.8), `research.md` (R-30, R-31), `data-model.md`, `quickstart.md` (C4)
-- [ ] T119 Übergabe an Gruppen `docs/specs/ad-administration/uebergabe-gruppen-v08.md` und Hinweis in `docs/offene-punkte.md` (Abschnitt Gruppen): EZ-Pfade in `480_gr_read_functions.test.sql` aktivieren (eigener Doku-PR, Product Owner mergt)
+- [x] T119 Übergabe an Gruppen `docs/specs/ad-administration/uebergabe-gruppen-v08.md` und Hinweis in `docs/offene-punkte.md` (Abschnitt Gruppen): EZ-Pfade in `480_gr_read_functions.test.sql` aktivieren (PR #28, gemergt 24.10.2026)
 - [ ] T120 [US-AD-27] [US-AD-28] [US-AD-29] (spec T55) Oberfläche: Zeile Anwesenheitserfassung und Reichweite „Referat“ für EZ in der Vorlagen-Matrix (R30, neuer Meldungstext in `src/lib/errors.ts`), /ad/orte Liste und Formular mit Navigationseintrag, Komponenten „Personensuche Aktive“ und „Auswahlfeld Ort“ – **zurückgestellt** (src/ nicht Teil der Sitzung vom 24.10.2026)
 - [ ] T121 (spec T58) Nach Freigabe des Product Owners nach TEST ausrollen (`npx supabase db push --linked`, Seed-Ergänzung Orte) und quickstart.md C4 mit den Testzugängen abnehmen
 
