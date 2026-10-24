@@ -255,6 +255,10 @@ function Relation({ p, data }: { p: PersonProperty; data: PropertiesData }) {
     const g = data.gremien.find((x) => x.id === p.related_gremium_id)
     return <span className="text-sm">Gremium {g?.name ?? '–'}</span>
   }
+  if (p.related_group_id) {
+    const g = data.groups.find((x) => x.id === p.related_group_id)
+    return <span className="text-sm">Gruppe {g?.name ?? '–'}</span>
+  }
   return null
 }
 

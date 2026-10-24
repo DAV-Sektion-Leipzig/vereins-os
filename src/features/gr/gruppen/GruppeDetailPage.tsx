@@ -18,6 +18,7 @@ import {
   type MembershipRow,
   type TrainingTime,
 } from '@/features/gr/gruppen/detail'
+import { FunktionBeendenDialog, FunktionHinzufuegenDialog } from '@/features/gr/gruppen/FunktionDialog'
 import { AufloesenDialog, GruppeAendernDialog } from '@/features/gr/gruppen/GruppeFormular'
 import { TrainingszeitDialog, type TrainingTimeMode } from '@/features/gr/gruppen/TrainingszeitDialog'
 import { FormError, HintBadge, LoadFailed } from '@/features/gr/shared/ui'
@@ -127,7 +128,9 @@ export function GruppeDetailPage() {
 
       <div role="tabpanel" id={`gr-panel-${tab}`} aria-labelledby={`gr-tab-${tab}`}>
         {tab === 'teilnehmer' && <MembersTab groupId={group.id} dissolved={Boolean(group.dissolved_on)} rows={memberships} />}
-        {tab === 'betreuung' && <FunctionsTab rows={functions} />}
+        {tab === 'betreuung' && (
+          <FunctionsTab groupId={group.id} rows={functions} editable={canEdit && !group.dissolved_on} onChanged={() => revalidator.revalidate()} />
+        )}
         {tab === 'trainingszeiten' && (
           <TrainingTimesTab group={group} rows={trainingTimes} editable={canEdit && !group.dissolved_on} onChanged={() => revalidator.revalidate()} />
         )}
@@ -295,27 +298,56 @@ export function MemberHints({ m }: { m: Pick<MembershipRow, 'needs_clarification
   )
 }
 
-// Betreuung (US-GR-13): Funktionen mit seit/bis; beendete aufklappbar
-function FunctionsTab({ rows }: { rows: FunctionRow[] }) {
+// Betreuung (US-GR-13): Funktionen mit seit/bis; beendete aufklappbar; Pflege nach T043
+function FunctionsTab({
+  groupId,
+  rows,
+  editable,
+  onChanged,
+}: {
+  groupId: string
+  rows: FunctionRow[]
+  editable: boolean
+  onChanged: () => void
+}) {
   const today = todayIso()
   const current = rows.filter((f) => isRunning(f.valid_to, today))
   const ended = rows.filter((f) => !isRunning(f.valid_to, today))
+  const [adding, setAdding] = useState(false)
+  const [ending, setEnding] = useState<FunctionRow | null>(null)
+  const actions = (f: FunctionRow) =>
+    editable && (
+      <Button variant="ghost" onClick={() => setEnding(f)} className="h-11 sm:h-8">
+        {f.valid_to ? '„Bis“ ändern' : 'Beenden'}
+      </Button>
+    )
 
-  if (rows.length === 0) return <p className="text-sm text-muted-foreground">Noch keine Betreuung festgelegt.</p>
   return (
     <div className="flex flex-col gap-4">
-      {current.length > 0 ? <FunctionList rows={current} /> : <p className="text-sm text-muted-foreground">Noch keine Betreuung festgelegt.</p>}
+      {editable && (
+        <Button variant="outline" onClick={() => setAdding(true)} className="h-11 self-start sm:h-8">
+          <PlusIcon data-icon="inline-start" aria-hidden="true" />
+          Funktion hinzufügen
+        </Button>
+      )}
+      {current.length > 0 ? (
+        <FunctionList rows={current} actions={actions} />
+      ) : (
+        <p className="text-sm text-muted-foreground">Noch keine Betreuung festgelegt.</p>
+      )}
       {ended.length > 0 && (
         <details className="flex flex-col gap-2">
           <summary className="cursor-pointer text-sm text-muted-foreground">Beendete Funktionen ({ended.length})</summary>
           <FunctionList rows={ended} />
         </details>
       )}
+      {adding && <FunktionHinzufuegenDialog groupId={groupId} onClose={() => setAdding(false)} onDone={() => (setAdding(false), onChanged())} />}
+      {ending && <FunktionBeendenDialog row={ending} onClose={() => setEnding(null)} onDone={() => (setEnding(null), onChanged())} />}
     </div>
   )
 }
 
-function FunctionList({ rows }: { rows: FunctionRow[] }) {
+function FunctionList({ rows, actions }: { rows: FunctionRow[]; actions?: (f: FunctionRow) => ReactNode }) {
   return (
     <ul className="flex flex-col divide-y rounded-xl border">
       {rows.map((f) => (
@@ -329,6 +361,7 @@ function FunctionList({ rows }: { rows: FunctionRow[] }) {
               {f.valid_to && ` · bis ${formatDate(f.valid_to)}`}
             </span>
           </span>
+          {actions?.(f)}
         </li>
       ))}
     </ul>

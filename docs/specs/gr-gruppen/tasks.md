@@ -12,7 +12,7 @@ description: "Tasks für das Modul Gruppen (GR)"
 
 **Tests**: Die Constitution verlangt test- und spec-getriebene Umsetzung mit pgTAP je Rechtevorlage. Vor jeder Migration steht eine Test-Task; die Tests müssen zuerst fehlschlagen. Dateien 410–495 (research.md R-GR-14). Für das Frontend gilt die Abnahme in TEST (quickstart.md D); für das Importskript Unit-Tests mit `node:test` über `tsx --test`.
 
-**Organisation**: Phasen nach den Branches aus plan.md.
+**Organisation**: Phasen nach den Branches aus plan.md. Die Oberfläche (Phasen 4–9) entsteht als Baum: Sammelbranch `gr-oberflaeche` mit dem Gerüst (T024, T026), darauf je Story ein Branch als Stapel (1/6 → 6/6), jeder Pull Request gegen `gr-oberflaeche`; zum Schluss ein Pull Request `gr-oberflaeche` → `main` (Entscheidung Product Owner 24.10.2026).
 
 ## Format: `- [ ] T### [P?] [US-GR-xx] (spec Tn) Beschreibung`
 
@@ -163,10 +163,10 @@ description: "Tasks für das Modul Gruppen (GR)"
 
 **Ziel**: /gr mit Routenschutz. **Unabhängiger Test**: quickstart.md D 1, 2.
 
-- [ ] T024 [US-GR-02] (spec T11) `src/features/gr/access.ts` (Rechte aus `ad_my_modules()` bzw. `ad_has_level` für read/edit/manage), `src/features/gr/GrLayout.tsx` (Navigation „Gruppen · Aufnahmen offen“), `src/features/gr/routes.tsx`; Einbindung in `src/App.tsx`; ohne GR lesen → /kein-zugriff vor jeder Abfrage (contracts/routes.md).
-- [ ] T025 [US-GR-02] (spec T11) `src/features/gr/gruppen/GruppenPage.tsx`: `gr_group_overview`, Suche Namensteil, Filter Referat und „aufgelöst“ (URL-Parameter), Hinweiszähler, Leerzustand „Keine Gruppen gefunden.“, Karten ab 375 px; Knopf „Gruppe anlegen“ nur mit edit.
-- [ ] T026 [P] [US-GR-02] `src/lib/errors.ts`: alle GR-Codes aus contracts/error-codes.md mit Meldungen; `src/lib/format.ts`: `formatWeekday()`, `formatTime()` (`HH:MM`), `ageFromBirthDate()`.
-- [ ] T027 PR `us-gr-02-uebersicht` mit Vorschau-URL; Merge durch den Product Owner.
+- [x] T024 [US-GR-02] (spec T11) `src/features/gr/access.ts` (Rechte aus `ad_my_modules()` bzw. `ad_has_level` für read/edit/manage), `src/features/gr/GrLayout.tsx` (Navigation „Gruppen · Aufnahmen offen“), `src/features/gr/routes.tsx`; Einbindung in `src/App.tsx`; ohne GR lesen → /kein-zugriff vor jeder Abfrage (contracts/routes.md).
+- [x] T025 [US-GR-02] (spec T11) `src/features/gr/gruppen/GruppenPage.tsx`: `gr_group_overview`, Suche Namensteil, Filter Referat und „aufgelöst“ (URL-Parameter), Hinweiszähler, Leerzustand „Keine Gruppen gefunden.“, Karten ab 375 px; Knopf „Gruppe anlegen“ nur mit edit.
+- [x] T026 [P] [US-GR-02] `src/lib/errors.ts`: alle GR-Codes aus contracts/error-codes.md mit Meldungen; `src/lib/format.ts`: `formatWeekday()`, `formatTime()` (`HH:MM`), `ageFromBirthDate()`.
+- [x] T027 PR `us-gr-02-uebersicht` mit Vorschau-URL; Merge durch den Product Owner.
 
 ---
 
@@ -174,10 +174,10 @@ description: "Tasks für das Modul Gruppen (GR)"
 
 **Unabhängiger Test**: quickstart.md D 3.
 
-- [ ] T028 [US-GR-03] (spec T12) `src/features/gr/gruppen/GruppeFormDialog.tsx` und Route /gr/gruppen/neu: Name, Referat (nur aktive), optional erste Trainingszeit; `gr_save_group`, `gr_add_training_time`; Meldungen R1, R21.
-- [ ] T029 [US-GR-18] (spec T12) `src/features/gr/gruppen/TrainingszeitDialog.tsx`: Hinzufügen, „Ändern ab“, Beenden; Hinweis bei `overlap`; Kernfelder nach dem Speichern nicht editierbar (A13).
-- [ ] T030 [US-GR-04] (spec T12) `src/features/gr/gruppen/AufloesenDialog.tsx`: Datum (≤ heute), Bestätigung, Anzeige der Rückgabeliste „beginnt nach Auflösung“, Meldungen R9.
-- [ ] T031 PR `us-gr-03-gruppe`; Merge durch den Product Owner.
+- [x] T028 [US-GR-03] (spec T12) `src/features/gr/gruppen/GruppeFormDialog.tsx` und Route /gr/gruppen/neu: Name, Referat (nur aktive), optional erste Trainingszeit; `gr_save_group`, `gr_add_training_time`; Meldungen R1, R21.
+- [x] T029 [US-GR-18] (spec T12) `src/features/gr/gruppen/TrainingszeitDialog.tsx`: Hinzufügen, „Ändern ab“, Beenden; Hinweis bei `overlap`; Kernfelder nach dem Speichern nicht editierbar (A13).
+- [x] T030 [US-GR-04] (spec T12) `src/features/gr/gruppen/AufloesenDialog.tsx`: Datum (≤ heute), Bestätigung, Anzeige der Rückgabeliste „beginnt nach Auflösung“, Meldungen R9.
+- [x] T031 PR `us-gr-03-gruppe`; Merge durch den Product Owner.
 
 ---
 
@@ -185,9 +185,9 @@ description: "Tasks für das Modul Gruppen (GR)"
 
 **Unabhängiger Test**: quickstart.md D 4.
 
-- [ ] T032 [US-GR-05] (spec T13) `src/features/gr/gruppen/GruppeDetailPage.tsx`: Kopf (Name, Referat, heutige Trainingszeiten, Betreuung); Reiter Teilnehmer:innen (`gr_v_memberships`; Alter nur bei gelesenem Geburtsdatum; Filter alle / „Teilnahme klären“ / „beendet“ nur Admin; Hinweise R2, R7, R17), Betreuung (lesend, Pflege in T038), Trainingszeiten (gültige, künftige „ab TT.MM.JJJJ“, frühere aufklappbar); aufgelöste Gruppe nur lesend; Leerzustände nach spec.md 6.
-- [ ] T033 [US-GR-15] (spec T13) `src/features/gr/gruppen/EmailListeButton.tsx`: `gr_guardian_emails`, mit „; “ verbinden, Zwischenablage, Meldung „N Adressen kopiert. Bitte in Blindkopie (BCC) einfügen.“ bzw. „Keine E-Mail-Adressen vorhanden.“
-- [ ] T034 PR `us-gr-05-gruppendetail`; Merge durch den Product Owner.
+- [x] T032 [US-GR-05] (spec T13) `src/features/gr/gruppen/GruppeDetailPage.tsx`: Kopf (Name, Referat, heutige Trainingszeiten, Betreuung); Reiter Teilnehmer:innen (`gr_v_memberships`; Alter nur bei gelesenem Geburtsdatum; Filter alle / „Teilnahme klären“ / „beendet“ nur Admin; Hinweise R2, R7, R17), Betreuung (lesend, Pflege in T038), Trainingszeiten (gültige, künftige „ab TT.MM.JJJJ“, frühere aufklappbar); aufgelöste Gruppe nur lesend; Leerzustände nach spec.md 6.
+- [x] T033 [US-GR-15] (spec T13) `src/features/gr/gruppen/EmailListeButton.tsx`: `gr_guardian_emails`, mit „; “ verbinden, Zwischenablage, Meldung „N Adressen kopiert. Bitte in Blindkopie (BCC) einfügen.“ bzw. „Keine E-Mail-Adressen vorhanden.“
+- [x] T034 PR `us-gr-05-gruppendetail`; Merge durch den Product Owner.
 
 ---
 
@@ -195,9 +195,9 @@ description: "Tasks für das Modul Gruppen (GR)"
 
 **Unabhängiger Test**: quickstart.md D 5.
 
-- [ ] T035 [US-GR-06] (spec T14) `src/features/gr/aufnahme/AufnahmeAssistent.tsx` (Route /gr/gruppen/:id/aufnehmen), fünf Schritte, jeder speichert sofort: 1. Suche über `ea_v_persons` oder neu, Dublettenprüfung `ad_find_similar_persons`, `DublettenDialog` mit `hitAction` „Vorhandene Person übernehmen“ für alle Treffer inkl. `is_visible = false` ab edit (Ü2) → `gr_start_admission`; 2. Erziehungsberechtigte (`gr_add_guardian`, „Adresse übernehmen“ → `gr_copy_address`); 3. Notfallkontakte; 4. Fotoerlaubnis, Einwilligung, Gesundheit (nur edit, Hinweistext spec.md 6); 5. Teilnahme und Vertrag (`gr_admit`). Bei laufender Teilnahme in anderer Gruppe direkt Schritt 5. Neue Person nur mit manage.
-- [ ] T036 [US-GR-06] (spec T14) `src/features/gr/aufnahme/AufnahmenPage.tsx` (/gr/aufnahmen): `gr_v_pending_admissions`, „Aufnahme fortsetzen“, „Aufnahme abbrechen“ mit Bestätigung „Die Person wird aus Gruppen entfernt. Ihre Daten bleiben gespeichert.“, Leerzustand „Keine offenen Aufnahmen.“
-- [ ] T037 PR `us-gr-06-aufnahme`; Merge durch den Product Owner.
+- [x] T035 [US-GR-06] (spec T14) `src/features/gr/aufnahme/AufnahmeAssistent.tsx` (Route /gr/gruppen/:id/aufnehmen), fünf Schritte, jeder speichert sofort: 1. Suche über `ea_v_persons` oder neu, Dublettenprüfung `ad_find_similar_persons`, `DublettenDialog` mit `hitAction` „Vorhandene Person übernehmen“ für alle Treffer inkl. `is_visible = false` ab edit (Ü2) → `gr_start_admission`; 2. Erziehungsberechtigte (`gr_add_guardian`, „Adresse übernehmen“ → `gr_copy_address`); 3. Notfallkontakte; 4. Fotoerlaubnis, Einwilligung, Gesundheit (nur edit, Hinweistext spec.md 6); 5. Teilnahme und Vertrag (`gr_admit`). Bei laufender Teilnahme in anderer Gruppe direkt Schritt 5. Neue Person nur mit manage.
+- [x] T036 [US-GR-06] (spec T14) `src/features/gr/aufnahme/AufnahmenPage.tsx` (/gr/aufnahmen): `gr_v_pending_admissions`, „Aufnahme fortsetzen“, „Aufnahme abbrechen“ mit Bestätigung „Die Person wird aus Gruppen entfernt. Ihre Daten bleiben gespeichert.“, Leerzustand „Keine offenen Aufnahmen.“
+- [x] T037 PR `us-gr-06-aufnahme`; Merge durch den Product Owner.
 
 ---
 
@@ -205,11 +205,11 @@ description: "Tasks für das Modul Gruppen (GR)"
 
 **Unabhängiger Test**: quickstart.md D 6, 7, 9.
 
-- [ ] T038 [US-GR-14] (spec T15) `src/features/gr/personen/PersonPage.tsx` (/gr/personen/:id): Notfallkontakte oben (Reihenfolge, `tel:`/`mailto:`; ohne Kontakt Hinweis und Erziehungsberechtigte mit Kontakt), Stammdaten (Geburtsdatum/Alter nur bei Recht), Erziehungsberechtigte, Teilnahmen mit Verträgen und Historie, Fotoerlaubnis mit Historie; Variante für Erziehungsberechtigte, Notfallkontakte, Betreuer:innen („erziehungsberechtigt für …“, „Notfallkontakt für …“, Funktionen).
-- [ ] T039 [US-GR-11] (spec T15) Abschnitte Vertrag kündigen (Rückfrage R8b), Folgevertrag, Teilnahme beenden, Vertrag ändern in `src/features/gr/personen/VertragDialog.tsx`.
-- [ ] T040 [US-GR-12] (spec T15) `src/features/gr/personen/GesundheitAbschnitt.tsx`: nur edit; Einwilligung mit Historie, Text, Historie aufklappbar; Meldungen R24.
-- [ ] T041 [US-GR-07] (spec T15) Pflege Stammdaten (`gr_update_person`), Erziehungsberechtigte und Notfallkontakte hinzufügen, entfernen, sortieren.
-- [ ] T042 PR `us-gr-14-person`; Merge durch den Product Owner.
+- [x] T038 [US-GR-14] (spec T15) `src/features/gr/personen/PersonPage.tsx` (/gr/personen/:id): Notfallkontakte oben (Reihenfolge, `tel:`/`mailto:`; ohne Kontakt Hinweis und Erziehungsberechtigte mit Kontakt), Stammdaten (Geburtsdatum/Alter nur bei Recht), Erziehungsberechtigte, Teilnahmen mit Verträgen und Historie, Fotoerlaubnis mit Historie; Variante für Erziehungsberechtigte, Notfallkontakte, Betreuer:innen („erziehungsberechtigt für …“, „Notfallkontakt für …“, Funktionen).
+- [x] T039 [US-GR-11] (spec T15) Abschnitte Vertrag kündigen (Rückfrage R8b), Folgevertrag, Teilnahme beenden, Vertrag ändern in `src/features/gr/personen/VertragDialog.tsx`.
+- [x] T040 [US-GR-12] (spec T15) `src/features/gr/personen/GesundheitAbschnitt.tsx`: nur edit; Einwilligung mit Historie, Text, Historie aufklappbar; Meldungen R24.
+- [x] T041 [US-GR-07] (spec T15) Pflege Stammdaten (`gr_update_person`), Erziehungsberechtigte und Notfallkontakte hinzufügen, entfernen, sortieren.
+- [x] T042 PR `us-gr-14-person`; Merge durch den Product Owner.
 
 ---
 
@@ -217,9 +217,9 @@ description: "Tasks für das Modul Gruppen (GR)"
 
 **Unabhängiger Test**: quickstart.md D 8.
 
-- [ ] T043 [US-GR-13] (spec T16) `src/features/gr/gruppen/FunktionDialog.tsx` im Reiter Betreuung: Funktion hinzufügen (vorhandene oder neue Person), beenden; Statushinweis aus `status_hint` bzw. Meldung „aktiv gesetzt“.
-- [ ] T044 [US-GR-13] (spec T17) Ehrenamtsmanagement: Eigenschaften `group_function` in /ea/aktive/:id nur lesend mit Gruppenname und Text „Diese Angabe wird im Modul Gruppen gepflegt.“; mit Seed in der Vorschau prüfen.
-- [ ] T045 PR `us-gr-13-betreuung`; Merge durch den Product Owner.
+- [x] T043 [US-GR-13] (spec T16) `src/features/gr/gruppen/FunktionDialog.tsx` im Reiter Betreuung: Funktion hinzufügen (vorhandene oder neue Person), beenden; Statushinweis aus `status_hint` bzw. Meldung „aktiv gesetzt“.
+- [x] T044 [US-GR-13] (spec T17) Ehrenamtsmanagement: Eigenschaften `group_function` in /ea/aktive/:id nur lesend mit Gruppenname und Text „Diese Angabe wird im Modul Gruppen gepflegt.“; mit Seed in der Vorschau prüfen.
+- [x] T045 PR `us-gr-13-betreuung`; Merge durch den Product Owner.
 
 ---
 
