@@ -1,6 +1,7 @@
 # User Stories: Administration (AD)
 
-Stand: 24.10.2026 · Version 0.9 · Status: Ready (Nachtrag freigegeben am 21.10.2026; Nachtrag v0.8 Anwesenheitserfassung freigegeben am 24.10.2026) · Product Owner: Toni Werner
+Stand: 24.10.2026 · Version 0.9.1 · Status: Ready (Nachtrag freigegeben am 21.10.2026; Nachtrag v0.8 Anwesenheitserfassung freigegeben am 24.10.2026) · Product Owner: Toni Werner
+Änderungen v0.9.1 (24.10.2026): US-AD-30 auf eine Person mit Rechten nur in der Anwesenheitserfassung umgestellt; Referent:innen mit EA-Rechten nutzen den Weg des Ehrenamtsmanagements (spec.md v0.9.5).
 Änderungen v0.9 (24.10.2026): Nachtrag Anwesenheitserfassung (spec.md v0.9.4, Nachtrag v0.8.1): US-AD-27 bis US-AD-30 (Orte, Rechte EZ in Rechtevorlagen, Namen für die Anwesenheitserfassung, Helfer:innen beim Arbeitseinsatz anlegen oder wieder aktiv eintragen).
 Änderungen v0.8.2 (23.10.2026): US-AD-06 AK5 an R32 angeglichen; US-AD-07 AK5 mit Vorabprüfung der Login-Adresse (Entscheidungen Product Owner aus dem Review des Kerns, spec.md v0.9.3).
 Grundlage: 00-steckbrief.md v1.1, 01-erhebung.md v0.7 (Regeln R1–R20), spec.md v0.7.1 (Regeln R21–R42), glossar.md v1.1, rollen.md v0.8
@@ -444,18 +445,19 @@ Aktionen im Protokoll: eingeladen, Login-Adresse geändert, Vorlage zugewiesen, 
 **Nicht Teil dieser Story:** Oberfläche der Anwesenheitserfassung; Inhalt von `ez_person_visible` (legt die Anwesenheitserfassung fest); Eigenschaften, Kontaktdaten, Ehrenamtsstatus.
 
 ### US-AD-30: Helfer:innen beim Arbeitseinsatz anlegen oder wieder aktiv eintragen
-**Als** Referent:in mit Rechten in der Anwesenheitserfassung
+**Als** Person mit Rechten nur in der Anwesenheitserfassung (Reichweite Referat; Referent:innen mit Rechten im Ehrenamtsmanagement nutzen dessen Weg, US-AD-23)
 **möchte ich** beim Arbeitseinsatz neue Helfer:innen anlegen und ruhende, ausgeschiedene oder bisher nicht aktive Personen direkt wieder aktiv eintragen,
 **damit** alle Helfer:innen eines Einsatzes erfasst sind und ein Mensch nur einmal existiert.
 **Priorität:** Must · **Regeln:** R3, R40, R45, R45a · **Abhängig von:** US-AD-25, US-AD-28 · **Nachtrag:** v0.8 (Übergabe EZ A4, A9)
 **Akzeptanzkriterien**
-- AK1: Gegeben Rita Referentin (Klettern), wenn sie beim Arbeitseinsatz im Referat Klettern eine neue Person mit Vor- und Nachname anlegt, dann hat die Person Ehrenamtsstatus „aktiv“, die Funktion Helfer:in im Referat Klettern und als Anlagemodul die Anwesenheitserfassung; eine Kontakt-E-Mail ist optional.
-- AK2: Gegeben eine ähnliche Person existiert, wenn Rita die neue Person anlegen will, dann zeigt der Dublettendialog die Treffer nach R40 mit „Diese Person eintragen“.
-- AK3: Gegeben Olga Ausgeschieden, wenn Rita sie beim Arbeitseinsatz im Referat Klettern einträgt, dann ist Olga „aktiv“ mit Eintrag in der Historie und hat die Funktion Helfer:in im Referat Klettern; das gilt auch, wenn sie zuletzt in einem anderen Referat aktiv war.
-- AK4: Gegeben Paul Nurgruppe ohne Ehrenamtsstatus, wenn Rita ihn beim Arbeitseinsatz einträgt, dann ist er „aktiv“ mit der Funktion Helfer:in im Referat Klettern.
-- AK5: Gegeben ein Arbeitseinsatz im Referat Ausbildung, wenn Rita dort eine Person anlegt oder wieder aktiv einträgt, dann erscheint „Du kannst nur Zuordnungen zu deinen Referaten pflegen.“ (Fehlerfall).
-- AK6: Gegeben Rita will über die Anwesenheitserfassung eine andere Funktion als Helfer:in setzen (z. B. Trainer:in), wenn sie speichert, dann erscheint „Für diesen Bereich hast du keine Rechte.“ (Fehlerfall).
+- AK1: Gegeben Erik Erfasser (nur Anwesenheitserfassung bearbeiten, Referat Klettern), wenn er beim Arbeitseinsatz im Referat Klettern eine neue Person mit Vor- und Nachname anlegt, dann hat die Person Ehrenamtsstatus „aktiv“, die Funktion Helfer:in im Referat Klettern und als Anlagemodul die Anwesenheitserfassung; eine Kontakt-E-Mail ist optional.
+- AK2: Gegeben eine ähnliche Person existiert, wenn Erik die neue Person anlegen will, dann zeigt der Dublettendialog die Treffer nach R40 mit „Diese Person eintragen“.
+- AK3: Gegeben Olga Ausgeschieden, wenn Erik sie beim Arbeitseinsatz im Referat Klettern einträgt, dann ist Olga „aktiv“ mit Eintrag in der Historie und hat die Funktion Helfer:in im Referat Klettern; das gilt auch, wenn sie zuletzt in einem anderen Referat aktiv war.
+- AK4: Gegeben Paul Nurgruppe ohne Ehrenamtsstatus, wenn Erik ihn beim Arbeitseinsatz einträgt, dann ist er „aktiv“ mit der Funktion Helfer:in im Referat Klettern.
+- AK5: Gegeben ein Arbeitseinsatz im Referat Ausbildung, wenn Erik dort eine Person anlegt oder wieder aktiv einträgt, dann erscheint „Du kannst nur Zuordnungen zu deinen Referaten pflegen.“ (Fehlerfall).
+- AK6: Gegeben Erik will über die Anwesenheitserfassung eine andere Funktion als Helfer:in setzen (z. B. Trainer:in), wenn er speichert, dann erscheint „Für diesen Bereich hast du keine Rechte.“ (Fehlerfall).
 - AK7: Gegeben der Vorstand ohne Rechte in der Anwesenheitserfassung, wenn er eine Person anlegen oder wieder aktiv eintragen will, dann lehnt die Datenbank ab (Rechte-Fall).
+- AK8: Gegeben Rita Referentin (Ehrenamtsmanagement und Anwesenheitserfassung bearbeiten, Referat Klettern), wenn sie beim Arbeitseinsatz eine Person anlegt, dann gilt der Weg des Ehrenamtsmanagements: Anlagemodul Ehrenamtsmanagement, auch Trainer:in ist möglich.
 **Nicht Teil dieser Story:** Oberfläche der Anwesenheitserfassung; Bestätigung „Person informiert“ (spec.md EZ R29); Anwesenheit am Einsatz.
 
 ---
