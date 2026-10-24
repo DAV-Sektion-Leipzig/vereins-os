@@ -208,7 +208,7 @@ description: "Tasks für das Modul Ehrenamtsmanagement (EA)"
 
 **Unabhängiger Test**: US-EA-13 AK1–AK4.
 
-- [ ] T049 [US-EA-13] (spec T17) `src/features/ea/gremien/GremienPage.tsx` (Loader `requireEaManage`): je aktivem Gremium (`sort_order`) die aktuellen `committee`-Eigenschaften mit Name (Link zum Detail), Rolle, seit, bis; leer: „Keine Mitglieder eingetragen.“
+- [x] T049 [US-EA-13] (spec T17) `src/features/ea/gremien/GremienPage.tsx` (Loader `requireEaManage`): je aktivem Gremium (`sort_order`) die aktuellen `committee`-Eigenschaften mit Name (Link zum Detail), Rolle, seit, bis; leer: „Keine Mitglieder eingetragen.“
 
 ---
 
