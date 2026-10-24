@@ -1,6 +1,8 @@
 // Personendaten in Gruppen (US-GR-06–14): eine Person mit Personenangaben (Eigenschaften birth_date, contact,
 // member), Erziehungsberechtigten, Notfallkontakten, Teilnahmen mit Verträgen, Fotoerlaubnis, Einwilligung,
 // Gesundheitsangaben und Funktionen in Gruppen. Was sichtbar ist, entscheidet die RLS (spec.md 3).
+import type { LoaderFunctionArgs } from 'react-router-dom'
+import { loadGrAccess } from '@/features/gr/access'
 import type { MembershipRow } from '@/features/gr/gruppen/detail'
 import { supabase } from '@/lib/supabase'
 
@@ -266,4 +268,10 @@ export const EMPTY_PERSON: NewPerson = {
   phone_landline: '',
   email: '',
   member_number: '',
+}
+
+/** Loader von /gr/personen/:id (T038). */
+export async function loadPersonPage({ params }: LoaderFunctionArgs): Promise<GrPersonResult> {
+  await loadGrAccess()
+  return loadGrPerson(params.id ?? '')
 }
