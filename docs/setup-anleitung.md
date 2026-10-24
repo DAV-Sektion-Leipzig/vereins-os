@@ -7,7 +7,7 @@ Legende: **[DU]** = manuell im Browser/Dashboard · **[CC]** = in Claude Code au
 
 Reihenfolge ist verbindlich: Konten → Repo → Claude Code → Frontend → Supabase → Cloudflare → Prüfung. Erst danach mit Spec Kit an US-AD-01 beginnen.
 
-Änderungen v0.4 (24.10.2026): Umzug nach `DAV-Sektion-Leipzig/vereins-os` (öffentlich); Phase 6 auf Produktion und Vorschau-Basis von Cloudflare umgestellt (`npx wrangler preview`, `"previews": {}` in `wrangler.jsonc`, Build-Variablen je Konfiguration); offene Punkte zu Sichtbarkeit des Repositorys und Trennung PROD/TEST entschieden; Merge-Art als offener Punkt.
+Änderungen v0.4 (24.10.2026): Umzug nach `DAV-Sektion-Leipzig/vereins-os` (öffentlich); Phase 6 auf Produktion und Vorschau-Basis von Cloudflare umgestellt (`npx wrangler preview`, `"previews": {}` in `wrangler.jsonc`, Build-Variablen je Konfiguration); offene Punkte zu Sichtbarkeit des Repositorys und Trennung PROD/TEST entschieden; Merge-Art Merge-Commit festgehalten.
 
 Änderungen v0.3 (21.10.2026): Impeccable über `npx impeccable install`, PRODUCT.md und DESIGN.md im Wurzelverzeichnis; Supabase MCP zurückgestellt; Spec-Kit-Befehle mit Bindestrich; kein `supabase config push`, Auth-Einstellungen per Dashboard-Checkliste; Phase 8 abgeschlossen bis auf P3 und P7.
 
@@ -245,7 +245,7 @@ Entschieden:
 - Seed über `supabase/seed.sh` mit Passwort aus `SEED_TEST_PASSWORD`; Abbruch mit „Seed in PROD nicht erlaubt.“ (spec.md AD Abschnitt 9).
 - Repository öffentlich unter `DAV-Sektion-Leipzig/vereins-os` (Umzug von `DAVLeipzig/vereins-os`, 24.10.2026). Im kostenlosen Plan sind Ruleset für `main` und Auto-Merge nur für öffentliche Repositories verfügbar.
 - Cloudflare-Vorschau je Branch über die Vorschau-Basis mit `npx wrangler preview`; Build-Variablen getrennt für Produktion und Vorschau-Basis (6.1, 6.2; 24.10.2026).
+- Pull Requests werden per Merge-Commit gemergt (CLAUDE.md, `gh pr merge --merge`), nicht per Squash oder Rebase; im Repository ist nur „Allow merge commits“ erlaubt, im Ruleset `main-schutz` nur die Merge-Art „Merge“ (Entscheidung Product Owner 24.10.2026). Grund: Branches bauen aufeinander auf und bekommen `main` per Merge-Commit.
 
 Offen:
 - [OFFEN] Weg der Migrationen nach PROD: manuell durch den Product Owner (`supabase link` auf PROD, `db push`, zurück auf TEST) oder per GitHub Action beim Merge auf `main`? Vor dem ersten PROD-Deployment. (offene-punkte.md AD)
-- [OFFEN] Merge-Art für Pull Requests: Merge-Commit (CLAUDE.md, `gh pr merge --merge`) oder Squash. Bis zur Entscheidung Merge-Commit.
