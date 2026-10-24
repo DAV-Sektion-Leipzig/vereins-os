@@ -24,6 +24,8 @@ import { LoginPage } from '@/features/auth/LoginPage'
 import { PasswortSetzenPage } from '@/features/auth/PasswortSetzenPage'
 import { PasswortVergessenPage } from '@/features/auth/PasswortVergessenPage'
 import { loadEaAccess, requireEaManage } from '@/features/ea/access'
+import { AblaufPage } from '@/features/ea/ablauf/AblaufPage'
+import { loadExpiryList } from '@/features/ea/ablauf/data'
 import { AktivePage } from '@/features/ea/aktive/AktivePage'
 import { loadNewVolunteer, loadVolunteerDetail, loadVolunteers } from '@/features/ea/aktive/data'
 import { PersonDetailPage } from '@/features/ea/aktive/PersonDetailPage'
@@ -97,7 +99,7 @@ export const router = createBrowserRouter([
           { path: 'aktive', loader: loadVolunteers, element: <AktivePage /> },
           { path: 'aktive/neu', loader: loadNewVolunteer, element: <PersonNeuPage /> },
           { path: 'aktive/:id', loader: loadVolunteerDetail, element: <PersonDetailPage /> },
-          { path: 'ablauf', element: <PlaceholderPage title="Ablauf" /> },
+          { path: 'ablauf', loader: loadExpiryList, element: <AblaufPage /> },
           // nur mit verwalten (US-EA-01 AK5)
           { path: 'gremien', loader: requireEaManage, element: <PlaceholderPage title="Gremien" /> },
           { path: 'eigenschaftsarten/*', loader: requireEaManage, element: <PlaceholderPage title="Eigenschaftsarten" /> },
