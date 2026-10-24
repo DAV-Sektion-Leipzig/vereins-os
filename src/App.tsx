@@ -54,6 +54,8 @@ import { loadAdmission, loadPendingAdmissions } from '@/features/gr/aufnahme/dat
 import { GrLayout } from '@/features/gr/GrLayout'
 import { loadGroupOverview } from '@/features/gr/gruppen/data'
 import { loadGroupDetail } from '@/features/gr/gruppen/detail'
+import { loadPersonPage } from '@/features/gr/personen/data'
+import { PersonPage } from '@/features/gr/personen/PersonPage'
 import { GruppeDetailPage } from '@/features/gr/gruppen/GruppeDetailPage'
 import { GruppeNeuPage } from '@/features/gr/gruppen/GruppeFormular'
 import { GruppenPage } from '@/features/gr/gruppen/GruppenPage'
@@ -159,7 +161,7 @@ export const router = createBrowserRouter([
             loader: async (args) => (await requireGrEdit(), loadAdmission(args)),
             element: <AufnahmePage />,
           },
-          { path: 'personen/:id', element: <PlaceholderPage title="Person" /> },
+          { path: 'personen/:id', loader: loadPersonPage, element: <PersonPage /> },
           { path: '*', loader: () => redirect('/gr') },
         ],
       },
