@@ -1,11 +1,13 @@
 # Setup-Anleitung: Vereins OS mit Claude Code
 
-Stand: 21.10.2026 · Version 0.3 · Grundlage: tech-stack.md v0.6, rollen.md v0.6, spec.md AD v0.5.1
+Stand: 24.10.2026 · Version 0.4 · Grundlage: tech-stack.md v0.6, rollen.md v0.6, spec.md AD v0.5.1
 Ablage: `docs/setup-anleitung.md`
 
 Legende: **[DU]** = manuell im Browser/Dashboard · **[CC]** = in Claude Code ausführen lassen · [ANNAHME] / [OFFEN] wie im Projekt üblich.
 
 Reihenfolge ist verbindlich: Konten → Repo → Claude Code → Frontend → Supabase → Cloudflare → Prüfung. Erst danach mit Spec Kit an US-AD-01 beginnen.
+
+Änderungen v0.4 (24.10.2026): Umzug nach `DAV-Sektion-Leipzig/vereins-os` (öffentlich); Phase 6 auf Produktion und Vorschau-Basis von Cloudflare umgestellt (`npx wrangler preview`, `"previews": {}` in `wrangler.jsonc`, Build-Variablen je Konfiguration); offene Punkte zu Sichtbarkeit des Repositorys und Trennung PROD/TEST entschieden; Merge-Art als offener Punkt.
 
 Änderungen v0.3 (21.10.2026): Impeccable über `npx impeccable install`, PRODUCT.md und DESIGN.md im Wurzelverzeichnis; Supabase MCP zurückgestellt; Spec-Kit-Befehle mit Bindestrich; kein `supabase config push`, Auth-Einstellungen per Dashboard-Checkliste; Phase 8 abgeschlossen bis auf P3 und P7.
 
@@ -165,14 +167,36 @@ Der Seed läuft über `supabase/seed.sh` (Daten in `supabase/seed.sql`). Das Skr
 ## Phase 6: Cloudflare (Hosting)
 
 ### 6.1 Worker mit GitHub verbinden [DU]
-- [ ] Workers & Pages → Create → Import a repository → `vereins-os`.
-- [ ] Build command: `npm run build` · Deploy command: `npx wrangler deploy` · Produktionsbranch: `main`.
-- [ ] **Builds for non-production branches** aktivieren → jeder Branch-Push erzeugt eine Vorschau-Version mit eigener Vorschau-URL (Deploy-Befehl dort: `npx wrangler versions upload`).
+- [ ] Workers & Pages → Worker `vereins-os` → Einstellungen → Builds → Git-Repository: `DAV-Sektion-Leipzig/vereins-os`. Die GitHub-App von Cloudflare ist in der Organisation DAV-Sektion-Leipzig installiert und hat Zugriff auf `vereins-os`.
+- [ ] API-Token: „Workers Builds – 2026-10-19 18:29“ (gilt für Produktion und Vorschau-Basis).
+
+Cloudflare führt die Builds in zwei Konfigurationen (Einstellungen → Builds, Umschalter „Produktion“ / „Vorschau-Basis“):
+
+| Einstellung | Produktion | Vorschau-Basis |
+|---|---|---|
+| Gilt für | Produktionsbranch `main` | jeden anderen Branch (eine Vorschau je Branch) |
+| Build-Befehl | `npm run build` | `npm run build` |
+| Befehl danach | Bereitstellungsbefehl `npx wrangler deploy` | Vorschau-Befehl `npx wrangler preview` |
+| Stammverzeichnis | `/` | `/` |
+| Schalter | „Builds deaktivieren“ aus | „Builds für Vorschau-Zweige“ an |
+| Adresse | `https://vereins-os.sektion-leipzig.workers.dev` | `https://<branch>-vereins-os.sektion-leipzig.workers.dev` (Schrägstriche im Branchnamen werden zu `-`, z. B. `claude/abc` → `claude-abc-vereins-os…`) |
+
+- `wrangler.jsonc` braucht dafür den Block `"previews": {}` (darf leer sein); ohne ihn bricht `npx wrangler preview` mit „missing a previews block“ ab.
+- `npx wrangler versions upload` funktioniert mit der Vorschau-Basis nicht mehr (Fehler „The name in your wrangler.json file (vereins-os) must match the name of your Worker“), weil jede Vorschau ein eigener Worker ist. Die frühere Einstellung „Builds for non-production branches“ bietet Cloudflare für diesen Worker nicht mehr an.
+- Neue Vorschauen übernehmen Befehl und Variablen aus der Vorschau-Basis. Wird ein Branch gelöscht, löscht Cloudflare seine Vorschau („Automatisches Löschen“ an).
+- Domänen: workers.dev an, Vorschau-URLs an.
 
 ### 6.2 Umgebungsvariablen für den Build [DU]
-Vite schreibt `VITE_*`-Werte beim Build in das Bundle. Produktion braucht PROD-Werte, Vorschau braucht TEST-Werte.
+Vite schreibt `VITE_*`-Werte beim Build in das Bundle. Sie stehen deshalb unter **Builds → Variablen und geheime Schlüssel** (Build-Variablen), nicht als Laufzeitvariablen, und zwar in **beiden** Konfigurationen:
 
-[OFFEN] Wie werden PROD- und TEST-Werte je Branch getrennt? [ANNAHME] Workers Builds stellt den Branchnamen als Build-Variable bereit; ein kleines Skript wählt danach die Werte. Vor Umsetzung in der Cloudflare-Dokumentation prüfen. Bis zur Klärung: Vorschau-Builds deaktiviert lassen oder nur TEST-Werte hinterlegen und PROD erst bei Go-live umstellen.
+| Variable | Produktion | Vorschau-Basis |
+|---|---|---|
+| `VITE_SUPABASE_URL` | bis zum Go-live TEST (`https://zskpywhanbthaytmiqxe.supabase.co`), danach PROD | immer TEST |
+| `VITE_SUPABASE_ANON_KEY` | bis zum Go-live Publishable Key von TEST, danach von PROD | immer Publishable Key von TEST |
+
+URL ohne Anführungszeichen, ohne Leerzeichen, ohne `/rest/v1` und ohne Schrägstrich am Ende. Fehlen die Werte, bricht die App beim Start mit „Supabase-Konfiguration fehlt“ ab.
+
+Damit sind PROD- und TEST-Werte getrennt: Beim Go-live werden nur die Werte unter **Produktion** auf PROD umgestellt; Vorschauen bleiben auf TEST.
 
 Anon-/Publishable Key ist öffentlich (Schutz nur über RLS). Der Service-Schlüssel kommt **nie** zu Cloudflare.
 
@@ -219,8 +243,9 @@ Entschieden:
 - Kein `supabase config push`; Auth-Einstellungen per Dashboard-Checkliste (`supabase/setup/README.md`).
 - Kein Docker lokal: Die Datenbanktests (pgTAP, `supabase test db`) laufen in einer GitHub Action mit lokalem Supabase-Stack und Seed; die fachliche Abnahme läuft in TEST.
 - Seed über `supabase/seed.sh` mit Passwort aus `SEED_TEST_PASSWORD`; Abbruch mit „Seed in PROD nicht erlaubt.“ (spec.md AD Abschnitt 9).
+- Repository öffentlich unter `DAV-Sektion-Leipzig/vereins-os` (Umzug von `DAVLeipzig/vereins-os`, 24.10.2026). Im kostenlosen Plan sind Ruleset für `main` und Auto-Merge nur für öffentliche Repositories verfügbar.
+- Cloudflare-Vorschau je Branch über die Vorschau-Basis mit `npx wrangler preview`; Build-Variablen getrennt für Produktion und Vorschau-Basis (6.1, 6.2; 24.10.2026).
 
 Offen:
 - [OFFEN] Weg der Migrationen nach PROD: manuell durch den Product Owner (`supabase link` auf PROD, `db push`, zurück auf TEST) oder per GitHub Action beim Merge auf `main`? Vor dem ersten PROD-Deployment. (offene-punkte.md AD)
-- [OFFEN] Repository öffentlich oder privat? Öffentlich ist unkritisch, solange keine Daten, Keys oder Passwörter im Repo liegen (tech-stack.md 3); privat schützt zusätzlich Project Refs und Aufbau.
-- [OFFEN] Trennung der PROD- und TEST-Werte bei Cloudflare: Vite schreibt `VITE_*` beim Build ins Bundle; Produktion braucht PROD-Werte, Vorschau-Builds TEST-Werte (6.2).
+- [OFFEN] Merge-Art für Pull Requests: Merge-Commit (CLAUDE.md, `gh pr merge --merge`) oder Squash. Bis zur Entscheidung Merge-Commit.
