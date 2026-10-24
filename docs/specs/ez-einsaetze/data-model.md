@@ -8,10 +8,10 @@ Stand: 24.10.2026 · Normativ für Spalten, Typen, Checks und Regeln ist [spec.m
 |---|---|---|---|
 | 1 | `20261028000100_ez_tables.sql` | T1, T2 (Teil) | Typen `ez_event_kind`, `ez_span`, `ez_day_category`, `ez_role`, `ez_attendance_status`; `ez_can_read`, `ez_can_write`, `ez_can_delete`; Tabellen `ez_events` (Check `ez_events_shape`), `ez_event_groups`, `ez_attendances`, `ez_trial_participants` mit Indizes; RLS, Select-Policies, `grant select` |
 | 2 | `20261028000200_ez_visibility.sql` | T2 | `ez_person_visible` (Ersatz des Platzhalters, gleiche Signatur) |
-| 3 | `20261028000300_ez_triggers.sql` | T3 | `ez_events_before_insert`, `ez_events_before_update`, `ez_attendances_set_audit`, `ez_trial_participants_set_audit`; interne Hilfe `ez_my_person_id()` |
-| 4 | `20261028000400_ez_save_event.sql` | T4 | interne Hilfen `ez_raise`, `ez_roster`; `ez_save_event` |
-| 5 | `20261028000500_ez_event_functions.sql` | T5 | Tabelle `ez_privacy_confirmations` (RLS, Select-Policy); `ez_delete_event`, `ez_cancel_event`, `ez_restore_event`, `ez_create_helper`, `ez_reactivate_helper` |
-| 6 | `20261028000600_ez_read_functions.sql` | T6 | View `ez_v_events`; `ez_list_events`, `ez_get_event`, `ez_climbing_points_report` |
+| 3 | `20261028000300_ez_triggers.sql` | T3 | `ez_events_before_insert`, `ez_events_before_update`, `ez_attendances_set_audit` (Probetrainings nur per Default, sie werden ersetzt statt geändert); interne Hilfe `ez_my_person_id()` |
+| 4 | `20261028000400_ez_save_event.sql` | T4 | interne Hilfe `ez_roster`; `ez_save_event` |
+| 5 | `20261028000500_ez_event_functions.sql` | T5 | Tabelle `ez_privacy_confirmations` (RLS, Select-Policy); interne Hilfen `ez_load_event`, `ez_check_helper_event`; `ez_delete_event`, `ez_cancel_event`, `ez_restore_event`, `ez_create_helper`, `ez_reactivate_helper` |
+| 6 | `20261028000600_ez_read_functions.sql` | T6 | View `ez_v_events`; interne Hilfe `ez_group_label`; `ez_list_events`, `ez_get_event`, `ez_climbing_points_report` |
 | 7 | `2026…_ez_module_available.sql` | T17 | `update ad_modules set is_available = true where code = 'EZ'` – erst nach Abnahme und Freigabe |
 | 8 | `2026…_ez_planned_events.sql` | T19 (zurückgestellt) | `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state` – mit TK T13 |
 
@@ -53,7 +53,7 @@ Technisch ergänzt (plan.md H6): `ez_events (organizer_person_id) where organize
 |---|---|---|
 | `ez_can_read(uuid)`, `ez_can_write(uuid)`, `ez_can_delete()` | security definer, stable | authenticated |
 | `ez_person_visible(uuid)` | security definer, stable | authenticated (bleibt aus AD) |
-| `ez_my_person_id()`, `ez_raise(…)`, `ez_roster(…)`, Triggerfunktionen | security definer | keiner |
+| `ez_my_person_id()`, `ez_roster(…)`, `ez_load_event(…)`, `ez_check_helper_event(…)`, `ez_group_label(…)`, Triggerfunktionen | security definer | keiner |
 | `ez_save_event`, `ez_delete_event`, `ez_cancel_event`, `ez_restore_event`, `ez_create_helper`, `ez_reactivate_helper` | security definer, Rechteprüfung zuerst | authenticated |
 | `ez_list_events`, `ez_get_event`, `ez_climbing_points_report` | security definer, stable, Filter `ez_can_read` | authenticated |
 | View `ez_v_events` | security_invoker | select an authenticated |

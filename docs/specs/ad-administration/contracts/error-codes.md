@@ -1,6 +1,6 @@
 # Contract: Fehlercodes → Meldungen
 
-Stand: 23.10.2026 · Grundlage: [spec.md Administration](../spec.md) v0.9 (Abschnitt 5 und Abschnitt 2; umgesetzt wird zunächst der Kern bis v0.7.1, siehe [plan.md](../plan.md)), [02-stories.md Gruppen](../../gr-gruppen/02-stories.md) v0.7 (US-GR-19), [spec.md Anwesenheitserfassung](../../ez-einsaetze/spec.md) v0.1 (Abschnitt 5)
+Stand: 23.10.2026 · Grundlage: [spec.md Administration](../spec.md) v0.9 (Abschnitt 5 und Abschnitt 2; umgesetzt wird zunächst der Kern bis v0.7.1, siehe [plan.md](../plan.md)), [02-stories.md Gruppen](../../gr-gruppen/02-stories.md) v0.7 (US-GR-19), [spec.md Anwesenheitserfassung](../../ez-einsaetze/spec.md) v0.5 (Abschnitt 5)
 
 Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnung Code → Meldung auf sie. Die Meldungstexte stehen wörtlich in der jeweiligen Spec. Das Frontend bildet die Codes in `src/lib/errors.ts` auf die Meldungen ab.
 
@@ -99,30 +99,38 @@ Die Codes von Gruppen stehen normativ in [contracts/error-codes.md Gruppen](../.
 
 ## Anwesenheitserfassung (EZ)
 
-| Code / Constraint | Meldung | Regel | Status |
+Stand spec.md Anwesenheitserfassung v0.5 (Abschnitt 5 und 2). Ausführlich mit „Ausgelöst in“, weitergereichten Codes und Hinweisen: [contracts/error-codes.md Anwesenheitserfassung](../../ez-einsaetze/contracts/error-codes.md). Entfallen gegenüber v0.1: `EZ_END_TIME`, `EZ_KIND_NOT_AVAILABLE`.
+
+| Code | Meldung | Regel | Status |
 |---|---|---|---|
-| `EZ_FIELD_REQUIRED` | Bitte ‚<Feld>‘ angeben. | R1 | geplant (T4) |
-| `EZ_END_DATE` | Das Enddatum muss nach dem Startdatum liegen. Für eintägige Einsätze bitte ‚eintägig‘ wählen. | R2 | geplant (T4) |
-| `EZ_END_TIME` | Das Ende muss nach dem Beginn liegen. | – | geplant (T4) |
-| `EZ_TITLE_LENGTH` | Bitte einen Titel mit höchstens 60 Zeichen eingeben. | – | geplant (T4) |
-| `EZ_MIN_ATTENDANCE` | Training: „Bitte mindestens eine Trainer:in oder Helfer:in und eine Teilnehmer:in auswählen.“ Andere: „Bitte mindestens eine Trainer:in oder Helfer:in auswählen.“ | R5 | geplant (T4) |
-| `EZ_TRIAL_NAME` | Leer: „Bitte einen Vornamen eingeben.“ Zu lang: „Bitte höchstens 30 Zeichen eingeben.“ | R6 | geplant (T4) |
-| `EZ_REMARK_LENGTH` | Die Bemerkung darf höchstens 500 Zeichen haben. | R7 | geplant (T4) |
-| `EZ_DUPLICATE_EVENT` (Rückfrage, kein Abbruch) | Für diese Gruppe ist an diesem Tag bereits ein Einsatz dieser Art erfasst. Trotzdem speichern? | R8 | geplant (T4) |
-| `EZ_ORGANIZER_NOT_ACTIVE` | Bitte eine aktive Person auswählen. | R11 | geplant (T4) |
-| `EZ_LOCATION_INACTIVE` | Dieser Ort ist nicht mehr aktiv. Bitte einen anderen Ort wählen. | R12 | geplant (T4) |
-| `EZ_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | R13, R14 | geplant (T4) |
-| `EZ_PARTICIPANT_NOT_IN_GROUP` | Diese Person ist an diesem Tag nicht Teilnehmer:in der Gruppe. | R16 | geplant (T4) |
-| `EZ_DUPLICATE_PERSON` | Diese Person ist bereits eingetragen. | R17 | geplant (T4) |
-| `EZ_FIELD_LOCKED` (Trigger `ez_events_before_update`, `ez_save_event`) | Einsatzart, Gruppe und Referat können nicht geändert werden. Bitte den Einsatz löschen lassen und neu erfassen. | R19 | geplant (T3, T4) |
-| `EZ_PERSON_NOT_ACTIVE` | Bitte eine aktive Person auswählen. | R20 | geplant (T4) |
-| `EZ_STATUS_NOT_ALLOWED` | [OFFEN] Meldung fehlt in spec.md | R21 | geplant (T4) |
-| `EZ_ROLE_NOT_ALLOWED` | Beim Arbeitseinsatz gibt es keine Teilnehmer:innen. | R21 | geplant (T4) |
-| `EZ_KIND_NOT_AVAILABLE` | [OFFEN] Meldung fehlt in spec.md | R21 | geplant (T4) |
-| `EZ_DELETE_FORBIDDEN` | Du darfst Einsätze nicht löschen. | R15 | geplant (T5) |
-| `EZ_KIND_NOT_ALLOWED` (`ez_create_helper` außerhalb des Arbeitseinsatzes) | [OFFEN] Meldung fehlt in spec.md | – | geplant (T5) |
-| `EZ_NOT_FOUND` | Einsatz nicht gefunden. | R13 | geplant (T6) |
-| `EZ_LOCATION_NO_POINTS` | [OFFEN] Meldung fehlt in spec.md | – | geplant (T6) |
+| `EZ_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | R13, R14 | umgesetzt |
+| `EZ_NOT_FOUND` | Einsatz nicht gefunden. | R13 | umgesetzt |
+| `EZ_DELETE_FORBIDDEN` | Du darfst Einsätze nicht löschen. | R15 | umgesetzt |
+| `EZ_FIELD_REQUIRED` | Bitte ‚<Feld>‘ angeben. (Feld in `details`: Gruppe, Referat, Titel, Organisierende Person, Datum, Startdatum, Enddatum, Beginn, Ende, Dauer, Ort, Grund) | R1 | umgesetzt |
+| `EZ_FIELD_LOCKED` | Einsatzart und Gruppe können nicht geändert werden. Bitte den Einsatz löschen lassen und neu erfassen. | R19 | umgesetzt |
+| `EZ_END_DATE` | Das Enddatum muss nach dem Startdatum liegen. Für eintägige Einsätze bitte ‚eintägig‘ wählen. | R2 | umgesetzt |
+| `EZ_TITLE_LENGTH` | Bitte einen Titel mit höchstens 90 Zeichen eingeben. | Längen | umgesetzt |
+| `EZ_TRIAL_NAME` | Leer: „Bitte einen Vornamen eingeben.“ Zu lang: „Bitte höchstens 30 Zeichen eingeben.“ | R6 | umgesetzt |
+| `EZ_REMARK_LENGTH` | Die Bemerkung darf höchstens 500 Zeichen haben. | R7 | umgesetzt |
+| `EZ_LOCATION_INACTIVE` | Dieser Ort ist nicht mehr aktiv. Bitte einen anderen Ort wählen. | R12 | umgesetzt |
+| `EZ_LOCATION_NO_POINTS` | Etwas ist schiefgelaufen. Bitte versuche es erneut. (keine eigene Meldung in spec.md; die Oberfläche bietet nur Orte mit Punktekonto an) | US-EZ-16 | umgesetzt |
+| `EZ_ORGANIZER_NOT_ACTIVE` | Bitte eine aktive Person auswählen. | R11 | umgesetzt |
+| `EZ_PERSON_NOT_ACTIVE` | Bitte eine aktive Person auswählen. | R20 | umgesetzt |
+| `EZ_PARTICIPANT_NOT_IN_GROUP` | Diese Person ist an diesem Tag nicht Teilnehmer:in der Gruppe. | R16 | umgesetzt |
+| `EZ_DUPLICATE_PERSON` | Diese Person ist bereits eingetragen. | R17 | umgesetzt |
+| `EZ_DUPLICATE_EVENT` (Rückfrage, kein Abbruch) | Für diese Gruppe ist an diesem Tag bereits ein Einsatz dieser Art erfasst. Trotzdem speichern? | R8 | umgesetzt |
+| `EZ_MIN_ATTENDANCE` | Bitte mindestens eine Trainer:in oder Helfer:in und eine Teilnehmer:in auswählen. | R5 | umgesetzt |
+| `EZ_STATUS_NOT_ALLOWED` | Etwas ist schiefgelaufen. Bitte versuche es erneut. (keine eigene Meldung in spec.md; die Oberfläche bietet „eingetragen“ nur bei Arbeitseinsatz, Kurs und Tour an) | R21 | umgesetzt |
+| `EZ_ROLE_NOT_ALLOWED` | Bei dieser Einsatzart gibt es keine Teilnehmer:innen. | R21 | umgesetzt |
+| `EZ_KIND_NOT_ALLOWED` | Etwas ist schiefgelaufen. Bitte versuche es erneut. (keine eigene Meldung in spec.md; nur bei Aufrufen außerhalb der Oberfläche) | R30, US-EZ-11 | umgesetzt |
+| `EZ_GROUP_REFERAT_MISMATCH` | Alle Gruppen müssen zum selben Referat gehören. | R30 | umgesetzt |
+| `EZ_EVENT_CANCELLED` | Der Einsatz ist abgesagt. Bitte zuerst die Absage zurücknehmen. | R22 | umgesetzt |
+| `EZ_CANCEL_REASON` | Bitte einen Grund mit höchstens 500 Zeichen angeben. | R23 | umgesetzt |
+| `EZ_CANCEL_NOT_ALLOWED` | Der Einsatz hat schon anwesende Personen und kann nicht abgesagt werden. | R23 | umgesetzt |
+| `EZ_TK_MANAGED` | Dieser Einsatz kommt aus der Planungshilfe Touren und Kurse. Bitte dort ändern. | R25 | umgesetzt |
+| `EZ_EVENT_LOCKED` | Der Einsatz ist schon erfasst und wurde nicht geändert. | R26, R27 | zurückgestellt (T19) |
+| `EZ_PRIVACY_NOT_CONFIRMED` | Bitte bestätige, dass die Person informiert wurde. | R29 | umgesetzt |
+| `EZ_PERSON_NOT_INACTIVE` | Diese Person ist bereits aktiv. | R31 | umgesetzt |
 
 `EZ_DUPLICATE_EVENT` bricht das Speichern ab und liefert `existing_id` nur, wenn der vorhandene Einsatz lesbar ist. „Trotzdem speichern“ ruft `ez_save_event` erneut mit `p_confirm_duplicate = true` auf (R8).
 
@@ -168,7 +176,7 @@ Diese Codes bzw. Fälle melden einen **erfolgreichen** Vorgang. Das Frontend zei
 
 ## Offene Punkte
 
-- Erledigt 24.10.2026: `AD_TOO_MANY_IDS` nutzt die allgemeine Meldung (spec.md v0.9.4). [OFFEN] Meldungstext fehlt in der Spec für `EZ_STATUS_NOT_ALLOWED`, `EZ_KIND_NOT_AVAILABLE`, `EZ_KIND_NOT_ALLOWED`, `EZ_LOCATION_NO_POINTS` (Quelle: docs/specs/ez-einsaetze/spec.md v0.1, Abschnitte 2 und 5). Bis zur Klärung zeigt das Frontend die Meldung für unerwartete Fehler.
+- Erledigt 24.10.2026: `AD_TOO_MANY_IDS` nutzt die allgemeine Meldung (spec.md v0.9.4). [OFFEN] Meldungstext fehlt in der Spec für `EZ_STATUS_NOT_ALLOWED`, `EZ_KIND_NOT_ALLOWED`, `EZ_LOCATION_NO_POINTS` (Quelle: docs/specs/ez-einsaetze/spec.md v0.5, Abschnitte 2 und 5; `EZ_KIND_NOT_AVAILABLE` entfällt seit v0.2). Die Oberfläche bietet diese Fälle nicht an; tritt einer doch auf, zeigt das Frontend die Meldung für unerwartete Fehler.
 - [OFFEN] `EA_FIELD_LOCKED` und `EA_DATA_TYPE_LOCKED`: Beide stehen für R36. Ist `EA_FIELD_LOCKED` der Nachfolger (Datentyp je Feld seit v0.7) oder ein eigener Fall? (Quelle: docs/specs/ad-administration/spec.md v0.8, R36 und Abschnitt 5)
 - [OFFEN] `EA_CONFIDENTIAL_FORBIDDEN`: Seit R29 regelt die Lesestufe „vertraulich“ den Lesezugriff, beim Setzen gilt `AD_CONFIDENTIAL_ONLY_AD`. Bleibt der Code? (Quelle: docs/specs/ad-administration/spec.md v0.8, R8, R29)
 - [OFFEN] Ohne Code in der Spec: „Ein Feld mit dieser Bezeichnung gibt es bereits.“ (spec.md Administration, Abschnitt 5, „Weitere Meldungen“) und „Gruppe nicht gefunden.“ (gr-gruppen/02-stories.md v0.7, US-GR-19 AK6).

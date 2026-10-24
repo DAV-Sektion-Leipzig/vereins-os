@@ -55,7 +55,7 @@ Keine `NEEDS CLARIFICATION` im Technical Context. Fachliche Lücken stehen als O
 
 ## R-EZ-09 Audit
 
-- **Decision:** `created_at`/`created_by` per Default (`now()`, `auth.uid()`), `created_by` `not null` (spec.md 2: Pflicht). Trigger `ez_events_before_insert` setzt `created_by_person_id` über `ad_accesses.auth_user_id = auth.uid()`; `ez_events_before_update` setzt `updated_at`, `updated_by`, `updated_by_person_id`. `ez_attendances_set_audit` setzt `created_*`/`updated_*`. `cancelled_by`, `cancelled_by_person_id` setzt `ez_cancel_event`. Der Seed setzt für seinen Abschnitt den Nutzerkontext der Geschäftsstelle (`request.jwt.claims`), damit `created_by` gefüllt ist.
+- **Decision:** `created_at`/`created_by` per Default (`now()`, `auth.uid()`), `created_by` `not null` (spec.md 2: Pflicht), ohne Fremdschlüssel auf `auth.users`, damit das Aufräumen von Testnutzern in TEST nicht an Einsätzen scheitert; angezeigt wird `created_by_person_id`. Trigger `ez_events_before_insert` setzt `created_by_person_id` über `ad_accesses.auth_user_id = auth.uid()`; `ez_events_before_update` setzt `updated_at`, `updated_by`, `updated_by_person_id`. `ez_attendances_set_audit` setzt `created_*`/`updated_*`. `cancelled_by`, `cancelled_by_person_id` setzt `ez_cancel_event`. Der Seed setzt für seinen Abschnitt den Nutzerkontext der Geschäftsstelle (`request.jwt.claims`), damit `created_by` gefüllt ist.
 - **Rationale:** R9; Muster `ad_set_updated`. Ohne Nutzerkontext gäbe es keinen „erfasst von“.
 - **Alternatives considered:** `created_by` nullable wie bei Gruppen (widerspricht spec.md 2).
 
