@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
-import { ChevronLeftIcon, CopyIcon, UserPlusIcon } from 'lucide-react'
-import { Link, useLoaderData, useSearchParams } from 'react-router-dom'
+import { ChevronLeftIcon, CopyIcon, PencilIcon, PlusIcon, UserPlusIcon } from 'lucide-react'
+import { Link, useLoaderData, useLocation, useRevalidator, useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { ResponsiveTable, type Column } from '@/components/ResponsiveTable'
 import { Button } from '@/components/ui/button'
@@ -13,11 +13,14 @@ import {
   timeLabel,
   validOn,
   type FunctionRow,
+  type GroupDetail,
   type GroupDetailResult,
   type MembershipRow,
   type TrainingTime,
 } from '@/features/gr/gruppen/detail'
-import { HintBadge, LoadFailed } from '@/features/gr/shared/ui'
+import { AufloesenDialog, GruppeAendernDialog } from '@/features/gr/gruppen/GruppeFormular'
+import { TrainingszeitDialog, type TrainingTimeMode } from '@/features/gr/gruppen/TrainingszeitDialog'
+import { FormError, HintBadge, LoadFailed } from '@/features/gr/shared/ui'
 import { MESSAGES } from '@/lib/errors'
 import { ageOn, formatDate, personName, todayIso } from '@/lib/format'
 import { cn } from '@/lib/utils'
@@ -38,6 +41,12 @@ const NOT_FOUND = 'Gruppe nicht gefunden.'
 export function GruppeDetailPage() {
   const result = useLoaderData() as GroupDetailResult
   const [params, setParams] = useSearchParams()
+  const { canEdit } = useGrAccess()
+  const revalidator = useRevalidator()
+  const location = useLocation()
+  const [dialog, setDialog] = useState<'edit' | 'dissolve' | null>(null)
+  // Fehler beim Anlegen der ersten Trainingszeit (/gr/gruppen/neu)
+  const carriedError = (location.state as { error?: string } | null)?.error ?? null
   const tab = (TABS.find((t) => t.id === params.get('reiter'))?.id ?? 'teilnehmer') as Tab
 
   if (result.state !== 'ok') {
@@ -66,8 +75,22 @@ export function GruppeDetailPage() {
               {group.dissolved_on && ` · aufgelöst am ${formatDate(group.dissolved_on)}`}
             </p>
           </div>
-          <EmailListButton groupId={group.id} />
+          <div className="flex flex-wrap gap-2">
+            <EmailListButton groupId={group.id} />
+            {canEdit && !group.dissolved_on && (
+              <>
+                <Button variant="outline" onClick={() => setDialog('edit')} className="h-11 sm:h-8">
+                  <PencilIcon data-icon="inline-start" aria-hidden="true" />
+                  Gruppe ändern
+                </Button>
+                <Button variant="destructive" onClick={() => setDialog('dissolve')} className="h-11 sm:h-8">
+                  Gruppe auflösen
+                </Button>
+              </>
+            )}
+          </div>
         </div>
+        <FormError text={carriedError} />
         <dl className="grid gap-x-6 gap-y-1 text-sm sm:grid-cols-[auto_1fr]">
           <dt className="text-muted-foreground">Trainingszeiten heute gültig</dt>
           <dd>{timesToday.length > 0 ? timesToday.map(timeLabel).join(' · ') : 'Keine Trainingszeit'}</dd>
@@ -105,8 +128,17 @@ export function GruppeDetailPage() {
       <div role="tabpanel" id={`gr-panel-${tab}`} aria-labelledby={`gr-tab-${tab}`}>
         {tab === 'teilnehmer' && <MembersTab groupId={group.id} dissolved={Boolean(group.dissolved_on)} rows={memberships} />}
         {tab === 'betreuung' && <FunctionsTab rows={functions} />}
-        {tab === 'trainingszeiten' && <TrainingTimesTab rows={trainingTimes} />}
+        {tab === 'trainingszeiten' && (
+          <TrainingTimesTab group={group} rows={trainingTimes} editable={canEdit && !group.dissolved_on} onChanged={() => revalidator.revalidate()} />
+        )}
       </div>
+
+      {dialog === 'edit' && (
+        <GruppeAendernDialog group={group} onClose={() => setDialog(null)} onDone={() => (setDialog(null), revalidator.revalidate())} />
+      )}
+      {dialog === 'dissolve' && (
+        <AufloesenDialog group={group} onClose={() => setDialog(null)} onDone={() => (setDialog(null), revalidator.revalidate())} />
+      )}
     </section>
   )
 }
@@ -303,18 +335,57 @@ function FunctionList({ rows }: { rows: FunctionRow[] }) {
   )
 }
 
-// Trainingszeiten (US-GR-18): gültige, künftige mit „ab“, frühere aufklappbar
-function TrainingTimesTab({ rows }: { rows: TrainingTime[] }) {
+// Trainingszeiten (US-GR-18): gültige, künftige mit „ab“, frühere aufklappbar; Pflege nach T029
+function TrainingTimesTab({
+  group,
+  rows,
+  editable,
+  onChanged,
+}: {
+  group: GroupDetail
+  rows: TrainingTime[]
+  editable: boolean
+  onChanged: () => void
+}) {
   const today = todayIso()
+  const [mode, setMode] = useState<TrainingTimeMode | null>(null)
+  const dialog = mode && (
+    <TrainingszeitDialog groupId={group.id} mode={mode} onClose={() => setMode(null)} onDone={() => (setMode(null), onChanged())} />
+  )
+  const addButton = editable && (
+    <Button variant="outline" onClick={() => setMode({ kind: 'add' })} className="h-11 self-start sm:h-8">
+      <PlusIcon data-icon="inline-start" aria-hidden="true" />
+      Trainingszeit hinzufügen
+    </Button>
+  )
+  const actions = (t: TrainingTime) =>
+    editable && (
+      <span className="flex flex-wrap gap-2">
+        <Button variant="outline" onClick={() => setMode({ kind: 'change', time: t })} className="h-11 sm:h-8">
+          Ändern ab
+        </Button>
+        <Button variant="ghost" onClick={() => setMode({ kind: 'end', time: t })} className="h-11 sm:h-8">
+          {t.valid_to ? '„Gültig bis“ ändern' : 'Beenden'}
+        </Button>
+      </span>
+    )
   const current = rows.filter((t) => validOn(t.valid_from, t.valid_to, today))
   const future = rows.filter((t) => t.valid_from > today)
   const past = rows.filter((t) => t.valid_to !== null && t.valid_to < today)
 
-  if (rows.length === 0) return <p className="text-sm text-muted-foreground">Keine Trainingszeit.</p>
+  if (rows.length === 0)
+    return (
+      <div className="flex flex-col gap-4">
+        <p className="text-sm text-muted-foreground">Keine Trainingszeit.</p>
+        {addButton}
+        {dialog}
+      </div>
+    )
   return (
     <div className="flex flex-col gap-4">
+      {addButton}
       {current.length + future.length > 0 ? (
-        <TimeList rows={[...current, ...future]} today={today} />
+        <TimeList rows={[...current, ...future]} today={today} actions={actions} />
       ) : (
         <p className="text-sm text-muted-foreground">Keine Trainingszeit.</p>
       )}
@@ -324,11 +395,12 @@ function TrainingTimesTab({ rows }: { rows: TrainingTime[] }) {
           <TimeList rows={past} today={today} />
         </details>
       )}
+      {dialog}
     </div>
   )
 }
 
-function TimeList({ rows, today }: { rows: TrainingTime[]; today: string }) {
+function TimeList({ rows, today, actions }: { rows: TrainingTime[]; today: string; actions?: (t: TrainingTime) => ReactNode }) {
   return (
     <ul className="flex flex-col divide-y rounded-xl border">
       {rows.map((t) => (
@@ -340,6 +412,7 @@ function TimeList({ rows, today }: { rows: TrainingTime[]; today: string }) {
               {t.valid_to && ` bis ${formatDate(t.valid_to)}`}
             </span>
           </span>
+          {actions?.(t)}
         </li>
       ))}
     </ul>
