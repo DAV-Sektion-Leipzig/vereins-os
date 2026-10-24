@@ -71,6 +71,8 @@ export const MESSAGES = {
   grTrainingTimeRequired: 'Bitte Wochentag, Beginn, Ende und ‚gültig von‘ angeben.',
   grTrainingTimeEnd: 'Das Ende muss nach dem Beginn liegen.',
   grChangeDateInvalid: 'Das Datum muss nach ‚gültig von‘ und innerhalb der Gültigkeit der bisherigen Trainingszeit liegen.',
+  grTrainingTimeWeekdayExists:
+    'Für diesen Wochentag gibt es in diesem Zeitraum bereits eine Trainingszeit. Bitte die bestehende mit ‚Ändern ab‘ anpassen.',
   grTrainingTimeLocked: 'Wochentag und Uhrzeit können nicht geändert werden. Bitte ‚Ändern ab‘ verwenden.',
   grPersonInvalid: 'Bitte eine vorhandene Person wählen oder eine neue anlegen.',
   grBirthDateForbidden: 'Das Geburtsdatum kann nur die Geschäftsstelle erfassen.',
@@ -173,6 +175,7 @@ const CODE_MESSAGES: Record<string, string> = {
   GR_TRAINING_TIME_END: MESSAGES.grTrainingTimeEnd,
   GR_VALID_TO_BEFORE_FROM: MESSAGES.validRange,
   GR_CHANGE_DATE_INVALID: MESSAGES.grChangeDateInvalid,
+  GR_TRAINING_TIME_WEEKDAY_EXISTS: MESSAGES.grTrainingTimeWeekdayExists,
   GR_TRAINING_TIME_LOCKED: MESSAGES.grTrainingTimeLocked,
   GR_PERSON_INVALID: MESSAGES.grPersonInvalid,
   GR_BIRTH_DATE_FORBIDDEN: MESSAGES.grBirthDateForbidden,

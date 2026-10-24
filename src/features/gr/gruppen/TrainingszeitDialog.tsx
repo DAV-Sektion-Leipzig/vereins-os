@@ -1,5 +1,4 @@
 import { useState, type FormEvent } from 'react'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -13,9 +12,8 @@ import { formatClock, formatDate, todayIso } from '@/lib/format'
 
 export type TrainingTimeMode = { kind: 'add' } | { kind: 'change'; time: TrainingTime } | { kind: 'end'; time: TrainingTime }
 
-const OVERLAP = 'Diese Trainingszeit überschneidet sich mit einer anderen.'
-
-// T029 (US-GR-18, R18, R19, A13): Trainingszeit hinzufügen, „Ändern ab“ oder beenden. Wochentag und Uhrzeit
+// T029, T056 (US-GR-18, R18, R19, A13): Trainingszeit hinzufügen, „Ändern ab“ oder beenden. Je Wochentag höchstens
+// eine gültige Trainingszeit; die Datenbank lehnt eine zweite ab (GR_TRAINING_TIME_WEEKDAY_EXISTS). Wochentag und Uhrzeit
 // einer gespeicherten Trainingszeit sind nicht änderbar; „Ändern ab“ beendet sie am Vortag und legt eine neue an.
 export function TrainingszeitDialog({
   groupId,
@@ -49,7 +47,7 @@ export function TrainingszeitDialog({
     setPending(true)
     const result =
       mode.kind === 'add'
-        ? await grRpc<{ overlap: boolean }>('gr_add_training_time', {
+        ? await grRpc<{ id: string }>('gr_add_training_time', {
             p_group: groupId,
             p_weekday: Number(weekday),
             p_starts: starts,
@@ -58,7 +56,7 @@ export function TrainingszeitDialog({
             p_valid_to: validTo || null,
           })
         : mode.kind === 'change'
-          ? await grRpc<{ overlap: boolean }>('gr_change_training_time', {
+          ? await grRpc<{ id: string }>('gr_change_training_time', {
               p_id: mode.time.id,
               p_from: validFrom,
               p_weekday: Number(weekday),
@@ -68,8 +66,6 @@ export function TrainingszeitDialog({
           : await grRpc<null>('gr_end_training_time', { p_id: mode.time.id, p_valid_to: validTo || null })
     setPending(false)
     if (result.error !== null) return setError(result.error)
-    // R19: Hinweis, Speichern bleibt möglich
-    if (result.data && typeof result.data === 'object' && result.data.overlap) toast.warning(OVERLAP)
     onDone()
   }
 
