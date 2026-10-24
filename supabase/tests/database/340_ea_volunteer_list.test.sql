@@ -2,6 +2,8 @@
 -- Suche, Filter, Sortierung, Paginierung, Spalten (R1, R2, R14, R32 AD, R34 AD).
 -- Hinweis: Anton Muster (5, ruhend, Trainer:in mit Lizenz bis 2019) erfüllt R14 ebenso wie Max (20); die Tabelle
 -- „Erwartete Ergebnisse“ nennt nur 20 – gemeldet als plan.md H3. Der Test folgt der Regel R14.
+-- Seit dem Seed von Gruppen (GR spec.md 9) zusätzlich aktiv: 26 Lars Lehrer, 28 Sam Sechzehn (Funktion in Gruppe),
+-- 31 Tom Ehemals (Funktion in Gruppe beendet), 32 Kim Kinderjugend (Amt Referent:in Kinder und Jugend).
 begin;
 create extension if not exists pgtap with schema extensions;
 select * from no_plan();
@@ -29,14 +31,14 @@ $$;
 -- Standardaufruf je Testzugang
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
 select is((select coalesce(array_agg(right(l.id::text, 2)::int order by l.id), '{}') from public.ea_volunteer_list() l),
-  array[4, 5, 9, 10, 19, 20, 21, 22], 'Admin: 4, 5, 9, 10, 19, 20, 21, 22');
+  array[4, 5, 9, 10, 19, 20, 21, 22, 26, 28, 31, 32], 'Admin: 4, 5, 9, 10, 19–22, 26, 28, 31, 32');
 select is((select array_agg(right(l.id::text, 2)::int) from public.ea_volunteer_list() l),
-  array[20, 21, 19, 5, 4, 9, 22, 10], 'Sortierung nach Nachname, dann Rufname bzw. Vorname (R2)');
-select is((select l.total_count from public.ea_volunteer_list() l limit 1), 8::bigint, 'total_count');
+  array[20, 31, 21, 32, 26, 19, 5, 4, 9, 22, 28, 10], 'Sortierung nach Nachname, dann Rufname bzw. Vorname (R2)');
+select is((select l.total_count from public.ea_volunteer_list() l limit 1), 12::bigint, 'total_count');
 
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
 select is((select coalesce(array_agg(right(l.id::text, 2)::int order by l.id), '{}') from public.ea_volunteer_list() l),
-  array[4, 5, 9, 10, 19, 20, 21, 22], 'Geschäftsstelle wie Admin');
+  array[4, 5, 9, 10, 19, 20, 21, 22, 26, 28, 31, 32], 'Geschäftsstelle wie Admin');
 
 -- Spalten
 select results_eq(
@@ -84,7 +86,7 @@ select is((select array_agg(right(l.id::text, 2)::int) from public.ea_volunteer_
 select is((select array_agg(right(l.id::text, 2)::int order by l.id) from public.ea_volunteer_list(p_status => '{left}') l),
   array[11], 'Geschäftsstelle: Statusfilter ausgeschieden → Olga (AK3)');
 select is((select array_agg(right(l.id::text, 2)::int order by l.id) from public.ea_volunteer_list(p_status => '{active}') l),
-  array[4, 9, 10, 19, 20, 21, 22], 'nur aktiv (Anton ruhend fehlt)');
+  array[4, 9, 10, 19, 20, 21, 22, 26, 28, 31, 32], 'nur aktiv (Anton ruhend fehlt)');
 select is_empty($$ select 1 from public.ea_volunteer_list(p_status => '{active,dormant,left}')
                     where id = 'a0000000-0000-4000-8000-000000000012' $$, 'Person 12 (ohne Status) erscheint nie');
 
@@ -101,7 +103,7 @@ select is((select array_agg(right(l.id::text, 2)::int order by l.id)
 select is((select array_agg(right(l.id::text, 2)::int order by l.id) from public.ea_volunteer_list(p_function => 'Helfer:in') l),
   array[10, 22], 'Funktion Helfer:in');
 select is((select array_agg(right(l.id::text, 2)::int order by l.id) from public.ea_volunteer_list(p_position => 'Referent:in') l),
-  array[9], 'Amt Referent:in');
+  array[9, 32], 'Amt Referent:in');
 select is((select array_agg(right(l.id::text, 2)::int order by l.id)
              from public.ea_volunteer_list(p_gremium => pg_temp.gremium('Beirat')) l),
   array[21], 'Gremium Beirat');
@@ -127,20 +129,21 @@ select results_eq($$ select right(id::text, 2)::int from public.ea_volunteer_lis
   $$ values (10) $$, 'Schnittmenge Referat Klettern und ohne gültige Lizenz: nur Karl (AK1, Schnittmenge je Person, plan.md H3)');
 
 -- aktiv ohne Funktion oder Amt
-select is_empty($$ select 1 from public.ea_volunteer_list(p_without_assignment => true) $$, 'im Seed niemand ohne Zuordnung');
+select results_eq($$ select last_name from public.ea_volunteer_list(p_without_assignment => true) $$,
+  $$ values ('Ehemals'::text) $$, 'im Seed nur Tom Ehemals ohne Zuordnung (Funktion in Gruppe beendet)');
 select lives_ok($$ select public.ea_create_volunteer('Ohne', 'Zuordnung', null, null, null, null, null) $$,
   'Geschäftsstelle legt Person ohne Zuordnung an');
 select results_eq($$ select last_name from public.ea_volunteer_list(p_without_assignment => true) $$,
-  $$ values ('Zuordnung'::text) $$, 'Filter „aktiv ohne Funktion oder Amt“');
+  $$ values ('Ehemals'::text), ('Zuordnung') $$, 'Filter „aktiv ohne Funktion oder Amt“');
 
 -- Paginierung
 select is((select count(*)::int from public.ea_volunteer_list(p_limit => 3)), 3, 'p_limit 3');
-select is((select l.total_count from public.ea_volunteer_list(p_limit => 3) l limit 1), 9::bigint, 'total_count unabhängig von limit');
-select is((select array_agg(right(l.id::text, 2)::int) from public.ea_volunteer_list(p_limit => 3, p_offset => 8) l),
+select is((select l.total_count from public.ea_volunteer_list(p_limit => 3) l limit 1), 13::bigint, 'total_count unabhängig von limit');
+select is((select array_agg(right(l.id::text, 2)::int) from public.ea_volunteer_list(p_limit => 3, p_offset => 12) l),
   array[10], 'p_offset (Zuordnung sortiert vor Zweireferat)');
 select is((select count(*)::int from public.ea_volunteer_list(p_limit => 0)), 1, 'p_limit unter 1 → 1');
-select is((select count(*)::int from public.ea_volunteer_list(p_limit => 500)), 9, 'p_limit über 200 → begrenzt, kein Fehler');
-select is((select count(*)::int from public.ea_volunteer_list(p_offset => -5)), 9, 'negativer Offset → 0');
+select is((select count(*)::int from public.ea_volunteer_list(p_limit => 500)), 13, 'p_limit über 200 → begrenzt, kein Fehler');
+select is((select count(*)::int from public.ea_volunteer_list(p_offset => -5)), 13, 'negativer Offset → 0');
 
 -- Referent:in Klettern (R32 AD): nur eigene Referate, nie ausgeschieden, kein Gremium
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');

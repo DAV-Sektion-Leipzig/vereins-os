@@ -50,7 +50,8 @@ select is((select field_values ->> 'valid_until' from public.ea_properties where
 -- Personen 19–22 (AK2): relative Datumswerte, Beispiel-IBAN, Gremium
 select results_eq(
   $$ select right(id::text, 2)::int, first_name, last_name, volunteer_status::text, volunteer_status_since
-       from public.ea_persons where id > 'a0000000-0000-4000-8000-000000000012' order by id $$,
+       from public.ea_persons where id > 'a0000000-0000-4000-8000-000000000012'
+        and id < 'a0000000-0000-4000-8000-000000000023' order by id $$,
   $$ values (19, 'Lena'::text, 'Lizenz'::text, 'active'::text, date '2024-01-01'), (20, 'Max', 'Abgelaufen', 'active', date '2020-01-01'),
             (21, 'Greta', 'Gremium', 'active', date '2023-01-01'), (22, 'Sven', 'Schlüssel', 'active', date '2025-01-01') $$,
   'Lena Lizenz, Max Abgelaufen, Greta Gremium, Sven Schlüssel aktiv');

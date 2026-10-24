@@ -15,7 +15,7 @@ begin
 end $$;
 
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
-select is((select count(*)::int from public.ad_v_person_overview), 16, 'Admin: 16 Personen (1–12, 19–22)');
+select is((select count(*)::int from public.ad_v_person_overview), 26, 'Admin: 26 Personen (1–12, 19–32)');
 select results_eq(
   $$ select access_status::text, volunteer_status::text, templates from public.ad_v_person_overview
       where person_id = 'a0000000-0000-4000-8000-000000000009' $$,
@@ -31,7 +31,14 @@ select results_eq(
 select results_eq(
   $$ select created_in, has_group_relation from public.ad_v_person_overview
       where person_id = 'a0000000-0000-4000-8000-000000000012' $$,
-  $$ values ('GR'::text, true) $$, 'Person 12: Gruppenbezug (bis zur ersten GR-Migration über created_in)');
+  $$ values ('GR'::text, false) $$, 'Person 12: angelegt in Gruppen, aber ohne laufenden Bezug (Ü3)');
+select results_eq(
+  $$ select person_id from public.ad_v_person_overview where has_group_relation order by person_id $$,
+  $$ values ('a0000000-0000-4000-8000-000000000023'::uuid), ('a0000000-0000-4000-8000-000000000024'),
+            ('a0000000-0000-4000-8000-000000000025'), ('a0000000-0000-4000-8000-000000000026'),
+            ('a0000000-0000-4000-8000-000000000028'), ('a0000000-0000-4000-8000-000000000029'),
+            ('a0000000-0000-4000-8000-000000000030') $$,
+  'Gruppenbezug über gr_has_current_relation (Ü3)');
 select results_eq(
   $$ select templates from public.ad_v_person_overview where person_id = 'a0000000-0000-4000-8000-000000000001' $$,
   $$ values (array['Admin']) $$, 'Vorlage ohne Referate ohne Klammer');
@@ -44,7 +51,7 @@ select results_eq($$ select person_id from public.ad_v_person_overview where pre
   $$ values ('a0000000-0000-4000-8000-000000000004'::uuid) $$, 'Suche über den Rufnamen');
 
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
-select is((select count(*)::int from public.ad_v_person_overview), 9, 'Geschäftsstelle: nur Personen im Pfad EA');
+select is((select count(*)::int from public.ad_v_person_overview), 18, 'Geschäftsstelle: nur Personen in den Pfaden EA und GR');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
 select is((select count(*)::int from public.ad_v_person_overview), 0, 'Vorstand: keine Zeilen');
 

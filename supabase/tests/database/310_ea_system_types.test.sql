@@ -1,16 +1,17 @@
 -- US-EA-16 (EA spec T9 Teil, T1): 25 System-Eigenschaftsarten mit Feldern und Bezeichnungen nach 01-erhebung.md C2/C2a;
 -- zweiter Lauf (AK2) und Abbruch bei Namenskonflikt (AK5, A7) über die interne Funktion ea_seed_system_property_types().
+-- Ohne die Art group_function der ersten GR-Migration (GR spec.md 2.2; Test 470).
 begin;
 create extension if not exists pgtap with schema extensions;
 select * from no_plan();
 
-select is((select count(*)::int from public.ea_property_types where origin = 'system'), 25, '25 System-Eigenschaftsarten');
-select is((select count(*)::int from public.ea_property_types where system_key is not null), 25, 'alle mit system_key');
+select is((select count(*)::int from public.ea_property_types where origin = 'system' and system_key <> 'group_function'), 25, '25 System-Eigenschaftsarten');
+select is((select count(*)::int from public.ea_property_types where system_key is not null and system_key <> 'group_function'), 25, 'alle mit system_key');
 
 select results_eq(
   $$ select system_key, name, category::text, read_level::text, relation_kind::text, relation_required, allow_multiple,
             visible_in::text, valid_from_label, valid_to_label
-       from public.ea_property_types where origin = 'system' order by system_key collate "C" $$,
+       from public.ea_property_types where origin = 'system' and system_key <> 'group_function' order by system_key collate "C" $$,
   $$ values
      ('award'::text, 'Auszeichnung'::text, 'other'::text, 'all'::text, 'none'::text, false, true, '{AD,EA}'::text, 'verliehen am'::text, null::text),
      ('bank_account', 'Bankverbindung', 'master_data', 'office', 'none', false, false, '{AD,EA}', null, null),
@@ -40,16 +41,16 @@ select results_eq(
   $$, 'Kategorie, Lesestufe, Bezug, mehrfach, sichtbar in und Bezeichnungen nach C2 und C2a');
 
 select is((select count(*)::int from public.ea_property_fields f
-            join public.ea_property_types t on t.id = f.property_type_id where t.origin = 'system'), 47, '47 Felder');
+            join public.ea_property_types t on t.id = f.property_type_id where t.origin = 'system' and t.system_key <> 'group_function'), 47, '47 Felder');
 select is_empty(
   $$ select t.system_key from public.ea_property_types t
-      where t.origin = 'system' and not exists (select 1 from public.ea_property_fields f where f.property_type_id = t.id) $$,
+      where t.origin = 'system' and t.system_key <> 'group_function' and not exists (select 1 from public.ea_property_fields f where f.property_type_id = t.id) $$,
   'jede Art hat mindestens ein Feld (R9)');
 
 select results_eq(
   $$ select t.system_key, f.key, f.label, f.data_type::text, f.is_required, f.sort_order
        from public.ea_property_fields f join public.ea_property_types t on t.id = f.property_type_id
-      where t.origin = 'system' order by t.system_key collate "C", f.sort_order $$,
+      where t.origin = 'system' and t.system_key <> 'group_function' order by t.system_key collate "C", f.sort_order $$,
   $$ values
      ('award'::text, 'kind'::text, 'Art'::text, 'text'::text, true, 1),
      ('bank_account', 'account_holder', 'Kontoinhaber:in', 'text', true, 1),
@@ -122,9 +123,9 @@ select is((pg_temp.field('further_training', 'qualification_type')).allowed_qual
 -- Idempotenz über system_key (AK2): zweiter Lauf legt nichts an und überschreibt keine Änderung aus der Oberfläche
 update public.ea_property_types set valid_from_label = 'Mitglied seit', purpose = 'geändert' where system_key = 'member';
 select lives_ok($$ select public.ea_seed_system_property_types() $$, 'zweiter Lauf ohne Fehler');
-select is((select count(*)::int from public.ea_property_types where origin = 'system'), 25, 'weiterhin 25 Arten');
+select is((select count(*)::int from public.ea_property_types where origin = 'system' and system_key <> 'group_function'), 25, 'weiterhin 25 Arten');
 select is((select count(*)::int from public.ea_property_fields f
-            join public.ea_property_types t on t.id = f.property_type_id where t.origin = 'system'), 47, 'keine doppelten Felder');
+            join public.ea_property_types t on t.id = f.property_type_id where t.origin = 'system' and t.system_key <> 'group_function'), 47, 'keine doppelten Felder');
 select results_eq($$ select valid_from_label, purpose from public.ea_property_types where system_key = 'member' $$,
   $$ values ('Mitglied seit'::text, 'geändert'::text) $$, 'geänderte Bezeichnung und Zweck bleiben erhalten');
 
