@@ -1,6 +1,6 @@
 # Abnahme-Test: Administration, Kern v0.7.4
 
-Umsetzungsdatei (Phase 14 in [tasks.md](tasks.md), T102–T105). Grundlage: [quickstart.md](quickstart.md) Abschnitte C, C2 und C3, spec.md v0.9.3. Stand: 23.10.2026. Private Adressen stehen hier nie; Mail-Abläufe (C1) führt der Product Owner selbst aus.
+Umsetzungsdatei (Phase 14 in [tasks.md](tasks.md), T102–T105). Grundlage: [quickstart.md](quickstart.md) Abschnitte C, C2 und C3, spec.md v0.9.3. Stand: 24.10.2026 (Oberfläche C und C3 in TEST abgenommen). Private Adressen stehen hier nie; Mail-Abläufe (C1) führt der Product Owner selbst aus.
 
 Legende: **erledigt** = von Claude Code geprüft, Ergebnis festgehalten · **offen (PO)** = nur mit Testzugang, Oberfläche oder Postfach prüfbar, führt der Product Owner aus und trägt das Ergebnis ein.
 
@@ -43,7 +43,7 @@ REST mit dem Publishable Key ohne Sitzung (Rolle `anon`), 23.10.2026. Erwartung 
 | `POST /functions/v1/ad-invite` ohne JWT | 401, `{"code":"AD_UNAUTHENTICATED"}` |
 | `POST /functions/v1/ad-access` ohne JWT | 401, `{"code":"AD_UNAUTHENTICATED"}` |
 
-## 4. Dublettenschwelle (T102) – Bewertung erledigt, Bestätigung im Dialog offen (PO)
+## 4. Dublettenschwelle (T102) – Dialog bestanden, Bewertung der Schwelle offen (PO)
 
 Regel R3a (spec.md Abschnitt 5): Nachname gleich (ohne Groß-/Kleinschreibung, getrimmt) **und** Vorname passt zu Vorname oder Rufname über `ad_first_names_match` (`similarity ≥ 0,3`, Enthaltensein oder gemeinsame Zeichenfolge aus 3 Buchstaben).
 
@@ -62,9 +62,10 @@ Durchgeführt am 23.10.2026 gegen den lokalen Stack mit denselben Migrationen un
 Zur Bewertung durch den Product Owner (T102, bei Bedarf Schwelle per neuer Migration):
 - Ein Tippfehler im Nachnamen führt zu keiner Warnung. Das entspricht R3a; ob das reicht, entscheidet der Product Owner.
 - „Tony“ warnt auch vor „Antonia“ (gemeinsame Zeichenfolge „ton“). Gewollt nach v0.7.3 (Toni/Anton), Nebenwirkung bei längeren Namen.
-- Ergebnis im Dialog in TEST (quickstart.md C, Zeile „Dublette“; nur Name, Rufname, Geburtsjahr, ggf. „ausgeschieden seit“): **offen (PO)**
+- Ergebnis im Dialog in TEST (quickstart.md C, Zeile „Dublette“; nur Name, Rufname, Geburtsjahr, ggf. „ausgeschieden seit“): **bestanden (24.10.2026)**
+- Bewertung der Nebenwirkungen oben (Tippfehler im Nachnamen ohne Warnung, „Tony“ warnt vor „Antonia“) und damit die Schwelle: **offen (PO)**
 
-## 5. Szenarien mit Testzugängen (T102, T104) – offen (PO)
+## 5. Szenarien mit Testzugängen (T102, T104) – C und C3 bestanden, C1 offen (PO)
 
 Mit den Testzugängen `test.admin`, `test.geschaeftsstelle`, `test.referent`, `test.vorstand`, `test.gesperrt`, `test.notfall` (Passwort `SEED_TEST_PASSWORD`). Erwartung je Zeile steht in quickstart.md; hier nur das Ergebnis. Bei 375 px zusätzlich: kein horizontales Scrollen.
 
@@ -72,19 +73,19 @@ Mit den Testzugängen `test.admin`, `test.geschaeftsstelle`, `test.referent`, `t
 
 | Szenario | Story | Ergebnis |
 |---|---|---|
-| Login, Startseite (test.admin) | US-AD-02 AK1, US-AD-05 AK1 | offen |
-| Login Vorstand, Hinweis ohne Module | US-AD-05 AK2 | offen |
-| /ad direkt als test.geschaeftsstelle → /kein-zugriff ohne Abfrage | US-AD-05 AK3, US-AD-06 AK5 | offen |
-| Login gesperrt (test.gesperrt) → R18 | US-AD-02 AK3 | offen |
-| Dublette „Tony Muster“ anlegen → Dialog | US-AD-07 AK3, US-AD-25 | offen |
-| Einladen ohne Vorlage → Meldung | US-AD-08 AK2 | offen |
-| R1: Login-Adresse mit fremder Domain → Meldung vor dem Anlegen (v0.7.4, Vorabprüfung) | US-AD-07 AK5 | offen |
-| Login-Adresse bei „aktiv“ ändern (Bernd Beispiel) → abgelehnt | US-AD-08 AK7 | offen |
-| Sperren Eva Eingeladen / Entsperren Dieter Gesperrt, Protokoll | US-AD-09 | offen |
-| Vertrauliche Eigenschaft per REST als Geschäftsstelle → Hauptamt fehlt | US-AD-13 AK4, US-AD-16 AK2 | offen |
-| Notfall-Admin: Login test.notfall, Hinweis bei test.admin, „Zur Kenntnis genommen“ | US-AD-15 AK1, AK2 | offen |
-| Protokoll per REST `PATCH`/`DELETE` → abgelehnt | US-AD-14 AK4 | offen |
-| Mobil 375 px, alle Screens | spec.md Abschnitt 6 | offen |
+| Login, Startseite (test.admin) | US-AD-02 AK1, US-AD-05 AK1 | bestanden (24.10.2026); seit der Freischaltung von EA (T055 EA) zwei Kacheln, AD und EA |
+| Login Vorstand, Hinweis ohne Module | US-AD-05 AK2 | bestanden (24.10.2026) |
+| /ad direkt als test.geschaeftsstelle → /kein-zugriff ohne Abfrage | US-AD-05 AK3, US-AD-06 AK5 | bestanden (24.10.2026) |
+| Login gesperrt (test.gesperrt) → R18 | US-AD-02 AK3 | bestanden (24.10.2026) |
+| Dublette „Tony Muster“ anlegen → Dialog | US-AD-07 AK3, US-AD-25 | bestanden (24.10.2026) |
+| Einladen ohne Vorlage → Meldung | US-AD-08 AK2 | bestanden (24.10.2026) |
+| R1: Login-Adresse mit fremder Domain → Meldung vor dem Anlegen (v0.7.4, Vorabprüfung) | US-AD-07 AK5 | bestanden (24.10.2026) |
+| Login-Adresse bei „aktiv“ ändern (Bernd Beispiel) → abgelehnt | US-AD-08 AK7 | bestanden (24.10.2026) |
+| Sperren Eva Eingeladen / Entsperren Dieter Gesperrt, Protokoll | US-AD-09 | bestanden (24.10.2026) |
+| Vertrauliche Eigenschaft per REST als Geschäftsstelle → Hauptamt fehlt | US-AD-13 AK4, US-AD-16 AK2 | nicht per REST geprüft; in der Oberfläche bestanden (24.10.2026, Geschäftsstelle sieht kein „Hauptamt“); Datenbank durch pgTAP abgedeckt, Verzicht auf REST-Aufruf zur Bestätigung durch den PO |
+| Notfall-Admin: Login test.notfall, Hinweis bei test.admin, „Zur Kenntnis genommen“ | US-AD-15 AK1, AK2 | bestanden (24.10.2026) |
+| Protokoll per REST `PATCH`/`DELETE` → abgelehnt | US-AD-14 AK4 | nicht per REST geprüft; durch pgTAP abgedeckt, Verzicht auf REST-Aufruf zur Bestätigung durch den PO |
+| Mobil 375 px, alle Screens | spec.md Abschnitt 6 | bestanden (24.10.2026) |
 
 ### 5.2 quickstart.md C1 (Mail-Abläufe mit eigenen Adressen, nur Product Owner)
 
@@ -100,15 +101,15 @@ Mit den Testzugängen `test.admin`, `test.geschaeftsstelle`, `test.referent`, `t
 
 | Szenario | Story | Ergebnis |
 |---|---|---|
-| Sichtbarkeit je Pfad (Tabelle in data-model.md, Vorstand sieht niemanden) | US-AD-23, US-AD-26 | offen |
-| Lesestufen: Geschäftsstelle ohne „Hauptamt“, Referent:in ohne „Geburtsdatum“ und „Hauptamt“ | US-AD-22, US-AD-23 | offen |
-| Reichweite „Referat“ in einer GR-Vorlage → Meldung | US-AD-20 | offen |
-| Referent:in ohne Referat zuweisen → Meldung; mit Referat → Protokoll | US-AD-21 | offen |
-| Eigenschaftsart mit zwei Feldern; Datentyp-Änderung mit Daten abgelehnt | US-AD-22 | offen |
-| Qualifikationsarten: 47 Einträge, Filter „aktuell“, Vorstand kann nicht speichern | US-AD-17, US-AD-18 | offen |
-| Historische Qualifikationsart als Feldwert → Meldung | US-AD-19 | offen |
-| Rufname an Person 4 → Übersicht, Detail, Kopfzeile | US-AD-24 | offen |
-| Mobil 375 px, neue Screens | spec.md Abschnitt 6 | offen |
+| Sichtbarkeit je Pfad (Tabelle in data-model.md, Vorstand sieht niemanden) | US-AD-23, US-AD-26 | bestanden (24.10.2026) |
+| Lesestufen: Geschäftsstelle ohne „Hauptamt“, Referent:in ohne „Geburtsdatum“ und „Hauptamt“ | US-AD-22, US-AD-23 | bestanden (24.10.2026) |
+| Reichweite „Referat“ in einer GR-Vorlage → Meldung | US-AD-20 | bestanden (24.10.2026) |
+| Referent:in ohne Referat zuweisen → Meldung; mit Referat → Protokoll | US-AD-21 | bestanden (24.10.2026) |
+| Eigenschaftsart mit zwei Feldern; Datentyp-Änderung mit Daten abgelehnt | US-AD-22 | bestanden (24.10.2026) |
+| Qualifikationsarten: 47 Einträge, Filter „aktuell“, Vorstand kann nicht speichern | US-AD-17, US-AD-18 | bestanden (24.10.2026) |
+| Historische Qualifikationsart als Feldwert → Meldung | US-AD-19 | bestanden (24.10.2026) |
+| Rufname an Person 4 → Übersicht, Detail, Kopfzeile | US-AD-24 | bestanden (24.10.2026) |
+| Mobil 375 px, neue Screens | spec.md Abschnitt 6 | bestanden (24.10.2026) |
 
 Diese Zeilen sind in der Datenbank durch pgTAP abgedeckt (Dateien 060–240, in CI grün); offen ist nur die Bestätigung in der Oberfläche von TEST.
 
