@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 25.10.2026 · Version 5.7
+Stand: 25.10.2026 · Version 5.8
+Änderungen v5.8: Finanzen: Höchstbetrag, Vertretung, Q4-Annahme, Arbeitseinsätze, Erklärung auf dem Abrechnungsdokument entschieden (Steckbrief v0.3, Erhebung v0.3); rollen.md v1.2.
 Änderungen v5.7: Finanzen: offene Fragen geklärt (Product Owner 25.10.2026): Vier-Augen-Prinzip mit Bestätigung durch die Referent:in (Q9 für FI geändert), Trainervereinbarung als Voraussetzung, Training ohne Trainingszeit, eintägige Ausbildungsfahrt, Wahl der Abrechnungsart; Steckbrief v0.2, Erhebung v0.2.
 Änderungen v5.6: Finanzen: Steckbrief v0.1 und Erhebung v0.1 (Entwurf); Q4, Q5, Q6, Q9 entschieden; Übergaben aus EZ (v1.6) und TK (v1.3) eingearbeitet; neue Übergaben an Administration, Anwesenheitserfassung und Planungshilfe.
 Änderungen v5.5: Anwesenheitserfassung: Spec v0.5 Ready; Übergaben an Administration (A9) und Gruppen (G6–G9) erledigt.
@@ -163,10 +164,10 @@ Entschieden 22.10.2026 (Product Owner, fünfter Block): PDF-Übernahme nicht im 
 
 ## FI – Finanzen (Priorität 3 – nach der Anwesenheitserfassung)
 
-Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.2, Entwurf, MVP-Schnitt bestätigt 24.10.2026) · Erhebung: 01-erhebung.md (Version 0.2, Entwurf) · Übergaben: uebergabe-administration.md (v1.1, offen), uebergabe-anwesenheitserfassung.md (v1.1, offen), uebergabe-planungshilfe.md (v1.0, offen; Planungshilfe eingefroren)
+Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.3, Entwurf, MVP-Schnitt bestätigt 24.10.2026) · Erhebung: 01-erhebung.md (Version 0.3, Entwurf) · Übergaben: uebergabe-administration.md (v1.2, offen), uebergabe-anwesenheitserfassung.md (v1.1, offen), uebergabe-planungshilfe.md (v1.0, offen; Planungshilfe eingefroren)
 
 - Entschieden 24.10.2026 (Product Owner, Chat Finanzen):
-  - **Q4 – Aufbewahrung:** 5 Jahre wie überall, auch für Abrechnungen und abgerechnete Einsätze; [ANNAHME] steuerlich aufbewahrungspflichtige Belege liegen in der Finanzbuchhaltung (Bestätigung durch Schatzmeister:in [OFFEN]).
+  - **Q4 – Aufbewahrung:** 5 Jahre wie überall, auch für Abrechnungen und abgerechnete Einsätze; steuerlich aufbewahrungspflichtige Belege liegen in der Finanzbuchhaltung (bestätigt 25.10.2026).
   - **Q5 – Struktur:** ein Modul FI; Abrechnung ist ein Bereich von Finanzen, kein eigenes Modul.
   - **Q6 – Parameter:** steuerfreier Höchstbetrag (`ad_rates`, Grenzwert) und Abgabefristen 31.07./15.12. als Stammdaten der Administration.
   - **Q9 – Nutzer:** im MVP Geschäftsstelle und – geändert 25.10.2026 – Referent:innen (Reichweite „Referat“, ohne Bankdaten) zur Bestätigung ihrer Abrechnungen; Schatzmeister:in und Kassenprüfung später als eigene Rechtevorlagen.
@@ -175,12 +176,10 @@ Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.2, Entwurf, MVP-S
   - **Abrechnungsart je Einsatz:** Tabelle aus Anhang 1 als Stammdaten der Administration, Vorbelegung je Einsatzart, Wahl beim Anlegen des Einsatzes (Übergaben an Administration A1–A3 und Anwesenheitserfassung Z1).
   - **Regeln:** angebrochene Trainingseinheiten aufrunden; Wettkampfbetreuung je Kalendertag; mehrtägige Einsätze ohne Beginn/Ende als Tagessatz mit Korrektur; Trainersatz bei förderfähiger Lizenz am (Start-)Datum oder Erwerb im selben Abrechnungshalbjahr; Sperre abgerechneter Anwesenheiten ab Freigabe (Übergabe an die Anwesenheitserfassung Z3); halbjährliche Abrechnungsdokumente nur Kinder und Jugend und Leistungssport, andere Referate später als Einzelabrechnung.
 - Entschieden 25.10.2026 (Product Owner): Vier-Augen-Prinzip – Referent:in bestätigt die Abrechnungen ihres Referats, die Geschäftsstelle gibt frei (Aktion „freigeben“ nach Q1, Übergabe an die Administration A7; rollen.md Spalte FI anzupassen); Trainervereinbarung ist Voraussetzung der Auszahlung; Training ohne Trainingszeit = 0 TE mit Hinweis und Korrektur; eintägige Ausbildungsfahrt startet mit Sätzen der Mehrtageskurse; Abrechnungsart am Einsatz wählt, wer den Einsatz anlegen darf.
+- Entschieden 25.10.2026 (Product Owner): steuerfreier Höchstbetrag 3.300 € ab 01.01.2026, Summe im Jahr der Auszahlung; Vertretung bei der Bestätigung durch stellvertretende Referent:in, sonst zweite Person der Geschäftsstelle mit Begründung; Vergütung bei Arbeitseinsätzen über die Ehrenamtspauschale (später); Erklärung zum Freibetrag auf dem Abrechnungsdokument (Wortlaut [ANNAHME], prüft der Product Owner); heutiger Aufwand 3–5 Arbeitstage je Halbjahr.
 - Erledigt (glossar.md, Gruppen v0.6–v0.8): „Vertrag“ wird im Modul Gruppen geführt (je Teilnahme); der Buchungslauf ist ein Einzug (SEPA-Lastschrift).
-- [OFFEN] Steuerfreier Höchstbetrag: Jahr des Einsatzes oder der Auszahlung; aktueller Betrag (Schatzmeister:in).
 - [OFFEN] SEPA: Format/Version laut Sparkasse, Auftraggeberkonto (Ort der Pflege), Verwendungszweck, Sammelbuchung, Rücknahme bei Ablehnung (Geschäftsstelle mit Sparkasse).
-- [OFFEN] Vertretung, wenn keine Referent:in bestätigen kann (Amt unbesetzt, Abwesenheit vor der Frist) (Product Owner).
-- [OFFEN] Steuerliche Einordnung einer Vergütung bei Arbeitseinsätzen (Schatzmeister:in).
-- [OFFEN] Vorlage des heutigen Abrechnungsdokuments; zählen Probetrainings für die Kletterhalle? (Geschäftsstelle)
+- [OFFEN] Zählen Probetrainings für die Kletterhalle? (Geschäftsstelle)
 - [OFFEN] Buchungslauf (später): DATEV-Buchungsexport oder SEPA-Datei; Datei-Export oder Schnittstelle über SC; Empfänger der Mails. (vision.md, modul-landkarte.md)
 - Hinweis aus EA: Bankverbindung der Aktiven und Trainervereinbarung liegen im Ehrenamtsmanagement.
 - **Übergabe aus EZ (v1.6): eingearbeitet am 24.10.2026** in 00-steckbrief.md v0.1 und 01-erhebung.md v0.1 (F1–F9).

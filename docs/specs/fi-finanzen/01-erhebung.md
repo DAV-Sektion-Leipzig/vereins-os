@@ -1,7 +1,8 @@
 # Erhebung: Finanzen
 
-Datum: 25.10.2026 · Version 0.2 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner); Geschäftsstelle und Schatzmeister:in noch nicht befragt [OFFEN]
+Datum: 25.10.2026 · Version 0.3 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner); Geschäftsstelle und Schatzmeister:in noch nicht befragt [OFFEN]
 Grundlage: 00-steckbrief.md v0.1 (MVP-Schnitt, Entscheidungen 24.10.2026); specs/ez-einsaetze/uebergabe-finanzen.md v1.6 (F1–F9); specs/tk-touren-kurse/uebergabe-finanzen.md v1.3; specs/ez-einsaetze/spec.md v0.5; specs/ad-administration/spec.md v0.9; specs/ea-ehrenamt/01-erhebung.md v0.5 (C2); Vergütungsordnung (Beschluss 21.11.2023, ergänzt 11.12.2025, Anhang 1)
+Änderungen v0.3: Höchstbetrag im Jahr der Auszahlung (R11), Vertretung bei der Bestätigung (R23), Erklärung auf dem Abrechnungsdokument (R18), Belege in der Finanzbuchhaltung bestätigt (F) (Product Owner 25.10.2026).
 Änderungen v0.2: Entscheidungen des Product Owners vom 25.10.2026 eingearbeitet: Bestätigung durch die Referent:in vor der Freigabe (Zustand „bestätigt“, Abschnitt A, B3, R23), Trainervereinbarung als Voraussetzung (R14), Training ohne Trainingszeit (R4), Probetrainings getrennt (B6).
 Änderungen v0.1: Erster Entwurf für den MVP (halbjährliche Abrechnung, Überweisungsdatei, Abgleich Punktekonto). Iteration 1 nur in Stichpunkten (Abschnitt B7).
 
@@ -157,19 +158,19 @@ Die Datei selbst und die IBANs werden nicht gespeichert (R21) [ANNAHME].
 - **R8 – Satzart Trainer:in:** Rolle Trainer:in wird mit Satz Trainer:in abgerechnet, wenn am Datum (mehrtägig: Startdatum, gilt dann für den ganzen Einsatz) eine förderfähige Lizenz gültig ist oder eine förderfähige Lizenz im selben Abrechnungshalbjahr erworben wurde (gültig von im Halbjahr) (Product Owner 24.10.2026). Sonst Satz Helfer:in mit Hinweis „keine förderfähige Lizenz“ [ANNAHME, F5]. Förderfähig = DOSB-lizenzfähig [ANNAHME, AD v0.9].
 - **R9 – Satzstand:** Satz aus `ad_rates_at` am Datum bzw. Startdatum des Einsatzes [ANNAHME]. Fehlt ein Satz, wird die Position mit Hinweis „Satz fehlt“ ohne Betrag angelegt und die Abrechnung kann nicht freigegeben werden [ANNAHME].
 - **R10 – Eine Person, ein Einsatz:** je Einsatz und Person höchstens eine Position je Position der Abrechnungsart (z. B. Tagessatz und Organisationspauschale); bei Wettkampfbetreuung mit mehreren Gruppen nur einmal.
-- **R11 – Steuerfreier Höchstbetrag:** Liegt die Summe aller freigegebenen, abgegebenen und ausgezahlten Abrechnungen der Person im Kalenderjahr zuzüglich dieser Abrechnung über dem Höchstbetrag, Hinweis „Höchstbetrag überschritten“; keine Sperre [ANNAHME, F6]. [OFFEN] Jahr des Einsatzes oder der Auszahlung.
+- **R11 – Steuerfreier Höchstbetrag:** Liegt die Summe aller freigegebenen, abgegebenen und ausgezahlten Abrechnungen der Person im Kalenderjahr zuzüglich dieser Abrechnung über dem Höchstbetrag, Hinweis „Höchstbetrag überschritten“; keine Sperre [ANNAHME, F6]. Maßgeblich ist das **Jahr der Auszahlung** (Zuflussprinzip; bei noch nicht ausgezahlten Abrechnungen das Jahr des Endes der Abgabefrist [ANNAHME]); Höchstbetrag aus `ad_rates_at` am 31.12. dieses Jahres, Startwert 3.300 € ab 01.01.2026 (Product Owner 25.10.2026).
 - **R12 – Bestätigung steuerfreie Einnahmen:** Ohne Bestätigung mit „für Jahr“ = Jahr der Abrechnung (bzw. ohne Jahr, abgegeben vor der Auszahlung [ANNAHME]) Hinweis; die Abrechnung kann freigegeben, aber nicht in die Überweisungsdatei übernommen werden (F6).
 - **R13 – Bankverbindung:** Ohne Bankverbindung Hinweis; nicht in die Überweisungsdatei.
 - **R14 – Trainervereinbarung:** Voraussetzung der Auszahlung (Product Owner 25.10.2026): ohne gültige Trainervereinbarung Hinweis; die Abrechnung kann bestätigt und freigegeben, aber nicht in die Überweisungsdatei übernommen werden. Gilt für Trainer:innen und Helfer:innen [ANNAHME].
 - **R15 – Neu berechnen:** nur Entwürfe; freigegebene und spätere Zustände bleiben unverändert.
 - **R16 – Korrektur:** Jede Abweichung vom berechneten Wert braucht eine Begründung (1–500 Zeichen), sonst Fehlermeldung „Bitte eine Begründung angeben.“; berechneter und korrigierter Wert bleiben sichtbar.
 - **R17 – Sperre:** Ab der Freigabe sind die abgerechneten Anwesenheiten und die abrechnungsrelevanten Kopfdaten des Einsatzes in der Anwesenheitserfassung gesperrt (Product Owner 24.10.2026; Übergabe FI → EZ, Z3). Rücknahme der Freigabe hebt die Sperre auf.
-- **R18 – Abrechnungsdokument:** enthält Person (Name, ohne Bankdaten [ANNAHME]), Halbjahr, Positionen mit Datum, Einsatz, Menge, Satz, Betrag, Korrekturen mit Begründung, Summe, Abgabefrist, Hinweis auf das Erlöschen des Anspruchs, Unterschriftsfeld. Inhalt und Wortlaut mit dem heutigen Dokument abgleichen [OFFEN: Vorlage liefert die Geschäftsstelle].
+- **R18 – Abrechnungsdokument:** enthält Person (Name, ohne Bankdaten [ANNAHME]), Halbjahr, Positionen mit Datum, Einsatz, Menge, Satz, Betrag, Korrekturen mit Begründung, Summe, Abgabefrist, Hinweis auf das Erlöschen des Anspruchs, Erklärung der Person zum Freibetrag (Product Owner 25.10.2026; Wortlaut [ANNAHME]: „Ich versichere, dass die Angaben richtig sind und die Vergütung zusammen mit anderen Einnahmen aus nebenberuflicher Tätigkeit nach § 3 Nr. 26 EStG den Freibetrag im Kalenderjahr nicht übersteigt. Änderungen teile ich der Sektion unverzüglich mit.“), Ort, Datum, Unterschriftsfeld. Layout nach marke.md.
 - **R19 – Frist:** Abgabefrist aus den Stammdaten der Administration (Start: 31.07. für das 1., 15.12. für das 2. Halbjahr). Abgabe nach der Frist: Rückfrage „Die Frist ist abgelaufen. Der Anspruch ist erloschen. Trotzdem als abgegeben erfassen?“ [ANNAHME: Ausnahme möglich mit Begründung].
 - **R20 – Auszahlung:** Eine Abrechnung ist höchstens in einer Überweisungsdatei; danach nicht mehr änderbar.
 - **R21 – Datensparsamkeit:** IBANs werden nur beim Erzeugen der Datei gelesen und nicht in Finanzen gespeichert [ANNAHME].
 - **R22 – Aufbewahrung:** Abrechnungen, Positionen, Überweisungsdateien und Abgleiche werden 5 Jahre nach Ende des Kalenderjahres der Auszahlung bzw. des Verfalls gelöscht [ANNAHME: Beginn der Frist] (Q4, Product Owner 24.10.2026: 5 Jahre wie überall).
-- **R23 – Bestätigung (Vier-Augen-Prinzip):** Freigeben ist erst möglich, wenn für jedes Referat mit Positionen in der Abrechnung eine Referent:in mit Reichweite dieses Referats bestätigt hat; sonst „Die Abrechnung ist noch nicht von allen Referaten bestätigt.“ [ANNAHME: Wortlaut]. Die freigebende Person darf nicht die bestätigende sein.
+- **R23 – Bestätigung (Vier-Augen-Prinzip):** Freigeben ist erst möglich, wenn für jedes Referat mit Positionen in der Abrechnung eine Referent:in mit Reichweite dieses Referats bestätigt hat; sonst „Die Abrechnung ist noch nicht von allen Referaten bestätigt.“ [ANNAHME: Wortlaut]. Die freigebende Person darf nicht die bestätigende sein. Vertretung (Product Owner 25.10.2026): bestätigen darf jede Person mit der Vorlage Referent:in für dieses Referat (auch stellvertretend); ist niemand da, bestätigt eine zweite Person der Geschäftsstelle mit Pflichtbegründung (1–500 Zeichen), die im Verlauf sichtbar bleibt.
 
 ## E. Schnittstellen
 
@@ -190,7 +191,7 @@ Die Datei selbst und die IBANs werden nicht gespeichert (R21) [ANNAHME].
 - Keine Daten von Teilnehmer:innen außer Anzahlen (Abgleich Punktekonto).
 - SEPA-Datei nur als Download, nicht gespeichert; IBANs nicht in Finanzen gespeichert (R21).
 - Abrechnungsdokument ohne Bankdaten [ANNAHME].
-- Aufbewahrung 5 Jahre (R22); Belege in der Finanzbuchhaltung [ANNAHME, Steckbrief].
+- Aufbewahrung 5 Jahre (R22); Belege in der Finanzbuchhaltung (bestätigt vom Product Owner 25.10.2026).
 - Freitexte (Begründung, Bemerkung) mit Hinweis, keine sensiblen Angaben einzutragen.
 
 ## G. Nicht-funktional
@@ -205,11 +206,7 @@ Die Datei selbst und die IBANs werden nicht gespeichert (R21) [ANNAHME].
 
 | Frage | Wer klärt | bis wann |
 |---|---|---|
-| Höchstbetrag: Jahr des Einsatzes oder der Auszahlung; aktueller Betrag (R11, A4) | Schatzmeister:in | vor der Spec |
+| Wortlaut der Erklärung auf dem Abrechnungsdokument prüfen (R18) | Product Owner | vor der Spec |
 | SEPA: Format/Version, Auftraggeberkonto, Verwendungszweck, Sammelbuchung; Rücknahme bei Ablehnung | Geschäftsstelle mit Sparkasse | vor der Spec |
-| Vertretung, wenn keine Referent:in bestätigen kann (unbesetzt, abwesend vor der Frist) | Product Owner | vor den Stories |
-| Vorlage des heutigen Abrechnungsdokuments (R18) | Geschäftsstelle | vor den Stories |
 | Zählen Probetrainings für die Kletterhalle (B6)? | Geschäftsstelle | vor den Stories |
-| Bestätigung der Annahme Q4 (Belege in der Finanzbuchhaltung) | Schatzmeister:in | vor der Spec |
-| Steuerliche Einordnung einer Vergütung bei Arbeitseinsätzen | Schatzmeister:in | vor Iteration 1 |
-| Befragung Geschäftsstelle zum heutigen Ablauf (Aufwand, Sonderfälle) | Product Owner | vor den Stories |
+| Sonderfälle im heutigen Ablauf (z. B. Nachzahlungen, Rückforderungen) | Geschäftsstelle | vor den Stories |
