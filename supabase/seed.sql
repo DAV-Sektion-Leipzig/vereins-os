@@ -276,7 +276,8 @@ select v.id, v.person_id,
 on conflict (id) do nothing;
 
 -- 8. Gruppen (GR spec.md Abschnitt 9): Gruppen c…01–c…04, Personen 23–32, Testzugang Kim Kinderjugend (b…32).
--- Ohne Nutzerkontext; Datumswerte relativ zu current_date, damit Status und Stichtage stabil bleiben.
+-- Ohne Nutzerkontext; Datumswerte relativ zu public.gr_today() (Europe/Berlin, wie die GR-Funktionen und -Tests),
+-- nicht zu public.gr_today() (UTC): sonst weichen Seed und Tests zwischen 22/23 Uhr UTC und Mitternacht um einen Tag ab.
 -- Abweichung zur Tabelle in spec.md 9: Jana Fiktiv (24) ist zusätzlich erziehungsberechtigt für Sam Sechzehn (28),
 -- damit dessen Vertrag eine gültige Vertragsinhaber:in hat (R4).
 insert into public.gr_groups (id, name, referat_id, dissolved_on)
@@ -334,7 +335,7 @@ select v.id, v.person_id, t.id, v.field_values, (select r.id from public.ea_refe
   from (values
     -- Mia Fiktiv (23): 12 Jahre
     ('e0000000-0000-4000-8000-000000000025'::uuid, 'a0000000-0000-4000-8000-000000000023'::uuid, 'birth_date'::text,
-     jsonb_build_object('date', to_char(current_date - interval '12 years' + interval '10 days', 'YYYY-MM-DD')),
+     jsonb_build_object('date', to_char(public.gr_today() - interval '12 years' + interval '10 days', 'YYYY-MM-DD')),
      null::text, null::date),
     ('e0000000-0000-4000-8000-000000000026', 'a0000000-0000-4000-8000-000000000023', 'contact',
      '{"street": "Testweg 1", "postal_code": "04109", "city": "Leipzig"}', null, date '2025-09-01'),
@@ -344,7 +345,7 @@ select v.id, v.person_id, t.id, v.field_values, (select r.id from public.ea_refe
        "email": "jana.fiktiv@example.test"}', null, date '2025-01-15'),
     -- Ben Fiktiv (25): 9 Jahre
     ('e0000000-0000-4000-8000-000000000028', 'a0000000-0000-4000-8000-000000000025', 'birth_date',
-     jsonb_build_object('date', to_char(current_date - interval '9 years', 'YYYY-MM-DD')), null, null),
+     jsonb_build_object('date', to_char(public.gr_today() - interval '9 years', 'YYYY-MM-DD')), null, null),
     ('e0000000-0000-4000-8000-000000000029', 'a0000000-0000-4000-8000-000000000025', 'contact',
      '{"street": "Testweg 1", "postal_code": "04109", "city": "Leipzig"}', null, date '2025-01-15'),
     -- Lars Lehrer (26)
@@ -353,12 +354,12 @@ select v.id, v.person_id, t.id, v.field_values, (select r.id from public.ea_refe
      null, date '2025-09-01'),
     -- Lea Lehrer (27): 10 Jahre
     ('e0000000-0000-4000-8000-000000000031', 'a0000000-0000-4000-8000-000000000027', 'birth_date',
-     jsonb_build_object('date', to_char(current_date - interval '10 years', 'YYYY-MM-DD')), null, null),
+     jsonb_build_object('date', to_char(public.gr_today() - interval '10 years', 'YYYY-MM-DD')), null, null),
     ('e0000000-0000-4000-8000-000000000032', 'a0000000-0000-4000-8000-000000000027', 'contact',
      '{"street": "Beispielstraße 26", "postal_code": "04103", "city": "Leipzig"}', null, date '2025-09-01'),
     -- Sam Sechzehn (28): 16 Jahre
     ('e0000000-0000-4000-8000-000000000033', 'a0000000-0000-4000-8000-000000000028', 'birth_date',
-     jsonb_build_object('date', to_char(current_date - interval '16 years' - interval '30 days', 'YYYY-MM-DD')), null, null),
+     jsonb_build_object('date', to_char(public.gr_today() - interval '16 years' - interval '30 days', 'YYYY-MM-DD')), null, null),
     ('e0000000-0000-4000-8000-000000000034', 'a0000000-0000-4000-8000-000000000028', 'contact',
      '{"street": "Musterplatz 28", "postal_code": "04105", "city": "Leipzig", "phone_mobile": "0151 0000028"}',
      null, date '2025-01-15'),
@@ -367,9 +368,9 @@ select v.id, v.person_id, t.id, v.field_values, (select r.id from public.ea_refe
      '{"phone_mobile": "0151 0000029"}', null, date '2025-09-01'),
     -- Paula Plan (30): 8 Jahre
     ('e0000000-0000-4000-8000-000000000036', 'a0000000-0000-4000-8000-000000000030', 'birth_date',
-     jsonb_build_object('date', to_char(current_date - interval '8 years', 'YYYY-MM-DD')), null, null),
+     jsonb_build_object('date', to_char(public.gr_today() - interval '8 years', 'YYYY-MM-DD')), null, null),
     ('e0000000-0000-4000-8000-000000000037', 'a0000000-0000-4000-8000-000000000030', 'contact',
-     '{"street": "Planweg 30", "postal_code": "04107", "city": "Leipzig"}', null, current_date),
+     '{"street": "Planweg 30", "postal_code": "04107", "city": "Leipzig"}', null, public.gr_today()),
     -- Kim Kinderjugend (32): Amt Referent:in Kinder und Jugend
     ('e0000000-0000-4000-8000-000000000038', 'a0000000-0000-4000-8000-000000000032', 'position',
      '{"position": "Referent:in"}', 'Kinder und Jugend', date '2024-01-01')
@@ -389,7 +390,7 @@ select v.id, v.person_id, t.id, v.field_values, v.group_id, v.valid_from, v.vali
      '{"function": "Helfer:in"}', 'c0000000-0000-4000-8000-000000000001', date '2026-01-01', null),
     -- Tom Ehemals (31): Trainer Test 2 bis vor 60 Tagen
     ('e0000000-0000-4000-8000-000000000041', 'a0000000-0000-4000-8000-000000000031',
-     '{"function": "Trainer:in"}', 'c0000000-0000-4000-8000-000000000002', date '2024-01-01', current_date - 60)
+     '{"function": "Trainer:in"}', 'c0000000-0000-4000-8000-000000000002', date '2024-01-01', public.gr_today() - 60)
   ) as v (id, person_id, field_values, group_id, valid_from, valid_to)
   join public.ea_property_types t on t.system_key = 'group_function'
 on conflict (id) do nothing;
@@ -412,7 +413,7 @@ insert into public.gr_memberships (id, group_id, person_id, joined_on, left_on) 
   ('c2000000-0000-4000-8000-000000000001', 'c0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000023', date '2025-09-01', null),
   ('c2000000-0000-4000-8000-000000000002', 'c0000000-0000-4000-8000-000000000003', 'a0000000-0000-4000-8000-000000000023', date '2026-01-01', null),
   ('c2000000-0000-4000-8000-000000000003', 'c0000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000025', date '2025-01-15', null),
-  ('c2000000-0000-4000-8000-000000000004', 'c0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000027', date '2025-09-01', current_date - 30),
+  ('c2000000-0000-4000-8000-000000000004', 'c0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000027', date '2025-09-01', public.gr_today() - 30),
   ('c2000000-0000-4000-8000-000000000005', 'c0000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000028', date '2025-01-15', null)
 on conflict (id) do nothing;
 
@@ -426,10 +427,10 @@ insert into public.gr_contracts (id, membership_id, holder_person_id, starts_on,
    date '2026-01-01', null, null, 'Jana Fiktiv', 'DE89370400440532013000', 'TEST-GR-23-2', date '2025-12-15',
    'Beitrag Klettergruppe Test Mia Fiktiv', 30.00),
   ('c3000000-0000-4000-8000-000000000003', 'c2000000-0000-4000-8000-000000000003', 'a0000000-0000-4000-8000-000000000024',
-   date '2025-01-15', current_date - 40, current_date - 10, 'Jana Fiktiv', 'DE89370400440532013000', 'TEST-GR-25-1',
+   date '2025-01-15', public.gr_today() - 40, public.gr_today() - 10, 'Jana Fiktiv', 'DE89370400440532013000', 'TEST-GR-25-1',
    date '2025-01-10', 'Beitrag Jugendgruppe Test 2 Ben Fiktiv', 25.00),
   ('c3000000-0000-4000-8000-000000000004', 'c2000000-0000-4000-8000-000000000004', 'a0000000-0000-4000-8000-000000000026',
-   date '2025-09-01', current_date - 60, current_date - 30, 'Lars Lehrer', 'DE89370400440532013000', 'TEST-GR-27-1',
+   date '2025-09-01', public.gr_today() - 60, public.gr_today() - 30, 'Lars Lehrer', 'DE89370400440532013000', 'TEST-GR-27-1',
    date '2025-08-25', 'Beitrag Jugendgruppe Test 1 Lea Lehrer', 25.00),
   ('c3000000-0000-4000-8000-000000000005', 'c2000000-0000-4000-8000-000000000005', 'a0000000-0000-4000-8000-000000000024',
    date '2025-01-15', null, null, 'Jana Fiktiv', 'DE89370400440532013000', 'TEST-GR-28-1', date '2025-01-10',
@@ -451,7 +452,7 @@ select v.person_id, v.granted, v.effective_on
   from (values
     ('a0000000-0000-4000-8000-000000000023'::uuid, true, date '2025-09-01'),
     ('a0000000-0000-4000-8000-000000000025'::uuid, true, date '2025-01-15'),
-    ('a0000000-0000-4000-8000-000000000025'::uuid, false, current_date - 5)
+    ('a0000000-0000-4000-8000-000000000025'::uuid, false, public.gr_today() - 5)
   ) as v (person_id, granted, effective_on)
  where not exists (select 1 from public.gr_health_consents c where c.person_id = v.person_id);
 
