@@ -1,7 +1,8 @@
 # Steckbrief: Finanzen
 
-Stand: 24.10.2026 · Version 0.1 · Kürzel: FI · Priorität: 3 – nach der Anwesenheitserfassung · Ablage: docs/specs/fi-finanzen/ · Status: Entwurf, MVP-Schnitt bestätigt (Product Owner 24.10.2026)
+Stand: 25.10.2026 · Version 0.2 · Kürzel: FI · Priorität: 3 – nach der Anwesenheitserfassung · Ablage: docs/specs/fi-finanzen/ · Status: Entwurf, MVP-Schnitt bestätigt (Product Owner 24.10.2026)
 Grundlage: vision.md v0.4, modul-landkarte.md v2.8, rollen.md v1.1, glossar.md v1.6, offene-punkte.md v5.5, querschnitt-administration.md v0.1 (P1, P3, P6, P7, P11–P17, Q4–Q6, Q9), arbeitsplan.md v0.3 (Schritt 10), specs/ez-einsaetze/uebergabe-finanzen.md v1.6 (F1–F9), specs/tk-touren-kurse/uebergabe-finanzen.md v1.3 (Punkte 1–7), specs/ez-einsaetze/spec.md v0.5 (Abschnitte 2 und 7), specs/ad-administration/spec.md v0.9 (Nachtrag v0.9, Sätze und Pauschalen), specs/ea-ehrenamt/spec.md v0.2.1 und 01-erhebung.md v0.5 (C2 Nr. 5, 9, 15, 16)
+Änderungen v0.2: Offene Fragen mit dem Product Owner geklärt (25.10.2026): Vier-Augen-Prinzip – Referent:in bestätigt die Abrechnungen ihres Referats, die Geschäftsstelle gibt frei; damit Referent:innen schon im MVP Nutzer von Finanzen (Reichweite „Referat“, ohne Bankdaten; ändert Q9); Trainervereinbarung ist Voraussetzung der Auszahlung; Training ohne Trainingszeit 0 TE mit Hinweis; eintägige Ausbildungsfahrt mit Sätzen der Mehrtageskurse; Abrechnungsart wählt, wer den Einsatz anlegen darf.
 Änderungen v0.1: Erster Entwurf. Q4, Q5, Q6, Q9 und P7 entschieden; MVP-Schnitt bestätigt; Übergaben der Anwesenheitserfassung (v1.6) und der Planungshilfe Touren und Kurse (v1.3) eingearbeitet; Fachfragen zu Trainingseinheiten, Wettkampfbetreuung, mehrtägigen Einsätzen, Lizenz, Sperre, Ehrenamtspauschale, Auszahlung, Reisekosten entschieden (Product Owner 24.10.2026).
 
 **Problem heute:**
@@ -13,10 +14,11 @@ Trainer:innen und Helfer:innen werden aus der großen Excel-Tabelle des Microsof
 - Später (Vision Z2): Monatlicher Buchungslauf für Verträge von ca. 30 Minuten auf ca. 1 Minute.
 
 **Nutzer & Rechtevorlagen:**
-- Geschäftsstelle – FI verwalten (Reichweite „alle“): Abrechnungen erstellen, korrigieren, freigeben, Abgabe und Verfall erfassen, Überweisungsdatei erzeugen, Abgleich Kletterhalle. Einziger Nutzer im MVP (Product Owner 24.10.2026, Q9).
+- Geschäftsstelle – FI verwalten (Reichweite „alle“): Abrechnungen erstellen, korrigieren, nach Bestätigung freigeben, Abgabe und Verfall erfassen, Überweisungsdatei erzeugen, Abgleich Kletterhalle.
+- Referent:in – FI mit Reichweite „Referat“ und Aktion „freigeben“ (Q1) [ANNAHME: Stufe „lesen“ plus „freigeben“; Umsetzung in der Administration]: Abrechnungen ihres Referats (nur Positionen des eigenen Referats) ansehen, Ausnahme (Lizenz) begründen, als sachlich richtig **bestätigen** (Vier-Augen-Prinzip, Product Owner 25.10.2026). Keine Bankverbindung, keine Überweisungsdatei, keine Beträge aus anderen Referaten. Im MVP wirksam für Kinder und Jugend und Leistungssport. Q9 damit geändert: MVP-Nutzer sind Geschäftsstelle und Referent:innen.
 - Admin – kein Zugriff auf Finanzen (rollen.md); pflegt in der Administration die Sätze, die Abrechnungsarten mit Vorbelegung je Einsatzart, den steuerfreien Höchstbetrag und die Abgabefristen (Product Owner 24.10.2026, Q6).
 - Vorstand – startet ohne Rechte (rollen.md).
-- Nach dem MVP: Schatzmeister:in und Kassenprüfung als eigene Rechtevorlagen (FI lesen; ggf. „freigeben“ als eigene Aktion nach Q1), Zeitpunkt mit dem Rollout; Referent:innen mit Reichweite „Referat“ für die Begründung von Ausnahmen (Lizenz) und die Sicht auf Abrechnungen ihres Referats; Trainer:innen mit Reichweite „nur eigene“ (Querschnitt P3) [OFFEN: ob und wann].
+- Nach dem MVP: Schatzmeister:in und Kassenprüfung als eigene Rechtevorlagen (FI lesen), Zeitpunkt mit dem Rollout; Trainer:innen mit Reichweite „nur eigene“ (Querschnitt P3) [OFFEN: ob und wann].
 - Struktur (Q5, Product Owner 24.10.2026): **ein Modul FI**; die Abrechnung ist ein Bereich von Finanzen, kein eigenes Modul. Präfix `fi_`. Spätere Bereiche (Buchungslauf, Budget) im selben Modul.
 
 **Im Scope (MVP):**
@@ -30,12 +32,14 @@ Trainer:innen und Helfer:innen werden aus der großen Excel-Tabelle des Microsof
   - Organisationspauschale je Tag für die organisierende Person, wo die Abrechnungsart sie vorsieht (Fahrten, Mehrtageskurse/Trainingslager).
   - Satzstand: Sätze gültig am Datum (mehrtägig: Startdatum) des Einsatzes [ANNAHME].
 - **Satz Trainer:in nur mit förderfähiger Lizenz** (F5, TK Punkt 5; Product Owner 24.10.2026: beide Regeln kombiniert): Trainersatz, wenn am Datum (mehrtägig: Startdatum, dann für den ganzen Einsatz) eine förderfähige Lizenz gültig ist **oder** sie im selben Abrechnungshalbjahr erworben wurde (wirkt ab Beginn des Halbjahres). Sonst Satz Helfer:in [ANNAHME, Übergabe EZ F5]. Ausnahme mit Begründung der verantwortlichen Referent:in (erfasst von der Geschäftsstelle). Förderfähig = Qualifikationsart DOSB-lizenzfähig [ANNAHME, spec.md AD v0.9].
+- **Training ohne Trainingszeit** am Wochentag: Position mit 0 Trainingseinheiten und Hinweis; die Geschäftsstelle trägt die Menge mit Begründung ein (Product Owner 25.10.2026).
 - **Korrektur je Position** mit Begründung (z. B. Halbtag statt Tag, Ausnahme Lizenz, Training ohne Trainingszeit).
-- **Hinweise** je Abrechnung: keine Bestätigung steuerfreie Einnahmen für das Jahr, keine Bankverbindung, steuerfreier Höchstbetrag überschritten (F6), Einsatz ohne Uhrzeit, Training ohne Trainingszeit.
+- **Hinweise** je Abrechnung: keine Bestätigung steuerfreie Einnahmen für das Jahr, keine Trainervereinbarung, keine Bankverbindung, steuerfreier Höchstbetrag überschritten (F6), Einsatz ohne Uhrzeit, Training ohne Trainingszeit.
+- **Bestätigung durch die Referent:in** (Vier-Augen-Prinzip, Product Owner 25.10.2026): Die Referent:in bestätigt die Positionen ihres Referats als sachlich richtig; betrifft eine Abrechnung mehrere Referate, bestätigt jede zuständige Referent:in ihren Teil [ANNAHME]. Erst danach kann die Geschäftsstelle freigeben.
 - **Freigabe und Abrechnungsdokument:** Freigegebene Abrechnung je Person und Halbjahr als Dokument zur Unterschrift (PDF zum Ausdrucken) (F7). Mit der Freigabe werden die abgerechneten Anwesenheiten in der Anwesenheitserfassung gesperrt (Product Owner 24.10.2026); Korrektur nur über Rücknahme der Freigabe in Finanzen.
 - **Abgabe und Frist:** Geschäftsstelle trägt „unterschrieben abgegeben am“ ein; Abgabefristen 31.07. (1. Halbjahr) und 15.12. (2. Halbjahr) als Stammdaten der Administration (Q6); danach erlischt der Anspruch (F7).
-- **SEPA-Überweisungsdatei** (Product Owner 24.10.2026) für abgegebene Abrechnungen mit Bankverbindung und Bestätigung steuerfreie Einnahmen; zum Hochladen im Online-Banking der Sparkasse (manuell).
-- **Abgleich Punktekonto Kletterhalle** (F8): je Ort mit Kennzeichen „Punktekonto Kletterhalle“ und Zeitraum Anzahl anwesender Teilnehmer:innen (Kinder) aus der Anwesenheitserfassung gegen die Werte der Rechnung; Abweichung sichtbar. Keine Namen.
+- **SEPA-Überweisungsdatei** (Product Owner 24.10.2026) für abgegebene Abrechnungen mit Bankverbindung, Bestätigung steuerfreie Einnahmen und Trainervereinbarung (Voraussetzung, Product Owner 25.10.2026); zum Hochladen im Online-Banking der Sparkasse (manuell).
+- **Abgleich Punktekonto Kletterhalle** (F8): je Ort mit Kennzeichen „Punktekonto Kletterhalle“ und Zeitraum Anzahl anwesender Teilnehmer:innen (Kinder) aus der Anwesenheitserfassung gegen die Werte der Rechnung; Abweichung sichtbar; Summe mit und ohne Probetrainings getrennt, bis die Geschäftsstelle klärt, ob die Halle Probetrainings abbucht. Keine Namen.
 - **Lesepfad Personendaten** (P7, Product Owner 24.10.2026): eigene Lesefunktion mit festen Spalten für Nutzer mit Rechten auf Finanzen (Bankverbindung, Trainervereinbarung, Bestätigung steuerfreie Einnahmen, förderfähige Lizenzen mit gültig von/bis); unabhängig von Rechten auf das Ehrenamtsmanagement (Übergabe an die Administration). Namen über `ea_person_names`, erweitert um Finanzen (Q2).
 - Bedienung am Arbeitsplatz der Geschäftsstelle; Listen mobil lesbar ab 375 px (vision.md).
 
@@ -65,7 +69,7 @@ Trainer:innen und Helfer:innen werden aus der großen Excel-Tabelle des Microsof
 - Extern: Sparkasse (SEPA-Datei, manuell hochgeladen), Finanzbuchhaltung (Belege), Kletterhalle (Rechnung, manuell).
 
 **Risiken / Besonderheiten:**
-- Datenschutz: Bankverbindungen und Nachweise sind Lesestufe „nur Geschäftsstelle und Admin“; Lesefunktion mit festen Spalten statt Lesepfad (P7). Die SEPA-Datei enthält IBANs und wird nur heruntergeladen, nicht gespeichert [ANNAHME]. Abgleich Kletterhalle ohne Namen von Kindern. Eintrag im Verarbeitungsverzeichnis (Trainerabrechnung).
+- Datenschutz: Bankverbindungen und Nachweise sind Lesestufe „nur Geschäftsstelle und Admin“; Lesefunktion mit festen Spalten statt Lesepfad (P7). Referent:innen sehen nur Positionen ihres Referats und Hinweise (z. B. „Nachweis fehlt“), keine Bankdaten und keine Daten der Nachweise selbst [ANNAHME]. Die SEPA-Datei enthält IBANs und wird nur heruntergeladen, nicht gespeichert [ANNAHME]. Abgleich Kletterhalle ohne Namen von Kindern. Eintrag im Verarbeitungsverzeichnis (Trainerabrechnung).
 - Aufbewahrung (Q4, Product Owner 24.10.2026): **5 Jahre wie überall** (rollen.md), auch für Abrechnungen und die abgerechneten Einsätze. [ANNAHME] Die steuerlich aufbewahrungspflichtigen Belege (unterschriebenes Abrechnungsdokument, Kontoauszug) liegen in der Finanzbuchhaltung, nicht im Vereins OS. Hinweis: Für Buchungsbelege gelten nach § 147 AO längere Fristen; die Annahme sollte die Schatzmeister:in bestätigen.
 - Fachliche Komplexität: Berechnungsregeln (Lizenz, Halbtage, Rundung) müssen mit der Vergütungsordnung übereinstimmen; der Vorstand kann sie jederzeit ändern → Sätze und Zuordnung konfigurierbar, Regeln mit pgTAP-Tests.
 - Abhängigkeit von einem Nachtrag der Anwesenheitserfassung (Spec Ready, in Umsetzung): Abrechnungsart am Einsatz und Sperre sollten vor der Abnahme von EZ in TEST feststehen, damit keine Einsätze ohne Abrechnungsart entstehen [ANNAHME: Vorbelegung aus der Einsatzart für Altbestand].
@@ -85,13 +89,13 @@ Trainer:innen und Helfer:innen werden aus der großen Excel-Tabelle des Microsof
 - **Satz:** Betrag je Einheit aus den Stammdaten „Sätze und Pauschalen“ (bisher ohne eigenen Eintrag).
 - Zu prüfen: „Trainingseinheit“ – [ANNAHME: Rundung offen] ersetzen durch „angebrochene Trainingseinheiten werden aufgerundet“; „Wettkampfbetreuung“ – [ANNAHME: Satz je Wettkampf bzw. Tag] ersetzen durch „Satz je Kalendertag“; „Trainer:in“ – Regel „ab dem Abrechnungshalbjahr des Lizenzerwerbs“ um den Stichtag ergänzen; „Abrechnung“ – [OFFEN: ggf. eigenes Abrechnungsmodul] erledigt (Bereich von Finanzen).
 
+**Entschieden 25.10.2026 (Product Owner):** Startwert der Vorbelegung für die eintägige Ausbildungsfahrt = Sätze der Mehrtageskurse; Training ohne Trainingszeit = 0 TE mit Hinweis und Korrektur; Trainervereinbarung ist Voraussetzung der Auszahlung; Vier-Augen-Prinzip mit Bestätigung durch die Referent:in; Abrechnungsart am Einsatz wählt, wer den Einsatz anlegen darf.
+
 **Offene Fragen:**
-- [OFFEN] Startwerte der Vorbelegung je Einsatzart, insbesondere eintägige Ausbildungsfahrt (Sätze der Mehrtageskurse oder der Fahrten); der Admin pflegt sie in der Administration. Wer: Product Owner, vor der Spec.
-- [OFFEN] Training ohne Trainingszeit am Wochentag: Vorschlag 0 TE mit Hinweis, Korrektur von Hand mit Begründung. Wer: Product Owner, mit der Erhebung.
 - [OFFEN] Steuerfreier Höchstbetrag: maßgeblich das Jahr des Einsatzes oder der Auszahlung (Zuflussprinzip)? Wer: Schatzmeister:in, vor der Spec.
-- [OFFEN] Ist die Trainervereinbarung Voraussetzung der Auszahlung (wie die Bestätigung steuerfreie Einnahmen)? Wer: Product Owner.
 - [OFFEN] SEPA: Auftraggeberkonto der Sektion (Ort der Pflege, Vorschlag Administration), Format laut Sparkasse [ANNAHME: pain.001 nach DK-Standard, Version mit der Sparkasse prüfen], Verwendungszweck, Sammelbuchung. Wer: Geschäftsstelle mit Sparkasse.
-- [OFFEN] Vier-Augen-Prinzip bei Freigabe oder Auszahlung (Schatzmeister:in, Kassenprüfung)? Im MVP gibt die Geschäftsstelle allein frei [ANNAHME]. Wer: Product Owner mit Vorstand.
+- [OFFEN] Zählen Probetrainings für die Kletterhalle (werden sie abgebucht)? Wer: Geschäftsstelle.
+- [OFFEN] Ausnahme bei fehlender Referent:in (Amt unbesetzt, Abwesenheit vor der Frist): wer bestätigt? Vorschlag: stellvertretende Referent:in mit derselben Vorlage, sonst Geschäftsstelle mit Begründung. Wer: Product Owner.
 - [OFFEN] Steuerliche Einordnung einer Vergütung bei Arbeitseinsätzen. Wer: Schatzmeister:in.
 - [OFFEN] Zielwert der Erfolgsmessung (heutiger Aufwand je Halbjahr). Wer: Geschäftsstelle.
 - [OFFEN] Bestätigung der Annahme zu Q4 (Belege in der Finanzbuchhaltung, 5 Jahre im Vereins OS). Wer: Schatzmeister:in.

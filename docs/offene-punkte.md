@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 24.10.2026 · Version 5.6
+Stand: 25.10.2026 · Version 5.7
+Änderungen v5.7: Finanzen: offene Fragen geklärt (Product Owner 25.10.2026): Vier-Augen-Prinzip mit Bestätigung durch die Referent:in (Q9 für FI geändert), Trainervereinbarung als Voraussetzung, Training ohne Trainingszeit, eintägige Ausbildungsfahrt, Wahl der Abrechnungsart; Steckbrief v0.2, Erhebung v0.2.
 Änderungen v5.6: Finanzen: Steckbrief v0.1 und Erhebung v0.1 (Entwurf); Q4, Q5, Q6, Q9 entschieden; Übergaben aus EZ (v1.6) und TK (v1.3) eingearbeitet; neue Übergaben an Administration, Anwesenheitserfassung und Planungshilfe.
 Änderungen v5.5: Anwesenheitserfassung: Spec v0.5 Ready; Übergaben an Administration (A9) und Gruppen (G6–G9) erledigt.
 Änderungen v5.4.1: Gruppen: Wortlaut der Ablehnung bei zweiter Trainingszeit am selben Wochentag festgelegt.
@@ -162,24 +163,22 @@ Entschieden 22.10.2026 (Product Owner, fünfter Block): PDF-Übernahme nicht im 
 
 ## FI – Finanzen (Priorität 3 – nach der Anwesenheitserfassung)
 
-Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.1, Entwurf, MVP-Schnitt bestätigt 24.10.2026) · Erhebung: 01-erhebung.md (Version 0.1, Entwurf) · Übergaben: uebergabe-administration.md (v1.0, offen), uebergabe-anwesenheitserfassung.md (v1.0, offen), uebergabe-planungshilfe.md (v1.0, offen; Planungshilfe eingefroren)
+Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.2, Entwurf, MVP-Schnitt bestätigt 24.10.2026) · Erhebung: 01-erhebung.md (Version 0.2, Entwurf) · Übergaben: uebergabe-administration.md (v1.1, offen), uebergabe-anwesenheitserfassung.md (v1.1, offen), uebergabe-planungshilfe.md (v1.0, offen; Planungshilfe eingefroren)
 
 - Entschieden 24.10.2026 (Product Owner, Chat Finanzen):
   - **Q4 – Aufbewahrung:** 5 Jahre wie überall, auch für Abrechnungen und abgerechnete Einsätze; [ANNAHME] steuerlich aufbewahrungspflichtige Belege liegen in der Finanzbuchhaltung (Bestätigung durch Schatzmeister:in [OFFEN]).
   - **Q5 – Struktur:** ein Modul FI; Abrechnung ist ein Bereich von Finanzen, kein eigenes Modul.
   - **Q6 – Parameter:** steuerfreier Höchstbetrag (`ad_rates`, Grenzwert) und Abgabefristen 31.07./15.12. als Stammdaten der Administration.
-  - **Q9 – Nutzer:** im MVP nur die Geschäftsstelle; Schatzmeister:in und Kassenprüfung später als eigene Rechtevorlagen.
+  - **Q9 – Nutzer:** im MVP Geschäftsstelle und – geändert 25.10.2026 – Referent:innen (Reichweite „Referat“, ohne Bankdaten) zur Bestätigung ihrer Abrechnungen; Schatzmeister:in und Kassenprüfung später als eigene Rechtevorlagen.
   - **P7 – Lesepfad:** eigene Lesefunktion mit festen Spalten für Bankverbindung, Nachweise und förderfähige Lizenzen (Übergabe an die Administration A8).
   - **MVP:** halbjährliche Abrechnung für Kinder und Jugend und Leistungssport aus der Anwesenheitserfassung (Training, Fahrten, Ausbildungsfahrt, Trainingslager, Wettkampfbetreuung) mit Lizenz- und Nachweisprüfung, Hinweis Höchstbetrag, Abrechnungsdokument, SEPA-Überweisungsdatei, Abgleich Punktekonto Kletterhalle. Iteration 1: Kurs und Tour (Vorbelegung aus der Planungshilfe, sobald umgesetzt), Einzelabrechnung anderer Referate, Reisekosten, Kosten bei Absage von Hand, Liste „nicht abgerechnet nach 4 Wochen“. Später: Buchungslauf, Budget, Dashboard, Ehrenamtspauschale.
   - **Abrechnungsart je Einsatz:** Tabelle aus Anhang 1 als Stammdaten der Administration, Vorbelegung je Einsatzart, Wahl beim Anlegen des Einsatzes (Übergaben an Administration A1–A3 und Anwesenheitserfassung Z1).
   - **Regeln:** angebrochene Trainingseinheiten aufrunden; Wettkampfbetreuung je Kalendertag; mehrtägige Einsätze ohne Beginn/Ende als Tagessatz mit Korrektur; Trainersatz bei förderfähiger Lizenz am (Start-)Datum oder Erwerb im selben Abrechnungshalbjahr; Sperre abgerechneter Anwesenheiten ab Freigabe (Übergabe an die Anwesenheitserfassung Z3); halbjährliche Abrechnungsdokumente nur Kinder und Jugend und Leistungssport, andere Referate später als Einzelabrechnung.
+- Entschieden 25.10.2026 (Product Owner): Vier-Augen-Prinzip – Referent:in bestätigt die Abrechnungen ihres Referats, die Geschäftsstelle gibt frei (Aktion „freigeben“ nach Q1, Übergabe an die Administration A7; rollen.md Spalte FI anzupassen); Trainervereinbarung ist Voraussetzung der Auszahlung; Training ohne Trainingszeit = 0 TE mit Hinweis und Korrektur; eintägige Ausbildungsfahrt startet mit Sätzen der Mehrtageskurse; Abrechnungsart am Einsatz wählt, wer den Einsatz anlegen darf.
 - Erledigt (glossar.md, Gruppen v0.6–v0.8): „Vertrag“ wird im Modul Gruppen geführt (je Teilnahme); der Buchungslauf ist ein Einzug (SEPA-Lastschrift).
-- [OFFEN] Startwerte der Vorbelegung je Einsatzart, v. a. eintägige Ausbildungsfahrt (Product Owner).
-- [OFFEN] Training ohne Trainingszeit am Wochentag (Vorschlag: 0 TE mit Hinweis, Korrektur von Hand).
 - [OFFEN] Steuerfreier Höchstbetrag: Jahr des Einsatzes oder der Auszahlung; aktueller Betrag (Schatzmeister:in).
-- [OFFEN] Trainervereinbarung als Voraussetzung der Auszahlung?
 - [OFFEN] SEPA: Format/Version laut Sparkasse, Auftraggeberkonto (Ort der Pflege), Verwendungszweck, Sammelbuchung, Rücknahme bei Ablehnung (Geschäftsstelle mit Sparkasse).
-- [OFFEN] Vier-Augen-Prinzip bei Freigabe oder Auszahlung (Product Owner mit Vorstand).
+- [OFFEN] Vertretung, wenn keine Referent:in bestätigen kann (Amt unbesetzt, Abwesenheit vor der Frist) (Product Owner).
 - [OFFEN] Steuerliche Einordnung einer Vergütung bei Arbeitseinsätzen (Schatzmeister:in).
 - [OFFEN] Vorlage des heutigen Abrechnungsdokuments; zählen Probetrainings für die Kletterhalle? (Geschäftsstelle)
 - [OFFEN] Buchungslauf (später): DATEV-Buchungsexport oder SEPA-Datei; Datei-Export oder Schnittstelle über SC; Empfänger der Mails. (vision.md, modul-landkarte.md)
@@ -214,7 +213,7 @@ Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.1, Entwurf, MVP-S
   - Q6 Beträge (z. B. steuerfreier Höchstbetrag) in den Stammdaten Sätze, Datumsfristen im Modul Finanzen? – **entschieden 24.10.2026:** beides in der Administration (siehe FI)
   - Q7 Aufgaben an Personen ohne Zugang? (siehe PM, GS, AM)
   - Q8 Projektteams mit eigenen Rechten (Reichweite „Projekt“)?
-  - Q9 Weitere Nutzergruppen mit Zugang (Schatzmeister:in, Kassenprüfung, Redaktion)? – **für FI entschieden 24.10.2026:** MVP nur Geschäftsstelle, Schatzmeister:in und Kassenprüfung später; Redaktion offen (OA)
+  - Q9 Weitere Nutzergruppen mit Zugang (Schatzmeister:in, Kassenprüfung, Redaktion)? – **für FI entschieden 24./25.10.2026:** MVP Geschäftsstelle und Referent:innen (Bestätigung), Schatzmeister:in und Kassenprüfung später; Redaktion offen (OA)
 - [OFFEN] Zeitpunkt und Umfang des Rollouts sowie Rechte und Reichweiten für weitere Personen mit Amt, Gruppenleitungen und Aktive. Teilweise geklärt: Referent:innen und Hüttenwart:innen im MVP; Reihenfolge der Zugänge (E6, 21.10.2026); Gruppenleitungen und Trainer:innen erhalten Zugang mit Iteration 1 von EZ. (vision.md, rollen.md)
 - [OFFEN] Navigation und Modulstruktur (u. a. Finanzen/Abrechnung, Planungshilfe Touren und Kurse).
 - [OFFEN] Verpflichtungserklärung zum Datenschutz bei der ersten Anmeldung: Text, Versionierung, erneute Bestätigung bei neuer Version (nach MVP; betrifft AD; Zeitpunkt siehe Q3).
