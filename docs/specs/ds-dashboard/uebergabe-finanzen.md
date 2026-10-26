@@ -1,6 +1,7 @@
 # Übergabe: Dashboard → Finanzen (Bereich Budget)
 
-Stand: 26.10.2026 · Version 1.2 · Status: offen (einzuarbeiten in den Steckbrief Finanzen als neuer, vorgezogener Bereich)
+Stand: 26.10.2026 · Version 1.3 · Status: offen (einzuarbeiten in den Steckbrief Finanzen als neuer, vorgezogener Bereich)
+Änderungen v1.3: neu B14 Vorjahresvergleich (Q-DS9).
 Änderungen v1.2: B9 (Referat nur Buchungen seiner Budgetposten, Admin liest), B10 (Kennzeichen „darf Budget pflegen“).
 Änderungen v1.1: Q-DS7, Q-DS11, Q-DS12 entschieden (B5, B9, B10, B11, neu B13).
 Grundlage: specs/ds-dashboard/00-steckbrief.md v0.3 (Q-DS1, Q-DS2, Q-DS4, Q-DS7, Q-DS11, Q-DS12), prototyp-budget-dashboard.md v1.0, specs/fi-finanzen/00-steckbrief.md v0.5.
@@ -31,6 +32,7 @@ Damit ändert sich im Steckbrief Finanzen v0.5 „Nicht im Scope: … Budget-Üb
 | B10 | **Rechte:** Import und Pflege der Zuordnung durch den 1. Vorsitzenden, später die Schatzmeister:in, nicht durch die Geschäftsstelle (Q-DS7); Recht dafür: Kennzeichen „darf Budget pflegen“ aus der Administration (Q-DS14; uebergabe-administration.md D6), ohne Rechte auf Abrechnungen und Bankdaten. Lesen über das Recht auf DS (Q-DS12). | Q-DS7, Q-DS12 |
 | B11 | **Löschfrist:** Einzelbuchungen bleiben für das laufende Jahr und das Vorjahr; danach automatisch gelöscht, vorher Verdichtung zu Summen je Budgetposten und Monat (bleiben für den Vorjahresvergleich) [ANNAHME: Löschung am 01.01. des übernächsten Jahres]. Eintrag im Verarbeitungsverzeichnis (Buchungstexte enthalten Namen). | Q-DS11 |
 | B13 | **Später:** Import über die DATEV-Schnittstelle des Schnittstellen-Connectors statt CSV; Rechenregeln und Prüfungen bleiben gleich. | Q-DS7 |
+| B14 | **Vorjahresvergleich** (Q-DS9, Product Owner 26.10.2026): Summen je Budgetposten und Monat bleiben über die Löschfrist der Einzelbuchungen hinaus erhalten [OFFEN: wie viele Jahre]; Lesefunktion liefert je Budgetposten und Gesamtbudget das Vorjahr bis zum gleichen Stichtag (Datenstand des laufenden Jahres) und das ganze Vorjahr; Verknüpfung der Budgetposten zweier Jahre über Name und Gesamtbudget [ANNAHME], neue Posten ohne Vorjahreswert. | Q-DS9 |
 | B12 | **Abnahme:** fiktiver DATEV-Export im Repository mit allen Sonderfällen (Doppelzählung, Storno, Umbuchung, EB-Wert, anderes Jahr, fehlende Einzelbuchung, Einzelbuchungsregel, Kostenstelle); Vergleich mit den echten Referenzwerten des Erstexports nur lokal durch den Product Owner. | Prototyp |
 
 ## Voraussetzungen in der Administration

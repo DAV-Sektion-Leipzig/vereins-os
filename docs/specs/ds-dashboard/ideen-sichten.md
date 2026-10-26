@@ -1,10 +1,11 @@
 # Ideenkatalog: Sichten und Kennzahlen des Dashboards
 
-Stand: 26.10.2026 · Version 0.2 · Status: Entwurf zur Auswahl durch den Product Owner und die Referate
+Stand: 26.10.2026 · Version 0.3 · Status: Entwurf zur Auswahl durch den Product Owner und die Referate
+Änderungen v0.3: Q-DS9 (Vorjahresvergleich für Budget und Kennzahlen) eingearbeitet: B7 als Must; alle Kennzahlen mit Vorjahreswert.
 Änderungen v0.2: Entscheidungen Q-DS1 (Referat sieht Einzelbuchungen), Q-DS2 (Budget in FI) und Q-DS3 (Auslastung ohne Platzzahl) eingearbeitet.
 Grundlage: Steckbriefe, Specs und Merkposten der Module AD, EA, GR, EZ, TK, FI (Stand 26.10.2026); 00-steckbrief.md DS v0.1.
 
-Alle Ideen sind Vorschläge [ANNAHME]. Spalte **ab** = frühester Zeitpunkt, zu dem die Daten im Vereins OS vorliegen (Modul und Iteration). Spalte **Datenschutz** nennt, was beachtet werden muss. Grundsatz: Das Dashboard zeigt Anzahlen, Summen und Quoten; Personenlisten bleiben im Fachmodul.
+Alle Ideen sind Vorschläge [ANNAHME]. Spalte **ab** = frühester Zeitpunkt, zu dem die Daten im Vereins OS vorliegen (Modul und Iteration). Spalte **Datenschutz** nennt, was beachtet werden muss. Grundsatz: Das Dashboard zeigt Anzahlen, Summen und Quoten; Personenlisten bleiben im Fachmodul. Jede Kennzahl zeigt den Wert des gleichen Zeitraums im Vorjahr daneben (Q-DS9, Product Owner 26.10.2026), sobald Daten für das Vorjahr vorliegen.
 
 Kürzel der Priorität für die Rückmeldung: **M** = Must (MVP), **S** = Should (Iteration 1), **C** = Could (später), **W** = Won't.
 
@@ -20,7 +21,7 @@ Kürzel der Priorität für die Rückmeldung: **M** = Must (MVP), **S** = Should
 | B4 | Einzelbuchungen je Budgetposten | Geschäftsstelle, Vorstand, Referat (eigene Budgetposten; Q-DS1 entschieden) | DATEV-Export (FI) | DS-MVP | Buchungstexte enthalten Namen; Einzelbuchungen laufendes Jahr + Vorjahr (Q-DS11) |
 | B5 | Nicht zugeordnete Buchungen, Prüfung des Exports | Geschäftsstelle, Vorstand | DATEV-Export | DS-MVP | – |
 | B6 | Monatsverlauf je Gesamtbudget (kumuliert gegen Plan-Linie) | Vorstand, Referat | DATEV-Export | DS-MVP oder S | – |
-| B7 | Vergleich mit dem Vorjahr (gleicher Stichtag) | Vorstand, Referat | Exporte mehrerer Jahre | C | Summen je Monat bleiben, Einzelbuchungen nur Vorjahr (Q-DS11) |
+| B7 | Vergleich mit dem Vorjahr (gleicher Stichtag und ganzes Vorjahr) je Gesamtbudget und Budgetposten (Q-DS9, entschieden) | Vorstand, Referat | Summen je Budgetposten und Monat (FI) | DS-MVP | Summen je Monat bleiben, Einzelbuchungen nur Vorjahr (Q-DS11) |
 | B8 | „Gebunden“: abgerechnete und freigegebene, noch nicht gebuchte Vergütung am Budgetposten „Vergütung Aktive“ | Referat Kinder und Jugend, Leistungssport; Vorstand | FI (Auszahlungsrunden) | FI-MVP | nur Summen |
 | B9 | Planwerte der Touren und Kurse (Kosten, Beiträge) gegen das Budget Touren/Ausbildung | Referat Touren, Ausbildung | TK (Kalkulation) | TK-MVP | – |
 | B10 | Einnahmen aus Verträgen (monatlicher Einzug) gegen Plan | Vorstand, Kinder und Jugend | GR (Verträge), später FI-Buchungslauf | später | nur Summen |
