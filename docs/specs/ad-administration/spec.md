@@ -1,6 +1,6 @@
 # Spec: Administration (AD)
 
-Version: 0.10.0 · Status: Abschnitte bis v0.7.4 (Kern) Ready · Nachtrag v0.8 (Anwesenheitserfassung) Ready (v0.8.2, freigegeben am 24.10.2026) · Nachtrag v0.9 (Planungshilfe Touren und Kurse) Entwurf, Annahmen in Abschnitt 11 · Nachtrag v0.10 (Finanzen, Aktion „freigeben“) Ready (freigegeben am 26.10.2026; Annahmen werden bei der Abnahme bestätigt), einschließlich der dafür nötigen Sätze aus v0.9 (T60, T61) · Stand: 26.10.2026 · Product Owner: Toni Werner
+Version: 0.11.0 · Nachtrag v0.11 (Finanzen, Buchungslauf) Ready (26.10.2026) · Status: Abschnitte bis v0.7.4 (Kern) Ready · Nachtrag v0.8 (Anwesenheitserfassung) Ready (v0.8.2, freigegeben am 24.10.2026) · Nachtrag v0.9 (Planungshilfe Touren und Kurse) Entwurf, Annahmen in Abschnitt 11 · Nachtrag v0.10 (Finanzen, Aktion „freigeben“) Ready (freigegeben am 26.10.2026; Annahmen werden bei der Abnahme bestätigt), einschließlich der dafür nötigen Sätze aus v0.9 (T60, T61) · Stand: 26.10.2026 · Product Owner: Toni Werner
 Stories: docs/specs/ad-administration/02-stories.md (US-AD-01 bis US-AD-30); Nachtrag v0.8 mit US-AD-27 bis US-AD-30 (v0.8.1) und den Tasks T50–T58; Nachtrag v0.9 ohne eigene Stories, Abnahme über die Übergabe-Anforderungen und die Tasks T59–T67
 Grundlage: 00-steckbrief.md v1.1, 01-erhebung.md v0.7 (R1–R20), glossar.md v1.5, rollen.md v1.0, tech-stack.md v0.6, specs/ea-ehrenamt/stammdaten-qualifikationsarten.md v0.2, specs/ea-ehrenamt/00-steckbrief.md v0.6, specs/ea-ehrenamt/migration-aktivenliste.md v0.4, specs/gr-gruppen/uebergabe-nachtrag-administration.md v1.0, specs/ez-einsaetze/uebergabe-rechte-administration.md v1.5 (A1–A9), specs/ez-einsaetze/spec.md v0.4 (Abschnitte 2, 3, 7), specs/gr-gruppen/01-erhebung.md v0.7 (R20 `gr_group_roster`), specs/tk-touren-kurse/uebergabe-administration.md v1.6, specs/tk-touren-kurse/spec.md v0.2, specs/ea-ehrenamt/uebergabe-administration.md v1.1 (Ü1–Ü3), specs/ea-ehrenamt/01-erhebung.md v0.5 (C2, C2a), specs/ea-ehrenamt/spec.md v0.2
 Änderungen v0.3 (19.10.2026): Klärung der Widersprüche aus plan.md (W1–W14, A1–A5, P1); siehe Abschnitt 11.
@@ -1116,3 +1116,12 @@ Annahmen v0.10 (bei Abnahme bestätigen):
 - [ANNAHME] `ea_person_finance_data` liefert auch ausgeschiedene Personen und alle Lizenzen (auch abgelaufene).
 - [ANNAHME] Angaben der Sektion mit „gültig ab“; lesen dürfen Admin und Geschäftsstelle (FI verwalten).
 - [OFFEN] Hinweis an die Anwesenheitserfassung: `ez_reactivate_helper` (spec.md EZ v0.4) lässt nur „ruhend“ und „ausgeschieden“ zu; die Administration erlaubt über den EZ-Weg auch Personen ohne Ehrenamtsstatus (24.10.2026). Ob die Anwesenheitserfassung das nutzt, entscheidet sie.
+
+## Nachtrag v0.11: Buchungslauf Verträge (Finanzen) – Ready (26.10.2026)
+
+Grundlage: specs/fi-finanzen/uebergabe-administration.md v1.4 (A11, A13); 01-erhebung.md FI v0.7.1 (R38, R41).
+
+- **R57 – Angaben der Sektion für den Einzug:** `ad_payout_settings` erhält `creditor_id` (Gläubiger-Identifikationsnummer, optional; Aufbau `^DE[0-9]{2}[A-Z0-9]{3}[0-9]{11}$`, Prüfziffer nach ISO 7064 Mod 97-10 über nationale Kennung + „DE“ + Prüfziffer, Geschäftsbereichskennung ausgenommen; sonst „Bitte eine gültige Gläubiger-Identifikationsnummer eingeben.“ `AD_CREDITOR_ID_INVALID`) und `ledger_account_collection` (Sachkonto der Gruppenbeiträge, optional, 1–20 Zeichen). Pflege und Rechte wie R54. `ad_payout_settings_at(date)` liefert beide Felder zusätzlich.
+- **R58 – Stichtag des ersten Buchungslaufs:** Tabelle `ad_collection_settings` (genau eine Zeile, `start_month date`, 1. eines Monats); Pflege nur mit AD ≥ bearbeiten (wie R54); lesen mit AD ≥ lesen oder FI verwalten; `ad_collection_start() returns date` (null, solange nicht gesetzt; Finanzen erlaubt dann keinen Buchungslauf). Kein Startbestand in PROD; TEST über den Seed.
+- Oberfläche: Seite /ad/auszahlung um Gläubiger-ID, Sachkonto der Gruppenbeiträge und Stichtag erweitert.
+- Tasks: T131 Migration, T132 pgTAP, T133 Oberfläche (Umsetzung mit FI FT17, FT22).

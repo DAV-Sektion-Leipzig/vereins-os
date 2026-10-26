@@ -1,6 +1,6 @@
 # Übergabe: Finanzen → Administration
 
-Stand: 26.10.2026 · Version 1.4 · Status: A1–A10 eingearbeitet (26.10.2026, spec.md AD v0.10.0); A11 und A13 offen (A12 entfällt) · Von: Finanzen (FI) · An: Administration (AD)
+Stand: 26.10.2026 · Version 1.4 · Status: A1–A10 eingearbeitet (26.10.2026, spec.md AD v0.10.0); A11 und A13 eingearbeitet (26.10.2026, spec.md AD v0.11; A12 entfällt) · Von: Finanzen (FI) · An: Administration (AD)
 Grundlage: docs/specs/fi-finanzen/00-steckbrief.md v0.1, 01-erhebung.md v0.1; spec.md AD v0.9 (Nachtrag v0.9, `ad_rates`, `ea_person_licenses`); querschnitt-administration.md v0.1 (P6, P7, P11, P14, Q2, Q6)
 Änderungen v1.4: A11 und A13 für den Buchungslauf Verträge (01-erhebung.md FI v0.7.1, Abschnitt H): Gläubiger-Identifikationsnummer und Sachkonto der Gruppenbeiträge, Stichtag erster Buchungslauf; A12 (Fälligkeitstag) entfällt, Finanzen schlägt Erstellen + 3 Tage vor.
 Änderungen v1.3: A10 entschieden – Angaben der Sektion für die Auszahlung (Name, IBAN, BIC, Sachkonto) als Einstellung der Administration (Vorlagen der Geschäftsstelle, Product Owner 26.10.2026).

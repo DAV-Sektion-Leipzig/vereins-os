@@ -1,6 +1,6 @@
 # Übergabe: Finanzen → Gruppen
 
-Stand: 26.10.2026 · Version 1.0 · Status: offen · Von: Finanzen (FI) · An: Gruppen (GR)
+Stand: 26.10.2026 · Version 1.0 · Status: eingearbeitet (26.10.2026, spec.md GR v0.4) · Von: Finanzen (FI) · An: Gruppen (GR)
 Grundlage: docs/specs/fi-finanzen/01-erhebung.md v0.7 (Abschnitt H, R34–R46), 02-stories.md v0.2 (US-FI-18 bis US-FI-21); spec.md GR (`gr_contracts`, R8, R8a, R8b, Abschnitt 3 RLS); glossar.md „Vertrag“, „Mandatsreferenz“, „Buchungslauf“
 Änderungen v1.0: Erste Fassung.
 
