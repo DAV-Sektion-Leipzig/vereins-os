@@ -120,23 +120,32 @@ function SearchForm({ result: { filter, options }, showReset }: SearchFormProps)
         />
       </div>
       {/* key setzt die Filterfelder zurück, wenn sich die Filter über die Adresse ändern */}
-      <Filterleiste key={filterHref({ ...filter, q: '' }, 1)} filter={filter} options={options} />
-      {showReset && (
-        <Button variant="ghost" asChild className="self-start">
-          <Link to="/ea/aktive">Filter zurücksetzen</Link>
-        </Button>
-      )}
+      <Filterleiste key={filterHref({ ...filter, q: '' }, 1)} filter={filter} options={options}>
+        {showReset && (
+          <Button variant="ghost" asChild className="self-start">
+            <Link to="/ea/aktive">Filter zurücksetzen</Link>
+          </Button>
+        )}
+      </Filterleiste>
     </Form>
   )
 }
 
 function Name({ person }: { person: VolunteerRow }) {
   return (
-    <span className="flex flex-wrap items-center gap-2">
-      <Link to={`/ea/aktive/${person.id}`} className="font-medium underline-offset-4 hover:underline">
-        {personName(person)}
-      </Link>
-      {person.trainer_without_license && <WithoutLicense />}
+    <Link to={`/ea/aktive/${person.id}`} className="font-medium underline-offset-4 hover:underline">
+      {personName(person)}
+    </Link>
+  )
+}
+
+// Kennzeichen „ohne gültige Lizenz“ steht bei den Lizenzen, neben dem Ablauf-Badge statt am Namen.
+function Licenses({ person }: { person: VolunteerRow }) {
+  if (!person.trainer_without_license) return <List values={person.license_codes} />
+  return (
+    <span className="flex flex-col items-start gap-1">
+      {person.license_codes.length > 0 && <List values={person.license_codes} />}
+      <WithoutLicense />
     </span>
   )
 }
@@ -174,7 +183,7 @@ const COLUMNS: Column<VolunteerRow>[] = [
     cell: (p) => <List values={[...p.functions, ...p.positions]} />,
     className: 'whitespace-normal',
   },
-  { key: 'licenses', header: 'Lizenzen', cell: (p) => <List values={p.license_codes} /> },
+  { key: 'licenses', header: 'Lizenzen', cell: (p) => <Licenses person={p} />, className: 'whitespace-normal' },
   { key: 'expiry', header: 'Ablauf', cell: (p) => <AblaufBadge status={p.worst_expiry} /> },
   {
     key: 'open',
@@ -207,6 +216,7 @@ function VolunteerCard({ person }: { person: VolunteerRow }) {
           {person.license_codes.length > 0 && (
             <span className="text-muted-foreground">Lizenzen: {person.license_codes.join(', ')}</span>
           )}
+          {person.trainer_without_license && <WithoutLicense />}
           {person.worst_expiry !== 'none' && <AblaufBadge status={person.worst_expiry} />}
         </div>
       </div>

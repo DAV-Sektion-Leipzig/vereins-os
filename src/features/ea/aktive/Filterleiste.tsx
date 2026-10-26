@@ -18,11 +18,12 @@ const selectClassName =
 
 const checkboxClassName = 'size-4 accent-primary'
 
-type Props = { filter: VolunteerFilter; options: FilterOptions }
+type Props = { filter: VolunteerFilter; options: FilterOptions; children?: React.ReactNode }
 
 // T036 (US-EA-03): Filterleiste innerhalb des Suchformulars der Übersicht; jede Änderung lädt die Liste neu.
 // Auf schmalen Bildschirmen eingeklappt. Die Auswahl richtet sich nach den Rechten (US-EA-03 AK4).
-export function Filterleiste({ filter, options }: Props) {
+// Eigener Kasten mit Überschrift, damit Filter und Kennzeichen der Tabelle nicht doppelt wirken; children z. B. „Filter zurücksetzen“.
+export function Filterleiste({ filter, options, children }: Props) {
   const submit = useSubmit()
   const [open, setOpen] = useState(false)
   const count = countFilters(filter, options)
@@ -45,7 +46,15 @@ export function Filterleiste({ filter, options }: Props) {
         {count > 0 ? `Filter (${count})` : 'Filter'}
       </Button>
 
-      <div id="ea-filter" className={cn('flex-col gap-4 sm:flex', open ? 'flex' : 'hidden')}>
+      <div
+        id="ea-filter"
+        role="group"
+        aria-labelledby="ea-filter-heading"
+        className={cn('flex-col gap-4 rounded-xl border p-4 sm:flex', open ? 'flex' : 'hidden')}
+      >
+        <h2 id="ea-filter-heading" className="sr-only text-base font-semibold sm:not-sr-only">
+          Filter
+        </h2>
         <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
           <fieldset className="flex flex-col gap-2">
             <legend className="mb-2 text-sm font-medium">Ehrenamtsstatus</legend>
@@ -136,7 +145,7 @@ export function Filterleiste({ filter, options }: Props) {
               </option>
             ))}
           </Choice>
-          <Choice id="ea-filter-ablauf" name="ablauf" label="Ablauf" value={filter.expiry} onChange={onChange}>
+          <Choice id="ea-filter-ablauf" name="ablauf" label="Ablaufstatus" value={filter.expiry} onChange={onChange}>
             {Object.entries(EXPIRY_FILTERS).map(([key, label]) => (
               <option key={key} value={key}>
                 {label}
@@ -169,6 +178,7 @@ export function Filterleiste({ filter, options }: Props) {
             aktiv ohne Funktion oder Amt
           </label>
         </div>
+        {children}
       </div>
     </div>
   )
