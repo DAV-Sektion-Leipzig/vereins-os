@@ -1,6 +1,6 @@
 # Übergabe an Finanzen: Trainerabrechnung, Vergütungsordnung, Kontrolle Kletterhalle
 
-Stand: 24.10.2026 · Version 1.6 · Von: Anwesenheitserfassung (EZ) · An: Finanzen (FI) · Status: offen
+Stand: 24.10.2026 · Version 1.6 · Von: Anwesenheitserfassung (EZ) · An: Finanzen (FI) · Status: eingearbeitet (24.10.2026, specs/fi-finanzen/00-steckbrief.md v0.1, 01-erhebung.md v0.1)
 Quelle: specs/ez-einsaetze/00-steckbrief.md (v0.8), 01-erhebung.md (v0.4), spec.md (v0.2); Vergütungsordnung der Sektion (2025_DAV_Leipzig_FO_VGO, Beschluss 21.11.2023, ergänzt 11.12.2025; vom Product Owner am 21.10.2026 geliefert)
 Änderungen v1.6: Training ohne Uhrzeit (Dauer aus der Trainingszeit der Gruppe); Beginn und Ende mehrtägiger Einsätze optional; Einsatzart heißt Wettkampfbetreuung. Abgesagte Einsätze zählen nicht für die Abrechnung; Kurs und Tour nur mit Trainer:innen und Helfer:innen (keine Teilnehmenden), auch aus der Planungshilfe Touren und Kurse erzeugt; Trainingslager mit Gruppe wie Mehrtagesfahrt (Product Owner 24.10.2026).
 Änderungen v1.5: Hinweis auf Abweichung von Vergütungsordnung Punkt 7 und Vorstandsbeschluss gestrichen (Product Owner 22.10.2026: Fehlinterpretation); Abgrenzung zum Modul Touren und Kurse (Kalkulation dort, Vergütung hier [ANNAHME]).
@@ -74,3 +74,4 @@ Die Anwesenheitserfassung erhebt und speichert nur. Die Vergütung wird in Finan
 
 - Beim Steckbrief Finanzen F1–F9 übernehmen.
 - Nach dem Einarbeiten: diese Übergabe als erledigt markieren.
+- [x] Eingearbeitet am 24.10.2026 in specs/fi-finanzen/00-steckbrief.md v0.1 und 01-erhebung.md v0.1 (F1–F9 übernommen; Entscheidungen des Product Owners: TE aufrunden, Wettkampfbetreuung je Kalendertag, ohne Uhrzeit Tagessatz mit Korrektur, Lizenz am Datum oder Erwerb im Halbjahr, Sperre nach Freigabe, halbjährlich nur Kinder und Jugend und Leistungssport, Sätze und Abrechnungsarten in der Administration, Ehrenamtspauschale später; offen: eintägige Ausbildungsfahrt als Startwert der Vorbelegung). Folgen für die Anwesenheitserfassung: specs/fi-finanzen/uebergabe-anwesenheitserfassung.md v1.0.

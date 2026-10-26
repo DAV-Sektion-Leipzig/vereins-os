@@ -1,6 +1,9 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 24.10.2026 · Version 5.5
+Stand: 25.10.2026 · Version 5.8
+Änderungen v5.8: Finanzen: Höchstbetrag, Vertretung, Q4-Annahme, Arbeitseinsätze, Erklärung auf dem Abrechnungsdokument entschieden (Steckbrief v0.3, Erhebung v0.3); rollen.md v1.2.
+Änderungen v5.7: Finanzen: offene Fragen geklärt (Product Owner 25.10.2026): Vier-Augen-Prinzip mit Bestätigung durch die Referent:in (Q9 für FI geändert), Trainervereinbarung als Voraussetzung, Training ohne Trainingszeit, eintägige Ausbildungsfahrt, Wahl der Abrechnungsart; Steckbrief v0.2, Erhebung v0.2.
+Änderungen v5.6: Finanzen: Steckbrief v0.1 und Erhebung v0.1 (Entwurf); Q4, Q5, Q6, Q9 entschieden; Übergaben aus EZ (v1.6) und TK (v1.3) eingearbeitet; neue Übergaben an Administration, Anwesenheitserfassung und Planungshilfe.
 Änderungen v5.5: Anwesenheitserfassung: Spec v0.5 Ready; Übergaben an Administration (A9) und Gruppen (G6–G9) erledigt.
 Änderungen v5.4.1: Gruppen: Wortlaut der Ablehnung bei zweiter Trainingszeit am selben Wochentag festgelegt.
 Änderungen v5.4: Gruppen: Übergabe aus der Anwesenheitserfassung (uebergabe-gruppen.md v1.0, eine Trainingszeit je Wochentag) eingearbeitet (spec.md GR v0.3); drei Detailfragen offen.
@@ -105,7 +108,7 @@ Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) ·
 
 ## EZ – Anwesenheitserfassung (Priorität 2b – nach Gruppen, vor Finanzen)
 
-Steckbrief: docs/specs/ez-einsaetze/00-steckbrief.md (Version 0.9, abgeschlossen) · Erhebung: 01-erhebung.md (Version 0.5, 24.10.2026) · Stories: 02-stories.md (Version 0.6, 24.10.2026; Training, Fahrten, Wettkampfbetreuung, Trainingslager, Arbeitseinsätze, Kurs, Tour, Absage) · Spec: spec.md (Version 0.5, **Ready**, 24.10.2026) · Übergaben: uebergabe-rechte-administration.md (v1.6, erledigt), uebergabe-trainingszeiten.md (v1.3, erledigt), uebergabe-ehrenamtsmanagement.md (v1.3, erledigt), uebergabe-finanzen.md (v1.6, offen), uebergabe-gruppen.md (v1.1, erledigt)
+Steckbrief: docs/specs/ez-einsaetze/00-steckbrief.md (Version 0.9, abgeschlossen) · Erhebung: 01-erhebung.md (Version 0.5, 24.10.2026) · Stories: 02-stories.md (Version 0.6, 24.10.2026; Training, Fahrten, Wettkampfbetreuung, Trainingslager, Arbeitseinsätze, Kurs, Tour, Absage) · Spec: spec.md (Version 0.5, **Ready**, 24.10.2026) · Übergaben: uebergabe-rechte-administration.md (v1.6, erledigt), uebergabe-trainingszeiten.md (v1.3, erledigt), uebergabe-ehrenamtsmanagement.md (v1.3, erledigt), uebergabe-finanzen.md (v1.6, eingearbeitet in Finanzen 24.10.2026), uebergabe-gruppen.md (v1.1, erledigt)
 
 Keine Blocker vor der Spec. Kurs, Tour, Trainingslager und Absage:
 - **Übergabe aus der Planungshilfe Touren und Kurse (v1.2) eingearbeitet am 24.10.2026** in spec.md v0.2 und 02-stories.md v0.4 (US-EZ-20 bis US-EZ-23, R22–R27, `ez_events.tk_plan_id`, `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`; Umsetzung T19–T21 zusammen mit TK T13). Die Datei liegt in specs/tk-touren-kurse/ und wird dort im Chat Planungshilfe als erledigt markiert.
@@ -114,7 +117,7 @@ Keine Blocker vor der Spec. Kurs, Tour, Trainingslager und Absage:
 - [OFFEN] Lehreinheiten bei Kursen erfassen (hier oder aus der Planungshilfe; mit Finanzen).
 - Entschieden 24.10.2026 (Product Owner, Abgleich mit dem Forms-Formular): Training ohne Uhrzeit (R28); Beginn und Ende mehrtägiger Einsätze optional; mindestens eine Teilnehmer:in auch bei Fahrten, Trainingslager und Wettkampfbetreuung (R5); Kinder mit Vor- und Nachname (bestätigt); Einsatzart heißt Wettkampfbetreuung; kein Hilfe- oder Kontakthinweis; Erfassung durch Trainer:innen erst in Iteration 1 (Ablösung des Formulars dann).
 - Entschieden 24.10.2026 (Product Owner): Je Gruppe und Wochentag höchstens eine Trainingszeit; eine Gruppe kann an mehreren Tagen trainieren (z. B. Leistungssport). **Übergabe an Gruppen (v1.1, erledigt):** specs/ez-einsaetze/uebergabe-gruppen.md, umgesetzt in Gruppen v0.3.1. Training ohne Trainingszeit am Wochentag mit Hinweis speicherbar; abweichende Dauer nur in der Bemerkung (vorläufig).
-- [OFFEN] Beginn und Ende mehrtägiger Einsätze und ihre Abrechnung – vom Product Owner noch einmal in Ruhe anzusehen (mit Finanzen).
+- Entschieden 24.10.2026 (Chat Finanzen): Beginn und Ende mehrtägiger Einsätze bleiben optional; fehlen sie, zählt der erste bzw. letzte Tag als Tagessatz mit Hinweis, Korrektur in Finanzen. Keine Änderung in der Anwesenheitserfassung.
 - Hinweis an Gruppen (24.10.2026, nur zur Kenntnis): Die Gruppenlisten der beiden Forms-Formulare weichen voneinander ab (z. B. „Gruppe 4“ / „Gruppe 4 Senioren“ und „Gruppe 4 Junioren“, „Gruppe 5a“, „Gruppe 10“); beim Import der Gruppen beachten.
 - Erledigt 24.10.2026: Q1 und Q2 aus dem Querschnitts-Check entschieden (siehe Abschnitt AD); Q1 betrifft die Anwesenheitserfassung nicht, Q2 bestätigt `ez_person_visible`.
 
@@ -124,14 +127,14 @@ Keine Blocker vor der Spec. Kurs, Tour, Trainingslager und Absage:
 In der Spec oder später:
 - Entschieden 22.10.2026 (Product Owner, Chat Ehrenamtsmanagement): Information nach Art. 13 DSGVO beim Anlegen über ein Pflicht-Häkchen mit Link auf die Datenschutzhinweise; [OFFEN] Text und Link liefert der Product Owner.
 - **Übergabe aus EA (v1.0) eingearbeitet am 24.10.2026** in spec.md v0.2 (R29, Tabelle `ez_privacy_confirmations`) und 02-stories.md v0.4 (US-EZ-11 AK6–AK8). Entschieden (Product Owner 24.10.2026): Die Bestätigung „Person informiert“ wird gespeichert (Zeitpunkt, bestätigende Person, Version der Datenschutzhinweise), in einer eigenen Tabelle der Anwesenheitserfassung [ANNAHME: Ort]. Die Datei liegt in specs/ea-ehrenamt/ und wird dort im Chat Ehrenamtsmanagement als erledigt markiert.
-- [OFFEN] Löschfrist der Einsätze gegenüber Aufbewahrungsfristen für Abrechnungsgrundlagen (gemeinsam mit FI).
+- Entschieden 24.10.2026 (Chat Finanzen, Q4): Löschfrist der Einsätze auch als Abrechnungsgrundlage 5 Jahre wie überall; Einarbeitung über specs/fi-finanzen/uebergabe-anwesenheitserfassung.md (v1.0, offen: Abrechnungsart am Einsatz Z1, Lesefunktion für Finanzen Z2, Sperre abgerechneter Anwesenheiten Z3).
 - Hinweis aus AD (v0.8): Die erste Migration der Anwesenheitserfassung ersetzt `ez_person_visible` (Platzhalter, gleiche Signatur) und setzt `ad_modules.is_available` für EZ erst mit der Freigabe. Namen nur über `ea_person_names`, `ea_search_active_persons` und `gr_group_roster`, nie direkt aus `ea_persons`. Neue Personen beim Arbeitseinsatz über `ad_find_similar_persons` und `ea_create_volunteer` (`created_in = 'EZ'`). Orte über `ad_locations` (nur aktive wählbar).
 - Hinweis aus GR (v0.7): `gr_group_roster(group_id, date)` liefert Gruppe, Referat, gültige Trainingszeiten des Wochentags und je Person ID, Vorname, Rufname, Nachname, Rolle (`participant`, `group_lead`, `trainer`, `helper`); eine Person kann mit zwei Rollen erscheinen – EZ entscheidet über die Darstellung.
 - Hinweis aus EA: „TE pro Woche“ ist bis dahin ein Feld an der Funktion Trainer:in.
 
 ## TK – Planungshilfe Touren und Kurse (Priorität offen)
 
-Steckbrief: docs/specs/tk-touren-kurse/00-steckbrief.md (Version 0.7, Entwurf, 22.10.2026) · Erhebung: 01-erhebung.md (Version 0.7, Entwurf) · Stories: 02-stories.md (Version 0.4, Entwurf; US-TK-01 bis US-TK-24) · Spec: spec.md (Version 0.2, Entwurf, 22.10.2026) · Prototyp: prototyp-tourenkonzept.md (Übergabe des HTML-Prototyps „Tourenkonzept“, 22.10.2026) · Übergaben: uebergabe-administration.md (v1.7, erledigt), uebergabe-anwesenheitserfassung.md (v1.2, offen), uebergabe-finanzen.md (v1.3, offen) · Stand der Arbeit: eingefroren bis zur Einordnung in die Reihenfolge (claude/arbeitsplan.md, Schritt 11)
+Steckbrief: docs/specs/tk-touren-kurse/00-steckbrief.md (Version 0.7, Entwurf, 22.10.2026) · Erhebung: 01-erhebung.md (Version 0.7, Entwurf) · Stories: 02-stories.md (Version 0.4, Entwurf; US-TK-01 bis US-TK-24) · Spec: spec.md (Version 0.2, Entwurf, 22.10.2026) · Prototyp: prototyp-tourenkonzept.md (Übergabe des HTML-Prototyps „Tourenkonzept“, 22.10.2026) · Übergaben: uebergabe-administration.md (v1.7, erledigt), uebergabe-anwesenheitserfassung.md (v1.2, offen), uebergabe-finanzen.md (v1.3, eingearbeitet in Finanzen 24.10.2026; Antwort specs/fi-finanzen/uebergabe-planungshilfe.md v1.0, offen) · Stand der Arbeit: eingefroren bis zur Einordnung in die Reihenfolge (claude/arbeitsplan.md, Schritt 11)
 
 Entschieden 22.10.2026 (Product Owner): Modulname „Planungshilfe Touren und Kurse“, Kürzel TK, Ablage docs/specs/tk-touren-kurse/; Leitung aus den Aktiven (Trainer:innen mit Lizenz); TK erzeugt den Einsatz in der Anwesenheitserfassung; TK befüllt die Abrechnung vor, Finanzen rechnet; CO2-Bilanz und Planungsunterstützung wie im Prototyp; Nutzer im MVP Referat Touren und Geschäftsstelle, Tourenleitende reichen per PDF aus dem HTML-Formular ein.
 
@@ -161,20 +164,26 @@ Entschieden 22.10.2026 (Product Owner, fünfter Block): PDF-Übernahme nicht im 
 
 ## FI – Finanzen (Priorität 3 – nach der Anwesenheitserfassung)
 
-- [OFFEN] Struktur: Abrechnung als eigenes Modul, das in Finanzen aufgeht? (Idee Product Owner 22.10.2026; mit der Navigation entscheiden; Querschnitt Q5)
-- [OFFEN] Was ist ein „Vertrag“ im Bereich Kinder und Jugend? Wird er in FI oder GR geführt, hängt er an einer Gruppe? (vision.md, glossar.md, modul-landkarte.md)
-- [OFFEN] Richtung des Buchungslaufs (Auszahlung oder Einzug) und Empfänger der Mails. (vision.md)
-- [OFFEN] Übergabe: DATEV-Buchungsexport oder SEPA-Datei; Datei-Export oder Schnittstelle über SC? (vision.md, modul-landkarte.md)
-- [OFFEN] Aufbewahrungsfristen für Abrechnungsdaten (Steuer, Buchhaltung) gegenüber der 5-Jahres-Regel. (rollen.md; Querschnitt Q4: wer klärt, vor dem Steckbrief Finanzen)
-- [OFFEN] Rundung angebrochener Trainingseinheiten (30 Minuten); Satz der Wettkampfbetreuung je Wettkampf oder je Tag (jetzt auch mehrtägig); halbjährliche Abrechnungsdokumente auch für andere Referate als Kinder und Jugend und Leistungssport?
-- [OFFEN] Eintägige Ausbildungsfahrt: Satz der Mehrtageskurse oder der Fahrten; Einsätze nach Abgabe des Halbjahres sperren?
-- [OFFEN] Ehrenamtspauschale (Antrag, Vorstandsbeschluss, Vereinbarung, jährliche Erklärung): Abbildung in FI?
-- Entschieden 22.10.2026 (Product Owner): Abgrenzung zur Planungshilfe Touren und Kurse – Kalkulation dort, Vergütung und Kostenerstattung hier; die Planungshilfe befüllt die Abrechnung von Kursen und Touren vor.
+Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.3, Entwurf, MVP-Schnitt bestätigt 24.10.2026) · Erhebung: 01-erhebung.md (Version 0.3, Entwurf) · Übergaben: uebergabe-administration.md (v1.2, offen), uebergabe-anwesenheitserfassung.md (v1.1, offen), uebergabe-planungshilfe.md (v1.0, offen; Planungshilfe eingefroren)
+
+- Entschieden 24.10.2026 (Product Owner, Chat Finanzen):
+  - **Q4 – Aufbewahrung:** 5 Jahre wie überall, auch für Abrechnungen und abgerechnete Einsätze; steuerlich aufbewahrungspflichtige Belege liegen in der Finanzbuchhaltung (bestätigt 25.10.2026).
+  - **Q5 – Struktur:** ein Modul FI; Abrechnung ist ein Bereich von Finanzen, kein eigenes Modul.
+  - **Q6 – Parameter:** steuerfreier Höchstbetrag (`ad_rates`, Grenzwert) und Abgabefristen 31.07./15.12. als Stammdaten der Administration.
+  - **Q9 – Nutzer:** im MVP Geschäftsstelle und – geändert 25.10.2026 – Referent:innen (Reichweite „Referat“, ohne Bankdaten) zur Bestätigung ihrer Abrechnungen; Schatzmeister:in und Kassenprüfung später als eigene Rechtevorlagen.
+  - **P7 – Lesepfad:** eigene Lesefunktion mit festen Spalten für Bankverbindung, Nachweise und förderfähige Lizenzen (Übergabe an die Administration A8).
+  - **MVP:** halbjährliche Abrechnung für Kinder und Jugend und Leistungssport aus der Anwesenheitserfassung (Training, Fahrten, Ausbildungsfahrt, Trainingslager, Wettkampfbetreuung) mit Lizenz- und Nachweisprüfung, Hinweis Höchstbetrag, Abrechnungsdokument, SEPA-Überweisungsdatei, Abgleich Punktekonto Kletterhalle. Iteration 1: Kurs und Tour (Vorbelegung aus der Planungshilfe, sobald umgesetzt), Einzelabrechnung anderer Referate, Reisekosten, Kosten bei Absage von Hand, Liste „nicht abgerechnet nach 4 Wochen“. Später: Buchungslauf, Budget, Dashboard, Ehrenamtspauschale.
+  - **Abrechnungsart je Einsatz:** Tabelle aus Anhang 1 als Stammdaten der Administration, Vorbelegung je Einsatzart, Wahl beim Anlegen des Einsatzes (Übergaben an Administration A1–A3 und Anwesenheitserfassung Z1).
+  - **Regeln:** angebrochene Trainingseinheiten aufrunden; Wettkampfbetreuung je Kalendertag; mehrtägige Einsätze ohne Beginn/Ende als Tagessatz mit Korrektur; Trainersatz bei förderfähiger Lizenz am (Start-)Datum oder Erwerb im selben Abrechnungshalbjahr; Sperre abgerechneter Anwesenheiten ab Freigabe (Übergabe an die Anwesenheitserfassung Z3); halbjährliche Abrechnungsdokumente nur Kinder und Jugend und Leistungssport, andere Referate später als Einzelabrechnung.
+- Entschieden 25.10.2026 (Product Owner): Vier-Augen-Prinzip – Referent:in bestätigt die Abrechnungen ihres Referats, die Geschäftsstelle gibt frei (Aktion „freigeben“ nach Q1, Übergabe an die Administration A7; rollen.md Spalte FI anzupassen); Trainervereinbarung ist Voraussetzung der Auszahlung; Training ohne Trainingszeit = 0 TE mit Hinweis und Korrektur; eintägige Ausbildungsfahrt startet mit Sätzen der Mehrtageskurse; Abrechnungsart am Einsatz wählt, wer den Einsatz anlegen darf.
+- Entschieden 25.10.2026 (Product Owner): steuerfreier Höchstbetrag 3.300 € ab 01.01.2026, Summe im Jahr der Auszahlung; Vertretung bei der Bestätigung durch stellvertretende Referent:in, sonst zweite Person der Geschäftsstelle mit Begründung; Vergütung bei Arbeitseinsätzen über die Ehrenamtspauschale (später); Erklärung zum Freibetrag auf dem Abrechnungsdokument (Wortlaut [ANNAHME], prüft der Product Owner); heutiger Aufwand 3–5 Arbeitstage je Halbjahr.
+- Erledigt (glossar.md, Gruppen v0.6–v0.8): „Vertrag“ wird im Modul Gruppen geführt (je Teilnahme); der Buchungslauf ist ein Einzug (SEPA-Lastschrift).
+- [OFFEN] SEPA: Format/Version laut Sparkasse, Auftraggeberkonto (Ort der Pflege), Verwendungszweck, Sammelbuchung, Rücknahme bei Ablehnung (Geschäftsstelle mit Sparkasse).
+- [OFFEN] Zählen Probetrainings für die Kletterhalle? (Geschäftsstelle)
+- [OFFEN] Buchungslauf (später): DATEV-Buchungsexport oder SEPA-Datei; Datei-Export oder Schnittstelle über SC; Empfänger der Mails. (vision.md, modul-landkarte.md)
 - Hinweis aus EA: Bankverbindung der Aktiven und Trainervereinbarung liegen im Ehrenamtsmanagement.
-- Hinweis aus dem Querschnitts-Check (22.10.2026): Nutzer nur mit Rechten auf Finanzen (z. B. Schatzmeister:in) bräuchten eine eigene Lesefunktion für Bankverbindung, Nachweise und Lizenzen (P7); Fristen und Höchstbeträge als Parameter (P11, Q6). Im Steckbrief Finanzen entscheiden.
-- Hinweis aus EZ: Trainerabrechnung liegt in FI (entschieden 21.10.2026); die Anwesenheitserfassung erhebt und speichert nur. Regeln und Sätze der Übungsleiterpauschale stehen in der Vergütungsordnung (Anhang 1); Sätze liegen als Stammdaten in der Administration (Product Owner 22.10.2026; ersetzt „pflegbar in FI“). Abrechnungszeitraum bei Fahrten ab Startort (Reisezeit = Arbeitszeit; kein Vorstandsbeschluss nötig). Zeiten: eintägig Kategorie; mehrtägig Start und Ende mit Datum und Uhrzeit.
-- **Übergabe aus EZ (offen, v1.5):** specs/ez-einsaetze/uebergabe-finanzen.md – Datengrundlage aus der Anwesenheitserfassung, Zuordnung Einsatzart → Abrechnungsart, Sätze der Vergütungsordnung, Tages- und Halbtagessätze aus Kategorie bzw. Start und Ende, förderfähige Lizenz, halbjährliche Abrechnung mit Fristen 31.07./15.12., Kontrolle des Punktekontos der Kletterhalle (nur Kinder, je Ort).
-- **Übergabe aus der Planungshilfe Touren und Kurse (offen, v1.3):** specs/tk-touren-kurse/uebergabe-finanzen.md – Planwerte je Planung als Vorbelegung (Personen mit Satzart, Tage, Halbtage, Lehreinheiten, Organisationspauschale, Plan-Kosten der Leitung); gemeinsame Sätze aus den Stammdaten der Administration; Stichtag der Lizenz am Startdatum, Trainersatz für die ganze Tour (gegenüber „ab Abrechnungshalbjahr des Lizenzerwerbs“ prüfen); abgesagte Einsätze nicht abrechnen; offen: Kosten der Leitung bei Absage, Reisekostenabrechnung in Finanzen, Erinnerung „Abrechnung innerhalb von 4 Wochen“, Gemeinschaftstour mit Organisationspauschale (Ziff. 9.2).
+- **Übergabe aus EZ (v1.6): eingearbeitet am 24.10.2026** in 00-steckbrief.md v0.1 und 01-erhebung.md v0.1 (F1–F9).
+- **Übergabe aus der Planungshilfe Touren und Kurse (v1.3): eingearbeitet am 24.10.2026** in 00-steckbrief.md v0.1 (Punkte 1–7; Antworten in uebergabe-planungshilfe.md v1.0).
 
 ## OA – Öffentlichkeitsarbeit (Priorität 4)
 
@@ -198,12 +207,12 @@ Entschieden 22.10.2026 (Product Owner, fünfter Block): PDF-Übernahme nicht im 
   - Q1 Freigaben: Muster „Modul ohne Seiten“ (TKF) als Regel oder eigene Aktion „freigeben“? Vor Umsetzung des Nachtrags v0.8 entscheiden.
   - Q2 Namenszugriff weiterer Module: `ea_person_names` je Modul erweitern oder verallgemeinern? Vor Umsetzung des Nachtrags v0.8 entscheiden.
   - Q3 Verpflichtungserklärung zum Datenschutz vor dem ersten Zugang einer Referent:in?
-  - Q4 Wer klärt Aufbewahrungsfristen für Abrechnungsdaten? (siehe FI)
-  - Q5 Abrechnung als eigenes Modul? (siehe FI)
-  - Q6 Beträge (z. B. steuerfreier Höchstbetrag) in den Stammdaten Sätze, Datumsfristen im Modul Finanzen?
+  - Q4 Wer klärt Aufbewahrungsfristen für Abrechnungsdaten? – **entschieden 24.10.2026:** 5 Jahre wie überall (siehe FI)
+  - Q5 Abrechnung als eigenes Modul? – **entschieden 24.10.2026:** nein, Bereich von FI (siehe FI)
+  - Q6 Beträge (z. B. steuerfreier Höchstbetrag) in den Stammdaten Sätze, Datumsfristen im Modul Finanzen? – **entschieden 24.10.2026:** beides in der Administration (siehe FI)
   - Q7 Aufgaben an Personen ohne Zugang? (siehe PM, GS, AM)
   - Q8 Projektteams mit eigenen Rechten (Reichweite „Projekt“)?
-  - Q9 Weitere Nutzergruppen mit Zugang (Schatzmeister:in, Kassenprüfung, Redaktion)?
+  - Q9 Weitere Nutzergruppen mit Zugang (Schatzmeister:in, Kassenprüfung, Redaktion)? – **für FI entschieden 24./25.10.2026:** MVP Geschäftsstelle und Referent:innen (Bestätigung), Schatzmeister:in und Kassenprüfung später; Redaktion offen (OA)
 - [OFFEN] Zeitpunkt und Umfang des Rollouts sowie Rechte und Reichweiten für weitere Personen mit Amt, Gruppenleitungen und Aktive. Teilweise geklärt: Referent:innen und Hüttenwart:innen im MVP; Reihenfolge der Zugänge (E6, 21.10.2026); Gruppenleitungen und Trainer:innen erhalten Zugang mit Iteration 1 von EZ. (vision.md, rollen.md)
 - [OFFEN] Navigation und Modulstruktur (u. a. Finanzen/Abrechnung, Planungshilfe Touren und Kurse).
 - [OFFEN] Verpflichtungserklärung zum Datenschutz bei der ersten Anmeldung: Text, Versionierung, erneute Bestätigung bei neuer Version (nach MVP; betrifft AD; Zeitpunkt siehe Q3).

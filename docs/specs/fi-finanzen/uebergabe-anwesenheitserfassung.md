@@ -1,0 +1,22 @@
+# Übergabe: Finanzen → Anwesenheitserfassung
+
+Stand: 25.10.2026 · Version 1.1 · Status: offen · Von: Finanzen (FI) · An: Anwesenheitserfassung (EZ)
+Grundlage: docs/specs/fi-finanzen/00-steckbrief.md v0.1, 01-erhebung.md v0.1; specs/ez-einsaetze/spec.md v0.5 (Ready, in Umsetzung), uebergabe-finanzen.md v1.6
+Änderungen v1.1: Wahl der Abrechnungsart durch alle, die den Einsatz anlegen dürfen (Product Owner 25.10.2026); Training ohne Trainingszeit in Z5.
+Änderungen v1.0: Erste Fassung.
+
+## Anlass
+
+Die Übergabe EZ → FI v1.6 (F1–F9) ist in Finanzen eingearbeitet. Daraus ergeben sich Entscheidungen des Product Owners vom 24.10.2026, die die Anwesenheitserfassung betreffen. Die Spec EZ ist Ready; die Punkte kommen als Nachtrag. Z1 und Z2 sollten vor der Abnahme der Anwesenheitserfassung in TEST feststehen, damit keine Einsätze ohne Abrechnungsart entstehen.
+
+## Anforderungen
+
+- **Z1 – Abrechnungsart am Einsatz (Product Owner 24.10.2026):** Beim Anlegen eines Einsatzes wird gewählt, welche Abrechnungsart gilt bzw. ob eine Vergütung vorgesehen ist („keine Vergütung“). Vorbelegt aus der Einsatzart (eintägig/mehrtägig) nach den Stammdaten der Administration (Übergabe FI → AD v1.0, A1, A2). Beispiel: Arbeitseinsatz Bergfilmfestival mit Vergütung. Neue Spalte an `ez_events` (Verweis auf die Abrechnungsart, null = keine Vergütung) [ANNAHME: Name, Form]. Wählen und ändern darf, wer den Einsatz anlegen bzw. ändern darf (Geschäftsstelle, Referent:innen mit Reichweite „Referat“; Product Owner 25.10.2026). Änderbar wie die übrigen Kopfdaten, solange keine Anwesenheit des Einsatzes in einer freigegebenen Abrechnung steckt (Z3). Einsätze aus der Planungshilfe: Abrechnungsart aus der Vorbelegung [ANNAHME]. Bestehende Einsätze erhalten die Vorbelegung ihrer Einsatzart [ANNAHME].
+- **Z2 – Lesefunktion für Finanzen:** Finanzen liest Einsätze und Anwesenheiten nicht über die Rechte der Anwesenheitserfassung, sondern über eine Funktion mit FI-Rechten (FI ≥ lesen), z. B. `ez_settlement_basis(p_from date, p_to date, p_referat uuid default null)` [ANNAHME: Name]: je Anwesenheit mit Stand „anwesend“ und Rolle Trainer:in oder Helfer:in eines nicht abgesagten Einsatzes mit Abrechnungsart: Einsatz-ID, Einsatzart, Abrechnungsart, Referat, Gruppe(n), Titel, Datum bzw. Start/Ende mit Uhrzeiten, Dauer-Kategorie, organisierende Person, **Dauer des Trainings in Minuten** aus der Trainingszeit der Gruppe am Wochentag (null, wenn keine), Person-ID, Rolle, `tk_plan_id`. Keine Teilnehmer:innen (außer Anzahl je Training, wie `ez_climbing_points_report`, ebenfalls mit FI-Rechten erlaubt).
+- **Z3 – Sperre abgerechneter Anwesenheiten (Product Owner 24.10.2026):** Steckt eine Anwesenheit in einer freigegebenen Abrechnung, lehnen `ez_save_event`, `ez_cancel_event`, `ez_delete_event` und die Anbindung der Planungshilfe jede Änderung ab, die diese Anwesenheit oder die abrechnungsrelevanten Kopfdaten (Datum, Zeiten, Dauer-Kategorie, Abrechnungsart, organisierende Person) betrifft. Meldung [ANNAHME]: „Dieser Einsatz ist abgerechnet. Änderungen nur nach Rücknahme der Freigabe in Finanzen.“, Fehlercode `EZ_SETTLED` [ANNAHME]. Prüfung über eine Funktion von Finanzen als Platzhalter (Muster wie `ez_person_visible`): `fi_attendance_locked(p_attendance_id uuid) returns boolean`, zunächst `false`, Finanzen ersetzt sie. Bemerkung und Anwesenheiten anderer Personen bleiben änderbar.
+- **Z4 – Aufbewahrung (Q4, Product Owner 24.10.2026):** Abgerechnete Einsätze und Anwesenheiten folgen der 5-Jahres-Regel wie überall; keine längere Frist im Vereins OS. Damit ist der offene Punkt „Löschfrist der Einsätze gegenüber Aufbewahrungsfristen“ (spec.md EZ Abschnitt 11) entschieden.
+- **Z5 – Zur Kenntnis (keine Änderung in EZ):** Angebrochene Trainingseinheiten werden aufgerundet; Wettkampfbetreuung je Kalendertag; mehrtägige Einsätze ohne Beginn oder Ende zählen als Tagessatz mit Korrekturmöglichkeit in Finanzen (der offene Punkt „Beginn und Ende mehrtägiger Einsätze und ihre Abrechnung“ ist damit entschieden). Training ohne Trainingszeit am Wochentag bleibt mit Hinweis speicherbar; Finanzen rechnet 0 TE mit Hinweis und Korrektur (Product Owner 25.10.2026). Lehreinheiten bei Kursen erfasst Finanzen in Iteration 1 von Hand bzw. aus der Planungshilfe, nicht die Anwesenheitserfassung.
+
+## Einarbeitung
+
+- [ ] eingearbeitet in Anwesenheitserfassung (Datei, Version): –
