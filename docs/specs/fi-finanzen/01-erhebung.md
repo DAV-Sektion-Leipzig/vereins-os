@@ -1,7 +1,8 @@
 # Erhebung: Finanzen
 
-Datum: 26.10.2026 · Version 0.6 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner); Vorlagen der Geschäftsstelle: Auszahlliste (PDF) und SEPA-Datei (XML) einer Auszahlung der Übungsleitervergütung (Muster mit Echtdaten, nicht im Repository)
+Datum: 26.10.2026 · Version 0.7 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner); Vorlagen der Geschäftsstelle: Auszahlliste (PDF) und SEPA-Datei (XML) einer Auszahlung der Übungsleitervergütung (Muster mit Echtdaten, nicht im Repository)
 Grundlage: 00-steckbrief.md v0.4; specs/ez-einsaetze/uebergabe-finanzen.md v1.6 (F1–F9); specs/tk-touren-kurse/uebergabe-finanzen.md v1.3; specs/ez-einsaetze/spec.md v0.5; specs/ad-administration/spec.md v0.9; specs/ea-ehrenamt/01-erhebung.md v0.5 (C2); Vergütungsordnung (Beschluss 21.11.2023, ergänzt 11.12.2025, Anhang 1)
+Änderungen v0.7: **Nachtrag Buchungslauf Verträge** (Abschnitt H, Product Owner 26.10.2026): monatlicher Einzug der Verträge aus dem Modul Gruppen als SEPA-Lastschriftdatei (pain.008) mit Einzugsliste (PDF); Verträge aktiv am 1. des Monats mit vollem Monatsbetrag; je Vertrag und Monat höchstens ein Einzug, Nachtrag im selben Monat; Erst- und Folgelastschrift mit Stichtag für Bestandsverträge; Fälligkeitstag und Gläubiger-Identifikationsnummer als Stammdaten der Administration; Geschäftsstelle erstellt und gibt allein frei; Einzugsliste mit gekürzter IBAN; Rücklastschriften später. Regeln R34–R46. Damit ist der offene Punkt „Buchungslauf: DATEV oder SEPA“ für Verträge entschieden (SEPA-Datei).
 Änderungen v0.6: Bestätigt (Product Owner 26.10.2026): Abgabe nach der Frist mit Rückfrage und Begründung (R19), Verfall von Hand (B4); Referent:innen sehen die ganze Abrechnung (02-stories.md R31).
 Änderungen v0.5: Offene Fragen in Iteration 1 verschoben (Product Owner 26.10.2026); im MVP kein Storno einer Auszahlungsrunde [ANNAHME].
 Änderungen v0.4: Vorlagen der Geschäftsstelle eingearbeitet (Product Owner 26.10.2026): Auszahlung in **Auszahlungsrunden**; die Freigabe einer Runde erzeugt **Auszahlliste (PDF)** für die Ablage in der Buchhaltung und **Überweisungsdatei (XML, pain.001.001.03)** für die Sparkasse (B5, C3, C6, C7, R24–R30); je Person und Gruppe eine Zeile und eine Überweisung; „sachlich richtig“ auf der Auszahlliste = Bestätigung im Vereins OS. Begriff: Die einzelne Abrechnung wird **abgeschlossen** (bisher „freigegeben“), freigegeben wird nur die Auszahlungsrunde [ANNAHME: Begriff, damit „Freigabe“ eindeutig bleibt].
@@ -285,6 +286,128 @@ Kein `BtchBookg` (Sammelbuchung nach Voreinstellung der Bank, wie Vorlage), kein
 - Bedienung vor allem am Arbeitsplatz; Listen mobil lesbar ab 375 px; Abrechnungsdokument PDF A4 hoch, Auszahlliste PDF A4 quer.
 - Keine laufenden Kosten; keine externe Bankschnittstelle.
 
+## H. Nachtrag v0.7: Buchungslauf Verträge (Product Owner 26.10.2026)
+
+**Anlass:** Die Geschäftsstelle erstellt den monatlichen Einzug der Gruppenbeiträge heute von Hand (ca. 30 Minuten, 00-steckbrief.md). Die Verträge mit SEPA-Mandat liegen seit dem Modul Gruppen im Vereins OS (`gr_contracts`, glossar.md „Vertrag“, „Mandatsreferenz“). Ziel: Buchungslauf in ca. 1 Minute (Vision Z2), ohne Abtippen.
+
+**Rechte:** nur „FI verwalten“ (Geschäftsstelle). Referent:innen, Admin und Vorstand sehen keine Buchungsläufe. Die Geschäftsstelle erstellt und gibt allein frei, kein Vier-Augen-Prinzip (Product Owner 26.10.2026).
+
+**H1 – Buchungslauf erstellen**
+1. Die Geschäftsstelle wählt „Neuer Buchungslauf“ und den **Monat** (Standard: der Monat, dessen Fälligkeitstag als nächster erreichbar ist [ANNAHME]).
+2. Das System schlägt den **Fälligkeitstag** vor: Tag aus den Stammdaten der Administration (z. B. 5.) im gewählten Monat; fällt er auf Samstag oder Sonntag, der nächste Bankarbeitstag (Mo–Fr; Feiertage nicht berücksichtigt [ANNAHME]). Er ist änderbar und muss mindestens einen Bankarbeitstag nach heute liegen (R39).
+3. Das System stellt alle Verträge zusammen, die am **1. des Monats aktiv** sind (Vertragsbeginn ≤ 1., Vertragsende leer oder ≥ 1.) und für diesen Monat **noch nicht eingezogen** wurden (R34, R35). Je Vertrag eine Lastschrift über den **vollen Monatsbetrag** (kein anteiliger Betrag).
+4. Vorschau: Lastschriften je Gruppe mit Teilnehmer:in, Vertragsinhaber:in, Mandatsreferenz, Betrag, Erst- oder Folgelastschrift; Summe je Gruppe und gesamt; Anzahl. Ausgeschlossene Verträge mit Grund (R37).
+5. Die Geschäftsstelle kann einzelne Lastschriften abwählen (z. B. Klärung mit Eltern) [ANNAHME]; abgewählte Verträge bleiben für diesen Monat offen und kommen in einen Nachtrag.
+6. Ein Buchungslauf im Entwurf kann verworfen werden; die Verträge werden wieder frei.
+
+**H2 – Freigeben**
+1. „Freigeben“ mit Rückfrage „Buchungslauf {Monat} mit {Anzahl} Lastschriften über {Summe} freigeben? Fälligkeit {Datum}.“
+2. Danach erzeugt der Browser die **Lastschriftdatei** (XML, pain.008, R40) und die **Einzugsliste** (PDF, R41) aus denselben Daten (Summe der Liste = Summe der Datei). Nichts davon wird gespeichert; gespeichert werden nur die Einzüge ohne IBAN (R43).
+3. Hinweis nach dem Download: „Bitte die Lastschriftdatei nach dem Hochladen im Online-Banking von diesem Rechner löschen.“ (wie die Überweisungsdatei).
+4. Erneuter Abruf einer freigegebenen Datei mit gleichen IDs und Warnung „Dieser Buchungslauf ist bereits freigegeben. Die Lastschriftdatei nicht erneut hochladen.“ (wie R29).
+
+**H3 – Nachtrag**
+Für denselben Monat ist ein weiterer Buchungslauf möglich (**Nachtrag**, fortlaufend nummeriert: Lauf 1, 2 … je Monat). Er enthält nur Verträge, die für den Monat noch nicht eingezogen wurden, z. B. später erfasste oder im ersten Lauf abgewählte Verträge (R35).
+
+**H4 – Später (nicht in diesem Nachtrag)**
+Rücklastschriften (Rückgabe, Gebühr, erneuter Einzug) [OFFEN, Iteration später]; Storno eines freigegebenen Buchungslaufs; Vorabinformation der Zahlungspflichtigen aus dem Vereins OS; DATEV-Buchungsexport; Lastschriften für andere Anlässe (z. B. Kurse).
+
+**C8 – Buchungslauf (`fi_collection_runs`) [ANNAHME: Namen]**
+
+| Feld | Typ | Pflicht | Beispiel | Quelle |
+|---|---|---|---|---|
+| Monat | Datum (1. des Monats) | ja | 01.11.2026 | Auswahl |
+| Nummer | Zahl je Monat ab 1 | ja | 1 | System (R35) |
+| Zustand | Entwurf / freigegeben | ja | Entwurf | System |
+| Fälligkeitstag | Datum | ja | 05.11.2026 | Stammdaten AD, änderbar (R39) |
+| Nachrichten-ID, Zahlungs-IDs | Text ≤ 35 | bei Freigabe | FI-L-2026-11-01-AB12CD34 | System (R40) |
+| Anzahl, Summe (gesamt, je Erst-/Folgelastschrift) | Zahl, Betrag | bei Freigabe | 84 / 2.940,00 € | System |
+| freigegeben am, von | Zeitpunkt, Person | bei Freigabe | | System |
+
+**C9 – Einzug (`fi_collections`), je Vertrag und Monat**
+
+| Feld | Typ | Pflicht | Beispiel | Quelle |
+|---|---|---|---|---|
+| Buchungslauf | Bezug | ja | | System |
+| Vertrag | Bezug `gr_contracts` | ja | | Gruppen |
+| Monat | Datum | ja | 01.11.2026 | Buchungslauf |
+| Betrag | Betrag > 0 | ja | 35,00 € | Monatsbetrag des Vertrags am Erstellen |
+| Sequenz | Erst- / Folgelastschrift | ja | Folgelastschrift | System (R38) |
+| Mandatsreferenz, Unterschriftsdatum Mandat | Text, Datum | ja | GR-2026-0001 | Vertrag, Stand der Freigabe |
+| Gruppe (Name zur Freigabe) | Text | ja | Jugendgruppe Test 1 | Gruppen |
+| Verwendungszweck | Text ≤ 140 | ja | Gruppenbeitrag Jugendgruppe Test 1 11/2026 | R42 |
+| Ende-zu-Ende-ID | Text ≤ 35 | ja | FI-L-2026-11-01-0001 | System |
+| Prüfwert Bankverbindung | Text | ja | – | System (R43; keine IBAN) |
+
+Je Vertrag und Monat höchstens ein Einzug in einem Entwurf oder freigegebenen Lauf (eindeutig).
+
+**C10 – Einzugsliste (PDF)**
+
+| Bereich | Inhalt |
+|---|---|
+| Titel | „Einzugsliste Verträge {Monat JJJJ} – Lauf {Nummer}“ |
+| Kopf | Name der Sektion, Gläubiger-Identifikationsnummer, Fälligkeitstag, Sachkonto [OFFEN: eigenes Sachkonto für Gruppenbeiträge? R41] |
+| Tabelle | je Lastschrift: Teilnehmer:in (Nachname, Vorname), Gruppe, Vertragsinhaber:in, Mandatsreferenz, IBAN gekürzt (`•••• 1234`, Product Owner 26.10.2026), Erst-/Folgelastschrift, Betrag; sortiert nach Gruppe (natürliche Reihenfolge), dann Nachname, Vorname |
+| Summen | je Gruppe, je Seite, gesamt; gesamt = Summe der Lastschriftdatei |
+| Fuß | Nachrichten-ID, freigegeben am … von … |
+| Format | A4 quer, Layout nach marke.md; keine vollständige IBAN |
+
+**C11 – Lastschriftdatei (XML)**
+
+Format ISO 20022 **pain.008.001.02** (SEPA-Basislastschrift CORE) [ANNAHME: Version wie in der Sparkasse üblich; Vorlage der Geschäftsstelle wie bei der Überweisungsdatei anfordern], UTF-8.
+
+| Element | Inhalt |
+|---|---|
+| `GrpHdr/MsgId`, `CreDtTm`, `NbOfTxs`, `CtrlSum`, `InitgPty/Nm` | Nachrichten-ID, Zeitpunkt der Freigabe (Europe/Berlin), Anzahl, Summe, Name der Sektion |
+| `PmtInf` | **je Sequenz eine Zahlungsgruppe** (`FRST`, `RCUR`), nur wenn Lastschriften dieser Sequenz vorhanden sind; je `PmtInfId`, `PmtMtd` = `DD`, `NbOfTxs`, `CtrlSum` |
+| `PmtTpInf` | `SvcLvl/Cd` = `SEPA`, `LclInstrm/Cd` = `CORE`, `SeqTp` = `FRST` bzw. `RCUR` |
+| `ReqdColltnDt` | Fälligkeitstag |
+| `Cdtr/Nm`, `CdtrAcct/Id/IBAN`, `CdtrAgt/FinInstnId/BIC` | Name, IBAN, BIC der Sektion (Angaben der Sektion, AD) |
+| `CdtrSchmeId` | Gläubiger-Identifikationsnummer der Sektion (`Id/PrvtId/Othr/Id`, `SchmeNm/Prtry` = `SEPA`) |
+| `DrctDbtTxInf/PmtId/EndToEndId` | Ende-zu-Ende-ID |
+| `InstdAmt` (`Ccy="EUR"`) | Betrag mit Punkt und 2 Nachkommastellen |
+| `MndtRltdInf/MndtId`, `DtOfSgntr` | Mandatsreferenz, Unterschriftsdatum |
+| `MndtRltdInf/AmdmntInd` | [OFFEN] Mandatsänderung (R44) |
+| `DbtrAgt/FinInstnId/Othr/Id` | `NOTPROVIDED` (kein BIC der Zahlungspflichtigen) [ANNAHME] |
+| `Dbtr/Nm`, `DbtrAcct/Id/IBAN` | Kontoinhaber:in und IBAN aus dem Vertrag (max. 70 Zeichen; Zeichensatz wie R26) |
+| `RmtInf/Ustrd` | Verwendungszweck (R42) |
+
+**Regeln**
+
+- **R34 – Auswahl:** Eingezogen werden Verträge, die am 1. des Monats aktiv sind: Vertragsbeginn ≤ 1. des Monats und (Vertragsende leer oder ≥ 1. des Monats). Beginnt ein Vertrag im laufenden Monat, ist der erste Einzug im Folgemonat; endet er im Monat, wird dieser Monat noch eingezogen. Immer der volle Monatsbetrag des Vertrags (Stand beim Erstellen bzw. letzten Aktualisieren des Entwurfs); keine anteiligen Beträge (Product Owner 26.10.2026). Teilnahme und Gruppe spielen dafür keine Rolle (Vertragsende und „Teilnahme bis“ sind unabhängig, spec.md GR R8b).
+- **R35 – Einmal je Monat, Nachtrag:** Je Vertrag und Monat höchstens ein Einzug. Ein weiterer Buchungslauf für denselben Monat (Nachtrag) enthält nur Verträge ohne Einzug in diesem Monat. Ein Vertrag, der in einem Entwurf steht, ist für andere Läufe desselben Monats gesperrt (Product Owner 26.10.2026). Nummer je Monat fortlaufend, nicht wieder vergeben.
+- **R36 – Nachholen:** Für vergangene Monate ist kein Buchungslauf möglich [ANNAHME]; nicht eingezogene Monate holt die Geschäftsstelle außerhalb nach. Frühester Monat: Monat des Stichtags (R38).
+- **R37 – Ausgeschlossen mit Grund:** Unterschriftsdatum des Mandats nach dem Fälligkeitstag („Mandat noch nicht unterschrieben“); Zeichen der Kontoinhaber:in nicht darstellbar (wird ersetzt, kein Ausschluss, R26). Weitere Gründe [OFFEN] (z. B. Teilnahme klären, Gruppe aufgelöst – nach heutigem Stand kein Ausschluss).
+- **R38 – Erst- und Folgelastschrift:** Erstlastschrift (`FRST`), wenn der Vertrag im Vereins OS noch keinen freigegebenen Einzug hat **und** sein Vertragsbeginn am oder nach dem **Stichtag** liegt; sonst Folgelastschrift (`RCUR`). Der Stichtag (Beginn der Buchungsläufe im Vereins OS) ist ein Stammdatum der Administration, einmal vom Admin gesetzt; Verträge mit Beginn davor gelten als bereits eingezogen (Product Owner 26.10.2026).
+- **R39 – Fälligkeitstag:** Vorschlag aus dem Stammdatum „Fälligkeitstag“ (Tag des Monats) der Administration, verschoben auf den nächsten Bankarbeitstag (Mo–Fr). Änderbar. Mindestens ein Bankarbeitstag nach heute, sonst „Der Fälligkeitstag muss mindestens einen Bankarbeitstag in der Zukunft liegen.“ [ANNAHME: Vorlauf der Sparkasse für CORE; Erst- und Folgelastschriften gleich].
+- **R40 – IDs:** Nachrichten-ID `FI-L-{JJJJ}-{MM}-{Lauf, 2-stellig}-{8 Zeichen Zufall}`, Zahlungs-IDs mit Zusatz `-FRST` bzw. `-RCUR`, Ende-zu-Ende-ID `{Nachrichten-ID ohne Zufallsteil}-{laufende Nummer, 4-stellig}`; nur Buchstaben, Ziffern, Bindestrich, max. 35 Zeichen [ANNAHME, wie R26].
+- **R41 – Einzugsliste:** nach C10, mit gekürzter IBAN (letzte 4 Stellen). Sachkonto [OFFEN]: gleiches Sachkonto wie die Auszahlung oder eigenes für Gruppenbeiträge (Angaben der Sektion).
+- **R42 – Verwendungszweck:** Verwendungszweck des Vertrags und Monat, „{Verwendungszweck} {MM/JJJJ}“, auf 140 Zeichen gekürzt (der Monat bleibt erhalten) [ANNAHME].
+- **R43 – Datenschutz:** Kontoinhaber:in und IBAN werden nur zum Erzeugen der Datei gelesen (Lesefunktion der Gruppen nur mit „FI verwalten“) und nicht in Finanzen gespeichert; gespeichert wird ein Prüfwert. Beim erneuten Abruf Hinweis „Bankverbindung seit Freigabe geändert“ (wie R21). Einzüge werden 5 Jahre nach Ende des Kalenderjahres aufbewahrt [ANNAHME, wie Q4; Belege in der Finanzbuchhaltung].
+- **R44 – Mandatsänderung [OFFEN]:** Ändert die Geschäftsstelle nach einem Einzug IBAN, Kontoinhaber:in oder Mandatsreferenz eines Vertrags, verlangt das SEPA-Verfahren je nach Fall ein Änderungskennzeichen mit den bisherigen Angaben. Vorschlag: im Nachtrag nicht abbilden; die Vorschau zeigt den Hinweis „Bankverbindung seit dem letzten Einzug geändert“, die Geschäftsstelle klärt mit der Sparkasse. Klären mit der Sparkasse.
+- **R45 – Freigabe:** nur Entwurf mit mindestens einer Lastschrift („Der Buchungslauf enthält keine Lastschriften.“); Gläubiger-ID, Name, IBAN und BIC der Sektion vorhanden („Die Angaben der Sektion für den Einzug fehlen. Bitte den Admin informieren.“); Fälligkeitstag nach R39. Danach gilt der Monat für die enthaltenen Verträge als eingezogen. Kein Storno [ANNAHME, wie Auszahlungsrunde].
+- **R46 – Änderungen nach der Freigabe:** Kündigung oder Betragsänderung nach der Freigabe ändern den Einzug nicht; die Geschäftsstelle erstattet bei Bedarf außerhalb [ANNAHME].
+
+**Schnittstellen (Ergänzung zu E)**
+
+| Modul | Richtung | Inhalt |
+|---|---|---|
+| Gruppen | GR → FI | Lesefunktion Verträge für den Einzug mit „FI verwalten“ (Übergabe FI → GR v1.0, G1–G3) |
+| Administration | AD → FI | Gläubiger-Identifikationsnummer bei den Angaben der Sektion, Fälligkeitstag, Stichtag erster Buchungslauf (Übergabe FI → AD v1.4, A11–A13) |
+| Sparkasse | FI → extern | Lastschriftdatei pain.008 (manueller Upload) |
+
+**Begriffe (Vorschlag für glossar.md)**
+
+| Begriff | Definition | Nicht verwechseln mit |
+|---|---|---|
+| Einzug | Eine Lastschrift für einen Vertrag und einen Monat. | Abrechnung; Auszahlzeile |
+| Lastschriftdatei | SEPA-Datei (pain.008) eines Buchungslaufs mit einer Lastschrift je Einzug, zum Hochladen im Online-Banking. | Überweisungsdatei |
+| Einzugsliste | PDF eines Buchungslaufs für die Buchhaltung mit allen Einzügen und Summen. | Auszahlliste |
+| Fälligkeitstag | Tag, an dem die Lastschriften dem Konto belastet werden. | Ausführungsdatum (Überweisung) |
+| Gläubiger-Identifikationsnummer | Kennung der Sektion als Lastschrift-Empfängerin (Bundesbank). | Mandatsreferenz |
+| Erstlastschrift / Folgelastschrift | erster bzw. weiterer Einzug aus einem Mandat. | – |
+| Nachtrag (Buchungslauf) | weiterer Buchungslauf für einen Monat mit noch nicht eingezogenen Verträgen. | Storno |
+
 ## Offene Fragen (Frage | Wer klärt | bis wann)
 
 | Frage | Wer klärt | bis wann |
@@ -293,3 +416,8 @@ Kein `BtchBookg` (Sammelbuchung nach Voreinstellung der Bank, wie Vorlage), kein
 | Rücknahme einer freigegebenen Runde bei Ablehnung durch die Bank | Geschäftsstelle mit Sparkasse | Iteration 1 |
 | Zählen Probetrainings für die Kletterhalle (B6)? | Geschäftsstelle | Iteration 1 |
 | Sonderfälle im heutigen Ablauf (z. B. Nachzahlungen, Rückforderungen) | Geschäftsstelle | Iteration 1 |
+| Vorlage einer Lastschriftdatei der Sparkasse (Version pain.008, Sequenz, Vorlauf) wie bei der Überweisungsdatei (C11, R39) | Geschäftsstelle | vor der Spec Buchungslauf |
+| Mandatsänderung nach einem Einzug (R44) | Geschäftsstelle mit Sparkasse | vor der Spec Buchungslauf |
+| Sachkonto der Gruppenbeiträge (R41) | Geschäftsstelle | vor der Spec Buchungslauf |
+| Fälligkeitstag (Tag des Monats) und Stichtag des ersten Buchungslaufs (R38, R39) | Geschäftsstelle | vor der Umsetzung |
+| Rücklastschriften (H4) | Geschäftsstelle | später |

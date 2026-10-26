@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 26.10.2026 · Version 5.15
+Stand: 26.10.2026 · Version 5.16
+Änderungen v5.16: Finanzen – Buchungslauf Verträge entschieden (SEPA-Lastschriftdatei mit Einzugsliste, 01-erhebung.md FI v0.7); offene Punkte dazu ergänzt; Übergaben FI → AD v1.4 und FI → GR v1.0.
 Änderungen v5.15: Neues Modul Dashboard (DS [ANNAHME]): Steckbrief v0.2 (Entwurf), Q-DS1 bis Q-DS4 entschieden, neue Fragen Q-DS11 bis Q-DS13, Übergabe DS → FI v1.0 (Bereich Budget); Merkposten „Dashboard (EA)“ und „Auswertungen auf Gruppenebene“ mit Verweis auf DS.
 Änderungen v5.14: Finanzen Spec v0.2, Administration Nachtrag v0.10 und Anwesenheitserfassung Nachtrag v0.6 Ready (Product Owner 26.10.2026); Annahmen bei der Abnahme.
 Änderungen v5.13: Anwesenheitserfassung Nachtrag v0.6 (Finanzen; im Chat Finanzen eingearbeitet): Abrechnungsart am Einsatz, Lesefunktion für Finanzen, Sperre abgerechneter Einsätze; offene Punkte zu Löschfrist, mehrtägigen Einsätzen, Lehreinheiten und Sperre erledigt; Übergabe FI → EZ eingearbeitet.
@@ -191,7 +192,8 @@ Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.5, abgeschlossen 
 - Erledigt (glossar.md, Gruppen v0.6–v0.8): „Vertrag“ wird im Modul Gruppen geführt (je Teilnahme); der Buchungslauf ist ein Einzug (SEPA-Lastschrift).
 - Entschieden 26.10.2026 (Product Owner, Vorlagen der Geschäftsstelle): Auszahlung in Auszahlungsrunden (mehrere je Halbjahr); die Freigabe einer Runde erzeugt Auszahlliste (PDF, Ablage Buchhaltung) und Überweisungsdatei (XML, pain.001.001.03 wie die Vorlage der Sparkasse, Sammelüberweisung); je Person und Gruppe eine Zeile und eine Überweisung; „sachlich richtig“ = Bestätigung im Vereins OS, „gf Vorstand“ und „angewiesen“ auf Papier; Angaben der Sektion (Name, IBAN, BIC, Sachkonto) als Einstellung der Administration (A10). Die einzelne Abrechnung wird „abgeschlossen“ (bisher „freigegeben“) [ANNAHME: Begriff].
 - Iteration 1 (Product Owner 26.10.2026, kein Blocker für den MVP): Rücknahme einer freigegebenen Auszahlungsrunde bei Ablehnung durch die Bank (Geschäftsstelle mit Sparkasse; im MVP kein Storno [ANNAHME]); zählen Probetrainings für die Kletterhalle (Geschäftsstelle; im MVP beide Summen); Sonderfälle wie Nachzahlungen und Rückforderungen (Geschäftsstelle).
-- [OFFEN] Buchungslauf (später): DATEV-Buchungsexport oder SEPA-Datei; Datei-Export oder Schnittstelle über SC; Empfänger der Mails. (vision.md, modul-landkarte.md)
+- Entschieden 26.10.2026 (Product Owner): **Buchungslauf Verträge** als SEPA-Lastschriftdatei (pain.008) mit Einzugsliste (PDF, IBAN gekürzt); Verträge aktiv am 1. des Monats, voller Betrag; je Vertrag und Monat ein Einzug, Nachtrag im selben Monat; Erst-/Folgelastschrift mit Stichtag; Fälligkeitstag und Gläubiger-ID als Stammdaten der Administration; Geschäftsstelle erstellt und gibt allein frei (01-erhebung.md FI v0.7, Abschnitt H; Übergaben FI → AD v1.4, FI → GR v1.0).
+- [OFFEN] Buchungslauf Verträge: Vorlage einer Lastschriftdatei der Sparkasse; Mandatsänderung nach einem Einzug (R44); Sachkonto der Gruppenbeiträge (R41); Fälligkeitstag und Stichtag (Geschäftsstelle). Später: Rücklastschriften, DATEV-Buchungsexport, Schnittstelle über SC, Empfänger der Mails.
 - Hinweis aus EA: Bankverbindung der Aktiven und Trainervereinbarung liegen im Ehrenamtsmanagement.
 - **Übergabe aus EZ (v1.6): eingearbeitet am 24.10.2026** in 00-steckbrief.md v0.1 und 01-erhebung.md v0.1 (F1–F9).
 - **Übergabe aus der Planungshilfe Touren und Kurse (v1.3): eingearbeitet am 24.10.2026** in 00-steckbrief.md v0.1 (Punkte 1–7; Antworten in uebergabe-planungshilfe.md v1.0).
