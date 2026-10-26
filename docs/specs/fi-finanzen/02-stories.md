@@ -1,8 +1,9 @@
 # Stories: Finanzen
 
-Stand: 26.10.2026 · Version 0.2.1 · Kürzel: FI · Status: Entwurf
+Stand: 26.10.2026 · Version 0.3 · Kürzel: FI · Status: Entwurf
 Quellen: 00-steckbrief.md (v0.5, abgeschlossen), 01-erhebung.md (v0.5, Regeln R1–R30), rollen.md (v1.2), glossar.md (v1.6; Vorschläge im Steckbrief), Übergaben an Administration (v1.3, A1–A10), Anwesenheitserfassung (v1.2, Z1–Z5), Planungshilfe (v1.0)
 Umfang: MVP – halbjährliche Abrechnung (Kinder und Jugend, Leistungssport), Bestätigung durch Referent:innen, Abschluss mit Abrechnungsdokument, Abgabe, Auszahlungsrunde mit Auszahlliste (PDF) und Überweisungsdatei (XML), Abgleich Punktekonto Kletterhalle. Iteration 1 (Kurs, Tour, Einzelabrechnung, Reisekosten, Storno einer Runde) nicht enthalten.
+Änderungen v0.3: Nachtrag **Bereich Budget** aus dem Dashboard (specs/ds-dashboard/uebergabe-finanzen.md v1.7, 01-erhebung.md DS v0.1, Regeln DS R1–R26): US-FI-22 bis US-FI-29, bisher US-DS-01 bis US-DS-06, US-DS-21, US-DS-22 (Product Owner 26.10.2026).
 Änderungen v0.2.1: Nach der Vorlage der Sparkasse: Fälligkeitstag = Erstellen + 3 Tage, Verwendungszweck nach Vorlage, Zusatzbetrag (AK in US-FI-18, R47).
 Änderungen v0.2: Nachtrag Buchungslauf Verträge (01-erhebung.md v0.7, Abschnitt H, R34–R46): US-FI-18 bis US-FI-21 (Entwurf; offene Punkte R41, R44 und die Vorlage der Sparkasse vor der Spec).
 Änderungen v0.1: Erster Entwurf; Sichtbarkeit für Referent:innen (ganze Abrechnung), Abgabe nach der Frist mit Begründung und Verfall von Hand bestätigt (Product Owner 26.10.2026).
@@ -36,6 +37,14 @@ Beispiele sind fiktiv (Personen, Gruppen, Beträge); IBAN nur `DE893704004405320
 | US-FI-15 | Auszahlungsrunde freigeben: Auszahlliste und Überweisungsdatei | Must | Geschäftsstelle |
 | US-FI-16 | Dateien einer Runde erneut abrufen | Should | Geschäftsstelle |
 | US-FI-17 | Abgleich Punktekonto Kletterhalle | Should | Geschäftsstelle |
+| US-FI-22 | Finanzplan einlesen | Must | Budgetpflege |
+| US-FI-23 | Gesamtbudgets einem Referat zuordnen | Must | Budgetpflege |
+| US-FI-24 | Zuordnung Konto → Budgetposten pflegen | Must | Budgetpflege |
+| US-FI-25 | Zuordnung aus dem Prototyp übernehmen | Must | Budgetpflege |
+| US-FI-26 | DATEV-Export einspielen | Must | Budgetpflege |
+| US-FI-27 | Buchung umschlüsseln | Must | Budgetpflege |
+| US-FI-28 | Einzelbuchungen nach Frist löschen | Must | System |
+| US-FI-29 | Neues Budgetjahr anlegen | Should | Budgetpflege |
 
 Voraussetzungen aller Stories: Nachtrag der Administration nach Übergabe FI → AD (A1–A10, Aktion „freigeben“ aus Q1) und Nachtrag der Anwesenheitserfassung nach Übergabe FI → EZ (Z1–Z3).
 
@@ -414,3 +423,124 @@ Grundlage: 01-erhebung.md v0.7, Abschnitt H (R34–R46). Beispiele fiktiv: Jugen
 
 **Nicht Teil dieses Nachtrags:** Rücklastschriften, Storno eines freigegebenen Laufs, Vorabinformation, Mandatsänderung (R44, offen).
 
+## Nachtrag v0.3: Bereich Budget (aus dem Dashboard)
+
+Grundlage: specs/ds-dashboard/uebergabe-finanzen.md v1.7 (B1–B17), specs/ds-dashboard/01-erhebung.md v0.1 (Abschnitte B–G, Regeln „DS R1“ bis „DS R24“), specs/ds-dashboard/02-stories.md v0.2 (Regeln DS R25, DS R26; Anzeige, Hinweise, Umschichtung, Umschlüsselungs-Vorschlag als US-DS-07 bis US-DS-20). Tabellen und Funktionen mit Präfix `fi_`; Rechte über das Recht auf DS und das Kennzeichen „darf Budget pflegen“ (specs/ds-dashboard/uebergabe-administration.md D6). Beispiele fiktiv.
+
+### US-FI-22: Finanzplan einlesen
+
+**Als** Person mit Budgetpflege
+**möchte ich** den beschlossenen Finanzplan aus der Excel einlesen,
+**damit** Budgetposten und Plan im Vereins OS stehen, ohne dass ich sie abtippe.
+**Priorität:** Must · **Regeln:** DS R10, DS R21, DS R24 · **Abhängig von:** Übergabe AD D6 (Kennzeichen)
+
+**Akzeptanzkriterien**
+- AK1: Gegeben eine Excel mit dem Blatt „Finanzplan 2027“, Kopfzeile „Einnahmen“/„Ausgaben“ und je Seite „Plan 2027“, wenn ich sie hochlade, dann sehe ich je Art die Budgetposten mit Plan und „Summe = Summenzeile der Excel ✓“ und kann übernehmen.
+- AK2: Gegeben der Name „Vergütung Aktive“ steht zweimal unter Ausgaben, dann wird jeder dem Gesamtbudget des Postens darüber zugeordnet und ich sehe den Hinweis „steht mehrfach in der Excel“.
+- AK3: Gegeben ein Finanzplan 2027 wurde schon eingelesen, wenn ich eine geänderte Excel einlese, dann zeigt die Vorschau neue, entfallene und geänderte Posten; bestätigte Umschichtungen bleiben, solange beide Posten bestehen (sonst Hinweis „Umschichtung … betrifft einen entfallenen Posten“).
+- AK4 (Fehler): Gegeben die Summe der Ausgaben weicht von der Summenzeile ab, dann wird nichts übernommen und ich sehe „Summe der Ausgaben … € weicht von der Summenzeile … € ab.“
+- AK5 (Fehler): Gegeben die Datei hat kein Blatt „Finanzplan JJJJ“, dann „Kein Tabellenblatt ‚Finanzplan JJJJ‘ gefunden.“
+- AK6 (Rechte): Gegeben ich habe nur DS lesen (z. B. Geschäftsstelle), dann sehe ich „Finanzplan einlesen“ nicht; ein direkter Aufruf wird abgelehnt (DS R21).
+
+**Nicht Teil dieser Story:** Bearbeiten des Plans im Vereins OS (nur Umschichtung, US-DS-12).
+
+### US-FI-23: Gesamtbudgets einem Referat zuordnen
+
+**Als** Person mit Budgetpflege
+**möchte ich** je Gesamtbudget festlegen, zu welchem Referat es gehört, ob es für alle ist oder ohne Referat,
+**damit** Referent:innen ihr Budget pflegen und die richtigen Einzelbuchungen sehen.
+**Priorität:** Must · **Regeln:** DS R13, DS R22 · **Abhängig von:** US-FI-22; Übergabe AD D10 (neue Referate)
+
+**Akzeptanzkriterien**
+- AK1: Gegeben das Gesamtbudget „Kinder und Jugend“, wenn ich „Referat Kinder und Jugend“ wähle, dann sehen Referent:innen dieses Referats seine Einzelbuchungen und können es pflegen.
+- AK2: Gegeben „Veranstaltungen“ steht auf „alle“, dann sehen alle mit DS lesen seine Einzelbuchungen; pflegen kann es nur die Budgetpflege.
+- AK3: Gegeben „Vereinszentrum“ steht auf „ohne Referat“, dann sehen Referent:innen nur seine Summen.
+- AK4: Beim ersten Einlesen werden die Startwerte nach 00-steckbrief.md („Gesamtbudgets und Referate“) vorgeschlagen; neue Gesamtbudgets ohne Angabe sind „ohne Referat“ (DS R22).
+- AK5 (Fehler): Sichtbarkeit „Referat“ ohne gewähltes Referat → „Bitte ein Referat wählen.“
+- AK6 (Rechte): Referent:innen sehen die Zuordnung, können sie aber nicht ändern (DS R25).
+
+### US-FI-24: Zuordnung Konto → Budgetposten pflegen
+
+**Als** Person mit Budgetpflege
+**möchte ich** festlegen, welche Konten zu welchem Budgetposten zählen,
+**damit** jede Buchung im richtigen Budget landet und nichts verloren geht.
+**Priorität:** Must · **Regeln:** DS R1, DS R2, DS R11, DS R24 · **Abhängig von:** US-FI-22
+
+**Akzeptanzkriterien**
+- AK1: Gegeben die Regel „6326 6 → Kinder und Jugend Kosten“, wenn ich sie anlege, dann zählen alle Buchungen auf 6326 6 dort, und die Regel ist ab heute gültig mit meinem Kommentar im Verlauf.
+- AK2: Gegeben die Regeln „6326“ (Hauptkonto) und „6326 6“ (Einzelkonto), dann zählt eine Buchung auf 6326 6 nach der Einzelkonto-Regel (DS R2).
+- AK3: Gegeben eine Regel mit Kostenstelle „3“, dann zählen nur Buchungen mit KOST1 = 3 nach ihr; andere nach der Regel ohne Kostenstelle.
+- AK4: Liste mit Filtern „unsicher/offen“, „mit Fehler“, nach Budgetposten oder Kontonummer; je Regel Plan/Ist des Postens und Anzahl Buchungen des letzten Imports.
+- AK5 (Fehler): „63 26 x“ → „‚63 26 x‘ ist keine Kontonummer. Bitte wie im DATEV-Export schreiben, z. B. ‚6326 3‘.“; ein Konto zum zweiten Mal → „‚6326 6‘ ist bereits eingetragen.“ (DS R11).
+- AK6 (Rechte): ohne Budgetpflege nur lesen (Vorstand, Admin, Geschäftsstelle) bzw. nicht sichtbar (Referent:innen) [ANNAHME].
+
+### US-FI-25: Zuordnung aus dem Prototyp übernehmen
+
+**Als** Person mit Budgetpflege
+**möchte ich** meine bisherige `zuordnung.csv` einmalig übernehmen,
+**damit** ich die Arbeit aus dem Prototyp nicht wiederholen muss.
+**Priorität:** Must · **Regeln:** DS R10, DS R11 · **Abhängig von:** US-FI-22, US-FI-23, US-FI-24
+
+**Akzeptanzkriterien**
+- AK1: Gegeben eine `zuordnung.csv` (Semikolon, UTF-8 mit BOM) mit den Spalten des Prototyps, wenn ich sie einlese, dann entstehen Zuordnungsregeln mit Status und Hinweis, Gesamtbudgets und Einzelbuchungsregeln des Budgetjahres.
+- AK2: Das Ergebnis entspricht `lese_zuordnung` in `build.py`: gleiche Regeln, gleiche Fehler und Hinweise (Abnahme mit fiktiver Datei).
+- AK3: Einzelbuchungsregeln aus anderen Jahren werden ignoriert und gezählt („… Umschlüsselungen aus anderen Jahren ignoriert“).
+- AK4 (Fehler): Budgetposten, den es im Finanzplan nicht gibt → Zeile wird nicht übernommen, Meldung mit Zeilennummer und Liste der gültigen Posten.
+- AK5 (Rechte): nur mit Budgetpflege.
+
+### US-FI-26: DATEV-Export einspielen
+
+**Als** Person mit Budgetpflege
+**möchte ich** den monatlichen DATEV-Export hochladen und prüfen lassen,
+**damit** alle mit DS lesen den aktuellen Stand des Budgets sehen.
+**Priorität:** Must · **Regeln:** DS R1, DS R3, DS R4, DS R8, DS R9, DS R19, DS R21, DS R24 · **Abhängig von:** US-FI-24
+
+**Akzeptanzkriterien**
+- AK1: Gegeben ein Export der Kontenblätter 2027, wenn ich ihn hochlade, dann sehe ich Zeilen gelesen / gespeichert / ignoriert, Saldovorträge, Buchungen anderer Jahre, Datenstand und das Prüfergebnis je Konto, und kann übernehmen.
+- AK2: Gegeben jede Buchung steht auf Erfolgskonto, Bank und Sammelkonto, dann wird sie genau einmal gezählt (DS R1).
+- AK3: Gegeben eine Rücklastschrift (Haben auf einem Ausgabenkonto), dann mindert sie den verbrauchten Betrag (DS R3).
+- AK4: Gegeben bei Konto 6330 3 weicht die Summe der Einzelbuchungen von der Kontenübersicht ab, dann wird übernommen, und ich sehe „Export unvollständig: Konto 6330 3 …“ bis zum nächsten Import ohne Abweichung (DS R8).
+- AK5: Gegeben ein zweiter Import für 2027, dann ersetzt er den ersten; eine umgeschlüsselte Buchung, die fehlt, erzeugt „Umgeschlüsselte Buchung vom … nicht mehr im Export“ (DS R9).
+- AK6 (Fehler/Rechte): eine Datei ohne Buchungsliste → „Die Datei enthält keine Buchungsliste. Bitte die Kontenblätter aller Konten als CSV exportieren.“; ohne Budgetpflege kein Hochladen.
+
+**Nicht Teil dieser Story:** Import über die DATEV-Schnittstelle (später, Schnittstellen-Connector).
+
+### US-FI-27: Buchung umschlüsseln
+
+**Als** Person mit Budgetpflege
+**möchte ich** eine einzelne Buchung oder alle Buchungen eines Kontos einem anderen Budgetposten zuordnen,
+**damit** falsch gebuchte Beträge im richtigen Budget zählen.
+**Priorität:** Must · **Regeln:** DS R2, DS R9, DS R24 · **Abhängig von:** US-FI-26
+
+**Akzeptanzkriterien**
+- AK1: Gegeben die Buchung „Startgebühr Jugendcup“ vom 07.02.2027 über 280,00 € auf 6307 8 (Leistungssport Kosten), wenn ich „nur diese Buchung“ nach „Kinder und Jugend Kosten“ umschlüssele, dann zählt sie dort, mit Etikett „umgeschlüsselt“ (von, wann, warum).
+- AK2: „alle Buchungen auf Konto …“ ändert die Kontoregel statt eine Einzelbuchungsregel anzulegen.
+- AK3: Rückgängig: „zurück zur Kontozuordnung“ beendet die Einzelbuchungsregel.
+- AK4 (Fehler): ohne Grund → „Bitte einen Grund angeben.“ [ANNAHME: Grund Pflicht, im Prototyp optional]
+- AK5 (Rechte): nur mit Budgetpflege; Referent:innen schlagen vor (US-DS-14).
+
+### US-FI-28: Einzelbuchungen nach Frist löschen
+
+**Als** Verein
+**möchte ich**, dass Einzelbuchungen nach Ablauf der Frist automatisch gelöscht werden,
+**damit** Namen aus Buchungstexten nicht länger gespeichert sind als nötig.
+**Priorität:** Must · **Regeln:** DS R19 · **Abhängig von:** US-FI-26
+
+**Akzeptanzkriterien**
+- AK1: Am 01.01.2028 werden Einzelbuchungen, Einzelbuchungsregeln und Umschlüsselungs-Vorschläge des Jahres 2026 gelöscht.
+- AK2: Kontensummen je Monat, Finanzplan, Budgetposten, Umschichtungen und Hinweise 2026 bleiben (5 Jahre).
+- AK3: Der Löschlauf wird protokolliert (Anzahl gelöschter Zeilen).
+- AK4 (Fehler): Schlägt der Lauf fehl, sieht die Budgetpflege unter „Zu tun“ „Löschlauf Buchungen 2026 fehlgeschlagen“.
+
+### US-FI-29: Neues Budgetjahr anlegen
+
+**Als** Person mit Budgetpflege
+**möchte ich** ein neues Budgetjahr mit dem Finanzplan anlegen und die Zuordnung des Vorjahres übernehmen,
+**damit** ich nicht von vorn anfange.
+**Priorität:** Should · **Abhängig von:** US-FI-22 bis US-FI-24; Übernahme als Vorschlag (Product Owner 26.10.2026)
+
+**Akzeptanzkriterien**
+- AK1: Nach dem Einlesen des Finanzplans 2028 schlägt das System Gesamtbudgets, Sichtbarkeit und Zuordnungsregeln aus 2027 vor; Postennamen, die es nicht mehr gibt, werden als Fehler je Regel gezeigt.
+- AK2: Einzelbuchungsregeln aus 2027 werden nicht übernommen.
+- AK3: In der Budget-Sicht ist 2028 Standard, 2027 wählbar.
+- AK4 (Rechte): nur mit Budgetpflege.

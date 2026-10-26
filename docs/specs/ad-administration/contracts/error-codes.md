@@ -38,6 +38,7 @@ Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnun
 | `AD_SEARCH_TOO_SHORT` | Bitte mindestens 2 Zeichen eingeben. | R44 | Datenbank umgesetzt (`20261026000300`) |
 | `AD_TOO_MANY_IDS` | Etwas ist schiefgelaufen. Bitte versuche es erneut. (allgemeine Meldung, Programmierfehler; Product Owner 24.10.2026) | R44 | Datenbank umgesetzt (`20261026000300`) |
 | `AD_APPROVE_NOT_ALLOWED` / `ad_template_rights_approve_allowed` | ‚Darf freigeben‘ ist nur in Finanzen und in der Planungshilfe und nur zusammen mit einer Stufe möglich. | R50 | Datenbank umgesetzt (`20261029000100`); Oberfläche T74 |
+| `AD_BUDGET_MAINTAIN_NOT_ALLOWED` / `ad_template_rights_budget_allowed` | ‚Darf Budget pflegen‘ ist nur im Dashboard, nur mit einer Stufe und nur mit Reichweite ‚alle‘ möglich. | spec.md DS D6 | Datenbank umgesetzt (`20261103000100`); Oberfläche DT04 |
 | `AD_RATE_FIELD_REQUIRED` (Detail: Feld) | Bitte ‚<Feld>‘ angeben. | R46, R51, R54 | Datenbank umgesetzt (`20261029000200`, `…0300`) |
 | `AD_RATE_VALUE` | Wert ungültig. | R46 | Datenbank umgesetzt (`20261029000200`) |
 | `AD_RATE_DUPLICATE` | Für dieses Datum gibt es schon einen Wert. | R46, R52, R53, R54 | Datenbank umgesetzt (`20261029000200`, `…0300`) |
