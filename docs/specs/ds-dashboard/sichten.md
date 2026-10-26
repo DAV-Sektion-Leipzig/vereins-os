@@ -1,6 +1,7 @@
 # Sichten des Dashboards
 
-Stand: 26.10.2026 · Version 0.4 · Status: Entwurf
+Stand: 26.10.2026 · Version 0.5 · Status: Entwurf
+Änderungen v0.5: Grundsatz „Referent:innen steuern ihre Gruppen mit dem Dashboard“ (Product Owner 26.10.2026); Gruppendetail im Dashboard mit Namen und Hinweisen; Steuerungshinweis je Status; offene Frage zu den Rechten auf Gruppen gelöst.
 Änderungen v0.4: Schmale Spalten im Baustein Gruppen (Product Owner 26.10.2026): Spaltenköpfe TN, Anwesenheit, PT; kurze Werte; Legende unter der Liste.
 Änderungen v0.3: Herkunft von Gruppenname und Trainingszeit (Modul Gruppen) und Link je Recht festgelegt; Lücke: Referent:innen haben kein Recht auf Gruppen [OFFEN].
 Änderungen v0.2: Baustein Gruppen für Referate mit vielen Gruppen (Kinder und Jugend hat über 14; Product Owner 26.10.2026): Status je Gruppe, Sortierung, Filter „Mit Hinweis“ / „Alle“, Zählleiste; Ampel für abgesagte Trainings. Skizze: Artifact „Dashboard Kinder und Jugend“.
@@ -9,6 +10,10 @@ Grundlage: 00-steckbrief.md DS v0.10, ideen-sichten.md v0.4 (Ideenkatalog), Ents
 **Auftrag des Product Owners (26.10.2026):** Die Referate geben keine Rückmeldung. Claude legt die Inhalte fest, als wäre es selbst Referent:in. Alle Festlegungen in dieser Datei sind deshalb **Vorschläge zur Abnahme durch den Product Owner** und als **[FESTLEGUNG]** gekennzeichnet. Schwellenwerte sind [ANNAHME] und sollen nach dem ersten Halbjahr im Betrieb überprüft werden.
 
 ---
+
+## 0. Grundsatz (Product Owner 26.10.2026)
+
+Referent:innen **steuern ihre Gruppen mit dem Dashboard**: Sie erkennen an den Kennzahlen, wo sie eingreifen müssen (Betreuung verstärken, Trainingszeit ändern, neue Gruppe anbieten, Gruppen zusammenlegen, mit der Gruppenleitung sprechen), und handeln dann – meist außerhalb des Vereins OS. Das Dashboard ist dafür das Steuerungsinstrument; es **ändert selbst keine Daten** in den Fachmodulen. Änderungen an Gruppen bleiben bei der Geschäftsstelle im Modul Gruppen.
 
 ## 1. Leitfragen einer Referent:in
 
@@ -63,8 +68,25 @@ Eine Zeile je Gruppe (mobil: eine Karte), Zeitraum: laufendes Halbjahr, Vergleic
 
 **Herkunft und Link** [FESTLEGUNG]:
 - **Gruppenname** = `gr_groups.name` aus dem Modul Gruppen; **Zeile darunter** = die heute gültigen Trainingszeiten der Gruppe (`gr_training_times`, je Wochentag eine; mehrere durch Komma getrennt, z. B. „Mo 16:30–18:00, Do 16:30–18:00“; keine: „keine Trainingszeit“). Geliefert über eine Lesefunktion von Gruppen mit Recht auf DS (wie `gr_groups_for_attendance`, nur Gruppe, Referat, Name, Trainingszeiten, Anzahlen; keine Personendaten).
-- **Link der Gruppe:** mit Recht „Gruppen lesen“ auf die Gruppe im Modul Gruppen (`/gr/gruppen/:id`); sonst mit Recht auf die Anwesenheitserfassung auf die Einsätze der Gruppe; sonst kein Link.
-- [OFFEN] Referent:innen haben laut Spec Gruppen keinen Zugriff auf Gruppen (Startwerte: Referent:in und Vorstand ohne Rechte; Reichweite in GR nur „alle“; specs/gr-gruppen/spec.md Abschnitt 3). Damit führen die Punkte „Gruppen ohne Trainer:in mit Lizenz“ und „Teilnahme klären / ohne Notfallkontakt“ (Z5, Z6) für Referent:innen ins Leere: Sie sehen die Anzahl, aber nicht, wen es betrifft. Vorschlag: Reichweite „Referat“ für GR lesen (Nachtrag Gruppen und Administration) oder Z5/Z6 für Referent:innen nur als Hinweis „Geschäftsstelle informiert“.
+- **Link der Gruppe:** öffnet das **Gruppendetail im Dashboard** (siehe unten), nicht das Modul Gruppen. Mit Recht „Gruppen lesen“ zusätzlich ein Link „Im Modul Gruppen öffnen“.
+- Rechte: Referent:innen bekommen **kein** Recht auf das Modul Gruppen; Namen und Hinweise ihrer Gruppen sehen sie über das Recht auf das Dashboard (Reichweite „Referat“) (Product Owner 26.10.2026). Damit lassen sich Z5 und Z6 nachverfolgen.
+
+**Gruppendetail im Dashboard** [FESTLEGUNG]: Klick auf eine Gruppe öffnet eine Seite mit
+- Kopf: Name, Trainingszeiten, Status mit **Steuerungshinweis** (Tabelle unten), Kennzahlen der Zeile im Verlauf der letzten 4 Halbjahre (soweit vorhanden; Vorjahresvergleich bleibt im Hauptblock).
+- **Betreuung:** Namen der Trainer:innen und Helfer:innen mit Funktion, seit wann, Lizenz gültig bis (nur Datum, keine Lizenznummer); Hinweis bei Ablauf in 90 Tagen.
+- **Teilnehmer:innen:** Vorname und Nachname, Teilnahme seit, Hinweise „Teilnahme klären“, „kein Notfallkontakt“, „keine erziehungsberechtigte Person“; Anzahl Trainings anwesend im Halbjahr [ANNAHME]. **Keine** Kontaktdaten, kein Geburtsdatum oder Alter, keine Verträge, keine Gesundheitsangaben, keine Fotoerlaubnis (Product Owner 26.10.2026).
+- **Trainings:** Liste der Trainings im Halbjahr mit Datum, anwesend (Anzahl TN, Betreuer:innen), Betreuungsschlüssel eingehalten ja/nein, abgesagt mit Grund.
+
+**Steuerungshinweis je Status** [FESTLEGUNG] – Text im Gruppendetail und als Tooltip am Status, keine Aufgabe im System:
+
+| Lage | Steuerungshinweis |
+|---|---|
+| Betreuungsschlüssel unterschritten | „Helfer:in für diese Gruppe suchen oder Gruppe teilen.“ |
+| keine Trainer:in mit gültiger Lizenz | „Trainer:in mit Lizenz zuordnen – sonst gilt der Helfersatz und die Betreuung ist nicht abgesichert.“ |
+| Anwesenheit unter 50 % ohne Probetrainings | „Mit der Gruppenleitung sprechen: Trainingszeit, Ort oder Angebot passen? Zusammenlegen prüfen.“ |
+| mehr als 20 % der Trainings abgesagt | „Gründe der Absagen ansehen, Vertretung organisieren.“ |
+| Nachfrage hoch (PT ≥ 3, Anwesenheit ≥ 80 %) | „Zweite Trainingszeit oder neue Gruppe prüfen.“ |
+| Lizenz läuft in 90 Tagen ab | „Fortbildung der Trainer:in ansprechen.“ |
 
 **Schmale Spalten** (Product Owner 26.10.2026): Spaltenköpfe **Status · Gruppe · TN · Anwesenheit · Trainings · Betreuungsschlüssel · PT · Betreuung**; Abkürzungen mit Langform beim Überfahren (`<abbr title>`) und in der Legende unter der Liste. Kurze Werte: Anwesenheit „71 %“ mit „▲ 1 Pkt.“, Trainings „16“ mit „0 abgesagt“, Betreuungsschlüssel „■ 3× darunter“, Betreuung „1 / 0“ (Trainer:innen mit Lizenz / Helfer:innen); „Nachfrage hoch“ nur in der Statusspalte.
 
