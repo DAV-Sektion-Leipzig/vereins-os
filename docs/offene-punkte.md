@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 26.10.2026 · Version 5.17
+Stand: 26.10.2026 · Version 5.18
+Änderungen v5.18: Nachträge für die Planungshilfe eingearbeitet: spec.md AD v0.12 (Erwerbsdatum der Lizenz, Personen aus der Planung anlegen; Nachtrag v0.9 Ready) und spec.md EZ v0.7 (Abrechnungsart aus der Planung).
 Änderungen v5.17: Planungshilfe Touren und Kurse wieder aufgenommen: Abgleich mit dem Stand der anderen Module (Spec v0.3, Stories v0.5, Steckbrief und Erhebung v0.8); Übergaben AD → TK und FI → TK eingearbeitet; Abrechnungsart Gemeinschaftstour, Kurse nach Lehreinheiten und Lizenz-Regel wie Finanzen entschieden; neue Übergabepunkte an EZ (v1.3) und AD (v1.8).
 Änderungen v5.16: Finanzen – Buchungslauf Verträge entschieden (SEPA-Lastschriftdatei mit Einzugsliste, 01-erhebung.md FI v0.7); offene Punkte dazu ergänzt; Übergaben FI → AD v1.4 und FI → GR v1.0.
 Änderungen v5.15: Neues Modul Dashboard (DS [ANNAHME]): Steckbrief v0.2 (Entwurf), Q-DS1 bis Q-DS4 entschieden, neue Fragen Q-DS11 bis Q-DS13, Übergabe DS → FI v1.0 (Bereich Budget); Merkposten „Dashboard (EA)“ und „Auswertungen auf Gruppenebene“ mit Verweis auf DS.
@@ -146,7 +147,7 @@ In der Spec oder später:
 
 ## TK – Planungshilfe Touren und Kurse (Priorität offen)
 
-Steckbrief: docs/specs/tk-touren-kurse/00-steckbrief.md (Version 0.8, Entwurf, 26.10.2026) · Erhebung: 01-erhebung.md (Version 0.8, Entwurf) · Stories: 02-stories.md (Version 0.5, Entwurf; US-TK-01 bis US-TK-24) · Spec: spec.md (Version 0.4, **Ready** 26.10.2026) · Prototyp: prototyp-tourenkonzept.md (Übergabe des HTML-Prototyps „Tourenkonzept“, 22.10.2026) · Übergaben: uebergabe-administration.md (v1.8, offen Punkte 15 und 16), uebergabe-anwesenheitserfassung.md (v1.3, offen nur Punkt 10), uebergabe-finanzen.md (v1.3, eingearbeitet in Finanzen 24.10.2026); an TK: specs/fi-finanzen/uebergabe-planungshilfe.md v1.0 und specs/ad-administration/uebergabe-planungshilfe-freigabe.md v1.0 (beide eingearbeitet 26.10.2026) · Stand der Arbeit: wieder aufgenommen 26.10.2026 (Product Owner)
+Steckbrief: docs/specs/tk-touren-kurse/00-steckbrief.md (Version 0.8, Entwurf, 26.10.2026) · Erhebung: 01-erhebung.md (Version 0.8, Entwurf) · Stories: 02-stories.md (Version 0.5, Entwurf; US-TK-01 bis US-TK-24) · Spec: spec.md (Version 0.4, **Ready** 26.10.2026) · Prototyp: prototyp-tourenkonzept.md (Übergabe des HTML-Prototyps „Tourenkonzept“, 22.10.2026) · Übergaben: uebergabe-administration.md (v1.8, eingearbeitet in spec.md AD v0.12), uebergabe-anwesenheitserfassung.md (v1.3, eingearbeitet in spec.md EZ v0.7), uebergabe-finanzen.md (v1.3, eingearbeitet in Finanzen 24.10.2026); an TK: specs/fi-finanzen/uebergabe-planungshilfe.md v1.0 und specs/ad-administration/uebergabe-planungshilfe-freigabe.md v1.0 (beide eingearbeitet 26.10.2026) · Stand der Arbeit: wieder aufgenommen 26.10.2026 (Product Owner)
 
 Entschieden 22.10.2026 (Product Owner): Modulname „Planungshilfe Touren und Kurse“, Kürzel TK, Ablage docs/specs/tk-touren-kurse/; Leitung aus den Aktiven (Trainer:innen mit Lizenz); TK erzeugt den Einsatz in der Anwesenheitserfassung; TK befüllt die Abrechnung vor, Finanzen rechnet; CO2-Bilanz und Planungsunterstützung wie im Prototyp; Nutzer im MVP Referat Touren und Geschäftsstelle, Tourenleitende reichen per PDF aus dem HTML-Formular ein.
 

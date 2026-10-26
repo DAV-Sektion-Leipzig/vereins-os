@@ -1,6 +1,6 @@
 # Übergabe: Planungshilfe Touren und Kurse → Administration
 
-Stand: 26.10.2026 · Version 1.8 · Status: offen (Punkte 15 und 16; Punkte 1–14 eingearbeitet) · Von: Planungshilfe Touren und Kurse (TK) · An: Administration (AD)
+Stand: 26.10.2026 · Version 1.8 · Status: eingearbeitet (26.10.2026) · Von: Planungshilfe Touren und Kurse (TK) · An: Administration (AD)
 Änderungen v1.8: Punkt 16 neu: Anlegen und Reaktivieren von Aktiven aus der Planungshilfe (Product Owner 26.10.2026). Punkt 15 neu: Erwerbsdatum der Lizenz in `ea_person_licenses` (Trainersatz auch bei Erwerb im Halbjahr des Startdatums, wie Finanzen; Product Owner 26.10.2026). Hinweis: Punkte 9 und 11 (Modul TKF) sind durch Nachtrag v0.10 AD ersetzt (Aktion „darf freigeben“, Übergabe AD → TK `uebergabe-planungshilfe-freigabe.md`).
 Änderungen v1.7: Eingearbeitet in spec.md Administration v0.9 (T59–T67) im Chat Planungshilfe Touren und Kurse (Product Owner 22.10.2026: Chat der Administration liegt in einem anderen Projekt).
 Änderungen v1.6: Konkretisierung aus spec.md TK v0.1: Freigaberecht über zweites Modul TKF, Schlüssel der Sätze, Signatur von `ea_person_licenses` und `ad_rates_at`, Testzugänge.
@@ -43,7 +43,7 @@ Grundlage: docs/specs/tk-touren-kurse/00-steckbrief.md v0.7, 01-erhebung.md v0.7
 
 ## Einarbeitung
 
-- [ ] Punkte 15 und 16 eingearbeitet in Administration (Datei, Version): –
+- [x] Punkte 15 und 16 eingearbeitet in Administration: docs/specs/ad-administration/spec.md v0.12 (26.10.2026; R47a, R59, Signatur `ea_person_licenses`, `ea_create_volunteer`, `ea_activate_person`, `ad_find_similar_persons`).
 - [x] eingearbeitet in Administration: docs/specs/ad-administration/spec.md v0.9 (22.10.2026) – Abschnitte 2 (ad_modules `is_hidden`, TK/TKF, ad_rates, `ad_rates_at`, `ea_person_licenses`, `tk_person_visible`), 3 (Startwerte, Vorlage „Freigabe Touren und Kurse“), 5 (R30, R46–R48), 6 (/ad/saetze), 9 (Personen 13–18), 10 (T59–T67), 11.
 - Punkt 6 (Kontaktdaten der Leitung als Vorschlag) nicht übernommen: Die Planungshilfe erfasst Kontaktdaten je Planung selbst (R48).
 - Offen bleiben: externe Leitende ohne Ehrenamtsstatus (im MVP vorher im Ehrenamtsmanagement anlegen, A9 der Stories); Zuordnung Qualifikationsart → Sportart liegt in der Planungshilfe (`tk_qualification_sports`); Reichweite „nur eigene“ (später).

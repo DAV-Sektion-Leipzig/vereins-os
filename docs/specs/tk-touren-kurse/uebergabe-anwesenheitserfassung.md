@@ -1,6 +1,6 @@
 # Übergabe: Planungshilfe Touren und Kurse → Anwesenheitserfassung
 
-Stand: 26.10.2026 · Version 1.3 · Status: offen (nur Punkt 10; Punkte 1–9 eingearbeitet) · Von: Planungshilfe Touren und Kurse (TK) · An: Anwesenheitserfassung (EZ)
+Stand: 26.10.2026 · Version 1.3 · Status: eingearbeitet (26.10.2026) · Von: Planungshilfe Touren und Kurse (TK) · An: Anwesenheitserfassung (EZ)
 Änderungen v1.3: Punkt 10 neu: Abrechnungsart des Einsatzes bei Gemeinschaftstouren übergibt die Planungshilfe (Product Owner 26.10.2026); Punkte 1–9 in spec.md EZ v0.2 eingearbeitet (24.10.2026), Punkt 8 erledigt (90 Zeichen).
 Änderungen v1.2: Bei Absage wird der Einsatz als „abgesagt“ markiert statt gelöscht (Product Owner 22.10.2026).
 Änderungen v1.1: Einsatz entsteht mit Status „in Yolawo angelegt“ (nicht bei Freigabe); Kurse mit Referat Ausbildung (Product Owner 22.10.2026).
@@ -34,4 +34,4 @@ Die Planungshilfe Touren und Kurse **erzeugt** den Einsatz. Kurs und Tour werden
 ## Einarbeitung
 
 - [x] Punkte 1–9 eingearbeitet in Anwesenheitserfassung: specs/ez-einsaetze/spec.md v0.2 (24.10.2026; `tk_plan_id`, `cancelled_*`, `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`, R22–R27); offene Punkte dort entschieden (Kurs und Tour ohne Teilnehmende; Kurse und Touren ohne Planung von Hand; Trainingslager nicht über TK; Product Owner 24.10.2026).
-- [ ] Punkt 10 eingearbeitet in Anwesenheitserfassung (Datei, Version): –
+- [x] Punkt 10 eingearbeitet in Anwesenheitserfassung: specs/ez-einsaetze/spec.md v0.7 (26.10.2026; Signatur `ez_upsert_planned_event`, R26a).
