@@ -167,6 +167,7 @@ select is((select amount from public.fi_settlements where id = pg_temp.sid(605))
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000032');
 select lives_ok(format($$ select public.fi_confirm(array[%L, %L, %L, %L, %L]::uuid[]) $$,
   pg_temp.sid(601), pg_temp.sid(603), pg_temp.sid(604), pg_temp.sid(605), pg_temp.sid(606)), 'Kim bestätigt K&J');
+select pg_temp.as_owner();  -- Prüfung mit Personennamen (Kim sieht ea_persons dieser Personen nicht, R31/R56)
 select results_eq(
   $$ select p.last_name, s.status::text from public.fi_settlements s join public.ea_persons p on p.id = s.person_id
       where p.id in (select pg_temp.p(n) from generate_series(601, 606) n) order by p.last_name $$,
