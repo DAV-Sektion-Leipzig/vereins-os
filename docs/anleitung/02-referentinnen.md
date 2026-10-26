@@ -14,7 +14,7 @@ Du siehst die Daten **deines Referats**. Hast du mehrere Referate, siehst du all
 | Ehrenamtsmanagement | Aktive deines Referats finden, anlegen und pflegen | freigeschaltet |
 | Anwesenheitserfassung | Trainings, Fahrten und andere Einsätze deines Referats erfassen | freigeschaltet |
 | Finanzen | Abrechnungen deines Referats als „sachlich richtig“ bestätigen | freigeschaltet (für Kinder und Jugend und Leistungssport) |
-| Planungshilfe Touren und Kurse | Touren und Kurse deines Referats planen, einreichen und freigeben | in Vorbereitung (Referate Touren und Ausbildung) |
+| Planungshilfe Touren und Kurse | Touren und Kurse deines Referats planen, einreichen und freigeben | freigeschaltet (Referate Touren und Ausbildung) |
 
 ---
 
@@ -264,13 +264,11 @@ Stimmt etwas nicht? Korrigiere den Einsatz in der Anwesenheitserfassung oder sag
 
 ## Planungshilfe Touren und Kurse
 
-> **In Vorbereitung:** Das Modul ist noch nicht freigeschaltet. Bilder folgen.
-
 Hier planst du Führungstouren, Kurse und Gemeinschaftstouren. Die Planungshilfe rechnet den Teilnahmebeitrag und die CO2-Bilanz aus und bereitet alles für Yolawo vor. **Touren** gehören zum Referat Touren, **Kurse** zum Referat Ausbildung.
 
 ### Eine Planung anlegen
 
-1. Öffne **„Planungshilfe Touren und Kurse“**. Du siehst die Liste der Planungen.
+1. Öffne auf der Startseite **„Planungshilfe Touren und Kurse“**. Du siehst die Liste der Planungen.
 2. Klicke auf **„Neue Planung“**.
 3. Wähle den **Tourtyp**: Führungstour, Kurs oder Gemeinschaftstour. Gib einen **Titel** ein (höchstens 90 Zeichen).
 4. Klicke auf **„Planung anlegen“**. Die Planung öffnet sich als **Entwurf**.
