@@ -2,7 +2,7 @@
 
 Stand: 26.10.2026 · Version 0.10 · Kürzel: DS [ANNAHME] · Priorität: Budget-Sicht früh (nach dem Kern der Administration), Referats-Kennzahlen nach EZ und FI · Ablage: docs/specs/ds-dashboard/ · Status: Entwurf · Product Owner: Toni Werner
 Grundlage: vision.md v0.4, modul-landkarte.md v2.17, rollen.md v1.3, glossar.md, offene-punkte.md v5.15, specs/fi-finanzen/00-steckbrief.md v0.5 (Nicht im Scope: „Budget-Übersicht, Dashboard: später“), specs/gr-gruppen/00-steckbrief.md v0.7 und specs/ez-einsaetze/00-steckbrief.md v0.9 (Auslastung, Betreuungsschlüssel in Iteration 2), specs/tk-touren-kurse/00-steckbrief.md v0.7 (Kosten- und CO2-Auswertung), Prototyp Budget-Dashboard (Übergabe: prototyp-budget-dashboard.md v1.0), Ideenkatalog ideen-sichten.md v0.1.
-Änderungen v0.10: Q-DS5 und Q-DS19 entschieden (Product Owner 26.10.2026): Die Referate geben keine Rückmeldung; Claude legt die Sichten als Referent:in fest (sichten.md v0.1, zur Abnahme); Vorjahresvergleich nur mit dem Vorjahr; Gesamtbudgets ohne Referat bestätigt.
+Änderungen v0.10: Q-DS5 und Q-DS19 entschieden (Product Owner 26.10.2026): Die Referate geben keine Rückmeldung; Claude legt die Sichten als Referent:in fest (sichten.md v0.2, zur Abnahme); Vorjahresvergleich nur mit dem Vorjahr; Gesamtbudgets ohne Referat bestätigt.
 Änderungen v0.9: Q-DS18 entschieden (Product Owner 26.10.2026): Referent:innen schichten den Plan nur um (Summe des Gesamtbudgets bleibt gleich), die Budgetpflege bestätigt.
 Änderungen v0.8: Q-DS15 bis Q-DS17 entschieden (Product Owner 26.10.2026): Jede Referent:in sieht das gesamte Budget des Vereins (Summen aller Gesamtbudgets), Einzelbuchungen nur des eigenen Referats; sie pflegt nur ihr eigenes Budget: Hinweise und Plan; Umschlüsseln nur als Vorschlag an die Budgetpflege. Tabelle „Sichtbarkeit der Gesamtbudgets“ wird zu „Gesamtbudgets und Referate“.
 Änderungen v0.7: Q-DS6 entschieden (Product Owner 26.10.2026): Gesamtbudgets je Referat; „Veranstaltungen“ und „Fördermittel“ für alle mit „Dashboard lesen“; neue Referate Öffentlichkeitsarbeit und Umwelt und Naturschutz; Sulzenauhütte ohne Budget-Sicht.
@@ -46,7 +46,7 @@ Der 1. Vorsitzende wertet den Finanzplan mit einem eigenen, offline laufenden Bu
 - **Leistungssport:** wie Kinder und Jugend, dazu Wettkampfbetreuungen und Trainingslager.
 - **Touren und Ausbildung:** Planungen je Status, Kostendeckung, Absagen, „durchgeführt, nicht abgerechnet“, CO2 je Jahr (sobald TK Iteration 1).
 - **Verknüpfung Budget ↔ Abrechnung:** abgerechnete, noch nicht gebuchte Vergütung als „gebunden“ am Budgetposten „Vergütung Aktive“.
-- **Inhalt und Aufbau der Sichten:** sichten.md v0.1 (Festlegung durch Claude als Referent:in im Auftrag des Product Owners, Q-DS5): je Sicht ① Zu tun, ② Budget meines Referats, ③ Mein Referat in Zahlen, ④ Budget des Vereins; Bausteine je Referat; Entscheidung M/S/C/W zu jedem Eintrag des Ideenkatalogs (ideen-sichten.md).
+- **Inhalt und Aufbau der Sichten:** sichten.md v0.2 (Festlegung durch Claude als Referent:in im Auftrag des Product Owners, Q-DS5): je Sicht ① Zu tun, ② Budget meines Referats, ③ Mein Referat in Zahlen, ④ Budget des Vereins; Bausteine je Referat; Entscheidung M/S/C/W zu jedem Eintrag des Ideenkatalogs (ideen-sichten.md).
 
 **Gesamtbudgets und Referate** (Q-DS6, Q-DS15 (Product Owner 26.10.2026); Namen wie im Finanzplan 2026). Die Summen aller Gesamtbudgets sieht jede:r mit „Dashboard lesen“; die Tabelle legt fest, wer **Einzelbuchungen** sieht und wer das Gesamtbudget **pflegt** (Hinweise, Plan):
 

@@ -1,6 +1,7 @@
 # Sichten des Dashboards
 
-Stand: 26.10.2026 · Version 0.1 · Status: Entwurf
+Stand: 26.10.2026 · Version 0.2 · Status: Entwurf
+Änderungen v0.2: Baustein Gruppen für Referate mit vielen Gruppen (Kinder und Jugend hat über 14; Product Owner 26.10.2026): Status je Gruppe, Sortierung, Filter „Mit Hinweis“ / „Alle“, Zählleiste; Ampel für abgesagte Trainings. Skizze: Artifact „Dashboard Kinder und Jugend“.
 Grundlage: 00-steckbrief.md DS v0.10, ideen-sichten.md v0.4 (Ideenkatalog), Entscheidungen Q-DS1 bis Q-DS19.
 
 **Auftrag des Product Owners (26.10.2026):** Die Referate geben keine Rückmeldung. Claude legt die Inhalte fest, als wäre es selbst Referent:in. Alle Festlegungen in dieser Datei sind deshalb **Vorschläge zur Abnahme durch den Product Owner** und als **[FESTLEGUNG]** gekennzeichnet. Schwellenwerte sind [ANNAHME] und sollen nach dem ersten Halbjahr im Betrieb überprüft werden.
@@ -58,16 +59,25 @@ Z5 und Z6 sind Anzahlen; die Namen sieht die Referent:in nur im Modul Gruppen bz
 
 Eine Zeile je Gruppe (mobil: eine Karte), Zeitraum: laufendes Halbjahr, Vergleich: gleiches Halbjahr des Vorjahres.
 
+**Viele Gruppen** (Kinder und Jugend hat über 14 Gruppen, Product Owner 26.10.2026) [FESTLEGUNG]:
+- **Status je Gruppe** = schlechteste Ampel der Zeile: ■ handeln, ▲ beobachten, ◆ Nachfrage hoch (keine Warnung, aber Hinweis), ● ok.
+- **Sortierung** nach Status (■, ▲, ◆, ●), dann nach Name.
+- **Filter** „Mit Hinweis (n)“ (Standard) und „Alle (n)“; unter der Liste „n Gruppen ohne Hinweis anzeigen“. So stehen bei 15 Gruppen typischerweise 5–8 Zeilen sichtbar, der Rest ist einen Klick entfernt.
+- **Zählleiste** über der Liste: Anzahl Gruppen je Status.
+- Die Kennzahlen des ganzen Referats (Gruppen, Teilnehmer:innen, Anwesenheitsquote, Trainings, Probetrainings, Fahrten) stehen darüber und werden aus allen Gruppen berechnet, nicht nur aus den sichtbaren.
+- Neue Gruppen (ohne Vorjahr) zeigen „neu“ statt Vergleichswert; ihre Teilnehmer:innen werden im Vorjahresvergleich des Referats getrennt ausgewiesen.
+
 | Spalte | Berechnung | Ampel [ANNAHME] |
 |---|---|---|
+| Status | schlechteste Ampel der Zeile, „Nachfrage hoch“ als eigener Status | ■ ▲ ◆ ● |
 | Teilnehmer:innen | laufende Teilnahmen heute | – |
 | Anwesenheitsquote | Ø anwesende Teilnehmer:innen je Training ÷ Teilnehmer:innen zum Datum des Trainings | ▲ unter 50 %, ■ unter 30 % |
-| Trainings | stattgefunden / abgesagt | ▲ wenn abgesagt > 20 % |
+| Trainings | stattgefunden / abgesagt | ▲ wenn abgesagt > 20 % der angesetzten |
 | Betreuungsschlüssel | Trainings unter dem Mindestverhältnis (Glossar) | ▲ ab 1, ■ ab 3 im Halbjahr |
 | Probetrainings | Anzahl der letzten 3 Monate | Hinweis „Nachfrage hoch“, wenn ≥ 3 **und** Anwesenheitsquote ≥ 80 % |
 | Betreuung | Trainer:innen mit gültiger förderfähiger Lizenz / Helfer:innen | ■ wenn keine Trainer:in mit Lizenz |
 
-Darüber eine Zeile für das ganze Referat: Teilnehmer:innen gesamt, Anwesenheitsquote gesamt, Trainings gesamt, jeweils mit Vorjahr.
+Darüber eine Zeile für das ganze Referat: Gruppen, Teilnehmer:innen gesamt, Anwesenheitsquote gesamt (gewichtet nach Teilnehmer:innen), Trainings gesamt, Probetrainings, jeweils mit Vorjahr.
 
 **Wozu:** Zusammen beantworten die Spalten die Auslastung (Q-DS3): Eine Gruppe mit hoher Quote und vielen Probetrainings ist voll (neue Gruppe oder zweite Trainingszeit prüfen); eine Gruppe mit niedriger Quote und keinen Probetrainings schrumpft (zusammenlegen oder Zeit ändern); ein unterschrittener Betreuungsschlüssel heißt: Helfer:in suchen.
 
