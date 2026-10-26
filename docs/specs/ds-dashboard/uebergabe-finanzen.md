@@ -1,6 +1,7 @@
 # Übergabe: Dashboard → Finanzen (Bereich Budget)
 
-Stand: 26.10.2026 · Version 1.7 · Status: offen (einzuarbeiten in den Steckbrief Finanzen als neuer, vorgezogener Bereich)
+Stand: 26.10.2026 · Version 1.8 · Status: in Stories eingearbeitet (specs/fi-finanzen/02-stories.md v0.3, US-FI-22 bis US-FI-29); Steckbrief und Spec Finanzen folgen
+Änderungen v1.8: Product Owner 26.10.2026: Finanzen ist fertig, die Stories der Budgetpflege stehen in Finanzen; Vertretung durch die Schatzmeister:in; Vorschau-Abgleich über Betrag und Datum bestätigt; Übernahme ins neue Jahr als Vorschlag.
 Änderungen v1.7: B14 nur Vorjahr (Q-DS19).
 Änderungen v1.6: B16 nach Q-DS18 (Umschichtung mit Bestätigung durch die Budgetpflege).
 Änderungen v1.5: Q-DS15 bis Q-DS17: Summen für alle, Einzelbuchungen je Referat (B9), Pflege durch Referent:innen (neu B15 Hinweise, B16 Plan ändern, B17 Vorschlag Umschlüsselung), B3 und B10 angepasst.

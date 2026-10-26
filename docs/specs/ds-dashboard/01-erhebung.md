@@ -1,7 +1,8 @@
 # Erhebung: Dashboard
 
-Datum: 26.10.2026 · Version 0.1 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner); Claude als Referent:in für die Festlegung der Sichten (Auftrag des Product Owners)
+Datum: 26.10.2026 · Version 0.2 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner); Claude als Referent:in für die Festlegung der Sichten (Auftrag des Product Owners)
 Grundlage: 00-steckbrief.md v0.13, sichten.md v0.8, prototyp-budget-dashboard.md v1.0, uebergabe-finanzen.md v1.7, uebergabe-administration.md v1.3, uebergabe-gruppen.md v1.0, Skizze „Dashboard Kinder und Jugend“ (Übersicht und Gruppendetail).
+Änderungen v0.2: Offene Fragen entschieden (Product Owner 26.10.2026): Vertretung beim Bestätigen durch die Schatzmeister:in; Vorschau-Abgleich über Betrag und Datum; Übernahme ins neue Jahr als Vorschlag. Stories der Budgetpflege jetzt in specs/fi-finanzen/02-stories.md (US-FI-22 bis US-FI-29).
 Änderungen v0.1: Erster Entwurf für den MVP (Budget-Sicht, Budgetpflege, Pflege durch Referent:innen). Referats-Kennzahlen und Gruppendetail (Iteration 1) nur in Abschnitt B9.
 
 Begriffe nach glossar.md v1.7 (u. a. Dashboard, Sicht, Kennzahl, Budgetposten, Gesamtbudget, Zuordnung (Budget), Buchung, umschlüsseln, umschichten, Datenstand, Budgetpflege, Anwesenheitsquote).
@@ -21,7 +22,7 @@ Begriffe nach glossar.md v1.7 (u. a. Dashboard, Sicht, Kennzahl, Budgetposten, G
 
 - Ein Recht auf DS gibt keine Rechte in den Fachmodulen; die Lesefunktionen für das Dashboard prüfen das Recht auf DS (Q-DS12).
 - Startwert: Die Vorlage „Budgetpflege“ erhält der 1. Vorsitzende, später die Schatzmeister:in (uebergabe-administration.md D6).
-- Wer Budgetpflege hat und zugleich Referent:in ist, bestätigt keine eigene Umschichtung [ANNAHME: Vier-Augen-Prinzip wie in FI]; dann bestätigt eine zweite Person mit Budgetpflege oder der Vorstand [OFFEN: Vertretung, solange es nur eine Person mit Budgetpflege gibt].
+- Wer Budgetpflege hat, bestätigt keine eigene Umschichtung (Vier-Augen-Prinzip). Stellt der 1. Vorsitzende einen Antrag, bestätigt ihn die **Schatzmeister:in** als anderes Mitglied des Vorstands (Product Owner 26.10.2026). Dafür erhält die Schatzmeister:in schon im MVP die Vorlage „Budgetpflege“ [ANNAHME: gleiche Vorlage, kein eigenes Bestätigungsrecht].
 
 ## B. Abläufe (inkl. Zustände)
 
@@ -76,7 +77,7 @@ Die Budgetpflege schlüsselt auch direkt um (wie im Prototyp, „⇄“). Bis zu
 **B9 – Iteration 1 (Stichpunkte, Stories folgen mit den Übergaben an GR, EZ, EA, TK):** Block ① „Zu tun“ vollständig (Z1–Z9), Block ③ je Referat mit Baustein Gruppen (Status, Filter „Mit Hinweis“, Ampeln), Gruppendetail mit Steuerungshinweisen, Namen und Hinweisen, Verlauf über 4 Halbjahre; Sichten Touren/Ausbildung, Hütten, Umwelt; Sichten Verein und Geschäftsstelle mit Kennzahlen aus den Modulen.
 
 **B10 – Neues Budgetjahr** (Budgetpflege)
-Finanzplan des neuen Jahres einlesen (B1); Gesamtbudgets und Zuordnungsregeln werden aus dem Vorjahr übernommen und können angepasst werden [ANNAHME]; Einzelbuchungsregeln (Umschlüsselungen) gelten nur in ihrem Jahr. Jahreswahl in der Budget-Sicht: laufendes Jahr und Vorjahr (R19, R20).
+Finanzplan des neuen Jahres einlesen (B1); Gesamtbudgets, Sichtbarkeit und Zuordnungsregeln werden aus dem Vorjahr **vorgeschlagen** und können angepasst werden (Product Owner 26.10.2026); Einzelbuchungsregeln (Umschlüsselungen) gelten nur in ihrem Jahr. Jahreswahl in der Budget-Sicht: laufendes Jahr und Vorjahr (R19, R20).
 
 ## C. Daten (Feld | Typ | Pflicht | Beispiel | Quelle)
 
@@ -129,7 +130,7 @@ Alle Tabellen im **Bereich Budget von Finanzen** (`fi_budget_…`) [ANNAHME: Nam
 - **R15 – Umschichtung:** beide Budgetposten im selben Gesamtbudget, im selben Jahr, gleiche Art; Betrag > 0 und ≤ aktueller Plan des abgebenden Postens; die Summe des Gesamtbudgets bleibt gleich. Referent:innen nur für Gesamtbudgets des eigenen Referats. Fehler: „Umschichten geht nur zwischen Posten desselben Gesamtbudgets und derselben Art.“ / „Der Betrag ist höher als der Plan von ‚…‘.“
 - **R16 – Umschlüsselungs-Vorschlag:** nur für Buchungen, die einem Budgetposten des eigenen Referats zugeordnet sind; Ziel kann jeder Budgetposten desselben Jahres sein; je Buchung höchstens ein offener Vorschlag.
 - **R17 – Hinweis:** Referent:innen für Budgetposten des eigenen Referats, Budgetpflege für alle; sichtbar für alle mit Budget-Sicht; Historie.
-- **R18 – Vorschau:** abgeschlossene und ausgezahlte Abrechnungen eines Referats (Finanzen), deren Auszahlungsrunde noch nicht als Buchung auf dem Konto des Budgetpostens „Vergütung Aktive“ im Import steht [ANNAHME: Abgleich über Betrag und Datum der Auszahlungsrunde; Detail mit der Spec]; wird nie zu verbraucht, frei oder Ampel gerechnet; Hinweis ▲ „mit Vorschau über Plan“, wenn Ist + Vorschau > aktueller Plan.
+- **R18 – Vorschau:** abgeschlossene und ausgezahlte Abrechnungen eines Referats (Finanzen), deren Auszahlungsrunde noch nicht als Buchung auf dem Konto des Budgetpostens „Vergütung Aktive“ im Import steht (Abgleich über Betrag und Datum der Auszahlungsrunde auf dem Konto des Budgetpostens „Vergütung Aktive“ (Product Owner 26.10.2026)); wird nie zu verbraucht, frei oder Ampel gerechnet; Hinweis ▲ „mit Vorschau über Plan“, wenn Ist + Vorschau > aktueller Plan.
 - **R19 – Löschfrist:** Einzelbuchungen, Umschlüsselungs-Vorschläge und Einzelbuchungsregeln des Jahres J werden am 01.01. des Jahres J+2 automatisch gelöscht; Kontensummen je Monat, Finanzplan, Budgetposten, Umschichtungen und Hinweise bleiben 5 Jahre [ANNAHME].
 - **R20 – Vorjahr:** Vergleichswert = Summe des Vorjahres bis zum gleichen Tag und Monat wie der Datenstand, sowie das ganze Vorjahr; Budgetposten zweier Jahre werden über Name und Gesamtbudget verknüpft; ohne Treffer „neu“.
 - **R21 – Budgetpflege:** Pflegeaktionen nur mit dem Kennzeichen „darf Budget pflegen“; Prüfung in der Datenbank. Ohne Recht: „Für diesen Bereich hast du keine Rechte.“
@@ -168,8 +169,5 @@ Alle Tabellen im **Bereich Budget von Finanzen** (`fi_budget_…`) [ANNAHME: Nam
 
 | Frage | Wer klärt | bis wann |
 |---|---|---|
-| Vertretung beim Bestätigen von Umschichtungen, solange nur der 1. Vorsitzende Budgetpflege hat (eigener Antrag als Referent:in?) | Product Owner | vor der Spec |
-| Abgleich „noch nicht gebucht“ für die Vorschau (R18): über die Auszahlungsrunde und welches Konto | Product Owner, Geschäftsstelle | vor der Spec |
 | Verarbeitung des Imports im Browser oder in einer Edge Function | Claude Code (Spec), Product Owner | Spec |
 | Eintrag im Verarbeitungsverzeichnis | Product Owner | vor Echtdaten |
-| Werden Gesamtbudgets und Zuordnung beim neuen Jahr übernommen (B10)? | Product Owner | vor der Spec |
