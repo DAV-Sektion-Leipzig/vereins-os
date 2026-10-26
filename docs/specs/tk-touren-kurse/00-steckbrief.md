@@ -1,6 +1,7 @@
 # Steckbrief: Planungshilfe Touren und Kurse
 
-Stand: 22.10.2026 · Version 0.7 · Kürzel: TK · Ablage: docs/specs/tk-touren-kurse/ · Status: Entwurf · Product Owner: Toni Werner
+Stand: 26.10.2026 · Version 0.8 · Kürzel: TK · Ablage: docs/specs/tk-touren-kurse/ · Status: Entwurf · Product Owner: Toni Werner
+Änderungen v0.8: Wiederaufnahme, Abgleich mit den anderen Modulen: Titel ungekürzt (Anwesenheitserfassung erlaubt 90 Zeichen); Kurse ein- und mehrtägig nach Lehreinheiten; Trainersatz auch bei Lizenz-Erwerb im Halbjahr des Startdatums wie in Finanzen; Freigabe über die Aktion „darf freigeben“ der Administration (Product Owner 24./26.10.2026).
 Änderungen v0.7: Organisationspauschale der Gemeinschaftstour trägt vorerst die Sektion (Umlage auf Teilnehmende später klären); Sätze pflegt vorerst nur der Admin (Product Owner 22.10.2026).
 Änderungen v0.6: Gemeinschaftstour mit Organisationspauschale nach Vergütungsordnung Ziff. 9.2 (Fehler im Prototyp); Sätze und Pauschalen als Stammdaten in der Administration; Stornoregel (Rückerstattung 90 %/50 %) nicht im Scope (Product Owner 22.10.2026).
 Änderungen v0.5: PDF-Übernahme nicht im Scope (Referat überträgt Einreichungen von Hand bis Iteration 2); Person mit Freigaberecht darf Planungen bearbeiten und Rückfragen stellen; Iteration 2 (öffentliches Formular oder Zugang) als offener Punkt für später; Stories v0.1 (Product Owner 22.10.2026).
@@ -84,7 +85,6 @@ Tourenleitende planen Touren und Kurse mit einer eigenständigen HTML-Datei („
 - **Annahmen des Prototyps** (MwSt. 19 % auf Gebühren, Konditionsgrenzen, Technikstufen, Zuordnung Qualifikation → Sportart, Hüttenpreis 45–90 €, Faktoren Reisebus und Selbstversorgerhütte) sind nicht vom Referat Touren bestätigt.
 - **Yolawo-Feldbezeichnungen** sind aus dem Buchungs-Widget abgeleitet, nicht in der Verwaltungsoberfläche geprüft.
 - **Lizenzdaten im Ehrenamtsmanagement unvollständig:** Bis zur Migration fehlen viele Lizenzen; Wanderleiter:innen und externe Leitende ohne Lizenzeintrag bekommen den Helfersatz. Gegenmaßnahme: Hinweis, die freigebende Person kann begründet abweichen [OFFEN: ob erlaubt].
-- **Feldlänge Titel:** Prototyp 90 Zeichen, Einsatz in der Anwesenheitserfassung 60 Zeichen.
 - **Kosten:** keine zusätzlichen; PDF-Erzeugung im Browser [ANNAHME].
 
 **Offene Fragen:**

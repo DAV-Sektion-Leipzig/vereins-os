@@ -1,6 +1,6 @@
 # Übergabe: Finanzen → Planungshilfe Touren und Kurse
 
-Stand: 24.10.2026 · Version 1.0 · Status: offen (Planungshilfe eingefroren; Einarbeitung bei der Wiederaufnahme) · Von: Finanzen (FI) · An: Planungshilfe Touren und Kurse (TK)
+Stand: 24.10.2026 · Version 1.0 · Status: eingearbeitet (26.10.2026) · Von: Finanzen (FI) · An: Planungshilfe Touren und Kurse (TK)
 Grundlage: docs/specs/fi-finanzen/00-steckbrief.md v0.1; specs/tk-touren-kurse/uebergabe-finanzen.md v1.3
 Änderungen v1.0: Erste Fassung.
 
@@ -18,4 +18,4 @@ Die Übergabe TK → FI v1.3 ist in Finanzen eingearbeitet (Steckbrief v0.1). An
 
 ## Einarbeitung
 
-- [ ] eingearbeitet in Planungshilfe Touren und Kurse (Datei, Version): –
+- [x] eingearbeitet in Planungshilfe Touren und Kurse: specs/tk-touren-kurse/spec.md v0.3 (26.10.2026). T2: Die Planungshilfe gleicht die Regel an (Trainersatz auch bei Erwerb im Halbjahr des Startdatums, R2; Product Owner 26.10.2026). T3: Gemeinschaftstour übergibt die Abrechnungsart „Gemeinschaftstour“ an den Einsatz (R15; Übergabe TK → EZ v1.3). T7: `EZ_SETTLED` wird wie `EZ_EVENT_LOCKED` gemeldet. T1, T4–T6 ohne Änderung an der Planungshilfe (Abschnitt 7).

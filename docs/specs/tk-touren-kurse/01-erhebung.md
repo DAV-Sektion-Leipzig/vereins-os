@@ -1,6 +1,7 @@
 # Erhebung: Planungshilfe Touren und Kurse
 
-Datum: 22.10.2026 · Version 0.7 · Beteiligte: Toni Werner (Product Owner); Referat Touren (über den HTML-Prototyp „Tourenkonzept“ und dessen Übergabe) · Status: Entwurf
+Datum: 26.10.2026 · Version 0.8 · Beteiligte: Toni Werner (Product Owner); Referat Touren (über den HTML-Prototyp „Tourenkonzept“ und dessen Übergabe) · Status: Entwurf
+Änderungen v0.8: Wiederaufnahme: Satzart auch bei Lizenz-Erwerb im Halbjahr des Startdatums (wie Finanzen); Kurse ein- und mehrtägig nach Lehreinheiten; Titel ungekürzt an den Einsatz; Gemeinschaftstour übergibt die Abrechnungsart „Gemeinschaftstour“ (Product Owner 26.10.2026).
 Änderungen v0.7: Organisationspauschale der Gemeinschaftstour trägt vorerst die Sektion; Sätze pflegt vorerst nur der Admin (Product Owner 22.10.2026).
 Änderungen v0.6: Gemeinschaftstour mit Organisationspauschale (Vergütungsordnung Ziff. 9.2); Sätze und Pauschalen als Stammdaten der Administration; Stornoregel nicht im Scope (Product Owner 22.10.2026).
 Änderungen v0.5: PDF-Übernahme nicht im Scope (Referat überträgt Einreichungen von Hand; Ablösung des HTML-Formulars folgt in Iteration 2); Person mit Freigaberecht darf Planungen auch bearbeiten und Rückfragen stellen (Product Owner 22.10.2026); Stories v0.1 erstellt.
@@ -42,7 +43,7 @@ PDF-Übernahme entfällt (Product Owner 22.10.2026): Die Ablösung des HTML-Form
 ### B3 Leitung wählen
 - Suche über alle Aktiven (Ehrenamtsstatus „aktiv“, ab 2 Zeichen, nur Name) [ANNAHME, wie in der Anwesenheitserfassung].
 - Nach der Auswahl: gültige Lizenzen der Person (Qualifikationsart, gültig bis, förderfähig ja/nein); Rolle Leitung, Co-Leitung oder Helfer:in.
-- Satzart je Person: Trainer:in, wenn Rolle ≠ Helfer:in und eine förderfähige Lizenz am **ersten Tag** der Tour bzw. des Kurses gültig ist („gültig bis“ ≥ Startdatum); läuft die Lizenz während der Tour ab, gilt der Trainersatz für die ganze Tour, keine tageweise Rechnung (Product Owner 22.10.2026); sonst Helfer:in. Ersetzt die Regel „Lizenzjahr ≥ Tourjahr“ aus Prototyp 4.3. Beispiel: Lizenz gültig bis 30.10.2027 – Kurs am 15.10.2027 und Tour 29.10.–01.11.2027 Trainersatz, Kurs am 02.11.2027 Helfersatz.
+- Satzart je Person: Trainer:in, wenn Rolle ≠ Helfer:in und eine förderfähige Lizenz am **ersten Tag** der Tour bzw. des Kurses gültig ist („gültig bis“ ≥ Startdatum); läuft die Lizenz während der Tour ab, gilt der Trainersatz für die ganze Tour, keine tageweise Rechnung (Product Owner 22.10.2026); sonst Helfer:in. Trainer:in auch, wenn die förderfähige Lizenz im Kalenderhalbjahr des Startdatums erworben wurde (gleiche Regel wie Finanzen, Product Owner 26.10.2026). Ersetzt die Regel „Lizenzjahr ≥ Tourjahr“ aus Prototyp 4.3. Beispiel: Lizenz gültig bis 30.10.2027 – Kurs am 15.10.2027 und Tour 29.10.–01.11.2027 Trainersatz, Kurs am 02.11.2027 Helfersatz.
 - Person ohne Ehrenamtsstatus (z. B. externe Leitung) [OFFEN]: neu als Aktive:r anlegen wie beim Arbeitseinsatz der Anwesenheitserfassung, oder nicht zulässig.
 - Kontakt-E-Mail und Mobilnummer der Leitung: Vorschlag aus der Eigenschaft Kontaktdaten, je Planung änderbar [ANNAHME].
 
@@ -64,7 +65,7 @@ Jeder Wechsel mit „wer, wann, Kommentar“ im Verlauf. Nach „freigegeben“ 
 
 ### B5 Einsatz erzeugen (Anwesenheitserfassung)
 - Beim Übergang auf „in Yolawo angelegt“ (Product Owner 22.10.2026) ruft TK eine Funktion der Anwesenheitserfassung auf (uebergabe-anwesenheitserfassung.md).
-- Inhalt: Einsatzart `course` (Kurs) bzw. `tour` (Führungs- und Gemeinschaftstour), Referat der Planung, Titel (gekürzt auf 60 Zeichen [OFFEN]), eintägig/mehrtägig, Datum bzw. Start- und Enddatum mit Beginn (Treffzeit) und Ende, Dauer-Kategorie bei eintägig aus der Dauer, organisierende Person = erste Person mit Rolle Leitung, Leitende und Helfende mit Rolle Trainer:in bzw. Helfer:in und Stand „eingetragen“.
+- Inhalt: Einsatzart `course` (Kurs) bzw. `tour` (Führungs- und Gemeinschaftstour), Referat der Planung, Titel (bis 90 Zeichen, ungekürzt), Abrechnungsart „Gemeinschaftstour“ bei Gemeinschaftstouren (Product Owner 26.10.2026), eintägig/mehrtägig, Datum bzw. Start- und Enddatum mit Beginn (Treffzeit) und Ende, Dauer-Kategorie bei eintägig aus der Dauer, organisierende Person = erste Person mit Rolle Leitung, Leitende und Helfende mit Rolle Trainer:in bzw. Helfer:in und Stand „eingetragen“.
 - Rolle im Einsatz aus der Satzart (B3), nicht aus der Rolle Co-Leitung.
 - Änderungen an Termin oder Leitung werden übertragen, solange kein Stand „anwesend“ gesetzt ist; danach Hinweis an Referent:in [ANNAHME].
 - Absage: Der Einsatz wird als „abgesagt“ markiert, nicht gelöscht (Product Owner 22.10.2026); er zählt nicht für Abrechnung und Auswertung. Absage vor „in Yolawo angelegt“: kein Einsatz vorhanden.
@@ -132,7 +133,7 @@ Gleiche Struktur für Zahlungsgebühren (Zahlmethode, %, fix €, aktiv; Prototy
 ## D. Regeln
 
 - R1: Berechnung von Tagen, Vorschlägen, Vergütung, Kosten, Teilnahmebeitrag, Überschuss, CO2, Kondition nach Prototyp 4.1–4.9; Beispielrechnung Prototyp 4.5 und 4.7 sind Abnahmekriterien.
-- R2: Satzart Trainer:in nur mit förderfähiger Lizenz, die am Startdatum der Tour bzw. des Kurses gültig ist, aus dem Ehrenamtsmanagement (B3); gilt dann für die ganze Tour; sonst Helfersatz mit Hinweis „Ohne gültige Lizenz wird der Helfersatz gerechnet“. Ohne erfasste Person wird nicht mehr mit einer Trainerperson gerechnet (ändert Prototyp 4.3 `nTL = 1`) [ANNAHME].
+- R2: Satzart Trainer:in nur mit förderfähiger Lizenz, die am Startdatum der Tour bzw. des Kurses gültig ist oder im Halbjahr des Startdatums erworben wurde, aus dem Ehrenamtsmanagement (B3); gilt dann für die ganze Tour; sonst Helfersatz mit Hinweis „Ohne gültige Lizenz wird der Helfersatz gerechnet“. Ohne erfasste Person wird nicht mehr mit einer Trainerperson gerechnet (ändert Prototyp 4.3 `nTL = 1`) [ANNAHME].
 - R3: Jede gespeicherte Kalkulation verweist auf den Satzstand; ändern sich Sätze, rechnen Planungen bis „eingereicht“ mit dem neuen Stand neu, ab „freigegeben“ bleibt der Stand eingefroren [ANNAHME].
 - R4: Gemeinschaftstour: keine Tagessätze, keine Lehreinheiten, keine Kosten der Leitung; die **Organisationspauschale wird nach Vergütungsordnung Ziff. 9.2 gezahlt** (Prototyp-Regel „keine Organisationspauschale“ war ein Fehler, Product Owner 22.10.2026); kein Teilnahmebeitrag, die Organisationspauschale trägt vorerst die Sektion (Product Owner 22.10.2026). Sonst wie Prototyp 4.9. Organisationstage wie bei Führungstouren (Prototyp 4.2).
 - R11: Keine Stornoregel im System: Feld, Eingabeblatt-Zeile „Anmeldezeitraum & Rückerstattung → Stornoregeln“ und Ausschreibungszeile „Stornierung …“ entfallen (Product Owner 22.10.2026).
@@ -141,7 +142,8 @@ Gleiche Struktur für Zahlungsgebühren (Zahlmethode, %, fix €, aktiv; Prototy
 - R7: Der Status „in Yolawo angelegt“ erzeugt genau einen Einsatz je Planung (B5); spätere Änderungen aktualisieren ihn (bis zur ersten Anwesenheit „anwesend“).
 - R8: Notfallkontakte werden nach Frist automatisch gelöscht (B8) und erscheinen nicht in Yolawo-Texten, Listen oder Exporten außer dem PDF für das Referat.
 - R10: Alle Angaben einer Planung werden strukturiert in Tabellen gespeichert (Planung, Leitung, Teilstrecken der Anreise, Kostenpositionen, Statusverlauf); keine Ablage als Datei oder JSON-Block. Grundlage für spätere Auswertungen (CO2, Einsätze, Kosten) (Product Owner 22.10.2026).
-- R9: Titel max. 90 Zeichen (Prototyp); an die Anwesenheitserfassung werden höchstens 60 Zeichen übergeben [OFFEN: kürzen oder Feld dort verlängern].
+- R9: Titel max. 90 Zeichen (Prototyp); wird ungekürzt an die Anwesenheitserfassung übergeben (dort 1–90 Zeichen, Product Owner 24.10.2026).
+- Kurs nach Lehreinheiten (spec.md R22): Kurse werden ein- und mehrtägig nur nach Lehreinheiten vergütet, ohne Tagessätze und ohne Organisationspauschale; Vorschlag der Lehreinheiten nur bei eintägigen Kursen, bei mehrtägigen ist die Angabe Pflicht (Product Owner 26.10.2026; ändert Prototyp 4.3).
 
 ## E. Schnittstellen
 
