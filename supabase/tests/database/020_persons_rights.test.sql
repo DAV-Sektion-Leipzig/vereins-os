@@ -120,12 +120,12 @@ select throws_ok(
        (select id from public.ad_templates where name = 'Admin')) $$,
   'P0001', 'AD_FORBIDDEN', 'Geschäftsstelle darf nicht zuweisen (US-AD-11 AK5)');
 
--- Startseite
+-- Startseite (nur AD und EA geprüft; GR, EZ, FI haben eigene Tests)
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
-select results_eq($$ select code from public.ad_my_modules() $$, $$ values ('AD'::text), ('EA') $$,
+select results_eq($$ select code from public.ad_my_modules() where code in ('AD', 'EA') $$, $$ values ('AD'::text), ('EA') $$,
   'Admin sieht AD und EA');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
-select is_empty($$ select code from public.ad_my_modules() $$, 'Vorstand sieht keine Module');
+select is_empty($$ select code from public.ad_my_modules() where code in ('AD', 'EA') $$, 'Vorstand sieht AD und EA nicht');
 
 -- Personen (US-AD-07 AK6, R15)
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');

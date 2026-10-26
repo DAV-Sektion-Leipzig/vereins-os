@@ -17,8 +17,8 @@ end $$;
 -- Modul
 select results_eq(
   $$ select code, name, is_available from public.ad_modules where code = 'EZ' $$,
-  $$ values ('EZ'::text, 'Anwesenheitserfassung'::text, false) $$,
-  'Modul EZ „Anwesenheitserfassung“, noch nicht verfügbar');
+  $$ values ('EZ'::text, 'Anwesenheitserfassung'::text, true) $$,
+  'Modul EZ „Anwesenheitserfassung“, verfügbar seit der Freigabe 26.10.2026');
 select is((select sort_order from public.ad_modules where code = 'EZ'),
           (select sort_order + 1 from public.ad_modules where code = 'GR'), 'EZ direkt nach GR');
 
@@ -43,7 +43,13 @@ select ok(public.ad_has_any_level('EZ', 'edit'), 'Referent:in: EZ bearbeiten (Re
 select results_eq(
   $$ select r.name from public.ea_referate r where r.id = any (public.ad_my_referate('EZ', 'edit')) $$,
   $$ values ('Klettern'::text) $$, 'Referent:in: EZ-Referate = Referate der Zuweisung (R31)');
+select ok('EZ' = any (select m.code from public.ad_my_modules() m), 'Referent:in: Kachel EZ (verfügbar, Reichweite Referat)');
+select pg_temp.as_owner();
+update public.ad_modules set is_available = false where code = 'EZ';
+select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
 select ok(not ('EZ' = any (select m.code from public.ad_my_modules() m)), 'keine Kachel EZ, solange nicht verfügbar');
+select pg_temp.as_owner();
+update public.ad_modules set is_available = true where code = 'EZ';
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
 select ok(not public.ad_has_any_level('EZ', 'read'), 'Vorstand: kein Zugriff auf EZ');
 
