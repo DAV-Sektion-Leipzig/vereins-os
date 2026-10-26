@@ -1,6 +1,7 @@
 # Ideenkatalog: Sichten und Kennzahlen des Dashboards
 
-Stand: 26.10.2026 · Version 0.1 · Status: Entwurf zur Auswahl durch den Product Owner und die Referate
+Stand: 26.10.2026 · Version 0.2 · Status: Entwurf zur Auswahl durch den Product Owner und die Referate
+Änderungen v0.2: Entscheidungen Q-DS1 (Referat sieht Einzelbuchungen), Q-DS2 (Budget in FI) und Q-DS3 (Auslastung ohne Platzzahl) eingearbeitet.
 Grundlage: Steckbriefe, Specs und Merkposten der Module AD, EA, GR, EZ, TK, FI (Stand 26.10.2026); 00-steckbrief.md DS v0.1.
 
 Alle Ideen sind Vorschläge [ANNAHME]. Spalte **ab** = frühester Zeitpunkt, zu dem die Daten im Vereins OS vorliegen (Modul und Iteration). Spalte **Datenschutz** nennt, was beachtet werden muss. Grundsatz: Das Dashboard zeigt Anzahlen, Summen und Quoten; Personenlisten bleiben im Fachmodul.
@@ -16,7 +17,7 @@ Kürzel der Priorität für die Rückmeldung: **M** = Must (MVP), **S** = Should
 | B1 | Plan / verbraucht / frei / Verbrauch in % je Budgetposten und Gesamtbudget, Ampel, Zeitmarke | Vorstand (alle), Referat (eigene Gesamtbudgets) | DATEV-Export + Finanzplan | DS-MVP | Summen unkritisch |
 | B2 | Einnahmen Plan / erreicht / fehlt noch | Vorstand, Referat | DATEV-Export | DS-MVP | – |
 | B3 | Verbrauch im Verhältnis zum abgelaufenen Jahr („schneller als geplant“) als Hinweis | Referat | B1 | DS-MVP | – |
-| B4 | Einzelbuchungen je Budgetposten | Geschäftsstelle, Vorstand; Referat [OFFEN Q-DS1] | DATEV-Export | DS-MVP | Buchungstexte enthalten Namen |
+| B4 | Einzelbuchungen je Budgetposten | Geschäftsstelle, Vorstand, Referat (eigene Budgetposten; Q-DS1 entschieden) | DATEV-Export (FI) | DS-MVP | Buchungstexte enthalten Namen; Löschfrist Q-DS11 |
 | B5 | Nicht zugeordnete Buchungen, Prüfung des Exports | Geschäftsstelle, Vorstand | DATEV-Export | DS-MVP | – |
 | B6 | Monatsverlauf je Gesamtbudget (kumuliert gegen Plan-Linie) | Vorstand, Referat | DATEV-Export | DS-MVP oder S | – |
 | B7 | Vergleich mit dem Vorjahr (gleicher Stichtag) | Vorstand, Referat | Exporte mehrerer Jahre | C | – |
@@ -29,7 +30,7 @@ Kürzel der Priorität für die Rückmeldung: **M** = Must (MVP), **S** = Should
 
 | Nr | Kennzahl | Quelle | ab | Datenschutz |
 |---|---|---|---|---|
-| K1 | **Auslastung je Gruppe** – Definition [OFFEN Q-DS3]: (a) Teilnehmer:innen / Platzzahl, (b) Ø anwesende Kinder je Training / Teilnehmer:innen zum Stichtag, (c) Betreuungsschlüssel. Darstellung je Gruppe als Balken, Ampel bei sehr niedriger bzw. voller Auslastung | GR, EZ (a: neues Feld Platzzahl in GR) | EZ-MVP + GR | nur Anzahlen |
+| K1 | **Auslastung je Gruppe** (Q-DS3 entschieden): Anwesenheitsquote = Ø anwesende Teilnehmer:innen je Training / Teilnehmer:innen zum Datum; zusammen mit K5 (Probetrainings) und K6 (Betreuungsschlüssel). Darstellung je Gruppe als Balken; Grenzwerte für Hinweise [OFFEN] | GR, EZ | EZ-MVP + GR | nur Anzahlen |
 | K2 | Teilnehmer:innen je Gruppe zum Stichtag, Eintritte und Teilnahmeenden je Halbjahr | GR | GR-MVP | nur Anzahlen |
 | K3 | Anzahl Trainings je Gruppe und Halbjahr; Anzahl Trainings gegen Trainingszeiten (wie viele mögliche Termine wurden erfasst) | EZ, GR (Trainingszeiten) | EZ-MVP | – |
 | K4 | Abgesagte Einsätze je Gruppe mit Grund (Anzahl) | EZ | EZ-MVP | – |
