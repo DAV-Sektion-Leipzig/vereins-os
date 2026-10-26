@@ -183,6 +183,37 @@ spec.md FI v0.2 Abschnitt 5; Datenbank umgesetzt (`20261031000100`–`…0700`),
 | `FI_EXTRA_REQUIRED` | Bitte Text und Begründung angeben. | R47 | Datenbank umgesetzt |
 | `FI_AMOUNT_INVALID` | Bitte einen gültigen Betrag eingeben. | R47 | Datenbank umgesetzt |
 
+## Planungshilfe Touren und Kurse (TK)
+
+spec.md TK v0.4 Abschnitt 5; Datenbank Stufe 2 umgesetzt (`20261105000100`–`…0700`), Anbindung der Anwesenheitserfassung (`TK_EZ_*`) mit Stufe 3, Oberfläche folgt.
+
+| Code | Meldung | Regel | Status |
+|---|---|---|---|
+| `TK_FORBIDDEN` | Keine Berechtigung. | Abschnitt 3 | Datenbank umgesetzt |
+| `TK_FORBIDDEN_REFERAT` (Detail: Tourtyp) | Für Kurse ist das Referat Ausbildung zuständig. Dir fehlt das Recht für dieses Referat. (Touren: „Für Touren ist das Referat Touren zuständig. …“) | R12 | Datenbank umgesetzt |
+| `TK_NOT_FOUND` | Planung nicht gefunden. | Abschnitt 2 | Datenbank umgesetzt |
+| `TK_CONFLICT` (Detail: Name) | Die Planung wurde inzwischen von {Name} geändert. Bitte neu laden; deine Eingaben bleiben bis dahin sichtbar. | R20 | Datenbank umgesetzt |
+| `TK_LOCKED` (Detail: `approved` bzw. `final`) | approved: Nach der Freigabe ändern nur Personen mit Freigaberecht oder die Geschäftsstelle. · final: Diese Planung ist abgeschlossen und kann nicht mehr geändert werden. | R19 | Datenbank umgesetzt |
+| `TK_STATUS_NOT_ALLOWED` (Detail: Status) | Dieser Schritt ist im aktuellen Status nicht möglich. [ANNAHME: Text] | Abschnitt 4 | Datenbank umgesetzt |
+| `TK_STATUS_DIRECT` | Etwas ist schiefgelaufen. Bitte versuche es erneut. (Programmierfehler) | Abschnitt 2 | Datenbank umgesetzt |
+| `TK_MISSING_FIELDS` (Detail: Schlüssel, kommagetrennt) | Noch {n} Angaben offen. (bei Freigabe: „Freigabe nicht möglich: Angaben fehlen.“) | R6 | Datenbank umgesetzt |
+| `TK_COMMENT_REQUIRED` (Detail: `query` bzw. `cancel`) | query: Bitte die Rückfrage beschreiben. · cancel: Bitte einen Grund angeben. | R21 | Datenbank umgesetzt |
+| `TK_PERSON_NOT_ACTIVE` | Bitte eine aktive Person auswählen. | R13 | Datenbank umgesetzt |
+| `TK_DUPLICATE_PERSON` | Diese Person ist schon eingetragen. | R17 | Datenbank umgesetzt |
+| `TK_PHONE_INVALID` | Bitte eine Telefonnummer eingeben. | R18 | Datenbank umgesetzt |
+| `TK_EMAIL_INVALID` | Bitte eine gültige E-Mail-Adresse eingeben. | R18 | Datenbank umgesetzt |
+| `TK_NOT_FINISHED` | Die Tour ist noch nicht vorbei. | Abschnitt 4 | Datenbank umgesetzt |
+| `TK_DELETE_FORBIDDEN` | Löschen ist nur für Entwürfe und abgesagte Planungen ohne Einsatz möglich. [ANNAHME: Text] | Abschnitt 2 | Datenbank umgesetzt |
+| `TK_PLAN_CANCELLED` | Die Planung ist abgesagt. | US-TK-24 | Datenbank umgesetzt |
+| `TK_PRIVACY_NOT_CONFIRMED` | Bitte bestätige, dass du die Person informiert hast. | R23 | Datenbank umgesetzt |
+| `TK_PERSON_NOT_INACTIVE` | Diese Person ist bereits aktiv. | R23 | Datenbank umgesetzt |
+| `TK_FIELD_INVALID` (Detail: Feld bzw. Check) | Bitte die Eingabe prüfen. [ANNAHME: technischer Code, Text je Feld im Frontend] | Abschnitt 2 | Datenbank umgesetzt |
+| `TK_REFERAT_MISSING` | Etwas ist schiefgelaufen. Bitte den Admin informieren. (Referat Touren bzw. Ausbildung fehlt in den Stammdaten; plan.md P3) | R12 | Datenbank umgesetzt |
+| `TK_FIELD_LOCKED` | Etwas ist schiefgelaufen. Bitte versuche es erneut. (Programmierfehler) | Abschnitt 2 | Datenbank umgesetzt |
+| `TK_EZ_FAILED` | Einsatz konnte nicht angelegt werden. Bitte später erneut versuchen. | R15 | folgt mit Stufe 3 (tasks.md T015) |
+| `TK_EZ_LOCKED` | Der Einsatz ist schon erfasst oder abgerechnet und wurde nicht geändert. Bitte in der Anwesenheitserfassung anpassen. (Absage: „Absage nicht möglich: Im Einsatz sind schon Personen als anwesend erfasst oder er ist abgerechnet.“) | R15 | folgt mit Stufe 3 (tasks.md T015) |
+| `TK_EZ_SYNC_FAILED` | Die Planung ist gespeichert, der Einsatz konnte nicht aktualisiert werden. Bitte später erneut speichern. [ANNAHME: Text] | R15 | folgt mit Stufe 3 (tasks.md T015) |
+
 ## Bereich Budget (FI, Dashboard DS)
 
 spec.md DS v0.2 Abschnitt 5; Datenbank umgesetzt (`20261105100100`–`…0700`), Oberfläche folgt (Phase 3). `FI_BUDGET_SHEET_MISSING` prüft der Browser.

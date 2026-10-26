@@ -13,20 +13,20 @@ Siehe [AD tasks.md](../ad-administration/tasks.md) Phase 18 (T134–T141). Vorau
 
 ## Stufe 2: Datenbank (Branch `tk-datenbank`)
 
-- [ ] T001 [spec T1] Migration Typen und Tabellen `tk_plans`, `tk_plan_leaders` (mit `license_valid_from`), `tk_plan_contacts`, `tk_plan_legs`, `tk_plan_costs`, `tk_plan_results`, `tk_plan_rates`, `tk_plan_history`, `tk_qualification_sports`, `tk_privacy_confirmations`; Checks, Indizes, RLS an, keine Schreib-Grants (US-TK-01, -02, R10)
-- [ ] T002 [spec T2] Rechtefunktionen `tk_can_read`, `tk_can_write`, `tk_can_approve` (`ad_can_approve('TK', …)`), `tk_can_manage`, `tk_can_read_contacts`; `tk_person_visible` ersetzt den Platzhalter (gleiche Signatur); Select-Policies
-- [ ] T003 [spec T3] Startbestand `tk_qualification_sports` (Prototyp 4.8) über `ad_qualification_types.code`; nicht zuordenbare Bezeichnungen per `raise notice` und hier notieren
-- [ ] T004 [spec T4] Trigger: Referat aus Tourtyp (`tk_plan_referat`, P3), Audit, Sperre direkter Statusänderung (`TK_STATUS_DIRECT`)
-- [ ] T005 [spec T5] `tk_rates`, `tk_calculate` nach R1–R4, R6, R22; Satzart mit Erwerb im Halbjahr (R2)
-- [ ] T006 [P] [spec T6, T20] Testfälle `scripts/tk-calc/cases.json` (Planungen 1–5, 7, 9; Satzwechsel nach `valid_from`; fehlender Satz; Lizenz-Erwerb im Halbjahr); pgTAP `820_tk_calculate.test.sql`
-- [ ] T007 [spec T7] `tk_save_plan` (Schritte 1–9 ohne EZ-Aufruf), `tk_copy_plan`, `tk_delete_plan`
-- [ ] T008 [spec T8] `tk_change_status` ohne EZ-Aufrufe (submit, query, resubmit, approve mit Satzstand, done, close, cancel ohne Einsatz); publish nur `tk_can_approve` oder `tk_can_manage` (A11)
-- [ ] T009 [spec T9] `tk_list_plans`, `tk_get_plan` (inkl. `rates`, Rechte-Kennzeichen), `tk_cost_report`
-- [ ] T010 [spec T10] `tk_purge_contacts` (30 Tage, R16) und pg_cron-Job 03:15 Uhr
-- [ ] T011 [spec T11] `tk_settlement_draft` (US-TK-24; Lizenz-Felder mit Erwerbsdatum)
-- [ ] T012 [spec T23] `tk_create_leader`, `tk_reactivate_leader` (R23)
-- [ ] T013 [P] [spec T12] Fehlercodes TK in `ad-administration/contracts/error-codes.md`
-- [ ] T014 [spec T15, T18] Seed nach spec.md 9 (Planungen 1–9, ohne Einsatz bei Planung 5 bis Stufe 3); pgTAP `800_tk_structure`, `810_tk_rights` (Sichtbarkeitsmatrix, R19 je Status, R17, R13, Kontaktdaten-RLS, direkte Schreibzugriffe abgelehnt), `830_tk_save_status`, `840_tk_purge_leaders` (Löschjob, R23), `860_tk_volume`
+- [x] T001 [spec T1] `20261105000100_tk_tables.sql`: Migration Typen und Tabellen `tk_plans`, `tk_plan_leaders` (mit `license_valid_from`), `tk_plan_contacts`, `tk_plan_legs`, `tk_plan_costs`, `tk_plan_results`, `tk_plan_rates`, `tk_plan_history`, `tk_qualification_sports`, `tk_privacy_confirmations`; Checks, Indizes, RLS an, keine Schreib-Grants (US-TK-01, -02, R10)
+- [x] T002 [spec T2] `20261105000100_tk_tables.sql`: Rechtefunktionen `tk_can_read`, `tk_can_write`, `tk_can_approve` (`ad_can_approve('TK', …)`), `tk_can_manage`, `tk_can_read_contacts`; `tk_person_visible` ersetzt den Platzhalter (gleiche Signatur); Select-Policies
+- [x] T003 [spec T3] `20261105000200_tk_triggers.sql`: Startbestand `tk_qualification_sports` (Prototyp 4.8) über `ad_qualification_types.code` (10 Arten). Zuordnung „Trainer*in C Sportklettern“ → TCSPI, TCSP und KS (alle Sportklettern Breitensport) [ANNAHME, Prüfliste Referat Touren Nr. 4]; alle Kürzel gefunden
+- [x] T004 [spec T4] `20261105000200_tk_triggers.sql`: Trigger: Referat aus Tourtyp (`tk_plan_referat`, P3), Audit, Sperre direkter Statusänderung (`TK_STATUS_DIRECT`)
+- [x] T005 [spec T5] `20261105000300_tk_calculate.sql`: `tk_rates`, `tk_calculate` nach R1–R4, R6, R22; Satzart mit Erwerb im Halbjahr (R2)
+- [x] T006 [P] [spec T6] pgTAP `820_tk_calculate.test.sql` (40 Prüfungen: Planungen 1–5, 7, 9 mit den Werten aus Prototyp 4.5/4.7, Satzwechsel 2028, fehlender Satz, Lizenz-Erwerb im Halbjahr, Warnungen). `scripts/tk-calc/cases.json` mit denselben Werten folgt mit T017 (Oberfläche)
+- [x] T007 [spec T7] `20261105000400_tk_save.sql`: `tk_save_plan` (Schritte 1–9 ohne EZ-Aufruf), `tk_copy_plan`, `tk_delete_plan`
+- [x] T008 [spec T8] `20261105000500_tk_status.sql` (publish setzt nur den Status; Einsatz mit T015): `tk_change_status` ohne EZ-Aufrufe (submit, query, resubmit, approve mit Satzstand, done, close, cancel ohne Einsatz); publish nur `tk_can_approve` oder `tk_can_manage` (A11)
+- [x] T009 [spec T9] `20261105000600_tk_read.sql`: `tk_list_plans`, `tk_get_plan` (inkl. `rates`, Rechte-Kennzeichen), `tk_cost_report`
+- [x] T010 [spec T10] `20261105000700_tk_purge_leaders.sql`: `tk_purge_contacts` (30 Tage, R16) und pg_cron-Job 03:15 Uhr
+- [x] T011 [spec T11] `20261105000600_tk_read.sql`: `tk_settlement_draft` (US-TK-24; Lizenz-Felder mit Erwerbsdatum)
+- [x] T012 [spec T23] `20261105000700_tk_purge_leaders.sql`: `tk_create_leader`, `tk_reactivate_leader` (R23)
+- [x] T013 [P] [spec T12] (zusätzlich technisch `TK_FIELD_INVALID`, `TK_REFERAT_MISSING`, `TK_FIELD_LOCKED`) Fehlercodes TK in `ad-administration/contracts/error-codes.md`
+- [x] T014 [spec T15, T18] Seed `supabase/seed-tk.sql` (nur TEST, `SEED_WITH_TK=1`, nicht in CI) nach spec.md 9 (Planungen 1–9, ohne Einsatz bei Planung 5 bis Stufe 3); pgTAP legen ihre Daten selbst an: `800_tk_structure`, `810_tk_rights` (Sichtbarkeitsmatrix, R19 je Status, R17, R13, Kontaktdaten-RLS, direkte Schreibzugriffe abgelehnt), `830_tk_save_status`, `840_tk_purge_leaders` (Löschjob, R23), `860_tk_volume`
 
 ## Stufe 3: Anbindung Anwesenheitserfassung (Branch `tk-ez-anbindung`)
 
