@@ -39,9 +39,9 @@ Die Tasks folgen spec.md Abschnitt 10 (T1–T16). Ein eigener Spec-Kit-Plan ents
 - [x] FT19 Migration `supabase/migrations/20261102000300_fi_collection.sql`: Tabellen, Hilfsfunktionen, Schreib- und Lesefunktionen (12.1, 12.2)
 - [x] FT20 pgTAP `supabase/tests/database/640_fi_collection.test.sql` (R34–R47, R57, R58, Rechte, keine IBAN)
 - [x] FT21 Seed: Gläubiger-ID `DE98ZZZ09999999999`, Sachkonto `0000 1`, Stichtag = Monat des ersten Seeds
-- [ ] FT22 Oberfläche Administration (AD T133)
-- [ ] FT23 Oberfläche /fi/einzug, /fi/einzug/:id
-- [ ] FT24 Lastschriftdatei (pain.008.001.02) mit Test, Einzugsliste (PDF)
+- [x] FT22 Oberfläche Administration (AD T133): `src/features/ad/auszahlung/` (Gläubiger-ID, Sachkonto der Gruppenbeiträge, Stichtag)
+- [x] FT23 Oberfläche /fi/einzug, /fi/einzug/:id (`src/features/fi/einzug/`)
+- [x] FT24 Lastschriftdatei (pain.008.001.02, `export/sepaDebit.ts`) mit Test (`scripts/fi-export/sepaDebit.test.ts`, optional gegen XSD über `PAIN008_XSD`), Einzugsliste (PDF, `export/collectionList.ts`)
 - [ ] FT25 Abnahme in TEST
 
 ## Abweichungen und Präzisierungen gegenüber spec.md (zur Kenntnis des Product Owners)
