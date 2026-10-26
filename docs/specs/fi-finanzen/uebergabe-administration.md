@@ -1,8 +1,8 @@
 # Übergabe: Finanzen → Administration
 
-Stand: 26.10.2026 · Version 1.4 · Status: A1–A10 eingearbeitet (26.10.2026, spec.md AD v0.10.0); A11–A13 offen · Von: Finanzen (FI) · An: Administration (AD)
+Stand: 26.10.2026 · Version 1.4 · Status: A1–A10 eingearbeitet (26.10.2026, spec.md AD v0.10.0); A11 und A13 offen (A12 entfällt) · Von: Finanzen (FI) · An: Administration (AD)
 Grundlage: docs/specs/fi-finanzen/00-steckbrief.md v0.1, 01-erhebung.md v0.1; spec.md AD v0.9 (Nachtrag v0.9, `ad_rates`, `ea_person_licenses`); querschnitt-administration.md v0.1 (P6, P7, P11, P14, Q2, Q6)
-Änderungen v1.4: A11–A13 für den Buchungslauf Verträge (01-erhebung.md FI v0.7, Abschnitt H): Gläubiger-Identifikationsnummer, Fälligkeitstag, Stichtag erster Buchungslauf.
+Änderungen v1.4: A11 und A13 für den Buchungslauf Verträge (01-erhebung.md FI v0.7.1, Abschnitt H): Gläubiger-Identifikationsnummer und Sachkonto der Gruppenbeiträge, Stichtag erster Buchungslauf; A12 (Fälligkeitstag) entfällt, Finanzen schlägt Erstellen + 3 Tage vor.
 Änderungen v1.3: A10 entschieden – Angaben der Sektion für die Auszahlung (Name, IBAN, BIC, Sachkonto) als Einstellung der Administration (Vorlagen der Geschäftsstelle, Product Owner 26.10.2026).
 Änderungen v1.2: Höchstbetrag entschieden (A4).
 Änderungen v1.1: Startwert eintägige Ausbildungsfahrt entschieden (A2); A7 um Referent:innen mit Reichweite „Referat“ und Aktion „freigeben“ erweitert (Vier-Augen-Prinzip, Product Owner 25.10.2026); A8 und A9 angepasst.
@@ -34,13 +34,13 @@ Finanzen rechnet die Vergütung nach der Vergütungsordnung aus der Anwesenheits
 
 ## Nachtrag v1.4: Buchungslauf Verträge (offen)
 
-Finanzen zieht monatlich die Verträge des Moduls Gruppen per SEPA-Lastschrift ein (01-erhebung.md FI v0.7, Abschnitt H; Product Owner 26.10.2026). Dafür braucht Finanzen drei Stammdaten, die wie die Angaben der Sektion (A10) nur der Admin pflegt:
+Finanzen zieht monatlich die Verträge des Moduls Gruppen per SEPA-Lastschrift ein (01-erhebung.md FI v0.7, Abschnitt H; Product Owner 26.10.2026). Dafür braucht Finanzen zwei Stammdaten, die wie die Angaben der Sektion (A10) nur der Admin pflegt:
 
 | # | Bedarf | Vorschlag |
 |---|---|---|
-| A11 | **Gläubiger-Identifikationsnummer** der Sektion | neues Feld `creditor_id` in `ad_payout_settings` (gültig ab wie die übrigen Angaben); Prüfung des Aufbaus (DE, 2 Prüfziffern, 3 Zeichen Geschäftsbereich, 11 Ziffern; Prüfziffer nach ISO 7064 wie bei der IBAN) [ANNAHME]; Rückgabe in `ad_payout_settings_at`. Optional eigenes Sachkonto für Gruppenbeiträge [OFFEN, R41 FI]. |
-| A12 | **Fälligkeitstag** (Tag des Monats, 1–28) für den Buchungslauf | neue Stammdaten mit „gültig ab“ (wie die Abgabefristen), Funktion `ad_collection_due_day_at(p_date date)` [ANNAHME: Namen]; Startwert nach Angabe der Geschäftsstelle [OFFEN]. |
+| A11 | **Gläubiger-Identifikationsnummer** und **Sachkonto der Gruppenbeiträge** | neue Felder `creditor_id` und `ledger_account_collection` in `ad_payout_settings` (gültig ab wie die übrigen Angaben); Gläubiger-ID mit Prüfung des Aufbaus (DE, 2 Prüfziffern, 3 Zeichen Geschäftsbereich, 11 Ziffern; Prüfziffer nach ISO 7064 wie bei der IBAN) [ANNAHME]; Sachkonto als freies Eingabefeld wie das bestehende Sachkonto (Product Owner 26.10.2026); Rückgabe in `ad_payout_settings_at`. |
+| A12 | ~~Fälligkeitstag~~ | entfällt (Product Owner 26.10.2026: Fälligkeitstag = Erstellen + 3 Tage, in Finanzen) |
 | A13 | **Stichtag** des ersten Buchungslaufs im Vereins OS | einmaliges Datum (z. B. 01.11.2026); Verträge mit Beginn davor gelten als bereits eingezogen (Folgelastschrift, R38 FI); vom Admin gesetzt, danach nur noch vom Admin änderbar; Funktion `ad_collection_start()` [ANNAHME: Namen]. |
 
-Oberfläche: Seite „Auszahlung“ der Administration um „Einzug“ erweitern (Gläubiger-ID, Fälligkeitstag, Stichtag). Rechte: lesen mit AD ≥ lesen oder FI verwalten, pflegen nur Admin (wie A10).
+Oberfläche: Seite „Auszahlung“ der Administration um „Einzug“ erweitern (Gläubiger-ID, Sachkonto der Gruppenbeiträge, Stichtag). Rechte: lesen mit AD ≥ lesen oder FI verwalten, pflegen nur Admin (wie A10).
 
