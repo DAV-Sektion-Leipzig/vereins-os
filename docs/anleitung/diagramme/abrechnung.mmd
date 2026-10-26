@@ -1,0 +1,8 @@
+%% Halbjährliche Abrechnung (Vier-Augen-Prinzip)
+flowchart LR
+  A["Entwurf<br/><small>Geschäftsstelle berechnet<br/>das Halbjahr</small>"] --> B["bestätigt<br/><small>Referent:in: „sachlich richtig“</small>"]
+  B --> C["abgeschlossen<br/><small>Geschäftsstelle; Dokument<br/>zur Unterschrift drucken</small>"]
+  C --> D["abgegeben<br/><small>unterschriebenes Dokument<br/>ist da</small>"]
+  D --> E["ausgezahlt<br/><small>über eine Auszahlungsrunde</small>"]
+  C -. "Frist verpasst" .-> X["verfallen<br/><small>keine Auszahlung</small>"]
+  C -. "Fehler gefunden" .-> A

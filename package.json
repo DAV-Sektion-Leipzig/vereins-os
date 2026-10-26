@@ -10,7 +10,10 @@
     "preview": "vite preview",
     "ea:migrate": "tsx scripts/ea-migrate/index.ts",
     "ea:migrate:test": "tsx --test \"scripts/ea-migrate/*.test.ts\"",
-    "fi:export:test": "tsx --test \"scripts/fi-export/*.test.ts\""
+    "fi:export:test": "tsx --test \"scripts/fi-export/*.test.ts\"",
+    "anleitung:screenshots": "tsx scripts/anleitung/screenshots.ts",
+    "anleitung:diagramme": "tsx scripts/anleitung/diagramme.ts",
+    "anleitung:pdf": "tsx scripts/anleitung/pdf.ts"
   },
   "dependencies": {
     "@fontsource/fira-sans": "^5.3.0",
@@ -37,7 +40,10 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "csv-parse": "^7.0.3",
+    "marked": "^18.1.2",
+    "mermaid": "^12.2.0",
     "oxlint": "^1.88.0",
+    "playwright": "1.63.0",
     "shadcn": "^4.22.1",
     "supabase": "^2.121.0",
     "tsx": "^4.23.15",

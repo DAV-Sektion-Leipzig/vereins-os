@@ -1,0 +1,9 @@
+%% Vom Anlegen bis zur ersten Anmeldung
+flowchart TD
+  A["Admin legt die Person an<br/>und trägt die Login-Adresse ein"] --> B["Admin weist eine Rechtevorlage zu<br/><small>z. B. Referent:in mit Referat</small>"]
+  B --> C["Admin klickt „Einladen“"]
+  C --> D["Du bekommst eine E-Mail"]
+  D --> E["Du klickst auf den Link<br/>und setzt dein Passwort"]
+  E --> F["Zugang ist „aktiv“<br/>Du siehst deine Startseite"]
+  F -. "Passwort vergessen?" .-> G["„Passwort vergessen“<br/>auf der Anmeldeseite"]
+  G -. "neuer Link per E-Mail" .-> E

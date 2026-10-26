@@ -1,0 +1,12 @@
+%% Wie die Module zusammenhängen
+flowchart TB
+  AD["Administration<br/><small>Personen, Zugänge, Rechte</small>"]
+  EA["Ehrenamtsmanagement<br/><small>Aktive, Lizenzen</small>"]
+  GR["Gruppen<br/><small>Teilnehmer:innen, Trainingszeiten</small>"]
+  EZ["Anwesenheitserfassung<br/><small>Einsätze, Anwesenheit</small>"]
+  FI["Finanzen<br/><small>Abrechnung, Auszahlung</small>"]
+  AD -- "Rechte für alle Module" --> EA
+  EA -- "Trainer:innen und Lizenzen" --> EZ
+  GR -- "Gruppe und Trainingszeit" --> EZ
+  EZ -- "wer war wann da" --> FI
+  EA -- "Lizenz, Bankverbindung" --> FI

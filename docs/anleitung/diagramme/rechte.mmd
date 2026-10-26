@@ -1,0 +1,8 @@
+%% Woher deine Rechte kommen
+flowchart LR
+  P["Person"] --> Z["Zugang<br/><small>Login-Adresse, Status „aktiv“</small>"]
+  Z --> V1["Rechtevorlage 1<br/><small>z. B. Referent:in</small>"]
+  Z --> V2["Rechtevorlage 2<br/><small>z. B. Geschäftsstelle</small>"]
+  V1 --> R["Deine Rechte je Modul<br/><small>Es gilt die höchste Stufe:<br/>lesen < bearbeiten < verwalten</small>"]
+  V2 --> R
+  R --> S["Startseite zeigt<br/>nur deine Module"]

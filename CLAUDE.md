@@ -39,6 +39,18 @@ Antworte immer auf Deutsch.
   und example.org (reservierte Beispieldomains): anhalten und fragen. Ausnahme: die
   allgemein bekannte Beispiel-IBAN `DE89370400440532013000` für fiktive Testdaten.
 
+## Anleitung für Nutzer:innen
+
+- Die Anleitung liegt unter `docs/anleitung/` (einfache Sprache, je Nutzergruppe ein Teil, Screenshots und
+  Ablaufbilder). Claude Code pflegt sie selbst (Auftrag des Product Owners 26.10.2026); sie beschreibt nur, was
+  umgesetzt ist, und entscheidet nichts Fachliches.
+- **Mit jedem neuen Modul oder jeder neuen Oberfläche** die Anleitung im selben Pull Request ergänzen: Abschnitt in den
+  betroffenen Teilen, Bilder in `scripts/anleitung/screenshots.ts` eintragen und mit `npm run anleitung:screenshots`
+  gegen den lokalen Stack erzeugen (nie gegen PROD), Ablaufbilder in `docs/anleitung/diagramme/*.mmd` mit
+  `npm run anleitung:diagramme`, Tabelle „Welche Module gibt es?“ und Version in `docs/anleitung/README.md` anpassen.
+- Version: neues Modul oder neuer Teil = neue Hauptversion, sonst Unterversion; je Version eine Zeile „Änderungen“.
+  Auf `main` erzeugt der Workflow `anleitung-pdf.yml` das PDF und bei neuer Version ein Release `anleitung-v<Version>`.
+
 ## Offene Punkte
 
 - Offene Punkte nicht selbst entscheiden. Fehlt eine fachliche Entscheidung oder widersprechen sich Dokumente: als `[OFFEN]` kennzeichnen und melden, mit Quelle (Datei), wie in [docs/offene-punkte.md](docs/offene-punkte.md).
@@ -113,6 +125,7 @@ Antworte immer auf Deutsch.
 │   ├── vorlagen.md
 │   ├── marke.md                    DAV-Corporate-Design (Auszug)
 │   ├── diagrams/                   Excalidraw-Dateien
+│   ├── anleitung/                  Anleitung für Nutzer:innen (Bilder, Ablaufbilder, PDF über Workflow)
 │   └── specs/
 │       └── <modul>/                z. B. ad-administration, ea-ehrenamt
 │           ├── 00-steckbrief.md
