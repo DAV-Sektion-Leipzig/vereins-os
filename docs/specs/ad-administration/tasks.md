@@ -522,7 +522,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 
 - [x] T131 Migration `20261102000100_ad_collection_settings.sql` (R57, R58; mit FI FT17)
 - [x] T132 pgTAP in `640_fi_collection.test.sql` (Gläubiger-ID, Stichtag)
-- [ ] T133 Oberfläche /ad/auszahlung: Gläubiger-ID, Sachkonto der Gruppenbeiträge, Stichtag (mit FI FT22)
+- [x] T133 Oberfläche /ad/auszahlung: Gläubiger-ID, Sachkonto der Gruppenbeiträge, Stichtag (mit FI FT22)
 
 ## Abhängigkeiten und Reihenfolge
 

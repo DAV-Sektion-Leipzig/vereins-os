@@ -57,11 +57,11 @@ export function sepaText(text: string, max: number): string {
   return [...out.replace(/\s+/g, ' ').trim()].slice(0, max).join('').trim()
 }
 
-function xml(text: string): string {
+export function xml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&apos;').replace(/"/g, '&quot;')
 }
 
-function compactIban(iban: string): string {
+export function compactIban(iban: string): string {
   return iban.replace(/\s+/g, '').toUpperCase()
 }
 

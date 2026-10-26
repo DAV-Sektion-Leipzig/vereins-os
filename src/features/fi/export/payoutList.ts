@@ -55,7 +55,8 @@ export async function buildPayoutList(data: PayoutExport): Promise<Blob> {
 
   // Zwischensumme je Seite unter der letzten Zeile der Seite (nur bei mehreren Seiten)
   if (pages.size > 1) {
-    const last = Math.max(...pages.keys())
+    // Fußzeile der Tabelle (Summe) steht auf der letzten Seite des Dokuments
+    const last = doc.getNumberOfPages()
     for (const [page, entry] of pages) {
       doc.setPage(page)
       // letzte Seite: unter der Summe der Runde

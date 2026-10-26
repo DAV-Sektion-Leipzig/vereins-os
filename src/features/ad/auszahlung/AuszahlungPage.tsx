@@ -10,22 +10,26 @@ import { useAdAccess } from '@/features/ad/access'
 import {
   deadlineLabel,
   formatIban,
+  saveCollectionStart,
   saveDeadline,
   savePayoutSettings,
   setSemiannual,
   type PayoutAdminData,
+  type PayoutSettings,
 } from '@/features/ad/auszahlung/data'
 import { MESSAGES, toMessage } from '@/lib/errors'
 import { formatDate, todayIso } from '@/lib/format'
 
 // T129 (spec.md AD v0.10, R53, R54): Abgabefristen der halbjährlichen Abrechnung, Kennzeichen am Referat und
-// Angaben der Sektion für Auszahlliste und Überweisungsdatei. Pflege nur Admin.
+// Angaben der Sektion für Auszahlliste und Überweisungsdatei; v0.11 (R57, R58; T133): Gläubiger-ID, Sachkonto der
+// Gruppenbeiträge und Stichtag des ersten Buchungslaufs. Pflege nur Admin.
 export function AuszahlungPage() {
   const data = useLoaderData() as PayoutAdminData
   const { canEdit } = useAdAccess()
   const revalidator = useRevalidator()
   const [deadlineHalf, setDeadlineHalf] = useState<1 | 2 | null>(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [startOpen, setStartOpen] = useState(false)
   const [showIban, setShowIban] = useState(false)
   const [togglePending, setTogglePending] = useState<string | null>(null)
 
@@ -36,6 +40,7 @@ export function AuszahlungPage() {
     toast.success(text)
     setDeadlineHalf(null)
     setSettingsOpen(false)
+    setStartOpen(false)
     revalidator.revalidate()
   }
 
@@ -163,19 +168,52 @@ export function AuszahlungPage() {
             </dd>
             <dt className="text-muted-foreground">BIC</dt>
             <dd className="tabular-nums">{current.bic}</dd>
-            <dt className="text-muted-foreground">Sachkonto</dt>
+            <dt className="text-muted-foreground">Sachkonto Übungsleitervergütung</dt>
             <dd className="tabular-nums">{current.ledger_account}</dd>
+            <dt className="text-muted-foreground">Gläubiger-ID</dt>
+            <dd className="tabular-nums">{current.creditor_id ?? '–'}</dd>
+            <dt className="text-muted-foreground">Sachkonto Gruppenbeiträge</dt>
+            <dd className="tabular-nums">{current.ledger_account_collection ?? '–'}</dd>
             <dt className="text-muted-foreground">gültig ab</dt>
             <dd className="tabular-nums">{formatDate(current.valid_from)}</dd>
           </dl>
         )}
       </section>
 
+      <section aria-labelledby="collection-heading" className="flex flex-col gap-2">
+        <div className="flex items-center justify-between gap-3">
+          <h2 id="collection-heading" className="font-medium">
+            Buchungslauf Verträge
+          </h2>
+          {canEdit && (
+            <Button variant="outline" size="sm" onClick={() => setStartOpen(true)}>
+              {data.collectionStart ? 'Stichtag ändern' : 'Stichtag festlegen'}
+            </Button>
+          )}
+        </div>
+        <p className="max-w-2xl text-sm text-muted-foreground">
+          Stichtag des ersten Buchungslaufs im Vereins OS: {data.collectionStart ? formatMonth(data.collectionStart) : 'nicht festgelegt'}.
+          Verträge mit Beginn davor gelten als bereits eingezogen (Folgelastschrift). Ohne Stichtag und Gläubiger-ID ist
+          kein Buchungslauf möglich.
+        </p>
+      </section>
+
       {deadlineHalf && (
         <DeadlineDialog half={deadlineHalf} onClose={() => setDeadlineHalf(null)} onSaved={() => saved('Abgabefrist gespeichert.')} />
       )}
       {settingsOpen && (
-        <SettingsDialog onClose={() => setSettingsOpen(false)} onSaved={() => saved('Angaben der Sektion gespeichert.')} />
+        <SettingsDialog
+          initial={current}
+          onClose={() => setSettingsOpen(false)}
+          onSaved={() => saved('Angaben der Sektion gespeichert.')}
+        />
+      )}
+      {startOpen && (
+        <StartDialog
+          initial={data.collectionStart}
+          onClose={() => setStartOpen(false)}
+          onSaved={() => saved('Stichtag gespeichert.')}
+        />
       )}
     </section>
   )
@@ -249,11 +287,14 @@ function DeadlineDialog({ half, onClose, onSaved }: { half: 1 | 2; onClose: () =
   )
 }
 
-function SettingsDialog({ onClose, onSaved }: { onClose: () => void; onSaved: () => void }) {
-  const [debtorName, setDebtorName] = useState('')
-  const [iban, setIban] = useState('')
-  const [bic, setBic] = useState('')
-  const [ledger, setLedger] = useState('')
+function SettingsDialog({ initial, onClose, onSaved }: { initial: PayoutSettings | null; onClose: () => void; onSaved: () => void }) {
+  // Vorbelegt mit den aktuellen Angaben; gespeichert wird immer eine neue Zeile mit „gültig ab“
+  const [debtorName, setDebtorName] = useState(initial?.debtor_name ?? '')
+  const [iban, setIban] = useState(initial?.iban ?? '')
+  const [bic, setBic] = useState(initial?.bic ?? '')
+  const [ledger, setLedger] = useState(initial?.ledger_account ?? '')
+  const [creditorId, setCreditorId] = useState(initial?.creditor_id ?? '')
+  const [ledgerCollection, setLedgerCollection] = useState(initial?.ledger_account_collection ?? '')
   const [validFrom, setValidFrom] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
@@ -272,6 +313,8 @@ function SettingsDialog({ onClose, onSaved }: { onClose: () => void; onSaved: ()
       bic,
       ledger_account: ledger,
       valid_from: validFrom,
+      creditor_id: creditorId,
+      ledger_account_collection: ledgerCollection,
     })
     setPending(false)
     if (saveError) setError(toMessage(saveError).text)
@@ -302,13 +345,82 @@ function SettingsDialog({ onClose, onSaved }: { onClose: () => void; onSaved: ()
               <Input id="payout-bic" autoComplete="off" value={bic} onChange={(e) => setBic(e.target.value)} />
             </div>
             <div className="flex flex-col gap-2">
-              <Label htmlFor="payout-ledger">Sachkonto</Label>
+              <Label htmlFor="payout-ledger">Sachkonto Übungsleitervergütung</Label>
               <Input id="payout-ledger" maxLength={20} value={ledger} onChange={(e) => setLedger(e.target.value)} />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="payout-creditor">Gläubiger-ID (für den Einzug)</Label>
+              <Input id="payout-creditor" autoComplete="off" maxLength={18} value={creditorId} onChange={(e) => setCreditorId(e.target.value)} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="payout-ledger-collection">Sachkonto Gruppenbeiträge</Label>
+              <Input
+                id="payout-ledger-collection"
+                maxLength={20}
+                value={ledgerCollection}
+                onChange={(e) => setLedgerCollection(e.target.value)}
+              />
             </div>
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="payout-from">gültig ab</Label>
             <Input id="payout-from" type="date" value={validFrom} onChange={(e) => setValidFrom(e.target.value)} />
+          </div>
+          <ErrorText text={error} />
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={onClose} disabled={pending}>
+              Abbrechen
+            </Button>
+            <Button type="submit" disabled={pending}>
+              {pending ? 'Speichern …' : 'Speichern'}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+function formatMonth(day: string) {
+  const [y, m] = day.split('-')
+  return `${m}/${y}`
+}
+
+function StartDialog({ initial, onClose, onSaved }: { initial: string | null; onClose: () => void; onSaved: () => void }) {
+  const [month, setMonth] = useState(initial ? initial.slice(0, 7) : todayIso().slice(0, 7))
+  const [error, setError] = useState<string | null>(null)
+  const [pending, setPending] = useState(false)
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setError(null)
+    if (!/^\d{4}-\d{2}$/.test(month)) {
+      setError(MESSAGES.rateFieldRequired)
+      return
+    }
+    setPending(true)
+    const { error: saveError } = await saveCollectionStart(month, initial !== null)
+    setPending(false)
+    if (saveError) setError(toMessage(saveError).text)
+    else onSaved()
+  }
+
+  return (
+    <Dialog open onOpenChange={(open) => !open && !pending && onClose()}>
+      <DialogContent>
+        <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+          <DialogHeader>
+            <DialogTitle>Stichtag des ersten Buchungslaufs</DialogTitle>
+            <DialogDescription>
+              Monat des ersten Buchungslaufs im Vereins OS. Verträge mit Beginn vor diesem Monat werden als Folgelastschrift
+              eingezogen; frühere Monate sind nicht wählbar.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="collection-start">Monat</Label>
+            <Input id="collection-start" type="month" value={month} onChange={(e) => setMonth(e.target.value)} className="sm:w-48" />
           </div>
           <ErrorText text={error} />
           <DialogFooter>

@@ -6,13 +6,15 @@ type NavItem = { to: string; label: string; isActive: (pathname: string) => bool
 
 const SETTLEMENTS: NavItem = { to: '/fi', label: 'Abrechnungen', isActive: (p) => p === '/fi' || p.startsWith('/fi/abrechnung') }
 const RUNS: NavItem = { to: '/fi/auszahlungen', label: 'Auszahlungsrunden', isActive: (p) => p.startsWith('/fi/auszahlungen') }
+const COLLECTIONS: NavItem = { to: '/fi/einzug', label: 'Buchungsläufe', isActive: (p) => p.startsWith('/fi/einzug') }
 const CLIMBING: NavItem = { to: '/fi/kletterhalle', label: 'Punktekonto Kletterhalle', isActive: (p) => p.startsWith('/fi/kletterhalle') }
 
-// FT11 (spec.md FI 6): Rahmen der Finanzen; Auszahlungsrunden und Kletterhalle nur mit „FI verwalten“.
+// FT11, FT23 (spec.md FI 6, 12.4): Rahmen der Finanzen; Auszahlungsrunden, Buchungsläufe und Kletterhalle nur mit
+// „FI verwalten“.
 export function FiLayout() {
   const { pathname } = useLocation()
   const { canManage } = useFiAccess()
-  const nav = canManage ? [SETTLEMENTS, RUNS, CLIMBING] : [SETTLEMENTS]
+  const nav = canManage ? [SETTLEMENTS, RUNS, COLLECTIONS, CLIMBING] : [SETTLEMENTS]
 
   return (
     <div className="flex flex-col gap-6">
