@@ -164,6 +164,11 @@ begin
                       jsonb_build_object('person_id', v_hilde, 'role', 'helper')), pg_temp.contact(v_bernd),
     '[{"mode": "rail_long", "label": "Leipzig–Ötztal", "km_one_way": 700, "persons": 8}]', '[]', 'draft');
 
+  -- Einsatz für veröffentlichte Planungen nachtragen (Seed vor Stufe 3 schon gelaufen)
+  perform pg_temp.as_user(v_tina);
+  perform public.tk_ez_sync(p.id) from public.tk_plans p
+   where p.client_request_id::text like 'f1000000-%' and p.status = 'published' and p.ez_event_id is null;
+
   -- Ergebnisse mit eingefrorenem bzw. aktuellem Satzstand neu rechnen
   perform pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
   perform public.tk_calculate(p.id) from public.tk_plans p where p.client_request_id::text like 'f1000000-%';
