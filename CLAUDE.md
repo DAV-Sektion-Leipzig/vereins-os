@@ -50,6 +50,10 @@ Antworte immer auf Deutsch.
   `npm run anleitung:diagramme`, Tabelle „Welche Module gibt es?“ und Version in `docs/anleitung/README.md` anpassen.
 - Version: neues Modul oder neuer Teil = neue Hauptversion, sonst Unterversion; je Version eine Zeile „Änderungen“.
   Auf `main` erzeugt der Workflow `anleitung-pdf.yml` das PDF und bei neuer Version ein Release `anleitung-v<Version>`.
+- **Im Nachgang** (Auftrag des Product Owners 26.10.2026): Wird die Oberfläche ohne Anpassung der Anleitung gemergt,
+  sammelt der Workflow `anleitung-pruefen.yml` das im Issue „Anleitung nachziehen“ (Label `anleitung`). Die Routine
+  „Anleitung nachziehen“ arbeitet es werktags mit dem Skill `anleitung-nachziehen` ab und öffnet einen Pull Request.
+  Manuell: `/anleitung-nachziehen`.
 
 ## Offene Punkte
 

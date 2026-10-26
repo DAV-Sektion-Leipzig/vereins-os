@@ -11,8 +11,8 @@ Du siehst die Daten **deines Referats**. Hast du mehrere Referate, siehst du all
 | Modul | Was du dort tust | Stand |
 |---|---|---|
 | Ehrenamtsmanagement | Aktive deines Referats finden, anlegen und pflegen | freigeschaltet |
-| Anwesenheitserfassung | Trainings, Fahrten und andere Einsätze deines Referats erfassen | in Vorbereitung |
-| Finanzen | Abrechnungen deines Referats als „sachlich richtig“ bestätigen | in Vorbereitung (für Kinder und Jugend und Leistungssport) |
+| Anwesenheitserfassung | Trainings, Fahrten und andere Einsätze deines Referats erfassen | freigeschaltet |
+| Finanzen | Abrechnungen deines Referats als „sachlich richtig“ bestätigen | freigeschaltet (für Kinder und Jugend und Leistungssport) |
 
 ---
 
@@ -96,8 +96,6 @@ In der Liste „Aktive“ und auf der Detailseite siehst du außerdem Hinweise w
 
 ## Anwesenheitserfassung
 
-*In Vorbereitung: Das Modul erscheint auf deiner Startseite, sobald es freigeschaltet ist.*
-
 Hier erfasst du, wer bei einem Training, einer Fahrt oder einem anderen Einsatz dabei war. Daraus berechnet die Geschäftsstelle später die Vergütung.
 
 ![Ablauf eines Einsatzes: erfassen, Anwesende ankreuzen, speichern, absagen oder abrechnen](diagramme/einsatz.png)
@@ -160,7 +158,7 @@ Unter **„Kontrolle Kletterhalle“** siehst du je Ort und Zeitraum, wie viele 
 
 ## Finanzen: Abrechnungen bestätigen
 
-*In Vorbereitung. Zuerst für die Referate Kinder und Jugend und Leistungssport.*
+*Zuerst für die Referate Kinder und Jugend und Leistungssport.*
 
 Zweimal im Jahr rechnet die Geschäftsstelle die Vergütung der Trainer:innen und Helfer:innen ab. Bevor sie auszahlt, **bestätigst du**, dass die Angaben für dein Referat stimmen. Das heißt **„sachlich richtig“**. So schauen immer zwei Personen auf eine Abrechnung (Vier-Augen-Prinzip).
 
