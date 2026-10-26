@@ -6,6 +6,9 @@ const NAV = [
   { to: '/ad/rechtevorlagen', label: 'Rechtevorlagen', match: (p: string) => p.startsWith('/ad/rechtevorlagen') },
   { to: '/ad/eigenschaftsarten', label: 'Eigenschaftsarten', match: (p: string) => p.startsWith('/ad/eigenschaftsarten') },
   { to: '/ad/qualifikationsarten', label: 'Qualifikationsarten', match: (p: string) => p.startsWith('/ad/qualifikationsarten') },
+  { to: '/ad/saetze', label: 'Sätze', match: (p: string) => p.startsWith('/ad/saetze') },
+  { to: '/ad/abrechnungsarten', label: 'Abrechnungsarten', match: (p: string) => p.startsWith('/ad/abrechnungsarten') },
+  { to: '/ad/auszahlung', label: 'Auszahlung', match: (p: string) => p.startsWith('/ad/auszahlung') },
   { to: '/ad/protokoll', label: 'Protokoll', match: (p: string) => p.startsWith('/ad/protokoll') },
 ]
 

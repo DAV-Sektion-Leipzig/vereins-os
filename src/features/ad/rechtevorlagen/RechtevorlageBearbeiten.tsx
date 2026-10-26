@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAdAccess } from '@/features/ad/access'
 import {
+  allowsApprove,
   allowsReferat,
   personCountLabel,
   saveTemplate,
@@ -17,12 +18,13 @@ import {
 import { MESSAGES, toMessage } from '@/lib/errors'
 import { LEVEL_LABELS, LEVELS, SCOPE_LABELS, SCOPES, type Level, type Scope } from '@/lib/rights'
 
-const NONE: Right = { level: 'none', scope: 'all' }
+const NONE: Right = { level: 'none', scope: 'all', approve: false }
 
 /** Anzeige einer Stufe, bei Reichweite „Referat“ mit Zusatz (US-AD-20 AK1). */
 function rightLabel(right: Right) {
   if (right.level === 'none') return LEVEL_LABELS.none
-  return right.scope === 'referat' ? `${LEVEL_LABELS[right.level]}, Reichweite Referat` : LEVEL_LABELS[right.level]
+  const level = right.approve ? `${LEVEL_LABELS[right.level]} + freigeben` : LEVEL_LABELS[right.level]
+  return right.scope === 'referat' ? `${level}, Reichweite Referat` : level
 }
 
 function BackLink() {
@@ -107,7 +109,15 @@ function TemplateForm({ data }: { data: EditData }) {
   }, [nameTaken])
 
   function setLevel(code: string, level: Level) {
-    setRights((current) => ({ ...current, [code]: { ...(current[code] ?? NONE), level } }))
+    // „darf freigeben“ gibt es nur mit einer Stufe (R50)
+    setRights((current) => {
+      const right = current[code] ?? NONE
+      return { ...current, [code]: { ...right, level, approve: level === 'none' ? false : right.approve } }
+    })
+  }
+
+  function setApprove(code: string, approve: boolean) {
+    setRights((current) => ({ ...current, [code]: { ...(current[code] ?? NONE), approve } }))
   }
 
   function setScope(code: string, scope: Scope) {
@@ -175,10 +185,12 @@ function TemplateForm({ data }: { data: EditData }) {
         <fieldset className="flex flex-col gap-3">
           <legend className="mb-1 font-medium">Rechte je Modul</legend>
           <p className="mb-2 text-sm text-muted-foreground">
-            Reichweite „Referat“ gibt es nur im Ehrenamtsmanagement; die Referate legst du bei der Zuweisung fest.
+            Reichweite „Referat“ gibt es im Ehrenamtsmanagement, in der Anwesenheitserfassung, in der Planungshilfe und in
+            Finanzen; die Referate legst du bei der Zuweisung fest. „Darf freigeben“: in Finanzen Abrechnungen als sachlich
+            richtig bestätigen, in der Planungshilfe Planungen freigeben.
           </p>
-          <RightsMatrix modules={data.modules} rights={rights} onChange={setLevel} onScopeChange={setScope} />
-          <RightsList modules={data.modules} rights={rights} onChange={setLevel} onScopeChange={setScope} />
+          <RightsMatrix modules={data.modules} rights={rights} onChange={setLevel} onScopeChange={setScope} onApproveChange={setApprove} />
+          <RightsList modules={data.modules} rights={rights} onChange={setLevel} onScopeChange={setScope} onApproveChange={setApprove} />
         </fieldset>
 
         {error && !nameTaken && <ErrorMessage text={error} />}
@@ -210,6 +222,7 @@ type RightsProps = {
   rights: Rights
   onChange: (code: string, level: Level) => void
   onScopeChange: (code: string, scope: Scope) => void
+  onApproveChange: (code: string, approve: boolean) => void
 }
 
 const selectClassName =
@@ -237,10 +250,26 @@ function ScopeSelect({ module, right, onScopeChange, id }: { module: Module; rig
   )
 }
 
-// Ab 640 px: Matrix mit einer Optionsgruppe je Modul und der Spalte Reichweite
-function RightsMatrix({ modules, rights, onChange, onScopeChange }: RightsProps) {
+// „Darf freigeben“ nur für Finanzen und Planungshilfe, nur mit einer Stufe (R50)
+function ApproveCheckbox({ module, right, onApproveChange, id }: { module: Module; right: Right; onApproveChange: RightsProps['onApproveChange']; id: string }) {
+  if (!allowsApprove(module.code)) return <span className="text-sm text-muted-foreground">–</span>
   return (
-    <div className="hidden max-w-3xl overflow-hidden rounded-xl border sm:block">
+    <input
+      id={id}
+      type="checkbox"
+      checked={right.approve}
+      disabled={right.level === 'none'}
+      onChange={(event) => onApproveChange(module.code, event.target.checked)}
+      aria-label={`${module.name}: darf freigeben`}
+      className="size-4 cursor-pointer accent-primary disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring focus-visible:outline-solid"
+    />
+  )
+}
+
+// Ab 640 px: Matrix mit einer Optionsgruppe je Modul und den Spalten Reichweite und „darf freigeben“
+function RightsMatrix({ modules, rights, onChange, onScopeChange, onApproveChange }: RightsProps) {
+  return (
+    <div className="hidden max-w-4xl overflow-hidden rounded-xl border sm:block">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b bg-muted">
@@ -254,6 +283,9 @@ function RightsMatrix({ modules, rights, onChange, onScopeChange }: RightsProps)
             ))}
             <th scope="col" className="h-10 px-4 text-left font-medium">
               Reichweite
+            </th>
+            <th scope="col" className="h-10 px-4 text-center font-medium">
+              darf freigeben
             </th>
           </tr>
         </thead>
@@ -281,6 +313,9 @@ function RightsMatrix({ modules, rights, onChange, onScopeChange }: RightsProps)
               <td className="px-4 py-1">
                 <ScopeSelect module={m} right={rights[m.code] ?? NONE} onScopeChange={onScopeChange} id={`scope-${m.code}`} />
               </td>
+              <td className="px-4 py-1 text-center">
+                <ApproveCheckbox module={m} right={rights[m.code] ?? NONE} onApproveChange={onApproveChange} id={`approve-${m.code}`} />
+              </td>
             </tr>
           ))}
         </tbody>
@@ -289,8 +324,8 @@ function RightsMatrix({ modules, rights, onChange, onScopeChange }: RightsProps)
   )
 }
 
-// Unter 640 px: Liste mit je einem Auswahlfeld pro Modul, Reichweite darunter
-function RightsList({ modules, rights, onChange, onScopeChange }: RightsProps) {
+// Unter 640 px: Liste mit je einem Auswahlfeld pro Modul, Reichweite und „darf freigeben“ darunter
+function RightsList({ modules, rights, onChange, onScopeChange, onApproveChange }: RightsProps) {
   return (
     <ul className="flex flex-col divide-y rounded-xl border sm:hidden">
       {modules.map((m) => (
@@ -316,6 +351,14 @@ function RightsList({ modules, rights, onChange, onScopeChange }: RightsProps) {
                 Reichweite
               </label>
               <ScopeSelect module={m} right={rights[m.code] ?? NONE} onScopeChange={onScopeChange} id={`scope-select-${m.code}`} />
+            </div>
+          )}
+          {allowsApprove(m.code) && (
+            <div className="flex items-center justify-between gap-3">
+              <label htmlFor={`approve-list-${m.code}`} className="text-sm text-muted-foreground">
+                darf freigeben
+              </label>
+              <ApproveCheckbox module={m} right={rights[m.code] ?? NONE} onApproveChange={onApproveChange} id={`approve-list-${m.code}`} />
             </div>
           )}
         </li>

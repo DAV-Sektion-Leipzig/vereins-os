@@ -515,7 +515,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 - [x] T126 [spec T72] `supabase/migrations/20261029000500_ad_finance_data.sql`, `supabase/tests/database/293_ad_finance_data.test.sql`: `fi_person_visible` (Platzhalter), `ea_person_names` um Finanzen erweitert, `ea_person_finance_data` (R55, R56)
 - [x] T127 [P] [spec T73] `contracts/error-codes.md`: neue Codes v0.10, Text `AD_SCOPE_NOT_ALLOWED`
 - [x] T128 [spec T76] `supabase/seed.sql`: fiktive Angaben der Sektion (Beispiel-IBAN, BIC `TESTDEFFXXX`, Sachkonto „0000 0“)
-- [ ] T129 [spec T74] Oberfläche: Spalte „darf freigeben“ in der Vorlagen-Matrix, Seiten /ad/saetze (aus v0.9 T64), /ad/abrechnungsarten, /ad/auszahlung, Navigationseinträge – eigener Branch `us-ad-v010-oberflaeche`
+- [x] T129 [spec T74] Oberfläche (Branch `us-ad-v010-oberflaeche`; zusätzlich Reichweite „Referat“ für EZ in der Matrix, Teil von T120): Spalte „darf freigeben“ in der Vorlagen-Matrix, Seiten /ad/saetze (aus v0.9 T64), /ad/abrechnungsarten, /ad/auszahlung, Navigationseinträge – eigener Branch `us-ad-v010-oberflaeche`
 - [ ] T130 [spec T77] Nach Freigabe des Product Owners nach TEST ausrollen und mit Admin und Geschäftsstelle abnehmen
 
 ## Abhängigkeiten und Reihenfolge
