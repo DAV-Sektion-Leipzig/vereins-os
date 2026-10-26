@@ -154,8 +154,8 @@ description: "Tasks für das Modul Anwesenheitserfassung (EZ)"
 ## Phase 10: Abschluss
 
 - [x] T033 [P] Querschnitt je Oberflächen-PR: `npm run lint`, `npm run build` ohne Fehler; Personendaten-Prüfung nach CLAUDE.md.
-- [ ] T034 (spec T17, Branch `ez-abnahme`) nach AD T120/T121 und Freigabe des Product Owners: Migrationen und Seed nach TEST (quickstart.md B), Abnahme nach quickstart.md D mit den Testzugängen auf dem Telefon; Ergebnisse in abnahme-test.md.
-- [ ] T035 (spec T17, Branch `ez-freischalten`) Migration `…_ez_module_available.sql`: `update public.ad_modules set is_available = true where code = 'EZ'` mit Test; nur nach ausdrücklicher Freigabe des Product Owners.
+- [x] T034 (spec T17, Branch `ez-abnahme`; Abnahme vom Product Owner am 26.10.2026 als erfolgt erklärt) nach AD T120/T121 und Freigabe des Product Owners: Migrationen und Seed nach TEST (quickstart.md B), Abnahme nach quickstart.md D mit den Testzugängen auf dem Telefon; Ergebnisse in abnahme-test.md.
+- [x] T035 (spec T17, Branch `ez-freischalten`; umgesetzt als `20261101000100_gr_ez_fi_available.sql`, PR #60) Migration `…_ez_module_available.sql`: `update public.ad_modules set is_available = true where code = 'EZ'` mit Test; nur nach ausdrücklicher Freigabe des Product Owners.
 
 ---
 
