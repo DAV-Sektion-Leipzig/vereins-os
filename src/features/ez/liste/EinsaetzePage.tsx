@@ -17,6 +17,7 @@ import {
   type EventListResult,
   type EventRow,
 } from '@/features/ez/liste/data'
+import { SettledBadge } from '@/features/ez/shared/SettledBadge'
 import { LoadFailed, selectClassName } from '@/features/gr/shared/ui'
 import { cn } from '@/lib/utils'
 
@@ -166,6 +167,11 @@ function EventName({ event }: { event: EventRow }) {
         <Badge variant="outline" className="self-start">
           abgesagt
         </Badge>
+      )}
+      {event.is_settled && (
+        <span className="self-start">
+          <SettledBadge />
+        </span>
       )}
     </span>
   )

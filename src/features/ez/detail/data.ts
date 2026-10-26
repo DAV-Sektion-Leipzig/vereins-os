@@ -31,6 +31,10 @@ export type EzEvent = {
   updated_by_person_id: string | null
   is_cancelled: boolean
   from_planning: boolean
+  /** v0.6 (R32, R34): Abrechnungsart (null = keine Vergütung) und Kennzeichen „abgerechnet“. */
+  remuneration_kind_id: string | null
+  remuneration_kind_name: string | null
+  is_settled: boolean
 }
 
 export type Attendance = {
@@ -40,6 +44,7 @@ export type Attendance = {
   status: AttendanceStatus
   is_substitute: boolean
   from_plan: boolean
+  is_settled: boolean
 }
 
 export type EventDetail = {

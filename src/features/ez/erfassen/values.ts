@@ -21,6 +21,9 @@ export type FormValues = {
   dayCategory: DayCategory | ''
   locationId: string
   remark: string
+  /** Abrechnungsart ('' = keine Vergütung); gilt erst nach eigener Wahl, sonst die Vorbelegung (R32). */
+  remunerationKindId: string
+  remunerationTouched: boolean
   persons: FormPerson[]
   /** Vertretungen bzw. Personen außerhalb der Gruppenliste (bleiben beim Datumswechsel). */
   substituteIds: string[]
@@ -46,6 +49,8 @@ export function emptyValues(kind: EventKind, context: FormContext, today: string
     dayCategory: '',
     locationId: '',
     remark: '',
+    remunerationKindId: '',
+    remunerationTouched: false,
     persons: [],
     substituteIds: [],
     trials: [],
@@ -71,6 +76,8 @@ export function valuesFromDetail(detail: EventDetail): FormValues {
     dayCategory: (e.day_category ?? '') as DayCategory | '',
     locationId: e.location_id ?? '',
     remark: e.remark ?? '',
+    remunerationKindId: e.remuneration_kind_id ?? '',
+    remunerationTouched: true,
     persons: detail.attendances.map((a) => ({ person_id: a.person_id, role: a.role, status: a.status })),
     substituteIds: detail.attendances.filter((a) => a.is_substitute).map((a) => a.person_id),
     trials: detail.trials.map((t) => t.first_name),

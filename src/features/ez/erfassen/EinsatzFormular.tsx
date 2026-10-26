@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
-import { XIcon } from 'lucide-react'
+import { LockIcon, XIcon } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { AnwesenheitsListe, PersonenEintragen } from '@/features/ez/erfassen/Anwesenheit'
-import { loadRoster, mergeRosters, type FormContext, type ListPerson, type Roster } from '@/features/ez/erfassen/data'
+import { loadRoster, mergeRosters, remunerationDefault, type FormContext, type ListPerson, type Roster } from '@/features/ez/erfassen/data'
 import { clearDraft, writeDraft } from '@/features/ez/erfassen/draft'
 import type { FormValues } from '@/features/ez/erfassen/values'
 import { EZ_MESSAGES } from '@/features/ez/errors'
@@ -29,6 +29,11 @@ type Props = {
   /** Einsatz aus der Planungshilfe: Kopf außer Bemerkung gesperrt, Personen aus der Planung fest (R25). */
   fromPlanning?: boolean
   lockedPersonIds?: string[]
+  /** Abgerechneter Einsatz: Datum, Zeiten, Dauer, Vergütung und organisierende Person gesperrt (R34). */
+  settled?: boolean
+  settledPersonIds?: string[]
+  /** Bezeichnung der gespeicherten Abrechnungsart (auch wenn inaktiv). */
+  remunerationName?: string | null
   /** Name der Gruppe(n) beim Bearbeiten (nur angezeigt, R19). */
   groupLabel?: string
 }
@@ -52,7 +57,18 @@ const FIELD_IDS: Record<string, string> = {
 
 // T023–T028 (US-EZ-01 bis -09, -12, -17 bis -21): Formular je Einsatzart in der Reihenfolge aus spec.md 6 mit Anwesenheit;
 // Speichern über ez_save_event mit client_request_id, Rückfrage bei doppelter Erfassung (R8), Entwurf im Browser.
-export function EinsatzFormular({ context, initial, eventId, initialNames, fromPlanning = false, lockedPersonIds = [], groupLabel }: Props) {
+export function EinsatzFormular({
+  context,
+  initial,
+  eventId,
+  initialNames,
+  fromPlanning = false,
+  lockedPersonIds = [],
+  settled = false,
+  settledPersonIds = [],
+  remunerationName = null,
+  groupLabel,
+}: Props) {
   const navigate = useNavigate()
   const isNew = !eventId
   const [values, setValues] = useState<FormValues>(initial)
@@ -70,7 +86,13 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
   const withGroup = hasGroup(kind)
   const span = fixedSpan(kind) ?? values.span
   const headLocked = fromPlanning
+  // Abgerechnet: Datum, Zeiten, Dauer und organisierende Person zusätzlich gesperrt (R34)
+  const timesLocked = headLocked || settled
   const [locked] = useState(() => new Set(lockedPersonIds))
+  const [settledIds] = useState(() => new Set(settledPersonIds))
+  // Vergütung: Vorbelegung aus Einsatzart, Dauer und Datum, bis selbst gewählt (R32)
+  const remunerationPreset = remunerationDefault(context, kind, span, values.startDate)
+  const remunerationKindId = values.remunerationTouched ? values.remunerationKindId : remunerationPreset
   const set = (patch: Partial<FormValues>) => setValues((v) => ({ ...v, ...patch }))
 
   // Entwurf bei jeder Änderung (nur beim Anlegen, US-EZ-18)
@@ -160,6 +182,7 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
       day_category: values.dayCategory || null,
       location_id: values.locationId || null,
       remark: values.remark,
+      remuneration_kind_id: remunerationKindId || null,
     }
     if (isNew && kind === 'competition') event.additional_group_ids = values.additionalGroupIds
     const res = await ezRpc<string>('ez_save_event', {
@@ -172,7 +195,12 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
     if (res.error) {
       if (res.error.code === 'EZ_DUPLICATE_EVENT') return setDuplicate({ existingId: res.error.details || null })
       setDuplicate(null)
-      const field = res.error.code === 'EZ_FIELD_REQUIRED' ? FIELD_IDS[res.error.details] : undefined
+      const field =
+        res.error.code === 'EZ_FIELD_REQUIRED'
+          ? FIELD_IDS[res.error.details]
+          : res.error.code === 'EZ_REMUNERATION_INACTIVE'
+            ? 'ez-remuneration'
+            : undefined
       setError({ text: res.error.text, field })
       if (field) document.getElementById(field)?.focus()
       return
@@ -205,6 +233,13 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
       {(kind === 'course' || kind === 'tour') && isNew && (
         <p className="rounded-lg border bg-muted/50 p-3 text-sm">Kurse und Touren aus der Planungshilfe Touren und Kurse werden automatisch angelegt.</p>
       )}
+      {settled && (
+        <p className="flex gap-2 rounded-lg border bg-muted/50 p-3 text-sm">
+          <LockIcon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+          Dieser Einsatz ist abgerechnet. Datum, Zeiten, Dauer, Vergütung, organisierende Person und abgerechnete Personen
+          sind gesperrt. Änderungen nur nach Rücknahme des Abschlusses in Finanzen.
+        </p>
+      )}
       {fromPlanning && (
         <p className="rounded-lg border bg-muted/50 p-3 text-sm">
           Aus der Planungshilfe Touren und Kurse. Kopf und Personen aus der Planung werden dort geändert.
@@ -213,7 +248,7 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
 
       <div className="flex flex-col gap-5">
         {/* Ausbildungsfahrt und Wettkampfbetreuung: zuerst eintägig/mehrtägig (spec.md 6) */}
-        {fixedSpan(kind) === null && withGroup && <SpanField value={span} onChange={(s) => set({ span: s })} disabled={headLocked} />}
+        {fixedSpan(kind) === null && withGroup && <SpanField value={span} onChange={(s) => set({ span: s })} disabled={timesLocked} />}
 
         {!withGroup && (
           <Field id="ez-referat" label="Referat">
@@ -334,7 +369,7 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
                   <span id="ez-organizer" className="font-medium">
                     {names[values.organizerId] ?? 'ausgewählte Person'}
                   </span>
-                  {!headLocked && (
+                  {!timesLocked && (
                     <Button variant="ghost" size="sm" onClick={() => setEditingOrganizer(true)}>
                       Ändern
                     </Button>
@@ -358,7 +393,7 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
           </div>
         )}
 
-        {fixedSpan(kind) === null && !withGroup && <SpanField value={span} onChange={(s) => set({ span: s })} disabled={headLocked} />}
+        {fixedSpan(kind) === null && !withGroup && <SpanField value={span} onChange={(s) => set({ span: s })} disabled={timesLocked} />}
 
         {span === 'single' ? (
           <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start">
@@ -371,7 +406,7 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
                   setRosterNotice(null)
                   set({ startDate: e.target.value })
                 }}
-                disabled={headLocked}
+                disabled={timesLocked}
                 aria-invalid={invalid('ez-start-date')}
                 className="sm:w-44"
               />
@@ -397,7 +432,7 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
                         value={d}
                         checked={values.dayCategory === d}
                         onChange={() => set({ dayCategory: d })}
-                        disabled={headLocked}
+                        disabled={timesLocked}
                         className="accent-primary"
                       />
                       {DAY_LABELS[d]}
@@ -419,7 +454,7 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
                     setRosterNotice(null)
                     set({ startDate: e.target.value })
                   }}
-                  disabled={headLocked}
+                  disabled={timesLocked}
                   aria-invalid={invalid('ez-start-date')}
                   className="sm:w-44"
                 />
@@ -430,7 +465,7 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
                   type="time"
                   value={values.startTime}
                   onChange={(e) => set({ startTime: e.target.value })}
-                  disabled={headLocked}
+                  disabled={timesLocked}
                   className="sm:w-32"
                 />
               </Field>
@@ -443,7 +478,7 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
                   value={values.endDate}
                   min={values.startDate || undefined}
                   onChange={(e) => set({ endDate: e.target.value })}
-                  disabled={headLocked}
+                  disabled={timesLocked}
                   aria-invalid={invalid('ez-end-date')}
                   className="sm:w-44"
                 />
@@ -454,13 +489,24 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
                   type="time"
                   value={values.endTime}
                   onChange={(e) => set({ endTime: e.target.value })}
-                  disabled={headLocked}
+                  disabled={timesLocked}
                   className="sm:w-32"
                 />
               </Field>
             </div>
           </div>
         )}
+
+        <VerguetungField
+          context={context}
+          value={remunerationKindId}
+          preset={remunerationPreset}
+          touched={values.remunerationTouched}
+          storedName={remunerationName}
+          disabled={settled}
+          invalid={error?.field === 'ez-remuneration'}
+          onChange={(id) => set({ remunerationKindId: id, remunerationTouched: true })}
+        />
 
         {kind === 'training' && (
           <Field id="ez-location" label="Ort">
@@ -491,6 +537,7 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
               persons={values.persons}
               substitutes={values.substituteIds.map((id) => ({ id, name: names[id] ?? 'unbekannte Person' }))}
               lockedIds={locked}
+              settledIds={settledIds}
               disabled={pending}
               onToggle={togglePerson}
               onRole={(id, role) => set({ persons: values.persons.map((p) => (p.person_id === id ? { ...p, role } : p)) })}
@@ -512,6 +559,7 @@ export function EinsatzFormular({ context, initial, eventId, initialNames, fromP
             names={names}
             defaultRole={kind === 'work_assignment' ? 'helper' : 'trainer'}
             lockedIds={locked}
+            settledIds={settledIds}
             disabled={pending}
             onAdd={(person) => {
               remember(person)
@@ -630,5 +678,60 @@ function SpanField({ value, onChange, disabled }: { value: Span; onChange: (span
         ))}
       </div>
     </fieldset>
+  )
+}
+
+const NO_REMUNERATION = 'keine Vergütung'
+
+/**
+ * Feld „Vergütung“ (spec.md EZ 6, v0.6; R32): aktive Abrechnungsarten nach Bezeichnung und „keine Vergütung“;
+ * die gespeicherte Abrechnungsart bleibt wählbar, auch wenn sie inzwischen inaktiv ist.
+ */
+function VerguetungField({
+  context,
+  value,
+  preset,
+  touched,
+  storedName,
+  disabled,
+  invalid,
+  onChange,
+}: {
+  context: FormContext
+  value: string
+  preset: string
+  touched: boolean
+  storedName: string | null
+  disabled: boolean
+  invalid: boolean
+  onChange: (id: string) => void
+}) {
+  const options = context.remunerationKinds.filter((k) => k.is_active || k.id === value)
+  const nameOf = (id: string) =>
+    id ? (context.remunerationKinds.find((k) => k.id === id)?.name ?? (id === value ? storedName : null) ?? 'unbekannte Abrechnungsart') : NO_REMUNERATION
+  // Wechsel der Einsatzart bzw. Dauer: gewählte Abrechnungsart bleibt, neue Vorbelegung als Hinweis [ANNAHME R32]
+  const hint =
+    touched && !disabled && value !== preset
+      ? `Vorbelegung für diesen Einsatz: ${nameOf(preset)}.`
+      : 'Vorbelegt aus der Einsatzart. Ändern nur, wenn für diesen Einsatz eine andere Vergütung gilt.'
+  return (
+    <Field id="ez-remuneration" label="Vergütung" hint={hint}>
+      <select
+        id="ez-remuneration"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        disabled={disabled}
+        aria-invalid={invalid || undefined}
+        className={selectClassName}
+      >
+        <option value="">{NO_REMUNERATION}</option>
+        {value && !options.some((k) => k.id === value) && <option value={value}>{nameOf(value)}</option>}
+        {options.map((k) => (
+          <option key={k.id} value={k.id}>
+            {k.is_active ? k.name : `${k.name} (inaktiv)`}
+          </option>
+        ))}
+      </select>
+    </Field>
   )
 }

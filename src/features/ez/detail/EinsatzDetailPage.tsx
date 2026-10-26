@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import { BanIcon, CheckCheckIcon, PencilIcon, RotateCcwIcon, Trash2Icon, UserPlusIcon } from 'lucide-react'
+import { BanIcon, CheckCheckIcon, LockIcon, PencilIcon, RotateCcwIcon, Trash2Icon, UserPlusIcon } from 'lucide-react'
 import { Link, useLoaderData, useNavigate, useRevalidator } from 'react-router-dom'
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
@@ -26,6 +26,7 @@ import {
 } from '@/features/ez/labels'
 import { ConfirmDialog } from '@/features/ez/shared/ConfirmDialog'
 import { ezRpc, nameOf, type PersonNames } from '@/features/ez/shared/rpc'
+import { SettledBadge } from '@/features/ez/shared/SettledBadge'
 import { FormError } from '@/features/gr/shared/ui'
 import { formatDate, formatDateTime } from '@/lib/format'
 import { cn } from '@/lib/utils'
@@ -121,6 +122,7 @@ function Detail({ detail, names }: { detail: EventDetail; names: PersonNames }) 
           <div className="flex flex-wrap gap-1.5">
             {e.is_cancelled && <Badge variant="outline">abgesagt</Badge>}
             {e.from_planning && <Badge variant="outline">aus der Planungshilfe</Badge>}
+            {e.is_settled && <SettledBadge />}
           </div>
         </div>
 
@@ -132,6 +134,12 @@ function Detail({ detail, names }: { detail: EventDetail; names: PersonNames }) 
         {e.from_planning && (
           <p className="rounded-lg border bg-muted/50 p-3 text-sm">
             Aus der Planungshilfe Touren und Kurse. Kopf und Personen aus der Planung werden dort geändert.
+          </p>
+        )}
+        {e.is_settled && (
+          <p className="flex gap-2 rounded-lg border bg-muted/50 p-3 text-sm">
+            <LockIcon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+            {EZ_MESSAGES.settled}
           </p>
         )}
 
@@ -281,7 +289,7 @@ function Actions({
   // Einsätze aus der Planungshilfe: kein Absagen, kein Löschen (R25)
   if (detail.can_write && !e.from_planning && !e.is_cancelled) {
     buttons.push(
-      <Button key="cancel" variant="outline" onClick={onCancel}>
+      <Button key="cancel" variant="outline" onClick={onCancel} disabled={e.is_settled}>
         <BanIcon data-icon="inline-start" aria-hidden="true" />
         Absagen
       </Button>,
@@ -297,7 +305,7 @@ function Actions({
   }
   if (detail.can_delete && !e.from_planning) {
     buttons.push(
-      <Button key="delete" variant="destructive" onClick={onDelete}>
+      <Button key="delete" variant="destructive" onClick={onDelete} disabled={e.is_settled}>
         <Trash2Icon data-icon="inline-start" aria-hidden="true" />
         Löschen
       </Button>,
@@ -329,6 +337,7 @@ function Kopf({ detail, names }: { detail: EventDetail; names: PersonNames }) {
     ...(e.day_category ? [['Dauer', DAY_LABELS[e.day_category]] as [string, ReactNode]] : []),
     ...(detail.location_name ? [['Ort', detail.location_name] as [string, ReactNode]] : []),
     ...(e.organizer_person_id ? [['Organisierende Person', nameOf(names, e.organizer_person_id)] as [string, ReactNode]] : []),
+    ['Vergütung', e.remuneration_kind_name ?? 'keine Vergütung'],
     ...(e.remark ? [['Bemerkung', <span key="remark" className="whitespace-pre-line">{e.remark}</span>] as [string, ReactNode]] : []),
     ['Erfasst', `${formatDateTime(e.created_at)} von ${nameOf(names, e.created_by_person_id)}`],
     ...(e.updated_at
@@ -385,6 +394,7 @@ function AttendanceList({
                     <span className="font-medium">{nameOf(names, a.person_id)}</span>
                     {a.is_substitute && <Badge variant="outline">Vertretung</Badge>}
                     {a.from_plan && <Badge variant="outline">aus der Planung</Badge>}
+                    {a.is_settled && <SettledBadge />}
                     {statusMode && !writable && <span className="text-sm text-muted-foreground">{STATUS_LABELS[a.status]}</span>}
                   </div>
                   {statusMode && writable && (
@@ -395,7 +405,7 @@ function AttendanceList({
                           size="sm"
                           variant={a.status === s ? 'default' : 'outline'}
                           aria-pressed={a.status === s}
-                          disabled={pending}
+                          disabled={pending || a.is_settled}
                           onClick={() => a.status !== s && onStatus(a.person_id, s)}
                           className="h-11 sm:h-8"
                         >

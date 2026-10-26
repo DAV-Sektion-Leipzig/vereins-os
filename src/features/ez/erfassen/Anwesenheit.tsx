@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import type { ListPerson } from '@/features/ez/erfassen/data'
 import { ROLE_LABELS, STATUS_LABELS, type AttendanceStatus, type Role } from '@/features/ez/labels'
 import { AktivenSuche, type ActivePerson } from '@/features/ez/shared/AktivenSuche'
+import { SettledBadge } from '@/features/ez/shared/SettledBadge'
 import { selectClassName } from '@/features/gr/shared/ui'
 import { personName } from '@/lib/format'
 import { cn } from '@/lib/utils'
@@ -16,6 +17,8 @@ type ListProps = {
   persons: FormPerson[]
   substitutes: { id: string; name: string }[]
   lockedIds: Set<string>
+  /** Abgerechnete Personen (R34 EZ): fest wie Personen aus der Planung, mit Kennzeichen „abgerechnet“. */
+  settledIds: Set<string>
   disabled: boolean
   onToggle: (person: { person_id: string; defaultRole: Role }, checked: boolean) => void
   onRole: (personId: string, role: Role) => void
@@ -24,7 +27,7 @@ type ListProps = {
 
 // T024 (US-EZ-02, -03; R16, R17, R20): Liste der Gruppe zum Stichtag mit Kontrollkästchen (≥ 44 px), Rolle nur bei
 // angehakten Trainer:innen und Helfer:innen, Zähler je Abschnitt; Vertretung über die Personensuche „Aktive“.
-export function AnwesenheitsListe({ list, persons, substitutes, lockedIds, disabled, onToggle, onRole, onAddSubstitute }: ListProps) {
+export function AnwesenheitsListe({ list, persons, substitutes, lockedIds, settledIds, disabled, onToggle, onRole, onAddSubstitute }: ListProps) {
   const [searching, setSearching] = useState(false)
   const checked = new Map(persons.map((p) => [p.person_id, p]))
   const staff = list.filter((p) => p.staff)
@@ -48,6 +51,7 @@ export function AnwesenheitsListe({ list, persons, substitutes, lockedIds, disab
               selected={checked.get(p.person_id)}
               withRole
               locked={lockedIds.has(p.person_id)}
+              settled={settledIds.has(p.person_id)}
               disabled={disabled}
               onToggle={(on) => onToggle(p, on)}
               onRole={onRole}
@@ -62,6 +66,7 @@ export function AnwesenheitsListe({ list, persons, substitutes, lockedIds, disab
               selected={checked.get(s.id)}
               withRole
               locked={lockedIds.has(s.id)}
+              settled={settledIds.has(s.id)}
               disabled={disabled}
               onToggle={(on) => onToggle({ person_id: s.id, defaultRole: 'trainer' }, on)}
               onRole={onRole}
@@ -106,6 +111,7 @@ export function AnwesenheitsListe({ list, persons, substitutes, lockedIds, disab
               name={personName(p)}
               selected={checked.get(p.person_id)}
               locked={lockedIds.has(p.person_id)}
+              settled={settledIds.has(p.person_id)}
               disabled={disabled}
               onToggle={(on) => onToggle(p, on)}
               onRole={onRole}
@@ -127,6 +133,7 @@ function Row({
   selected,
   withRole,
   locked,
+  settled,
   disabled,
   onToggle,
   onRole,
@@ -137,6 +144,7 @@ function Row({
   selected: FormPerson | undefined
   withRole?: boolean
   locked: boolean
+  settled: boolean
   disabled: boolean
   onToggle: (checked: boolean) => void
   onRole: (personId: string, role: Role) => void
@@ -150,18 +158,19 @@ function Row({
           type="checkbox"
           checked={!!selected}
           onChange={(e) => onToggle(e.target.checked)}
-          disabled={disabled || locked}
+          disabled={disabled || locked || settled}
           className="size-5 shrink-0 accent-primary"
         />
         <span>{name}</span>
         {badge && <Badge variant="outline">{badge}</Badge>}
+        {settled && <SettledBadge />}
       </label>
       {withRole && selected && (
         <select
           aria-label={`Rolle von ${name}`}
           value={selected.role}
           onChange={(e) => onRole(id, e.target.value as Role)}
-          disabled={disabled || locked}
+          disabled={disabled || locked || settled}
           className={cn(selectClassName, 'sm:w-36')}
         >
           {(['trainer', 'helper'] as Role[]).map((r) => (
@@ -180,6 +189,7 @@ type EntryProps = {
   names: Record<string, string>
   defaultRole: Role
   lockedIds: Set<string>
+  settledIds: Set<string>
   disabled: boolean
   onAdd: (person: ActivePerson) => void
   onChange: (personId: string, patch: Partial<FormPerson>) => void
@@ -188,19 +198,21 @@ type EntryProps = {
 
 // T028 (US-EZ-09, -10, -20; R17, R20, R21): Personen eintragen bei Arbeitseinsatz, Kurs und Tour mit Rolle und Stand;
 // keine Teilnehmer:innen. Personen aus der Planung (R25) behalten Rolle und bleiben in der Liste.
-export function PersonenEintragen({ persons, names, defaultRole, lockedIds, disabled, onAdd, onChange, onRemove }: EntryProps) {
+export function PersonenEintragen({ persons, names, defaultRole, lockedIds, settledIds, disabled, onAdd, onChange, onRemove }: EntryProps) {
   return (
     <div className="flex flex-col gap-3">
       {persons.length > 0 ? (
         <ul className="flex flex-col divide-y rounded-xl border">
           {persons.map((p) => {
             const name = names[p.person_id] ?? 'unbekannte Person'
-            const locked = lockedIds.has(p.person_id)
+            const settled = settledIds.has(p.person_id)
+            const locked = lockedIds.has(p.person_id) || settled
             return (
               <li key={p.person_id} className="flex flex-col gap-2 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between">
                 <span className="flex flex-wrap items-center gap-1.5 font-medium">
                   {name}
-                  {locked && <Badge variant="outline">aus der Planung</Badge>}
+                  {lockedIds.has(p.person_id) && <Badge variant="outline">aus der Planung</Badge>}
+                  {settled && <SettledBadge />}
                 </span>
                 <div className="flex flex-wrap items-center gap-2">
                   <select
@@ -220,7 +232,7 @@ export function PersonenEintragen({ persons, names, defaultRole, lockedIds, disa
                     aria-label={`Stand von ${name}`}
                     value={p.status}
                     onChange={(e) => onChange(p.person_id, { status: e.target.value as AttendanceStatus })}
-                    disabled={disabled}
+                    disabled={disabled || settled}
                     className={cn(selectClassName, 'sm:w-40')}
                   >
                     {(['registered', 'present', 'absent'] as AttendanceStatus[]).map((s) => (
