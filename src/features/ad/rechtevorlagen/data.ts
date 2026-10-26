@@ -7,17 +7,24 @@ import { supabase } from '@/lib/supabase'
 export type Module = { code: ModuleCode; name: string }
 export type TemplateRow = { id: string; name: string; description: string | null; personCount: number }
 export type Template = { id: string; name: string; description: string | null }
-export type Right = { level: Level; scope: Scope }
+export type Right = { level: Level; scope: Scope; approve: boolean }
 export type Rights = Record<string, Right>
 
-/** Reichweite „Referat“ gibt es im Kern nur für das Ehrenamtsmanagement (R30; EZ, TK folgen mit den Nachträgen). */
-export const SCOPE_MODULES: ModuleCode[] = ['EA']
+/** Reichweite „Referat“ nach R30 (Nachträge v0.8 und v0.10): Ehrenamtsmanagement, Anwesenheitserfassung, Planungshilfe, Finanzen. */
+export const SCOPE_MODULES: string[] = ['EA', 'EZ', 'TK', 'FI']
 
 export function allowsReferat(code: string): boolean {
-  return SCOPE_MODULES.includes(code as ModuleCode)
+  return SCOPE_MODULES.includes(code)
 }
 
-const NONE: Right = { level: 'none', scope: 'all' }
+/** Aktion „freigeben“ (R50, Nachtrag v0.10): nur Finanzen (bestätigen) und Planungshilfe (freigeben). */
+export const APPROVE_MODULES: string[] = ['FI', 'TK']
+
+export function allowsApprove(code: string): boolean {
+  return APPROVE_MODULES.includes(code)
+}
+
+const NONE: Right = { level: 'none', scope: 'all', approve: false }
 
 export type ListResult = { templates: TemplateRow[]; failed: boolean }
 export type EditData = {
@@ -72,7 +79,7 @@ export async function loadTemplate({ params }: LoaderFunctionArgs): Promise<Edit
   const [modules, template, rights, assignments] = await Promise.all([
     loadModules(),
     supabase.from('ad_templates').select('id, name, description').eq('id', id).maybeSingle(),
-    supabase.from('ad_template_rights').select('module_code, level, scope').eq('template_id', id),
+    supabase.from('ad_template_rights').select('module_code, level, scope, can_approve').eq('template_id', id),
     supabase
       .from('ad_template_assignments')
       .select('id', { count: 'exact', head: true })
@@ -87,7 +94,7 @@ export async function loadTemplate({ params }: LoaderFunctionArgs): Promise<Edit
     modules: modules.data as Module[],
     template: template.data,
     rights: Object.fromEntries(
-      rights.data.map((r) => [r.module_code, { level: r.level as Level, scope: r.scope as Scope }]),
+      rights.data.map((r) => [r.module_code, { level: r.level as Level, scope: r.scope as Scope, approve: r.can_approve === true }]),
     ),
     personCount: assignments.count ?? 0,
     failed: false,
@@ -95,7 +102,7 @@ export async function loadTemplate({ params }: LoaderFunctionArgs): Promise<Edit
 }
 
 function sameRight(a: Right | undefined, b: Right) {
-  return a?.level === b.level && a?.scope === b.scope
+  return a?.level === b.level && a?.scope === b.scope && (a?.approve ?? false) === b.approve
 }
 
 // Zeilen nacheinander, damit bei einem Fehler (z. B. R30) klar ist, welche Stufen schon gespeichert sind
@@ -103,7 +110,7 @@ async function updateRights(templateId: string, changed: [string, Right][]) {
   for (const [code, right] of changed) {
     const { error } = await supabase
       .from('ad_template_rights')
-      .update({ level: right.level, scope: right.scope })
+      .update({ level: right.level, scope: right.scope, can_approve: right.level !== 'none' && right.approve })
       .eq('template_id', templateId)
       .eq('module_code', code)
     if (error) return error

@@ -20,6 +20,12 @@ import { PersonDetail } from '@/features/ad/personen/PersonDetail'
 import { PersonenUebersicht } from '@/features/ad/personen/PersonenUebersicht'
 import { PersonNeu } from '@/features/ad/personen/PersonNeu'
 import { loadAuditLog } from '@/features/ad/protokoll/data'
+import { AbrechnungsartenPage } from '@/features/ad/abrechnungsarten/AbrechnungsartenPage'
+import { loadRemuneration } from '@/features/ad/abrechnungsarten/data'
+import { AuszahlungPage } from '@/features/ad/auszahlung/AuszahlungPage'
+import { loadPayoutAdmin } from '@/features/ad/auszahlung/data'
+import { loadRates } from '@/features/ad/saetze/data'
+import { SaetzePage } from '@/features/ad/saetze/SaetzePage'
 import { ProtokollPage } from '@/features/ad/protokoll/ProtokollPage'
 import {
   loadNewQualificationType,
@@ -124,6 +130,9 @@ export const router = createBrowserRouter([
           { path: 'qualifikationsarten', loader: loadQualificationTypes, element: <QualifikationsartenListe /> },
           { path: 'qualifikationsarten/neu', loader: loadNewQualificationType, element: <QualifikationsartFormular /> },
           { path: 'qualifikationsarten/:id', loader: loadQualificationType, element: <QualifikationsartFormular /> },
+          { path: 'saetze', loader: loadRates, element: <SaetzePage /> },
+          { path: 'abrechnungsarten', loader: loadRemuneration, element: <AbrechnungsartenPage /> },
+          { path: 'auszahlung', loader: loadPayoutAdmin, element: <AuszahlungPage /> },
           { path: 'protokoll', loader: loadAuditLog, element: <ProtokollPage /> },
           { path: '*', element: <PlaceholderPage title="Administration" /> },
         ],
