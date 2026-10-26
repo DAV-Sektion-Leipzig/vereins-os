@@ -1,8 +1,10 @@
 # Stories: Finanzen
 
-Stand: 26.10.2026 · Version 0.1 · Kürzel: FI · Status: Entwurf
+Stand: 26.10.2026 · Version 0.2.1 · Kürzel: FI · Status: Entwurf
 Quellen: 00-steckbrief.md (v0.5, abgeschlossen), 01-erhebung.md (v0.5, Regeln R1–R30), rollen.md (v1.2), glossar.md (v1.6; Vorschläge im Steckbrief), Übergaben an Administration (v1.3, A1–A10), Anwesenheitserfassung (v1.2, Z1–Z5), Planungshilfe (v1.0)
 Umfang: MVP – halbjährliche Abrechnung (Kinder und Jugend, Leistungssport), Bestätigung durch Referent:innen, Abschluss mit Abrechnungsdokument, Abgabe, Auszahlungsrunde mit Auszahlliste (PDF) und Überweisungsdatei (XML), Abgleich Punktekonto Kletterhalle. Iteration 1 (Kurs, Tour, Einzelabrechnung, Reisekosten, Storno einer Runde) nicht enthalten.
+Änderungen v0.2.1: Nach der Vorlage der Sparkasse: Fälligkeitstag = Erstellen + 3 Tage, Verwendungszweck nach Vorlage, Zusatzbetrag (AK in US-FI-18, R47).
+Änderungen v0.2: Nachtrag Buchungslauf Verträge (01-erhebung.md v0.7, Abschnitt H, R34–R46): US-FI-18 bis US-FI-21 (Entwurf; offene Punkte R41, R44 und die Vorlage der Sparkasse vor der Spec).
 Änderungen v0.1: Erster Entwurf; Sichtbarkeit für Referent:innen (ganze Abrechnung), Abgabe nach der Frist mit Begründung und Verfall von Hand bestätigt (Product Owner 26.10.2026).
 
 Beispiele sind fiktiv (Personen, Gruppen, Beträge); IBAN nur `DE89370400440532013000`.
@@ -348,3 +350,67 @@ Voraussetzungen aller Stories: Nachtrag der Administration nach Übergabe FI →
 - AK5 (Rechte): Nur mit „FI verwalten“; keine Namen von Kindern.
 
 **Nicht Teil dieser Story:** Entscheidung, ob Probetrainings zählen (Iteration 1).
+
+## Nachtrag v0.2: Buchungslauf Verträge
+
+Grundlage: 01-erhebung.md v0.7, Abschnitt H (R34–R46). Beispiele fiktiv: Jugendgruppe Test 1 mit 3 Verträgen à 35,00 €, Jugendgruppe Test 2 mit 2 Verträgen à 40,00 €; Stichtag 01.11.2026; Buchungslauf erstellt am Mittwoch, 02.12.2026.
+
+### US-FI-18: Buchungslauf zusammenstellen
+
+**Als** Mitarbeiter:in der Geschäftsstelle
+**möchte ich** für einen Monat alle einzuziehenden Verträge mit einem Klick zusammenstellen und prüfen,
+**damit** ich die Gruppenbeiträge nicht mehr von Hand zusammensuchen muss.
+**Priorität:** Must · **Regeln:** R34, R35, R37, R38, R39, R47 · **Abhängig von:** Übergabe FI → GR v1.0 (G1), FI → AD v1.4 (A11, A13)
+
+**Akzeptanzkriterien**
+- AK1: Gegeben 5 Verträge sind am 01.12.2026 aktiv, wenn ich „Neuer Buchungslauf“ für Dezember 2026 wähle, dann zeigt die Vorschau 5 Lastschriften mit Teilnehmer:in, Gruppe, Vertragsinhaber:in, Mandatsreferenz, Betrag, Erst-/Folgelastschrift, Summen je Gruppe (105,00 € und 80,00 €) und gesamt (185,00 €).
+- AK2: Gegeben ein Vertrag beginnt am 15.12.2026, dann ist er im Dezember nicht enthalten und im Januar 2027 mit vollem Betrag enthalten (R34).
+- AK3: Gegeben ein Vertrag ist zum 10.12.2026 gekündigt, dann ist er im Dezember mit vollem Betrag enthalten und im Januar nicht (R34).
+- AK4: Gegeben ein Vertrag beginnt am 01.12.2026 (nach dem Stichtag) und wurde noch nie eingezogen, dann ist er Erstlastschrift; ein Vertrag mit Beginn 01.09.2026 (vor dem Stichtag) ist Folgelastschrift (R38).
+- AK5: Der Fälligkeitstag ist mit dem 05.12.2026 vorbelegt (erstellt + 3 Tage; Samstag → Montag 07.12.2026) und änderbar; ein Datum ohne einen Bankarbeitstag Vorlauf wird abgelehnt (R39).
+- AK5a: Ich erfasse bei einer Lastschrift einen Zusatzbetrag von 70,00 € mit Text „und rückwirkend bis Oktober 2026“ und Begründung; die Lastschrift beträgt 105,00 €, der Verwendungszweck lautet „Jugendgruppe Test 1 Beitragszahlung Dezember 2026 und rückwirkend bis Oktober 2026“; ohne Text oder Begründung „Bitte Text und Begründung angeben.“ (R47).
+- AK6: Ich kann eine Lastschrift abwählen; die Summen ändern sich; der Vertrag bleibt für Dezember offen.
+- AK7 (Fehler): Gegeben das Mandat ist nach dem Fälligkeitstag unterschrieben, dann erscheint der Vertrag unter „Ausgeschlossen“ mit „Mandat noch nicht unterschrieben“ (R37).
+- AK8 (Rechte): Nur mit „FI verwalten“; ohne dieses Recht /kein-zugriff.
+
+### US-FI-19: Buchungslauf freigeben: Lastschriftdatei und Einzugsliste
+
+**Als** Mitarbeiter:in der Geschäftsstelle
+**möchte ich** den geprüften Buchungslauf freigeben und die Dateien erhalten,
+**damit** ich die Lastschriften bei der Sparkasse hochladen und die Liste in der Buchhaltung ablegen kann.
+**Priorität:** Must · **Regeln:** R40–R43, R45
+
+**Akzeptanzkriterien**
+- AK1: Wenn ich „Freigeben“ wähle, dann fragt das System „Buchungslauf Dezember 2026 mit 5 Lastschriften über 185,00 € freigeben? Fälligkeit 07.12.2026.“; nach Bestätigung erhalte ich `Lastschriften_Vertraege_2026_12_Lauf1.xml` und `Einzugsliste_Vertraege_2026_12_Lauf1.pdf` [ANNAHME: Dateinamen].
+- AK2: Die Lastschriftdatei enthält je Sequenz eine Zahlungsgruppe; `CtrlSum` = 185.00, `NbOfTxs` = 5; Gläubiger-ID, Mandatsreferenz und Unterschriftsdatum je Lastschrift; Verwendungszweck „Jugendgruppe Test 1 Beitragszahlung Dezember 2026“ (R40, R42).
+- AK3: Die Einzugsliste zeigt je Lastschrift die IBAN gekürzt (`•••• 3000`), Summen je Gruppe und gesamt; gesamt = Summe der Datei (R41).
+- AK4: Nach der Freigabe sind die 5 Verträge für Dezember eingezogen; ein neuer Lauf für Dezember enthält sie nicht (R35).
+- AK5 (Fehler): Fehlt die Gläubiger-ID, dann „Die Angaben der Sektion für den Einzug fehlen. Bitte den Admin informieren.“; ohne Lastschriften „Der Buchungslauf enthält keine Lastschriften.“ (R45).
+- AK6 (Datenschutz): Nach dem Download Hinweis zum Löschen der Datei; IBAN und Kontoinhaber:in sind nicht in Finanzen gespeichert (R43).
+
+### US-FI-20: Nachtrag für einen Monat
+
+**Als** Mitarbeiter:in der Geschäftsstelle
+**möchte ich** später erfasste oder abgewählte Verträge im selben Monat nachträglich einziehen,
+**damit** kein Beitrag verloren geht und keiner doppelt eingezogen wird.
+**Priorität:** Must · **Regeln:** R35
+
+**Akzeptanzkriterien**
+- AK1: Gegeben Lauf 1 für Dezember ist freigegeben und danach wird ein Vertrag mit Beginn 01.12.2026 erfasst, wenn ich einen neuen Buchungslauf für Dezember erstelle, dann heißt er „Lauf 2“ und enthält nur diesen Vertrag.
+- AK2: Gegeben alle aktiven Verträge sind für Dezember eingezogen, dann zeigt ein neuer Lauf „Keine Verträge zum Einziehen.“
+- AK3 (Fehler): Ein Vertrag aus einem Entwurf erscheint in keinem anderen Lauf desselben Monats.
+
+### US-FI-21: Buchungsläufe ansehen und Dateien erneut abrufen
+
+**Als** Mitarbeiter:in der Geschäftsstelle
+**möchte ich** frühere Buchungsläufe sehen und ihre Dateien erneut erzeugen,
+**damit** ich bei Rückfragen der Buchhaltung oder einem fehlgeschlagenen Upload nicht neu anfangen muss.
+**Priorität:** Should · **Regeln:** R40, R43
+
+**Akzeptanzkriterien**
+- AK1: Die Liste zeigt je Lauf Monat, Nummer, Fälligkeitstag, Zustand, Anzahl, Summe, freigegeben am/von.
+- AK2: Erneuter Abruf erzeugt Dateien mit gleichen IDs und Beträgen und warnt „Dieser Buchungslauf ist bereits freigegeben. Die Lastschriftdatei nicht erneut hochladen.“
+- AK3: Hat sich eine Bankverbindung seit der Freigabe geändert, erscheint der Hinweis mit Namen (R43).
+
+**Nicht Teil dieses Nachtrags:** Rücklastschriften, Storno eines freigegebenen Laufs, Vorabinformation, Mandatsänderung (R44, offen).
+
