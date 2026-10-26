@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 26.10.2026 · Version 5.10
+Stand: 26.10.2026 · Version 5.11
+Änderungen v5.11: Finanzen: Stories v0.1 (US-FI-01 bis US-FI-17) und Spec v0.1 (Entwurf); Referent:innen sehen die ganze Abrechnung, Abgabe nach der Frist mit Begründung, Verfall von Hand (Product Owner 26.10.2026).
 Änderungen v5.10: Finanzen: Steckbrief v0.5 abgeschlossen; offene Punkte in Iteration 1 verschoben (Product Owner 26.10.2026).
 Änderungen v5.9: Finanzen: Vorlagen der Geschäftsstelle eingearbeitet – Auszahlungsrunden mit Auszahlliste (PDF) und Überweisungsdatei (XML, pain.001.001.03); Angaben der Sektion für die Auszahlung in der Administration (Steckbrief v0.4, Erhebung v0.4).
 Änderungen v5.8: Finanzen: Höchstbetrag, Vertretung, Q4-Annahme, Arbeitseinsätze, Erklärung auf dem Abrechnungsdokument entschieden (Steckbrief v0.3, Erhebung v0.3); rollen.md v1.2.
@@ -166,7 +167,7 @@ Entschieden 22.10.2026 (Product Owner, fünfter Block): PDF-Übernahme nicht im 
 
 ## FI – Finanzen (Priorität 3 – nach der Anwesenheitserfassung)
 
-Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.5, abgeschlossen 26.10.2026) · Erhebung: 01-erhebung.md (Version 0.5) · Übergaben: uebergabe-administration.md (v1.3, offen), uebergabe-anwesenheitserfassung.md (v1.2, offen), uebergabe-planungshilfe.md (v1.0, offen; Planungshilfe eingefroren)
+Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.5, abgeschlossen 26.10.2026) · Erhebung: 01-erhebung.md (Version 0.6) · Stories: 02-stories.md (Version 0.1, US-FI-01 bis US-FI-17) · Spec: spec.md (Version 0.1, Entwurf; Ready nach Freigabe durch den Product Owner, Umsetzung nach den Nachträgen AD und EZ) · Übergaben: uebergabe-administration.md (v1.3, offen), uebergabe-anwesenheitserfassung.md (v1.3, offen), uebergabe-planungshilfe.md (v1.0, offen; Planungshilfe eingefroren)
 
 - Entschieden 24.10.2026 (Product Owner, Chat Finanzen):
   - **Q4 – Aufbewahrung:** 5 Jahre wie überall, auch für Abrechnungen und abgerechnete Einsätze; steuerlich aufbewahrungspflichtige Belege liegen in der Finanzbuchhaltung (bestätigt 25.10.2026).

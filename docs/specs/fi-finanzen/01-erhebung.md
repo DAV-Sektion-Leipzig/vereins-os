@@ -1,7 +1,8 @@
 # Erhebung: Finanzen
 
-Datum: 26.10.2026 · Version 0.5 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner); Vorlagen der Geschäftsstelle: Auszahlliste (PDF) und SEPA-Datei (XML) einer Auszahlung der Übungsleitervergütung (Muster mit Echtdaten, nicht im Repository)
+Datum: 26.10.2026 · Version 0.6 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner); Vorlagen der Geschäftsstelle: Auszahlliste (PDF) und SEPA-Datei (XML) einer Auszahlung der Übungsleitervergütung (Muster mit Echtdaten, nicht im Repository)
 Grundlage: 00-steckbrief.md v0.4; specs/ez-einsaetze/uebergabe-finanzen.md v1.6 (F1–F9); specs/tk-touren-kurse/uebergabe-finanzen.md v1.3; specs/ez-einsaetze/spec.md v0.5; specs/ad-administration/spec.md v0.9; specs/ea-ehrenamt/01-erhebung.md v0.5 (C2); Vergütungsordnung (Beschluss 21.11.2023, ergänzt 11.12.2025, Anhang 1)
+Änderungen v0.6: Bestätigt (Product Owner 26.10.2026): Abgabe nach der Frist mit Rückfrage und Begründung (R19), Verfall von Hand (B4); Referent:innen sehen die ganze Abrechnung (02-stories.md R31).
 Änderungen v0.5: Offene Fragen in Iteration 1 verschoben (Product Owner 26.10.2026); im MVP kein Storno einer Auszahlungsrunde [ANNAHME].
 Änderungen v0.4: Vorlagen der Geschäftsstelle eingearbeitet (Product Owner 26.10.2026): Auszahlung in **Auszahlungsrunden**; die Freigabe einer Runde erzeugt **Auszahlliste (PDF)** für die Ablage in der Buchhaltung und **Überweisungsdatei (XML, pain.001.001.03)** für die Sparkasse (B5, C3, C6, C7, R24–R30); je Person und Gruppe eine Zeile und eine Überweisung; „sachlich richtig“ auf der Auszahlliste = Bestätigung im Vereins OS. Begriff: Die einzelne Abrechnung wird **abgeschlossen** (bisher „freigegeben“), freigegeben wird nur die Auszahlungsrunde [ANNAHME: Begriff, damit „Freigabe“ eindeutig bleibt].
 Änderungen v0.3: Höchstbetrag im Jahr der Auszahlung (R11), Vertretung bei der Bestätigung (R23), Erklärung auf dem Abrechnungsdokument (R18), Belege in der Finanzbuchhaltung bestätigt (F) (Product Owner 25.10.2026).
@@ -16,7 +17,7 @@ Begriffe nach glossar.md; neue Begriffe (Abrechnungsart, Position, Abrechnungsdo
 |---|---|---|---|
 | Geschäftsstelle | verwalten | Abrechnungen erstellen, neu berechnen, korrigieren, abschließen, Abschluss zurücknehmen, Abrechnungsdokument drucken, Abgabe und Verfall erfassen, Auszahlungsrunde zusammenstellen und freigeben (Auszahlliste und Überweisungsdatei), Abgleich Punktekonto | alle |
 | Admin | – | kein Zugriff auf Finanzen; pflegt Sätze, Abrechnungsarten, Vorbelegung, Fristen, Höchstbetrag, Angaben der Sektion für die Auszahlung in der Administration | – |
-| Referent:in | lesen + Aktion „freigeben“ (Q1) [ANNAHME: Stufe] | Abrechnungen ihres Referats ansehen (nur Positionen des eigenen Referats, Hinweise ohne Nachweisdaten), Ausnahme (Lizenz) begründen, Positionen ihres Referats bestätigen; keine Bankverbindung, keine Auszahlungsrunde, kein Abgleich Punktekonto | Referat (MVP: Kinder und Jugend, Leistungssport) |
+| Referent:in | lesen + Aktion „freigeben“ (Q1) [ANNAHME: Stufe] | Abrechnungen ihres Referats ansehen (ganze Abrechnung, sobald sie eine Position des eigenen Referats hat; Hinweise ohne Nachweisdaten; Product Owner 26.10.2026), Ausnahme (Lizenz) begründen, Positionen ihres Referats bestätigen; keine Bankverbindung, keine Auszahlungsrunde, kein Abgleich Punktekonto | Referat (MVP: Kinder und Jugend, Leistungssport) |
 | Vorstand | – | Startwert ohne Rechte; unterschreibt die Auszahlliste auf Papier („gf Vorstand“) | – |
 | Schatzmeister:in, Kassenprüfung (nach MVP) | lesen [ANNAHME] | Abrechnungen und Auszahlungsrunden einsehen | alle |
 
@@ -53,7 +54,7 @@ Begriffe nach glossar.md; neue Begriffe (Abrechnungsart, Position, Abrechnungsdo
 
 **B4 – Abgabe und Frist**
 - Geschäftsstelle trägt „unterschrieben abgegeben am“ ein → Zustand **abgegeben**. Liegt das Datum nach der Abgabefrist, fragt das System nach (R19).
-- Nach Ablauf der Frist ohne Abgabe: Liste „Frist abgelaufen“; die Geschäftsstelle setzt **verfallen** [ANNAHME: manuell, kein automatischer Wechsel]. Verfallene Abrechnungen werden nicht ausgezahlt; die Sperre bleibt [ANNAHME].
+- Nach Ablauf der Frist ohne Abgabe: Liste „Frist abgelaufen“; die Geschäftsstelle setzt **verfallen** (Product Owner 26.10.2026: von Hand, kein automatischer Wechsel). Verfallene Abrechnungen werden nicht ausgezahlt; die Sperre bleibt [ANNAHME].
 
 **B5 – Auszahlungsrunde (Product Owner 26.10.2026)**
 1. Geschäftsstelle legt für ein Abrechnungshalbjahr eine neue Auszahlungsrunde an (Nummer fortlaufend je Halbjahr: Runde 1, 2, 3 …) und wählt das Ausführungsdatum.
@@ -239,7 +240,7 @@ Kein `BtchBookg` (Sammelbuchung nach Voreinstellung der Bank, wie Vorlage), kein
 - **R16 – Korrektur:** Jede Abweichung vom berechneten Wert braucht eine Begründung (1–500 Zeichen), sonst Fehlermeldung „Bitte eine Begründung angeben.“; berechneter und korrigierter Wert bleiben sichtbar.
 - **R17 – Sperre:** Ab dem Abschluss sind die abgerechneten Anwesenheiten und die abrechnungsrelevanten Kopfdaten des Einsatzes in der Anwesenheitserfassung gesperrt (Product Owner 24.10.2026; Übergabe FI → EZ, Z3). Rücknahme des Abschlusses hebt die Sperre auf.
 - **R18 – Abrechnungsdokument:** enthält Person (Name, ohne Bankdaten [ANNAHME]), Halbjahr, Positionen mit Datum, Gruppe, Einsatz, Menge, Satz, Betrag, Korrekturen mit Begründung, Summe je Gruppe und gesamt, Abgabefrist, Hinweis auf das Erlöschen des Anspruchs, Erklärung der Person zum Freibetrag (Product Owner 25.10.2026; Wortlaut [ANNAHME]: „Ich versichere, dass die Angaben richtig sind und die Vergütung zusammen mit anderen Einnahmen aus nebenberuflicher Tätigkeit nach § 3 Nr. 26 EStG den Freibetrag im Kalenderjahr nicht übersteigt. Änderungen teile ich der Sektion unverzüglich mit.“), Ort, Datum, Unterschriftsfeld. Layout nach marke.md.
-- **R19 – Frist:** Abgabefrist aus den Stammdaten der Administration (Start: 31.07. für das 1., 15.12. für das 2. Halbjahr). Abgabe nach der Frist: Rückfrage „Die Frist ist abgelaufen. Der Anspruch ist erloschen. Trotzdem als abgegeben erfassen?“ [ANNAHME: Ausnahme möglich mit Begründung].
+- **R19 – Frist:** Abgabefrist aus den Stammdaten der Administration (Start: 31.07. für das 1., 15.12. für das 2. Halbjahr). Abgabe nach der Frist: Rückfrage „Die Frist ist abgelaufen. Der Anspruch ist erloschen. Trotzdem als abgegeben erfassen?“ Mit Bestätigung und Pflichtbegründung wird gespeichert (Ausnahme, Product Owner 26.10.2026).
 - **R20 – Auszahlung:** Eine Abrechnung ist höchstens in einer freigegebenen Auszahlungsrunde; danach nicht mehr änderbar.
 - **R21 – Datensparsamkeit:** Name der Kontoinhaber:in und IBAN werden nur beim Erzeugen der Überweisungsdatei gelesen und nicht in Finanzen gespeichert; die Dateien werden nicht gespeichert, sondern bei jedem Download aus den gespeicherten Auszahlzeilen neu erzeugt [ANNAHME]. Hat sich eine Bankverbindung seit der Freigabe geändert, erscheint vor dem erneuten Download ein Hinweis [ANNAHME].
 - **R22 – Aufbewahrung:** Abrechnungen, Positionen, Auszahlungsrunden, Auszahlzeilen und Abgleiche werden 5 Jahre nach Ende des Kalenderjahres der Auszahlung bzw. des Verfalls gelöscht [ANNAHME: Beginn der Frist] (Q4, Product Owner 24.10.2026: 5 Jahre wie überall). Auszahlliste und Kontoauszug als Belege liegen in der Finanzbuchhaltung.
