@@ -1,8 +1,9 @@
 # Stories: Anwesenheitserfassung
 
-Stand: 24.10.2026 · Version 0.6 · Kürzel: EZ · Status: Entwurf
+Stand: 26.10.2026 · Version 0.7 · Kürzel: EZ · Status: Entwurf
 Quellen: 00-steckbrief.md (v0.8), 01-erhebung.md (v0.4, Regeln R1–R12), rollen.md (v1.0), glossar.md (v1.6), Übergaben an AD (v1.3, eingearbeitet in spec.md AD v0.8), GR (v1.3, eingearbeitet in Gruppen 02-stories.md v0.4; Nachtrag `gr_my_groups` in v0.6), EA (v1.2), FI (v1.6); Übergabe aus der Planungshilfe Touren und Kurse (v1.2, `tk-touren-kurse/uebergabe-anwesenheitserfassung.md`)
 Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wettkampfbetreuung, Trainingslager, Arbeitseinsatz, Kurs, Tour, Absage, Übernahme aus der Planungshilfe Touren und Kurse, Listen.
+Änderungen v0.7: Nachtrag Finanzen (Übergabe FI → EZ v1.3): neue Stories US-EZ-24 (Vergütung am Einsatz) und US-EZ-25 (abgerechnete Einsätze geschützt), Regeln R32–R34 (Product Owner 24.–26.10.2026).
 Änderungen v0.6: R31 und US-EZ-11 AK9 auch für Personen ohne Ehrenamtsstatus (Angleichung an R45a der Administration); Spec Ready.
 Änderungen v0.5: Annahmen mit dem Product Owner durchgegangen (24.10.2026) und bestätigt; geändert: Wettkampfbetreuung mit einer oder mehreren Gruppen (R30, US-EZ-08 AK6); ruhende und ausgeschiedene Dublettentreffer direkt wieder aktiv eintragen (R31, US-EZ-11 AK2, AK9); bei mehreren eigenen Gruppen keine Vorauswahl (US-EZ-19 AK2); Referat beim Arbeitseinsatz änderbar (US-EZ-12 AK1).
 Änderungen v0.4: Übergabe aus dem Ehrenamtsmanagement v1.0 eingearbeitet: R29 und US-EZ-11 AK6–AK8 (Pflicht-Häkchen „Person informiert“, Bestätigung gespeichert, Product Owner 24.10.2026). Abgleich mit dem Forms-Formular (Product Owner 24.10.2026): Training ohne Uhrzeit (R28, US-EZ-01); Beginn und Ende mehrtägiger Einsätze optional (US-EZ-06, -21); mindestens eine Teilnehmer:in auch bei Fahrten und Wettkampfbetreuung (AK in US-EZ-05, -08); Einsatzart heißt Wettkampfbetreuung. Übergabe der Planungshilfe Touren und Kurse v1.2 eingearbeitet (Product Owner, 24.10.2026): neue Stories US-EZ-20 (Kurs oder Tour von Hand erfassen), US-EZ-21 (Trainingslager erfassen), US-EZ-22 (Einsatz absagen und Absage zurücknehmen), US-EZ-23 (Kurs oder Tour aus der Planungshilfe übernehmen); neue Regeln R22–R27; Titel bis 90 Zeichen (US-EZ-05 AK4); Stände „eingetragen“ auch bei Kurs und Tour.
@@ -20,6 +21,9 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 - **R18:** Ist die erfassende Person am Datum des Einsatzes Gruppenleitung, Trainer:in oder Helfer:in einer Gruppe, wird diese Gruppe beim Erfassen vorgeschlagen (Vorbelegung, änderbar). Der Vorschlag ist eine Eingabehilfe gegen Fehleingaben, kein Recht: Wählbar sind nur Gruppen, für die die Rechtevorlage der Person das Erfassen erlaubt (R13; ab Iteration 1 Reichweite „Gruppe“). Quelle: `gr_my_groups(date)` (Gruppen, US-GR-20).
 - **R30:** Eine Wettkampfbetreuung umfasst eine oder mehrere Gruppen desselben Referats; die Anwesenheitsliste zeigt die Personen aller gewählten Gruppen zum Stichtag (Product Owner 24.10.2026).
 - **R31:** Ruhende und ausgeschiedene Personen sowie Personen ohne Ehrenamtsstatus, die die Dublettenprüfung beim Arbeitseinsatz findet, können nach Rückfrage direkt wieder als aktiv eingetragen werden (Product Owner 24.10.2026).
+- **R32:** Jeder Einsatz hat eine Abrechnungsart oder „keine Vergütung“, vorbelegt aus der Einsatzart, wählbar von allen, die den Einsatz anlegen bzw. ändern dürfen (Product Owner 25./26.10.2026).
+- **R33:** Finanzen liest Einsätze und Anwesenheiten über eine eigene Lesefunktion mit Finanzen-Rechten, ohne Teilnehmer:innen und ohne Namen.
+- **R34:** Abgerechnete Anwesenheiten und die abrechnungsrelevanten Daten ihres Einsatzes sind gesperrt, bis Finanzen den Abschluss zurücknimmt (Product Owner 24.10.2026).
 - **R29:** Wer beim Arbeitseinsatz eine neue Person anlegt, bestätigt per Pflicht-Häkchen, dass die Person über die Speicherung ihrer Daten informiert und auf die Datenschutzhinweise hingewiesen wurde (Art. 13 DSGVO); die Bestätigung wird gespeichert (Übergabe EA v1.0; Product Owner 24.10.2026).
 - **R28:** Ein Training wird ohne Uhrzeit erfasst; die Zeit ergibt sich aus der Trainingszeit der Gruppe (Product Owner 24.10.2026).
 - **R22:** Jeder Einsatz kann abgesagt werden (alle Einsatzarten, Product Owner 24.10.2026). Ein abgesagter Einsatz bleibt in Liste und Detail sichtbar (mit Grund), ist nicht änderbar und zählt nicht für Abrechnung, Kontrollliste Kletterhalle und Warnung bei doppelter Erfassung.
@@ -56,6 +60,8 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 | US-EZ-21 | Trainingslager erfassen | Must | Geschäftsstelle, Referent:in |
 | US-EZ-22 | Einsatz absagen und Absage zurücknehmen | Must | Geschäftsstelle, Referent:in |
 | US-EZ-23 | Kurs oder Tour aus der Planungshilfe übernehmen | Must | Planungshilfe Touren und Kurse (System); Geschäftsstelle, Referent:in (Anwesenheit) |
+| US-EZ-24 | Vergütung am Einsatz wählen | Must | Geschäftsstelle, Referent:in |
+| US-EZ-25 | Abgerechnete Einsätze geschützt | Must | alle mit Schreibrecht |
 
 ---
 
@@ -479,6 +485,43 @@ Umfang: Training, Fahrten (Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt), Wett
 - AK7: Die Planungshilfe kann abfragen, ob der Einsatz durchgeführt ist (mindestens eine Leitung oder Helfer:in „anwesend“); sie erhält dabei keine Namen.
 
 **Nicht Teil dieser Story:** Teilnehmende aus Yolawo; Rücknahme einer Absage aus der Planungshilfe (Status „abgesagt“ ist dort endgültig); Planung, Kalkulation und Freigabe (Planungshilfe).
+
+---
+
+### US-EZ-24: Vergütung am Einsatz wählen
+
+**Als** Mitarbeiter:in der Geschäftsstelle oder Referent:in
+**möchte ich** beim Anlegen eines Einsatzes sehen und bei Bedarf ändern, welche Vergütung für ihn gilt,
+**damit** Finanzen richtig abrechnet und auch besondere Einsätze (z. B. ein vergüteter Arbeitseinsatz) erfasst werden können.
+**Priorität:** Must · **Regeln:** R13, R32 · **Abhängig von:** Administration Nachtrag v0.10 (Abrechnungsarten, Vorbelegung)
+
+**Akzeptanzkriterien**
+- AK1: Gegeben ich lege ein Training an, dann ist „Vergütung: Trainingseinheiten“ vorbelegt; bei einem Arbeitseinsatz „keine Vergütung“; bei einer eintägigen Ausbildungsfahrt „Mehrtageskurse, Führungstouren, Trainingslager“.
+- AK2: Wenn ich bei einem Arbeitseinsatz „Wettkampfbetreuung“ wähle und speichere, dann ist der Einsatz mit dieser Abrechnungsart gespeichert und erscheint in der Abrechnung von Finanzen (bei Referat mit halbjährlicher Abrechnung).
+- AK3: Wenn ich bei einem Training „keine Vergütung“ wähle, dann wird es nicht abgerechnet.
+- AK4 (Fehler): Gegeben die gewählte Abrechnungsart wurde inzwischen inaktiv gesetzt, wenn ich speichere, dann erscheint „Diese Abrechnungsart ist nicht mehr aktiv. Bitte eine andere wählen.“
+- AK5 (Rechte): Gegeben ich habe nur Leserechte (Admin, Vorstand mit „EZ lesen“), dann sehe ich die Vergütung im Detail, kann sie aber nicht ändern.
+- AK6: Im Detail steht „Vergütung: <Abrechnungsart>“ bzw. „keine Vergütung“.
+
+**Nicht Teil dieser Story:** Berechnung der Beträge (Finanzen); Pflege der Abrechnungsarten (Administration).
+
+---
+
+### US-EZ-25: Abgerechnete Einsätze geschützt
+
+**Als** Mitarbeiter:in der Geschäftsstelle
+**möchte ich**, dass abgerechnete Anwesenheiten nicht mehr verändert werden können,
+**damit** Abrechnung und Anwesenheit übereinstimmen (Finanzen US-FI-13).
+**Priorität:** Must · **Regeln:** R34 · **Abhängig von:** Finanzen (Abschluss einer Abrechnung, ersetzt `fi_attendance_locked`, `fi_event_locked`)
+
+**Akzeptanzkriterien**
+- AK1: Gegeben die Anwesenheit von Trainerin A beim Training am 14.04.2026 ist abgerechnet, wenn ich sie entferne oder ihre Rolle ändere, dann wird nicht gespeichert und es erscheint „Dieser Einsatz ist abgerechnet. Änderungen nur nach Rücknahme des Abschlusses in Finanzen.“
+- AK2: Gegeben der Einsatz ist abgerechnet, dann sind Datum, Zeiten, Dauer, eintägig/mehrtägig, Vergütung und organisierende Person gesperrt, und Absagen sowie Löschen sind nicht möglich (auch für die Geschäftsstelle).
+- AK3: Bemerkung, Ort und nicht abgerechnete Anwesenheiten bleiben änderbar.
+- AK4: Im Detail sind der Einsatz und die betroffenen Personen als „abgerechnet“ gekennzeichnet; gesperrte Aktionen sind ausgegraut mit Hinweis.
+- AK5 (Rechte): Die Sperre gilt für alle Rechtevorlagen; auch die Planungshilfe kann einen abgerechneten Einsatz nicht ändern oder absagen.
+
+**Nicht Teil dieser Story:** Aufheben der Sperre (Finanzen, Rücknahme des Abschlusses); Anzeige, in welcher Abrechnung die Anwesenheit steckt.
 
 ---
 

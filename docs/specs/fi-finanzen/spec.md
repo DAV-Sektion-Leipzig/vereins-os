@@ -1,8 +1,9 @@
 # Spec: Finanzen (FI)
 
-Version: 0.1.1 · Status: Entwurf (zur Freigabe als Ready durch den Product Owner) · Stand: 26.10.2026 · Product Owner: Toni Werner
+Version: 0.1.2 · Status: Entwurf (zur Freigabe als Ready durch den Product Owner) · Stand: 26.10.2026 · Product Owner: Toni Werner
 Stories: docs/specs/fi-finanzen/02-stories.md (US-FI-01 bis US-FI-17, v0.1)
 Grundlage: 00-steckbrief.md v0.5 (abgeschlossen), 01-erhebung.md v0.6 (R1–R30, C6, C7), 02-stories.md v0.1 (R31–R33), glossar.md v1.6, rollen.md v1.2, tech-stack.md, Übergaben FI → AD v1.3 (A1–A10), FI → EZ v1.2 (Z1–Z5), FI → TK v1.0; spec.md Administration v0.9 (`ad_rates`, `ad_rates_at`, `ea_person_names`), spec.md Anwesenheitserfassung v0.5 (`ez_events`, `ez_attendances`, `ez_climbing_points_report`)
+Änderungen v0.1.2: Namen der Anwesenheitserfassung bestätigt (spec.md EZ v0.6: `remuneration_kind_id`, `ez_settlement_basis`, `fi_attendance_locked`, `fi_event_locked`); Annahmen dazu entfallen.
 Änderungen v0.1.1: Namen an den Nachtrag v0.10 der Administration angeglichen (`ad_my_approve_referate`, `ad_can_approve`, `ad_remuneration_kinds`/`ad_remuneration_positions`, `ad_settlement_deadline`, `ad_payout_settings_at`, `ea_person_finance_data`); Annahme zu den AD-Namen entfällt.
 Änderungen v0.1: Erster Entwurf.
 
@@ -171,7 +172,7 @@ Rechte (zentrale Stelle):
 Ersetzte Platzhalter (gleiche Signatur):
 - `fi_person_visible(p_person uuid) returns boolean` (Administration, A9) – wahr, wenn eine lesbare Abrechnung die Person betrifft.
 - `fi_attendance_locked(p_attendance uuid) returns boolean` (Anwesenheitserfassung, Z3) – wahr, wenn die Anwesenheit in einer Position einer Abrechnung im Zustand `closed`, `submitted`, `expired` oder `paid` steckt.
-- `fi_event_locked(p_event uuid) returns boolean` (Anwesenheitserfassung, Z3) – wahr, wenn der Einsatz eine Position in einer solchen Abrechnung hat (sperrt die abrechnungsrelevanten Kopfdaten) [ANNAHME: zweiter Platzhalter, im Nachtrag EZ zu ergänzen].
+- `fi_event_locked(p_event uuid) returns boolean` (Anwesenheitserfassung, Z3) – wahr, wenn der Einsatz eine Position in einer solchen Abrechnung hat (sperrt die abrechnungsrelevanten Kopfdaten) (spec.md EZ v0.6, R34).
 
 Lesen:
 - `fi_list_settlements(p_year smallint, p_half smallint, p_status fi_settlement_status default null, p_group uuid default null, p_with_hint boolean default null, p_to_confirm boolean default null, p_limit int default 50, p_offset int default 0) returns setof (id, person_id, display_name, groups text[], amount, status, hints text[], confirmations jsonb, total_count)` – nur Zeilen mit `fi_can_read_settlement`; `display_name` über die Namenslogik der Administration; `p_to_confirm` = Entwurf mit Positionen in `fi_confirm_referate()` ohne Bestätigung dieses Referats; Sortierung Nachname, Vorname.
@@ -397,8 +398,7 @@ Voraussetzung: Nachträge AD und EZ umgesetzt (eigene Tasks dort).
 Entscheidungen des Product Owners: siehe 00-steckbrief.md (24.–26.10.2026) und 01-erhebung.md.
 
 Annahmen (sichtbar, Bestätigung bei Freigabe oder Abnahme):
-- [ANNAHME] Namen der Objekte aus dem Nachtrag EZ (Abschnitt 2, „Benötigt aus anderen Modulen“); die Namen aus der Administration stehen in spec.md AD v0.10.
-- [ANNAHME] Zweiter Platzhalter `fi_event_locked` für die Kopfdaten (Ergänzung zum Nachtrag EZ, Z3).
+- Namen der Objekte anderer Module: spec.md AD v0.10 und spec.md EZ v0.6.
 - [ANNAHME] Begriff „abschließen“; Wortlaut der Erklärung auf dem Abrechnungsdokument.
 - [ANNAHME] Organisationspauschale auch ohne eigene Anwesenheit der organisierenden Person; zusätzlich zum Tagessatz; Halbtage zählen als Tag.
 - [ANNAHME] Satzstand am Datum bzw. Startdatum; Halbjahr nach Startdatum.
