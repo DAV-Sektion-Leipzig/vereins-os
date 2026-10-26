@@ -159,6 +159,18 @@ description: "Tasks für das Modul Anwesenheitserfassung (EZ)"
 
 ---
 
+## Phase 11: Nachtrag v0.6 Finanzen (Branch `ez-nachtrag-v06`, spec v0.6) – US-EZ-24, US-EZ-25 (Datenbank)
+
+Voraussetzung: Administration Nachtrag v0.10 (PR #51, `20261029000300` Abrechnungsarten und Vorbelegung).
+
+- [x] T039 [US-EZ-24] [US-EZ-25] (spec T22, T23 Teil) `supabase/migrations/20261030000100_ez_remuneration.sql`: Platzhalter `fi_attendance_locked`, `fi_event_locked`; Spalte `ez_events.remuneration_kind_id` mit Vorbelegung des Altbestands (ohne Audit-Trigger); `ez_v_events`, `ez_list_events` (neuer Rückgabetyp: Abrechnungsart, `is_settled`), `ez_get_event` (Abrechnungsart, `is_settled` je Einsatz und Anwesenheit)
+- [x] T040 [US-EZ-24] [US-EZ-25] (spec T23) `supabase/migrations/20261030000200_ez_settlement_lock.sql`: `ez_save_event` mit Schritt 3a (Vorbelegung, `EZ_REMUNERATION_INACTIVE`), Sperre der Kopfdaten (Schritt 3) und der Anwesenheiten (Schritt 10a, `EZ_SETTLED`); `ez_delete_event`, `ez_cancel_event` mit Sperre. Die Anbindung der Planungshilfe (T036) prüft die Sperre bei ihrer Umsetzung
+- [x] T041 (spec T24) `supabase/migrations/20261030000300_ez_settlement_basis.sql`: `ez_settlement_basis` (nur FI-Reichweite „alle“), `ez_climbing_points_report` auch mit „FI verwalten“
+- [x] T042 [P] (spec T25) `contracts/error-codes.md`: `EZ_SETTLED`, `EZ_REMUNERATION_INACTIVE`
+- [x] T043 (spec T26) `supabase/tests/database/560_ez_remuneration_lock.test.sql`: Vorbelegung und Auswahl, inaktive Abrechnungsart, Lesefunktion, Sperre mit im Test ersetzten Platzhaltern
+- [ ] T044 [US-EZ-24] [US-EZ-25] (spec T27) Oberfläche: Feld „Vergütung“ in allen Formularen, Anzeige im Detail, Kennzeichen „abgerechnet“, gesperrte Aktionen – eigener Branch
+- [ ] T045 (spec T28) Abnahme der Ergänzung in TEST (mit T034 oder danach)
+
 ## Zurückgestellt (mit TK T13)
 
 - [ ] T036 [US-EZ-23] (spec T19) Migration `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`; Grants an `authenticated` (R26, R27).

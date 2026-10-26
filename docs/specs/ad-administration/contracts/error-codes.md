@@ -140,6 +140,8 @@ Stand spec.md Anwesenheitserfassung v0.5 (Abschnitt 5 und 2). Ausführlich mit �
 | `EZ_CANCEL_NOT_ALLOWED` | Der Einsatz hat schon anwesende Personen und kann nicht abgesagt werden. | R23 | umgesetzt |
 | `EZ_TK_MANAGED` | Dieser Einsatz kommt aus der Planungshilfe Touren und Kurse. Bitte dort ändern. | R25 | umgesetzt |
 | `EZ_EVENT_LOCKED` | Der Einsatz ist schon erfasst und wurde nicht geändert. | R26, R27 | zurückgestellt (T19) |
+| `EZ_SETTLED` (Detail: person_id bei einer Anwesenheit) | Dieser Einsatz ist abgerechnet. Änderungen nur nach Rücknahme des Abschlusses in Finanzen. | R34 (v0.6) | Datenbank umgesetzt (`20261030000200`); Oberfläche EZ T27 |
+| `EZ_REMUNERATION_INACTIVE` | Diese Abrechnungsart ist nicht mehr aktiv. Bitte eine andere wählen. | R32 (v0.6) | Datenbank umgesetzt (`20261030000200`); Oberfläche EZ T27 |
 | `EZ_PRIVACY_NOT_CONFIRMED` | Bitte bestätige, dass die Person informiert wurde. | R29 | umgesetzt |
 | `EZ_PERSON_NOT_INACTIVE` | Diese Person ist bereits aktiv. | R31 | umgesetzt |
 
