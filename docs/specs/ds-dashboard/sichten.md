@@ -1,6 +1,7 @@
 # Sichten des Dashboards
 
-Stand: 26.10.2026 · Version 0.6 · Status: Entwurf
+Stand: 26.10.2026 · Version 0.7 · Status: Entwurf
+Änderungen v0.7: B8 bleibt als Vorschau mit klarer Sichtbarkeit (Product Owner 26.10.2026).
 Änderungen v0.6: Regel „eine Quelle für Geld“ (Product Owner 26.10.2026): Beträge des Budgets nur aus dem DATEV-Import, nicht aus Buchungsläufen oder Abrechnungen; B10 entfällt endgültig; B8 nur als getrennt ausgewiesene Vorschau [OFFEN].
 Änderungen v0.5: Grundsatz „Referent:innen steuern ihre Gruppen mit dem Dashboard“ (Product Owner 26.10.2026); Gruppendetail im Dashboard mit Namen und Hinweisen; Steuerungshinweis je Status; offene Frage zu den Rechten auf Gruppen gelöst.
 Änderungen v0.4: Schmale Spalten im Baustein Gruppen (Product Owner 26.10.2026): Spaltenköpfe TN, Anwesenheit, PT; kurze Werte; Legende unter der Liste.
@@ -27,7 +28,7 @@ Als Referent:in öffne ich das Dashboard vor der Referatssitzung, vor der Vorsta
 
 Daraus folgt die Reihenfolge jeder Sicht.
 
-**Eine Quelle für Geld** (Product Owner 26.10.2026): Plan, verbraucht, erreicht und frei kommen **nur** aus dem Finanzplan und dem DATEV-Import. Zahlen aus Buchungsläufen (Verträge), Abrechnungen oder Planungen werden nie zu diesen Beträgen addiert und nie als zweiter Ist-Wert gezeigt; sonst gäbe es zwei Datenbestände für dasselbe Geld. Einnahmen aus Verträgen erscheinen deshalb nur über den Budgetposten, auf den die Finanzbuchhaltung sie bucht.
+**Eine Quelle für Geld** (Product Owner 26.10.2026): Plan, verbraucht, erreicht und frei kommen **nur** aus dem Finanzplan und dem DATEV-Import. Zahlen aus Buchungsläufen (Verträge), Abrechnungen oder Planungen werden nie zu diesen Beträgen addiert und nie als zweiter Ist-Wert gezeigt; sonst gäbe es zwei Datenbestände für dasselbe Geld. Einnahmen aus Verträgen erscheinen deshalb nur über den Budgetposten, auf den die Finanzbuchhaltung sie bucht. Einzige Ausnahme ist die klar gekennzeichnete **Vorschau** der abgerechneten, noch nicht gebuchten Vergütung (B8), die nie in die Beträge eingeht.
 
 ## 2. Aufbau jeder Sicht [FESTLEGUNG]
 
@@ -122,7 +123,7 @@ Darüber eine Zeile für das ganze Referat: Gruppen, Teilnehmer:innen gesamt, An
 | – | Baustein Gruppen (4.1) | M (Iteration 1, sobald EZ und GR laufen) |
 | K9 | Fahrten im Halbjahr: Tagesausflüge, Mehrtagesfahrten, Ausbildungsfahrten, Trainingslager; Teilnehmende gesamt | M |
 | K10 | Stand der halbjährlichen Abrechnung (erstellt / bestätigt / abgegeben / ausgezahlt), Tage bis zur Frist | M (auch in ①) |
-| B8 | Vergütung „gebunden“ am Budgetposten „Vergütung Aktive“: ausgezahlt + abgeschlossen, noch nicht gebucht – nur als getrennte Vorschau, nie im Ist [OFFEN: nach der Regel „eine Quelle für Geld“ behalten oder streichen?] | M |
+| B8 | **Vorschau „abgerechnet, noch nicht gebucht“** am Budgetposten „Vergütung Aktive“ (Product Owner 26.10.2026): Summe der abgeschlossenen und ausgezahlten Abrechnungen des Referats, die noch nicht im DATEV-Import stehen [ANNAHME: Abgleich über die Auszahlungsrunde]. Klar getrennt: eigenes Wort „Vorschau“, schraffiertes Balkenstück hinter dem Ist, eigene Zahl mit Quelle „aus Finanzen, noch nicht gebucht“; zählt **nie** zu verbraucht, frei oder zur Ampel. Hinweis ▲ „mit Vorschau über Plan“, wenn Ist + Vorschau den Plan übersteigen. | M |
 | K11 | Vergütung je Gruppe im Halbjahr | S |
 | K2 | Eintritte und Teilnahmeenden je Halbjahr | S |
 | K13 | Einsatzstunden der Aktiven (Trainingseinheiten, Tage) | S |

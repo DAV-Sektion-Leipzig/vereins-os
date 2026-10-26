@@ -49,7 +49,7 @@ Der 1. Vorsitzende wertet den Finanzplan mit einem eigenen, offline laufenden Bu
 - **Leistungssport:** wie Kinder und Jugend, dazu Wettkampfbetreuungen und Trainingslager.
 - **Touren und Ausbildung:** Planungen je Status, Kostendeckung, Absagen, „durchgeführt, nicht abgerechnet“, CO2 je Jahr (sobald TK Iteration 1).
 - **Verknüpfung Budget ↔ Abrechnung:** abgerechnete, noch nicht gebuchte Vergütung als „gebunden“ am Budgetposten „Vergütung Aktive“.
-- **Inhalt und Aufbau der Sichten:** sichten.md v0.6 (Festlegung durch Claude als Referent:in im Auftrag des Product Owners, Q-DS5): je Sicht ① Zu tun, ② Budget meines Referats, ③ Mein Referat in Zahlen, ④ Budget des Vereins; Bausteine je Referat; Entscheidung M/S/C/W zu jedem Eintrag des Ideenkatalogs (ideen-sichten.md).
+- **Inhalt und Aufbau der Sichten:** sichten.md v0.7 (Festlegung durch Claude als Referent:in im Auftrag des Product Owners, Q-DS5): je Sicht ① Zu tun, ② Budget meines Referats, ③ Mein Referat in Zahlen, ④ Budget des Vereins; Bausteine je Referat; Entscheidung M/S/C/W zu jedem Eintrag des Ideenkatalogs (ideen-sichten.md).
 
 **Gesamtbudgets und Referate** (Q-DS6, Q-DS15 (Product Owner 26.10.2026); Namen wie im Finanzplan 2026). Die Summen aller Gesamtbudgets sieht jede:r mit „Dashboard lesen“; die Tabelle legt fest, wer **Einzelbuchungen** sieht und wer das Gesamtbudget **pflegt** (Hinweise, Plan):
 
@@ -74,7 +74,7 @@ Der 1. Vorsitzende wertet den Finanzplan mit einem eigenen, offline laufenden Bu
 
 Neue Gesamtbudgets eines späteren Finanzplans bekommen ihr Referat bei der Budgetpflege; ohne Angabe gelten sie als „ohne Referat“ [ANNAHME].
 
-- **Eine Quelle für Geld** (Product Owner 26.10.2026): Beträge der Budget-Sicht kommen nur aus Finanzplan und DATEV-Import; Buchungsläufe (Verträge), Abrechnungen und Planungen liefern keine Beträge ins Ist (kein zweiter Datenbestand).
+- **Eine Quelle für Geld** (Product Owner 26.10.2026): Beträge der Budget-Sicht kommen nur aus Finanzplan und DATEV-Import; Buchungsläufe (Verträge), Abrechnungen und Planungen liefern keine Beträge ins Ist (kein zweiter Datenbestand). Ausnahme: Vorschau der abgerechneten, noch nicht gebuchten Vergütung, klar getrennt vom Ist (Product Owner 26.10.2026).
 
 **Nicht im Scope:**
 - Finanzbuchhaltung (vision.md, Nicht-Ziel): Das Dashboard bucht nicht und ändert keine Daten in DATEV.
