@@ -14,6 +14,7 @@ Du siehst die Daten **deines Referats**. Hast du mehrere Referate, siehst du all
 | Ehrenamtsmanagement | Aktive deines Referats finden, anlegen und pflegen | freigeschaltet |
 | Anwesenheitserfassung | Trainings, Fahrten und andere Einsätze deines Referats erfassen | freigeschaltet |
 | Finanzen | Abrechnungen deines Referats als „sachlich richtig“ bestätigen | freigeschaltet (für Kinder und Jugend und Leistungssport) |
+| Planungshilfe Touren und Kurse | Touren und Kurse deines Referats planen, einreichen und freigeben | in Vorbereitung (Referate Touren und Ausbildung) |
 
 ---
 
@@ -258,3 +259,63 @@ Mehrere Abrechnungen auf einmal: In der Liste die Kästchen vor den Namen ankreu
 | **Bankverbindung fehlt**, **Bestätigung steuerfreie Einnahmen fehlt** | Darum kümmert sich die Geschäftsstelle. |
 
 Stimmt etwas nicht? Korrigiere den Einsatz in der Anwesenheitserfassung oder sag der Geschäftsstelle Bescheid. Sie berechnet die Abrechnung dann neu.
+
+---
+
+## Planungshilfe Touren und Kurse
+
+> **In Vorbereitung:** Das Modul ist noch nicht freigeschaltet. Bilder folgen.
+
+Hier planst du Führungstouren, Kurse und Gemeinschaftstouren. Die Planungshilfe rechnet den Teilnahmebeitrag und die CO2-Bilanz aus und bereitet alles für Yolawo vor. **Touren** gehören zum Referat Touren, **Kurse** zum Referat Ausbildung.
+
+### Eine Planung anlegen
+
+1. Öffne **„Planungshilfe Touren und Kurse“**. Du siehst die Liste der Planungen.
+2. Klicke auf **„Neue Planung“**.
+3. Wähle den **Tourtyp**: Führungstour, Kurs oder Gemeinschaftstour. Gib einen **Titel** ein (höchstens 90 Zeichen).
+4. Klicke auf **„Planung anlegen“**. Die Planung öffnet sich als **Entwurf**.
+
+> **Tipp:** Eine Tour wiederholt sich? Klicke in der Liste bei einer alten Planung auf **„Kopieren“**. Termin, Anmeldeschluss, Kontaktdaten und Bestätigungen musst du neu eintragen.
+
+### Die Schritte 1 bis 7
+
+Die Planung hat sieben Schritte, wie das bisherige Formular „Tourenkonzept“. Oben siehst du, in welchem Schritt noch Angaben fehlen. Rechts (auf dem Handy unten) steht die **Seitenleiste** mit Beitrag, CO2-Bilanz und Hinweisen.
+
+1. **Leitung:** Suche die Leitung und die Helfer:innen in den Aktiven. Die Planungshilfe zeigt, ob jemand den **Trainersatz** oder den **Helfersatz** bekommt. Das hängt von der Lizenz im Ehrenamtsmanagement ab. Trage für die Leitung E-Mail und Notfallkontakt ein.
+2. **Ausschreibung:** Titel, Sportart, Region, Kurzbeschreibung, Titelbild.
+3. **Termin & Anreise:** Beginn, Ende, Treffpunkt und die geplante An- und Abreise. Jede Teilstrecke zählt für die CO2-Bilanz.
+4. **Anforderungen:** Gehzeit, Höhenmeter, Kondition, Technik, Voraussetzungen, Ausrüstung.
+5. **Teilnahme:** Mindest- und Höchstzahl, Anmeldeschluss, Fragen im Anmeldeformular.
+6. **Kalkulation:** Tagessätze bzw. Lehreinheiten, Kosten der Leitung, sonstige Kosten, Teilnahmebeitrag. Felder mit **„Vorschlag“** füllt die Planungshilfe aus. Änderst du sie, kannst du mit **„übernehmen“** zum Vorschlag zurück.
+7. **Einreichen:** Wer legt das Angebot in Yolawo an? Bestätigungen zu Lizenz, Abrechnung, Übungsleiter-Erklärung und Notfallkarte.
+
+> **Gut zu wissen:** Die Planungshilfe **speichert automatisch** zwei Sekunden nach deiner letzten Eingabe. Oben steht „Gespeichert … Uhr“. Hat jemand anderes die Planung inzwischen geändert, erscheint ein Hinweis mit **„Neu laden“**.
+
+### Externe Leitung anlegen
+
+Ist die Leitung noch nicht in den Aktiven? Klicke in Schritt 1 auf **„Neue Person anlegen“**. Gib Vor- und Nachnamen ein und setze das Häkchen, dass du die Person über die Speicherung ihrer Daten informiert hast. Die Person bekommt zunächst den **Helfersatz**. Den Trainersatz gibt es, sobald die Geschäftsstelle ihre Lizenz im Ehrenamtsmanagement einträgt.
+
+### Einreichen, Rückfrage, Freigabe
+
+1. Klicke auf **„Einreichen“**. Fehlen noch Angaben, zeigt die Planungshilfe eine Liste und öffnet den passenden Schritt.
+2. Wer das **Freigaberecht** hat, prüft die Planung. Er oder sie kann eine **„Rückfrage“** stellen oder **„Freigeben“**. Mit der Freigabe bleiben die Sätze so, wie sie an diesem Tag gelten.
+3. Nach der Freigabe ändern nur noch Personen mit Freigaberecht oder die Geschäftsstelle.
+
+### In Yolawo anlegen
+
+1. Öffne den Reiter **„Ausgaben“**. Dort stehen das **Yolawo-Eingabeblatt** (jedes Feld mit „Kopieren“), der **Ausschreibungstext** und die **Zusammenfassung**.
+2. Lege das Angebot in Yolawo an. Übertrage die Felder einzeln, den Ausschreibungstext mit **„Alles kopieren“**.
+3. Wer das Freigaberecht hat, klickt danach auf **„In Yolawo angelegt“** und trägt, wenn gewünscht, Link oder Nummer des Angebots ein. Jetzt entsteht der **Einsatz in der Anwesenheitserfassung**.
+
+> **PDF:** Im Reiter „Ausgaben“ lädst du die ganze Planung mit **„PDF herunterladen“** als Datei herunter.
+
+### Absagen und nach der Tour
+
+- **Absagen:** Klicke auf **„Absagen“** und gib einen Grund ein. Der Einsatz in der Anwesenheitserfassung wird als abgesagt markiert. Sind dort schon Personen als anwesend erfasst, geht das nicht mehr.
+- **Nach der Tour:** Klicke auf **„Durchgeführt“**. Die Geschäftsstelle schließt die Planung später ab.
+- Kontakt- und Notfalldaten werden **30 Tage nach der Tour** bzw. nach der Absage automatisch gelöscht.
+
+### Kostenauswertung
+
+Klicke oben auf **„Auswertung“**. Du siehst die geplanten Kosten und Beiträge aller Planungen eines Jahres mit Summen. Abgesagte Planungen blendest du mit **„abgesagte anzeigen“** ein.
+

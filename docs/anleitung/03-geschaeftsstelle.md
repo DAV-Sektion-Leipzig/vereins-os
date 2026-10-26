@@ -17,6 +17,7 @@ Du darfst in allen Fachmodulen **verwalten**. Das heißt: Du siehst alle Referat
 | Anwesenheitserfassung | Einsätze aller Referate erfassen, korrigieren, löschen | freigeschaltet |
 | Finanzen | Halbjahresabrechnung berechnen, abschließen, auszahlen | freigeschaltet |
 | Dashboard | Budget aller Referate und des Vereins sehen, mit Einzelbuchungen und Prüfung | in Vorbereitung |
+| Planungshilfe Touren und Kurse | Planungen aller Referate bearbeiten, in Yolawo anlegen, abschließen, Kostenauswertung | in Vorbereitung |
 
 Vieles funktioniert genauso wie bei den Referent:innen. Dort ist es Schritt für Schritt erklärt: [Anleitung für Referent:innen](02-referentinnen.md). Hier steht, was **du zusätzlich** tust.
 
@@ -214,3 +215,20 @@ Die Abrechnungen sind danach **„ausgezahlt“**. Die Dateien kannst du später
 2. Wähle **Ort** und **Zeitraum** der Rechnung.
 3. Trage die **Anzahl laut Rechnung** ein, wenn du willst auch die Rechnungsnummer.
 4. Das Vereins OS zeigt die Abweichung. Klicke auf **„Abgleich speichern“**.
+
+---
+
+## Planungshilfe Touren und Kurse
+
+> **In Vorbereitung:** Das Modul ist noch nicht freigeschaltet. Bilder folgen.
+
+Die Planungshilfe funktioniert für dich wie für die Referent:innen: [Anleitung für Referent:innen](02-referentinnen.md#planungshilfe-touren-und-kurse). Du siehst die Planungen **aller Referate**. Zusätzlich gilt:
+
+- **Bearbeiten nach der Freigabe:** Du darfst freigegebene Planungen weiter ändern. Änderungen an Termin, Leitung, Beitrag und Gesamtkosten stehen im **Verlauf**.
+- **Nicht freigeben:** Freigeben dürfen nur Personen mit der Rechtevorlage „Freigabe Touren und Kurse“. Du kannst aber Rückfragen stellen.
+- **In Yolawo angelegt:** Das darfst du setzen, wenn das Angebot in Yolawo steht.
+- **Abschließen:** Ist eine Tour durchgeführt und abgerechnet, klickst du auf **„Abschließen“**. Danach kann niemand mehr etwas ändern.
+- **Löschen:** Entwürfe und abgesagte Planungen ohne Einsatz kannst du löschen.
+- **Lizenzen:** Bekommt jemand den Helfersatz, obwohl er oder sie eine Lizenz hat, trage die Lizenz im Ehrenamtsmanagement ein. Die Planung rechnet danach beim nächsten Speichern den Trainersatz.
+- **Kostenauswertung:** Unter **„Auswertung“** lädst du die Tabelle mit **„CSV herunterladen“** herunter, zum Beispiel für Excel. Kontakt- und Notfalldaten stehen nicht darin.
+
