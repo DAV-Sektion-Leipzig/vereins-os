@@ -48,6 +48,7 @@ Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnun
 | `AD_DEADLINE_INVALID` | Bitte ein gültiges Datum angeben. | R53 | Datenbank umgesetzt (`20261029000300`) |
 | `AD_DEADLINE_MISSING` | Etwas ist schiefgelaufen. Bitte versuche es erneut. (keine Frist für das Halbjahr; Stammdaten prüfen) | R53 | Datenbank umgesetzt (`20261029000300`) |
 | `AD_BIC_INVALID` | BIC ungültig. | R54 | Datenbank umgesetzt (`20261029000300`) |
+| `AD_CREDITOR_ID_INVALID` | Bitte eine gültige Gläubiger-Identifikationsnummer eingeben. | R57 | Datenbank umgesetzt (`20261102000100`) |
 | `AD_FORBIDDEN`, SQLSTATE `42501` | Für diesen Bereich hast du keine Rechte. | R8, R43 | umgesetzt |
 | Constraint `ea_referate_name_key` bzw. `ea_gremien_name_key` (kein Code, [ANNAHME]) | ~~Ein Referat mit dieser Bezeichnung gibt es bereits. / Ein Gremium mit dieser Bezeichnung gibt es bereits.~~ ersetzt durch „Diese Bezeichnung gibt es bereits.“ (EA spec.md Abschnitt 6, US-EA-14 AK3; Zeile im Abschnitt EA) | – | umgesetzt (Oberfläche: `/ea/stammdaten`) |
 | Constraint `ad_qualification_types_discipline_not_blank` / `…_issuer_not_blank` (kein Code, [ANNAHME]) | Bitte eine Sparte angeben. / Bitte einen Aussteller angeben. | US-AD-17 AK2 | umgesetzt |
@@ -171,6 +172,15 @@ spec.md FI v0.2 Abschnitt 5; Datenbank umgesetzt (`20261031000100`–`…0700`),
 | `FI_RUN_EMPTY` | Die Runde enthält keine auszahlbaren Abrechnungen. | US-FI-15 | Datenbank umgesetzt |
 | `FI_PAYOUT_SETTINGS_MISSING` | Die Angaben der Sektion für die Auszahlung fehlen. Bitte den Admin informieren. | R26 | Datenbank umgesetzt |
 | `FI_LOCATION_NO_POINTS` | Dieser Ort hat kein Punktekonto. | US-FI-17 | Datenbank umgesetzt |
+| `FI_COLLECTION_MONTH` | Für diesen Monat ist kein Buchungslauf möglich. | R36, R38 | Datenbank umgesetzt (`20261102000300`) |
+| `FI_DUE_DATE` | Der Fälligkeitstag muss mindestens einen Bankarbeitstag in der Zukunft liegen. | R39 | Datenbank umgesetzt |
+| `FI_COLLECTION_EMPTY` | Der Buchungslauf enthält keine Lastschriften. | R45 | Datenbank umgesetzt |
+| `FI_COLLECTION_SETTINGS_MISSING` | Die Angaben der Sektion für den Einzug fehlen. Bitte den Admin informieren. | R45 | Datenbank umgesetzt |
+| `FI_COLLECTION_TAKEN` | Dieser Vertrag ist in diesem Monat bereits in einem anderen Buchungslauf. | R35 | Datenbank umgesetzt |
+| `FI_COLLECTION_EXCLUDED` | Diese Lastschrift kann nicht gewählt werden (Mandat noch nicht unterschrieben). | R37 | Datenbank umgesetzt |
+| `FI_COLLECTION_CHANGED` (Detail: Name) | Verträge haben sich seit dem Erstellen geändert. Bitte den Buchungslauf aktualisieren. | R34 | Datenbank umgesetzt |
+| `FI_EXTRA_REQUIRED` | Bitte Text und Begründung angeben. | R47 | Datenbank umgesetzt |
+| `FI_AMOUNT_INVALID` | Bitte einen gültigen Betrag eingeben. | R47 | Datenbank umgesetzt |
 
 ## Hinweise (keine Fehlermeldungen)
 
