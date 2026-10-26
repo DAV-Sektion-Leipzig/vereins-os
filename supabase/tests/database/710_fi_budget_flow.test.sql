@@ -354,6 +354,12 @@ select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
 select lives_ok($$ select public.fi_budget_payout_mark('c7100000-0000-4000-8000-000000000012', true) $$, 'Runde als gebucht markieren');
 select is((select o.preview_runs from public.ds_budget_overview(pg_temp.y()) o
             where o.group_name = 'Kinder und Jugend' and o.name = 'Vergütung Aktive'), 0::numeric, 'markierte Runde ohne Vorschau');
+select results_eq($$ select number::int, booked, marked from public.ds_budget_payout_runs(pg_temp.y()) order by number $$,
+  $$ values (91, true, false), (92, true, true) $$, 'Runden: gebucht per Abgleich bzw. von Hand markiert');
+select pg_temp.as_user('b0000000-0000-4000-8000-000000000032');
+select throws_ok($$ select * from public.ds_budget_payout_runs(pg_temp.y()) $$, 'P0001', 'FI_BUDGET_FORBIDDEN',
+  'Runden nur für die Budgetpflege');
+select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
 
 -- ---------------------------------------------------------------------------------------------------------------
 -- Zu tun (US-DS-17)

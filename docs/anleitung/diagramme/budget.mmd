@@ -1,0 +1,7 @@
+%% Bereich Budget im Dashboard: eine Quelle für Geld (Finanzplan und DATEV-Export)
+flowchart LR
+  A["Finanzplan<br/><small>Excel des Vorstands,<br/>einmal im Jahr</small>"] --> C["Budgetpflege<br/><small>Gesamtbudgets und<br/>Zuordnung pflegen</small>"]
+  B["DATEV-Export<br/><small>Kontenblätter der<br/>Buchhaltung</small>"] --> C
+  C --> D["Dashboard<br/><small>Plan, verbraucht, frei,<br/>Ampel je Budgetposten</small>"]
+  D -. "Umschichtung beantragen,<br/>Umschlüsselung vorschlagen" .-> C
+  E["Finanzen<br/><small>Auszahlungsrunden</small>"] -. "Vorschau,<br/>noch nicht gebucht" .-> D

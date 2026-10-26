@@ -11,6 +11,7 @@
     "ea:migrate": "tsx scripts/ea-migrate/index.ts",
     "ea:migrate:test": "tsx --test \"scripts/ea-migrate/*.test.ts\"",
     "fi:export:test": "tsx --test \"scripts/fi-export/*.test.ts\"",
+    "ds:budget:test": "tsx --test \"scripts/ds-budget/*.test.ts\"",
     "anleitung:screenshots": "tsx scripts/anleitung/screenshots.ts",
     "anleitung:diagramme": "tsx scripts/anleitung/diagramme.ts",
     "anleitung:pdf": "tsx scripts/anleitung/pdf.ts"
@@ -29,6 +30,7 @@
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-router-dom": "^7.18.4",
+    "read-excel-file": "^9.3.12",
     "sonner": "^2.0.8",
     "tailwindcss": "^4.3.3",
     "tw-animate-css": "^1.4.0"

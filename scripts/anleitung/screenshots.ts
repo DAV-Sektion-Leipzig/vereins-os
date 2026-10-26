@@ -7,7 +7,8 @@
 //   SEED_TEST_PASSWORD=… npm run anleitung:screenshots -- ez-training  nur Bilder, deren Name den Text enthält
 //   SEED_TEST_PASSWORD=… npm run anleitung:screenshots -- --vorbereiten  vorher die Daten der Finanzen vorbereiten
 //
-// Daten: Seed mit SEED_WITH_EZ=1 und SEED_WITH_FI=1 (scripts/anleitung/lokaler-stack.sh). „--vorbereiten“ erledigt in
+// Daten: Seed mit SEED_WITH_EZ=1, SEED_WITH_FI=1 und SEED_WITH_DS=1 (scripts/anleitung/lokaler-stack.sh).
+// Das Dashboard nutzt die Budgetdaten aus supabase/seed-ds.sql (Vorstand mit Vorlage „Budgetpflege“). „--vorbereiten“ erledigt in
 // der Oberfläche, was die Bilder der Finanzen zeigen: 1. Halbjahr 2026 berechnen, Tina Trainerin und Hans Helfer als
 // Kim Kinderjugend bestätigen, Tina Trainerin abschließen und ihre Abgabe erfassen, eine Auszahlungsrunde anlegen.
 // Bereits erledigte Schritte werden übersprungen.
@@ -34,6 +35,7 @@ const ZUGANG = {
   geschaeftsstelle: 'test.geschaeftsstelle@dav-leipzig.de',
   referent: 'test.referent@dav-leipzig.de',
   kiju: 'test.kiju@dav-leipzig.de',
+  vorstand: 'test.vorstand@dav-leipzig.de',
 } as const
 
 // Feste IDs aus supabase/seed.sql und seed-ez.sql
@@ -187,6 +189,47 @@ const SHOTS: Shot[] = [
     hoehe: 1000,
   },
   { name: 'fi-kletterhalle', zugang: 'geschaeftsstelle', pfad: '/fi/kletterhalle?von=2026-10-01&bis=2026-10-31', hoehe: 1000 },
+
+  // Dashboard (Bereich Budget)
+  { name: 'ds-dashboard', zugang: 'kiju', pfad: '/dashboard', hoehe: 1250 },
+  {
+    name: 'ds-posten',
+    zugang: 'kiju',
+    pfad: '/dashboard',
+    schritte: async (p) => {
+      await link(p, 'Vergütung Aktive')
+      await p.getByRole('heading', { name: 'Vergütung Aktive', level: 1 }).waitFor()
+    },
+    hoehe: 1000,
+  },
+  {
+    name: 'ds-hinweis',
+    zugang: 'kiju',
+    pfad: '/dashboard',
+    schritte: (p) => klick(p, 'Hinweis zu Fahrten und Freizeiten'),
+    dialog: true,
+  },
+  {
+    name: 'ds-umschichtung',
+    zugang: 'kiju',
+    pfad: '/dashboard',
+    schritte: (p) => klick(p, 'Umschichtung beantragen'),
+    dialog: true,
+  },
+  { name: 'ds-dashboard-mobil', zugang: 'kiju', pfad: '/dashboard', mobil: true },
+  { name: 'ds-verein', zugang: 'vorstand', pfad: '/dashboard/verein', hoehe: 1350 },
+  { name: 'ds-pflege-finanzplan', zugang: 'vorstand', pfad: '/dashboard/budget/pflege' },
+  { name: 'ds-pflege-gesamtbudgets', zugang: 'vorstand', pfad: '/dashboard/budget/pflege?reiter=gesamtbudgets' },
+  { name: 'ds-pflege-zuordnung', zugang: 'vorstand', pfad: '/dashboard/budget/pflege?reiter=zuordnung', hoehe: 1100 },
+  { name: 'ds-pflege-import', zugang: 'vorstand', pfad: '/dashboard/budget/pflege?reiter=import' },
+  { name: 'ds-pflege-antraege', zugang: 'vorstand', pfad: '/dashboard/budget/pflege?reiter=antraege' },
+  {
+    name: 'ad-rechtevorlage-budget',
+    zugang: 'admin',
+    pfad: '/ad/rechtevorlagen',
+    schritte: (p) => p.getByRole('link', { name: 'Budgetpflege' }).first().click(),
+    hoehe: 1060,
+  },
 ]
 
 async function anmelden(page: Page, email: string) {

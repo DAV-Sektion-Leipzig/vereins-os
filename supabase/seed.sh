@@ -7,6 +7,7 @@
 #   SEED_WITH_EZ=1      optional: zusätzlich supabase/seed-ez.sql (Anwesenheitserfassung, nur TEST)
 #   SEED_WITH_FI=1      optional: zusätzlich supabase/seed-fi.sql (Finanzen, nur TEST)
 #   SEED_WITH_TK=1      optional: zusätzlich supabase/seed-tk.sql (Planungshilfe, nur TEST)
+#   SEED_WITH_DS=1      optional: zusätzlich supabase/seed-ds.sql (Bereich Budget des Dashboards, nur TEST)
 #   psql
 #
 # Aufruf aus dem Repo-Wurzelverzeichnis: supabase/seed.sh
@@ -77,6 +78,12 @@ fi
 if [[ "${SEED_WITH_TK:-}" == "1" ]]; then
   psql "$SEED_DB_URL" --single-transaction -v ON_ERROR_STOP=1 -f supabase/seed-tk.sql
   echo "Seed Planungshilfe abgeschlossen."
+fi
+
+# Testdaten Bereich Budget nur auf Wunsch (vereins-os-test), nicht in CI (spec.md DS Abschnitt 9)
+if [[ "${SEED_WITH_DS:-}" == "1" ]]; then
+  psql "$SEED_DB_URL" --single-transaction -v ON_ERROR_STOP=1 -f supabase/seed-ds.sql
+  echo "Seed Budget abgeschlossen."
 fi
 
 echo "Seed abgeschlossen."
