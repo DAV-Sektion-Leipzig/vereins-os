@@ -177,7 +177,7 @@ Entschieden 22.10.2026 (Product Owner, fünfter Block): PDF-Übernahme nicht im 
 ## FI – Finanzen (Priorität 3 – nach der Anwesenheitserfassung)
 
 Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.5, abgeschlossen 26.10.2026) · Erhebung: 01-erhebung.md (Version 0.6) · Stories: 02-stories.md (Version 0.1, US-FI-01 bis US-FI-17) · Spec: spec.md (Version 0.2, **Ready** 26.10.2026; Umsetzung nach den Nachträgen AD v0.10 und EZ v0.6) · Übergaben: uebergabe-administration.md (v1.3, eingearbeitet in spec.md AD v0.10.0), uebergabe-anwesenheitserfassung.md (v1.3, eingearbeitet in spec.md EZ v0.6), uebergabe-planungshilfe.md (v1.0, offen; Planungshilfe eingefroren)
-- [OFFEN] **Übergabe aus dem Dashboard (v1.0, offen):** Bereich Budget in Finanzen (Finanzplan, Zuordnung Konto → Budgetposten, DATEV-Import, Berechnung Plan/Ist, Einzelbuchungen je Referat), vorgezogen vor die Abrechnung (specs/ds-dashboard/uebergabe-finanzen.md v1.2).
+- [OFFEN] **Übergabe aus dem Dashboard (v1.0, offen):** Bereich Budget in Finanzen (Finanzplan, Zuordnung Konto → Budgetposten, DATEV-Import, Berechnung Plan/Ist, Einzelbuchungen je Referat), vorgezogen vor die Abrechnung (specs/ds-dashboard/uebergabe-finanzen.md v1.4).
 
 - Entschieden 24.10.2026 (Product Owner, Chat Finanzen):
   - **Q4 – Aufbewahrung:** 5 Jahre wie überall, auch für Abrechnungen und abgerechnete Einsätze; steuerlich aufbewahrungspflichtige Belege liegen in der Finanzbuchhaltung (bestätigt 25.10.2026).
