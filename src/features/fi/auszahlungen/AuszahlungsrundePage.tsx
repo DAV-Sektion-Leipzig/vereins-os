@@ -21,7 +21,7 @@ type Dialog = 'release' | 'discard' | 'refetch' | null
 // FT14 (US-FI-14, -15, -16): Runde im Entwurf mit Auswahl, Ausführungsdatum und Vorschau der Auszahlzeilen;
 // Freigabe mit Rückfrage, danach Download von Auszahlliste (PDF) und Überweisungsdatei (XML); freigegeben: erneut abrufen.
 export function AuszahlungsrundePage() {
-  const { preview, failed } = useLoaderData() as RunResult
+  const { preview, closedCount, failed } = useLoaderData() as RunResult
   if (failed || !preview) {
     return (
       <section className="flex flex-col gap-4">
@@ -33,10 +33,10 @@ export function AuszahlungsrundePage() {
       </section>
     )
   }
-  return <Run key={preview.run.id} preview={preview} />
+  return <Run key={preview.run.id} preview={preview} closedCount={closedCount} />
 }
 
-function Run({ preview }: { preview: RunPreview }) {
+function Run({ preview, closedCount }: { preview: RunPreview; closedCount: number }) {
   const { run, lines, total, available } = preview
   const navigate = useNavigate()
   const revalidator = useRevalidator()
@@ -192,8 +192,20 @@ function Run({ preview }: { preview: RunPreview }) {
           <h2 id="fi-run-select" className="text-lg font-semibold">
             Abgegebene Abrechnungen
           </h2>
+          <p className="text-sm text-muted-foreground">
+            In eine Runde kommen nur Abrechnungen, deren unterschriebene Abgabe erfasst ist (Zustand „abgegeben“).
+          </p>
+          {closedCount > 0 && (
+            <p className="rounded-lg border bg-muted/50 p-3 text-sm">
+              {closedCount === 1 ? '1 Abrechnung ist' : `${closedCount} Abrechnungen sind`} abgeschlossen, aber noch nicht
+              abgegeben.{' '}
+              <Link to={`/fi?hj=${run.year}-${run.half}&zustand=closed`} className="underline underline-offset-4">
+                Abgabe erfassen
+              </Link>
+            </p>
+          )}
           {available.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Keine auszahlbaren Abrechnungen.</p>
+            <p className="text-sm text-muted-foreground">Keine abgegebenen Abrechnungen.</p>
           ) : (
             <ul className="flex flex-col divide-y rounded-xl border">
               {available.map((a) => (
