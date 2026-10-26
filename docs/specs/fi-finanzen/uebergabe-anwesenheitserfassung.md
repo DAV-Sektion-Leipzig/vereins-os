@@ -1,6 +1,6 @@
 # Übergabe: Finanzen → Anwesenheitserfassung
 
-Stand: 26.10.2026 · Version 1.3 · Status: offen · Von: Finanzen (FI) · An: Anwesenheitserfassung (EZ)
+Stand: 26.10.2026 · Version 1.3 · Status: eingearbeitet (26.10.2026, spec.md EZ v0.6, 02-stories.md EZ v0.7) · Von: Finanzen (FI) · An: Anwesenheitserfassung (EZ)
 Grundlage: docs/specs/fi-finanzen/00-steckbrief.md v0.1, 01-erhebung.md v0.1; specs/ez-einsaetze/spec.md v0.5 (Ready, in Umsetzung), uebergabe-finanzen.md v1.6
 Änderungen v1.3: Zweiter Platzhalter `fi_event_locked(p_event uuid)` für die abrechnungsrelevanten Kopfdaten (spec.md FI v0.1); Lesefunktion `ez_settlement_basis` mit Gruppenname.
 Änderungen v1.2: Sperre ab dem Abschluss einer Abrechnung (Begriff, bisher „Freigabe“); Gruppenname in der Lesefunktion (Auszahlung je Person und Gruppe).
@@ -21,4 +21,4 @@ Die Übergabe EZ → FI v1.6 (F1–F9) ist in Finanzen eingearbeitet. Daraus erg
 
 ## Einarbeitung
 
-- [ ] eingearbeitet in Anwesenheitserfassung (Datei, Version): –
+- [x] eingearbeitet in Anwesenheitserfassung (Datei, Version): docs/specs/ez-einsaetze/spec.md v0.6 (Nachtrag Finanzen: R32–R34, `remuneration_kind_id`, `ez_settlement_basis`, `fi_attendance_locked`, `fi_event_locked`, `EZ_SETTLED`, T22–T28) und 02-stories.md v0.7 (US-EZ-24, US-EZ-25), 26.10.2026.
