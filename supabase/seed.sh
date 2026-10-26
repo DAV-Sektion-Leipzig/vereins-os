@@ -82,7 +82,8 @@ fi
 
 # Testdaten Bereich Budget nur auf Wunsch (vereins-os-test), nicht in CI (spec.md DS Abschnitt 9)
 if [[ "${SEED_WITH_DS:-}" == "1" ]]; then
-  psql "$SEED_DB_URL" --single-transaction -v ON_ERROR_STOP=1 -f supabase/seed-ds.sql
+  psql "$SEED_DB_URL" --single-transaction -v ON_ERROR_STOP=1 -v test_password="$SEED_TEST_PASSWORD" \
+    -f supabase/seed-ds.sql
   echo "Seed Budget abgeschlossen."
 fi
 
