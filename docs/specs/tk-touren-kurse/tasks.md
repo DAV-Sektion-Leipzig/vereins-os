@@ -35,11 +35,11 @@ Siehe [AD tasks.md](../ad-administration/tasks.md) Phase 18 (T134–T141). Vorau
 
 ## Stufe 4: Oberfläche (Branch `tk-oberflaeche`)
 
-- [ ] T017 [spec T20] `src/features/tk/calc.ts` mit `npm run tk:calc:test` gegen `cases.json`
-- [ ] T018 [spec T16] Zugriff, Rahmen, Navigation (Planungen · Auswertung), Liste `/tk` mit Filtern und Karten mobil, `/tk/neu`, Kopieren (US-TK-01, -02, -23)
-- [ ] T019 [spec T17] `/tk/:id` Schritte 1–7, Seitenleiste (Beitrag, CO2, Fortschritt, Hinweise), Speichern mit `row_version` und Autospeichern, Konfliktdialog, Statusdialoge, Verlauf (US-TK-03 bis -14, -16 bis -18)
-- [ ] T020 [spec T23] Dialog „Neue Person anlegen“ und Dublettendialog nach `src/features/shared/` (EZ und TK), Wieder aktivieren (US-TK-03 AK9, AK10)
-- [ ] T021 AD T64 Rest: Zeile Planungshilfe in der Vorlagen-Matrix mit „darf freigeben“; Anleitung (Teil Referent:innen und Geschäftsstelle, Screenshots, Version)
+- [x] T017 [spec T20] `src/features/tk/calc.ts` mit `npm run tk:calc:test` (`scripts/tk-calc/calc.test.ts`, gleiche Werte wie pgTAP 820; statt einer eigenen `cases.json`)
+- [x] T018 [spec T16] `src/features/tk/` (access, TkLayout, liste/, neu/): Zugriff, Rahmen, Navigation (Planungen · Auswertung), Liste `/tk` mit Filtern und Karten mobil, `/tk/neu`, Kopieren (US-TK-01, -02, -23)
+- [x] T019 [spec T17] `detail/PlanungPage.tsx`, `steps.tsx`, `Seitenleiste.tsx`, `Verlauf.tsx` (Wortlaut der Bestätigungen c2–c4 [ANNAHME], Prototyp nennt nur Kurzbezeichnungen): `/tk/:id` Schritte 1–7, Seitenleiste (Beitrag, CO2, Fortschritt, Hinweise), Speichern mit `row_version` und Autospeichern, Konfliktdialog, Statusdialoge, Verlauf (US-TK-03 bis -14, -16 bis -18)
+- [x] T020 [spec T23] `detail/NeueLeitungDialog.tsx` mit gemeinsamem `DublettenDialog`, Wieder aktivieren (US-TK-03 AK9, AK10). Abweichung von plan.md P8: eigene Fassung statt Verschieben des EZ-Dialogs (EZ speichert dabei die Anwesenheit, TK nur die Person); EZ unverändert
+- [ ] T021 AD T64 Rest: Zeile Planungshilfe in der Vorlagen-Matrix mit „darf freigeben“ – erledigt (schon mit AD T129, `APPROVE_MODULES`); Anleitung (Teil Referent:innen und Geschäftsstelle, Screenshots, Version) folgt mit Stufe 5 vor dem Freischalten, weil das Modul bis dahin nicht sichtbar ist
 
 ## Stufe 5: Ausgaben und Auswertung (Branch `tk-ausgaben-auswertung`)
 
