@@ -32,6 +32,18 @@ Die Tasks folgen spec.md Abschnitt 10 (T1–T16). Ein eigener Spec-Kit-Plan ents
 - [x] FT15 (spec T15) /fi/kletterhalle (`src/features/fi/kletterhalle/`)
 - [x] FT16 (spec T16) abnahme-test.md, Abnahme in TEST (Product Owner 26.10.2026)
 
+## Phase 3: Buchungslauf Verträge (spec.md v0.3 Abschnitt 12)
+
+- [x] FT17 (spec 12.5) Migration AD v0.11 `supabase/migrations/20261102000100_ad_collection_settings.sql`: `creditor_id`, `ledger_account_collection`, `ad_creditor_id_valid`, `ad_collection_settings`, `ad_collection_start`; `ad_payout_settings_at` mit beiden Feldern (AD T131)
+- [x] FT18 Migration GR v0.4 `supabase/migrations/20261102000200_gr_contracts_for_collection.sql` (GR T053)
+- [x] FT19 Migration `supabase/migrations/20261102000300_fi_collection.sql`: Tabellen, Hilfsfunktionen, Schreib- und Lesefunktionen (12.1, 12.2)
+- [x] FT20 pgTAP `supabase/tests/database/640_fi_collection.test.sql` (R34–R47, R57, R58, Rechte, keine IBAN)
+- [x] FT21 Seed: Gläubiger-ID `DE98ZZZ09999999999`, Sachkonto `0000 1`, Stichtag = Monat des ersten Seeds
+- [ ] FT22 Oberfläche Administration (AD T133)
+- [ ] FT23 Oberfläche /fi/einzug, /fi/einzug/:id
+- [ ] FT24 Lastschriftdatei (pain.008.001.02) mit Test, Einzugsliste (PDF)
+- [ ] FT25 Abnahme in TEST
+
 ## Abweichungen und Präzisierungen gegenüber spec.md (zur Kenntnis des Product Owners)
 
 - Hinweise je Abrechnung werden über interne Funktionen berechnet, die nur Ja/Nein-Werte liefern; so sehen Referent:innen den Hinweis „Bankverbindung fehlt“, ohne Zugriff auf `ea_person_finance_data` (R31, R55).
@@ -39,3 +51,6 @@ Die Tasks folgen spec.md Abschnitt 10 (T1–T16). Ein eigener Spec-Kit-Plan ents
 - Positionen ohne Gruppe bilden je Referat eine Auszahlzeile (R24); Check auf genau Gruppe oder Referat.
 - Kurse (Lehreinheiten) werden in der Berechnung noch nicht berücksichtigt (Iteration 1).
 - Neuer Fehlercode `FI_PERIOD_INVALID` (ungültiges Halbjahr; nur Programmierfehler).
+- Buchungslauf: abgewählte Lastschriften bleiben im Entwurf als Zeile (`included = false`) und werden bei der Freigabe gelöscht; ein Vertrag ist je Monat höchstens einmal enthalten (Teilindex). Freigabe prüft gegen die aktuellen Verträge (`FI_COLLECTION_CHANGED`); „Aktualisieren“ übernimmt Änderungen und behält Abwahl und Zusatzbeträge.
+- Buchungslauf: ohne Stichtag (`ad_collection_start()` null) ist kein Buchungslauf möglich (`FI_COLLECTION_MONTH`).
+

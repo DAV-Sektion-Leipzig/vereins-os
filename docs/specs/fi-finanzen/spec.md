@@ -1,8 +1,9 @@
 # Spec: Finanzen (FI)
 
-Version: 0.2 · Status: Ready (freigegeben am 26.10.2026; Annahmen werden bei der Abnahme bestätigt) · Stand: 26.10.2026 · Product Owner: Toni Werner
-Stories: docs/specs/fi-finanzen/02-stories.md (US-FI-01 bis US-FI-17, v0.1)
+Version: 0.3 · Status: Ready (MVP freigegeben am 26.10.2026; Nachtrag v0.3 Buchungslauf Verträge freigegeben am 26.10.2026) · Stand: 26.10.2026 · Product Owner: Toni Werner
+Stories: docs/specs/fi-finanzen/02-stories.md (US-FI-01 bis US-FI-21, v0.2.1)
 Grundlage: 00-steckbrief.md v0.5 (abgeschlossen), 01-erhebung.md v0.6 (R1–R30, C6, C7), 02-stories.md v0.1 (R31–R33), glossar.md v1.6, rollen.md v1.2, tech-stack.md, Übergaben FI → AD v1.3 (A1–A10), FI → EZ v1.2 (Z1–Z5), FI → TK v1.0; spec.md Administration v0.9 (`ad_rates`, `ad_rates_at`, `ea_person_names`), spec.md Anwesenheitserfassung v0.5 (`ez_events`, `ez_attendances`, `ez_climbing_points_report`)
+Änderungen v0.3: Nachtrag Buchungslauf Verträge (Abschnitt 12; 01-erhebung.md v0.7.1, R34–R47; US-FI-18 bis US-FI-21); Status Ready (Product Owner 26.10.2026).
 Änderungen v0.2: Status Ready (Product Owner 26.10.2026); [ANNAHME]-Punkte bleiben sichtbar und werden bei der Abnahme in TEST bestätigt. Voraussetzung der Umsetzung: Administration Nachtrag v0.10 und Anwesenheitserfassung Nachtrag v0.6.
 Änderungen v0.1.2: Namen der Anwesenheitserfassung bestätigt (spec.md EZ v0.6: `remuneration_kind_id`, `ez_settlement_basis`, `fi_attendance_locked`, `fi_event_locked`); Annahmen dazu entfallen.
 Änderungen v0.1.1: Namen an den Nachtrag v0.10 der Administration angeglichen (`ad_my_approve_referate`, `ad_can_approve`, `ad_remuneration_kinds`/`ad_remuneration_positions`, `ad_settlement_deadline`, `ad_payout_settings_at`, `ea_person_finance_data`); Annahme zu den AD-Namen entfällt.
@@ -413,3 +414,99 @@ Annahmen (sichtbar, Bestätigung bei Freigabe oder Abnahme):
 - [ANNAHME] Mengengerüst und Antwortzeiten.
 
 Offen für Iteration 1 (kein Blocker): Storno einer Runde; Probetrainings Kletterhalle; Sonderfälle; Kurs und Tour; Reisekosten.
+
+## 12. Nachtrag v0.3: Buchungslauf Verträge (Ready, 26.10.2026)
+
+Grundlage: 01-erhebung.md v0.7.1 Abschnitt H (R34–R47, C8–C11), 02-stories.md v0.2.1 (US-FI-18 bis US-FI-21), Übergaben FI → AD v1.4 (A11, A13), FI → GR v1.0 (G1–G4). Voraussetzung: Nachtrag AD v0.11 und GR v0.4 (gleiche Migration-Reihe).
+
+### 12.1 Datenmodell
+
+Typen: `fi_collection_status` (`draft`, `released`), `fi_sequence` (`FRST`, `RCUR`).
+
+**fi_collection_runs (Buchungslauf)**
+
+| Spalte | Typ | Pflicht | Beschreibung |
+|---|---|---|---|
+| id | uuid | ja | PK |
+| month | date | ja | 1. des Monats (Check) |
+| number | smallint | ja | je Monat ab 1, Zähler `fi_collection_counters (month, last_number)`, nicht wieder vergeben (R35) |
+| status | fi_collection_status | ja | Default `draft` |
+| due_date | date | ja | Fälligkeitstag (R39) |
+| msg_id, pmt_inf_id_frst, pmt_inf_id_rcur | text | bei Freigabe | R40 |
+| line_count, total, total_frst, total_rcur | integer, numeric(12,2) | bei Freigabe | |
+| released_at / released_by / released_by_person_id | | bei Freigabe | |
+| created_at / created_by | | ja | |
+
+Unique `(month, number)`.
+
+**fi_collections (Einzug)**
+
+| Spalte | Typ | Pflicht | Beschreibung |
+|---|---|---|---|
+| id | uuid | ja | PK |
+| run_id | uuid | ja | FK fi_collection_runs on delete cascade |
+| contract_id | uuid | ja | FK gr_contracts on delete restrict |
+| month | date | ja | = Monat des Laufs |
+| included | boolean | ja | Default true; abgewählt = false (bleibt im Entwurf sichtbar) |
+| excluded_reason | text | nein | `mandate_not_signed` (R37); dann `included = false`, nicht wählbar |
+| monthly_amount | numeric(10,2) | ja | > 0, Stand Erstellen/Aktualisieren (R34) |
+| extra_amount, extra_text, extra_reason | numeric(10,2), text, text | nein | R47; alle drei oder keins (Check) |
+| amount | numeric(10,2) | ja | generiert: monthly_amount + coalesce(extra_amount, 0) |
+| sequence | fi_sequence | ja | R38 |
+| group_id, group_label, participant_person_id, holder_person_id | | ja | aus G1 |
+| mandate_reference, mandate_signed_on | text, date | ja | aus G1 |
+| remittance, end_to_end_id, sort_no | text, text, integer | bei Freigabe | R40, R42 |
+| bank_check | text | ja | Prüfwert aus G2 (R43) |
+
+Unique `(contract_id, month) where included` (R35). Keine IBAN, kein Kontoinhaber. Beim Freigeben werden nicht enthaltene Zeilen gelöscht.
+
+### 12.2 Funktionen (security definer, `set search_path = ''`, nur `fi_can_manage()`, sonst `FI_FORBIDDEN`)
+
+- `fi_default_due_date(p_today date default current_date) returns date` – heute + 3 Tage, Samstag/Sonntag → Montag (R39).
+- `fi_create_collection_run(p_month date, p_due_date date default null) returns uuid` – Monat = 1. des Monats, nicht vor dem aktuellen Monat und nicht vor `ad_collection_start()` (`FI_COLLECTION_MONTH`); Fälligkeitstag nach R39 (`FI_DUE_DATE`); legt den Lauf mit nächster Nummer an und übernimmt alle Verträge aus `gr_contracts_for_collection(p_month)`, die im Monat noch keinen enthaltenen Einzug haben (R34, R35), mit Sequenz nach R38 und Ausschluss nach R37.
+- `fi_refresh_collection_run(p_run uuid)` – nur Entwurf (`FI_STATUS`): aktualisiert Beträge, Mandatsangaben, Gruppe und Sequenz, entfernt nicht mehr aktive Verträge, ergänzt neue; Abwahl und Zusatzbeträge bleiben.
+- `fi_update_collection_run(p_run uuid, p_due_date date)` – nur Entwurf; R39; Ausschluss R37 neu bewerten.
+- `fi_set_collection_included(p_collection uuid, p_included boolean)` – nur Entwurf; ausgeschlossene Zeile → `FI_COLLECTION_EXCLUDED`; Vertrag im Monat schon in anderem Lauf enthalten → `FI_COLLECTION_TAKEN`.
+- `fi_set_collection_extra(p_collection uuid, p_amount numeric, p_text text, p_reason text)` – nur Entwurf; `p_amount` null entfernt; sonst Betrag > 0 mit höchstens 2 Nachkommastellen (`FI_AMOUNT_INVALID`), Text 1–60 und Begründung 1–500 Zeichen (`FI_EXTRA_REQUIRED`) (R47).
+- `fi_discard_collection_run(p_run uuid)` – nur Entwurf; löscht den Lauf mit seinen Zeilen.
+- `fi_release_collection_run(p_run uuid) returns uuid` – nur Entwurf; mindestens ein enthaltener Einzug (`FI_COLLECTION_EMPTY`); Angaben der Sektion mit Gläubiger-ID am Fälligkeitstag (`FI_COLLECTION_SETTINGS_MISSING`); R39 (`FI_DUE_DATE`); jeder enthaltene Vertrag weiter aktiv und Betrag, Mandat unverändert (`FI_COLLECTION_CHANGED`, Detail Name); Sequenz neu nach R38; vergibt IDs (R40), Verwendungszweck (R42), Reihenfolge (Gruppe natürlich, Nachname, Vorname); löscht nicht enthaltene Zeilen; setzt `released`.
+- `fi_list_collection_runs() returns setof (id, month, number, status, due_date, line_count, total, included_count, included_total, released_at, released_by_name)`.
+- `fi_get_collection_run(p_run uuid) returns jsonb` – Kopf, Zeilen mit Namen (Teilnehmer:in, Vertragsinhaber:in), Gruppe, Beträge, Sequenz, Ausschluss, `iban_last4`, Hinweis `bank_changed_since_last` (R44), Summen je Gruppe; `FI_NOT_FOUND`.
+- `fi_collection_export(p_run uuid) returns jsonb` – nur `released` (`FI_STATUS`): Kopf, Angaben der Sektion (`ad_payout_settings_at(due_date)` mit Gläubiger-ID und Sachkonto der Gruppenbeiträge), je Einzug Kontoinhaber:in und IBAN aus `gr_contracts_for_collection(null, ids)`, Kennzeichen `bank_changed` (R43). Das Frontend erzeugt daraus Lastschriftdatei und Einzugsliste.
+
+Grants nur an `authenticated`; Tabellen nur `select` mit RLS `fi_can_manage()`; Schreiben nur über die Funktionen.
+
+### 12.3 Fehlercodes (Ergänzung contracts/error-codes.md)
+
+| Code | Meldung |
+|---|---|
+| `FI_COLLECTION_MONTH` | Für diesen Monat ist kein Buchungslauf möglich. |
+| `FI_DUE_DATE` | Der Fälligkeitstag muss mindestens einen Bankarbeitstag in der Zukunft liegen. |
+| `FI_COLLECTION_EMPTY` | Der Buchungslauf enthält keine Lastschriften. |
+| `FI_COLLECTION_SETTINGS_MISSING` | Die Angaben der Sektion für den Einzug fehlen. Bitte den Admin informieren. |
+| `FI_COLLECTION_TAKEN` | Dieser Vertrag ist in diesem Monat bereits in einem anderen Buchungslauf. |
+| `FI_COLLECTION_EXCLUDED` | Diese Lastschrift kann nicht gewählt werden (Mandat noch nicht unterschrieben). |
+| `FI_COLLECTION_CHANGED` (Detail: Name) | Verträge haben sich seit dem Erstellen geändert. Bitte den Buchungslauf aktualisieren. |
+| `FI_EXTRA_REQUIRED` | Bitte Text und Begründung angeben. |
+| `FI_AMOUNT_INVALID` | Bitte einen gültigen Betrag eingeben. |
+
+### 12.4 Oberfläche
+
+| Route | Zeigt | Aktionen |
+|---|---|---|
+| /fi/einzug | Buchungsläufe (Monat, Lauf, Fälligkeitstag, Zustand, Anzahl, Summe, freigegeben am/von) | Neuer Buchungslauf (Monat, Fälligkeitstag vorbelegt); Dateien erneut abrufen (Warnung) |
+| /fi/einzug/:id | Entwurf: Fälligkeitstag, Lastschriften je Gruppe (Teilnehmer:in, Vertragsinhaber:in, Mandatsreferenz, IBAN gekürzt, Sequenz, Betrag, Zusatz), ausgeschlossene, Summen; freigegeben: Zeilen und IDs | Entwurf: abwählen/wählen, Zusatzbetrag (Dialog), Fälligkeitstag ändern, aktualisieren, verwerfen, freigeben (Rückfrage R45-Text) → Download `Lastschriften_Vertraege_{JJJJ}_{MM}_Lauf{n}.xml`, `Einzugsliste_Vertraege_{JJJJ}_{MM}_Lauf{n}.pdf`; freigegeben: erneut abrufen |
+
+Navigation Finanzen: „Buchungsläufe“ nur mit „FI verwalten“. Lastschriftdatei nach C11 mit Test gegen das XSD pain.008.001.02 (wie FT14).
+
+### 12.5 Tasks
+
+- FT17 Migration AD v0.11 (A11, A13) – siehe spec.md AD
+- FT18 Migration GR v0.4 (G1, G2) – siehe spec.md GR
+- FT19 Migration FI Buchungslauf (12.1, 12.2)
+- FT20 pgTAP: Auswahl (R34), Nachtrag (R35), Sequenz (R38), Fälligkeit (R39), Ausschluss (R37), Zusatzbetrag (R47), Freigabe mit IDs und Verwendungszweck (R40, R42), Rechte, keine IBAN in `fi_`-Tabellen
+- FT21 Seed: Gläubiger-ID (Test-ID `DE98ZZZ09999999999`), Sachkonto, Stichtag
+- FT22 Oberfläche Administration (Gläubiger-ID, Sachkonto der Gruppenbeiträge, Stichtag)
+- FT23 Oberfläche /fi/einzug, /fi/einzug/:id
+- FT24 Lastschriftdatei (pain.008.001.02) mit Test, Einzugsliste (PDF)
+- FT25 Abnahme in TEST

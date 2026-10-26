@@ -13,9 +13,9 @@ Du darfst in allen Fachmodulen **verwalten**. Das heißt: Du siehst alle Referat
 | Modul | Was du dort tust | Stand |
 |---|---|---|
 | Ehrenamtsmanagement | Aktive aller Referate pflegen, Gremien, Referate, Eigenschaftsarten und Qualifikationsarten | freigeschaltet |
-| Gruppen | Gruppen, Teilnehmer:innen, Erziehungsberechtigte, Verträge, Betreuung | in Vorbereitung |
-| Anwesenheitserfassung | Einsätze aller Referate erfassen, korrigieren, löschen | in Vorbereitung |
-| Finanzen | Halbjahresabrechnung berechnen, abschließen, auszahlen | in Vorbereitung |
+| Gruppen | Gruppen, Teilnehmer:innen, Erziehungsberechtigte, Verträge, Betreuung | freigeschaltet |
+| Anwesenheitserfassung | Einsätze aller Referate erfassen, korrigieren, löschen | freigeschaltet |
+| Finanzen | Halbjahresabrechnung berechnen, abschließen, auszahlen | freigeschaltet |
 
 Vieles funktioniert genauso wie bei den Referent:innen. Dort ist es Schritt für Schritt erklärt: [Anleitung für Referent:innen](02-referentinnen.md). Hier steht, was **du zusätzlich** tust.
 
@@ -51,8 +51,6 @@ Unter **„Referate und Gremien“** legst du neue Referate oder Gremien an und 
 ---
 
 ## Gruppen
-
-*In Vorbereitung: Das Modul erscheint auf der Startseite, sobald es freigeschaltet ist.*
 
 Hier verwaltest du die Gruppen im Kinder-, Jugend- und Erwachsenenbereich mit ihren Teilnehmer:innen. Das ersetzt die Excel-Teilnehmerlisten.
 
@@ -114,8 +112,6 @@ Klicke in der Teilnehmerliste auf einen Namen. Hier kannst du:
 
 ## Anwesenheitserfassung
 
-*In Vorbereitung.*
-
 Einsätze erfassen und korrigieren funktioniert wie bei den Referent:innen: [Anwesenheitserfassung](02-referentinnen.md#anwesenheitserfassung). Für dich zusätzlich:
 
 - Du siehst die Einsätze **aller Referate**.
@@ -131,8 +127,6 @@ Wähle **Ort** und **Zeitraum** (von, bis). Du siehst je Training, wie viele Kin
 ---
 
 ## Finanzen
-
-*In Vorbereitung.*
 
 Zweimal im Jahr rechnest du die Vergütung der Trainer:innen und Helfer:innen nach der Vergütungsordnung ab. Grundlage ist die Anwesenheitserfassung.
 

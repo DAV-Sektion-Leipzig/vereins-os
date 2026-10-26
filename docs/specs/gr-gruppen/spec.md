@@ -1,6 +1,6 @@
 # Spec: Gruppen (GR)
 
-Version: 0.3.1 · Status: Ready · Stand: 24.10.2026 · Product Owner: Toni Werner
+Version: 0.4 · Status: Ready (Nachtrag v0.4 Lesefunktion Buchungslauf freigegeben am 26.10.2026) · Stand: 26.10.2026 · Product Owner: Toni Werner
 Stories: docs/specs/gr-gruppen/02-stories.md (US-GR-01 bis US-GR-20, v0.9.1)
 Grundlage: 00-steckbrief.md v0.7, 01-erhebung.md v0.8.1 (R1–R20), 02-stories.md v0.9.1, glossar.md v1.5, rollen.md v1.1, tech-stack.md v0.6, specs/ad-administration/spec.md v0.9 (Kern bis v0.7.1; Abschnitte 2, 3, 5, 7, 9) mit Ü2 aus specs/ea-ehrenamt/uebergabe-administration.md (Geburtsjahr in R40, laut Product Owner Teil von AD v0.7.2), specs/ea-ehrenamt/01-erhebung.md v0.5 (C2), specs/ea-ehrenamt/spec.md v0.2 (Abschnitte 2, 7), specs/ez-einsaetze/spec.md v0.1, specs/ez-einsaetze/uebergabe-trainingszeiten.md v1.3, specs/ez-einsaetze/uebergabe-gruppen.md v1.0
 Änderungen v0.3.1: Wortlaut von `GR_TRAINING_TIME_WEEKDAY_EXISTS` festgelegt (R19, Abschnitt 11; Product Owner, 24.10.2026).
@@ -512,3 +512,12 @@ Weiter offen, kein Blocker für die Umsetzung:
 - [OFFEN] Löschfristen und Aufbewahrung Vertrags-/Mandatsdaten mit Finanzen (vor dem Löschlauf, nach MVP).
 - [OFFEN] Bankdaten für Gruppenleitung und Trainer:innen nach MVP (Iteration mit Zugang).
 - [OFFEN] Speicherung von Gesundheitsangaben nach Widerruf (R24) mit Datenschutzbeauftragter:m klären (vor Go-live).
+
+## Nachtrag v0.4: Lesefunktion für den Buchungslauf (Finanzen) – Ready (26.10.2026)
+
+Grundlage: specs/fi-finanzen/uebergabe-gruppen.md v1.0 (G1–G4).
+
+- `gr_contracts_for_collection(p_month date, p_ids uuid[] default null) returns setof (contract_id, membership_id, group_id, group_name, referat_id, participant_person_id, participant_first_name, participant_preferred_name, participant_last_name, holder_person_id, holder_first_name, holder_preferred_name, holder_last_name, account_holder, iban, mandate_reference, mandate_signed_on, purpose, monthly_amount, starts_on, ends_on, bank_check)` – security definer, stable; nur mit `ad_has_level('FI','manage')`, sonst `GR_FORBIDDEN`. Mit `p_ids`: genau diese Verträge (Wiederabruf); sonst alle Verträge mit `starts_on <= p_month` und (`ends_on is null or ends_on >= p_month`). `bank_check` = md5(IBAN || '|' || Kontoinhaber:in). Keine weiteren Felder (G1, G2).
+- G3: Verträge werden nicht gelöscht, solange Einzüge in Finanzen auf sie verweisen (Fremdschlüssel on delete restrict); Löschfrist bleibt nach R15.
+- G4: Doppelte Mandatsreferenzen in den Bestandsdaten bereinigt die Geschäftsstelle vor dem Import; der Probelauf meldet sie (R6).
+- Task: T053 Migration und pgTAP (Umsetzung mit FI FT18).

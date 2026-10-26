@@ -234,9 +234,10 @@ description: "Tasks für das Modul Gruppen (GR)"
 
 ## Phase 11: Abnahme und Freischalten
 
-- [ ] T050 (Branch `gr-abnahme`) Abnahme in TEST nach quickstart.md D 1–12 mit Admin, Geschäftsstelle, Vorstand, Rita, Kim, auch bei 375 px; Ergebnis in `docs/specs/gr-gruppen/abnahme-test.md`; Anpassungen aus der Abnahme.
-- [ ] T051 [P] Querschnitt: `npm run lint`, `npm run build` ohne Fehler; Personendaten-Prüfung nach CLAUDE.md über `docs`, `scripts`, `supabase/seed.sql`.
-- [ ] T052 [US-GR-02] (spec T19, Branch `gr-freischalten`) Migration `…_gr_module_available.sql`: `update public.ad_modules set is_available = true where code = 'GR'`; Test in `supabase/tests/database/` ergänzen; nur nach Freigabe des Product Owners.
+- [x] T050 (Branch `gr-abnahme`; Abnahme vom Product Owner am 26.10.2026 als erfolgt erklärt) Abnahme in TEST nach quickstart.md D 1–12 mit Admin, Geschäftsstelle, Vorstand, Rita, Kim, auch bei 375 px; Ergebnis in `docs/specs/gr-gruppen/abnahme-test.md`; Anpassungen aus der Abnahme.
+- [x] T051 [P] Querschnitt (26.10.2026, abnahme-test.md 2): `npm run lint`, `npm run build` ohne Fehler; Personendaten-Prüfung nach CLAUDE.md über `docs`, `scripts`, `supabase/seed.sql`.
+- [x] T052 [US-GR-02] (umgesetzt als `20261101000100_gr_ez_fi_available.sql`, PR #60) (spec T19, Branch `gr-freischalten`) Migration `…_gr_module_available.sql`: `update public.ad_modules set is_available = true where code = 'GR'`; Test in `supabase/tests/database/` ergänzen; nur nach Freigabe des Product Owners.
+- [x] T053 (spec v0.4) Migration `20261102000200_gr_contracts_for_collection.sql` und pgTAP in `640_fi_collection.test.sql` (mit FI FT18)
 
 ---
 

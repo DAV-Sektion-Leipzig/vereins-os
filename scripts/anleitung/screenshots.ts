@@ -5,12 +5,14 @@
 //   SEED_TEST_PASSWORD=… npm run anleitung:screenshots                 alle Bilder, App unter http://localhost:5173
 //   ANLEITUNG_URL=https://…workers.dev SEED_TEST_PASSWORD=… npm run anleitung:screenshots
 //   SEED_TEST_PASSWORD=… npm run anleitung:screenshots -- ez-training  nur Bilder, deren Name den Text enthält
+//   SEED_TEST_PASSWORD=… npm run anleitung:screenshots -- --vorbereiten  vorher die Daten der Finanzen vorbereiten
 //
-// Daten: Seed mit SEED_WITH_EZ=1 und SEED_WITH_FI=1; für die Finanzen vorher in der Oberfläche das 1. Halbjahr 2026
-// berechnen, Tina Trainerin und Hans Helfer als Kim Kinderjugend bestätigen, Tina Trainerin abschließen und die Abgabe
-// erfassen sowie eine Auszahlungsrunde anlegen (docs/anleitung/README.md, Abschnitt „Anleitung aktualisieren“).
+// Daten: Seed mit SEED_WITH_EZ=1 und SEED_WITH_FI=1 (scripts/anleitung/lokaler-stack.sh). „--vorbereiten“ erledigt in
+// der Oberfläche, was die Bilder der Finanzen zeigen: 1. Halbjahr 2026 berechnen, Tina Trainerin und Hans Helfer als
+// Kim Kinderjugend bestätigen, Tina Trainerin abschließen und ihre Abgabe erfassen, eine Auszahlungsrunde anlegen.
+// Bereits erledigte Schritte werden übersprungen.
 import { mkdir } from 'node:fs/promises'
-import { chromium, type BrowserContext, type Page } from 'playwright'
+import { chromium, type Browser, type BrowserContext, type Page } from 'playwright'
 
 const BASE = (process.env.ANLEITUNG_URL ?? 'http://localhost:5173').replace(/\/$/, '')
 const PASSWORD = process.env.SEED_TEST_PASSWORD
@@ -195,12 +197,84 @@ async function anmelden(page: Page, email: string) {
   await page.waitForURL(`${BASE}/`)
 }
 
+const sichtbar = async (page: Page, name: string) => {
+  const button = page.getByRole('button', { name, exact: true }).first()
+  return (await button.isVisible()) && (await button.isEnabled())
+}
+
+// Bestätigungsdialog (ConfirmDialog/FormDialog): letzter Knopf im Dialog
+async function dialogBestaetigen(page: Page, name: string | RegExp) {
+  await page.getByRole('dialog').getByRole('button', { name }).last().click()
+  await page.getByRole('dialog').waitFor({ state: 'detached' })
+  await page.waitForLoadState('networkidle')
+}
+
+async function abrechnungOeffnen(page: Page, name: string) {
+  await page.goto(`${BASE}/fi?hj=2026-1`)
+  await page.waitForLoadState('networkidle')
+  await link(page, name)
+  await page.waitForURL(/\/fi\/abrechnung\//)
+  await page.getByRole('heading', { name }).waitFor()
+  await page.waitForLoadState('networkidle')
+}
+
+/** Daten der Finanzen für die Bilder vorbereiten (idempotent). */
+async function finanzenVorbereiten(browser: Browser) {
+  const als = async (zugang: keyof typeof ZUGANG, schritte: (page: Page) => Promise<void>) => {
+    const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, locale: 'de-DE' })
+    const page = await context.newPage()
+    await anmelden(page, ZUGANG[zugang])
+    await schritte(page)
+    await context.close()
+  }
+  await als('geschaeftsstelle', async (p) => {
+    await p.goto(`${BASE}/fi?hj=2026-1`)
+    await p.waitForLoadState('networkidle')
+    if (await p.getByRole('link', { name: 'Tina Trainerin', exact: true }).count()) return
+    await klick(p, 'Berechnen')
+    await dialogBestaetigen(p, 'Berechnen')
+    console.log('· 1. Halbjahr 2026 berechnet')
+  })
+  await als('kiju', async (p) => {
+    for (const name of ['Tina Trainerin', 'Hans Helfer']) {
+      await abrechnungOeffnen(p, name)
+      if (!(await sichtbar(p, 'Bestätigen'))) continue
+      await klick(p, 'Bestätigen')
+      await dialogBestaetigen(p, 'Bestätigen')
+      console.log(`· ${name} bestätigt`)
+    }
+  })
+  await als('geschaeftsstelle', async (p) => {
+    await abrechnungOeffnen(p, 'Tina Trainerin')
+    if (await sichtbar(p, 'Abschließen')) {
+      await klick(p, 'Abschließen')
+      await dialogBestaetigen(p, 'Abschließen')
+      console.log('· Tina Trainerin abgeschlossen')
+      await abrechnungOeffnen(p, 'Tina Trainerin')
+    }
+    if (await sichtbar(p, 'Abgabe erfassen')) {
+      await klick(p, 'Abgabe erfassen')
+      await p.fill('#fi-submitted-on', '2026-07-20')
+      await dialogBestaetigen(p, 'Speichern')
+      console.log('· Abgabe von Tina Trainerin erfasst')
+    }
+    await p.goto(`${BASE}/fi/auszahlungen`)
+    await p.waitForLoadState('networkidle')
+    if (await p.locator('main a[href^="/fi/auszahlungen/"]').count()) return
+    await klick(p, 'Neue Runde')
+    await dialogBestaetigen(p, 'Anlegen')
+    console.log('· Auszahlungsrunde angelegt')
+  })
+}
+
 async function main() {
-  const filter = process.argv.slice(2)
+  const args = process.argv.slice(2)
+  const filter = args.filter((a) => a !== '--vorbereiten')
   const shots = filter.length ? SHOTS.filter((s) => filter.some((f) => s.name.includes(f))) : SHOTS
   await mkdir(OUT, { recursive: true })
 
   const browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH, args: ['--lang=de-DE'], env: { ...process.env, LANG: 'de_DE.UTF-8', LANGUAGE: 'de' } })
+  if (args.includes('--vorbereiten')) await finanzenVorbereiten(browser)
   let failed = 0
   for (const zugang of [null, ...Object.keys(ZUGANG)] as (keyof typeof ZUGANG | null)[]) {
     const own = shots.filter((s) => s.zugang === zugang)
