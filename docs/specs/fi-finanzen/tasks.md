@@ -30,7 +30,7 @@ Die Tasks folgen spec.md Abschnitt 10 (T1–T16). Ein eigener Spec-Kit-Plan ents
 - [x] FT13 (spec T13) Abrechnungsdokument (PDF) (`src/features/fi/export/documents.ts`; jsPDF, plan.md P1–P3)
 - [x] FT14 (spec T14) /fi/auszahlungen; Auszahlliste (PDF) und Überweisungsdatei (XML) mit Schema-Test (`src/features/fi/auszahlungen/`, `export/`; Test `npm run fi:export:test`, XSD optional über `PAIN001_XSD`)
 - [x] FT15 (spec T15) /fi/kletterhalle (`src/features/fi/kletterhalle/`)
-- [ ] FT16 (spec T16) abnahme-test.md (angelegt), Abnahme in TEST (Product Owner)
+- [x] FT16 (spec T16) abnahme-test.md, Abnahme in TEST (Product Owner 26.10.2026)
 
 ## Abweichungen und Präzisierungen gegenüber spec.md (zur Kenntnis des Product Owners)
 

@@ -169,7 +169,7 @@ Voraussetzung: Administration Nachtrag v0.10 (PR #51, `20261029000300` Abrechnun
 - [x] T042 [P] (spec T25) `contracts/error-codes.md`: `EZ_SETTLED`, `EZ_REMUNERATION_INACTIVE`
 - [x] T043 (spec T26) `supabase/tests/database/560_ez_remuneration_lock.test.sql`: Vorbelegung und Auswahl, inaktive Abrechnungsart, Lesefunktion, Sperre mit im Test ersetzten Platzhaltern
 - [x] T044 [US-EZ-24] [US-EZ-25] (spec T27) Oberfläche: Feld „Vergütung“ in allen Formularen (`erfassen/EinsatzFormular.tsx`, Vorbelegung client- und serverseitig gleich), Anzeige im Detail und in der Liste, Kennzeichen „abgerechnet“ (`shared/SettledBadge.tsx`), gesperrte Felder, Personen und Aktionen – Branch `us-ez-24-verguetung`
-- [ ] T045 (spec T28) Abnahme der Ergänzung in TEST (mit T034 oder danach)
+- [x] T045 (spec T28) Abnahme der Ergänzung in TEST (mit der Abnahme Finanzen, Product Owner 26.10.2026; fi-finanzen/abnahme-test.md Schritt 10)
 
 ## Zurückgestellt (mit TK T13)
 
