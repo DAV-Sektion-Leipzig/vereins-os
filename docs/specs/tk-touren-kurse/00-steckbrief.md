@@ -9,6 +9,7 @@ Stand: 26.10.2026 · Version 0.8 · Kürzel: TK · Ablage: docs/specs/tk-touren-
 Änderungen v0.3: Ziel: HTML-Formular ablösen und alle Einreichungen zentral in der Datenbank speichern (Auswertung CO2, Einsätze); Lizenz-Stichtag = erster Tag (läuft die Lizenz während der Tour ab, gilt der Trainersatz für die ganze Tour); Freigabe durch Referent:innen, delegierbar über ein eigenes Freigaberecht; Einreichungen weiter an tourenreferat@dav-leipzig.de, auch für Kurse; bei Absage wird der Einsatz als abgesagt markiert (Product Owner 22.10.2026).
 Änderungen v0.2: Kurse gehören zum Referat Ausbildung und werden ebenfalls mit der Planungshilfe geplant; der Einsatz entsteht erst mit Status „in Yolawo angelegt“; Trainersatz nur, wenn die Lizenz am letzten Tag der Tour bzw. des Kurses gültig ist (Product Owner 22.10.2026).
 Änderungen v0.1: Erster Entwurf aus dem HTML-Prototyp „Tourenkonzept“ des Referats Touren (Tourenkonzept_DAV-Leipzig.html, Stand Oktober 2026) und dessen Übergabe (prototyp-tourenkonzept.md); Vorgaben Product Owner 22.10.2026: Leitung aus Personen (Trainer:innen), Einsatz in der Anwesenheitserfassung erzeugen, Abrechnung vorbefüllen (Finanzen rechnet), CO2-Bilanz, Planungsunterstützung; Kürzel TK; Nutzer im MVP Referat Touren und Geschäftsstelle.
+**Hinweis (26.10.2026):** Die Kennzeichen [ANNAHME] in diesem Dokument hat der Product Owner mit spec.md v0.4 bestätigt oder dort anders entschieden; maßgeblich ist spec.md.
 
 **Problem heute:**
 Tourenleitende planen Touren und Kurse mit einer eigenständigen HTML-Datei („Tourenkonzept“), kalkulieren dort den Teilnahmebeitrag nach Vergütungs- und Reisekostenordnung, erzeugen eine CO2-Bilanz und schicken ein PDF per E-Mail an das Referat Touren. Das Referat öffnet das PDF wieder im Formular, prüft per E-Mail und legt das Angebot von Hand in Yolawo an. Es gibt keinen Status, keine Übersicht aller geplanten Touren, keine Verbindung zu den Lizenzen der Leitenden (Name, Qualifikation und Lizenzjahr werden je Tour frei eingetippt) und keine Übergabe an Anwesenheitserfassung und Abrechnung: Nach der Tour füllt die Leitung die Formulare „Reisekosten“ und „Kostenabrechnung“ erneut von Hand aus. Sätze und Emissionsfaktoren stehen im HTML-Code; eine Änderung heißt: Datei ändern und neu verteilen. Beispiel: Für die Hüttentour Stubai (5 Tage, 735 € Kosten, Beitrag 160 €) tippt die Leitung Tagessätze, Bahnkosten und Leitung dreimal ein – im Tourenkonzept, in der Reisekostenabrechnung und in der Kostenabrechnung.
@@ -84,7 +85,7 @@ Tourenleitende planen Touren und Kurse mit einer eigenständigen HTML-Datei („
 - **Sätze zentral in der Administration:** Finanzen und Planungshilfe lesen dieselben Sätze; Abhängigkeit: die Stammdaten müssen vor der Planungshilfe in der Administration umgesetzt sein (Übergabe v1.4).
 - **Annahmen des Prototyps** (MwSt. 19 % auf Gebühren, Konditionsgrenzen, Technikstufen, Zuordnung Qualifikation → Sportart, Hüttenpreis 45–90 €, Faktoren Reisebus und Selbstversorgerhütte) sind nicht vom Referat Touren bestätigt.
 - **Yolawo-Feldbezeichnungen** sind aus dem Buchungs-Widget abgeleitet, nicht in der Verwaltungsoberfläche geprüft.
-- **Lizenzdaten im Ehrenamtsmanagement unvollständig:** Bis zur Migration fehlen viele Lizenzen; Wanderleiter:innen und externe Leitende ohne Lizenzeintrag bekommen den Helfersatz. Gegenmaßnahme: Hinweis, die freigebende Person kann begründet abweichen [OFFEN: ob erlaubt].
+- **Lizenzdaten im Ehrenamtsmanagement unvollständig:** Bis zur Migration fehlen viele Lizenzen; Wanderleiter:innen und externe Leitende ohne Lizenzeintrag bekommen den Helfersatz. Gegenmaßnahme: Hinweis in der Planung; die Geschäftsstelle trägt die Lizenz im Ehrenamtsmanagement nach, danach rechnet die Planung den Trainersatz. Keine Abweichung durch die freigebende Person (Product Owner 26.10.2026).
 - **Kosten:** keine zusätzlichen; PDF-Erzeugung im Browser [ANNAHME].
 
 **Offene Fragen:**
@@ -95,7 +96,7 @@ Tourenleitende planen Touren und Kurse mit einer eigenständigen HTML-Datei („
 - Entschieden 26.10.2026: „Benötigtes Material“ nur als Ausrüstungsliste; Reservierung von Material der Sektion später.
 - [OFFEN] Iteration 2 (später anschauen): öffentliches Formular ohne Login (Datenschutz, Missbrauchsschutz) oder Zugang für Tourenleitende mit Reichweite „nur eigene“?
 - [OFFEN] Priorität und Einordnung in die Reihenfolge der Module.
-- [ANNAHME] bestätigen: Kürzel TK und Ablage; Statusmodell; Admin liest; Berechnung serverseitig; Planwerte nur als Vorbelegung für Finanzen.
+- Bestätigt 26.10.2026: Kürzel TK und Ablage; Statusmodell; Admin liest; Berechnung serverseitig; Planwerte nur als Vorbelegung für Finanzen.
 
 **Folgeänderungen in anderen Dokumenten (ausgeführt):**
 - spec.md v0.1 (22.10.2026): Übergabe an Administration v1.6; modul-landkarte.md v2.4; offene-punkte.md v3.7.

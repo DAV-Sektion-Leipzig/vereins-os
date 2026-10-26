@@ -9,6 +9,7 @@ Datum: 26.10.2026 · Version 0.8 · Beteiligte: Toni Werner (Product Owner); Ref
 Änderungen v0.3: Lizenz-Stichtag = erster Tag, Trainersatz für die ganze Tour; Freigabe durch Referent:innen mit delegierbarem Freigaberecht; Einreichungen auch für Kurse an tourenreferat@dav-leipzig.de; Einsatz bei Absage „abgesagt“; Ziel Ablösung des HTML-Formulars mit strukturierter Speicherung für Auswertungen (Product Owner 22.10.2026).
 Änderungen v0.2: Kurse im Referat Ausbildung (Reichweite Touren und Ausbildung); Einsatz entsteht mit Status „in Yolawo angelegt“; Stichtag der Lizenz = letzter Tag der Tour bzw. des Kurses (Product Owner 22.10.2026).
 Änderungen v0.1: Erster Entwurf. Quelle der fachlichen Felder, Formeln, Prüfungen und Texte ist prototyp-tourenkonzept.md (im Folgenden „Prototyp“, mit Abschnittsnummer). Diese Erhebung beschreibt nur, was sich gegenüber dem Prototyp ändert oder neu hinzukommt (Mehrbenutzer, Status, Personen, Einsatz, Abrechnung, Stammdaten).
+**Hinweis (26.10.2026):** Die Kennzeichen [ANNAHME] in diesem Dokument hat der Product Owner mit spec.md v0.4 bestätigt oder dort anders entschieden; maßgeblich ist spec.md.
 
 ## A. Rechtevorlagen & Rechte
 
