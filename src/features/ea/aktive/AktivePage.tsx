@@ -12,6 +12,7 @@ import {
   filterHref,
   hasActiveFilter,
   VOLUNTEER_STATUS_LABELS,
+  type ExpiryKind,
   type VolunteerRow,
   type VolunteersResult,
 } from '@/features/ea/aktive/data'
@@ -139,13 +140,31 @@ function Name({ person }: { person: VolunteerRow }) {
   )
 }
 
-// Kennzeichen „ohne gültige Lizenz“ steht bei den Lizenzen, neben dem Ablauf-Badge statt am Namen.
-function Licenses({ person }: { person: VolunteerRow }) {
-  if (!person.trainer_without_license) return <List values={person.license_codes} />
+const MAX_EXPIRIES = 2
+
+const EXPIRY_KIND_LABELS: Record<ExpiryKind, string> = {
+  license: 'Lizenz',
+  qualification: 'Qualifikation',
+  police_clearance: 'Führungszeugnis',
+}
+
+// Ablauf an einer Stelle: schlechtester Status (Badge), darunter was abgelaufen ist oder bald abläuft,
+// dazu das Kennzeichen „ohne gültige Lizenz“.
+function Ablauf({ person }: { person: VolunteerRow }) {
+  if (person.worst_expiry === 'none' && !person.trainer_without_license) return <AblaufBadge status="none" />
+  const shown = person.expiries.length > MAX_EXPIRIES ? person.expiries.slice(0, MAX_EXPIRIES - 1) : person.expiries
+  const more = person.expiries.length - shown.length
   return (
     <span className="flex flex-col items-start gap-1">
-      {person.license_codes.length > 0 && <List values={person.license_codes} />}
-      <WithoutLicense />
+      {person.worst_expiry !== 'none' && <AblaufBadge status={person.worst_expiry} />}
+      {shown.map((e) => (
+        <span key={e.propertyId} className="text-xs text-muted-foreground">
+          {[EXPIRY_KIND_LABELS[e.kind], e.code].filter(Boolean).join(' ')} · {formatDate(e.validUntil)}
+          {e.status === 'expiring' && person.worst_expiry === 'expired' && ' (läuft bald ab)'}
+        </span>
+      ))}
+      {more > 0 && <span className="text-xs text-muted-foreground">+ {more} weitere</span>}
+      {person.trainer_without_license && <WithoutLicense />}
     </span>
   )
 }
@@ -183,8 +202,8 @@ const COLUMNS: Column<VolunteerRow>[] = [
     cell: (p) => <List values={[...p.functions, ...p.positions]} />,
     className: 'whitespace-normal',
   },
-  { key: 'licenses', header: 'Lizenzen', cell: (p) => <Licenses person={p} />, className: 'whitespace-normal' },
-  { key: 'expiry', header: 'Ablauf', cell: (p) => <AblaufBadge status={p.worst_expiry} /> },
+  { key: 'licenses', header: 'Lizenzen', cell: (p) => <List values={p.license_codes} /> },
+  { key: 'expiry', header: 'Ablauf', cell: (p) => <Ablauf person={p} />, className: 'whitespace-normal' },
   {
     key: 'open',
     header: <span className="sr-only">Aktion</span>,
@@ -212,13 +231,14 @@ function VolunteerCard({ person }: { person: VolunteerRow }) {
         {person.referate.length > 0 && (
           <span className="text-sm text-muted-foreground">Referate: {person.referate.join(', ')}</span>
         )}
-        <div className="flex flex-wrap items-center gap-2 text-sm">
-          {person.license_codes.length > 0 && (
-            <span className="text-muted-foreground">Lizenzen: {person.license_codes.join(', ')}</span>
-          )}
-          {person.trainer_without_license && <WithoutLicense />}
-          {person.worst_expiry !== 'none' && <AblaufBadge status={person.worst_expiry} />}
-        </div>
+        {person.license_codes.length > 0 && (
+          <span className="text-sm text-muted-foreground">Lizenzen: {person.license_codes.join(', ')}</span>
+        )}
+        {(person.worst_expiry !== 'none' || person.trainer_without_license) && (
+          <span className="text-sm">
+            <Ablauf person={person} />
+          </span>
+        )}
       </div>
       <Button variant="outline" asChild className="self-start">
         <Link to={`/ea/aktive/${person.id}`} aria-label={`${personName(person)} öffnen`}>
