@@ -535,7 +535,7 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 - [x] T138 [P] [spec T63] Fehlercodes v0.9 in contracts/error-codes.md – keine neuen Codes nötig (`AD_RATE_*` seit T127; TK-Weg nutzt `EA_CREATE_FORBIDDEN`, `EA_RELATION_FOREIGN_REFERAT`, `AD_FORBIDDEN`, `AD_TOO_MANY_IDS`)
 - [x] T139 [spec T65] pgTAP `294_ad_tk.test.sql` (58 Prüfungen; angepasst: 010, 020, 100, 130, 150, 170, 200, 250, 270, 290, 291, 330, 340 wegen Modul TK, Vorlage Freigabe und Personen 13–18): Startwerte TK je Vorlage, Freigabe mit `can_approve`, Reichweite Referat, „Erwartete Ergebnisse v0.9“ (Abschnitt 9, Fritz Freigabe nach P5 der Übergabe AD → TK), Sätze nach Datum, `ea_person_licenses` mit Erwerbsdatum, Anlegen über den TK-Pfad
 - [x] T140 [spec T66] `supabase/seed.sql`: Seed-Ergänzung: Personen 13–18 (Tina Touren, Alex Ausbildung, Fritz Freigabe, Bernd Berg, Hilde Helfer, Karl Kletter) mit Zugängen, Vorlagen und Lizenzen; zweiter Wert `rOrg` ab 01.01.2028
-- [ ] T141 [spec T67] Abnahme mit der Abnahme der Planungshilfe (TK T025)
+- [x] T141 [spec T67] Abnahme mit der Abnahme der Planungshilfe (TK T025, Product Owner 27.10.2026)
 
 ## Abhängigkeiten und Reihenfolge
 

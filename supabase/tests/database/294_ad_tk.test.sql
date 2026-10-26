@@ -38,7 +38,7 @@ $$;
 
 -- Modul und Startwerte (T134)
 select results_eq($$ select name, is_available from public.ad_modules where code = 'TK' $$,
-  $$ values ('Planungshilfe Touren und Kurse'::text, false) $$, 'Modul TK, noch nicht verfügbar');
+  $$ values ('Planungshilfe Touren und Kurse'::text, true) $$, 'Modul TK, verfügbar seit der Freigabe 27.10.2026');
 select results_eq(
   $$ select t.name, r.level::text, r.scope::text, r.can_approve
        from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
@@ -94,7 +94,8 @@ select ok(not public.ad_can_approve('TK', pg_temp.referat('Ausbildung')), 'Fritz
 select results_eq($$ select id from public.ea_search_active_persons('Berg') $$, $$ values (pg_temp.p(16)) $$,
   'Fritz: „Berg“ → Bernd Berg');
 select lives_ok($$ select * from public.ad_rates_at(current_date) $$, 'Fritz: liest Sätze (TK)');
-select is_empty($$ select 1 from public.ad_my_modules() where code = 'TK' $$, 'Fritz: keine Kachel, solange TK nicht verfügbar');
+select results_eq($$ select code, level::text from public.ad_my_modules() where code = 'TK' $$, $$ values ('TK'::text, 'edit'::text) $$,
+  'Fritz: Kachel TK auch nur mit der Vorlage Freigabe (Annahme v0.9 AD)');
 
 select pg_temp.as_user(pg_temp.u(9));
 select is(pg_temp.names(public.ad_my_referate('TK', 'edit')), array['Klettern'], 'Rita: TK bearbeiten Klettern');
