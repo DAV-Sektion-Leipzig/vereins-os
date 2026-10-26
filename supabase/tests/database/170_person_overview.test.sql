@@ -15,7 +15,7 @@ begin
 end $$;
 
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
-select is((select count(*)::int from public.ad_v_person_overview), 26, 'Admin: 26 Personen (1–12, 19–32)');
+select is((select count(*)::int from public.ad_v_person_overview), 32, 'Admin: 32 Personen (1–32)');
 select results_eq(
   $$ select access_status::text, volunteer_status::text, templates from public.ad_v_person_overview
       where person_id = 'a0000000-0000-4000-8000-000000000009' $$,
@@ -51,7 +51,7 @@ select results_eq($$ select person_id from public.ad_v_person_overview where pre
   $$ values ('a0000000-0000-4000-8000-000000000004'::uuid) $$, 'Suche über den Rufnamen');
 
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
-select is((select count(*)::int from public.ad_v_person_overview), 18, 'Geschäftsstelle: nur Personen in den Pfaden EA und GR');
+select is((select count(*)::int from public.ad_v_person_overview), 24, 'Geschäftsstelle: nur Personen in den Pfaden EA und GR');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
 select is((select count(*)::int from public.ad_v_person_overview), 0, 'Vorstand: keine Zeilen');
 
@@ -64,8 +64,8 @@ select results_eq($$ select first_name, preferred_name, last_name, access_status
 
 -- Verwendung einer Qualifikationsart (nur die Zahl)
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
-select is(public.ad_qualification_usage((select id from public.ad_qualification_types where code = 'TCSPI')), 2,
-  'TCSPI: 2 Personen (Toni, Max)');
+select is(public.ad_qualification_usage((select id from public.ad_qualification_types where code = 'TCSPI')), 3,
+  'TCSPI: 3 Personen (Toni, Max, Karl Kletter)');
 select is(public.ad_qualification_usage((select id from public.ad_qualification_types where code = 'TCBO')), 1,
   'TCBO: 1 Person (Lena)');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');

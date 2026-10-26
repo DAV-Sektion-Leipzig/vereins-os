@@ -18,7 +18,7 @@ Siehe [AD tasks.md](../ad-administration/tasks.md) Phase 18 (T134–T141). Vorau
 - [ ] T003 [spec T3] Startbestand `tk_qualification_sports` (Prototyp 4.8) über `ad_qualification_types.code`; nicht zuordenbare Bezeichnungen per `raise notice` und hier notieren
 - [ ] T004 [spec T4] Trigger: Referat aus Tourtyp (`tk_plan_referat`, P3), Audit, Sperre direkter Statusänderung (`TK_STATUS_DIRECT`)
 - [ ] T005 [spec T5] `tk_rates`, `tk_calculate` nach R1–R4, R6, R22; Satzart mit Erwerb im Halbjahr (R2)
-- [ ] T006 [P] [spec T6, T20] Testfälle `scripts/tk-calc/cases.json` (Planungen 1–5, 7, 9; Satzwechsel nach `valid_from`; fehlender Satz; Lizenz-Erwerb im Halbjahr); pgTAP `720_tk_calculate.test.sql`
+- [ ] T006 [P] [spec T6, T20] Testfälle `scripts/tk-calc/cases.json` (Planungen 1–5, 7, 9; Satzwechsel nach `valid_from`; fehlender Satz; Lizenz-Erwerb im Halbjahr); pgTAP `820_tk_calculate.test.sql`
 - [ ] T007 [spec T7] `tk_save_plan` (Schritte 1–9 ohne EZ-Aufruf), `tk_copy_plan`, `tk_delete_plan`
 - [ ] T008 [spec T8] `tk_change_status` ohne EZ-Aufrufe (submit, query, resubmit, approve mit Satzstand, done, close, cancel ohne Einsatz); publish nur `tk_can_approve` oder `tk_can_manage` (A11)
 - [ ] T009 [spec T9] `tk_list_plans`, `tk_get_plan` (inkl. `rates`, Rechte-Kennzeichen), `tk_cost_report`
@@ -26,12 +26,12 @@ Siehe [AD tasks.md](../ad-administration/tasks.md) Phase 18 (T134–T141). Vorau
 - [ ] T011 [spec T11] `tk_settlement_draft` (US-TK-24; Lizenz-Felder mit Erwerbsdatum)
 - [ ] T012 [spec T23] `tk_create_leader`, `tk_reactivate_leader` (R23)
 - [ ] T013 [P] [spec T12] Fehlercodes TK in `ad-administration/contracts/error-codes.md`
-- [ ] T014 [spec T15, T18] Seed nach spec.md 9 (Planungen 1–9, ohne Einsatz bei Planung 5 bis Stufe 3); pgTAP `700_tk_structure`, `710_tk_rights` (Sichtbarkeitsmatrix, R19 je Status, R17, R13, Kontaktdaten-RLS, direkte Schreibzugriffe abgelehnt), `730_tk_save_status`, `740_tk_purge_leaders` (Löschjob, R23), `760_tk_volume`
+- [ ] T014 [spec T15, T18] Seed nach spec.md 9 (Planungen 1–9, ohne Einsatz bei Planung 5 bis Stufe 3); pgTAP `800_tk_structure`, `810_tk_rights` (Sichtbarkeitsmatrix, R19 je Status, R17, R13, Kontaktdaten-RLS, direkte Schreibzugriffe abgelehnt), `830_tk_save_status`, `840_tk_purge_leaders` (Löschjob, R23), `860_tk_volume`
 
 ## Stufe 3: Anbindung Anwesenheitserfassung (Branch `tk-ez-anbindung`)
 
 - [ ] T015 [spec T13] EZ T036 (mit `p_remuneration_kind_code`, EZ v1.3) und TK-Anbindung in `tk_change_status` (publish, cancel mit `TK_EZ_LOCKED`) und `tk_save_plan` (Synchronisation, Abrechnungsart, `EZ_SETTLED` wie `EZ_EVENT_LOCKED`); Seed Planung 5 mit Einsatz
-- [ ] T016 [spec T14] pgTAP `750_tk_ez.test.sql` zusammen mit EZ T037/T038: Inhalt R15, Gemeinschaftstour mit `COMMUNITY_TOUR`, Sperre nach Anwesenheit und Abrechnung, Absage, Rollback
+- [ ] T016 [spec T14] pgTAP `850_tk_ez.test.sql` zusammen mit EZ T037/T038: Inhalt R15, Gemeinschaftstour mit `COMMUNITY_TOUR`, Sperre nach Anwesenheit und Abrechnung, Absage, Rollback
 
 ## Stufe 4: Oberfläche (Branch `tk-oberflaeche`)
 

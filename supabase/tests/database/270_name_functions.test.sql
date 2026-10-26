@@ -43,7 +43,7 @@ select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
 select results_eq($$ select id from public.ea_search_active_persons('Muster') $$,
   $$ values (pg_temp.p(4)) $$, 'Geschäftsstelle: „Muster“ → 4 (nicht 5: ruhend)');
 select results_eq($$ select id from public.ea_search_active_persons('Karl') $$,
-  $$ values (pg_temp.p(10)) $$, 'Geschäftsstelle: „Karl“ → 10');
+  $$ values (pg_temp.p(18)), (pg_temp.p(10)) $$, 'Geschäftsstelle: „Karl“ → 18, 10 (nach Nachname)');
 select results_eq($$ select id from public.ea_person_names(array[pg_temp.p(4), pg_temp.p(5), pg_temp.p(12)]) order by id $$,
   $$ values (pg_temp.p(4)), (pg_temp.p(5)) $$,
   'Geschäftsstelle: Namen 4, 5 (Pfad EA; 12 hat im Seed keinen laufenden Gruppenbezug)');
@@ -63,8 +63,8 @@ select is_empty($$ select 1 from public.ea_person_names(array[gen_random_uuid()]
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
 select results_eq($$ select id from public.ea_search_active_persons('Muster') $$, $$ values (pg_temp.p(4)) $$,
   'Referent:in: „Muster“ → 4');
-select results_eq($$ select id from public.ea_search_active_persons('Karl') $$, $$ values (pg_temp.p(10)) $$,
-  'Referent:in: „Karl“ → 10 (über Referatsgrenzen)');
+select results_eq($$ select id from public.ea_search_active_persons('Karl') $$, $$ values (pg_temp.p(18)), (pg_temp.p(10)) $$,
+  'Referent:in: „Karl“ → 18, 10 (über Referatsgrenzen)');
 select results_eq($$ select id from public.ea_person_names(array[pg_temp.p(4), pg_temp.p(5), pg_temp.p(12)]) $$,
   $$ values (pg_temp.p(4)) $$, 'Referent:in: Namen nur 4 (Pfad EA Referat)');
 

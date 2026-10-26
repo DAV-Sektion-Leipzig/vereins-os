@@ -26,7 +26,8 @@ select ok(has_column_privilege('authenticated', 'public.ad_rates', 'value', 'UPD
 
 -- Startbestand
 select results_eq(
-  $$ select rate_key, value from public.ad_rates where rate_group = 'remuneration' order by rate_key $$,
+  $$ select rate_key, value from public.ad_rates where rate_group = 'remuneration' and valid_from = date '2026-01-01'
+      order by rate_key $$,
   $$ values ('rFH'::text, 20::numeric), ('rFHh', 10), ('rFT', 30), ('rFTh', 15), ('rH', 40), ('rHh', 20), ('rLE', 15),
             ('rOrg', 10), ('rTE', 6), ('rTEH', 4), ('rTL', 50), ('rTLh', 25), ('rWK', 50), ('rWKH', 40) $$,
   'Startbestand Vergütung nach Anhang 1');
@@ -49,9 +50,16 @@ select throws_ok($$ insert into public.ad_rates (rate_key, label, rate_group, un
   '42501', null, 'Geschäftsstelle darf keine Sätze anlegen (nur Admin)');
 
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000032');
+-- Seit AD v0.9 (T59) hat die Vorlage Referent:in TK bearbeiten (Reichweite Referat) und liest damit die Sätze
+-- (ad_can_read_rates, Erwartete Ergebnisse v0.9: Referent:in Klettern liest rOrg); nur über FI-Reichweite „Referat“ nicht.
+select lives_ok($$ select * from public.ad_rates_at(current_date) $$, 'Referent:in (über TK bearbeiten): liest Sätze');
+select pg_temp.as_owner();
+update public.ad_template_rights r set level = 'none', scope = 'all'
+  from public.ad_templates t where r.template_id = t.id and t.name = 'Referent:in' and r.module_code = 'TK';
+select pg_temp.as_user('b0000000-0000-4000-8000-000000000032');
 select throws_ok($$ select * from public.ad_rates_at(current_date) $$, 'P0001', 'AD_FORBIDDEN',
-  'Referent:in (FI nur Reichweite Referat): keine Sätze');
-select is_empty($$ select 1 from public.ad_rates $$, 'Referent:in: Tabelle per RLS leer');
+  'Referent:in nur mit FI-Reichweite Referat (ohne TK): keine Sätze');
+select is_empty($$ select 1 from public.ad_rates $$, 'Referent:in ohne TK: Tabelle per RLS leer');
 
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
 select throws_ok($$ select * from public.ad_rates_at(current_date) $$, 'P0001', 'AD_FORBIDDEN', 'Vorstand: keine Sätze');
@@ -59,23 +67,23 @@ select throws_ok($$ select * from public.ad_rates_at(current_date) $$, 'P0001', 
 -- Pflege durch den Admin (R46)
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
 select lives_ok($$ insert into public.ad_rates (rate_key, label, rate_group, unit, value, valid_from, source)
-                   values ('rOrg', 'Organisationspauschale je Tag', 'remuneration', '€', 12, date '2028-01-01', 'Test') $$,
+                   values ('rOrg', 'Organisationspauschale je Tag', 'remuneration', '€', 12, date '2029-01-01', 'Test') $$,
   'Admin: neuer Wert mit „gültig ab“');
-select is((select value from public.ad_rates_at(date '2028-01-02') where rate_key = 'rOrg'), 12::numeric,
-  'neuer Wert ab 2028');
+select is((select value from public.ad_rates_at(date '2029-01-02') where rate_key = 'rOrg'), 12::numeric,
+  'neuer Wert ab 2029');
 select is((select value from public.ad_rates_at(date '2027-12-31') where rate_key = 'rOrg'), 10::numeric,
   'alter Wert bis 2027');
 select throws_ok($$ insert into public.ad_rates (rate_key, label, rate_group, unit, value, valid_from, source)
-                    values ('rOrg', 'x', 'remuneration', '€', 13, date '2028-01-01', 'Test') $$,
+                    values ('rOrg', 'x', 'remuneration', '€', 13, date '2029-01-01', 'Test') $$,
   'P0001', 'AD_RATE_DUPLICATE', 'je Schlüssel und Datum eine Zeile');
 select throws_ok($$ insert into public.ad_rates (rate_key, label, rate_group, unit, value, valid_from, source)
-                    values ('rNeu', 'x', 'remuneration', '€', -1, date '2028-01-01', 'Test') $$,
+                    values ('rNeu', 'x', 'remuneration', '€', -1, date '2029-01-01', 'Test') $$,
   'P0001', 'AD_RATE_VALUE', 'Werte ≥ 0');
 select throws_ok($$ insert into public.ad_rates (rate_key, label, rate_group, unit, value, valid_from, source)
-                    values ('rNeu', '  ', 'remuneration', '€', 1, date '2028-01-01', 'Test') $$,
+                    values ('rNeu', '  ', 'remuneration', '€', 1, date '2029-01-01', 'Test') $$,
   'P0001', 'AD_RATE_FIELD_REQUIRED', 'Bezeichnung Pflicht');
 select throws_ok($$ insert into public.ad_rates (rate_key, label, rate_group, unit, value, valid_from, source)
-                    values ('fee_test', 'Gebühr', 'payment_fee', '%', 1, date '2028-01-01', 'Test') $$,
+                    values ('fee_test', 'Gebühr', 'payment_fee', '%', 1, date '2029-01-01', 'Test') $$,
   'P0001', 'AD_RATE_VALUE', 'Zahlungsgebühr mit Prozentsatz und festem Betrag statt Wert');
 select lives_ok($$ update public.ad_rates set source = 'Vergütungsordnung 2025, Anhang 1 (korrigiert)'
                     where rate_key = 'rTE' and valid_from = date '2026-01-01' $$, 'Quelle korrigierbar');

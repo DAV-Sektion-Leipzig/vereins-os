@@ -22,16 +22,18 @@ select results_eq(
      from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
      where r.level <> 'none' order by t.name, r.module_code $$,
   $$ values ('Admin'::text, 'AD'::text, 'manage'::text), ('Admin', 'EA', 'manage'), ('Admin', 'EZ', 'read'),
-            ('Admin', 'GR', 'read'), ('Admin', 'SC', 'manage'),
+            ('Admin', 'GR', 'read'), ('Admin', 'SC', 'manage'), ('Admin', 'TK', 'read'),
+            ('Freigabe Touren und Kurse', 'TK', 'edit'),
             ('Geschäftsstelle', 'AM', 'manage'), ('Geschäftsstelle', 'EA', 'manage'), ('Geschäftsstelle', 'EZ', 'manage'),
             ('Geschäftsstelle', 'FI', 'manage'),
             ('Geschäftsstelle', 'GR', 'manage'), ('Geschäftsstelle', 'GS', 'manage'), ('Geschäftsstelle', 'OA', 'manage'),
-            ('Geschäftsstelle', 'PM', 'manage'), ('Referent:in', 'EA', 'edit'), ('Referent:in', 'EZ', 'edit'),
-            ('Referent:in', 'FI', 'read') $$,
-  'Startvorlagen nach spec.md Abschnitt 3 (Kern v0.7, Nachträge v0.8 und v0.10); Vorstand ohne Rechte'
+            ('Geschäftsstelle', 'PM', 'manage'), ('Geschäftsstelle', 'TK', 'manage'),
+            ('Referent:in', 'EA', 'edit'), ('Referent:in', 'EZ', 'edit'),
+            ('Referent:in', 'FI', 'read'), ('Referent:in', 'TK', 'edit') $$,
+  'Startvorlagen nach spec.md Abschnitt 3 (Kern v0.7, Nachträge v0.8, v0.9 und v0.10); Vorstand ohne Rechte'
 );
 select is((select count(*)::int from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
-           where t.name = 'Vorstand'), 10, 'Vorstand hat je Modul eine Zeile');
+           where t.name = 'Vorstand'), 11, 'Vorstand hat je Modul eine Zeile');
 
 -- ad_user_level je Testzugang
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
@@ -79,7 +81,7 @@ select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
 select lives_ok($$ insert into public.ad_templates (name, description) values ('Testvorlage', 'nur Test') $$,
   'Admin legt Vorlage an');
 select is((select count(*)::int from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
-           where t.name = 'Testvorlage' and r.level = 'none'), 10, 'neue Vorlage hat 10 Zeilen kein Zugriff (auch EZ)');
+           where t.name = 'Testvorlage' and r.level = 'none'), 11, 'neue Vorlage hat 11 Zeilen kein Zugriff (auch EZ, TK)');
 select throws_ok($$ insert into public.ad_templates (name) values ('testvorlage') $$, '23505',
   null, 'Vorlagenname doppelt (ad_templates_name_key)');
 
@@ -140,8 +142,8 @@ select is((select count(*)::int from public.ea_persons where kind = 'function'),
 select ok((select count(*) from public.ea_persons) > 0, 'Geschäftsstelle (EA) sieht Menschen');
 select throws_ok($$ insert into public.ea_persons (first_name, last_name) values ('Erika', 'Neu') $$,
   '42501', null, 'EA verwalten legt Personen nur über ea_create_volunteer an (spec v0.7, Abschnitt 3)');
-select is((select count(*)::int from public.ea_persons), 18,
-  'Geschäftsstelle sieht Personen mit Ehrenamtsstatus (R32: 4, 5, 9, 10, 11, 19–22, 26, 28, 31, 32) und im Pfad GR (23–25, 29, 30)');
+select is((select count(*)::int from public.ea_persons), 24,
+  'Geschäftsstelle sieht Personen mit Ehrenamtsstatus (R32: 4, 5, 9, 10, 11, 13–22, 26, 28, 31, 32) und im Pfad GR (23–25, 29, 30)');
 select throws_ok($$ insert into public.ea_persons (first_name, last_name, kind) values ('Funktion', 'Test', 'function') $$,
   '42501', null, 'Funktionsperson nur durch AD');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');

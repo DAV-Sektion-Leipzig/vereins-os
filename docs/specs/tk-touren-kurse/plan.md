@@ -31,7 +31,7 @@ TEST-Rollout jeder Datenbank-Stufe nach dem Merge mit `npx supabase db push --li
 
 ## Technischer Rahmen
 
-- **Datenbank:** PostgreSQL 17 (Supabase). Migrationen `supabase/migrations/202611030001xx_ad_tk_*.sql` (Stufe 1), `202611040001xx_tk_*.sql` (Stufe 2), `202611050001xx_tk_ez_*.sql` (Stufe 3). pgTAP-Dateien `294_ad_tk.test.sql` (Stufe 1) und `700_`–`760_tk_*.test.sql`. Lokal mit der Postgres.app-Umgebung (Skripte im Scratchpad), in CI über `db-tests`.
+- **Datenbank:** PostgreSQL 17 (Supabase). Migrationen `supabase/migrations/202611040001xx_ad_tk_*.sql` (Stufe 1), `202611050001xx_tk_*.sql` (Stufe 2), `202611060001xx_tk_ez_*.sql` (Stufe 3); eigene Datumsnummern, weil das Dashboard parallel `20261103…` nutzt. pgTAP-Dateien `294_ad_tk.test.sql` (Stufe 1) und `800_`–`860_tk_*.test.sql` (700er nutzt das Dashboard). Lokal mit der Postgres.app-Umgebung (Skripte im Scratchpad), in CI über `db-tests`.
 - **Frontend:** React 19, Vite, TypeScript, shadcn/ui, react-router Loader, sonner, ResponsiveTable wie EZ und FI. Ordner `src/features/tk/` (die Spec nennt `src/modules/tk/`; das Repo führt Module unter `src/features/`, technische Abweichung ohne fachliche Wirkung).
 - **Keine neuen Pakete.** PDF mit `jspdf` 4.2.1 und `jspdf-autotable` 5.0.9 (schon vorhanden, dynamischer Import).
 
@@ -39,7 +39,7 @@ TEST-Rollout jeder Datenbank-Stufe nach dem Merge mit `npx supabase db push --li
 
 | # | Thema | Entscheidung | Grund |
 |---|---|---|---|
-| P1 | Kalkulation doppelt | `tk_calculate` (PL/pgSQL) ist maßgeblich (R1). `src/features/tk/calc.ts` ist eine reine Funktion ohne Supabase und dient nur der Live-Anzeige. Beide laufen gegen dieselben Testfälle aus `scripts/tk-calc/cases.json` (Planungen 1–5, 7, 9 aus spec.md 9 mit erwarteten Werten). Die TS-Seite testet `npm run tk:calc:test` (tsx --test), die SQL-Seite pgTAP `720_tk_calculate.test.sql` mit denselben Werten. | spec.md 8, T6/T20: Werte auf den Cent gleich |
+| P1 | Kalkulation doppelt | `tk_calculate` (PL/pgSQL) ist maßgeblich (R1). `src/features/tk/calc.ts` ist eine reine Funktion ohne Supabase und dient nur der Live-Anzeige. Beide laufen gegen dieselben Testfälle aus `scripts/tk-calc/cases.json` (Planungen 1–5, 7, 9 aus spec.md 9 mit erwarteten Werten). Die TS-Seite testet `npm run tk:calc:test` (tsx --test), die SQL-Seite pgTAP `820_tk_calculate.test.sql` mit denselben Werten. | spec.md 8, T6/T20: Werte auf den Cent gleich |
 | P2 | Rundung | `numeric` in SQL, Cent-Ganzzahlen in TS (wie FI `toCents`); Beitrag `ceil(roh / rRund − 1e−9) × rRund`; CO2 auf 0,01 kg | R1 |
 | P3 | Referat aus Tourtyp | `tk_plan_referat(plan_type)` löst die Referate über den Namen in `ea_referate` auf („Ausbildung“, „Touren“; Startbestand der Migration `…23000200`). Fehlt der Name: Fehler `TK_REFERAT_MISSING` beim Anlegen, ohne festes UUID. | R12; robuster als feste IDs [ANNAHME der Spec ersetzt, technisch] |
 | P4 | Sätze | `tk_rates(p_plan_id)` liefert die Sätze als `jsonb` (eingefroren aus `tk_plan_rates` oder `ad_rates_at`). Frontend liest denselben Stand über `tk_get_plan` (Schlüssel `rates`). | R3, eine Quelle für beide Rechnungen |
@@ -51,7 +51,7 @@ TEST-Rollout jeder Datenbank-Stufe nach dem Merge mit `npx supabase db push --li
 | P10 | Ausgaben | Die Texte (Eingabeblatt, Ausschreibung, Zusammenfassung) sind reine Funktionen in `src/features/tk/ausgaben/texts.ts`, gebaut nach Prototyp 7.1–7.3 ohne Stornoregel und mit Test (`scripts/tk-calc/texts.test.ts`). PDF nach Prototyp 7.5 mit den gemeinsamen Hilfen aus `src/features/fi/export/pdf.ts`, verschoben nach `src/lib/pdf.ts`. | R11, R14 |
 | P11 | Qualifikation → Sportart | Startbestand `tk_qualification_sports` per Migration über die Kürzel der Qualifikationsarten (`ad_qualification_types.code`); nicht zuordenbare Prototyp-Bezeichnungen meldet die Migration per `raise notice`; sie werden bei T003 in tasks.md notiert. | spec.md 2, C3 |
 | P12 | Fehlercodes | Neue Codes im Abschnitt TK von `ad-administration/contracts/error-codes.md`; Texte im Frontend in `src/features/tk/errors.ts` | spec.md 5 |
-| P13 | Mengentest | pgTAP `760_tk_volume.test.sql`: 60 Planungen mit je 10 Leitenden, 10 Teilstrecken, 40 Kostenzeilen; `tk_save_plan` und `tk_list_plans` unter 1 s (lokal gemessen, in CI nur Funktion) | spec.md 8 |
+| P13 | Mengentest | pgTAP `860_tk_volume.test.sql`: 60 Planungen mit je 10 Leitenden, 10 Teilstrecken, 40 Kostenzeilen; `tk_save_plan` und `tk_list_plans` unter 1 s (lokal gemessen, in CI nur Funktion) | spec.md 8 |
 
 ## Constitution Check
 

@@ -530,3 +530,128 @@ update public.ad_payout_settings
 insert into public.ad_collection_settings (start_month)
 values (date_trunc('month', current_date)::date)
 on conflict (id) do nothing;
+
+-- Nachtrag v0.9 (spec.md AD v0.12.0, Abschnitt 9; spec T66): Personen 13–18 für die Planungshilfe, nur fiktiv.
+-- Testzugänge b…13 (Tina Touren: Referent:in + Freigabe, Referat Touren), b…14 (Alex Ausbildung: Referent:in, Referat
+-- Ausbildung, ohne Freigabe), b…15 (Fritz Freigabe: nur Freigabe Touren und Kurse, Referat Touren); Aktive Bernd Berg
+-- (Trainer*in C Bergwandern bis 30.10.2027), Hilde Helfer (ohne Lizenz), Karl Kletter (TCSPI bis 31.12.2025).
+-- Eigenschaften e…42–e…49. Zweiter Wert rOrg = 12 € ab 01.01.2028 (nur TEST).
+insert into public.ea_persons (id, first_name, last_name, kind, created_in) values
+  ('a0000000-0000-4000-8000-000000000013', 'Tina', 'Touren', 'human', 'AD'),
+  ('a0000000-0000-4000-8000-000000000014', 'Alex', 'Ausbildung', 'human', 'AD'),
+  ('a0000000-0000-4000-8000-000000000015', 'Fritz', 'Freigabe', 'human', 'AD'),
+  ('a0000000-0000-4000-8000-000000000016', 'Bernd', 'Berg', 'human', 'AD'),
+  ('a0000000-0000-4000-8000-000000000017', 'Hilde', 'Helfer', 'human', 'AD'),
+  ('a0000000-0000-4000-8000-000000000018', 'Karl', 'Kletter', 'human', 'AD')
+on conflict (id) do nothing;
+
+with v (person_id, status, since) as (values
+  ('a0000000-0000-4000-8000-000000000013'::uuid, 'active'::public.ea_volunteer_status, date '2024-01-01'),
+  ('a0000000-0000-4000-8000-000000000014'::uuid, 'active'::public.ea_volunteer_status, date '2024-01-01'),
+  ('a0000000-0000-4000-8000-000000000015'::uuid, 'active'::public.ea_volunteer_status, date '2025-01-01'),
+  ('a0000000-0000-4000-8000-000000000016'::uuid, 'active'::public.ea_volunteer_status, date '2020-01-01'),
+  ('a0000000-0000-4000-8000-000000000017'::uuid, 'active'::public.ea_volunteer_status, date '2022-01-01'),
+  ('a0000000-0000-4000-8000-000000000018'::uuid, 'active'::public.ea_volunteer_status, date '2018-01-01')
+), upd as (
+  update public.ea_persons p
+     set volunteer_status = v.status, volunteer_status_since = v.since
+    from v
+   where p.id = v.person_id and p.volunteer_status is null
+  returning p.id, p.volunteer_status, p.volunteer_status_since
+)
+insert into public.ea_volunteer_status_history (person_id, status, valid_from)
+select id, volunteer_status, volunteer_status_since from upd;
+
+insert into public.ea_properties (id, person_id, property_type_id, field_values, related_referat_id, valid_from)
+select v.id, v.person_id, t.id, v.field_values, (select r.id from public.ea_referate r where r.name = v.referat), v.valid_from
+  from (values
+    ('e0000000-0000-4000-8000-000000000042'::uuid, 'a0000000-0000-4000-8000-000000000013'::uuid, 'position'::text,
+     '{"position": "Referent:in"}'::jsonb, 'Touren'::text, date '2024-01-01'),
+    ('e0000000-0000-4000-8000-000000000043', 'a0000000-0000-4000-8000-000000000014', 'position',
+     '{"position": "Referent:in"}', 'Ausbildung', date '2024-01-01'),
+    ('e0000000-0000-4000-8000-000000000044', 'a0000000-0000-4000-8000-000000000015', 'function',
+     '{"function": "Helfer:in"}', 'Touren', date '2025-01-01'),
+    ('e0000000-0000-4000-8000-000000000045', 'a0000000-0000-4000-8000-000000000016', 'function',
+     '{"function": "Trainer:in"}', 'Touren', date '2020-01-01'),
+    ('e0000000-0000-4000-8000-000000000046', 'a0000000-0000-4000-8000-000000000016', 'license',
+     jsonb_build_object('qualification_type', (select id from public.ad_qualification_types where code = 'TCBW'),
+                        'license_number', 'TEST-0016', 'valid_until', '2027-10-30'),
+     null, date '2023-10-30'),
+    ('e0000000-0000-4000-8000-000000000047', 'a0000000-0000-4000-8000-000000000017', 'function',
+     '{"function": "Helfer:in"}', 'Touren', date '2022-01-01'),
+    ('e0000000-0000-4000-8000-000000000048', 'a0000000-0000-4000-8000-000000000018', 'function',
+     '{"function": "Trainer:in"}', 'Ausbildung', date '2018-01-01'),
+    ('e0000000-0000-4000-8000-000000000049', 'a0000000-0000-4000-8000-000000000018', 'license',
+     jsonb_build_object('qualification_type', (select id from public.ad_qualification_types where code = 'TCSPI'),
+                        'license_number', 'TEST-0018', 'valid_until', '2025-12-31'),
+     null, date '2021-12-31')
+  ) as v (id, person_id, system_key, field_values, referat, valid_from)
+  join public.ea_property_types t on t.system_key = v.system_key
+on conflict (id) do nothing;
+
+insert into public.ad_accesses (person_id, login_email, status, is_emergency, last_invited_at, locked_at) values
+  ('a0000000-0000-4000-8000-000000000013', 'test.touren@dav-leipzig.de', 'active', false, now() - interval '30 days', null),
+  ('a0000000-0000-4000-8000-000000000014', 'test.ausbildung@dav-leipzig.de', 'active', false, now() - interval '30 days', null),
+  ('a0000000-0000-4000-8000-000000000015', 'test.freigabe@dav-leipzig.de', 'active', false, now() - interval '30 days', null)
+on conflict (person_id) do nothing;
+
+insert into public.ad_template_assignments (person_id, template_id)
+select v.person_id, t.id
+  from (values
+    ('a0000000-0000-4000-8000-000000000013'::uuid, 'Referent:in'),
+    ('a0000000-0000-4000-8000-000000000013'::uuid, 'Freigabe Touren und Kurse'),
+    ('a0000000-0000-4000-8000-000000000014'::uuid, 'Referent:in'),
+    ('a0000000-0000-4000-8000-000000000015'::uuid, 'Freigabe Touren und Kurse')
+  ) as v (person_id, template_name)
+  join public.ad_templates t on t.name = v.template_name
+ where not exists (
+   select 1 from public.ad_template_assignments ta
+    where ta.person_id = v.person_id and ta.template_id = t.id and ta.revoked_at is null
+ );
+
+insert into public.ad_assignment_referate (assignment_id, referat_id)
+select ta.id, r.id
+  from (values
+    ('a0000000-0000-4000-8000-000000000013'::uuid, 'Referent:in', 'Touren'),
+    ('a0000000-0000-4000-8000-000000000013'::uuid, 'Freigabe Touren und Kurse', 'Touren'),
+    ('a0000000-0000-4000-8000-000000000014'::uuid, 'Referent:in', 'Ausbildung'),
+    ('a0000000-0000-4000-8000-000000000015'::uuid, 'Freigabe Touren und Kurse', 'Touren')
+  ) as v (person_id, template_name, referat)
+  join public.ad_templates t on t.name = v.template_name
+  join public.ad_template_assignments ta on ta.person_id = v.person_id and ta.template_id = t.id and ta.revoked_at is null
+  join public.ea_referate r on r.name = v.referat
+on conflict do nothing;
+
+insert into auth.users (
+  instance_id, id, aud, role, email, encrypted_password,
+  email_confirmed_at, invited_at, banned_until,
+  raw_app_meta_data, raw_user_meta_data,
+  confirmation_token, recovery_token, email_change_token_new, email_change,
+  created_at, updated_at
+)
+select
+  '00000000-0000-0000-0000-000000000000', v.id, 'authenticated', 'authenticated', v.email,
+  extensions.crypt(:'test_password', extensions.gen_salt('bf')),
+  now(), now() - interval '30 days', null,
+  '{"provider": "email", "providers": ["email"]}'::jsonb, '{}'::jsonb,
+  '', '', '', '',
+  now() - interval '30 days', now()
+from (values
+  ('b0000000-0000-4000-8000-000000000013'::uuid, 'test.touren@dav-leipzig.de'),
+  ('b0000000-0000-4000-8000-000000000014'::uuid, 'test.ausbildung@dav-leipzig.de'),
+  ('b0000000-0000-4000-8000-000000000015'::uuid, 'test.freigabe@dav-leipzig.de')
+) as v (id, email)
+on conflict (id) do nothing;
+
+insert into auth.identities (id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at)
+select gen_random_uuid(), u.id, u.id::text, 'email',
+       jsonb_build_object('sub', u.id::text, 'email', u.email, 'email_verified', true),
+       null, now(), now()
+  from auth.users u
+ where u.id in ('b0000000-0000-4000-8000-000000000013', 'b0000000-0000-4000-8000-000000000014',
+                'b0000000-0000-4000-8000-000000000015')
+on conflict (provider_id, provider) do nothing;
+
+insert into public.ad_rates (rate_key, label, rate_group, unit, value, valid_from, source)
+select 'rOrg', 'Organisationspauschale je Tag', 'remuneration', '€', 12, date '2028-01-01', 'Testwert (nur TEST)'
+ where not exists (select 1 from public.ad_rates r where r.rate_key = 'rOrg' and r.valid_from = date '2028-01-01');
