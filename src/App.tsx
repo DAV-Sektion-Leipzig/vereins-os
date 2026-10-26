@@ -98,6 +98,13 @@ import { FiLayout } from '@/features/fi/FiLayout'
 import { loadClimbing } from '@/features/fi/kletterhalle/data'
 import { KletterhallePage as FiKletterhallePage } from '@/features/fi/kletterhalle/KletterhallePage'
 import { AbrechnungenPage } from '@/features/fi/liste/AbrechnungenPage'
+import { loadTkAccess, requireTkEdit } from '@/features/tk/access'
+import { loadPlan } from '@/features/tk/detail/data'
+import { PlanungPage } from '@/features/tk/detail/PlanungPage'
+import { loadPlanList } from '@/features/tk/liste/data'
+import { PlanungenPage } from '@/features/tk/liste/PlanungenPage'
+import { PlanungNeuPage } from '@/features/tk/neu/PlanungNeuPage'
+import { TkLayout } from '@/features/tk/TkLayout'
 import { loadSettlementList } from '@/features/fi/liste/data'
 import { StammdatenPage } from '@/features/ea/stammdaten/StammdatenPage'
 import { KeinZugriffPage } from '@/features/start/KeinZugriffPage'
@@ -238,6 +245,21 @@ export const router = createBrowserRouter([
           { path: ':id', loader: loadEventDetail, element: <EinsatzDetailPage /> },
           { path: ':id/bearbeiten', loader: loadEditEvent, element: <EinsatzBearbeitenPage /> },
           { path: '*', loader: () => redirect('/ez') },
+        ],
+      },
+      {
+        // TK mit TK ≥ lesen in irgendeiner Reichweite (spec.md TK 3, Routenschutz); Auswertung folgt mit Stufe 5.
+        id: 'tk',
+        path: 'tk',
+        loader: loadTkAccess,
+        element: <TkLayout />,
+        handle: { moduleName: 'Planungshilfe Touren und Kurse' } satisfies RouteHandle,
+        children: [
+          { index: true, loader: loadPlanList, element: <PlanungenPage /> },
+          { path: 'neu', loader: requireTkEdit, element: <PlanungNeuPage /> },
+          { path: 'auswertung', element: <PlaceholderPage title="Kostenauswertung" /> },
+          { path: ':id', loader: loadPlan, element: <PlanungPage /> },
+          { path: '*', loader: () => redirect('/tk') },
         ],
       },
       {

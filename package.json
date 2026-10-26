@@ -12,6 +12,7 @@
     "ea:migrate:test": "tsx --test \"scripts/ea-migrate/*.test.ts\"",
     "fi:export:test": "tsx --test \"scripts/fi-export/*.test.ts\"",
     "ds:budget:test": "tsx --test \"scripts/ds-budget/*.test.ts\"",
+    "tk:calc:test": "tsx --test \"scripts/tk-calc/*.test.ts\"",
     "anleitung:screenshots": "tsx scripts/anleitung/screenshots.ts",
     "anleitung:diagramme": "tsx scripts/anleitung/diagramme.ts",
     "anleitung:pdf": "tsx scripts/anleitung/pdf.ts"
