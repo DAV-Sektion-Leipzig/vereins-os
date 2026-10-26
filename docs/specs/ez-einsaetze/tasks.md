@@ -173,7 +173,7 @@ Voraussetzung: Administration Nachtrag v0.10 (PR #51, `20261029000300` Abrechnun
 
 ## Zurückgestellt (mit TK T13)
 
-- [ ] T036 [US-EZ-23] (spec T19) Migration `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`; Grants an `authenticated` (R26, R27).
+- [ ] T036 [US-EZ-23] (spec T19) Migration `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`; Grants an `authenticated` (R26, R27); zusätzlich Parameter `p_remuneration_kind_code` nach Übergabe TK → EZ v1.3 Punkt 10 (nach Einarbeitung in spec.md EZ). Umsetzung mit TK T015 auf Branch `tk-ez-anbindung` (tk-touren-kurse/plan.md Stufe 3).
 - [ ] T037 [US-EZ-23] (spec T20) pgTAP: Anlegen und Aktualisieren aus der Planung; `from_plan`-Abgleich; `EZ_EVENT_LOCKED` nach erster Anwesenheit „anwesend“; Absage aus der Planung; `EZ_FORBIDDEN` ohne `tk_can_write`; `ez_planned_event_state` mit und ohne Einsatz.
 - [ ] T038 [US-EZ-23] (spec T21) Abstimmung mit TK T14 (gemeinsamer Test von `tk_change_status` publish/cancel).
 

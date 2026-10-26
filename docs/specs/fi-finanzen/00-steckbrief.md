@@ -57,7 +57,7 @@ Trainer:innen und Helfer:innen werden aus der großen Excel-Tabelle des Microsof
 - **Liste „durchgeführt, noch nicht abgerechnet, älter als 4 Wochen“** für Kurs und Tour (TK Punkt 4); E-Mail-Erinnerung erst mit dem Schnittstellen-Connector.
 
 **Nicht im Scope:**
-- Monatlicher Buchungslauf für Verträge (Einzug, Modul Gruppen), Budget-Übersicht, Dashboard: später, eigene Iterationen.
+- Monatlicher Buchungslauf für Verträge (Einzug, Modul Gruppen), Budget-Übersicht, Dashboard: später, eigene Iterationen. Nachtrag (Product Owner 26.10.2026): Der **Bereich Budget** (Finanzplan, Zuordnung, DATEV-Import) kommt für das Modul Dashboard in Finanzen; Anforderungen specs/ds-dashboard/uebergabe-finanzen.md, Stories US-FI-22 bis US-FI-29; die Anzeige liegt im Modul Dashboard.
 - Ehrenamtspauschale (F9): nicht im MVP, später als eigene Abrechnungsart mit Betrag von Hand (Product Owner 24.10.2026); Nachweise liegen im Ehrenamtsmanagement.
 - Finanzbuchhaltung, Buchung, DATEV-Buchungsexport (vision.md: Nicht-Ziel; Übergabe an die Finanzbuchhaltung).
 - Pflege der Sätze, Abrechnungsarten, Fristen und des Höchstbetrags (Administration, nur Admin).

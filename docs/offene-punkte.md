@@ -1,7 +1,8 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 26.10.2026 · Version 5.17
-Änderungen v5.17: Planungshilfe Touren und Kurse wieder aufgenommen: Abgleich mit dem Stand der anderen Module (Spec v0.3, Stories v0.5, Steckbrief und Erhebung v0.8); Übergaben AD → TK und FI → TK eingearbeitet; Abrechnungsart Gemeinschaftstour, Kurse nach Lehreinheiten und Lizenz-Regel wie Finanzen entschieden; neue Übergabepunkte an EZ (v1.3) und AD (v1.8).
+Stand: 26.10.2026 · Version 5.18
+Änderungen v5.18: Planungshilfe Touren und Kurse wieder aufgenommen: Abgleich mit dem Stand der anderen Module (Spec v0.3, Stories v0.5, Steckbrief und Erhebung v0.8); Übergaben AD → TK und FI → TK eingearbeitet; Abrechnungsart Gemeinschaftstour, Kurse nach Lehreinheiten und Lizenz-Regel wie Finanzen entschieden; neue Übergabepunkte an EZ (v1.3) und AD (v1.8).
+Änderungen v5.17: Dashboard Steckbrief v0.13, Erhebung v0.2, Stories v0.2, Spec v0.2 Ready (Budgetpflege als US-FI-22 bis US-FI-29 in Finanzen) (u. a. eine Quelle für Geld): Q-DS5 bis Q-DS19 und D5 entschieden; Sichten festgelegt durch Claude als Referent:in (sichten.md v0.5, zur Abnahme); Referent:innen steuern ihre Gruppen mit dem Dashboard (Übergabe DS → GR v1.0); neue Referate Öffentlichkeitsarbeit und Umwelt und Naturschutz (Übergabe an AD D10) (Product Owner 26.10.2026); Übergaben DS → FI v1.2 und DS → AD v1.1 bei FI und AD eingetragen; DATEV-Schnittstelle bei SC; Begriffe im Glossar v1.7.
 Änderungen v5.16: Finanzen – Buchungslauf Verträge entschieden (SEPA-Lastschriftdatei mit Einzugsliste, 01-erhebung.md FI v0.7); offene Punkte dazu ergänzt; Übergaben FI → AD v1.4 und FI → GR v1.0.
 Änderungen v5.15: Neues Modul Dashboard (DS [ANNAHME]): Steckbrief v0.2 (Entwurf), Q-DS1 bis Q-DS4 entschieden, neue Fragen Q-DS11 bis Q-DS13, Übergabe DS → FI v1.0 (Bereich Budget); Merkposten „Dashboard (EA)“ und „Auswertungen auf Gruppenebene“ mit Verweis auf DS.
 Änderungen v5.14: Finanzen Spec v0.2, Administration Nachtrag v0.10 und Anwesenheitserfassung Nachtrag v0.6 Ready (Product Owner 26.10.2026); Annahmen bei der Abnahme.
@@ -77,6 +78,7 @@ Jeder Abschnitt wird beim Steckbrief des Moduls in „Offene Fragen“ übernomm
 - Erledigt 26.10.2026: Q1 im Nachtrag v0.10 der Administration eingearbeitet (Kennzeichen „darf freigeben“ am Recht, R50; Modul TKF entfällt; Product Owner 26.10.2026). Die Planungshilfe stellt bei der Wiederaufnahme um: specs/ad-administration/uebergabe-planungshilfe-freigabe.md (v1.0, offen).
 - **Nachtrag v0.10 (Finanzen), Ready 26.10.2026 (inkl. Sätze T60/T61 aus v0.9):** Aktion „freigeben“, Startwerte FI (Referent:in lesen + freigeben, Reichweite Referat), Stammdaten Abrechnungsarten mit Positionen, Vorbelegung je Einsatzart, Abgabefristen, Angaben der Sektion für die Auszahlung, Kennzeichen „halbjährliche Abrechnung“ am Referat, Sätze und Höchstbetrag, `ea_person_finance_data`, `fi_person_visible`; Oberflächen /ad/abrechnungsarten und /ad/auszahlung; Tasks T68–T77. Vor der ersten Migration von Finanzen umsetzen; T68 auch vor T59.
 - [ANNAHME] Annahmen v0.10 bei Abnahme bestätigen (spec.md AD Abschnitt 11).
+- [OFFEN] **Übergabe aus dem Dashboard (v1.0, offen):** neues Modul DS (lesen, Reichweite „alle“/„Referat“), Startwerte der Rechtevorlagen, Startseite mit Sichten; Kennzeichen „darf Budget pflegen“ mit Vorlage „Budgetpflege“; neue Referate Öffentlichkeitsarbeit und Umwelt und Naturschutz (specs/ds-dashboard/uebergabe-administration.md v1.3).
 
 ## EA – Ehrenamtsmanagement (Priorität 1)
 
@@ -116,6 +118,7 @@ Steckbrief: docs/specs/ea-ehrenamt/00-steckbrief.md (Version 0.6, 21.10.2026) ·
   - [ANNAHME] A12: Auflösen einer Gruppe beendet ihre offenen Trainingszeiten zum Auflösungsdatum.
   - [ANNAHME] Fehler „Gruppe nicht gefunden.“ bei unbekannter oder am Datum aufgelöster Gruppe (US-GR-19).
 - **Übergabe aus der Anwesenheitserfassung (eingearbeitet, v1.0, 24.10.2026):** specs/ez-einsaetze/uebergabe-gruppen.md – höchstens eine Trainingszeit je Gruppe und Wochentag (Product Owner 24.10.2026); eingearbeitet in 01-erhebung.md v0.8, 02-stories.md v0.9, spec.md GR v0.3 (R19, US-GR-16, -18, -19); Umsetzung: spec.md T20. Wortlaut der Ablehnung festgelegt (spec.md GR v0.3.1). Noch [OFFEN] (spec.md GR Abschnitt 11): Ablehnung auch beim Verlängern von „gültig bis“; Import bei zwei Zeiten am selben Wochentag nur diesen Wochentag oder die ganze Gruppe ohne Trainingszeit.
+- [OFFEN] **Übergabe aus dem Dashboard (v1.0, offen):** Lesefunktionen für Gruppen-Kennzahlen und Gruppendetail (Namen und Hinweise) mit Recht auf das Dashboard, Reichweite „Referat“; Alter nur intern für den Betreuungsschlüssel (specs/ds-dashboard/uebergabe-gruppen.md).
 
 ## EZ – Anwesenheitserfassung (Priorität 2b – nach Gruppen, vor Finanzen)
 
@@ -171,13 +174,13 @@ Entschieden 22.10.2026 (Product Owner, fünfter Block): PDF-Übernahme nicht im 
 - [OFFEN] Iteration 2 (später anschauen, Product Owner 22.10.2026): öffentliches Formular ohne Login (Datenschutz, Missbrauchsschutz) oder Zugang für Tourenleitende mit Reichweite „nur eigene“?
 - Entschieden 26.10.2026 (Product Owner): Planungshilfe wird nach Finanzen wieder aufgenommen. Gemeinschaftstour übergibt die Abrechnungsart „Gemeinschaftstour“ an den Einsatz (Übergabe an EZ v1.3); Kurse ein- und mehrtägig nur nach Lehreinheiten, ohne Vorschlag bei mehrtägigen Kursen, ohne Organisationspauschale; Trainersatz auch bei Lizenz-Erwerb im Halbjahr des Startdatums wie in Finanzen (Übergabe an AD v1.8); Titel ungekürzt (90 Zeichen). Zweiter Teil: externe Leitende direkt aus der Planung anlegen bzw. wieder aktivieren (Funktion Helfer:in, alle mit TK bearbeiten; Übergabe an AD v1.8 Punkt 16); „in Yolawo angelegt“ nur Freigaberecht und Geschäftsstelle; Löschfrist Kontakt- und Notfalldaten 30 Tage; alle 24 Stories im MVP; Annahmen der Stories und der Spec bestätigt; Umsetzung mit Prototyp-Werten (Prüfliste für das Referat Touren); Material nur als Ausrüstungsliste.
 - [OFFEN] Prüfliste für das Referat Touren (specs/tk-touren-kurse/pruefliste-referat-touren.md; Umsetzung startet mit Prototyp-Werten, Product Owner 26.10.2026): MwSt. 19 % auf Zahlungsgebühren, Konditionsgrenzen, Technikstufen, Zuordnung Qualifikation → Sportart, Hüttenpreis-Plausibilität 45–90 €, Faktoren Reisebus und Selbstversorgerhütte, Wert für `flight_min_km` (Flug-Warnung), Gültig-ab-Daten der Sätze.
-- Erledigt 26.10.2026: Glossar v1.7 (Abschnitt „Touren und Kurse“); Spalte TK in rollen.md seit v1.1/v1.3 vorhanden.
+- Erledigt 26.10.2026: Glossar v1.8 (Abschnitt „Touren und Kurse“); Spalte TK in rollen.md seit v1.1/v1.3 vorhanden.
 - Erledigt 26.10.2026: Statusmodell; Admin liest; Berechnung in der Datenbank; PDF der Einreichung wird nicht gespeichert; Planwerte nur Vorbelegung für Finanzen – bestätigt. Keine Abweichung vom Lizenz-Ergebnis durch die freigebende Person. Spec v0.4 Ready.
 
 ## FI – Finanzen (Priorität 3 – nach der Anwesenheitserfassung)
 
 Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.5, abgeschlossen 26.10.2026) · Erhebung: 01-erhebung.md (Version 0.6) · Stories: 02-stories.md (Version 0.1, US-FI-01 bis US-FI-17) · Spec: spec.md (Version 0.2, **Ready** 26.10.2026; Umsetzung nach den Nachträgen AD v0.10 und EZ v0.6) · Übergaben: uebergabe-administration.md (v1.3, eingearbeitet in spec.md AD v0.10.0), uebergabe-anwesenheitserfassung.md (v1.3, eingearbeitet in spec.md EZ v0.6), uebergabe-planungshilfe.md (v1.0, offen; Planungshilfe eingefroren)
-- [OFFEN] **Übergabe aus dem Dashboard (v1.0, offen):** Bereich Budget in Finanzen (Finanzplan, Zuordnung Konto → Budgetposten, DATEV-Import, Berechnung Plan/Ist, Einzelbuchungen je Referat), vorgezogen vor die Abrechnung (specs/ds-dashboard/uebergabe-finanzen.md).
+- **Übergabe aus dem Dashboard (v1.8): in Stories eingearbeitet** (02-stories.md v0.3, US-FI-22 bis US-FI-29); Steckbrief und Spec folgen. Bereich Budget in Finanzen (Finanzplan, Zuordnung Konto → Budgetposten, DATEV-Import, Berechnung Plan/Ist, Einzelbuchungen je Referat), vorgezogen vor die Abrechnung (specs/ds-dashboard/uebergabe-finanzen.md v1.7).
 
 - Entschieden 24.10.2026 (Product Owner, Chat Finanzen):
   - **Q4 – Aufbewahrung:** 5 Jahre wie überall, auch für Abrechnungen und abgerechnete Einsätze; steuerlich aufbewahrungspflichtige Belege liegen in der Finanzbuchhaltung (bestätigt 25.10.2026).
@@ -202,20 +205,23 @@ Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.5, abgeschlossen 
 
 ## DS – Dashboard (Priorität offen)
 
-Steckbrief: docs/specs/ds-dashboard/00-steckbrief.md (Version 0.2, Entwurf 26.10.2026) · Übergabe des Prototyps: prototyp-budget-dashboard.md (v1.0) · Ideenkatalog: ideen-sichten.md (v0.2) · Übergabe an Finanzen: uebergabe-finanzen.md (v1.0, offen)
+Steckbrief: docs/specs/ds-dashboard/00-steckbrief.md (Version 0.13, Entwurf 26.10.2026) · Erhebung: 01-erhebung.md (v0.2) · Stories: 02-stories.md (v0.2, US-DS-07 bis US-DS-20; Budgetpflege als US-FI-22 bis US-FI-29 in Finanzen) · Spec: spec.md (v0.2, **Ready** 26.10.2026) · Sichten: sichten.md (v0.8, zur Abnahme) · Übergabe an Gruppen: uebergabe-gruppen.md (v1.0, offen) · Übergabe des Prototyps: prototyp-budget-dashboard.md (v1.0) · Ideenkatalog: ideen-sichten.md (v0.4) · Übergaben: uebergabe-finanzen.md (v1.7, offen), uebergabe-administration.md (v1.3, offen)
 
 - Vorgabe Product Owner 26.10.2026: Neues Modul Dashboard; Grundlage ist das Budget-Dashboard des 1. Vorsitzenden; darüber Sichten für einzelne Referate, z. B. Auslastung der Gruppen für Kinder und Jugend.
-- Entschieden 26.10.2026 (Product Owner): **Q-DS1** Buchungsliste wird gespeichert, Referent:innen sehen die Einzelbuchungen ihres Referats; **Q-DS2** Budget ist ein Bereich von Finanzen, DS zeigt die Sichten; **Q-DS3** Auslastung = Anwesenheitsquote, Betreuungsschlüssel, Probetrainings (keine Platzzahl in GR); **Q-DS4** Budget-Sicht früh nach dem Kern der Administration, Referats-Kennzahlen nach EZ und FI.
+- Entschieden 26.10.2026 (Product Owner): **Q-DS1** Buchungsliste wird gespeichert, Referent:innen sehen die Einzelbuchungen ihres Referats; **Q-DS2** Budget ist ein Bereich von Finanzen, DS zeigt die Sichten; **Q-DS3** Auslastung = Anwesenheitsquote, Betreuungsschlüssel, Probetrainings (keine Platzzahl in GR); **Q-DS4** Budget-Sicht früh nach dem Kern der Administration, Referats-Kennzahlen nach EZ und FI. **Q-DS7** Export und Zuordnung pflegt der 1. Vorsitzende, später die Schatzmeister:in; künftig über die DATEV-Schnittstelle des SC; Export monatlich. **Q-DS11** Einzelbuchungen laufendes Jahr und Vorjahr, danach nur Summen. **Q-DS12** eigenes Recht „Dashboard lesen“ (Modul DS, Reichweite „Referat“). **Q-DS8** Gruppenleitungen später mit Kennzahlen der eigenen Gruppe, ohne Budget. **Q-DS13** Referat sieht nur Buchungen seiner Budgetposten. **Q-DS14** Budgetpflege über Kennzeichen „darf Budget pflegen“. **D5** Admin sieht die Budget-Sicht (auch Notfall-Admin). **Q-DS10** Name in der Oberfläche bleibt „Dashboard“; Begriffe im Glossar v1.7. **Q-DS9** Vorjahresvergleich für Budget und Kennzahlen. **Q-DS6** Gesamtbudgets je Referat (Tabelle im Steckbrief), „Veranstaltungen“ und „Fördermittel“ für alle, Sulzenauhütte ohne eigenes Budget, neue Referate Öffentlichkeitsarbeit und Umwelt und Naturschutz. **Q-DS15** Jede Referent:in sieht das gesamte Budget (Summen), Einzelbuchungen nur des eigenen Referats. **Q-DS16** Referent:innen pflegen Hinweise und Plan ihres Referats. **Q-DS17** Umschlüsseln durch Referent:innen nur als Vorschlag an die Budgetpflege. **Q-DS18** Plan nur umschichten (Summe des Gesamtbudgets bleibt), Bestätigung durch die Budgetpflege. **Q-DS19** Vorjahresvergleich nur mit dem Vorjahr. **Q-DS5** Keine Rückmeldung der Referate; Claude legt die Sichten als Referent:in fest (sichten.md). Gesamtbudgets ohne Referat bestätigt.
 - [OFFEN] Arbeitsplan anpassen: Nachtrag AD v0.10 (Rechte FI mit Reichweite „Referat“), Bereich Budget in FI und Budget-Sicht DS vor der Abrechnung. (arbeitsplan.md)
-- [OFFEN] Q-DS5 Sichten je Referat: Rückmeldung der Referate zum Ideenkatalog. (ideen-sichten.md)
-- [OFFEN] Q-DS6 Zuordnung Gesamtbudget → Referat; Gesamtbudgets ohne Referat nur für den Vorstand? (00-steckbrief.md DS)
-- [OFFEN] Q-DS7 Wer spielt den DATEV-Export ein und pflegt die Zuordnung, wie oft? (00-steckbrief.md DS)
-- [OFFEN] Q-DS8 Kennzahlen der eigenen Gruppe für Gruppenleitungen (Reichweite „Gruppe“, nach MVP)? (00-steckbrief.md DS)
-- [OFFEN] Q-DS9 Vergleich mit Vorjahren. (00-steckbrief.md DS)
-- [OFFEN] Q-DS10 Kürzel DS, Name in der Oberfläche, Begriffe für glossar.md (Sicht, Kennzahl, Budgetposten, Gesamtbudget, Datenstand). (00-steckbrief.md DS)
-- [OFFEN] Q-DS11 Löschfrist der gespeicherten Buchungen. (00-steckbrief.md DS)
-- [OFFEN] Q-DS12 Recht für die Budget-Sicht über DS oder FI. (00-steckbrief.md DS)
-- [OFFEN] Q-DS13 Sieht ein Referat auch nicht zugeordnete Buchungen mit seiner Kontenendziffer? (00-steckbrief.md DS)
+- Entschieden 26.10.2026 (Product Owner): Referent:innen **steuern ihre Gruppen mit dem Dashboard** (Entscheidungen anhand der Kennzahlen, nicht unbedingt Handlungen im Vereins OS); sie sehen im Gruppendetail des Dashboards Namen und Hinweise der Gruppen ihres Referats, keine Kontaktdaten, Geburtsdaten, Verträge oder Gesundheitsangaben; kein Recht auf das Modul Gruppen nötig (Übergabe DS → GR v1.0). (sichten.md 0, 4.1)
+- Entschieden 26.10.2026 (Product Owner): **Eine Quelle für Geld** – Einnahmen und Ausgaben im Dashboard nur aus dem DATEV-Import, nicht aus dem Buchungslauf der Verträge (kein zweiter Datenbestand).
+- Entschieden 26.10.2026 (Product Owner): Vergütung „abgerechnet, noch nicht gebucht“ bleibt als **Vorschau mit klarer Sichtbarkeit** am Budgetposten „Vergütung Aktive“, getrennt vom Ist, ohne Einfluss auf verbraucht, frei und Ampel. (sichten.md B8)
+- Entschieden 26.10.2026 (Product Owner): Im Gruppendetail bleibt die Anwesenheit je Teilnehmer:in („x von n“); der Verlauf einer Gruppe geht über 4 Halbjahre (Ausnahme zu Q-DS19). (sichten.md 4.1)
+- [OFFEN] Abnahme der Sichten (sichten.md v0.8)
+- Entschieden 26.10.2026 (Product Owner): Eigene Umschichtungsanträge des 1. Vorsitzenden bestätigt die Schatzmeister:in (Vorlage „Budgetpflege“ schon im MVP [ANNAHME]); Vorschau „noch nicht gebucht“ über Betrag und Datum der Auszahlungsrunde; Gesamtbudgets und Zuordnung werden ins neue Jahr vorgeschlagen; Stories der Budgetpflege in Finanzen (US-FI-22 bis US-FI-29).
+- Entschieden 26.10.2026 (Product Owner): Spec DS v0.2 Ready; Annahmen der Spec bestätigt (Dateien im Browser lesen, Regeln in der Datenbank; Vorschau inkl. abgeschlossener, nicht ausgezahlter Abrechnungen, Abgleichfenster −3/+14 Tage; Budgetpflege schichtet direkt um; Nachtrag der Administration als Tasks T1–T4; Zuordnung per View, numeric(12,2)).
+- [OFFEN] Eintrag im Verarbeitungsverzeichnis vor Echtdaten; rollen.md um Spalte DS und Vorlage Budgetpflege ergänzen. (spec.md DS Abschnitt 11)
+- [ANNAHME] Stories DS v0.2: Annahmen A1–A3 und A5 bestätigen. (02-stories.md DS)
+- [OFFEN] Vorschlag an TK: tatsächliche Teilnehmerzahl bei „durchgeführt“ erfassen, damit die Auslastung von Kursen und Touren sichtbar wird. (sichten.md 4.5, T7)
+- [ANNAHME] Umschichtung nur zwischen Posten gleicher Art; bestätigte Umschichtungen bleiben beim erneuten Einlesen der Excel erhalten. (00-steckbrief.md DS, uebergabe-finanzen.md B16)
+- [OFFEN] rollen.md ergänzen: Spalte DS in der Rechte-Matrix, Admin sieht Budget über DS, Kennzeichen „darf Budget pflegen“, Vorlage „Budgetpflege“. (uebergabe-administration.md DS)
 - [OFFEN] Datenschutz Buchungen: Eintrag im Verarbeitungsverzeichnis (Buchungstexte mit Namen). (00-steckbrief.md DS)
 - [OFFEN] Datenschutz Minderjährige: Mindestgröße für Kennzahlen zu Gruppen (z. B. Altersstruktur). (00-steckbrief.md DS)
 
@@ -228,6 +234,7 @@ Steckbrief: docs/specs/ds-dashboard/00-steckbrief.md (Version 0.2, Entwurf 26.10
 
 - [OFFEN] API-Key-Verwaltung als Erweiterung von AD: Felder, Anzeige der letzten Zeichen, Erinnerung vor Ablauf per E-Mail. (modul-landkarte.md, 00-steckbrief.md AD)
 - Weitere Anforderungen kommen aus EA (E-Mail vor Ablauf einer Qualifikation, Geburtstagserinnerung), FI (DATEV/Sparkasse) und OA (Instagram, Umfragen); ggf. TK (Schreib-Schnittstelle Yolawo, falls vorhanden [OFFEN]).
+- DATEV-Schnittstelle für den Import der Buchungen in den Bereich Budget von Finanzen statt CSV (Dashboard Q-DS7, Product Owner 26.10.2026); [OFFEN] welche DATEV-Schnittstelle (z. B. DATEVconnect, Datenservice) und Kosten.
 
 ## PM, GS, AM – Projekt-, Geschäftsstellen-, Aufgabenmanagement (Priorität 5)
 

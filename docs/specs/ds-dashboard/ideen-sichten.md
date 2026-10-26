@@ -1,10 +1,12 @@
 # Ideenkatalog: Sichten und Kennzahlen des Dashboards
 
-Stand: 26.10.2026 · Version 0.2 · Status: Entwurf zur Auswahl durch den Product Owner und die Referate
+Stand: 26.10.2026 · Version 0.4 · Status: Ideenspeicher; die Auswahl steht in sichten.md
+Änderungen v0.4: Auswahl M/S/C/W in sichten.md v0.1 (Q-DS5); Vorjahr nur ein Jahr (Q-DS19); Fragen an die Referate entfallen (keine Rückmeldung, Product Owner 26.10.2026).
+Änderungen v0.3: Q-DS9 (Vorjahresvergleich für Budget und Kennzahlen) eingearbeitet: B7 als Must; alle Kennzahlen mit Vorjahreswert.
 Änderungen v0.2: Entscheidungen Q-DS1 (Referat sieht Einzelbuchungen), Q-DS2 (Budget in FI) und Q-DS3 (Auslastung ohne Platzzahl) eingearbeitet.
 Grundlage: Steckbriefe, Specs und Merkposten der Module AD, EA, GR, EZ, TK, FI (Stand 26.10.2026); 00-steckbrief.md DS v0.1.
 
-Alle Ideen sind Vorschläge [ANNAHME]. Spalte **ab** = frühester Zeitpunkt, zu dem die Daten im Vereins OS vorliegen (Modul und Iteration). Spalte **Datenschutz** nennt, was beachtet werden muss. Grundsatz: Das Dashboard zeigt Anzahlen, Summen und Quoten; Personenlisten bleiben im Fachmodul.
+Alle Ideen sind Vorschläge [ANNAHME]. Spalte **ab** = frühester Zeitpunkt, zu dem die Daten im Vereins OS vorliegen (Modul und Iteration). Spalte **Datenschutz** nennt, was beachtet werden muss. Grundsatz: Das Dashboard zeigt Anzahlen, Summen und Quoten; Personenlisten bleiben im Fachmodul. Jede Kennzahl zeigt den Wert des gleichen Zeitraums im Vorjahr daneben (Q-DS9, Product Owner 26.10.2026), sobald Daten für das Vorjahr vorliegen.
 
 Kürzel der Priorität für die Rückmeldung: **M** = Must (MVP), **S** = Should (Iteration 1), **C** = Could (später), **W** = Won't.
 
@@ -14,16 +16,17 @@ Kürzel der Priorität für die Rückmeldung: **M** = Must (MVP), **S** = Should
 
 | Nr | Kennzahl | Sicht | Quelle | ab | Datenschutz |
 |---|---|---|---|---|---|
-| B1 | Plan / verbraucht / frei / Verbrauch in % je Budgetposten und Gesamtbudget, Ampel, Zeitmarke | Vorstand (alle), Referat (eigene Gesamtbudgets) | DATEV-Export + Finanzplan | DS-MVP | Summen unkritisch |
+| B1 | Plan / verbraucht / frei / Verbrauch in % je Budgetposten und Gesamtbudget, Ampel, Zeitmarke | alle mit „Dashboard lesen“: gesamtes Budget des Vereins (Q-DS15) | DATEV-Export + Finanzplan | DS-MVP | Summen unkritisch |
 | B2 | Einnahmen Plan / erreicht / fehlt noch | Vorstand, Referat | DATEV-Export | DS-MVP | – |
 | B3 | Verbrauch im Verhältnis zum abgelaufenen Jahr („schneller als geplant“) als Hinweis | Referat | B1 | DS-MVP | – |
-| B4 | Einzelbuchungen je Budgetposten | Geschäftsstelle, Vorstand, Referat (eigene Budgetposten; Q-DS1 entschieden) | DATEV-Export (FI) | DS-MVP | Buchungstexte enthalten Namen; Löschfrist Q-DS11 |
+| B4 | Einzelbuchungen je Budgetposten | Geschäftsstelle, Vorstand, Admin, Budgetpflege; Referat nur eigene Budgetposten (Q-DS1, Q-DS15) | DATEV-Export (FI) | DS-MVP | Buchungstexte enthalten Namen; Einzelbuchungen laufendes Jahr + Vorjahr (Q-DS11) |
+| B12 | Hinweise, Umschichtungen (beantragt / bestätigt) und Vorschläge zur Umschlüsselung je Budgetposten (Q-DS16 bis Q-DS18) | Referat (eigene Posten), Budgetpflege | Referent:in | DS-MVP | – |
 | B5 | Nicht zugeordnete Buchungen, Prüfung des Exports | Geschäftsstelle, Vorstand | DATEV-Export | DS-MVP | – |
 | B6 | Monatsverlauf je Gesamtbudget (kumuliert gegen Plan-Linie) | Vorstand, Referat | DATEV-Export | DS-MVP oder S | – |
-| B7 | Vergleich mit dem Vorjahr (gleicher Stichtag) | Vorstand, Referat | Exporte mehrerer Jahre | C | – |
+| B7 | Vergleich mit dem Vorjahr (gleicher Stichtag und ganzes Vorjahr) je Gesamtbudget und Budgetposten (Q-DS9, entschieden) | Vorstand, Referat | Summen je Budgetposten und Monat (FI) | DS-MVP | Summen je Monat bleiben, Einzelbuchungen nur Vorjahr (Q-DS11) |
 | B8 | „Gebunden“: abgerechnete und freigegebene, noch nicht gebuchte Vergütung am Budgetposten „Vergütung Aktive“ | Referat Kinder und Jugend, Leistungssport; Vorstand | FI (Auszahlungsrunden) | FI-MVP | nur Summen |
 | B9 | Planwerte der Touren und Kurse (Kosten, Beiträge) gegen das Budget Touren/Ausbildung | Referat Touren, Ausbildung | TK (Kalkulation) | TK-MVP | – |
-| B10 | Einnahmen aus Verträgen (monatlicher Einzug) gegen Plan | Vorstand, Kinder und Jugend | GR (Verträge), später FI-Buchungslauf | später | nur Summen |
+| B10 | Einnahmen aus Verträgen (monatlicher Einzug) gegen Plan | Vorstand, Kinder und Jugend | – | **entfällt** (Product Owner 26.10.2026): Einnahmen kommen nur über den DATEV-Import, kein zweiter Datenbestand aus dem Buchungslauf | – |
 | B11 | Sphären (ideell, Zweckbetrieb, wGB) als Filter bzw. Summe | Vorstand, Schatzmeister:in | KOST1 | DS-MVP | – |
 
 ## 2. Referat Kinder und Jugend (gleiche Sicht für Leistungssport und Klettergruppen)
@@ -95,7 +98,7 @@ Kürzel der Priorität für die Rückmeldung: **M** = Must (MVP), **S** = Should
 | G3 | „Teilnahme klären“ und Teilnehmer:innen ohne Erziehungsberechtigte | GR | GR-MVP | – |
 | G4 | Einsätze ohne Anwesenheit (angelegt, aber nicht erfasst) | EZ | EZ-MVP | – |
 | G5 | Planungen „in Yolawo angelegt“, aber Termin vorbei und nicht „durchgeführt“ | TK | TK-MVP | – |
-| G6 | Datenstand des Budgets älter als N Wochen → Hinweis „neuen Export einspielen“ | DS | DS-MVP | – |
+| G6 | Datenstand des Budgets älter als 6 Wochen → Hinweis „neuen Export einspielen“ (Export monatlich, Q-DS7) | DS | DS-MVP | Hinweis an den 1. Vorsitzenden bzw. die Schatzmeister:in |
 
 ## 8. Admin
 
@@ -106,7 +109,10 @@ Kürzel der Priorität für die Rückmeldung: **M** = Must (MVP), **S** = Should
 
 ---
 
-## Fragen an die Referate (Vorschlag für die Erhebung)
+## Fragen an die Referate (entfallen)
+
+Die Referate geben keine Rückmeldung (Product Owner 26.10.2026). Die Fragen dienten Claude bei der Festlegung in sichten.md als Leitfragen.
+
 
 1. Welche drei Zahlen schaust du heute am häufigsten nach – und wo?
 2. Welche Entscheidung würdest du mit einer Kennzahl anders oder früher treffen (z. B. Gruppe zusammenlegen, Trainer:in suchen, Budget umschichten)?
