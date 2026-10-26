@@ -1,6 +1,7 @@
 # Übergabe: Dashboard → Finanzen (Bereich Budget)
 
-Stand: 26.10.2026 · Version 1.3 · Status: offen (einzuarbeiten in den Steckbrief Finanzen als neuer, vorgezogener Bereich)
+Stand: 26.10.2026 · Version 1.4 · Status: offen (einzuarbeiten in den Steckbrief Finanzen als neuer, vorgezogener Bereich)
+Änderungen v1.4: B3 nach Q-DS6 (Sichtbarkeit je Gesamtbudget: Referat, alle, ohne Referat).
 Änderungen v1.3: neu B14 Vorjahresvergleich (Q-DS9).
 Änderungen v1.2: B9 (Referat nur Buchungen seiner Budgetposten, Admin liest), B10 (Kennzeichen „darf Budget pflegen“).
 Änderungen v1.1: Q-DS7, Q-DS11, Q-DS12 entschieden (B5, B9, B10, B11, neu B13).
@@ -22,7 +23,7 @@ Damit ändert sich im Steckbrief Finanzen v0.5 „Nicht im Scope: … Budget-Üb
 |---|---|---|
 | B1 | **Finanzplan** je Jahr einlesen aus der Excel „Finanzen Sektion JJJJ.xlsx“, Blatt „Finanzplan JJJJ“ (Kopfzeile „Einnahmen“/„Ausgaben“, Spalte „Plan JJJJ“ je Seite, Zeilen „Summe…“ als Kontrollsumme). Abbruch, wenn die Summe der Posten von der Summenzeile abweicht. | Prototyp `build.py` |
 | B2 | **Budgetposten** (Art Einnahme/Ausgabe, Name, Plan, Reihenfolge) und **Gesamtbudget** (Gruppierung) je Jahr; doppelte Postennamen über das Gesamtbudget unterscheiden. | Prototyp |
-| B3 | **Gesamtbudget ↔ Referat** als Zuordnung (ein Gesamtbudget gehört zu höchstens einem Referat; ohne Referat nur für Vorstand und Geschäftsstelle) [OFFEN Q-DS6: Liste]. | Steckbrief DS |
+| B3 | **Sichtbarkeit je Gesamtbudget** (Q-DS6, entschieden 26.10.2026): Referat (genau eines), **alle** (jede:r mit „Dashboard lesen“) oder **ohne Referat** (nur Reichweite „alle“). Pflege durch die Budgetpflege, je Jahr; Startwerte nach der Tabelle im Steckbrief DS („Sichtbarkeit der Gesamtbudgets“). Neues Gesamtbudget ohne Angabe = ohne Referat [ANNAHME]. | Steckbrief DS |
 | B4 | **Zuordnungsregeln** Konto → Budgetposten: Einzelbuchung, Einzelkonto, Hauptkonto, Kontenbereich, optional Kostenstelle (KOST1); Status ok / unsicher / offen / keine Buchung; Hinweis. Regelvorrang und Prüfungen wie im Prototyp (jedes Konto nur einmal; unverständliche Kontonummer = Fehler). Historie mit `valid_from`/`valid_to` und Protokoll (wer, wann, Kommentar) ersetzt die Versionsdateien. | Prototyp |
 | B5 | **DATEV-Import** der Kontenblätter (CSV, UTF-8 mit BOM oder Windows-1252, Spalten über Namen): Kontenübersicht und Buchungsliste. Gespeichert werden nur Buchungszeilen auf Konten, die eine Regel trifft (Erfolgskonten und ausdrücklich zugeordnete Konten), keine Bank-, Kreditoren- und Personenkonten [ANNAHME, datensparsam]. Saldovorträge und Buchungen anderer Jahre werden nicht übernommen. Ein neuer Import ersetzt den vorigen des Jahres [ANNAHME]. Export monatlich (Q-DS7). | Prototyp, Q-DS1 |
 | B6 | **Prüfung beim Import:** Summe je Konto aus den Einzelbuchungen = Kontenübersicht; ausgewertet = Ausgaben − Einnahmen + nicht zugeordnet. Abweichungen als Warnung sichtbar (Import wird trotzdem übernommen, wie im Prototyp) [ANNAHME]. | Prototyp |

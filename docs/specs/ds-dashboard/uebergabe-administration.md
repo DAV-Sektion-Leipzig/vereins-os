@@ -1,6 +1,7 @@
 # Übergabe: Dashboard → Administration
 
-Stand: 26.10.2026 · Version 1.1 · Status: offen (Nachtrag der Administration vor der ersten Migration des Dashboards)
+Stand: 26.10.2026 · Version 1.2 · Status: offen (Nachtrag der Administration vor der ersten Migration des Dashboards)
+Änderungen v1.2: D10 neue Referate Öffentlichkeitsarbeit und Umwelt und Naturschutz (Q-DS6, Product Owner 26.10.2026).
 Änderungen v1.1: D3, D5, D6, D9 nach den Entscheidungen vom 26.10.2026 (Admin sieht Budget; Kennzeichen „darf Budget pflegen“; Gruppenleitungen ohne Budget).
 Grundlage: specs/ds-dashboard/00-steckbrief.md v0.4 (Q-DS7, Q-DS8, Q-DS12, Q-DS13, Q-DS14, D5), uebergabe-finanzen.md v1.2, spec.md AD v0.10.0 (`ad_modules`, `ad_template_rights`, R30), rollen.md v1.3.
 
@@ -24,3 +25,4 @@ Kennzeichnung: **[ANNAHME]** = Vorschlag, mit dem Product Owner zu bestätigen. 
 | D7 | **Startseite:** Für Nutzer mit DS-Recht zeigt die Startseite die passende Sicht statt der Willkommensgrafik; ohne DS-Recht bleibt die Startseite wie heute. | [ANNAHME] |
 | D8 | **Testzugänge in TEST:** Referent:in Kinder und Jugend und Vorstand mit DS lesen; Testzugang „Budget“ (1. Vorsitzender) für die Pflege; fiktive Budgetdaten im Seed. | – |
 | D9 | **Später:** Rechtevorlage Schatzmeister:in (FI-Vorlagen Q9) mit Budgetpflege; Reichweite „Gruppe“ für DS mit der Vorlage Gruppenleitung: Kennzahlen der eigenen Gruppe ohne Budget und Buchungen (Q-DS8, entschieden 26.10.2026). | – |
+| D10 | **Neue Referate** (Q-DS6, entschieden 26.10.2026): „Öffentlichkeitsarbeit“ und „Umwelt und Naturschutz“ in `ea_referate` per Migration ergänzen (dann 9 Referate). Wirkt in allen Modulen mit Reichweite „Referat“ (EA, EZ, TK, FI, DS); Kennzeichen „halbjährliche Abrechnung“ = nein [ANNAHME]. Startbestand der Referate in spec.md AD, glossar.md und modul-landkarte.md anpassen. | entschieden |
