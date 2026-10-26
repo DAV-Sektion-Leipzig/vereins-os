@@ -1,8 +1,9 @@
 # Spec: Finanzen (FI)
 
-Version: 0.1.2 · Status: Entwurf (zur Freigabe als Ready durch den Product Owner) · Stand: 26.10.2026 · Product Owner: Toni Werner
+Version: 0.2 · Status: Ready (freigegeben am 26.10.2026; Annahmen werden bei der Abnahme bestätigt) · Stand: 26.10.2026 · Product Owner: Toni Werner
 Stories: docs/specs/fi-finanzen/02-stories.md (US-FI-01 bis US-FI-17, v0.1)
 Grundlage: 00-steckbrief.md v0.5 (abgeschlossen), 01-erhebung.md v0.6 (R1–R30, C6, C7), 02-stories.md v0.1 (R31–R33), glossar.md v1.6, rollen.md v1.2, tech-stack.md, Übergaben FI → AD v1.3 (A1–A10), FI → EZ v1.2 (Z1–Z5), FI → TK v1.0; spec.md Administration v0.9 (`ad_rates`, `ad_rates_at`, `ea_person_names`), spec.md Anwesenheitserfassung v0.5 (`ez_events`, `ez_attendances`, `ez_climbing_points_report`)
+Änderungen v0.2: Status Ready (Product Owner 26.10.2026); [ANNAHME]-Punkte bleiben sichtbar und werden bei der Abnahme in TEST bestätigt. Voraussetzung der Umsetzung: Administration Nachtrag v0.10 und Anwesenheitserfassung Nachtrag v0.6.
 Änderungen v0.1.2: Namen der Anwesenheitserfassung bestätigt (spec.md EZ v0.6: `remuneration_kind_id`, `ez_settlement_basis`, `fi_attendance_locked`, `fi_event_locked`); Annahmen dazu entfallen.
 Änderungen v0.1.1: Namen an den Nachtrag v0.10 der Administration angeglichen (`ad_my_approve_referate`, `ad_can_approve`, `ad_remuneration_kinds`/`ad_remuneration_positions`, `ad_settlement_deadline`, `ad_payout_settings_at`, `ea_person_finance_data`); Annahme zu den AD-Namen entfällt.
 Änderungen v0.1: Erster Entwurf.
