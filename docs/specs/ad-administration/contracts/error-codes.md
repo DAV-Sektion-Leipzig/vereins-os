@@ -185,7 +185,7 @@ spec.md FI v0.2 Abschnitt 5; Datenbank umgesetzt (`20261031000100`–`…0700`),
 
 ## Planungshilfe Touren und Kurse (TK)
 
-spec.md TK v0.4 Abschnitt 5; Datenbank Stufe 2 umgesetzt (`20261105000100`–`…0700`), Anbindung der Anwesenheitserfassung (`TK_EZ_*`) mit Stufe 3, Oberfläche folgt.
+spec.md TK v0.4 Abschnitt 5; Datenbank Stufe 2 umgesetzt (`20261105000100`–`…0700`), Anbindung der Anwesenheitserfassung (`TK_EZ_*`) mit Stufe 3 (`20261106000200`), Oberfläche folgt.
 
 | Code | Meldung | Regel | Status |
 |---|---|---|---|
@@ -210,9 +210,9 @@ spec.md TK v0.4 Abschnitt 5; Datenbank Stufe 2 umgesetzt (`20261105000100`–`�
 | `TK_FIELD_INVALID` (Detail: Feld bzw. Check) | Bitte die Eingabe prüfen. [ANNAHME: technischer Code, Text je Feld im Frontend] | Abschnitt 2 | Datenbank umgesetzt |
 | `TK_REFERAT_MISSING` | Etwas ist schiefgelaufen. Bitte den Admin informieren. (Referat Touren bzw. Ausbildung fehlt in den Stammdaten; plan.md P3) | R12 | Datenbank umgesetzt |
 | `TK_FIELD_LOCKED` | Etwas ist schiefgelaufen. Bitte versuche es erneut. (Programmierfehler) | Abschnitt 2 | Datenbank umgesetzt |
-| `TK_EZ_FAILED` | Einsatz konnte nicht angelegt werden. Bitte später erneut versuchen. | R15 | folgt mit Stufe 3 (tasks.md T015) |
-| `TK_EZ_LOCKED` | Der Einsatz ist schon erfasst oder abgerechnet und wurde nicht geändert. Bitte in der Anwesenheitserfassung anpassen. (Absage: „Absage nicht möglich: Im Einsatz sind schon Personen als anwesend erfasst oder er ist abgerechnet.“) | R15 | folgt mit Stufe 3 (tasks.md T015) |
-| `TK_EZ_SYNC_FAILED` | Die Planung ist gespeichert, der Einsatz konnte nicht aktualisiert werden. Bitte später erneut speichern. [ANNAHME: Text] | R15 | folgt mit Stufe 3 (tasks.md T015) |
+| `TK_EZ_FAILED` | Einsatz konnte nicht angelegt werden. Bitte später erneut versuchen. | R15 | Datenbank umgesetzt (`20261106000200`) |
+| `TK_EZ_LOCKED` | Der Einsatz ist schon erfasst oder abgerechnet und wurde nicht geändert. Bitte in der Anwesenheitserfassung anpassen. (Absage: „Absage nicht möglich: Im Einsatz sind schon Personen als anwesend erfasst oder er ist abgerechnet.“) | R15 | Datenbank umgesetzt (`20261106000200`) |
+| `TK_EZ_SYNC_FAILED` | Die Planung ist gespeichert, der Einsatz konnte nicht aktualisiert werden. Bitte später erneut speichern. [ANNAHME: Text] | R15 | Datenbank umgesetzt (`20261106000200`) |
 
 ## Bereich Budget (FI, Dashboard DS)
 

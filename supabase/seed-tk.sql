@@ -3,7 +3,7 @@
 -- seed.sql (Personen 13–18 aus AD v0.9).
 -- Planungen werden über tk_save_plan mit dem Nutzerkontext der Testzugänge angelegt (Rechte, Kalkulation);
 -- Status ohne Prüfung der Pflichtangaben direkt gesetzt (nur Seed). Idempotent über client_request_id.
--- Planung 5 erhält ihren Einsatz mit Stufe 3 (tasks.md T015).
+-- Planung 5 (in Yolawo angelegt) erhält ihren Einsatz in der Anwesenheitserfassung über tk_ez_sync (Stufe 3).
 
 create function pg_temp.as_user(p_user uuid) returns void language plpgsql as $$
 begin
@@ -26,6 +26,9 @@ begin
     perform set_config('tk.status_change', 'on', true);
     update public.tk_plans set status = p_status where id = v_id;
     perform set_config('tk.status_change', '', true);
+    if p_status = 'published' then
+      perform public.tk_ez_sync(v_id);
+    end if;
     insert into public.tk_plan_history (plan_id, event, from_status, to_status, comment)
     values (v_id, case p_status when 'submitted' then 'submitted' when 'approved' then 'approved'
                                 when 'published' then 'published' when 'cancelled' then 'cancelled'
