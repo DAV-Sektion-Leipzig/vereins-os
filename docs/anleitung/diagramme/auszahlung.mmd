@@ -1,0 +1,8 @@
+%% Auszahlungsrunde
+flowchart LR
+  A["„Neue Runde“<br/>Halbjahr und Ausführungsdatum"] --> B["Abgegebene Abrechnungen<br/>auswählen"]
+  B --> C["Vorschau prüfen"]
+  C --> D["„Freigeben“"]
+  D --> E["Auszahlliste (PDF)"]
+  D --> F["Überweisungsdatei (XML)<br/><small>bei der Sparkasse hochladen</small>"]
+  D --> G["Abrechnungen sind<br/>„ausgezahlt“"]

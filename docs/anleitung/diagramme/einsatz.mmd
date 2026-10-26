@@ -1,0 +1,10 @@
+%% Ein Einsatz von der Erfassung bis zur Abrechnung
+flowchart TD
+  A["„Neuer Einsatz“<br/>Einsatzart wählen"] --> B["Gruppe, Datum, Ort<br/>bzw. Titel und Zeiten eintragen"]
+  B --> C["Anwesende ankreuzen<br/><small>Trainer:in, Helfer:in, Teilnehmer:in</small>"]
+  C --> D["Speichern"]
+  D --> E{"Fand der<br/>Einsatz statt?"}
+  E -- "ja" --> F["Einsatz bleibt gespeichert<br/><small>korrigieren jederzeit möglich</small>"]
+  E -- "nein" --> G["„Absagen“ mit Grund<br/><small>kann zurückgenommen werden</small>"]
+  F --> H["Finanzen rechnet ab"]
+  H --> I["Nach dem Abschluss der Abrechnung<br/>ist die Anwesenheit gesperrt"]

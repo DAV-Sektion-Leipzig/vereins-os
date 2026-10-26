@@ -1,0 +1,9 @@
+%% Ehrenamtsstatus einer Person
+stateDiagram-v2
+  direction LR
+  [*] --> aktiv: Person anlegen
+  aktiv --> ruhend: macht Pause
+  ruhend --> aktiv: macht wieder mit
+  aktiv --> ausgeschieden: hört auf
+  ruhend --> ausgeschieden: hört auf
+  ausgeschieden --> aktiv: kommt zurück

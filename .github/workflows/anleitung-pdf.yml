@@ -1,0 +1,68 @@
+# PDF der Anleitung (docs/anleitung) für jeden Stand von main (= PROD).
+# Hat die Anleitung eine neue Version (Zeile „Version x.y“ in docs/anleitung/README.md), legt der Workflow ein
+# Release „anleitung-v<Version>“ mit dem PDF an. Ohne neue Version wird nur das Artefakt des Laufs aktualisiert.
+# Greift auf keine Supabase-Umgebung zu; die Bilder liegen eingecheckt im Repository.
+name: Anleitung als PDF
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - docs/anleitung/**
+      - scripts/anleitung/**
+      - .github/workflows/anleitung-pdf.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Abhängigkeiten installieren
+        run: npm ci
+
+      - name: Chromium für Playwright installieren
+        run: npx playwright install --with-deps chromium
+
+      - name: PDF erzeugen
+        run: npm run anleitung:pdf
+
+      - name: Version lesen
+        id: version
+        run: |
+          version="$(sed -n 's/^Stand: .* · Version \([0-9]\+\.[0-9]\+\)$/\1/p' docs/anleitung/README.md | head -n1)"
+          test -n "$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "file=docs/anleitung/dist/vereins-os-anleitung-v$version.pdf" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: anleitung-v${{ steps.version.outputs.version }}
+          path: ${{ steps.version.outputs.file }}
+
+      - name: Release anlegen (nur bei neuer Version)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          FILE: ${{ steps.version.outputs.file }}
+        run: |
+          tag="anleitung-v$VERSION"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag gibt es schon; kein neues Release."
+            exit 0
+          fi
+          notes="$(sed -n "s/^Änderungen v$VERSION: //p" docs/anleitung/README.md | head -n1)"
+          gh release create "$tag" "$FILE" \
+            --target "$GITHUB_SHA" \
+            --title "Anleitung Vereins OS $VERSION" \
+            --notes "${notes:-Anleitung Vereins OS, Version $VERSION.}" \
+            --latest=false
