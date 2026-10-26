@@ -7,10 +7,10 @@ select results_eq(
   $$ select r.module_code, r.level::text, r.scope::text
        from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
       where t.name = 'Referent:in' order by r.module_code $$,
-  $$ values ('AD'::text, 'none'::text, 'all'::text), ('AM', 'none', 'all'), ('EA', 'edit', 'referat'),
+  $$ values ('AD'::text, 'none'::text, 'all'::text), ('AM', 'none', 'all'), ('DS', 'read', 'referat'), ('EA', 'edit', 'referat'),
             ('EZ', 'edit', 'referat'), ('FI', 'read', 'referat'), ('GR', 'none', 'all'), ('GS', 'none', 'all'), ('OA', 'none', 'all'),
             ('PM', 'none', 'all'), ('SC', 'none', 'all') $$,
-  'Referent:in: EA und EZ bearbeiten, FI lesen (Nachtrag v0.10), je Reichweite Referat; übrige Module kein Zugriff');
+  'Referent:in: EA und EZ bearbeiten, FI lesen (Nachtrag v0.10), DS lesen (Dashboard), je Reichweite Referat; übrige Module kein Zugriff');
 select results_eq(
   $$ select r.module_code from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
       where t.name = 'Referent:in' and r.can_approve order by r.module_code $$,
@@ -21,8 +21,8 @@ select is(
   'read', 'Admin: Gruppen lesen (E5)');
 select is(
   (select r.level::text from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
-    where t.name = 'Vorstand' and r.level <> 'none' limit 1),
-  null, 'Vorstand weiter ohne Rechte');
+    where t.name = 'Vorstand' and r.level <> 'none' and r.module_code <> 'DS' limit 1),
+  null, 'Vorstand weiter ohne Rechte außer Dashboard lesen (spec.md DS D3)');
 
 -- Zweiter Lauf ändert nichts und überschreibt keine Änderung des Admins
 update public.ad_template_rights r set level = 'read'
