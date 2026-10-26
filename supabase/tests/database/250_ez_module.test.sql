@@ -27,9 +27,10 @@ select results_eq(
   $$ select t.name, r.level::text, r.scope::text
        from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
       where r.module_code = 'EZ' order by t.name $$,
-  $$ values ('Admin'::text, 'read'::text, 'all'::text), ('Freigabe Touren und Kurse', 'none', 'all'),
-            ('Geschäftsstelle', 'manage', 'all'), ('Referent:in', 'edit', 'referat'), ('Vorstand', 'none', 'all') $$,
-  'Startwerte EZ: Admin lesen, Geschäftsstelle verwalten, Referent:in bearbeiten (Referat), Vorstand und Freigabe ohne');
+  $$ values ('Admin'::text, 'read'::text, 'all'::text), ('Budgetpflege', 'none', 'all'),
+            ('Freigabe Touren und Kurse', 'none', 'all'), ('Geschäftsstelle', 'manage', 'all'),
+            ('Referent:in', 'edit', 'referat'), ('Vorstand', 'none', 'all') $$,
+  'Startwerte EZ: Admin lesen, Geschäftsstelle verwalten, Referent:in bearbeiten (Referat), Vorstand, Budgetpflege und Freigabe ohne');
 
 -- Wirkung je Testzugang (A5)
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');

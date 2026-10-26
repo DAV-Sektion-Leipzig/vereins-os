@@ -43,7 +43,8 @@ select results_eq(
   $$ select t.name, r.level::text, r.scope::text, r.can_approve
        from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
       where r.module_code = 'TK' order by t.name $$,
-  $$ values ('Admin'::text, 'read'::text, 'all'::text, false), ('Freigabe Touren und Kurse', 'edit', 'referat', true),
+  $$ values ('Admin'::text, 'read'::text, 'all'::text, false), ('Budgetpflege', 'none', 'all', false),
+            ('Freigabe Touren und Kurse', 'edit', 'referat', true),
             ('Geschäftsstelle', 'manage', 'all', false), ('Referent:in', 'edit', 'referat', false),
             ('Vorstand', 'none', 'all', false) $$,
   'Startwerte TK: Admin lesen, Geschäftsstelle verwalten, Referent:in bearbeiten (Referat), Freigabe bearbeiten + freigeben');
