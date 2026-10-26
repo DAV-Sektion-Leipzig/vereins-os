@@ -118,3 +118,11 @@ export function nextWorkday(today = todayIso()): string {
   while (date.getUTCDay() === 0 || date.getUTCDay() === 6)
   return date.toISOString().slice(0, 10)
 }
+
+const MONTHS = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
+
+/** Monat ausgeschrieben, z. B. „Dezember 2026“ (Buchungslauf, R42). */
+export function monthLabel(month: string): string {
+  const [y, m] = month.split('-').map(Number)
+  return `${MONTHS[m - 1]} ${y}`
+}

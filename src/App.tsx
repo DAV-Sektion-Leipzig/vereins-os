@@ -83,6 +83,9 @@ import { AuszahlungsrundePage } from '@/features/fi/auszahlungen/Auszahlungsrund
 import { loadRun, loadRuns } from '@/features/fi/auszahlungen/data'
 import { AbrechnungDetailPage } from '@/features/fi/detail/AbrechnungDetailPage'
 import { loadSettlement } from '@/features/fi/detail/data'
+import { loadCollectionRun, loadCollectionRuns } from '@/features/fi/einzug/data'
+import { EinzugLaufPage } from '@/features/fi/einzug/EinzugLaufPage'
+import { EinzugPage } from '@/features/fi/einzug/EinzugPage'
 import { FiLayout } from '@/features/fi/FiLayout'
 import { loadClimbing } from '@/features/fi/kletterhalle/data'
 import { KletterhallePage as FiKletterhallePage } from '@/features/fi/kletterhalle/KletterhallePage'
@@ -226,6 +229,8 @@ export const router = createBrowserRouter([
           { path: 'abrechnung/:id', loader: loadSettlement, element: <AbrechnungDetailPage /> },
           { path: 'auszahlungen', loader: loadRuns, element: <AuszahlungenPage /> },
           { path: 'auszahlungen/:id', loader: loadRun, element: <AuszahlungsrundePage /> },
+          { path: 'einzug', loader: loadCollectionRuns, element: <EinzugPage /> },
+          { path: 'einzug/:id', loader: loadCollectionRun, element: <EinzugLaufPage /> },
           { path: 'kletterhalle', loader: loadClimbing, element: <FiKletterhallePage /> },
           { path: '*', loader: () => redirect('/fi') },
         ],
