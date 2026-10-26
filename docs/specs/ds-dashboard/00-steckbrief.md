@@ -2,6 +2,7 @@
 
 Stand: 26.10.2026 · Version 0.13 · Kürzel: DS [ANNAHME] · Priorität: Budget-Sicht früh (nach dem Kern der Administration), Referats-Kennzahlen nach EZ und FI · Ablage: docs/specs/ds-dashboard/ · Status: Entwurf · Product Owner: Toni Werner
 Grundlage: vision.md v0.4, modul-landkarte.md v2.17, rollen.md v1.3, glossar.md, offene-punkte.md v5.15, specs/fi-finanzen/00-steckbrief.md v0.5 (Nicht im Scope: „Budget-Übersicht, Dashboard: später“), specs/gr-gruppen/00-steckbrief.md v0.7 und specs/ez-einsaetze/00-steckbrief.md v0.9 (Auslastung, Betreuungsschlüssel in Iteration 2), specs/tk-touren-kurse/00-steckbrief.md v0.7 (Kosten- und CO2-Auswertung), Prototyp Budget-Dashboard (Übergabe: prototyp-budget-dashboard.md v1.0), Ideenkatalog ideen-sichten.md v0.1.
+Änderungen v0.13.1: Erhebung v0.1 und Stories v0.1 (US-DS-01 bis US-DS-22) für den MVP erstellt.
 Änderungen v0.13: Gruppendetail (Product Owner 26.10.2026): Anwesenheit je Teilnehmer:in bleibt; Verlauf der Gruppen über 4 Halbjahre (Ausnahme zu Q-DS19, das für Budget und übrige Kennzahlen gilt).
 Änderungen v0.12: Regel „eine Quelle für Geld“ (Product Owner 26.10.2026): Beträge des Budgets nur aus Finanzplan und DATEV-Import, nicht aus Buchungsläufen.
 Änderungen v0.11: Grundsatz (Product Owner 26.10.2026): Referent:innen steuern ihre Gruppen mit dem Dashboard (Entscheidungen anhand der Kennzahlen); Gruppendetail mit Namen und Hinweisen über das Recht auf das Dashboard; Übergabe an Gruppen (uebergabe-gruppen.md v1.0).
