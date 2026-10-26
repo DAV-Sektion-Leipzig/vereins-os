@@ -25,7 +25,7 @@ $$;
 
 -- Modul (D1, plan.md P1)
 select results_eq($$ select name, sort_order, is_available from public.ad_modules where code = 'DS' $$,
-  $$ values ('Dashboard'::text, 1, false) $$, 'Modul DS „Dashboard“ an erster Stelle, noch nicht verfügbar');
+  $$ values ('Dashboard'::text, 1, true) $$, 'Modul DS „Dashboard“ an erster Stelle, verfügbar (Freigabe 27.10.2026)');
 select is((select count(*)::int from public.ad_templates t
             where not exists (select 1 from public.ad_template_rights r
                                where r.template_id = t.id and r.module_code = 'DS')),

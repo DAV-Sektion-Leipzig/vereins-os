@@ -10,7 +10,7 @@ Du siehst die Daten **deines Referats**. Hast du mehrere Referate, siehst du all
 
 | Modul | Was du dort tust | Stand |
 |---|---|---|
-| Dashboard | Budget deines Referats sehen, Hinweise eintragen, Umschichtungen beantragen | in Vorbereitung |
+| Dashboard | Budget deines Referats sehen, Hinweise eintragen, Umschichtungen beantragen | freigeschaltet |
 | Ehrenamtsmanagement | Aktive deines Referats finden, anlegen und pflegen | freigeschaltet |
 | Anwesenheitserfassung | Trainings, Fahrten und andere Einsätze deines Referats erfassen | freigeschaltet |
 | Finanzen | Abrechnungen deines Referats als „sachlich richtig“ bestätigen | freigeschaltet (für Kinder und Jugend und Leistungssport) |
@@ -20,7 +20,7 @@ Du siehst die Daten **deines Referats**. Hast du mehrere Referate, siehst du all
 
 ## Dashboard: Budget meines Referats
 
-*Das Dashboard ist in Vorbereitung. Die Bilder zeigen erfundene Testdaten.*
+*Die Bilder zeigen erfundene Testdaten.*
 
 Im Dashboard siehst du, wie viel Geld dein Referat im Jahr hat und wie viel schon ausgegeben ist. Du musst nicht mehr nachfragen.
 

@@ -4,7 +4,7 @@ Für alle mit der Rechtevorlage „Budgetpflege“, zum Beispiel 1. Vorsitzende:
 
 [Zurück zur Übersicht](README.md) · Zuerst lesen: [Erste Schritte](01-erste-schritte.md) und den Abschnitt [Dashboard](02-referentinnen.md#dashboard-budget-meines-referats)
 
-*Das Dashboard ist in Vorbereitung. Die Bilder zeigen erfundene Testdaten.*
+*Die Bilder zeigen erfundene Testdaten.*
 
 ## Was du tust
 
