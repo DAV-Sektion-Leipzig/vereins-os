@@ -1,60 +1,70 @@
 # Erhebung: Finanzen
 
-Datum: 25.10.2026 · Version 0.3 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner); Geschäftsstelle und Schatzmeister:in noch nicht befragt [OFFEN]
-Grundlage: 00-steckbrief.md v0.1 (MVP-Schnitt, Entscheidungen 24.10.2026); specs/ez-einsaetze/uebergabe-finanzen.md v1.6 (F1–F9); specs/tk-touren-kurse/uebergabe-finanzen.md v1.3; specs/ez-einsaetze/spec.md v0.5; specs/ad-administration/spec.md v0.9; specs/ea-ehrenamt/01-erhebung.md v0.5 (C2); Vergütungsordnung (Beschluss 21.11.2023, ergänzt 11.12.2025, Anhang 1)
+Datum: 26.10.2026 · Version 0.4 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner); Vorlagen der Geschäftsstelle: Auszahlliste (PDF) und SEPA-Datei (XML) einer Auszahlung der Übungsleitervergütung (Muster mit Echtdaten, nicht im Repository)
+Grundlage: 00-steckbrief.md v0.4; specs/ez-einsaetze/uebergabe-finanzen.md v1.6 (F1–F9); specs/tk-touren-kurse/uebergabe-finanzen.md v1.3; specs/ez-einsaetze/spec.md v0.5; specs/ad-administration/spec.md v0.9; specs/ea-ehrenamt/01-erhebung.md v0.5 (C2); Vergütungsordnung (Beschluss 21.11.2023, ergänzt 11.12.2025, Anhang 1)
+Änderungen v0.4: Vorlagen der Geschäftsstelle eingearbeitet (Product Owner 26.10.2026): Auszahlung in **Auszahlungsrunden**; die Freigabe einer Runde erzeugt **Auszahlliste (PDF)** für die Ablage in der Buchhaltung und **Überweisungsdatei (XML, pain.001.001.03)** für die Sparkasse (B5, C3, C6, C7, R24–R30); je Person und Gruppe eine Zeile und eine Überweisung; „sachlich richtig“ auf der Auszahlliste = Bestätigung im Vereins OS. Begriff: Die einzelne Abrechnung wird **abgeschlossen** (bisher „freigegeben“), freigegeben wird nur die Auszahlungsrunde [ANNAHME: Begriff, damit „Freigabe“ eindeutig bleibt].
 Änderungen v0.3: Höchstbetrag im Jahr der Auszahlung (R11), Vertretung bei der Bestätigung (R23), Erklärung auf dem Abrechnungsdokument (R18), Belege in der Finanzbuchhaltung bestätigt (F) (Product Owner 25.10.2026).
-Änderungen v0.2: Entscheidungen des Product Owners vom 25.10.2026 eingearbeitet: Bestätigung durch die Referent:in vor der Freigabe (Zustand „bestätigt“, Abschnitt A, B3, R23), Trainervereinbarung als Voraussetzung (R14), Training ohne Trainingszeit (R4), Probetrainings getrennt (B6).
+Änderungen v0.2: Entscheidungen des Product Owners vom 25.10.2026 eingearbeitet: Bestätigung durch die Referent:in (Zustand „bestätigt“, Abschnitt A, B3a, R23), Trainervereinbarung als Voraussetzung (R14), Training ohne Trainingszeit (R4), Probetrainings getrennt (B6).
 Änderungen v0.1: Erster Entwurf für den MVP (halbjährliche Abrechnung, Überweisungsdatei, Abgleich Punktekonto). Iteration 1 nur in Stichpunkten (Abschnitt B7).
 
-Begriffe nach glossar.md; neue Begriffe (Abrechnungsart, Position, Abrechnungsdokument, Abgabe, Überweisungsdatei, Abgleich Punktekonto, steuerfreier Höchstbetrag) als Vorschlag im Steckbrief.
+Begriffe nach glossar.md; neue Begriffe (Abrechnungsart, Position, Abrechnungsdokument, abschließen, Abgabe, Auszahlungsrunde, Auszahlliste, Auszahlzeile, Überweisungsdatei, Abgleich Punktekonto, steuerfreier Höchstbetrag) als Vorschlag im Steckbrief.
 
 ## A. Rechtevorlagen & Rechte
 
 | Rechtevorlage | FI | Was | Reichweite |
 |---|---|---|---|
-| Geschäftsstelle | verwalten | Abrechnungen erstellen, neu berechnen, korrigieren, freigeben, Freigabe zurücknehmen, Abgabe und Verfall erfassen, Abrechnungsdokument drucken, Überweisungsdatei erzeugen, Abgleich Punktekonto | alle |
-| Admin | – | kein Zugriff auf Finanzen; pflegt Sätze, Abrechnungsarten, Vorbelegung, Fristen, Höchstbetrag in der Administration | – |
-| Referent:in | lesen + Aktion „freigeben“ (Q1) [ANNAHME: Stufe] | Abrechnungen ihres Referats ansehen (nur Positionen des eigenen Referats, Hinweise ohne Nachweisdaten), Ausnahme (Lizenz) begründen, Positionen ihres Referats bestätigen; keine Bankverbindung, keine Überweisungsdatei, kein Abgleich Punktekonto | Referat (MVP: Kinder und Jugend, Leistungssport) |
-| Vorstand | – | Startwert ohne Rechte | – |
-| Schatzmeister:in, Kassenprüfung (nach MVP) | lesen [ANNAHME] | Abrechnungen und Überweisungsdateien einsehen; ggf. „freigeben“ als eigene Aktion (Q1) | alle |
+| Geschäftsstelle | verwalten | Abrechnungen erstellen, neu berechnen, korrigieren, abschließen, Abschluss zurücknehmen, Abrechnungsdokument drucken, Abgabe und Verfall erfassen, Auszahlungsrunde zusammenstellen und freigeben (Auszahlliste und Überweisungsdatei), Abgleich Punktekonto | alle |
+| Admin | – | kein Zugriff auf Finanzen; pflegt Sätze, Abrechnungsarten, Vorbelegung, Fristen, Höchstbetrag, Angaben der Sektion für die Auszahlung in der Administration | – |
+| Referent:in | lesen + Aktion „freigeben“ (Q1) [ANNAHME: Stufe] | Abrechnungen ihres Referats ansehen (nur Positionen des eigenen Referats, Hinweise ohne Nachweisdaten), Ausnahme (Lizenz) begründen, Positionen ihres Referats bestätigen; keine Bankverbindung, keine Auszahlungsrunde, kein Abgleich Punktekonto | Referat (MVP: Kinder und Jugend, Leistungssport) |
+| Vorstand | – | Startwert ohne Rechte; unterschreibt die Auszahlliste auf Papier („gf Vorstand“) | – |
+| Schatzmeister:in, Kassenprüfung (nach MVP) | lesen [ANNAHME] | Abrechnungen und Auszahlungsrunden einsehen | alle |
 
-- Vier-Augen-Prinzip (Product Owner 25.10.2026): Die Referent:in bestätigt, die Geschäftsstelle gibt frei. „Freigeben“ und „Überweisungsdatei erzeugen“ der Geschäftsstelle sind Teil von „verwalten“ (rollen.md 5: Abläufe auslösen) [ANNAHME]; das Bestätigen der Referent:in ist die eigene Aktion „freigeben“ nach Q1 mit Reichweite „Referat“ [ANNAHME: Zuordnung].
-- Eine Person der Geschäftsstelle, die zugleich Referent:in ist, darf nicht dieselbe Abrechnung bestätigen und freigeben [ANNAHME].
+- Vier-Augen-Prinzip (Product Owner 25.10.2026): Die Referent:in bestätigt, die Geschäftsstelle schließt ab und gibt die Auszahlungsrunde frei. Die Bestätigung ist die Unterschrift „sachlich richtig“ der Auszahlliste (Product Owner 26.10.2026); „gf Vorstand“ und „angewiesen“ werden weiter auf Papier unterschrieben.
+- Das Bestätigen der Referent:in ist die eigene Aktion „freigeben“ nach Q1 mit Reichweite „Referat“ [ANNAHME: Zuordnung]. Abschließen und Freigeben der Auszahlungsrunde durch die Geschäftsstelle sind Teil von „verwalten“ (rollen.md 5: Abläufe auslösen) [ANNAHME].
+- Eine Person der Geschäftsstelle, die zugleich Referent:in ist, darf nicht dieselbe Abrechnung bestätigen und abschließen [ANNAHME].
 - Personendaten (Bankverbindung, Nachweise, Lizenzen) liest Finanzen nur über die Lesefunktion der Administration (Übergabe FI → AD, A8); Referent:innen erhalten daraus nur die berechneten Hinweise, nicht die Daten; Namen über `ea_person_names` (A9).
 - Einsätze und Anwesenheiten liest Finanzen über eine Lesefunktion der Anwesenheitserfassung mit FI-Rechten (Übergabe FI → EZ, Z2).
 
 ## B. Abläufe (inkl. Zustände)
 
+Überblick: Abrechnung je Person und Halbjahr berechnen → Referent:in bestätigt → Geschäftsstelle schließt ab (Abrechnungsdokument zur Unterschrift, Sperre) → Person gibt unterschrieben ab → Geschäftsstelle stellt eine Auszahlungsrunde zusammen und gibt sie frei → Auszahlliste (PDF) und Überweisungsdatei (XML).
+
 **B1 – Halbjahresabrechnung erstellen**
 1. Geschäftsstelle wählt das Abrechnungshalbjahr (1. Halbjahr 01.01.–30.06., 2. Halbjahr 01.07.–31.12.).
 2. Das System sucht alle nicht abgesagten Einsätze mit Abrechnungsart der Referate mit Kennzeichen „halbjährliche Abrechnung“ (Kinder und Jugend, Leistungssport), deren Datum (mehrtägig: Startdatum) im Halbjahr liegt (R1, R2).
-3. Je Person mit Anwesenheit „anwesend“ als Trainer:in oder Helfer:in entsteht eine Abrechnung im Zustand **Entwurf** mit einer Position je Einsatz und Satz (R3–R10).
+3. Je Person mit Anwesenheit „anwesend“ als Trainer:in oder Helfer:in entsteht eine Abrechnung im Zustand **Entwurf** mit einer Position je Einsatz und Satz (R3–R10). Jede Position trägt die Gruppe des Einsatzes (R24).
 4. Hinweise je Abrechnung und Position (R11–R14).
-5. Für Personen, die schon eine Abrechnung für das Halbjahr haben, werden nur Entwürfe neu berechnet; freigegebene Abrechnungen bleiben unverändert (R15). Neue Anwesenheiten nach der Freigabe erscheinen als Hinweis „nicht abgerechnete Einsätze“ [ANNAHME].
+5. Für Personen, die schon eine Abrechnung für das Halbjahr haben, werden nur Entwürfe neu berechnet; abgeschlossene Abrechnungen bleiben unverändert (R15). Neue Anwesenheiten nach dem Abschluss erscheinen als Hinweis „nicht abgerechnete Einsätze“ [ANNAHME].
 
 **B2 – Prüfen und korrigieren**
-- Liste der Abrechnungen des Halbjahres: Person, Referat(e), Betrag, Hinweise, Zustand; Filter nach Zustand und Hinweis.
+- Liste der Abrechnungen des Halbjahres: Person, Referat(e), Gruppe(n), Betrag, Hinweise, Zustand; Filter nach Zustand und Hinweis.
 - Je Position Korrektur mit Pflichtbegründung: Satz Trainer:in statt Helfer:in (Ausnahme Lizenz, Begründung der Referent:in), Halbtagessatz statt Tagessatz, Menge (z. B. Trainingseinheiten bei Training ohne Trainingszeit) (R16).
 - Korrekturen bleiben bei erneuter Berechnung erhalten, solange der Einsatz unverändert in der Abrechnung steckt [ANNAHME].
 
-**B3a – Bestätigen durch die Referent:in**
+**B3a – Bestätigen durch die Referent:in („sachlich richtig“)**
 - Referent:in sieht die Abrechnungen mit Positionen ihres Referats (Filter: zu bestätigen), begründet ggf. Ausnahmen (Lizenz) und bestätigt die Positionen ihres Referats.
 - Sind alle beteiligten Referate bestätigt → Zustand **bestätigt**. Ändert die Geschäftsstelle danach eine Position oder wird neu berechnet, fällt die Bestätigung des betroffenen Referats zurück → **Entwurf** [ANNAHME].
 
-**B3 – Freigeben**
-- Geschäftsstelle gibt eine oder mehrere bestätigte Abrechnungen frei → Zustand **freigegeben**. Die Anwesenheiten der Positionen werden in der Anwesenheitserfassung gesperrt (R17).
-- Abrechnungsdokument je Person als PDF zum Ausdrucken (Abschnitt C, R18); Unterschrift auf Papier.
-- Rücknahme der Freigabe → zurück zu **Entwurf** (Bestätigungen entfallen), Sperre aufgehoben; nur vor der Abgabe [ANNAHME].
+**B3 – Abschließen**
+- Geschäftsstelle schließt eine oder mehrere bestätigte Abrechnungen ab → Zustand **abgeschlossen**. Die Anwesenheiten der Positionen werden in der Anwesenheitserfassung gesperrt (R17).
+- Abrechnungsdokument je Person als PDF zum Ausdrucken (R18); Unterschrift der Person auf Papier.
+- Rücknahme des Abschlusses → zurück zu **Entwurf** (Bestätigungen entfallen), Sperre aufgehoben; nur vor der Abgabe [ANNAHME].
 
 **B4 – Abgabe und Frist**
 - Geschäftsstelle trägt „unterschrieben abgegeben am“ ein → Zustand **abgegeben**. Liegt das Datum nach der Abgabefrist, fragt das System nach (R19).
 - Nach Ablauf der Frist ohne Abgabe: Liste „Frist abgelaufen“; die Geschäftsstelle setzt **verfallen** [ANNAHME: manuell, kein automatischer Wechsel]. Verfallene Abrechnungen werden nicht ausgezahlt; die Sperre bleibt [ANNAHME].
 
-**B5 – Überweisungsdatei erzeugen**
-- Geschäftsstelle wählt abgegebene Abrechnungen (Standard: alle abgegebenen, noch nicht ausgezahlten) und das Ausführungsdatum.
-- Ausgeschlossen mit Hinweis: ohne Bankverbindung, ohne Bestätigung steuerfreie Einnahmen für das Jahr, ohne Trainervereinbarung (R12–R14), Betrag 0.
-- Das System erzeugt die SEPA-Datei (Download) und setzt die enthaltenen Abrechnungen auf **ausgezahlt** (in Datei übernommen am, Ausführungsdatum) (R20). Die Geschäftsstelle lädt die Datei im Online-Banking hoch (außerhalb des Vereins OS).
-- [OFFEN] Rücknahme, wenn die Bank die Datei ablehnt (Vorschlag: Überweisungsdatei stornieren → Abrechnungen wieder „abgegeben“).
+**B5 – Auszahlungsrunde (Product Owner 26.10.2026)**
+1. Geschäftsstelle legt für ein Abrechnungshalbjahr eine neue Auszahlungsrunde an (Nummer fortlaufend je Halbjahr: Runde 1, 2, 3 …) und wählt das Ausführungsdatum.
+2. Das System schlägt alle abgegebenen, noch nicht ausgezahlten Abrechnungen des Halbjahres vor; die Geschäftsstelle kann einzelne abwählen. Ausgeschlossen mit Hinweis: ohne Bankverbindung, ohne Bestätigung steuerfreie Einnahmen für das Jahr, ohne Trainervereinbarung (R12–R14), Betrag 0.
+3. Vorschau: Auszahlzeilen je Person und Gruppe (R24) mit Summe; Hinweis auf geänderte Bankverbindungen seit der letzten Auszahlung [ANNAHME].
+4. **Freigeben** der Runde → Zustand **freigegeben**; das System erzeugt in einem Schritt:
+   - **Auszahlliste (PDF)** für die Ablage in der Buchhaltung (C6, R27),
+   - **Überweisungsdatei (XML, pain.001.001.03)** für das Online-Banking der Sparkasse (C7, R26),
+   beide mit denselben Zeilen und derselben Summe (R28). Die enthaltenen Abrechnungen werden **ausgezahlt** (in Runde n, Ausführungsdatum).
+5. Geschäftsstelle lädt die XML im Online-Banking hoch, druckt die Auszahlliste, holt die Unterschriften „gf Vorstand“ und „angewiesen“ ein und gibt sie mit dem Kontoauszug an die Buchhaltung (außerhalb des Vereins OS).
+6. Erneuter Download beider Dateien einer freigegebenen Runde ist möglich, mit Warnung „Diese Runde ist bereits freigegeben. Die Überweisungsdatei nicht erneut hochladen.“ (R29).
+- [OFFEN] Rücknahme einer freigegebenen Runde, wenn die Bank die Datei ablehnt (Vorschlag: Runde stornieren → Abrechnungen wieder „abgegeben“, neue Runde).
 
 **B6 – Abgleich Punktekonto Kletterhalle**
 - Geschäftsstelle wählt Ort (nur Orte mit Kennzeichen „Punktekonto Kletterhalle“) und Zeitraum der Rechnung.
@@ -63,7 +73,7 @@ Begriffe nach glossar.md; neue Begriffe (Abrechnungsart, Position, Abrechnungsdo
 - [OFFEN] Zählen Probetrainings für die Halle mit? Bis zur Klärung durch die Geschäftsstelle beide Summen (Product Owner 25.10.2026).
 
 **B7 – Iteration 1 (Stichpunkte, Erhebung folgt)**
-- Einzelabrechnung je Einsatz (Kurs, Tour, vergütete Einsätze anderer Referate) mit Lehreinheiten, Tagen, Organisationspauschale von Hand; Vorbelegung aus der Planungshilfe (`tk_settlement_draft`); Gemeinschaftstour nur Organisationspauschale.
+- Einzelabrechnung je Einsatz (Kurs, Tour, vergütete Einsätze anderer Referate) mit Lehreinheiten, Tagen, Organisationspauschale von Hand; Vorbelegung aus der Planungshilfe (`tk_settlement_draft`); Gemeinschaftstour nur Organisationspauschale; Auszahlung über dieselben Auszahlungsrunden [ANNAHME].
 - Reisekosten und Kostenerstattung nach Reisekostenordnung; Kosten bei Absage von Hand.
 - Liste „durchgeführt, noch nicht abgerechnet, älter als 4 Wochen“.
 
@@ -75,30 +85,40 @@ Begriffe nach glossar.md; neue Begriffe (Abrechnungsart, Position, Abrechnungsdo
 | Entwurf | Entwurf | Geschäftsstelle | neu berechnen, korrigieren |
 | Entwurf | bestätigt | Referent:in(nen) | alle beteiligten Referate bestätigt (R23) |
 | bestätigt | Entwurf | Geschäftsstelle / System | Korrektur oder Neuberechnung nach der Bestätigung |
-| bestätigt | freigegeben | Geschäftsstelle | Betrag > 0 [ANNAHME]; nicht dieselbe Person wie bei der Bestätigung; Sperre der Anwesenheiten |
-| freigegeben | Entwurf | Geschäftsstelle | Rücknahme vor der Abgabe; Sperre aufgehoben |
-| freigegeben | abgegeben | Geschäftsstelle | Abgabedatum eingetragen |
-| freigegeben | verfallen | Geschäftsstelle | Frist abgelaufen ohne Abgabe |
-| abgegeben | ausgezahlt | System | in Überweisungsdatei übernommen |
+| bestätigt | abgeschlossen | Geschäftsstelle | Betrag > 0 [ANNAHME]; nicht dieselbe Person wie bei der Bestätigung; Sperre der Anwesenheiten |
+| abgeschlossen | Entwurf | Geschäftsstelle | Rücknahme vor der Abgabe; Sperre aufgehoben |
+| abgeschlossen | abgegeben | Geschäftsstelle | Abgabedatum eingetragen |
+| abgeschlossen | verfallen | Geschäftsstelle | Frist abgelaufen ohne Abgabe |
+| abgegeben | ausgezahlt | System | Freigabe der Auszahlungsrunde (B5) |
 | Entwurf | – (gelöscht) | Geschäftsstelle | Entwurf verwerfen [ANNAHME] |
+
+**Zustände der Auszahlungsrunde**
+
+| Von | Nach | Wer | Bedingung |
+|---|---|---|---|
+| – | Entwurf | Geschäftsstelle | Runde anlegen, Abrechnungen wählen, Ausführungsdatum |
+| Entwurf | Entwurf | Geschäftsstelle | Auswahl ändern |
+| Entwurf | freigegeben | Geschäftsstelle | mindestens eine Auszahlzeile; Angaben der Sektion vollständig (A10); erzeugt PDF und XML |
+| Entwurf | – (gelöscht) | Geschäftsstelle | Runde verwerfen |
+| freigegeben | storniert | Geschäftsstelle | [OFFEN] bei Ablehnung durch die Bank |
 
 ## C. Daten (Feld | Typ | Pflicht | Beispiel | Quelle)
 
-Tabellen mit Präfix `fi_` (Namen [ANNAHME], Festlegung in der Spec).
+Tabellen mit Präfix `fi_` (Namen [ANNAHME], Festlegung in der Spec). Beispiele fiktiv.
 
 **C1 – Abrechnung (`fi_settlements`)**
 
 | Feld | Typ | Pflicht | Beispiel | Quelle |
 |---|---|---|---|---|
 | Person | Verweis Person | ja | Trainerin A | Anwesenheitserfassung |
-| Abrechnungshalbjahr | Jahr + Halbjahr | ja | 2026 / 2 | Auswahl |
-| Zustand | Auswahl (Entwurf, bestätigt, freigegeben, abgegeben, verfallen, ausgezahlt) | ja | freigegeben | System |
-| Bestätigung je Referat | Referat, bestätigt am / von | nein | Kinder und Jugend, 25.11.2026 | Referent:in |
+| Abrechnungshalbjahr | Jahr + Halbjahr | ja | 2026 / 1 | Auswahl |
+| Zustand | Auswahl (Entwurf, bestätigt, abgeschlossen, abgegeben, verfallen, ausgezahlt) | ja | abgegeben | System |
+| Bestätigung je Referat | Referat, bestätigt am / von, Vertretung mit Begründung | nein | Kinder und Jugend, 10.07.2026 | Referent:in |
 | Betrag | Zahl (€) | ja | 312,00 | berechnet |
-| freigegeben am / von | Zeitpunkt / Nutzer | nein | 01.12.2026 | System |
-| abgegeben am | Datum | nein | 10.12.2026 | Geschäftsstelle |
+| abgeschlossen am / von | Zeitpunkt / Nutzer | nein | 12.07.2026 | System |
+| abgegeben am | Datum | nein | 20.07.2026 | Geschäftsstelle |
 | verfallen am / von | Datum / Nutzer | nein | – | Geschäftsstelle |
-| Überweisungsdatei | Verweis | nein | – | System |
+| Auszahlungsrunde | Verweis | nein | 1. Hj. 2026, Runde 3 | System |
 | Hinweise | berechnet, nicht gespeichert [ANNAHME] | – | „keine Bestätigung 2026“ | R11–R14 |
 
 **C2 – Position (`fi_settlement_items`)**
@@ -106,28 +126,43 @@ Tabellen mit Präfix `fi_` (Namen [ANNAHME], Festlegung in der Spec).
 | Feld | Typ | Pflicht | Beispiel | Quelle |
 |---|---|---|---|---|
 | Abrechnung | Verweis | ja | – | System |
-| Einsatz / Anwesenheit | Verweis | ja | Training Gruppe X, 14.10.2026 | Anwesenheitserfassung |
+| Einsatz / Anwesenheit | Verweis | ja | Training Gruppe X, 14.04.2026 | Anwesenheitserfassung |
+| Gruppe | Verweis Gruppe | nein (Pflicht bei Einsätzen mit Gruppe) | Gruppe X | Einsatz (R24) |
 | Abrechnungsart, Position | Verweis | ja | Trainingseinheiten / Trainingseinheit | Einsatz, Administration |
 | Rolle (erfasst) | Trainer:in, Helfer:in | ja | Trainer:in | Anwesenheitserfassung |
 | Satzart (abgerechnet) | Trainer:in, Helfer:in, ohne Rolle | ja | Helfer:in (keine förderfähige Lizenz) | R8 |
 | Menge | Zahl | ja | 3 (TE) | R3–R7 |
 | Satz | Zahl (€) | ja | 6,00 | `ad_rates_at` am Einsatzdatum |
 | Betrag | Zahl (€) | ja | 18,00 | Menge × Satz |
-| Korrektur: Satzart, Menge, Begründung | Auswahl, Zahl, Text 1–500 | nein (Begründung Pflicht bei Korrektur) | „Ausnahme Lizenz, Begründung Referentin K&J vom 20.11.“ | R16 |
+| Korrektur: Satzart, Menge, Begründung | Auswahl, Zahl, Text 1–500 | nein (Begründung Pflicht bei Korrektur) | „Ausnahme Lizenz, Begründung Referentin K&J vom 20.06.“ | R16 |
 | Hinweis-Kennzeichen | ohne Uhrzeit, ohne Trainingszeit | nein | ohne Uhrzeit | R5, R4 |
 
 Organisationspauschale als eigene Position der organisierenden Person (Menge = Tage).
 
-**C3 – Überweisungsdatei (`fi_payment_files`)**
+**C3 – Auszahlungsrunde (`fi_payout_runs`)**
 
 | Feld | Typ | Pflicht | Beispiel | Quelle |
 |---|---|---|---|---|
-| erzeugt am / von | Zeitpunkt / Nutzer | ja | 18.12.2026 | System |
-| Ausführungsdatum | Datum | ja | 20.12.2026 | Geschäftsstelle |
-| Anzahl, Summe | Zahl | ja | 87 / 21.450,00 € | System |
-| Verwendungszweck | Text | ja | „Übungsleiterpauschale 2. Hj. 2026“ [ANNAHME] | System |
+| Abrechnungshalbjahr | Jahr + Halbjahr | ja | 2026 / 1 | Auswahl |
+| Nummer | ganze Zahl, fortlaufend je Halbjahr | ja | 3 | System (R25) |
+| Zustand | Auswahl (Entwurf, freigegeben, storniert) | ja | freigegeben | System |
+| Ausführungsdatum | Datum | ja | 01.08.2026 | Geschäftsstelle |
+| Nachrichten-ID, Zahlungs-ID | Text, eindeutig, max. 35 Zeichen | ja (bei Freigabe) | FI-2026-1-03 [ANNAHME: Aufbau] | System (R26) |
+| Anzahl Auszahlzeilen, Summe | Zahl | ja | 17 / 3.434,00 € (Muster der Geschäftsstelle) | System |
+| freigegeben am / von | Zeitpunkt / Nutzer | nein | 28.07.2026 | System |
+| Sachkonto | Text | ja | aus den Angaben der Sektion (A10) | Administration |
 
-Die Datei selbst und die IBANs werden nicht gespeichert (R21) [ANNAHME].
+**C3a – Auszahlzeile (`fi_payout_lines`)**
+
+| Feld | Typ | Pflicht | Beispiel | Quelle |
+|---|---|---|---|---|
+| Auszahlungsrunde, Abrechnung | Verweis | ja | – | System |
+| Gruppe | Verweis Gruppe bzw. Referat (ohne Gruppe) | ja | Gruppe X | Positionen (R24) |
+| Betrag | Zahl (€) | ja | 264,00 | Summe der Positionen der Person in dieser Gruppe |
+| Verwendungszweck | Text, max. 140 Zeichen | ja | „ÜL-Vergütung 1. Hj 2026 Gruppe X“ | R26 |
+| Ende-zu-Ende-ID | Text, eindeutig, max. 35 Zeichen | ja | FI-2026-1-03-0001 [ANNAHME: Aufbau] | System |
+
+Name und IBAN der Empfänger:in werden nicht gespeichert, sondern beim Erzeugen gelesen (R21).
 
 **C4 – Abgleich Punktekonto (`fi_climbing_checks`)**
 
@@ -142,9 +177,46 @@ Die Datei selbst und die IBANs werden nicht gespeichert (R21) [ANNAHME].
 | erfasst am / von | Zeitpunkt / Nutzer | ja | – | System |
 
 **C5 – Gelesen, nicht gespeichert**
-- Aus der Administration: Sätze (`ad_rates_at`), Abrechnungsarten und Vorbelegung (A1, A2), Höchstbetrag (A4), Fristen (A5), Kennzeichen am Referat (A6), Auftraggeberkonto (A10).
+- Aus der Administration: Sätze (`ad_rates_at`), Abrechnungsarten und Vorbelegung (A1, A2), Höchstbetrag (A4), Fristen (A5), Kennzeichen am Referat (A6), Angaben der Sektion für die Auszahlung (A10: Name, IBAN, BIC, Sachkonto).
 - Aus dem Ehrenamtsmanagement (über A8): Kontoinhaber:in, IBAN; Trainervereinbarung (Datum); Bestätigung steuerfreie Einnahmen (Jahr, Abgabedatum); förderfähige Lizenzen (gültig von, gültig bis).
-- Aus der Anwesenheitserfassung (über Z2): Einsatz, Anwesenheit, Dauer der Trainingszeit.
+- Aus der Anwesenheitserfassung (über Z2): Einsatz, Gruppe, Anwesenheit, Dauer der Trainingszeit.
+- Aus Gruppen: Name der Gruppe (über die Lesefunktion der Anwesenheitserfassung) [ANNAHME].
+
+**C6 – Auszahlliste (PDF), nach der Vorlage der Geschäftsstelle**
+
+| Bereich | Inhalt |
+|---|---|
+| Titel | „Auszahlliste Übungsleitervergütung {1./2.} Hj. {Jahr}“, dazu „Runde {Nummer}“ [ANNAHME: Rundennummer im Titel] |
+| Kopf rechts | „Konto“ mit dem Sachkonto aus den Angaben der Sektion (A10) |
+| Tabelle | Spalten Zuname, Vorname, Auszahlungsbetrag (€), Gruppe; eine Zeile je Auszahlzeile (Person und Gruppe); Sortierung nach Gruppe (natürliche Reihenfolge: Gruppe 1, 2 … 10), dann Zuname, Vorname [ANNAHME] |
+| Summen | Zwischensumme je Spalte bzw. Seite, Summe der Runde; Summe = Summe der Überweisungsdatei (R28) |
+| Unterschriften | „sachl. richtig“: gefüllt mit den Bestätigungen im Vereins OS (je Referat Name, Datum; Vertretung durch die Geschäftsstelle gekennzeichnet) (Product Owner 26.10.2026); „gf Vorstand“ und „angewiesen“: leere Felder für die Unterschrift auf Papier |
+| Fuß | Ausführungsdatum, Nachrichten-ID der Überweisungsdatei, „freigegeben am … von …“ [ANNAHME] |
+| Format | A4 quer wie die Vorlage; keine IBANs; Layout nach marke.md |
+
+**C7 – Überweisungsdatei (XML), nach der Vorlage der Geschäftsstelle**
+
+Format ISO 20022 **pain.001.001.03** (SEPA-Überweisung), UTF-8, eine Sammelüberweisung je Runde (Product Owner 26.10.2026: Format der Sparkasse laut Vorlage).
+
+| Element | Inhalt |
+|---|---|
+| `GrpHdr/MsgId` | Nachrichten-ID der Runde, eindeutig, max. 35 Zeichen |
+| `GrpHdr/CreDtTm` | Zeitpunkt der Freigabe mit Zeitzone |
+| `GrpHdr/NbOfTxs`, `GrpHdr/CtrlSum` | Anzahl Auszahlzeilen, Summe (2 Nachkommastellen, Punkt) |
+| `GrpHdr/InitgPty/Nm` | Name der Sektion (A10) |
+| `PmtInf/PmtInfId` | Zahlungs-ID der Runde |
+| `PmtInf/PmtMtd` | `TRF` |
+| `PmtInf/NbOfTxs`, `PmtInf/CtrlSum` | wie Kopf (eine Zahlungsgruppe je Datei) |
+| `PmtInf/PmtTpInf/SvcLvl/Cd` | `SEPA` |
+| `PmtInf/ReqdExctnDt` | Ausführungsdatum |
+| `PmtInf/Dbtr/Nm`, `DbtrAcct/Id/IBAN`, `DbtrAgt/FinInstnId/BIC` | Name, IBAN und BIC der Sektion (A10) |
+| `CdtTrfTxInf/PmtId/EndToEndId` | Ende-zu-Ende-ID der Auszahlzeile |
+| `CdtTrfTxInf/Amt/InstdAmt` (`Ccy="EUR"`) | Betrag der Auszahlzeile |
+| `CdtTrfTxInf/Cdtr/Nm` | Kontoinhaber:in aus der Bankverbindung (max. 70 Zeichen) |
+| `CdtTrfTxInf/CdtrAcct/Id/IBAN` | IBAN aus der Bankverbindung; kein BIC der Empfänger:in (wie Vorlage) |
+| `CdtTrfTxInf/RmtInf/Ustrd` | Verwendungszweck „ÜL-Vergütung {1/2}. Hj {Jahr} {Gruppe}“ (R26) |
+
+Kein `BtchBookg` (Sammelbuchung nach Voreinstellung der Bank, wie Vorlage), keine Adressen, keine Kategorie.
 
 ## D. Regeln (R1, R2 …)
 
@@ -156,50 +228,59 @@ Die Datei selbst und die IBANs werden nicht gespeichert (R21) [ANNAHME].
 - **R6 – Wettkampfbetreuung:** Satz je Kalendertag von Startdatum bis Enddatum, unabhängig von Stunden (Product Owner 24.10.2026).
 - **R7 – Organisationspauschale:** je Tag des Einsatzes für die organisierende Person, wenn die Abrechnungsart die Position vorsieht; zusätzlich zu ihrem Tagessatz, wenn sie auch als Trainer:in oder Helfer:in anwesend ist [ANNAHME]. Halbtage zählen als Tag [ANNAHME].
 - **R8 – Satzart Trainer:in:** Rolle Trainer:in wird mit Satz Trainer:in abgerechnet, wenn am Datum (mehrtägig: Startdatum, gilt dann für den ganzen Einsatz) eine förderfähige Lizenz gültig ist oder eine förderfähige Lizenz im selben Abrechnungshalbjahr erworben wurde (gültig von im Halbjahr) (Product Owner 24.10.2026). Sonst Satz Helfer:in mit Hinweis „keine förderfähige Lizenz“ [ANNAHME, F5]. Förderfähig = DOSB-lizenzfähig [ANNAHME, AD v0.9].
-- **R9 – Satzstand:** Satz aus `ad_rates_at` am Datum bzw. Startdatum des Einsatzes [ANNAHME]. Fehlt ein Satz, wird die Position mit Hinweis „Satz fehlt“ ohne Betrag angelegt und die Abrechnung kann nicht freigegeben werden [ANNAHME].
+- **R9 – Satzstand:** Satz aus `ad_rates_at` am Datum bzw. Startdatum des Einsatzes [ANNAHME]. Fehlt ein Satz, wird die Position mit Hinweis „Satz fehlt“ ohne Betrag angelegt und die Abrechnung kann nicht abgeschlossen werden [ANNAHME].
 - **R10 – Eine Person, ein Einsatz:** je Einsatz und Person höchstens eine Position je Position der Abrechnungsart (z. B. Tagessatz und Organisationspauschale); bei Wettkampfbetreuung mit mehreren Gruppen nur einmal.
-- **R11 – Steuerfreier Höchstbetrag:** Liegt die Summe aller freigegebenen, abgegebenen und ausgezahlten Abrechnungen der Person im Kalenderjahr zuzüglich dieser Abrechnung über dem Höchstbetrag, Hinweis „Höchstbetrag überschritten“; keine Sperre [ANNAHME, F6]. Maßgeblich ist das **Jahr der Auszahlung** (Zuflussprinzip; bei noch nicht ausgezahlten Abrechnungen das Jahr des Endes der Abgabefrist [ANNAHME]); Höchstbetrag aus `ad_rates_at` am 31.12. dieses Jahres, Startwert 3.300 € ab 01.01.2026 (Product Owner 25.10.2026).
-- **R12 – Bestätigung steuerfreie Einnahmen:** Ohne Bestätigung mit „für Jahr“ = Jahr der Abrechnung (bzw. ohne Jahr, abgegeben vor der Auszahlung [ANNAHME]) Hinweis; die Abrechnung kann freigegeben, aber nicht in die Überweisungsdatei übernommen werden (F6).
-- **R13 – Bankverbindung:** Ohne Bankverbindung Hinweis; nicht in die Überweisungsdatei.
-- **R14 – Trainervereinbarung:** Voraussetzung der Auszahlung (Product Owner 25.10.2026): ohne gültige Trainervereinbarung Hinweis; die Abrechnung kann bestätigt und freigegeben, aber nicht in die Überweisungsdatei übernommen werden. Gilt für Trainer:innen und Helfer:innen [ANNAHME].
-- **R15 – Neu berechnen:** nur Entwürfe; freigegebene und spätere Zustände bleiben unverändert.
+- **R11 – Steuerfreier Höchstbetrag:** Liegt die Summe aller abgeschlossenen, abgegebenen und ausgezahlten Abrechnungen der Person im Kalenderjahr zuzüglich dieser Abrechnung über dem Höchstbetrag, Hinweis „Höchstbetrag überschritten“; keine Sperre [ANNAHME, F6]. Maßgeblich ist das **Jahr der Auszahlung** (Zuflussprinzip; Ausführungsdatum der Runde, bei noch nicht ausgezahlten Abrechnungen das Jahr des Endes der Abgabefrist [ANNAHME]); Höchstbetrag aus `ad_rates_at` am 31.12. dieses Jahres, Startwert 3.300 € ab 01.01.2026 (Product Owner 25.10.2026).
+- **R12 – Bestätigung steuerfreie Einnahmen:** Ohne Bestätigung mit „für Jahr“ = Jahr der Abrechnung (bzw. ohne Jahr, abgegeben vor der Auszahlung [ANNAHME]) Hinweis; die Abrechnung kann abgeschlossen, aber nicht in eine Auszahlungsrunde übernommen werden (F6).
+- **R13 – Bankverbindung:** Ohne Bankverbindung Hinweis; nicht in eine Auszahlungsrunde.
+- **R14 – Trainervereinbarung:** Voraussetzung der Auszahlung (Product Owner 25.10.2026): ohne gültige Trainervereinbarung Hinweis; die Abrechnung kann bestätigt und abgeschlossen, aber nicht in eine Auszahlungsrunde übernommen werden. Gilt für Trainer:innen und Helfer:innen [ANNAHME].
+- **R15 – Neu berechnen:** nur Entwürfe; abgeschlossene und spätere Zustände bleiben unverändert.
 - **R16 – Korrektur:** Jede Abweichung vom berechneten Wert braucht eine Begründung (1–500 Zeichen), sonst Fehlermeldung „Bitte eine Begründung angeben.“; berechneter und korrigierter Wert bleiben sichtbar.
-- **R17 – Sperre:** Ab der Freigabe sind die abgerechneten Anwesenheiten und die abrechnungsrelevanten Kopfdaten des Einsatzes in der Anwesenheitserfassung gesperrt (Product Owner 24.10.2026; Übergabe FI → EZ, Z3). Rücknahme der Freigabe hebt die Sperre auf.
-- **R18 – Abrechnungsdokument:** enthält Person (Name, ohne Bankdaten [ANNAHME]), Halbjahr, Positionen mit Datum, Einsatz, Menge, Satz, Betrag, Korrekturen mit Begründung, Summe, Abgabefrist, Hinweis auf das Erlöschen des Anspruchs, Erklärung der Person zum Freibetrag (Product Owner 25.10.2026; Wortlaut [ANNAHME]: „Ich versichere, dass die Angaben richtig sind und die Vergütung zusammen mit anderen Einnahmen aus nebenberuflicher Tätigkeit nach § 3 Nr. 26 EStG den Freibetrag im Kalenderjahr nicht übersteigt. Änderungen teile ich der Sektion unverzüglich mit.“), Ort, Datum, Unterschriftsfeld. Layout nach marke.md.
+- **R17 – Sperre:** Ab dem Abschluss sind die abgerechneten Anwesenheiten und die abrechnungsrelevanten Kopfdaten des Einsatzes in der Anwesenheitserfassung gesperrt (Product Owner 24.10.2026; Übergabe FI → EZ, Z3). Rücknahme des Abschlusses hebt die Sperre auf.
+- **R18 – Abrechnungsdokument:** enthält Person (Name, ohne Bankdaten [ANNAHME]), Halbjahr, Positionen mit Datum, Gruppe, Einsatz, Menge, Satz, Betrag, Korrekturen mit Begründung, Summe je Gruppe und gesamt, Abgabefrist, Hinweis auf das Erlöschen des Anspruchs, Erklärung der Person zum Freibetrag (Product Owner 25.10.2026; Wortlaut [ANNAHME]: „Ich versichere, dass die Angaben richtig sind und die Vergütung zusammen mit anderen Einnahmen aus nebenberuflicher Tätigkeit nach § 3 Nr. 26 EStG den Freibetrag im Kalenderjahr nicht übersteigt. Änderungen teile ich der Sektion unverzüglich mit.“), Ort, Datum, Unterschriftsfeld. Layout nach marke.md.
 - **R19 – Frist:** Abgabefrist aus den Stammdaten der Administration (Start: 31.07. für das 1., 15.12. für das 2. Halbjahr). Abgabe nach der Frist: Rückfrage „Die Frist ist abgelaufen. Der Anspruch ist erloschen. Trotzdem als abgegeben erfassen?“ [ANNAHME: Ausnahme möglich mit Begründung].
-- **R20 – Auszahlung:** Eine Abrechnung ist höchstens in einer Überweisungsdatei; danach nicht mehr änderbar.
-- **R21 – Datensparsamkeit:** IBANs werden nur beim Erzeugen der Datei gelesen und nicht in Finanzen gespeichert [ANNAHME].
-- **R22 – Aufbewahrung:** Abrechnungen, Positionen, Überweisungsdateien und Abgleiche werden 5 Jahre nach Ende des Kalenderjahres der Auszahlung bzw. des Verfalls gelöscht [ANNAHME: Beginn der Frist] (Q4, Product Owner 24.10.2026: 5 Jahre wie überall).
-- **R23 – Bestätigung (Vier-Augen-Prinzip):** Freigeben ist erst möglich, wenn für jedes Referat mit Positionen in der Abrechnung eine Referent:in mit Reichweite dieses Referats bestätigt hat; sonst „Die Abrechnung ist noch nicht von allen Referaten bestätigt.“ [ANNAHME: Wortlaut]. Die freigebende Person darf nicht die bestätigende sein. Vertretung (Product Owner 25.10.2026): bestätigen darf jede Person mit der Vorlage Referent:in für dieses Referat (auch stellvertretend); ist niemand da, bestätigt eine zweite Person der Geschäftsstelle mit Pflichtbegründung (1–500 Zeichen), die im Verlauf sichtbar bleibt.
+- **R20 – Auszahlung:** Eine Abrechnung ist höchstens in einer freigegebenen Auszahlungsrunde; danach nicht mehr änderbar.
+- **R21 – Datensparsamkeit:** Name der Kontoinhaber:in und IBAN werden nur beim Erzeugen der Überweisungsdatei gelesen und nicht in Finanzen gespeichert; die Dateien werden nicht gespeichert, sondern bei jedem Download aus den gespeicherten Auszahlzeilen neu erzeugt [ANNAHME]. Hat sich eine Bankverbindung seit der Freigabe geändert, erscheint vor dem erneuten Download ein Hinweis [ANNAHME].
+- **R22 – Aufbewahrung:** Abrechnungen, Positionen, Auszahlungsrunden, Auszahlzeilen und Abgleiche werden 5 Jahre nach Ende des Kalenderjahres der Auszahlung bzw. des Verfalls gelöscht [ANNAHME: Beginn der Frist] (Q4, Product Owner 24.10.2026: 5 Jahre wie überall). Auszahlliste und Kontoauszug als Belege liegen in der Finanzbuchhaltung.
+- **R23 – Bestätigung (Vier-Augen-Prinzip):** Abschließen ist erst möglich, wenn für jedes Referat mit Positionen in der Abrechnung eine Referent:in mit Reichweite dieses Referats bestätigt hat; sonst „Die Abrechnung ist noch nicht von allen Referaten bestätigt.“ [ANNAHME: Wortlaut]. Die abschließende Person darf nicht die bestätigende sein. Vertretung (Product Owner 25.10.2026): bestätigen darf jede Person mit der Vorlage Referent:in für dieses Referat (auch stellvertretend); ist niemand da, bestätigt eine zweite Person der Geschäftsstelle mit Pflichtbegründung (1–500 Zeichen), die im Verlauf und auf der Auszahlliste sichtbar bleibt.
+- **R24 – Auszahlzeile je Person und Gruppe (Product Owner 26.10.2026):** Je Abrechnung entsteht eine Auszahlzeile je Gruppe ihrer Positionen (Betrag = Summe dieser Positionen) und daraus je eine Überweisung. Wettkampfbetreuung mit mehreren Gruppen zählt zur ersten Gruppe des Einsatzes [ANNAHME]; Positionen ohne Gruppe (Iteration 1) bilden eine Zeile je Referat [ANNAHME]. Höchstbetrag (R11) und Voraussetzungen (R12–R14) gelten je Person.
+- **R25 – Nummer der Runde:** fortlaufend je Abrechnungshalbjahr ab 1; eine verworfene Runde im Entwurf gibt ihre Nummer nicht frei [ANNAHME]. Eine Abrechnung kann nur in einer Runde im Entwurf gleichzeitig stehen.
+- **R26 – Überweisungsdatei:** Aufbau nach C7 (pain.001.001.03 wie die Vorlage der Sparkasse). IDs eindeutig, max. 35 Zeichen, nur Buchstaben, Ziffern und Bindestrich [ANNAHME: Aufbau aus Halbjahr, Rundennummer und laufender Nummer]. Verwendungszweck „ÜL-Vergütung {1/2}. Hj {Jahr} {Name der Gruppe}“, höchstens 140 Zeichen, sonst gekürzt; Umlaute wie in der Vorlage zulässig [ANNAHME: Zeichensatz der Sparkasse]. Beträge mit Punkt und 2 Nachkommastellen. Freigabe nur, wenn Name, IBAN und BIC der Sektion vorhanden sind; sonst „Die Angaben der Sektion für die Auszahlung fehlen. Bitte den Admin informieren.“ [ANNAHME: Wortlaut].
+- **R27 – Auszahlliste:** Aufbau nach C6; enthält keine Bankdaten der Empfänger:innen.
+- **R28 – Gleichheit:** Auszahlliste und Überweisungsdatei einer Runde enthalten dieselben Auszahlzeilen in derselben Reihenfolge; Summe der Liste = `CtrlSum`, Anzahl Zeilen = `NbOfTxs`. Die Summe erscheint als eine Buchung auf dem Kontoauszug und ist damit gegen die Auszahlliste prüfbar.
+- **R29 – Erneuter Download:** PDF und XML einer freigegebenen Runde jederzeit erneut abrufbar, mit derselben Nachrichten-ID und denselben Ende-zu-Ende-IDs; vor dem XML-Download Warnung „Diese Runde ist bereits freigegeben. Die Überweisungsdatei nicht erneut hochladen.“
+- **R30 – Ausführungsdatum:** nicht in der Vergangenheit; Standard nächster Bankarbeitstag [ANNAHME].
 
 ## E. Schnittstellen
 
 | Schnittstelle | Richtung | Inhalt |
 |---|---|---|
-| Administration | AD → FI | `ad_has_level('FI', …)`, `ad_modules` (FI), `ad_rates_at`, Abrechnungsarten und Vorbelegung, Fristen, Kennzeichen am Referat, Lesefunktion Personendaten, `ea_person_names` (Übergabe FI → AD v1.0, A1–A10) |
-| Anwesenheitserfassung | EZ → FI | Lesefunktion Abrechnungsgrundlage mit FI-Rechten, `ez_climbing_points_report` mit FI-Rechten (Z2) |
+| Administration | AD → FI | `ad_has_level('FI', …)`, `ad_modules` (FI), `ad_rates_at`, Abrechnungsarten und Vorbelegung, Fristen, Kennzeichen am Referat, Angaben der Sektion für die Auszahlung (Name, IBAN, BIC, Sachkonto), Lesefunktion Personendaten, `ea_person_names` (Übergabe FI → AD, A1–A10) |
+| Anwesenheitserfassung | EZ → FI | Lesefunktion Abrechnungsgrundlage mit FI-Rechten inkl. Gruppe und Gruppenname, `ez_climbing_points_report` mit FI-Rechten (Z2) |
 | Anwesenheitserfassung | FI → EZ | Sperre über `fi_attendance_locked` (Platzhalter in EZ, ersetzt von FI) (Z3); Abrechnungsart am Einsatz (Z1) |
 | Planungshilfe Touren und Kurse | TK → FI | `tk_settlement_draft` (Iteration 1); Übergabe FI → TK v1.0 |
-| Sparkasse | FI → extern | SEPA-Überweisungsdatei, manueller Upload; [OFFEN] Format/Version, Auftraggeberkonto |
-| Finanzbuchhaltung | FI → extern | unterschriebene Abrechnungsdokumente (Papier) als Beleg; kein DATEV-Export im MVP |
+| Sparkasse | FI → extern | Überweisungsdatei pain.001.001.03 nach C7, manueller Upload im Online-Banking (Product Owner 26.10.2026) |
+| Finanzbuchhaltung | FI → extern | Auszahlliste (PDF, mit Unterschriften auf Papier) und Kontoauszug als Beleg; unterschriebene Abrechnungsdokumente; kein DATEV-Export im MVP |
 | Kletterhalle | extern → FI | Rechnung, manuelle Eingabe der Werte |
 
 ## F. Datenschutz
 
-- Zweck: Vergütung nach der Vergütungsordnung und Kontrolle der Rechnungen der Kletterhalle. Eintrag im Verarbeitungsverzeichnis (Trainerabrechnung, Bankverbindung).
+- Zweck: Vergütung nach der Vergütungsordnung und Kontrolle der Rechnungen der Kletterhalle. Eintrag im Verarbeitungsverzeichnis (Trainerabrechnung, Bankverbindung, Auszahlung).
 - Zugriff im MVP: Geschäftsstelle (FI verwalten) und Referent:innen (Reichweite „Referat“, ohne Bankdaten und ohne Nachweisdaten, nur Hinweise). Bankverbindung und Nachweise nur über die Lesefunktion mit festen Spalten (A8); keine Lizenznummern, keine weiteren Eigenschaften.
 - Keine Daten von Teilnehmer:innen außer Anzahlen (Abgleich Punktekonto).
-- SEPA-Datei nur als Download, nicht gespeichert; IBANs nicht in Finanzen gespeichert (R21).
-- Abrechnungsdokument ohne Bankdaten [ANNAHME].
+- Überweisungsdatei nur als Download, nicht gespeichert; Name der Kontoinhaber:in und IBAN nicht in Finanzen gespeichert (R21). Die Datei landet im Download-Ordner des Arbeitsplatzes; Hinweis, sie nach dem Hochladen zu löschen [ANNAHME].
+- Auszahlliste und Abrechnungsdokument ohne Bankdaten.
+- Echtdaten (z. B. die Vorlagen der Geschäftsstelle) nie im Repository oder in TEST; Tests nur mit fiktiven Daten und der Beispiel-IBAN.
 - Aufbewahrung 5 Jahre (R22); Belege in der Finanzbuchhaltung (bestätigt vom Product Owner 25.10.2026).
 - Freitexte (Begründung, Bemerkung) mit Hinweis, keine sensiblen Angaben einzutragen.
 
 ## G. Nicht-funktional
 
-- Mengengerüst [ANNAHME]: ca. 130 Trainer:innen und Helfer:innen je Halbjahr; ca. 30 Gruppen; ca. 1.500 Trainings und 4.000 abrechenbare Anwesenheiten je Halbjahr.
-- Berechnung eines Halbjahres unter 10 Sekunden; Liste der Abrechnungen unter 2 Sekunden [ANNAHME].
-- Berechnung in der Datenbank (nachvollziehbar, mit pgTAP-Tests je Regel R3–R11).
-- Bedienung vor allem am Arbeitsplatz; Listen mobil lesbar ab 375 px; Abrechnungsdokument als PDF A4.
+- Mengengerüst [ANNAHME]: ca. 130 Trainer:innen und Helfer:innen je Halbjahr; ca. 30 Gruppen; ca. 1.500 Trainings und 4.000 abrechenbare Anwesenheiten je Halbjahr; 3–6 Auszahlungsrunden je Halbjahr mit bis zu 150 Auszahlzeilen.
+- Berechnung eines Halbjahres unter 10 Sekunden; Liste der Abrechnungen unter 2 Sekunden; Erzeugen von PDF und XML einer Runde unter 5 Sekunden [ANNAHME].
+- Berechnung in der Datenbank (nachvollziehbar, mit pgTAP-Tests je Regel R3–R11, R24, R28).
+- Die XML wird gegen das Schema pain.001.001.03 geprüft (Test mit fiktiven Daten) [ANNAHME].
+- Bedienung vor allem am Arbeitsplatz; Listen mobil lesbar ab 375 px; Abrechnungsdokument PDF A4 hoch, Auszahlliste PDF A4 quer.
 - Keine laufenden Kosten; keine externe Bankschnittstelle.
 
 ## Offene Fragen (Frage | Wer klärt | bis wann)
@@ -207,6 +288,6 @@ Die Datei selbst und die IBANs werden nicht gespeichert (R21) [ANNAHME].
 | Frage | Wer klärt | bis wann |
 |---|---|---|
 | Wortlaut der Erklärung auf dem Abrechnungsdokument prüfen (R18) | Product Owner | vor der Spec |
-| SEPA: Format/Version, Auftraggeberkonto, Verwendungszweck, Sammelbuchung; Rücknahme bei Ablehnung | Geschäftsstelle mit Sparkasse | vor der Spec |
+| Rücknahme einer freigegebenen Runde bei Ablehnung durch die Bank | Geschäftsstelle mit Sparkasse | vor der Spec |
 | Zählen Probetrainings für die Kletterhalle (B6)? | Geschäftsstelle | vor den Stories |
 | Sonderfälle im heutigen Ablauf (z. B. Nachzahlungen, Rückforderungen) | Geschäftsstelle | vor den Stories |
