@@ -515,3 +515,9 @@ insert into public.ad_locations (id, name, has_climbing_points, is_active) value
   ('e1000000-0000-4000-8000-000000000002', 'Fels Test', false, true),
   ('e1000000-0000-4000-8000-000000000003', 'Halle alt Test', false, false)
 on conflict (id) do nothing;
+
+-- Nachtrag v0.10 (spec.md AD v0.10.0, Abschnitt 9; spec T76): Angaben der Sektion für die Auszahlung, nur fiktiv
+-- (Beispiel-IBAN). Kim Kinderjugend erhält „FI lesen + freigeben“ über die Startwerte der Vorlage Referent:in.
+insert into public.ad_payout_settings (debtor_name, iban, bic, ledger_account, valid_from)
+select 'Sektion Test', 'DE89370400440532013000', 'TESTDEFFXXX', '0000 0', date '2026-01-01'
+ where not exists (select 1 from public.ad_payout_settings s where s.valid_from = date '2026-01-01');

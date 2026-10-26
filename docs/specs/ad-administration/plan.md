@@ -32,6 +32,17 @@ Grundlage: spec.md v0.9.4 (Nachtrag v0.8.1, Ready seit 24.10.2026), 02-stories.m
 
 `ad_modules.is_available` für EZ bleibt `false`; das setzt die Anwesenheitserfassung mit ihrer Freigabe. Gruppen kann die EZ-Pfade in `480_gr_read_functions.test.sql` (heute `todo`, GR plan.md O2) aktivieren; Übergabe in [uebergabe-gruppen-v08.md](uebergabe-gruppen-v08.md).
 
+## Nachtrag v0.10 Finanzen und Aktion „freigeben“ (Umsetzung ab 26.10.2026, Branch `ad-nachtrag-v010`)
+
+Grundlage: spec.md v0.10.0 (Ready 26.10.2026), Übergabe FI → AD v1.3. Tasks: Phase 16 in tasks.md (T122–T130).
+
+- **Reihenfolge der Migrationen:** `20261029000100` Aktion „freigeben“ → `…0200` Sätze (T60 und Vergütungsteil von T61 aus v0.9) → `…0300` Stammdaten Finanzen → `…0400` Startwerte FI → `…0500` Personendaten und Namen. Die Sätze werden vor der Planungshilfe gebraucht (querschnitt-administration.md 4).
+- **Rechtemodell:** `can_approve` an `ad_template_rights` statt eigener Tabelle; Prüfung im bestehenden Trigger `ad_template_rights_guard` (Fehlercode vor dem Check). Änderungen an Rechten einer Vorlage werden wie bisher nicht protokolliert.
+- **Schreiben** in die neuen Stammdaten direkt per RLS (wie `ad_locations`), unveränderliche Spalten über Spaltenrechte und Trigger; kein Löschen.
+- **Startbestand** per Migration mit `where not exists` (die Trigger melden Dubletten, deshalb kein `on conflict`). Angaben der Sektion ohne Startbestand (keine echten Kontodaten); in TEST über den Seed.
+- **TKF** wird nicht angelegt; die Planungshilfe stellt bei ihrer Umsetzung auf `ad_can_approve('TK', …)` um (`uebergabe-planungshilfe-freigabe.md`).
+- **Oberfläche** (T129) auf eigenem Branch, weil `src/` vom Product Owner gemergt wird.
+
 ## Abgrenzung: Kern ohne Nachträge v0.8 und v0.9
 
 Nicht umgesetzt werden der Nachtrag v0.8 (T50–T58) und der Nachtrag v0.9 (T59–T67) ([arbeitsplan.md](../../arbeitsplan.md) 4.1, [querschnitt-administration.md](../../querschnitt-administration.md) Abschnitt 2). Wo spec.md v0.9 in den Kernabschnitten Text mit „v0.8“ oder „v0.9“ markiert, gilt die Fassung ohne diese Ergänzung. Für den Kern heißt das:
