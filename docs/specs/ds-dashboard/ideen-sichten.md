@@ -17,10 +17,10 @@ Kürzel der Priorität für die Rückmeldung: **M** = Must (MVP), **S** = Should
 | B1 | Plan / verbraucht / frei / Verbrauch in % je Budgetposten und Gesamtbudget, Ampel, Zeitmarke | Vorstand (alle), Referat (eigene Gesamtbudgets) | DATEV-Export + Finanzplan | DS-MVP | Summen unkritisch |
 | B2 | Einnahmen Plan / erreicht / fehlt noch | Vorstand, Referat | DATEV-Export | DS-MVP | – |
 | B3 | Verbrauch im Verhältnis zum abgelaufenen Jahr („schneller als geplant“) als Hinweis | Referat | B1 | DS-MVP | – |
-| B4 | Einzelbuchungen je Budgetposten | Geschäftsstelle, Vorstand, Referat (eigene Budgetposten; Q-DS1 entschieden) | DATEV-Export (FI) | DS-MVP | Buchungstexte enthalten Namen; Löschfrist Q-DS11 |
+| B4 | Einzelbuchungen je Budgetposten | Geschäftsstelle, Vorstand, Referat (eigene Budgetposten; Q-DS1 entschieden) | DATEV-Export (FI) | DS-MVP | Buchungstexte enthalten Namen; Einzelbuchungen laufendes Jahr + Vorjahr (Q-DS11) |
 | B5 | Nicht zugeordnete Buchungen, Prüfung des Exports | Geschäftsstelle, Vorstand | DATEV-Export | DS-MVP | – |
 | B6 | Monatsverlauf je Gesamtbudget (kumuliert gegen Plan-Linie) | Vorstand, Referat | DATEV-Export | DS-MVP oder S | – |
-| B7 | Vergleich mit dem Vorjahr (gleicher Stichtag) | Vorstand, Referat | Exporte mehrerer Jahre | C | – |
+| B7 | Vergleich mit dem Vorjahr (gleicher Stichtag) | Vorstand, Referat | Exporte mehrerer Jahre | C | Summen je Monat bleiben, Einzelbuchungen nur Vorjahr (Q-DS11) |
 | B8 | „Gebunden“: abgerechnete und freigegebene, noch nicht gebuchte Vergütung am Budgetposten „Vergütung Aktive“ | Referat Kinder und Jugend, Leistungssport; Vorstand | FI (Auszahlungsrunden) | FI-MVP | nur Summen |
 | B9 | Planwerte der Touren und Kurse (Kosten, Beiträge) gegen das Budget Touren/Ausbildung | Referat Touren, Ausbildung | TK (Kalkulation) | TK-MVP | – |
 | B10 | Einnahmen aus Verträgen (monatlicher Einzug) gegen Plan | Vorstand, Kinder und Jugend | GR (Verträge), später FI-Buchungslauf | später | nur Summen |
@@ -95,7 +95,7 @@ Kürzel der Priorität für die Rückmeldung: **M** = Must (MVP), **S** = Should
 | G3 | „Teilnahme klären“ und Teilnehmer:innen ohne Erziehungsberechtigte | GR | GR-MVP | – |
 | G4 | Einsätze ohne Anwesenheit (angelegt, aber nicht erfasst) | EZ | EZ-MVP | – |
 | G5 | Planungen „in Yolawo angelegt“, aber Termin vorbei und nicht „durchgeführt“ | TK | TK-MVP | – |
-| G6 | Datenstand des Budgets älter als N Wochen → Hinweis „neuen Export einspielen“ | DS | DS-MVP | – |
+| G6 | Datenstand des Budgets älter als 6 Wochen → Hinweis „neuen Export einspielen“ (Export monatlich, Q-DS7) | DS | DS-MVP | Hinweis an den 1. Vorsitzenden bzw. die Schatzmeister:in |
 
 ## 8. Admin
 
