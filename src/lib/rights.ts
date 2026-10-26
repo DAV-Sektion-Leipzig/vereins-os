@@ -3,7 +3,7 @@
 import { redirect } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 
-export type ModuleCode = 'AD' | 'SC' | 'EA' | 'GR' | 'EZ' | 'TK' | 'FI' | 'OA' | 'PM' | 'GS' | 'AM'
+export type ModuleCode = 'AD' | 'SC' | 'EA' | 'GR' | 'EZ' | 'TK' | 'FI' | 'OA' | 'PM' | 'GS' | 'AM' | 'DS'
 export type Level = 'none' | 'read' | 'edit' | 'manage'
 export type AccessStatus = 'none' | 'invited' | 'active' | 'locked'
 export type Scope = 'all' | 'referat'

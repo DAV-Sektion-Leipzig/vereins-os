@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { useAdAccess } from '@/features/ad/access'
 import {
   allowsApprove,
+  allowsBudget,
   allowsReferat,
   personCountLabel,
   saveTemplate,
@@ -23,7 +24,11 @@ const NONE: Right = { level: 'none', scope: 'all', approve: false }
 /** Anzeige einer Stufe, bei Reichweite „Referat“ mit Zusatz (US-AD-20 AK1). */
 function rightLabel(right: Right) {
   if (right.level === 'none') return LEVEL_LABELS.none
-  const level = right.approve ? `${LEVEL_LABELS[right.level]} + freigeben` : LEVEL_LABELS[right.level]
+  const level = right.approve
+    ? `${LEVEL_LABELS[right.level]} + freigeben`
+    : right.budget
+      ? `${LEVEL_LABELS[right.level]} + Budget pflegen`
+      : LEVEL_LABELS[right.level]
   return right.scope === 'referat' ? `${level}, Reichweite Referat` : level
 }
 
@@ -112,16 +117,27 @@ function TemplateForm({ data }: { data: EditData }) {
     // „darf freigeben“ gibt es nur mit einer Stufe (R50)
     setRights((current) => {
       const right = current[code] ?? NONE
-      return { ...current, [code]: { ...right, level, approve: level === 'none' ? false : right.approve } }
+      return {
+        ...current,
+        [code]: { ...right, level, approve: level === 'none' ? false : right.approve, budget: level === 'none' ? false : right.budget },
+      }
     })
   }
 
   function setApprove(code: string, approve: boolean) {
-    setRights((current) => ({ ...current, [code]: { ...(current[code] ?? NONE), approve } }))
+    // Im Dashboard steht an dieser Stelle „darf Budget pflegen“ (DS D6)
+    setRights((current) => ({
+      ...current,
+      [code]: allowsBudget(code) ? { ...(current[code] ?? NONE), budget: approve } : { ...(current[code] ?? NONE), approve },
+    }))
   }
 
   function setScope(code: string, scope: Scope) {
-    setRights((current) => ({ ...current, [code]: { ...(current[code] ?? NONE), scope } }))
+    // „darf Budget pflegen“ nur mit Reichweite „alle“
+    setRights((current) => {
+      const right = current[code] ?? NONE
+      return { ...current, [code]: { ...right, scope, budget: scope === 'all' ? right.budget : false } }
+    })
   }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -185,9 +201,10 @@ function TemplateForm({ data }: { data: EditData }) {
         <fieldset className="flex flex-col gap-3">
           <legend className="mb-1 font-medium">Rechte je Modul</legend>
           <p className="mb-2 text-sm text-muted-foreground">
-            Reichweite „Referat“ gibt es im Ehrenamtsmanagement, in der Anwesenheitserfassung, in der Planungshilfe und in
-            Finanzen; die Referate legst du bei der Zuweisung fest. „Darf freigeben“: in Finanzen Abrechnungen als sachlich
-            richtig bestätigen, in der Planungshilfe Planungen freigeben.
+            Reichweite „Referat“ gibt es im Dashboard, im Ehrenamtsmanagement, in der Anwesenheitserfassung, in der
+            Planungshilfe und in Finanzen; die Referate legst du bei der Zuweisung fest. „Darf freigeben“: in Finanzen
+            Abrechnungen als sachlich richtig bestätigen, in der Planungshilfe Planungen freigeben. „Budget pflegen“ (nur
+            Dashboard, Reichweite „alle“): Finanzplan, Zuordnung und DATEV-Import pflegen, Anträge entscheiden.
           </p>
           <RightsMatrix modules={data.modules} rights={rights} onChange={setLevel} onScopeChange={setScope} onApproveChange={setApprove} />
           <RightsList modules={data.modules} rights={rights} onChange={setLevel} onScopeChange={setScope} onApproveChange={setApprove} />
@@ -250,8 +267,25 @@ function ScopeSelect({ module, right, onScopeChange, id }: { module: Module; rig
   )
 }
 
-// „Darf freigeben“ nur für Finanzen und Planungshilfe, nur mit einer Stufe (R50)
+// „Darf freigeben“ nur für Finanzen und Planungshilfe, nur mit einer Stufe (R50); im Dashboard an derselben Stelle
+// „darf Budget pflegen“, nur mit einer Stufe und Reichweite „alle“ (DS D6)
 function ApproveCheckbox({ module, right, onApproveChange, id }: { module: Module; right: Right; onApproveChange: RightsProps['onApproveChange']; id: string }) {
+  if (allowsBudget(module.code)) {
+    return (
+      <span className="inline-flex items-center gap-1.5">
+        <input
+          id={id}
+          type="checkbox"
+          checked={right.budget === true}
+          disabled={right.level === 'none' || right.scope !== 'all'}
+          onChange={(event) => onApproveChange(module.code, event.target.checked)}
+          aria-label={`${module.name}: darf Budget pflegen`}
+          className="size-4 cursor-pointer accent-primary disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring focus-visible:outline-solid"
+        />
+        <span className="text-xs text-muted-foreground">Budget pflegen</span>
+      </span>
+    )
+  }
   if (!allowsApprove(module.code)) return <span className="text-sm text-muted-foreground">–</span>
   return (
     <input
@@ -353,10 +387,10 @@ function RightsList({ modules, rights, onChange, onScopeChange, onApproveChange 
               <ScopeSelect module={m} right={rights[m.code] ?? NONE} onScopeChange={onScopeChange} id={`scope-select-${m.code}`} />
             </div>
           )}
-          {allowsApprove(m.code) && (
+          {(allowsApprove(m.code) || allowsBudget(m.code)) && (
             <div className="flex items-center justify-between gap-3">
               <label htmlFor={`approve-list-${m.code}`} className="text-sm text-muted-foreground">
-                darf freigeben
+                {allowsBudget(m.code) ? 'darf Budget pflegen' : 'darf freigeben'}
               </label>
               <ApproveCheckbox module={m} right={rights[m.code] ?? NONE} onApproveChange={onApproveChange} id={`approve-list-${m.code}`} />
             </div>

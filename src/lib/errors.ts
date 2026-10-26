@@ -40,6 +40,7 @@ export const MESSAGES = {
   scopeNotAllowed:
     'Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement, in der Anwesenheitserfassung, in der Planungshilfe Touren und Kurse und in Finanzen möglich.',
   approveNotAllowed: '‚Darf freigeben‘ ist nur in Finanzen und in der Planungshilfe und nur zusammen mit einer Stufe möglich.',
+  budgetMaintainNotAllowed: '‚Darf Budget pflegen‘ ist nur im Dashboard, nur mit einer Stufe und nur mit Reichweite ‚alle‘ möglich.',
   // Sätze und Stammdaten Finanzen (spec.md AD R46, R51–R54)
   rateFieldRequired: 'Bitte alle Pflichtfelder ausfüllen.',
   rateValue: 'Wert ungültig.',
@@ -165,6 +166,7 @@ const CODE_MESSAGES: Record<string, string> = {
   AD_CONFIDENTIAL_ONLY_AD: MESSAGES.confidentialOnlyAd,
   AD_SCOPE_NOT_ALLOWED: MESSAGES.scopeNotAllowed,
   AD_APPROVE_NOT_ALLOWED: MESSAGES.approveNotAllowed,
+  AD_BUDGET_MAINTAIN_NOT_ALLOWED: MESSAGES.budgetMaintainNotAllowed,
   AD_RATE_FIELD_REQUIRED: MESSAGES.rateFieldRequired,
   AD_RATE_VALUE: MESSAGES.rateValue,
   AD_RATE_DUPLICATE: MESSAGES.rateDuplicate,
@@ -249,6 +251,7 @@ const CONSTRAINT_MESSAGES: Record<string, string> = {
   ea_property_fields_label_key: MESSAGES.fieldLabelTaken,
   ad_template_rights_scope_allowed: MESSAGES.scopeNotAllowed,
   ad_template_rights_approve_allowed: MESSAGES.approveNotAllowed,
+  ad_template_rights_budget_allowed: MESSAGES.budgetMaintainNotAllowed,
   ad_rates_key_from: MESSAGES.rateDuplicate,
   ad_remuneration_kinds_name_key: MESSAGES.remunerationDuplicate,
   ad_remuneration_kinds_code_key: MESSAGES.remunerationDuplicate,

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { MESSAGES } from '@/lib/errors'
 import { LEVEL_LABELS, type Me } from '@/lib/rights'
 import { MODULE_PATHS, type loadMyModules, type MyModulesResult } from '@/features/start/modules'
+import { StartDashboard } from '@/features/start/StartDashboard'
 
 // US-AD-05: Willkommensgrafik und Einstiege zu den Modulen, für die Rechte bestehen.
 export function StartPage() {
@@ -20,6 +21,11 @@ export function StartPage() {
       <h1 className="text-xl font-semibold text-balance">
         {me ? `Willkommen, ${me.first_name}` : 'Willkommen'}
       </h1>
+
+      {/* US-DS-20: Dashboard über den Modulen, sobald DS freigegeben ist und Rechte bestehen */}
+      <Suspense fallback={null}>
+        <Await resolve={result}>{(r: MyModulesResult) => (r.modules.some((m) => m.code === 'DS') ? <StartDashboard /> : null)}</Await>
+      </Suspense>
 
       <section aria-labelledby="modules-heading" className="flex flex-col gap-3">
         <h2 id="modules-heading" className="font-medium">

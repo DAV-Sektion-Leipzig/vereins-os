@@ -97,7 +97,7 @@ Eine Rechtevorlage legt fest, was jemand in jedem Modul darf. Eine Person kann m
 1. Klicke auf eine Vorlage oder auf **„Neu“**.
 2. Wähle je Modul eine Stufe: **kein Zugriff**, **lesen**, **bearbeiten** oder **verwalten**.
 3. **Reichweite:** „alle“ oder „Referat“. Die Referate wählst du später bei der Zuweisung an eine Person.
-4. **darf freigeben:** In Finanzen heißt das, Abrechnungen als „sachlich richtig“ bestätigen.
+4. **darf freigeben:** In Finanzen heißt das, Abrechnungen als „sachlich richtig“ bestätigen. Beim Dashboard steht an dieser Stelle **„Budget pflegen“**: Finanzplan, Zuordnung und DATEV-Import pflegen und Anträge entscheiden. Das geht nur mit Reichweite „alle“.
 5. Klicke auf **„Speichern“**.
 
 Änderungen gelten sofort für alle Personen mit dieser Vorlage.
@@ -107,7 +107,12 @@ Eine Rechtevorlage legt fest, was jemand in jedem Modul darf. Eine Person kann m
 | Admin | Product Owner |
 | Geschäftsstelle | Mitarbeiter:innen der Geschäftsstelle |
 | Referent:in | Referent:innen und Hüttenwart:innen, mit ihren Referaten |
-| Vorstand | noch ohne Rechte |
+| Vorstand | Dashboard lesen (alle Referate) |
+| Budgetpflege | 1. Vorsitzende:r und Schatzmeister:in: Dashboard lesen und Budget pflegen |
+
+![Rechtevorlage „Budgetpflege“: Dashboard lesen mit „Budget pflegen“](bilder/ad-rechtevorlage-budget.png)
+
+Die Rechtevorlage „Referent:in“ hat im Dashboard „lesen“ mit Reichweite „Referat“: Referent:innen sehen das Budget ihrer Referate mit Einzelbuchungen und die Summen aller anderen.
 
 ---
 
