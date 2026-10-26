@@ -46,9 +46,10 @@ select is(public.ea_default_valid_until('00000000-0000-4000-8000-000000000000', 
 -- View: Admin und Geschäftsstelle sehen alle Zeilen aktiver und ruhender Personen
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
 select results_eq($$ select * from pg_temp.expiry() $$,
-  $$ values (4, 'license'::text, 'valid'::text), (5, 'license', 'expired'), (19, 'license', 'expiring'),
+  $$ values (4, 'license'::text, 'valid'::text), (5, 'license', 'expired'), (16, 'license', 'valid'),
+            (18, 'license', 'expired'), (19, 'license', 'expiring'),
             (20, 'license', 'expired'), (20, 'police_clearance', 'expiring') $$,
-  'Admin: Toni gültig, Anton abgelaufen, Lena läuft ab, Max Lizenz abgelaufen und Führungszeugnis läuft ab');
+  'Admin: Toni und Bernd Berg gültig, Anton und Karl Kletter abgelaufen, Lena läuft ab, Max Lizenz abgelaufen und Führungszeugnis läuft ab');
 select is((select valid_until from public.ea_v_expiry where person_id = 'a0000000-0000-4000-8000-000000000019'),
   (current_date + interval '2 months')::date, 'Lena: gültig bis heute + 2 Monate (AK1)');
 select is((select valid_until from public.ea_v_expiry where kind = 'police_clearance'),
@@ -62,7 +63,8 @@ select is((select qualification_type_id from public.ea_v_expiry where kind = 'po
 
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
 select results_eq($$ select * from pg_temp.expiry() $$,
-  $$ values (4, 'license'::text, 'valid'::text), (5, 'license', 'expired'), (19, 'license', 'expiring'),
+  $$ values (4, 'license'::text, 'valid'::text), (5, 'license', 'expired'), (16, 'license', 'valid'),
+            (18, 'license', 'expired'), (19, 'license', 'expiring'),
             (20, 'license', 'expired'), (20, 'police_clearance', 'expiring') $$,
   'Geschäftsstelle wie Admin');
 
@@ -70,8 +72,9 @@ select results_eq($$ select * from pg_temp.expiry() $$,
 select results_eq(
   $$ select right(person_id::text, 2)::int from public.ea_v_expiry
       where kind in ('license', 'qualification') and valid_until between '2027-01-01' and '2027-12-31' order by 1 $$,
-  $$ select 4 union all select 19 where extract(year from current_date + interval '2 months') = 2027 order by 1 $$,
-  'Jahr 2027: Toni Muster TCSPI 31.12.2027 (+ Lena, falls heute + 2 Monate in 2027)');
+  $$ select 4 union all select 16 union all select 19 where extract(year from current_date + interval '2 months') = 2027
+     order by 1 $$,
+  'Jahr 2027: Toni Muster TCSPI 31.12.2027, Bernd Berg TCBW 30.10.2027 (+ Lena, falls heute + 2 Monate in 2027)');
 
 -- Referent:in Klettern: nur Personen ihrer Referate, keine Führungszeugnis-Zeile (Lesestufe GST; AK5)
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');

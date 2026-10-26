@@ -45,6 +45,7 @@ select results_eq(
        from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
       where r.module_code = 'DS' order by t.name $$,
   $$ values ('Admin'::text, 'read'::text, 'all'::text, false), ('Budgetpflege', 'read', 'all', true),
+            ('Freigabe Touren und Kurse', 'none', 'all', false),
             ('Geschäftsstelle', 'read', 'all', false), ('Referent:in', 'read', 'referat', false),
             ('Vorstand', 'read', 'all', false) $$,
   'Startwerte DS: Admin, Geschäftsstelle, Vorstand lesen (alle); Referent:in lesen (Referat); Budgetpflege mit Kennzeichen');

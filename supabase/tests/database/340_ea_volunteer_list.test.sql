@@ -28,6 +28,11 @@ create function pg_temp.qual(p_code text) returns uuid language sql as $$
   select id from public.ad_qualification_types where code = p_code
 $$;
 
+-- Personen 13–18 (Seed AD v0.9, Planungshilfe) sind für diese Erwartungen ausgeblendet: ohne Ehrenamtsstatus
+-- (nur in dieser Transaktion; ohne Nutzerkontext zulässig wie im Seed)
+update public.ea_persons set volunteer_status = null, volunteer_status_since = null
+ where id between 'a0000000-0000-4000-8000-000000000013' and 'a0000000-0000-4000-8000-000000000018';
+
 -- Standardaufruf je Testzugang
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
 select is((select coalesce(array_agg(right(l.id::text, 2)::int order by l.id), '{}') from public.ea_volunteer_list() l),

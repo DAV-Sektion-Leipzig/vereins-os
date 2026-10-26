@@ -36,8 +36,9 @@ select results_eq(
   $$ select t.name, r.module_code, r.level::text, r.scope::text
        from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
       where r.can_approve order by t.name, r.module_code $$,
-  $$ values ('Referent:in'::text, 'FI'::text, 'read'::text, 'referat'::text) $$,
-  'nur Referent:in darf freigeben: FI lesen, Reichweite Referat');
+  $$ values ('Freigabe Touren und Kurse'::text, 'TK'::text, 'edit'::text, 'referat'::text),
+            ('Referent:in', 'FI', 'read', 'referat') $$,
+  'freigeben: Referent:in in FI (lesen), Freigabe Touren und Kurse in TK (bearbeiten), je Reichweite Referat');
 
 -- Erwartete Ergebnisse v0.10 (spec.md Abschnitt 9)
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000032');
