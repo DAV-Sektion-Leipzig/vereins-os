@@ -10,9 +10,79 @@ Du siehst die Daten **deines Referats**. Hast du mehrere Referate, siehst du all
 
 | Modul | Was du dort tust | Stand |
 |---|---|---|
+| Dashboard | Budget deines Referats sehen, Hinweise eintragen, Umschichtungen beantragen | in Vorbereitung |
 | Ehrenamtsmanagement | Aktive deines Referats finden, anlegen und pflegen | freigeschaltet |
 | Anwesenheitserfassung | Trainings, Fahrten und andere Einsätze deines Referats erfassen | freigeschaltet |
 | Finanzen | Abrechnungen deines Referats als „sachlich richtig“ bestätigen | freigeschaltet (für Kinder und Jugend und Leistungssport) |
+
+---
+
+## Dashboard: Budget meines Referats
+
+*Das Dashboard ist in Vorbereitung. Die Bilder zeigen erfundene Testdaten.*
+
+Im Dashboard siehst du, wie viel Geld dein Referat im Jahr hat und wie viel schon ausgegeben ist. Du musst nicht mehr nachfragen.
+
+![Dashboard der Referentin Kinder und Jugend mit „Zu tun“, Kacheln, Budgetposten und dem Budget des Vereins](bilder/ds-dashboard.png)
+
+Oben wählst du die **Sicht** (dein Referat oder „Verein“) und das **Jahr** (laufendes Jahr oder Vorjahr). Die Seite hat drei Blöcke:
+
+- **① Zu tun:** was gerade ansteht, zum Beispiel Abrechnungen zur Bestätigung oder die Antwort auf deinen Antrag.
+- **② Budget meines Referats:** die Kacheln **Plan**, **verbraucht**, **frei** und **Verbrauch**, darunter eine Zeile je Budgetposten.
+- **④ Budget des Vereins:** die Summen aller Gesamtbudgets. Dein Referat ist grün umrandet. Klicke auf ein Gesamtbudget, um seine Posten zu sehen.
+
+So liest du eine Zeile:
+
+| Teil | Bedeutung |
+|---|---|
+| **Plan** | aktueller Plan. Steht darunter „beschlossen“, wurde umgeschichtet. |
+| **verbraucht** | gebuchte Ausgaben bis zum **Datenstand** (letzte Buchung im DATEV-Export, nicht heute). Darunter der Wert des Vorjahres am gleichen Tag; „neu“ heißt: im Vorjahr gab es den Posten nicht. |
+| **Balken** | grün, gelb oder rot gefüllt bis zum Verbrauch. Der **senkrechte Strich** zeigt, wie viel vom Jahr bis zum Datenstand vorbei ist. Liegt der Balken rechts vom Strich, gibst du schneller aus als geplant. |
+| **Vorschau** (blau gestreift) | Vergütung, die schon ausgezahlt, aber noch nicht gebucht ist. Sie zählt **nicht** zu verbraucht, frei oder zur Ampel. |
+| **Ampel** | ● im Plan (unter 80 %), ▲ knapp (80 bis 100 %), ■ über Plan (über 100 %) oder ohne Budget |
+| **Hinweis** | kurzer Text deines Referats, zum Beispiel „Herbstfreizeit noch offen“ |
+| **?** | Die Zuordnung ist noch unsicher. Die Budgetpflege klärt das. |
+
+Auf dem Handy stehen die Kacheln und Posten untereinander.
+
+![Dashboard auf dem Handy](bilder/ds-dashboard-mobil.png)
+
+### Einzelbuchungen ansehen
+
+Klicke auf einen Budgetposten. Du siehst die Summe je Konto und alle Buchungen. Du kannst sie durchsuchen und nach Datum, Konto oder Betrag sortieren.
+
+![Budgetposten „Vergütung Aktive“ mit Summe je Konto und Einzelbuchungen](bilder/ds-posten.png)
+
+Einzelbuchungen siehst du nur für dein Referat und für Gesamtbudgets, die für alle freigegeben sind (zum Beispiel Veranstaltungen). Bei anderen Referaten siehst du nur die Summen.
+
+### Hinweis eintragen
+
+![Dialog „Hinweis eintragen“](bilder/ds-hinweis.png)
+
+1. Klicke in der Zeile auf das Sprechblasen-Zeichen oder im Budgetposten auf **„Hinweis eintragen“**.
+2. Schreib höchstens 500 Zeichen und klicke auf **„Speichern“**.
+
+Den Hinweis sehen alle mit Zugriff auf das Dashboard. Ein leerer Hinweis entfernt ihn.
+
+### Umschichtung beantragen
+
+Du brauchst bei einem Posten mehr Geld und hast bei einem anderen Posten **desselben Gesamtbudgets** zu viel? Dann beantrage eine Umschichtung. Die Summe deines Gesamtbudgets bleibt gleich.
+
+![Dialog „Umschichtung beantragen“ mit von, nach, Betrag und Grund](bilder/ds-umschichtung.png)
+
+1. Klicke auf **„Umschichtung beantragen“**.
+2. Wähle **von** und **nach**, trage den **Betrag** und einen **Grund** ein.
+3. Klicke auf **„Beantragen“**.
+
+Die Budgetpflege bestätigt oder lehnt ab. Die Antwort siehst du unter „Zu tun“. Bis dahin kannst du den Antrag zurückziehen.
+
+### Umschlüsselung vorschlagen
+
+Eine Buchung steht beim falschen Budgetposten? Klicke im Budgetposten bei der Buchung auf **„Vorschlagen“**, wähle den richtigen Posten und schreib einen Grund. Die Budgetpflege entscheidet. Bis dahin steht bei der Buchung „Vorschlag offen“.
+
+### Drucken
+
+**„Drucken“** erzeugt eine Seite im Querformat mit allen Gesamtbudgets aufgeklappt, mit Datenstand und Druckdatum. Gut für Sitzungen.
 
 ---
 

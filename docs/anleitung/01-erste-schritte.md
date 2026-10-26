@@ -49,7 +49,7 @@ Jetzt ist dein Zugang aktiv. Du landest auf deiner Startseite.
 
 ## Die Startseite
 
-![Startseite mit Begrüßung und den Kacheln deiner Module](bilder/start-referent.png)
+![Startseite mit Begrüßung, Dashboard und den Kacheln deiner Module](bilder/start-referent.png)
 
 Auf der Startseite siehst du **deine Module**. Das sind nur die Module, für die du Rechte hast. Unter dem Namen steht, was du dort darfst:
 
@@ -58,6 +58,8 @@ Auf der Startseite siehst du **deine Module**. Das sind nur die Module, für die
 - **verwalten:** Du kannst alles in diesem Modul, auch löschen und Einstellungen ändern.
 
 Klicke auf eine Kachel, um das Modul zu öffnen.
+
+Hast du Rechte auf das **Dashboard**, siehst du über deinen Modulen gleich das Wichtigste: was **zu tun** ist und das **Budget deines Referats** (bzw. des Vereins). Mit **„Ganzes Dashboard“** öffnest du alles. Mehr dazu im Abschnitt [Dashboard](02-referentinnen.md#dashboard-budget-meines-referats).
 
 Oben im Modul siehst du eine Leiste mit den Seiten des Moduls. Oben links kommst du mit einem Klick auf **„Vereins OS“** zurück zur Startseite.
 
@@ -94,3 +96,8 @@ Klicke oben rechts auf **„Abmelden“**. Melde dich immer ab, wenn du an einem
 | **Eigenschaft** | Eine Angabe zu einer Person mit Datum, zum Beispiel Funktion, Lizenz oder Kontaktdaten. |
 | **Einsatz** | Ein Training, eine Fahrt, ein Arbeitseinsatz, ein Kurs oder eine Tour. |
 | **Abrechnung** | Die Vergütung einer Person für ein Halbjahr, berechnet aus den Einsätzen. |
+| **Budgetposten** | Eine Zeile im Finanzplan des Vereins, zum Beispiel „Vergütung Aktive“, mit dem geplanten Betrag. |
+| **Gesamtbudget** | Mehrere Budgetposten zusammen, zum Beispiel alle Posten von Kinder und Jugend. |
+| **Datenstand** | Datum der letzten Buchung im DATEV-Export. Bis dahin sind die Zahlen im Dashboard vollständig. |
+| **Umschichtung** | Geld zwischen zwei Budgetposten desselben Gesamtbudgets verschieben. Die Summe bleibt gleich. |
+| **Umschlüsselung** | Eine Buchung einem anderen Budgetposten zuordnen. |

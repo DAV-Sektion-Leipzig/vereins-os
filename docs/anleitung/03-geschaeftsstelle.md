@@ -16,8 +16,21 @@ Du darfst in allen Fachmodulen **verwalten**. Das heißt: Du siehst alle Referat
 | Gruppen | Gruppen, Teilnehmer:innen, Erziehungsberechtigte, Verträge, Betreuung | freigeschaltet |
 | Anwesenheitserfassung | Einsätze aller Referate erfassen, korrigieren, löschen | freigeschaltet |
 | Finanzen | Halbjahresabrechnung berechnen, abschließen, auszahlen | freigeschaltet |
+| Dashboard | Budget aller Referate und des Vereins sehen, mit Einzelbuchungen und Prüfung | in Vorbereitung |
 
 Vieles funktioniert genauso wie bei den Referent:innen. Dort ist es Schritt für Schritt erklärt: [Anleitung für Referent:innen](02-referentinnen.md). Hier steht, was **du zusätzlich** tust.
+
+---
+
+## Dashboard
+
+*Das Dashboard ist in Vorbereitung.*
+
+Du siehst das Budget **aller Referate** mit Einzelbuchungen. Unter **„Verein“** stehen zusätzlich die Summen des Vereins, die Gesamtbudgets nach Ampel, die **nicht zugeordneten Buchungen** und die **Prüfung** des letzten DATEV-Exports.
+
+![Sicht „Verein“ mit Summen, Gesamtbudgets, nicht zugeordneten Buchungen und Prüfung](bilder/ds-verein.png)
+
+Wie du das Dashboard liest, steht im Abschnitt [Dashboard](02-referentinnen.md#dashboard-budget-meines-referats). Finanzplan, Zuordnung und DATEV-Import pflegt die Budgetpflege: [Anleitung für die Budgetpflege](05-budgetpflege.md).
 
 ---
 

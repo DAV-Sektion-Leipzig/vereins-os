@@ -28,13 +28,13 @@ Stand: 26.10.2026 · Grundlage: spec.md v0.2 (Ready), 02-stories.md DS v0.2, 02-
 
 ## Phase 3: Oberfläche
 
-- [ ] DT14 (spec T14) Parser Excel und DATEV-CSV im Browser mit Unit-Tests (plan.md P6)
-- [ ] DT15 (spec T15) /dashboard, Postendetail, Dialoge, Vorschau, Druck
-- [ ] DT16 (spec T16) /dashboard/verein, /dashboard/budget/pflege
-- [ ] DT04 (spec T4, T2 Oberfläche) Startseite mit Dashboard; Kennzeichen „darf Budget pflegen“ in der Rechtevorlage
+- [x] DT14 (spec T14) Parser Excel und DATEV-CSV im Browser mit Unit-Tests (plan.md P6)
+- [x] DT15 (spec T15) /dashboard, Postendetail, Dialoge, Vorschau, Druck
+- [x] DT16 (spec T16) /dashboard/verein, /dashboard/budget/pflege
+- [x] DT04 (spec T4, T2 Oberfläche) Startseite mit Dashboard; Kennzeichen „darf Budget pflegen“ in der Rechtevorlage
 
 ## Phase 4: Abschluss
 
-- [ ] DT17 (spec T17) Seed `supabase/seed-ds.sql`, Testzugänge Budgetpflege und Schatzmeisterin Test
-- [ ] DT18 (spec T18) Anleitung: neuer Teil „Dashboard“
+- [ ] DT17 (spec T17) Seed `supabase/seed-ds.sql`, Testzugänge Budgetpflege und Schatzmeisterin Test — Teil 1 mit Phase 3: `seed-ds.sql` (`SEED_WITH_DS=1`, Budgetpflege für Vorstand Test, Finanzplan, Regeln, DATEV-Export, Hinweis, Umschichtung, Vorschlag); offen: Testzugang Schatzmeisterin Test
+- [x] DT18 (spec T18) Anleitung: neuer Teil „Budgetpflege“ (05), Abschnitte Dashboard in 01–04, Version 2.0 (mit Phase 3, CLAUDE.md „Anleitung im selben Pull Request“)
 - [ ] DT19 (spec T19) abnahme-test.md; `ad_modules.is_available` für DS mit der Freigabe

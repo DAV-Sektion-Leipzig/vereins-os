@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Lokaler Stack für die Screenshots der Anleitung: Supabase lokal (nie TEST, nie PROD), Seed mit EZ und FI,
+# Lokaler Stack für die Screenshots der Anleitung: Supabase lokal (nie TEST, nie PROD), Seed mit EZ, FI und DS,
 # alle umgesetzten Module freigeschaltet (nur lokal) und die App unter http://localhost:5173.
 #
 # Aufruf aus dem Repo-Wurzelverzeichnis:
@@ -41,10 +41,10 @@ publishable="$(node -e 'console.log(JSON.parse(process.argv[1]).PUBLISHABLE_KEY)
 
 [[ "$db_url" =~ @(127\.0\.0\.1|localhost): ]] || { echo "Kein lokaler Stack: $db_url" >&2; exit 1; }
 
-SEED_DB_URL="$db_url" SEED_WITH_EZ=1 SEED_WITH_FI=1 supabase/seed.sh
+SEED_DB_URL="$db_url" SEED_WITH_EZ=1 SEED_WITH_FI=1 SEED_WITH_DS=1 supabase/seed.sh
 
 # Für die Bilder alle Module mit Oberfläche zeigen; den echten Stand nennt die Tabelle in docs/anleitung/README.md
-psql "$db_url" -q -c "update public.ad_modules set is_available = true where code in ('AD', 'EA', 'GR', 'EZ', 'FI', 'TK')"
+psql "$db_url" -q -c "update public.ad_modules set is_available = true where code in ('DS', 'AD', 'EA', 'GR', 'EZ', 'FI', 'TK')"
 
 # App gegen den lokalen Stack (Publishable Key des lokalen Stacks, kein Secret)
 pkill -f "vite --port 5173" 2>/dev/null || true

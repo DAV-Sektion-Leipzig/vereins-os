@@ -1,4 +1,4 @@
-// PDF der Anleitung: fügt docs/anleitung/README.md und die Teile 01–04 zu einem Dokument mit Titelseite und
+// PDF der Anleitung: fügt docs/anleitung/README.md und die Teile 01–05 zu einem Dokument mit Titelseite und
 // Inhaltsverzeichnis zusammen. Ausgabe: docs/anleitung/dist/vereins-os-anleitung-v<Version>.pdf (nicht im Git).
 // Die Version steht in docs/anleitung/README.md („Version x.y“). Für PROD erzeugt der Workflow
 // .github/workflows/anleitung-pdf.yml das PDF und legt es als Release ab.
@@ -16,7 +16,7 @@ const DIST = new URL('dist/', DIR)
 const LOGO = new URL('../../src/assets/brand/DAVLogo-lg_Leipzig-1378_RGB.svg', import.meta.url)
 
 // Reihenfolge im PDF; der Abschnitt für Admin und Entwicklung in README.md bleibt draußen.
-const CHAPTERS = ['README.md', '01-erste-schritte.md', '02-referentinnen.md', '03-geschaeftsstelle.md', '04-admin.md']
+const CHAPTERS = ['README.md', '01-erste-schritte.md', '02-referentinnen.md', '03-geschaeftsstelle.md', '04-admin.md', '05-budgetpflege.md']
 const README_CUT = '## Anleitung aktualisieren'
 
 /** Anker wie bei GitHub: klein, ohne Satzzeichen, Leerzeichen als Bindestrich. */

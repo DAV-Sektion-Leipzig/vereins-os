@@ -43,6 +43,14 @@ import { RechtevorlagenListe } from '@/features/ad/rechtevorlagen/Rechtevorlagen
 import { LoginPage } from '@/features/auth/LoginPage'
 import { PasswortSetzenPage } from '@/features/auth/PasswortSetzenPage'
 import { PasswortVergessenPage } from '@/features/auth/PasswortVergessenPage'
+import { loadDsAccess } from '@/features/ds/access'
+import { DashboardPage } from '@/features/ds/budget/DashboardPage'
+import { loadDashboard, loadItem, loadVerein } from '@/features/ds/budget/data'
+import { PostenPage } from '@/features/ds/budget/PostenPage'
+import { VereinPage } from '@/features/ds/budget/VereinPage'
+import { loadPflege } from '@/features/ds/pflege/data'
+import { PflegePage } from '@/features/ds/pflege/PflegePage'
+import { DsLayout } from '@/features/ds/DsLayout'
 import { loadEaAccess } from '@/features/ea/access'
 import { AblaufPage } from '@/features/ea/ablauf/AblaufPage'
 import { loadExpiryList } from '@/features/ea/ablauf/data'
@@ -124,6 +132,22 @@ export const router = createBrowserRouter([
     children: [
       { index: true, loader: loadMyModules, element: <StartPage /> },
       { path: 'kein-zugriff', element: <KeinZugriffPage /> },
+      {
+        // Dashboard mit DS ≥ lesen in irgendeiner Reichweite; Budgetpflege nur mit „darf Budget pflegen“
+        // (spec.md DS v0.2 Abschnitte 3 und 6).
+        id: 'ds',
+        path: 'dashboard',
+        loader: loadDsAccess,
+        element: <DsLayout />,
+        handle: { moduleName: 'Dashboard' } satisfies RouteHandle,
+        children: [
+          { index: true, loader: loadDashboard, element: <DashboardPage /> },
+          { path: 'verein', loader: loadVerein, element: <VereinPage /> },
+          { path: 'budget/posten/:id', loader: loadItem, element: <PostenPage /> },
+          { path: 'budget/pflege', loader: loadPflege, element: <PflegePage /> },
+          { path: '*', loader: () => redirect('/dashboard') },
+        ],
+      },
       {
         // AD nur mit AD ≥ lesen; sonst /kein-zugriff ohne Datenabfrage (US-AD-05 AK3)
         id: 'ad',
