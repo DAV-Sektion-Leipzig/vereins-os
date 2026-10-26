@@ -27,7 +27,7 @@ select results_eq(
   $$ select t.name, r.level::text, r.scope::text
        from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
       where r.module_code = 'EZ' order by t.name $$,
-  $$ values ('Admin'::text, 'read'::text, 'all'::text), ('Geschäftsstelle', 'manage', 'all'),
+  $$ values ('Admin'::text, 'read'::text, 'all'::text), ('Budgetpflege', 'none', 'all'), ('Geschäftsstelle', 'manage', 'all'),
             ('Referent:in', 'edit', 'referat'), ('Vorstand', 'none', 'all') $$,
   'Startwerte EZ: Admin lesen, Geschäftsstelle verwalten, Referent:in bearbeiten (Referat), Vorstand ohne');
 

@@ -21,17 +21,18 @@ select results_eq(
   $$ select t.name, r.module_code, r.level::text
      from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
      where r.level <> 'none' order by t.name, r.module_code $$,
-  $$ values ('Admin'::text, 'AD'::text, 'manage'::text), ('Admin', 'EA', 'manage'), ('Admin', 'EZ', 'read'),
+  $$ values ('Admin'::text, 'AD'::text, 'manage'::text), ('Admin', 'DS', 'read'), ('Admin', 'EA', 'manage'), ('Admin', 'EZ', 'read'),
             ('Admin', 'GR', 'read'), ('Admin', 'SC', 'manage'),
-            ('Geschäftsstelle', 'AM', 'manage'), ('Geschäftsstelle', 'EA', 'manage'), ('Geschäftsstelle', 'EZ', 'manage'),
+            ('Budgetpflege', 'DS', 'read'),
+            ('Geschäftsstelle', 'AM', 'manage'), ('Geschäftsstelle', 'DS', 'read'), ('Geschäftsstelle', 'EA', 'manage'), ('Geschäftsstelle', 'EZ', 'manage'),
             ('Geschäftsstelle', 'FI', 'manage'),
             ('Geschäftsstelle', 'GR', 'manage'), ('Geschäftsstelle', 'GS', 'manage'), ('Geschäftsstelle', 'OA', 'manage'),
-            ('Geschäftsstelle', 'PM', 'manage'), ('Referent:in', 'EA', 'edit'), ('Referent:in', 'EZ', 'edit'),
-            ('Referent:in', 'FI', 'read') $$,
-  'Startvorlagen nach spec.md Abschnitt 3 (Kern v0.7, Nachträge v0.8 und v0.10); Vorstand ohne Rechte'
+            ('Geschäftsstelle', 'PM', 'manage'), ('Referent:in', 'DS', 'read'), ('Referent:in', 'EA', 'edit'), ('Referent:in', 'EZ', 'edit'),
+            ('Referent:in', 'FI', 'read'), ('Vorstand', 'DS', 'read') $$,
+  'Startvorlagen nach spec.md Abschnitt 3 (Kern v0.7, Nachträge v0.8 und v0.10) und spec.md DS (DS lesen, Vorlage Budgetpflege)'
 );
 select is((select count(*)::int from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
-           where t.name = 'Vorstand'), 10, 'Vorstand hat je Modul eine Zeile');
+           where t.name = 'Vorstand'), 11, 'Vorstand hat je Modul eine Zeile');
 
 -- ad_user_level je Testzugang
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
@@ -79,7 +80,7 @@ select pg_temp.as_user('b0000000-0000-4000-8000-000000000001');
 select lives_ok($$ insert into public.ad_templates (name, description) values ('Testvorlage', 'nur Test') $$,
   'Admin legt Vorlage an');
 select is((select count(*)::int from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
-           where t.name = 'Testvorlage' and r.level = 'none'), 10, 'neue Vorlage hat 10 Zeilen kein Zugriff (auch EZ)');
+           where t.name = 'Testvorlage' and r.level = 'none'), 11, 'neue Vorlage hat 11 Zeilen kein Zugriff (auch EZ und DS)');
 select throws_ok($$ insert into public.ad_templates (name) values ('testvorlage') $$, '23505',
   null, 'Vorlagenname doppelt (ad_templates_name_key)');
 

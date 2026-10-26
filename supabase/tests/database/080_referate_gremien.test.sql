@@ -17,15 +17,15 @@ end $$;
 -- Startbestand
 select results_eq($$ select name from public.ea_referate order by sort_order $$,
   $$ values ('Ausbildung'::text), ('Touren'), ('Kinder und Jugend'), ('Klettern'), ('Leistungssport'),
-            ('Karl-Stein-Hütte'), ('Sulzenauhütte') $$,
-  '7 Referate in der Reihenfolge aus spec.md');
+            ('Karl-Stein-Hütte'), ('Sulzenauhütte'), ('Öffentlichkeitsarbeit'), ('Umwelt und Naturschutz') $$,
+  '9 Referate in der Reihenfolge aus spec.md (Dashboard D10: Öffentlichkeitsarbeit, Umwelt und Naturschutz)');
 select results_eq($$ select name from public.ea_gremien order by sort_order $$,
   $$ values ('Vorstand'::text), ('Beirat'), ('Ehrenrat'), ('Jugendausschuss') $$, '4 Gremien');
 select ok((select bool_and(is_active) from public.ea_referate), 'alle Referate aktiv');
 
 -- Lesen mit aktivem Zugang
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000003');
-select is((select count(*)::int from public.ea_referate), 7, 'Vorstand liest Referate');
+select is((select count(*)::int from public.ea_referate), 9, 'Vorstand liest Referate');
 select is((select count(*)::int from public.ea_gremien), 4, 'Vorstand liest Gremien');
 select ok(public.ad_has_active_access(), 'ad_has_active_access für aktiven Zugang');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000006');

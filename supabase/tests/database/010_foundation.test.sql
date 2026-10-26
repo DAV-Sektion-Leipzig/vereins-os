@@ -28,7 +28,7 @@ select enum_has_labels('public', 'ad_license_level', array['pre', 'C', 'B', 'A',
 select enum_has_labels('public', 'ad_qualification_status', array['current', 'historic']);
 
 -- Module
-select is((select count(*)::int from public.ad_modules), 10, 'ad_modules hat 10 Module (v0.8: EZ)');
+select is((select count(*)::int from public.ad_modules), 11, 'ad_modules hat 11 Module (v0.8: EZ; Dashboard: DS)');
 select results_eq(
   $$ select code from public.ad_modules where is_available order by sort_order $$,
   $$ values ('AD'::text), ('EA'), ('GR'), ('EZ'), ('FI') $$,
@@ -36,8 +36,8 @@ select results_eq(
 );
 select results_eq(
   $$ select code from public.ad_modules order by sort_order $$,
-  $$ values ('AD'::text), ('SC'), ('EA'), ('GR'), ('EZ'), ('FI'), ('OA'), ('PM'), ('GS'), ('AM') $$,
-  'Reihenfolge der Module (v0.8: EZ direkt nach GR)'
+  $$ values ('DS'::text), ('AD'), ('SC'), ('EA'), ('GR'), ('EZ'), ('FI'), ('OA'), ('PM'), ('GS'), ('AM') $$,
+  'Reihenfolge der Module (v0.8: EZ direkt nach GR; Dashboard: DS zuerst)'
 );
 
 -- RLS auf jeder Tabelle in public
