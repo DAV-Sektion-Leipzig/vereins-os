@@ -5,7 +5,8 @@ import { valuesFromDetail } from '@/features/ez/erfassen/values'
 import { KIND_LABELS } from '@/features/ez/labels'
 
 // T029 (US-EZ-12, -23): Einsatz korrigieren wie /ez/neu Schritt 2–3; Einsatzart und Gruppe nur angezeigt (R19);
-// bei Einsätzen aus der Planungshilfe Kopf außer Bemerkung gesperrt und Personen aus der Planung fest (R25).
+// bei Einsätzen aus der Planungshilfe Kopf außer Bemerkung gesperrt und Personen aus der Planung fest (R25);
+// abgerechnete Einsätze mit gesperrten Kopfdaten und Personen (R34, US-EZ-25).
 export function EinsatzBearbeitenPage() {
   const { detail, names, ...context } = useLoaderData() as EditContext
   const e = detail.event
@@ -19,6 +20,9 @@ export function EinsatzBearbeitenPage() {
         initialNames={names}
         fromPlanning={e.from_planning}
         lockedPersonIds={detail.attendances.filter((a) => a.from_plan).map((a) => a.person_id)}
+        settled={e.is_settled}
+        settledPersonIds={detail.attendances.filter((a) => a.is_settled).map((a) => a.person_id)}
+        remunerationName={e.remuneration_kind_name}
         groupLabel={detail.groups.map((g) => g.name).join(' + ')}
       />
     </section>

@@ -31,6 +31,9 @@ export type EventRow = {
   registered_count: number
   absent_count: number
   trial_count: number
+  remuneration_kind_id: string | null
+  remuneration_kind_name: string | null
+  is_settled: boolean
   total_count: number
 }
 

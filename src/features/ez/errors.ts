@@ -28,6 +28,8 @@ export const EZ_MESSAGES = {
   eventLocked: 'Der Einsatz ist schon erfasst und wurde nicht geändert.',
   privacyNotConfirmed: 'Bitte bestätige, dass die Person informiert wurde.',
   personNotInactive: 'Diese Person ist bereits aktiv.',
+  settled: 'Dieser Einsatz ist abgerechnet. Änderungen nur nach Rücknahme des Abschlusses in Finanzen.',
+  remunerationInactive: 'Diese Abrechnungsart ist nicht mehr aktiv. Bitte eine andere wählen.',
   // Nur Frontend (spec.md 5, „Weitere Meldungen“)
   network: 'Die Eingabe wurde nicht gesendet. Bitte bei Verbindung erneut speichern.',
   sessionExpired: 'Bitte erneut anmelden.',
@@ -60,6 +62,8 @@ const CODES: Record<string, string> = {
   EZ_EVENT_LOCKED: EZ_MESSAGES.eventLocked,
   EZ_PRIVACY_NOT_CONFIRMED: EZ_MESSAGES.privacyNotConfirmed,
   EZ_PERSON_NOT_INACTIVE: EZ_MESSAGES.personNotInactive,
+  EZ_SETTLED: EZ_MESSAGES.settled,
+  EZ_REMUNERATION_INACTIVE: EZ_MESSAGES.remunerationInactive,
   // ohne eigene Meldung in spec.md: allgemeine Meldung (contracts/error-codes.md)
   EZ_STATUS_NOT_ALLOWED: MESSAGES.unexpected,
   EZ_KIND_NOT_ALLOWED: MESSAGES.unexpected,

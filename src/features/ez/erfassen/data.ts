@@ -3,7 +3,7 @@ import { redirect, type LoaderFunctionArgs } from 'react-router-dom'
 import { canWriteReferat, requireEzEdit, type EzAccess } from '@/features/ez/access'
 import { todayIso } from '@/features/ez/dates'
 import { fetchEventDetail, type EventDetail } from '@/features/ez/detail/data'
-import type { Role } from '@/features/ez/labels'
+import type { EventKind, Role, Span } from '@/features/ez/labels'
 import { loadLocations, type Location } from '@/features/ez/shared/locations'
 import type { PersonNames } from '@/features/ez/shared/rpc'
 import { supabase } from '@/lib/supabase'
@@ -24,12 +24,18 @@ export type Roster = {
   persons: RosterPerson[]
 }
 
+export type RemunerationOption = { id: string; name: string; is_active: boolean }
+export type RemunerationDefault = { event_kind: EventKind; span: Span; kind_id: string | null; valid_from: string }
+
 export type FormContext = {
   access: EzAccess
   userId: string
   groups: GroupOption[]
   referate: ReferatOption[]
   locations: Location[]
+  /** Abrechnungsarten und Vorbelegung je Einsatzart aus der Administration (R32). */
+  remunerationKinds: RemunerationOption[]
+  remunerationDefaults: RemunerationDefault[]
 }
 
 export type EditContext = FormContext & { detail: EventDetail; names: PersonNames }
@@ -60,11 +66,36 @@ async function loadReferate(access: EzAccess): Promise<ReferatOption[]> {
     .map(({ id, name }) => ({ id, name }))
 }
 
+async function loadRemuneration(): Promise<Pick<FormContext, 'remunerationKinds' | 'remunerationDefaults'>> {
+  const [kinds, defaults] = await Promise.all([
+    supabase.from('ad_remuneration_kinds').select('id, name, is_active').order('name'),
+    supabase.from('ad_remuneration_defaults').select('event_kind, span, kind_id, valid_from'),
+  ])
+  return {
+    remunerationKinds: (kinds.data ?? []) as RemunerationOption[],
+    remunerationDefaults: (defaults.data ?? []) as RemunerationDefault[],
+  }
+}
+
 async function loadContext(): Promise<FormContext> {
   const access = await requireEzEdit()
   const { data } = await supabase.auth.getSession()
-  const [groups, referate, locations] = await Promise.all([loadGroups(access), loadReferate(access), loadLocations()])
-  return { access, userId: data.session?.user.id ?? '', groups, referate, locations }
+  const [groups, referate, locations, remuneration] = await Promise.all([
+    loadGroups(access),
+    loadReferate(access),
+    loadLocations(),
+    loadRemuneration(),
+  ])
+  return { access, userId: data.session?.user.id ?? '', groups, referate, locations, ...remuneration }
+}
+
+/** Vorbelegte Abrechnungsart wie ad_remuneration_default_at: spätestes „gültig ab“ ≤ Datum; '' = keine Vergütung. */
+export function remunerationDefault(context: FormContext, kind: EventKind, span: Span, date: string): string {
+  const day = date || todayIso()
+  const match = context.remunerationDefaults
+    .filter((d) => d.event_kind === kind && d.span === span && d.valid_from <= day)
+    .sort((a, b) => b.valid_from.localeCompare(a.valid_from))[0]
+  return match?.kind_id ?? ''
 }
 
 export async function loadNewEvent(): Promise<FormContext> {
