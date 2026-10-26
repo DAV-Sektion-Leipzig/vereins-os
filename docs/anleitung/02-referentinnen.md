@@ -270,14 +270,20 @@ Hier planst du Führungstouren, Kurse und Gemeinschaftstouren. Die Planungshilfe
 
 ### Eine Planung anlegen
 
+![Liste der Planungen mit Filtern und Knopf „Neue Planung“](bilder/tk-planungen.png)
+
 1. Öffne auf der Startseite **„Planungshilfe Touren und Kurse“**. Du siehst die Liste der Planungen.
 2. Klicke auf **„Neue Planung“**.
 3. Wähle den **Tourtyp**: Führungstour, Kurs oder Gemeinschaftstour. Gib einen **Titel** ein (höchstens 90 Zeichen).
 4. Klicke auf **„Planung anlegen“**. Die Planung öffnet sich als **Entwurf**.
 
+![Neue Planung: Tourtyp wählen und Titel eingeben](bilder/tk-neu.png)
+
 > **Tipp:** Eine Tour wiederholt sich? Klicke in der Liste bei einer alten Planung auf **„Kopieren“**. Termin, Anmeldeschluss, Kontaktdaten und Bestätigungen musst du neu eintragen.
 
 ### Die Schritte 1 bis 7
+
+![Planung mit Schritt 1 „Leitung“ und Seitenleiste mit Beitrag, CO2-Bilanz und Fortschritt](bilder/tk-planung.png)
 
 Die Planung hat sieben Schritte, wie das bisherige Formular „Tourenkonzept“. Oben siehst du, in welchem Schritt noch Angaben fehlen. Rechts (auf dem Handy unten) steht die **Seitenleiste** mit Beitrag, CO2-Bilanz und Hinweisen.
 
@@ -287,6 +293,10 @@ Die Planung hat sieben Schritte, wie das bisherige Formular „Tourenkonzept“.
 4. **Anforderungen:** Gehzeit, Höhenmeter, Kondition, Technik, Voraussetzungen, Ausrüstung.
 5. **Teilnahme:** Mindest- und Höchstzahl, Anmeldeschluss, Fragen im Anmeldeformular.
 6. **Kalkulation:** Tagessätze bzw. Lehreinheiten, Kosten der Leitung, sonstige Kosten, Teilnahmebeitrag. Felder mit **„Vorschlag“** füllt die Planungshilfe aus. Änderst du sie, kannst du mit **„übernehmen“** zum Vorschlag zurück.
+![Schritt 3: Termin, Treffpunkt und geplante An- und Abreise](bilder/tk-anreise.png)
+
+![Schritt 6: Kalkulation mit Vorschlägen, Kosten und Teilnahmebeitrag](bilder/tk-kalkulation.png)
+
 7. **Einreichen:** Wer legt das Angebot in Yolawo an? Bestätigungen zu Lizenz, Abrechnung, Übungsleiter-Erklärung und Notfallkarte.
 
 > **Gut zu wissen:** Die Planungshilfe **speichert automatisch** zwei Sekunden nach deiner letzten Eingabe. Oben steht „Gespeichert … Uhr“. Hat jemand anderes die Planung inzwischen geändert, erscheint ein Hinweis mit **„Neu laden“**.
@@ -301,7 +311,11 @@ Ist die Leitung noch nicht in den Aktiven? Klicke in Schritt 1 auf **„Neue Per
 2. Wer das **Freigaberecht** hat, prüft die Planung. Er oder sie kann eine **„Rückfrage“** stellen oder **„Freigeben“**. Mit der Freigabe bleiben die Sätze so, wie sie an diesem Tag gelten.
 3. Nach der Freigabe ändern nur noch Personen mit Freigaberecht oder die Geschäftsstelle.
 
+![Dialog „Planung freigeben“ mit optionalem Kommentar](bilder/tk-freigeben.png)
+
 ### In Yolawo anlegen
+
+![Reiter „Ausgaben“ mit Yolawo-Eingabeblatt, Ausschreibungstext und PDF](bilder/tk-ausgaben.png)
 
 1. Öffne den Reiter **„Ausgaben“**. Dort stehen das **Yolawo-Eingabeblatt** (jedes Feld mit „Kopieren“), der **Ausschreibungstext** und die **Zusammenfassung**.
 2. Lege das Angebot in Yolawo an. Übertrage die Felder einzeln, den Ausschreibungstext mit **„Alles kopieren“**.
@@ -316,6 +330,8 @@ Ist die Leitung noch nicht in den Aktiven? Klicke in Schritt 1 auf **„Neue Per
 - Kontakt- und Notfalldaten werden **30 Tage nach der Tour** bzw. nach der Absage automatisch gelöscht.
 
 ### Kostenauswertung
+
+![Kostenauswertung mit Summenzeile](bilder/tk-auswertung.png)
 
 Klicke oben auf **„Auswertung“**. Du siehst die geplanten Kosten und Beiträge aller Planungen eines Jahres mit Summen. Abgesagte Planungen blendest du mit **„abgesagte anzeigen“** ein.
 
