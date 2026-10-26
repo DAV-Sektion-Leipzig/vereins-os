@@ -49,8 +49,8 @@ Siehe [AD tasks.md](../ad-administration/tasks.md) Phase 18 (T134–T141). Vorau
 
 ## Stufe 6: Abnahme und Freischalten
 
-- [ ] T025 [spec T22] abnahme-test.md erstellen (erledigt 27.10.2026; Bilder der Anleitung in `scripts/anleitung/screenshots.ts`, `tk-…`); Abnahme in TEST mit allen Testzugängen (Desktop und 375 px), Vergleich Planung 1 mit dem Prototyp; Prüfliste Referat Touren eingearbeitet
-- [ ] T026 [spec T22] Migration `is_available = true` für TK, nur nach Freigabe des Product Owners
+- [x] T025 [spec T22] abnahme-test.md erstellen (erledigt 27.10.2026, Abnahme durch den Product Owner am 27.10.2026; Bilder der Anleitung in `scripts/anleitung/screenshots.ts`, `tk-…`); Abnahme in TEST mit allen Testzugängen (Desktop und 375 px), Vergleich Planung 1 mit dem Prototyp; Prüfliste Referat Touren eingearbeitet
+- [x] T026 [spec T22] Migration `20261107000100_tk_available.sql` (`is_available = true` für TK), Freigabe des Product Owners 27.10.2026
 
 ## Abhängigkeiten
 
