@@ -16,7 +16,7 @@ Du darfst in allen Fachmodulen **verwalten**. Das heißt: Du siehst alle Referat
 | Gruppen | Gruppen, Teilnehmer:innen, Erziehungsberechtigte, Verträge, Betreuung | freigeschaltet |
 | Anwesenheitserfassung | Einsätze aller Referate erfassen, korrigieren, löschen | freigeschaltet |
 | Finanzen | Halbjahresabrechnung berechnen, abschließen, auszahlen | freigeschaltet |
-| Dashboard | Budget aller Referate und des Vereins sehen, mit Einzelbuchungen und Prüfung | in Vorbereitung |
+| Dashboard | Budget aller Referate und des Vereins sehen, mit Einzelbuchungen und Prüfung | freigeschaltet |
 | Planungshilfe Touren und Kurse | Planungen aller Referate bearbeiten, in Yolawo anlegen, abschließen, Kostenauswertung | in Vorbereitung |
 
 Vieles funktioniert genauso wie bei den Referent:innen. Dort ist es Schritt für Schritt erklärt: [Anleitung für Referent:innen](02-referentinnen.md). Hier steht, was **du zusätzlich** tust.
@@ -24,8 +24,6 @@ Vieles funktioniert genauso wie bei den Referent:innen. Dort ist es Schritt für
 ---
 
 ## Dashboard
-
-*Das Dashboard ist in Vorbereitung.*
 
 Du siehst das Budget **aller Referate** mit Einzelbuchungen. Unter **„Verein“** stehen zusätzlich die Summen des Vereins, die Gesamtbudgets nach Ampel, die **nicht zugeordneten Buchungen** und die **Prüfung** des letzten DATEV-Exports.
 
