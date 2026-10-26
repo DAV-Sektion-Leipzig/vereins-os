@@ -15,7 +15,7 @@ Kennzeichnung: **[ANNAHME]** = Vorschlag, mit dem Product Owner zu bestätigen. 
 
 | Nr | Anforderung | Vorschlag |
 |---|---|---|
-| D1 | **Modul DS** in `ad_modules` (Code `DS` [ANNAHME], Name „Dashboard“ [OFFEN Q-DS10: Name in der Oberfläche]). Für jede vorhandene Vorlage eine Zeile DS mit `none`, außer den Startwerten (wie T50/T59). | – |
+| D1 | **Modul DS** in `ad_modules` (Code `DS` [ANNAHME], Name „Dashboard“ (Q-DS10, entschieden 26.10.2026)). Für jede vorhandene Vorlage eine Zeile DS mit `none`, außer den Startwerten (wie T50/T59). | – |
 | D2 | **Reichweite „Referat“ für DS** (R30: Check um `DS` erweitern). Stufen im MVP nur „lesen“; „bearbeiten“/„verwalten“ haben in DS keine Wirkung [ANNAHME]. | – |
 | D3 | **Startwerte:** Admin – DS lesen (alle), mit Budget-Sicht (D5); Geschäftsstelle – DS lesen (alle); Referent:in – DS lesen (Referat); Vorstand – DS lesen (alle) [ANNAHME: Vorstand startet sonst ohne Rechte, rollen.md]. | Product Owner bestätigt |
 | D4 | **Hilfsfunktionen** wie bei den anderen Modulen: `ad_has_level('DS', …)`, Referate der Zuweisung für DS (`ad_my_referate('DS')` o. ä.), damit Lesefunktionen in FI, GR, EZ, EA, TK die Reichweite prüfen können. | – |

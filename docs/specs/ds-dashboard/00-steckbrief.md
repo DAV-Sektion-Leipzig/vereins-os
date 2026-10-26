@@ -1,7 +1,8 @@
 # Steckbrief: Dashboard
 
-Stand: 26.10.2026 · Version 0.4 · Kürzel: DS [ANNAHME] · Priorität: Budget-Sicht früh (nach dem Kern der Administration), Referats-Kennzahlen nach EZ und FI · Ablage: docs/specs/ds-dashboard/ · Status: Entwurf · Product Owner: Toni Werner
+Stand: 26.10.2026 · Version 0.5 · Kürzel: DS [ANNAHME] · Priorität: Budget-Sicht früh (nach dem Kern der Administration), Referats-Kennzahlen nach EZ und FI · Ablage: docs/specs/ds-dashboard/ · Status: Entwurf · Product Owner: Toni Werner
 Grundlage: vision.md v0.4, modul-landkarte.md v2.17, rollen.md v1.3, glossar.md, offene-punkte.md v5.15, specs/fi-finanzen/00-steckbrief.md v0.5 (Nicht im Scope: „Budget-Übersicht, Dashboard: später“), specs/gr-gruppen/00-steckbrief.md v0.7 und specs/ez-einsaetze/00-steckbrief.md v0.9 (Auslastung, Betreuungsschlüssel in Iteration 2), specs/tk-touren-kurse/00-steckbrief.md v0.7 (Kosten- und CO2-Auswertung), Prototyp Budget-Dashboard (Übergabe: prototyp-budget-dashboard.md v1.0), Ideenkatalog ideen-sichten.md v0.1.
+Änderungen v0.5: Q-DS10 entschieden (Product Owner 26.10.2026): Name in der Oberfläche bleibt „Dashboard“; Begriffe im Glossar v1.7.
 Änderungen v0.4: Q-DS8, Q-DS13, Q-DS14 und D5 entschieden (Product Owner 26.10.2026): Budgetpflege über ein Kennzeichen „darf Budget pflegen“; der Admin sieht über „Dashboard lesen“ auch die Budget-Sicht; ein Referat sieht nur Buchungen seiner Budgetposten; Gruppenleitungen später mit Kennzahlen der eigenen Gruppe ohne Budget.
 Änderungen v0.3: Q-DS7, Q-DS11, Q-DS12 entschieden (Product Owner 26.10.2026): eigenes Recht „Dashboard lesen“ (Modul DS, Reichweite „Referat“); Einzelbuchungen bleiben laufendes Jahr und Vorjahr, danach nur Summen; Export und Zuordnung pflegt der 1. Vorsitzende, später die Schatzmeister:in, künftig Import über die DATEV-Schnittstelle des Schnittstellen-Connectors; Export monatlich. Übergabe an die Administration (uebergabe-administration.md v1.0); neue Frage Q-DS14.
 Änderungen v0.2: Q-DS1 bis Q-DS4 entschieden (Product Owner 26.10.2026): Buchungsliste wird gespeichert, Referent:innen sehen die Einzelbuchungen ihres Referats; Budget ist ein Bereich von Finanzen, das Dashboard zeigt die Sichten (Übergabe an Finanzen: uebergabe-finanzen.md v1.0); Auslastung = Anwesenheitsquote, Betreuungsschlüssel und Probetrainings (keine Platzzahl); Budget-Sicht früh, Referats-Kennzahlen später.
@@ -78,7 +79,7 @@ Der 1. Vorsitzende wertet den Finanzplan mit einem eigenen, offline laufenden Bu
 - Q-DS7 – **entschieden 26.10.2026:** 1. Vorsitzender, später Schatzmeister:in; künftig über die DATEV-Schnittstelle des Schnittstellen-Connectors; Export monatlich.
 - Q-DS8 – **entschieden 26.10.2026:** ja, Kennzahlen der eigenen Gruppe, ohne Budget (nach dem MVP, mit Reichweite „Gruppe“).
 - [OFFEN] Q-DS9 Vergleich mit Vorjahren: Sollen Kennzahlen und Budget mehrere Jahre nebeneinander zeigen (z. B. Trainings je Halbjahr 2026 zu 2027)?
-- [OFFEN] Q-DS10 Kürzel „DS“ und Name „Dashboard“ (Oberfläche deutsch: „Übersicht“ oder „Dashboard“?); Begriffe für glossar.md (Sicht, Kennzahl, Budgetposten, Gesamtbudget, Datenstand).
+- Q-DS10 – **entschieden 26.10.2026:** Name in der Oberfläche „Dashboard“; Begriffe Dashboard, Sicht, Kennzahl, Budgetposten, Gesamtbudget, Zuordnung (Budget), Buchung, umschlüsseln, Datenstand im Glossar v1.7. Kürzel DS bleibt [ANNAHME] bis zur Umsetzung.
 - Q-DS11 – **entschieden 26.10.2026:** Einzelbuchungen laufendes Jahr und Vorjahr, danach nur Summen je Budgetposten und Monat.
 - Q-DS12 – **entschieden 26.10.2026:** eigenes Recht „Dashboard lesen“ (Modul DS, Reichweite „Referat“).
 - Q-DS13 – **entschieden 26.10.2026:** nur Buchungen der Budgetposten des Referats.

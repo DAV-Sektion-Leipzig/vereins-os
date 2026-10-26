@@ -1,6 +1,7 @@
 # Glossar: Vereins OS
 
-Stand: 24.10.2026 · Version 1.6
+Stand: 26.10.2026 · Version 1.7
+Änderungen v1.7: Begriffe des Moduls **Dashboard** (DS) aufgenommen: Dashboard, Sicht, Kennzahl, Budgetposten, Gesamtbudget, Zuordnung (Budget), Buchung, umschlüsseln, Datenstand, Budgetpflege (Product Owner 26.10.2026; specs/ds-dashboard/00-steckbrief.md v0.5).
 Änderungen v1.6: Einsatzart heißt **Wettkampfbetreuung** statt Wettkampfbegleitung; Einsatz kann abgesagt werden (Stand „abgesagt“ mit Grund, alle Einsatzarten); Kurs und Tour in der Anwesenheitserfassung ohne Teilnehmende (Product Owner 24.10.2026).
 Änderungen v1.5: Abweichung von Vergütungsordnung Punkt 7 gestrichen (kein Vorstandsbeschluss nötig, Product Owner 22.10.2026); Abgrenzung Modul Touren und Kurse (Planung, Kalkulation) zu Anwesenheitserfassung (Durchführung) in Kurs und Tour; Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt, Ort aufgenommen; Wettkampfbegleitung ein- oder mehrtägig.
 Änderungen v1.4: Modul Einsätze heißt jetzt **Anwesenheitserfassung** (Kürzel EZ bleibt [ANNAHME]); Kurse, Touren, Mehrtageskurse/Trainingslager werden dort erfasst; Einsatzserie ohne Vorab-Erzeugung; Abrechnungszeitraum bei Fahrten immer ab Startort (Reisezeit = Arbeitszeit); Betreuungsschlüssel nur in späterer Auswertung; Punktekonto nur für Kinder.
@@ -135,6 +136,9 @@ Regel: ein Begriff pro Sache. Synonyme stehen nur in „Nicht verwechseln mit“
 | Lesestufe | Angabe an einer Eigenschaftsart, wer Eigenschaften dieser Art lesen darf: „alle mit Zugriff auf das Ehrenamtsmanagement“ · „nur Geschäftsstelle und Admin“ · „vertraulich“. Durchgesetzt in der Datenbank. | sichtbar in; Reichweite; Kategorie | Führungszeugnis-Einsicht: nur Geschäftsstelle und Admin |
 | vertraulich | Höchste Lesestufe: Eigenschaften dieser Art darf nur lesen, wer Rechte auf AD hat; durchgesetzt in der Datenbank. | sichtbar in | Hauptamt ist vertraulich. |
 | Protokoll | Nachvollziehbare Liste der Einladungen, Vergaben und Entzüge von Rechtevorlagen, Sperren/Entsperren und Anmeldungen des Notfall-Admins (wer, wem, was, wann); 5 Jahre aufbewahrt. | Historie (frühere Werte einer Eigenschaft) | „19.10.2026 14:00 Toni Werner hat Denise Muster die Vorlage Geschäftsstelle zugewiesen.“ |
+| Dashboard | Modul (DS [ANNAHME]), das Sichten mit Kennzahlen aus allen Modulen und die Budget-Sicht zeigt; nur lesen, eigenes Recht „Dashboard lesen“ mit Reichweite „alle“ oder „Referat“. Name in der Oberfläche „Dashboard“ (Product Owner 26.10.2026). | Startseite; Auswertung in einem Fachmodul | Dashboard des Referats Kinder und Jugend |
+| Sicht | Zusammenstellung von Kennzahlen für eine Nutzergruppe im Dashboard (Vorstand, Referat, Geschäftsstelle, später Gruppe). | Ansicht, Bericht (Synonyme, nicht verwenden); Sichtbarkeit von Personen; Reichweite | Sicht des Referats Kinder und Jugend |
+| Kennzahl | Anzahl, Summe oder Quote, die ein Fachmodul für das Dashboard liefert; keine Personenliste. | KPI (nicht verwenden); Auswertung | Anwesenheitsquote der Gruppe „Jugendgruppe Test 1“: 72 % |
 | API-Key | Zugangsschlüssel für einen externen Dienst; im Admin-Modul nachgehalten (mit SC), in Supabase Vault gespeichert. | Passwort eines Nutzers | Instagram-Key, gültig bis 30.06.2027 |
 
 ## Finanzen und Aufgaben
@@ -157,6 +161,13 @@ Regel: ein Begriff pro Sache. Synonyme stehen nur in „Nicht verwechseln mit“
 | Abrechnungshalbjahr | Zeitraum der halbjährlichen Abrechnung für die Referate Kinder und Jugend und Leistungssport; unterschriebene Abrechnungsdokumente bis 31.07. (1. Halbjahr) bzw. 15.12. (2. Halbjahr) abzugeben, sonst erlischt der Anspruch. Trainer-Vergütung beginnt mit dem Abrechnungshalbjahr des Lizenzerwerbs. | Kalenderjahr der Übungsleiterpauschale | 2. Halbjahr 2026, Abgabe bis 15.12.2026 |
 | Punktekonto | Guthaben der Sektion bei der Kletterhalle, von dem je Training und Kind Punkte abgebucht werden; Trainer:innen werden nicht abgebucht. Grundlage der Rechnungen der Halle. Wird nicht im Vereins OS geführt; das Vereins OS liefert die Anwesenheit der Kinder zur Kontrolle. | Abrechnung; Buchungslauf | Abgleich Oktober: 48 Kinder-Anwesenheiten |
 | Buchungslauf | Monatlich erzeugte Zusammenstellung, die an die Finanzbuchhaltung bzw. die Sparkasse übergeben wird; für Verträge als SEPA-Lastschrift (Einzug). | Abrechnung; Buchung in der Finanzbuchhaltung; Lastschriftlauf (Synonym, nicht verwenden) [ANNAHME] | Buchungslauf Verträge November |
+| Budgetposten | Posten des Finanzplans eines Jahres mit Art (Einnahme oder Ausgabe) und Plan; Name genau wie in der Excel „Finanzplan JJJJ“. Gepflegt im Bereich Budget von Finanzen. | Gesamtbudget; Konto | „Vergütung Aktive“ (Ausgabe) |
+| Gesamtbudget | Gruppierung von Budgetposten, aufklappbar in der Budget-Sicht; kann einem Referat zugeordnet sein (Grundlage der Reichweite „Referat“ im Budget). | Budgetposten; Referat | Gesamtbudget „Kinder und Jugend“ |
+| Zuordnung (Budget) | Regel, welches Konto (Einzelkonto, Hauptkonto, Kontenbereich oder einzelne Buchung, ggf. mit Kostenstelle) zu welchem Budgetposten zählt; mit Status (ok, unsicher, offen, keine Buchung) und Historie. Die genauere Regel gewinnt. | Zuordnung einer Person zu einem Einsatz (Anwesenheit) | Konto „6326 3“ → Budgetposten „Kosten“ |
+| Buchung | Buchungszeile aus dem DATEV-Export der Finanzbuchhaltung (Datum, Konto, Buchungstext, Beleg, Betrag Soll/Haben, Kostenstelle). Das Vereins OS bucht nicht, es liest nur. Einzelbuchungen bleiben für das laufende Jahr und das Vorjahr gespeichert. | Buchungslauf; Abrechnung | Buchung vom 07.02.2026 auf Konto „6307 8“ |
+| umschlüsseln | Eine Buchung oder alle Buchungen eines Kontos mit Grund einem anderen Budgetposten zuordnen. | umbuchen (Buchhaltung) | Startgebühr von Leistungssport nach Kinder und Jugend umschlüsseln |
+| Datenstand | Datum der letzten Buchung im eingespielten DATEV-Export; Bezugspunkt der Budget-Sicht (nicht das heutige Datum). | Exportdatum | Datenstand 30.06.2026 |
+| Budgetpflege | Einspielen des DATEV-Exports, Pflege der Zuordnung und Umschlüsseln; nur mit dem Kennzeichen „darf Budget pflegen“ (1. Vorsitzender, später Schatzmeister:in). | Finanzbuchhaltung; Haushaltsplanung | – |
 | Aufgabe | Zu erledigende Tätigkeit mit Zuständigkeit, Frist und Erinnerung. | Einsatz | Förderantrag einreichen bis 31.01. |
 | Checkliste | Geordnete Folge von Aufgaben zu einem Vorgang, ggf. wiederkehrend. | Aufgabe | Checkliste Förderunterlagen |
 

@@ -1,7 +1,8 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 26.10.2026 · Version 5.15
-Änderungen v5.15: Neues Modul Dashboard (DS [ANNAHME]): Steckbrief v0.2 (Entwurf), Q-DS1 bis Q-DS4 entschieden, Q-DS7, Q-DS8, Q-DS11 bis Q-DS14 und D5 entschieden, Übergaben DS → FI v1.2 (Bereich Budget) und DS → AD v1.1 (Modul DS, Kennzeichen „darf Budget pflegen“); Merkposten „Dashboard (EA)“ und „Auswertungen auf Gruppenebene“ mit Verweis auf DS.
+Stand: 26.10.2026 · Version 5.16
+Änderungen v5.16: Dashboard Steckbrief v0.5: Q-DS7, Q-DS8, Q-DS10 bis Q-DS14 und D5 entschieden (Product Owner 26.10.2026); Übergaben DS → FI v1.2 und DS → AD v1.1 bei FI und AD eingetragen; DATEV-Schnittstelle bei SC; Begriffe im Glossar v1.7.
+Änderungen v5.15: Neues Modul Dashboard (DS [ANNAHME]): Steckbrief v0.2 (Entwurf), Q-DS1 bis Q-DS4 entschieden, neue Fragen Q-DS11 bis Q-DS13, Übergabe DS → FI v1.0 (Bereich Budget); Merkposten „Dashboard (EA)“ und „Auswertungen auf Gruppenebene“ mit Verweis auf DS.
 Änderungen v5.14: Finanzen Spec v0.2, Administration Nachtrag v0.10 und Anwesenheitserfassung Nachtrag v0.6 Ready (Product Owner 26.10.2026); Annahmen bei der Abnahme.
 Änderungen v5.13: Anwesenheitserfassung Nachtrag v0.6 (Finanzen; im Chat Finanzen eingearbeitet): Abrechnungsart am Einsatz, Lesefunktion für Finanzen, Sperre abgerechneter Einsätze; offene Punkte zu Löschfrist, mehrtägigen Einsätzen, Lehreinheiten und Sperre erledigt; Übergabe FI → EZ eingearbeitet.
 Änderungen v5.12: Administration Nachtrag v0.10 (Finanzen, Aktion „freigeben“; im Chat Finanzen eingearbeitet): Q1 umgesetzt in der Spec, TKF entfällt; Übergabe FI → AD eingearbeitet; neue Übergabe AD → TK (Freigaberecht).
@@ -199,15 +200,14 @@ Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.5, abgeschlossen 
 
 ## DS – Dashboard (Priorität offen)
 
-Steckbrief: docs/specs/ds-dashboard/00-steckbrief.md (Version 0.4, Entwurf 26.10.2026) · Übergabe des Prototyps: prototyp-budget-dashboard.md (v1.0) · Ideenkatalog: ideen-sichten.md (v0.2) · Übergaben: uebergabe-finanzen.md (v1.2, offen), uebergabe-administration.md (v1.1, offen)
+Steckbrief: docs/specs/ds-dashboard/00-steckbrief.md (Version 0.5, Entwurf 26.10.2026) · Übergabe des Prototyps: prototyp-budget-dashboard.md (v1.0) · Ideenkatalog: ideen-sichten.md (v0.2) · Übergaben: uebergabe-finanzen.md (v1.2, offen), uebergabe-administration.md (v1.1, offen)
 
 - Vorgabe Product Owner 26.10.2026: Neues Modul Dashboard; Grundlage ist das Budget-Dashboard des 1. Vorsitzenden; darüber Sichten für einzelne Referate, z. B. Auslastung der Gruppen für Kinder und Jugend.
-- Entschieden 26.10.2026 (Product Owner): **Q-DS1** Buchungsliste wird gespeichert, Referent:innen sehen die Einzelbuchungen ihres Referats; **Q-DS2** Budget ist ein Bereich von Finanzen, DS zeigt die Sichten; **Q-DS3** Auslastung = Anwesenheitsquote, Betreuungsschlüssel, Probetrainings (keine Platzzahl in GR); **Q-DS4** Budget-Sicht früh nach dem Kern der Administration, Referats-Kennzahlen nach EZ und FI. **Q-DS7** Export und Zuordnung pflegt der 1. Vorsitzende, später die Schatzmeister:in; künftig über die DATEV-Schnittstelle des SC; Export monatlich. **Q-DS11** Einzelbuchungen laufendes Jahr und Vorjahr, danach nur Summen. **Q-DS12** eigenes Recht „Dashboard lesen“ (Modul DS, Reichweite „Referat“). **Q-DS8** Gruppenleitungen später mit Kennzahlen der eigenen Gruppe, ohne Budget. **Q-DS13** Referat sieht nur Buchungen seiner Budgetposten. **Q-DS14** Budgetpflege über Kennzeichen „darf Budget pflegen“. **D5** Admin sieht die Budget-Sicht (auch Notfall-Admin).
+- Entschieden 26.10.2026 (Product Owner): **Q-DS1** Buchungsliste wird gespeichert, Referent:innen sehen die Einzelbuchungen ihres Referats; **Q-DS2** Budget ist ein Bereich von Finanzen, DS zeigt die Sichten; **Q-DS3** Auslastung = Anwesenheitsquote, Betreuungsschlüssel, Probetrainings (keine Platzzahl in GR); **Q-DS4** Budget-Sicht früh nach dem Kern der Administration, Referats-Kennzahlen nach EZ und FI. **Q-DS7** Export und Zuordnung pflegt der 1. Vorsitzende, später die Schatzmeister:in; künftig über die DATEV-Schnittstelle des SC; Export monatlich. **Q-DS11** Einzelbuchungen laufendes Jahr und Vorjahr, danach nur Summen. **Q-DS12** eigenes Recht „Dashboard lesen“ (Modul DS, Reichweite „Referat“). **Q-DS8** Gruppenleitungen später mit Kennzahlen der eigenen Gruppe, ohne Budget. **Q-DS13** Referat sieht nur Buchungen seiner Budgetposten. **Q-DS14** Budgetpflege über Kennzeichen „darf Budget pflegen“. **D5** Admin sieht die Budget-Sicht (auch Notfall-Admin). **Q-DS10** Name in der Oberfläche bleibt „Dashboard“; Begriffe im Glossar v1.7.
 - [OFFEN] Arbeitsplan anpassen: Nachtrag AD v0.10 (Rechte FI mit Reichweite „Referat“), Bereich Budget in FI und Budget-Sicht DS vor der Abrechnung. (arbeitsplan.md)
 - [OFFEN] Q-DS5 Sichten je Referat: Rückmeldung der Referate zum Ideenkatalog. (ideen-sichten.md)
 - [OFFEN] Q-DS6 Zuordnung Gesamtbudget → Referat; Gesamtbudgets ohne Referat nur für den Vorstand? (00-steckbrief.md DS)
 - [OFFEN] Q-DS9 Vergleich mit Vorjahren. (00-steckbrief.md DS)
-- [OFFEN] Q-DS10 Kürzel DS, Name in der Oberfläche, Begriffe für glossar.md (Sicht, Kennzahl, Budgetposten, Gesamtbudget, Datenstand). (00-steckbrief.md DS)
 - [OFFEN] rollen.md ergänzen: Spalte DS in der Rechte-Matrix, Admin sieht Budget über DS, Kennzeichen „darf Budget pflegen“, Vorlage „Budgetpflege“. (uebergabe-administration.md DS)
 - [OFFEN] Datenschutz Buchungen: Eintrag im Verarbeitungsverzeichnis (Buchungstexte mit Namen). (00-steckbrief.md DS)
 - [OFFEN] Datenschutz Minderjährige: Mindestgröße für Kennzahlen zu Gruppen (z. B. Altersstruktur). (00-steckbrief.md DS)
