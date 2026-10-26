@@ -37,4 +37,4 @@ Stand: 26.10.2026 · Grundlage: spec.md v0.2 (Ready), 02-stories.md DS v0.2, 02-
 
 - [x] DT17 (spec T17) Seed `supabase/seed-ds.sql` (`SEED_WITH_DS=1`): Fälle 1–9 aus spec 9 inkl. Leistungssport mit doppeltem Namen, Einzelbuchungsregel, Doppelbuchung, Storno, Umbuchung, Vorjahresbuchung, unvollständiges Konto, Folgejahr, Auszahlungsrunden 901/902; Testzugang Schatzmeisterin Test (Budgetpflege)
 - [x] DT18 (spec T18) Anleitung: neuer Teil „Budgetpflege“ (05), Abschnitte Dashboard in 01–04, Version 2.0 (mit Phase 3, CLAUDE.md „Anleitung im selben Pull Request“)
-- [x] DT19 (spec T19) abnahme-test.md (Abnahme durch den PO am 27.10.2026); `ad_modules.is_available` für DS (`20261107000100_ds_available.sql`)
+- [x] DT19 (spec T19) abnahme-test.md (Abnahme durch den PO am 27.10.2026); `ad_modules.is_available` für DS (`20261107000200_ds_available.sql`)

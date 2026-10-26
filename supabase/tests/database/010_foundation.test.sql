@@ -31,8 +31,8 @@ select enum_has_labels('public', 'ad_qualification_status', array['current', 'hi
 select is((select count(*)::int from public.ad_modules), 12, 'ad_modules hat 12 Module (v0.8: EZ; Dashboard: DS; v0.9: TK)');
 select results_eq(
   $$ select code from public.ad_modules where is_available order by sort_order $$,
-  $$ values ('DS'::text), ('AD'), ('EA'), ('GR'), ('EZ'), ('FI') $$,
-  'verfügbar: DS, AD, EA, GR, EZ, FI (Freigabe 26.10.2026; DS 27.10.2026)'
+  $$ values ('DS'::text), ('AD'), ('EA'), ('GR'), ('EZ'), ('TK'), ('FI') $$,
+  'verfügbar: AD, EA, GR, EZ, FI (Freigabe 26.10.2026), TK und DS (Freigabe 27.10.2026)'
 );
 select results_eq(
   $$ select code from public.ad_modules order by sort_order $$,

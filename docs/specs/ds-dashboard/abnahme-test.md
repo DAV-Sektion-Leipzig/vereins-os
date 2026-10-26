@@ -58,6 +58,6 @@ Erwartete Zahlen gelten für den Seed im laufenden Jahr J (Datenstand 30.09.J).
 
 ## 5. Ergebnis
 
-Abgenommen am 27.10.2026 (Product Owner). Die Schritte aus Abschnitt 3 wurden nicht einzeln protokolliert. Freigabe des Moduls mit `20261107000100_ds_available.sql`; danach zeigt die Startseite das Dashboard (US-DS-20). Offen: Schritt 20 (Meldungstexte).
+Abgenommen am 27.10.2026 (Product Owner). Die Schritte aus Abschnitt 3 wurden nicht einzeln protokolliert. Freigabe des Moduls mit `20261107000200_ds_available.sql`; danach zeigt die Startseite das Dashboard (US-DS-20). Offen: Schritt 20 (Meldungstexte).
 
 Vor Echtdaten (Finanzplan und DATEV-Export der Sektion in PROD) offen: Eintrag im Verarbeitungsverzeichnis (01-erhebung.md F), rollen.md (Spalte DS, Vorlage Budgetpflege; uebergabe-administration.md D5) – beides fachliche Dokumente, Auftrag des Product Owners nötig.
