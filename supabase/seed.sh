@@ -5,6 +5,7 @@
 #   SEED_TEST_PASSWORD  Passwort der Testzugänge (lokal .env.local, CI: GitHub-Secret)
 #   SEED_DB_URL         Postgres-Verbindung zum Ziel (lokal .env.local, CI: DB_URL des lokalen Stacks)
 #   SEED_WITH_EZ=1      optional: zusätzlich supabase/seed-ez.sql (Anwesenheitserfassung, nur TEST)
+#   SEED_WITH_FI=1      optional: zusätzlich supabase/seed-fi.sql (Finanzen, nur TEST)
 #   psql
 #
 # Aufruf aus dem Repo-Wurzelverzeichnis: supabase/seed.sh
@@ -62,6 +63,13 @@ psql "$SEED_DB_URL" \
 if [[ "${SEED_WITH_EZ:-}" == "1" ]]; then
   psql "$SEED_DB_URL" --single-transaction -v ON_ERROR_STOP=1 -f supabase/seed-ez.sql
   echo "Seed Anwesenheitserfassung abgeschlossen."
+fi
+
+# Testdaten Finanzen nur auf Wunsch (vereins-os-test), nicht in CI (spec.md FI Abschnitt 9)
+if [[ "${SEED_WITH_FI:-}" == "1" ]]; then
+  psql "$SEED_DB_URL" --single-transaction -v ON_ERROR_STOP=1 -v test_password="$SEED_TEST_PASSWORD" \
+    -f supabase/seed-fi.sql
+  echo "Seed Finanzen abgeschlossen."
 fi
 
 echo "Seed abgeschlossen."
