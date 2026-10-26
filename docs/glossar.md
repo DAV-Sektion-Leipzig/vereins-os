@@ -1,6 +1,7 @@
 # Glossar: Vereins OS
 
-Stand: 26.10.2026 · Version 1.7
+Stand: 26.10.2026 · Version 1.8
+Änderungen v1.8: Abschnitt „Touren und Kurse“ mit Planung, Tourenleitung, Teilnahmebeitrag, Kostendeckung, CO2-Bilanz, Klimaschutzbudget, Yolawo; Kurs ein- und mehrtägig nach Lehreinheiten (Product Owner 26.10.2026).
 Änderungen v1.7: Begriffe des Moduls **Dashboard** (DS) aufgenommen: Dashboard, Sicht, Kennzahl, Budgetposten, Gesamtbudget, Zuordnung (Budget), Buchung, umschlüsseln, umschichten, Datenstand, Budgetpflege; Anwesenheitsquote; Abkürzungen TN (Teilnehmer:innen) und PT (Probetrainings) nur in schmalen Tabellenköpfen; neue Referate Öffentlichkeitsarbeit und Umwelt und Naturschutz (Product Owner 26.10.2026; specs/ds-dashboard/00-steckbrief.md v0.5).
 Änderungen v1.6: Einsatzart heißt **Wettkampfbetreuung** statt Wettkampfbegleitung; Einsatz kann abgesagt werden (Stand „abgesagt“ mit Grund, alle Einsatzarten); Kurs und Tour in der Anwesenheitserfassung ohne Teilnehmende (Product Owner 24.10.2026).
 Änderungen v1.5: Abweichung von Vergütungsordnung Punkt 7 gestrichen (kein Vorstandsbeschluss nötig, Product Owner 22.10.2026); Abgrenzung Modul Touren und Kurse (Planung, Kalkulation) zu Anwesenheitserfassung (Durchführung) in Kurs und Tour; Tagesausflug, Mehrtagesfahrt, Ausbildungsfahrt, Ort aufgenommen; Wettkampfbegleitung ein- oder mehrtägig.
@@ -78,7 +79,7 @@ Regel: ein Begriff pro Sache. Synonyme stehen nur in „Nicht verwechseln mit“
 | Ehrenamtspass | Ausweis für Ehrenamtliche mit ausgegeben am und gültig bis. [ANNAHME] | Trainer- und Jugendleiterausweis | Ehrenamtspass 2026 |
 | Zugang extern | Vermerk, dass eine Person Zugang zu einem externen System oder Verteiler hat (seit, bis). Das Vereins OS steuert diese Systeme nicht. | Zugang (Login zum Vereins OS) | DAV360, JDAV Aktiven-Mailverteiler |
 | Auszeichnung | Ehrung einer Person durch die Sektion mit Art und Datum. | – | Ehrennadel, 12.03.2025 |
-| Kurs | Ausbildungskurs der Sektion für Mitglieder mit klar definierten Ausbildungsinhalten; vergütet je Lehreinheit (Vergütungsordnung). Erstellung, Planung und Kalkulation im Modul Touren und Kurse; Durchführung und Anwesenheit als Einsatz im Modul Anwesenheitserfassung. | Lizenz, Weiterbildung, Fortbildung (Qualifikationen); Lehrgang (Bundesverband); Training; Mehrtageskurs | Kurs Vorstieg Halle |
+| Kurs | Ausbildungskurs der Sektion für Mitglieder mit klar definierten Ausbildungsinhalten; vergütet je Lehreinheit (Vergütungsordnung), ein- und mehrtägig (Product Owner 26.10.2026). Erstellung, Planung und Kalkulation im Modul Planungshilfe Touren und Kurse; Durchführung und Anwesenheit als Einsatz im Modul Anwesenheitserfassung. | Lizenz, Weiterbildung, Fortbildung (Qualifikationen); Lehrgang (Bundesverband); Training; Mehrtageskurs | Kurs Vorstieg Halle |
 | Dublettenwarnung | Hinweis beim Anlegen einer Person, dass bereits eine ähnliche Person existiert (gleiche E-Mail-Adresse oder gleicher Nachname mit ähnlichem Vorname). Anlegen bleibt möglich. Findet auch ausgeschiedene Personen und bietet „wieder aktivieren“ an [ANNAHME]. | Zusammenführen (nicht im MVP) | „Anton Werner ähnelt Toni Werner.“ |
 | Migration | Einmalige Übernahme bestehender Listen per Skript in PROD, mit Probelauf und Prüfbericht; Excel- und CSV-Dateien nie im Repository oder in TEST. Stammdaten ohne Personendaten (z. B. Startbestand der Qualifikationsarten) kommen per Datenbank-Migration in TEST und PROD. | Import-Funktion (gibt es nicht) | Migration der Aktivenliste zum Stichtag |
 
@@ -173,6 +174,18 @@ Regel: ein Begriff pro Sache. Synonyme stehen nur in „Nicht verwechseln mit“
 | Aufgabe | Zu erledigende Tätigkeit mit Zuständigkeit, Frist und Erinnerung. | Einsatz | Förderantrag einreichen bis 31.01. |
 | Checkliste | Geordnete Folge von Aufgaben zu einem Vorgang, ggf. wiederkehrend. | Aufgabe | Checkliste Förderunterlagen |
 
+## Touren und Kurse
+
+| Begriff | Definition | Nicht verwechseln mit | Beispiel |
+|---|---|---|---|
+| Planung | Vorbereitung eines Kurses, einer Führungstour oder einer Gemeinschaftstour im Modul Planungshilfe Touren und Kurse: Ausschreibung, Termin, Anreise, Leitung, Kalkulation, CO2-Bilanz; mit Status von „Entwurf“ bis „abgeschlossen“ bzw. „abgesagt“. Mit „in Yolawo angelegt“ entsteht der Einsatz in der Anwesenheitserfassung. | Einsatz (Durchführung, Anwesenheitserfassung); Ausschreibung (Text für Yolawo) | Planung „Hüttentour Stubaier Alpen“ |
+| Tourenleitung | Person, die eine Tour oder einen Kurs leitet (Rolle Leitung oder Co-Leitung in der Planung); aus den Aktiven gewählt. Trainersatz nur mit förderfähiger Lizenz, sonst Helfersatz. | Referat Touren (lässt Touren zu); Organisierende Person (Einsatz) | Leitung Bernd Berg, Co-Leitung Hilde Helfer |
+| Teilnahmebeitrag | Betrag, den Teilnehmende für eine Tour oder einen Kurs zahlen; Vorschlag aus den Gesamtkosten, der Mindestanzahl und den Zahlungsgebühren, aufgerundet; für Nichtmitglieder höher. Gemeinschaftstouren ohne Teilnahmebeitrag. | Beitrag (Mitgliedsbeitrag der Sektion); Vertrag (Gruppen) | 160 € Mitglieder, 210 € Nichtmitglieder |
+| Kostendeckung | Zustand, in dem die Teilnahmebeiträge nach Abzug der Zahlungsgebühren die Gesamtkosten einer Planung decken; angegeben als Anzahl Teilnehmende, ab der die Planung kostendeckend ist. | Deckungsbeitrag je Teilnehmer:in | kostendeckend ab 5 Teilnehmenden |
+| CO2-Bilanz | Geschätzte Emissionen einer Planung in kg CO2e aus An- und Abreise, Unterkunft und Verpflegung, je Person und je Person und Tag; DAV-Hütten zählen nicht zum Tourbudget. Erfasst ab dem MVP, Auswertung über mehrere Planungen in Iteration 1. | Klimaschutzbudget | Tour 564,3 kg, ca. 100 kg je Person |
+| Klimaschutzbudget | Betrag aus der CO2-Bilanz mal internem CO2-Preis der Sektion (Satz in der Administration); zeigt, was die Emissionen einer Planung kosten würden. | CO2-Bilanz; Kosten der Planung | 79,00 € |
+| Yolawo | Externe Buchungsplattform der Sektion für Anmeldung und Zahlung bei Touren und Kursen. Das Vereins OS liefert Texte und Felder zum Kopieren; keine Schnittstelle. | Planungshilfe (Vereins OS) | Angebot „Hüttentour Stubaier Alpen“ in Yolawo |
+
 ## Offene Punkte
 
 - [OFFEN] Regelwerk Führungszeugnis-Einsicht: Pflicht je Funktion, Erneuerungsintervall, weitere Nachweise. Liefert Product Owner.
@@ -183,8 +196,8 @@ Regel: ein Begriff pro Sache. Synonyme stehen nur in „Nicht verwechseln mit“
 - [OFFEN] Abgrenzung Kurs zu Weiterbildung: Können Aktive über einen Kurs eine Weiterbildung erwerben?
 - [OFFEN] Rundung angebrochener Trainingseinheiten (z. B. 75 Minuten).
 - [OFFEN] „Förderfähige Lizenz“ = Kennzeichen „DOSB-lizenzfähig“ der Qualifikationsart?
-- [OFFEN] Begriffe des Moduls Touren und Kurse (Kalkulation, Deckungsbeitrag, Material, CO2) beim Steckbrief dieses Moduls präzisieren.
 
+Erledigt am 26.10.2026 (v1.8): Begriffe des Moduls Touren und Kurse ergänzt (Abschnitt „Touren und Kurse“); Material nur als Ausrüstungsliste (kein eigener Begriff).
 Erledigt am 19.10.2026: Bezahlte Trainer:innen ohne Anstellung zählen als Aktive (Ehrenamt kann vergütet sein; Hauptamt = Anstellung).
 
 Erledigt am 21.10.2026 (Ehrenamtsmanagement): „Bereich“ wird durch „Referat“ ersetzt; Trainer:in setzt eine Lizenz voraus, ohne Lizenz Helfer:in; Übungsleiter:in = veraltet für Trainer:in; Referatsleiter:in = Referent:in; Gremium und Veranstaltung als eigene Begriffe; Hüttenwart:in ist ein Amt mit Rechten wie Referent:in; Weiterbildungen haben ein Ablaufdatum; Gültigkeitsdauer je Qualifikationsart.

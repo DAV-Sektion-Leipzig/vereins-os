@@ -1,6 +1,7 @@
 # Übergabe: Planungshilfe Touren und Kurse → Anwesenheitserfassung
 
-Stand: 22.10.2026 · Version 1.2 · Status: offen · Von: Planungshilfe Touren und Kurse (TK) · An: Anwesenheitserfassung (EZ)
+Stand: 26.10.2026 · Version 1.3 · Status: eingearbeitet (26.10.2026) · Von: Planungshilfe Touren und Kurse (TK) · An: Anwesenheitserfassung (EZ)
+Änderungen v1.3: Punkt 10 neu: Abrechnungsart des Einsatzes bei Gemeinschaftstouren übergibt die Planungshilfe (Product Owner 26.10.2026); Punkte 1–9 in spec.md EZ v0.2 eingearbeitet (24.10.2026), Punkt 8 erledigt (90 Zeichen).
 Änderungen v1.2: Bei Absage wird der Einsatz als „abgesagt“ markiert statt gelöscht (Product Owner 22.10.2026).
 Änderungen v1.1: Einsatz entsteht mit Status „in Yolawo angelegt“ (nicht bei Freigabe); Kurse mit Referat Ausbildung (Product Owner 22.10.2026).
 Änderungen v1.0: Erste Fassung; beantwortet den offenen Punkt der Anwesenheitserfassung „Übernahme geplanter Kurse und Touren als Einsatz“.
@@ -22,6 +23,7 @@ Die Planungshilfe Touren und Kurse **erzeugt** den Einsatz. Kurs und Tour werden
 7. Lesefunktion `ez_planned_event_state(p_tk_plan_id)` → Einsatz-ID, Anzahl anwesend je Rolle, „durchgeführt“ (mind. eine Leitung `present`) [ANNAHME].
 8. Titel: TK erlaubt 90 Zeichen, `ez_events.title` 60 – [OFFEN] verlängern oder TK kürzt.
 9. Stände `registered` / `present` / `absent` bei Kurs und Tour wie beim Arbeitseinsatz.
+10. **Abrechnungsart (neu v1.3, Product Owner 26.10.2026):** Die Einsatzart `tour` umfasst Führungs- und Gemeinschaftstouren; die Vorbelegung (`ad_remuneration_default_at('tour', …)` = „Mehrtageskurse, Führungstouren, Trainingslager“) passt für Gemeinschaftstouren nicht. `ez_upsert_planned_event` erhält einen zusätzlichen Parameter `p_remuneration_kind_code text default null` (Code aus `ad_remuneration_kinds`, z. B. `COMMUNITY_TOUR`): null → Vorbelegung wie bisher (nur beim Anlegen); gesetzt → Abrechnungsart des Einsatzes wird beim Anlegen und bei jedem Aktualisieren auf diesen Wert gesetzt (nicht bei `fi_event_locked`, dann `EZ_SETTLED`); unbekannter oder inaktiver Code → `EZ_REMUNERATION_INACTIVE`. Die Planungshilfe übergibt `COMMUNITY_TOUR` bei Gemeinschaftstouren, sonst null (spec.md TK v0.3 R15). Die Annahme in spec.md EZ Abschnitt 11 („Abrechnungsart in der Anwesenheitserfassung änderbar, z. B. Gemeinschaftstour statt Führungstour“) bleibt für Einzelfälle bestehen.
 
 ## Offen
 
@@ -31,4 +33,5 @@ Die Planungshilfe Touren und Kurse **erzeugt** den Einsatz. Kurs und Tour werden
 
 ## Einarbeitung
 
-- [ ] eingearbeitet in Anwesenheitserfassung (Datei, Version): –
+- [x] Punkte 1–9 eingearbeitet in Anwesenheitserfassung: specs/ez-einsaetze/spec.md v0.2 (24.10.2026; `tk_plan_id`, `cancelled_*`, `ez_upsert_planned_event`, `ez_cancel_planned_event`, `ez_planned_event_state`, R22–R27); offene Punkte dort entschieden (Kurs und Tour ohne Teilnehmende; Kurse und Touren ohne Planung von Hand; Trainingslager nicht über TK; Product Owner 24.10.2026).
+- [x] Punkt 10 eingearbeitet in Anwesenheitserfassung: specs/ez-einsaetze/spec.md v0.7 (26.10.2026; Signatur `ez_upsert_planned_event`, R26a).
