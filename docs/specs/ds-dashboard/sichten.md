@@ -1,6 +1,7 @@
 # Sichten des Dashboards
 
-Stand: 26.10.2026 · Version 0.5 · Status: Entwurf
+Stand: 26.10.2026 · Version 0.6 · Status: Entwurf
+Änderungen v0.6: Regel „eine Quelle für Geld“ (Product Owner 26.10.2026): Beträge des Budgets nur aus dem DATEV-Import, nicht aus Buchungsläufen oder Abrechnungen; B10 entfällt endgültig; B8 nur als getrennt ausgewiesene Vorschau [OFFEN].
 Änderungen v0.5: Grundsatz „Referent:innen steuern ihre Gruppen mit dem Dashboard“ (Product Owner 26.10.2026); Gruppendetail im Dashboard mit Namen und Hinweisen; Steuerungshinweis je Status; offene Frage zu den Rechten auf Gruppen gelöst.
 Änderungen v0.4: Schmale Spalten im Baustein Gruppen (Product Owner 26.10.2026): Spaltenköpfe TN, Anwesenheit, PT; kurze Werte; Legende unter der Liste.
 Änderungen v0.3: Herkunft von Gruppenname und Trainingszeit (Modul Gruppen) und Link je Recht festgelegt; Lücke: Referent:innen haben kein Recht auf Gruppen [OFFEN].
@@ -25,6 +26,8 @@ Als Referent:in öffne ich das Dashboard vor der Referatssitzung, vor der Vorsta
 4. **Wie steht der Verein?** (Budget gesamt, damit ich Umschichtungen und Anträge einordnen kann)
 
 Daraus folgt die Reihenfolge jeder Sicht.
+
+**Eine Quelle für Geld** (Product Owner 26.10.2026): Plan, verbraucht, erreicht und frei kommen **nur** aus dem Finanzplan und dem DATEV-Import. Zahlen aus Buchungsläufen (Verträge), Abrechnungen oder Planungen werden nie zu diesen Beträgen addiert und nie als zweiter Ist-Wert gezeigt; sonst gäbe es zwei Datenbestände für dasselbe Geld. Einnahmen aus Verträgen erscheinen deshalb nur über den Budgetposten, auf den die Finanzbuchhaltung sie bucht.
 
 ## 2. Aufbau jeder Sicht [FESTLEGUNG]
 
@@ -119,7 +122,7 @@ Darüber eine Zeile für das ganze Referat: Gruppen, Teilnehmer:innen gesamt, An
 | – | Baustein Gruppen (4.1) | M (Iteration 1, sobald EZ und GR laufen) |
 | K9 | Fahrten im Halbjahr: Tagesausflüge, Mehrtagesfahrten, Ausbildungsfahrten, Trainingslager; Teilnehmende gesamt | M |
 | K10 | Stand der halbjährlichen Abrechnung (erstellt / bestätigt / abgegeben / ausgezahlt), Tage bis zur Frist | M (auch in ①) |
-| B8 | Vergütung „gebunden“ am Budgetposten „Vergütung Aktive“: ausgezahlt + abgeschlossen, noch nicht gebucht | M |
+| B8 | Vergütung „gebunden“ am Budgetposten „Vergütung Aktive“: ausgezahlt + abgeschlossen, noch nicht gebucht – nur als getrennte Vorschau, nie im Ist [OFFEN: nach der Regel „eine Quelle für Geld“ behalten oder streichen?] | M |
 | K11 | Vergütung je Gruppe im Halbjahr | S |
 | K2 | Eintritte und Teilnahmeenden je Halbjahr | S |
 | K13 | Einsatzstunden der Aktiven (Trainingseinheiten, Tage) | S |
@@ -227,7 +230,7 @@ Nur Baustein Gruppen (4.1) für die eigene Gruppe, ohne Budget und ohne Block �
 | **M** – sobald das Quellmodul läuft (Iteration 1) | K1, K3, K5, K6, K7, K8, K9, K10, B8, L1, L2, H2, T1, T2, T3, T6, B9, G1–G5, Z1–Z3, Z5, Z6, Z9 |
 | **S** | B6, K2, K11, K13, H3, T1b, T4, T5, V2–V5, A1, A2 |
 | **C** | V6, V7, B11, Gruppenleitung, OA-Kennzahlen |
-| **W** | K12 (für Referent:innen), K14, H4, B10 (Verträge: erst mit dem Buchungslauf in FI), T7 (bis TK die Teilnehmerzahl erfasst) |
+| **W** | K12 (für Referent:innen), K14, H4, B10 (Einnahmen aus Verträgen nur über den DATEV-Import, Regel „eine Quelle für Geld“), T7 (bis TK die Teilnehmerzahl erfasst) |
 
 ## 7. Folgen für andere Module
 

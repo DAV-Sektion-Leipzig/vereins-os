@@ -26,7 +26,7 @@ Kürzel der Priorität für die Rückmeldung: **M** = Must (MVP), **S** = Should
 | B7 | Vergleich mit dem Vorjahr (gleicher Stichtag und ganzes Vorjahr) je Gesamtbudget und Budgetposten (Q-DS9, entschieden) | Vorstand, Referat | Summen je Budgetposten und Monat (FI) | DS-MVP | Summen je Monat bleiben, Einzelbuchungen nur Vorjahr (Q-DS11) |
 | B8 | „Gebunden“: abgerechnete und freigegebene, noch nicht gebuchte Vergütung am Budgetposten „Vergütung Aktive“ | Referat Kinder und Jugend, Leistungssport; Vorstand | FI (Auszahlungsrunden) | FI-MVP | nur Summen |
 | B9 | Planwerte der Touren und Kurse (Kosten, Beiträge) gegen das Budget Touren/Ausbildung | Referat Touren, Ausbildung | TK (Kalkulation) | TK-MVP | – |
-| B10 | Einnahmen aus Verträgen (monatlicher Einzug) gegen Plan | Vorstand, Kinder und Jugend | GR (Verträge), später FI-Buchungslauf | später | nur Summen |
+| B10 | Einnahmen aus Verträgen (monatlicher Einzug) gegen Plan | Vorstand, Kinder und Jugend | – | **entfällt** (Product Owner 26.10.2026): Einnahmen kommen nur über den DATEV-Import, kein zweiter Datenbestand aus dem Buchungslauf | – |
 | B11 | Sphären (ideell, Zweckbetrieb, wGB) als Filter bzw. Summe | Vorstand, Schatzmeister:in | KOST1 | DS-MVP | – |
 
 ## 2. Referat Kinder und Jugend (gleiche Sicht für Leistungssport und Klettergruppen)

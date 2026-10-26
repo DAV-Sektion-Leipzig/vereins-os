@@ -1,7 +1,8 @@
 # Steckbrief: Dashboard
 
-Stand: 26.10.2026 · Version 0.11 · Kürzel: DS [ANNAHME] · Priorität: Budget-Sicht früh (nach dem Kern der Administration), Referats-Kennzahlen nach EZ und FI · Ablage: docs/specs/ds-dashboard/ · Status: Entwurf · Product Owner: Toni Werner
+Stand: 26.10.2026 · Version 0.12 · Kürzel: DS [ANNAHME] · Priorität: Budget-Sicht früh (nach dem Kern der Administration), Referats-Kennzahlen nach EZ und FI · Ablage: docs/specs/ds-dashboard/ · Status: Entwurf · Product Owner: Toni Werner
 Grundlage: vision.md v0.4, modul-landkarte.md v2.17, rollen.md v1.3, glossar.md, offene-punkte.md v5.15, specs/fi-finanzen/00-steckbrief.md v0.5 (Nicht im Scope: „Budget-Übersicht, Dashboard: später“), specs/gr-gruppen/00-steckbrief.md v0.7 und specs/ez-einsaetze/00-steckbrief.md v0.9 (Auslastung, Betreuungsschlüssel in Iteration 2), specs/tk-touren-kurse/00-steckbrief.md v0.7 (Kosten- und CO2-Auswertung), Prototyp Budget-Dashboard (Übergabe: prototyp-budget-dashboard.md v1.0), Ideenkatalog ideen-sichten.md v0.1.
+Änderungen v0.12: Regel „eine Quelle für Geld“ (Product Owner 26.10.2026): Beträge des Budgets nur aus Finanzplan und DATEV-Import, nicht aus Buchungsläufen.
 Änderungen v0.11: Grundsatz (Product Owner 26.10.2026): Referent:innen steuern ihre Gruppen mit dem Dashboard (Entscheidungen anhand der Kennzahlen); Gruppendetail mit Namen und Hinweisen über das Recht auf das Dashboard; Übergabe an Gruppen (uebergabe-gruppen.md v1.0).
 Änderungen v0.10: Q-DS5 und Q-DS19 entschieden (Product Owner 26.10.2026): Die Referate geben keine Rückmeldung; Claude legt die Sichten als Referent:in fest (sichten.md v0.4, zur Abnahme); Vorjahresvergleich nur mit dem Vorjahr; Gesamtbudgets ohne Referat bestätigt.
 Änderungen v0.9: Q-DS18 entschieden (Product Owner 26.10.2026): Referent:innen schichten den Plan nur um (Summe des Gesamtbudgets bleibt gleich), die Budgetpflege bestätigt.
@@ -48,7 +49,7 @@ Der 1. Vorsitzende wertet den Finanzplan mit einem eigenen, offline laufenden Bu
 - **Leistungssport:** wie Kinder und Jugend, dazu Wettkampfbetreuungen und Trainingslager.
 - **Touren und Ausbildung:** Planungen je Status, Kostendeckung, Absagen, „durchgeführt, nicht abgerechnet“, CO2 je Jahr (sobald TK Iteration 1).
 - **Verknüpfung Budget ↔ Abrechnung:** abgerechnete, noch nicht gebuchte Vergütung als „gebunden“ am Budgetposten „Vergütung Aktive“.
-- **Inhalt und Aufbau der Sichten:** sichten.md v0.5 (Festlegung durch Claude als Referent:in im Auftrag des Product Owners, Q-DS5): je Sicht ① Zu tun, ② Budget meines Referats, ③ Mein Referat in Zahlen, ④ Budget des Vereins; Bausteine je Referat; Entscheidung M/S/C/W zu jedem Eintrag des Ideenkatalogs (ideen-sichten.md).
+- **Inhalt und Aufbau der Sichten:** sichten.md v0.6 (Festlegung durch Claude als Referent:in im Auftrag des Product Owners, Q-DS5): je Sicht ① Zu tun, ② Budget meines Referats, ③ Mein Referat in Zahlen, ④ Budget des Vereins; Bausteine je Referat; Entscheidung M/S/C/W zu jedem Eintrag des Ideenkatalogs (ideen-sichten.md).
 
 **Gesamtbudgets und Referate** (Q-DS6, Q-DS15 (Product Owner 26.10.2026); Namen wie im Finanzplan 2026). Die Summen aller Gesamtbudgets sieht jede:r mit „Dashboard lesen“; die Tabelle legt fest, wer **Einzelbuchungen** sieht und wer das Gesamtbudget **pflegt** (Hinweise, Plan):
 
@@ -72,6 +73,8 @@ Der 1. Vorsitzende wertet den Finanzplan mit einem eigenen, offline laufenden Bu
 | – (Sulzenauhütte) | kein eigenes Budget; das Referat sieht wie alle die Summen des Vereins | kein Budgetposten im Finanzplan; Konten bleiben „nicht zugeordnet“ |
 
 Neue Gesamtbudgets eines späteren Finanzplans bekommen ihr Referat bei der Budgetpflege; ohne Angabe gelten sie als „ohne Referat“ [ANNAHME].
+
+- **Eine Quelle für Geld** (Product Owner 26.10.2026): Beträge der Budget-Sicht kommen nur aus Finanzplan und DATEV-Import; Buchungsläufe (Verträge), Abrechnungen und Planungen liefern keine Beträge ins Ist (kein zweiter Datenbestand).
 
 **Nicht im Scope:**
 - Finanzbuchhaltung (vision.md, Nicht-Ziel): Das Dashboard bucht nicht und ändert keine Daten in DATEV.
