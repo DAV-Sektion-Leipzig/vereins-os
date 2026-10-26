@@ -71,6 +71,17 @@ import { KletterhallePage } from '@/features/ez/kletterhalle/KletterhallePage'
 import { EzLayout } from '@/features/ez/EzLayout'
 import { EinsaetzePage } from '@/features/ez/liste/EinsaetzePage'
 import { loadEventList } from '@/features/ez/liste/data'
+import { loadFiAccess } from '@/features/fi/access'
+import { AuszahlungenPage } from '@/features/fi/auszahlungen/AuszahlungenPage'
+import { AuszahlungsrundePage } from '@/features/fi/auszahlungen/AuszahlungsrundePage'
+import { loadRun, loadRuns } from '@/features/fi/auszahlungen/data'
+import { AbrechnungDetailPage } from '@/features/fi/detail/AbrechnungDetailPage'
+import { loadSettlement } from '@/features/fi/detail/data'
+import { FiLayout } from '@/features/fi/FiLayout'
+import { loadClimbing } from '@/features/fi/kletterhalle/data'
+import { KletterhallePage as FiKletterhallePage } from '@/features/fi/kletterhalle/KletterhallePage'
+import { AbrechnungenPage } from '@/features/fi/liste/AbrechnungenPage'
+import { loadSettlementList } from '@/features/fi/liste/data'
 import { StammdatenPage } from '@/features/ea/stammdaten/StammdatenPage'
 import { KeinZugriffPage } from '@/features/start/KeinZugriffPage'
 import { loadMyModules } from '@/features/start/modules'
@@ -191,6 +202,23 @@ export const router = createBrowserRouter([
           { path: ':id', loader: loadEventDetail, element: <EinsatzDetailPage /> },
           { path: ':id/bearbeiten', loader: loadEditEvent, element: <EinsatzBearbeitenPage /> },
           { path: '*', loader: () => redirect('/ez') },
+        ],
+      },
+      {
+        // FI mit FI ≥ lesen in irgendeiner Reichweite; Auszahlungsrunden und Kletterhalle nur mit „FI verwalten“
+        // (spec.md FI 3, Routenschutz).
+        id: 'fi',
+        path: 'fi',
+        loader: loadFiAccess,
+        element: <FiLayout />,
+        handle: { moduleName: 'Finanzen' } satisfies RouteHandle,
+        children: [
+          { index: true, loader: loadSettlementList, element: <AbrechnungenPage /> },
+          { path: 'abrechnung/:id', loader: loadSettlement, element: <AbrechnungDetailPage /> },
+          { path: 'auszahlungen', loader: loadRuns, element: <AuszahlungenPage /> },
+          { path: 'auszahlungen/:id', loader: loadRun, element: <AuszahlungsrundePage /> },
+          { path: 'kletterhalle', loader: loadClimbing, element: <FiKletterhallePage /> },
+          { path: '*', loader: () => redirect('/fi') },
         ],
       },
     ],

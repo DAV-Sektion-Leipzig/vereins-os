@@ -25,12 +25,12 @@ Die Tasks folgen spec.md Abschnitt 10 (T1–T16). Ein eigener Spec-Kit-Plan ents
 
 ## Phase 2: Oberfläche (je eigener Branch, Merge durch den Product Owner)
 
-- [ ] FT11 (spec T11) /fi Liste mit Filtern und Mehrfachaktionen
-- [ ] FT12 (spec T12) /fi/abrechnung/:id mit Dialogen
-- [ ] FT13 (spec T13) Abrechnungsdokument (PDF)
-- [ ] FT14 (spec T14) /fi/auszahlungen; Auszahlliste (PDF) und Überweisungsdatei (XML) mit Schema-Test
-- [ ] FT15 (spec T15) /fi/kletterhalle
-- [ ] FT16 (spec T16) abnahme-test.md, Abnahme in TEST
+- [x] FT11 (spec T11) /fi Liste mit Filtern und Mehrfachaktionen (`src/features/fi/liste/`, Rahmen `FiLayout.tsx`, `access.ts`)
+- [x] FT12 (spec T12) /fi/abrechnung/:id mit Dialogen (`src/features/fi/detail/`)
+- [x] FT13 (spec T13) Abrechnungsdokument (PDF) (`src/features/fi/export/documents.ts`; jsPDF, plan.md P1–P3)
+- [x] FT14 (spec T14) /fi/auszahlungen; Auszahlliste (PDF) und Überweisungsdatei (XML) mit Schema-Test (`src/features/fi/auszahlungen/`, `export/`; Test `npm run fi:export:test`, XSD optional über `PAIN001_XSD`)
+- [x] FT15 (spec T15) /fi/kletterhalle (`src/features/fi/kletterhalle/`)
+- [ ] FT16 (spec T16) abnahme-test.md (angelegt), Abnahme in TEST (Product Owner)
 
 ## Abweichungen und Präzisierungen gegenüber spec.md (zur Kenntnis des Product Owners)
 
