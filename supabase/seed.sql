@@ -521,3 +521,12 @@ on conflict (id) do nothing;
 insert into public.ad_payout_settings (debtor_name, iban, bic, ledger_account, valid_from)
 select 'Sektion Test', 'DE89370400440532013000', 'TESTDEFFXXX', '0000 0', date '2026-01-01'
  where not exists (select 1 from public.ad_payout_settings s where s.valid_from = date '2026-01-01');
+
+-- Nachtrag v0.11 (spec.md AD R57, R58; FI FT21): Gläubiger-ID (Test-Kennung der Bundesbank), Sachkonto der
+-- Gruppenbeiträge, Stichtag des ersten Buchungslaufs = Monat des ersten Seeds; nur fiktiv
+update public.ad_payout_settings
+   set creditor_id = 'DE98ZZZ09999999999', ledger_account_collection = '0000 1'
+ where valid_from = date '2026-01-01' and creditor_id is null;
+insert into public.ad_collection_settings (start_month)
+values (date_trunc('month', current_date)::date)
+on conflict (id) do nothing;

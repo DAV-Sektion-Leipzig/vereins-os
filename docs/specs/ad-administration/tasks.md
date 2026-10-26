@@ -518,6 +518,12 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 - [x] T129 [spec T74] Oberfläche (Branch `us-ad-v010-oberflaeche`; zusätzlich Reichweite „Referat“ für EZ in der Matrix, Teil von T120): Spalte „darf freigeben“ in der Vorlagen-Matrix, Seiten /ad/saetze (aus v0.9 T64), /ad/abrechnungsarten, /ad/auszahlung, Navigationseinträge – eigener Branch `us-ad-v010-oberflaeche`
 - [x] T130 [spec T77] Nach Freigabe des Product Owners nach TEST ausrollen und mit Admin und Geschäftsstelle abnehmen (Product Owner 26.10.2026, mit der Abnahme Finanzen)
 
+## Phase 17: Nachtrag v0.11 Buchungslauf (Finanzen)
+
+- [x] T131 Migration `20261102000100_ad_collection_settings.sql` (R57, R58; mit FI FT17)
+- [x] T132 pgTAP in `640_fi_collection.test.sql` (Gläubiger-ID, Stichtag)
+- [ ] T133 Oberfläche /ad/auszahlung: Gläubiger-ID, Sachkonto der Gruppenbeiträge, Stichtag (mit FI FT22)
+
 ## Abhängigkeiten und Reihenfolge
 
 ### Zwischen den Phasen
