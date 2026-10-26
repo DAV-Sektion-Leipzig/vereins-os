@@ -147,6 +147,31 @@ Stand spec.md Anwesenheitserfassung v0.5 (Abschnitt 5 und 2). Ausführlich mit �
 
 `EZ_DUPLICATE_EVENT` bricht das Speichern ab und liefert `existing_id` nur, wenn der vorhandene Einsatz lesbar ist. „Trotzdem speichern“ ruft `ez_save_event` erneut mit `p_confirm_duplicate = true` auf (R8).
 
+## Finanzen (FI)
+
+spec.md FI v0.2 Abschnitt 5; Datenbank umgesetzt (`20261031000100`–`…0700`), Oberfläche folgt.
+
+| Code | Meldung | Regel | Status |
+|---|---|---|---|
+| `FI_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | R32 | Datenbank umgesetzt |
+| `FI_NOT_FOUND` | Abrechnung nicht gefunden. | R31 | Datenbank umgesetzt |
+| `FI_STATUS` | In diesem Zustand ist das nicht möglich. | R20 | Datenbank umgesetzt |
+| `FI_PERIOD_INVALID` | Etwas ist schiefgelaufen. Bitte versuche es erneut. (ungültiges Halbjahr, Programmierfehler) | – | Datenbank umgesetzt |
+| `FI_REASON_REQUIRED` | Bitte eine Begründung angeben. | R16, R23 | Datenbank umgesetzt |
+| `FI_QUANTITY` | Bitte eine gültige Menge eingeben. | R16 | Datenbank umgesetzt |
+| `FI_RATE_MISSING` | Für eine Position fehlt der Satz. | R9 | Datenbank umgesetzt |
+| `FI_AMOUNT_ZERO` | Die Abrechnung hat keinen Betrag. | US-FI-10 | Datenbank umgesetzt |
+| `FI_NOT_CONFIRMED` | Die Abrechnung ist noch nicht von allen Referaten bestätigt. | R23 | Datenbank umgesetzt |
+| `FI_SAME_PERSON` | Du hast diese Abrechnung bestätigt. Eine andere Person muss abschließen. | R23 | Datenbank umgesetzt |
+| `FI_DATE_FUTURE` | Das Datum darf nicht in der Zukunft liegen. | US-FI-12 | Datenbank umgesetzt |
+| `FI_LATE_REASON_REQUIRED` (Detail: Frist) | Die Frist ist abgelaufen. Der Anspruch ist erloschen. Trotzdem als abgegeben erfassen? (Rückfrage mit Begründung) | R19 | Datenbank umgesetzt |
+| `FI_DEADLINE_NOT_PASSED` | Die Frist ist noch nicht abgelaufen. | US-FI-12 | Datenbank umgesetzt |
+| `FI_EXECUTION_DATE` | Das Ausführungsdatum darf nicht in der Vergangenheit liegen. | R30 | Datenbank umgesetzt |
+| `FI_NOT_PAYABLE` (Detail: Name bzw. ID) | Nicht auszahlbar: {Name} ({Grund}). | R12–R14 | Datenbank umgesetzt |
+| `FI_RUN_EMPTY` | Die Runde enthält keine auszahlbaren Abrechnungen. | US-FI-15 | Datenbank umgesetzt |
+| `FI_PAYOUT_SETTINGS_MISSING` | Die Angaben der Sektion für die Auszahlung fehlen. Bitte den Admin informieren. | R26 | Datenbank umgesetzt |
+| `FI_LOCATION_NO_POINTS` | Dieser Ort hat kein Punktekonto. | US-FI-17 | Datenbank umgesetzt |
+
 ## Hinweise (keine Fehlermeldungen)
 
 Diese Codes bzw. Fälle melden einen **erfolgreichen** Vorgang. Das Frontend zeigt sie als Hinweis an (z. B. sonner-Toast „info“) und nicht als Fehler. Die Aktion ist ausgeführt.
