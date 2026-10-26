@@ -148,15 +148,27 @@ const EXPIRY_KIND_LABELS: Record<ExpiryKind, string> = {
   police_clearance: 'Führungszeugnis',
 }
 
-// Ablauf an einer Stelle: schlechtester Status (Badge), darunter was abgelaufen ist oder bald abläuft,
-// dazu das Kennzeichen „ohne gültige Lizenz“.
+// Ablauf an einer Stelle: schlechtester Status (Badge), darunter was abgelaufen ist oder bald abläuft.
+// Gilt „ohne gültige Lizenz“, nennt das Kennzeichen die abgelaufenen Lizenzen selbst; sie stehen nicht noch einmal darunter.
 function Ablauf({ person }: { person: VolunteerRow }) {
   if (person.worst_expiry === 'none' && !person.trainer_without_license) return <AblaufBadge status="none" />
-  const shown = person.expiries.length > MAX_EXPIRIES ? person.expiries.slice(0, MAX_EXPIRIES - 1) : person.expiries
-  const more = person.expiries.length - shown.length
+  const expiredLicenses = person.trainer_without_license ? person.expiries.filter((e) => e.kind === 'license') : []
+  const others = person.expiries.filter((e) => !expiredLicenses.includes(e))
+  const shown = others.length > MAX_EXPIRIES ? others.slice(0, MAX_EXPIRIES - 1) : others
+  const more = others.length - shown.length
   return (
     <span className="flex flex-col items-start gap-1">
       {person.worst_expiry !== 'none' && <AblaufBadge status={person.worst_expiry} />}
+      {person.trainer_without_license && (
+        <span className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+          <WithoutLicense />
+          {expiredLicenses.length > 0 && (
+            <span className="text-xs text-muted-foreground">
+              {expiredLicenses.map((e) => `${e.code ?? 'Lizenz'} bis ${formatDate(e.validUntil)}`).join(', ')}
+            </span>
+          )}
+        </span>
+      )}
       {shown.map((e) => (
         <span key={e.propertyId} className="text-xs text-muted-foreground">
           {[EXPIRY_KIND_LABELS[e.kind], e.code].filter(Boolean).join(' ')} · {formatDate(e.validUntil)}
@@ -164,7 +176,6 @@ function Ablauf({ person }: { person: VolunteerRow }) {
         </span>
       ))}
       {more > 0 && <span className="text-xs text-muted-foreground">+ {more} weitere</span>}
-      {person.trainer_without_license && <WithoutLicense />}
     </span>
   )
 }
