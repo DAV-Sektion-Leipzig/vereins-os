@@ -2,18 +2,32 @@
 // und fotografiert die Seiten aus SHOTS. Nur gegen den lokalen Stack oder TEST (Vorschau), nie gegen PROD.
 //
 // Aufruf:
-//   SEED_TEST_PASSWORD=… npm run anleitung:screenshots                 alle Bilder, App unter http://localhost:5173
+//   npm run anleitung:screenshots                 alle Bilder, App unter http://localhost:5173; Passwort aus .env.local
+//   (oder SEED_TEST_PASSWORD=… setzen); ohne Terminal: GitHub Actions „Anleitung: Bilder erzeugen“ (anleitung-bilder.yml)
 //   ANLEITUNG_URL=https://…workers.dev SEED_TEST_PASSWORD=… npm run anleitung:screenshots
 //   SEED_TEST_PASSWORD=… npm run anleitung:screenshots -- ez-training  nur Bilder, deren Name den Text enthält
 //   SEED_TEST_PASSWORD=… npm run anleitung:screenshots -- --vorbereiten  vorher die Daten der Finanzen vorbereiten
 //
-// Daten: Seed mit SEED_WITH_EZ=1, SEED_WITH_FI=1 und SEED_WITH_DS=1 (scripts/anleitung/lokaler-stack.sh).
+// Daten: Seed mit SEED_WITH_EZ=1, SEED_WITH_FI=1, SEED_WITH_DS=1 und SEED_WITH_TK=1 (scripts/anleitung/lokaler-stack.sh).
 // Das Dashboard nutzt die Budgetdaten aus supabase/seed-ds.sql (Vorstand mit Vorlage „Budgetpflege“). „--vorbereiten“ erledigt in
 // der Oberfläche, was die Bilder der Finanzen zeigen: 1. Halbjahr 2026 berechnen, Tina Trainerin und Hans Helfer als
 // Kim Kinderjugend bestätigen, Tina Trainerin abschließen und ihre Abgabe erfassen, eine Auszahlungsrunde anlegen.
 // Bereits erledigte Schritte werden übersprungen.
+import { existsSync, readFileSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 import { chromium, type Browser, type BrowserContext, type Page } from 'playwright'
+
+// Lokale Werte wie supabase/seed.sh aus .env.local laden (Datei: ANLEITUNG_ENV, sonst .env.local im Arbeitsordner),
+// nur für noch nicht gesetzte Variablen; nichts wird ausgegeben. In GitHub Actions kommt das Passwort aus den Secrets.
+function loadEnvFile(path: string) {
+  if (!existsSync(path)) return
+  for (const line of readFileSync(path, 'utf8').split(/\r?\n/)) {
+    const m = /^\s*(?:export\s+)?([A-Z0-9_]+)\s*=\s*(.*)\s*$/.exec(line)
+    if (!m || process.env[m[1]] !== undefined) continue
+    process.env[m[1]] = m[2].replace(/^(['"])(.*)\1$/, '$2')
+  }
+}
+loadEnvFile(process.env.ANLEITUNG_ENV ?? '.env.local')
 
 const BASE = (process.env.ANLEITUNG_URL ?? 'http://localhost:5173').replace(/\/$/, '')
 const PASSWORD = process.env.SEED_TEST_PASSWORD

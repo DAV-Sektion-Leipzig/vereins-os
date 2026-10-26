@@ -1,0 +1,73 @@
+# Bilder der Anleitung (docs/anleitung/bilder) ohne Terminal erzeugen: GitHub → Actions → „Anleitung: Bilder erzeugen“ →
+# „Run workflow“. Fotografiert eine Vorschau-Adresse, die gegen TEST läuft (nie PROD; das Skript bricht bei der
+# PROD-Adresse ab), meldet sich mit den Testzugängen an (Secret SEED_TEST_PASSWORD) und öffnet einen Pull Request mit
+# den geänderten Bildern. Greift nur lesend bzw. über die Oberfläche auf TEST zu.
+name: "Anleitung: Bilder erzeugen"
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Vorschau-Adresse gegen TEST, z. B. https://<branch>-vereins-os.sektion-leipzig.workers.dev"
+        required: true
+      filter:
+        description: "Nur Bilder, deren Name den Text enthält (leer = alle), z. B. tk-"
+        required: false
+        default: ""
+      vorbereiten:
+        description: "Daten der Finanzen vorher vorbereiten (--vorbereiten)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bilder:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Browser installieren
+        run: npx playwright install --with-deps chromium
+
+      - name: Bilder erzeugen
+        env:
+          ANLEITUNG_URL: ${{ inputs.url }}
+          SEED_TEST_PASSWORD: ${{ secrets.SEED_TEST_PASSWORD }}
+          FILTER: ${{ inputs.filter }}
+          VORBEREITEN: ${{ inputs.vorbereiten }}
+        run: |
+          args=()
+          [[ -n "$FILTER" ]] && args+=("$FILTER")
+          [[ "$VORBEREITEN" == "true" ]] && args+=("--vorbereiten")
+          npm run anleitung:screenshots -- "${args[@]}"
+
+      - name: Pull Request mit den Bildern
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FILTER: ${{ inputs.filter }}
+          URL: ${{ inputs.url }}
+        run: |
+          if git diff --quiet -- docs/anleitung/bilder && [[ -z "$(git ls-files --others --exclude-standard docs/anleitung/bilder)" ]]; then
+            echo "Keine geänderten Bilder."
+            exit 0
+          fi
+          branch="anleitung-bilder-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add docs/anleitung/bilder
+          git commit -m "Anleitung: Bilder erzeugt${FILTER:+ (${FILTER})}"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "Anleitung: Bilder${FILTER:+ ${FILTER}} erzeugt" \
+            --body "Bilder der Anleitung, erzeugt mit dem Workflow „Anleitung: Bilder erzeugen“ gegen ${URL} (TEST). Bitte die Bilder im Diff ansehen; einbinden in die Texte bei Bedarf in einem eigenen Commit."
