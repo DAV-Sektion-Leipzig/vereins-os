@@ -22,6 +22,11 @@ Umsetzungsdatei zu [spec.md](spec.md) v0.2 (Ready, 26.10.2026); Tasks in [tasks.
 | P5 | Neue Referate | „Öffentlichkeitsarbeit“ (8) und „Umwelt und Naturschutz“ (9), `semiannual_settlement = false`, idempotent über den Namen | D10 |
 | P6 | Dateien lesen | im Browser (Phase 3): DATEV-CSV mit eigenem Parser nach `build.py`/Prototyp; Excel mit einer Bibliothek – Auswahl in Phase 3 (Kandidaten `read-excel-file`, `exceljs`; Lizenz, Größe, dynamischer Import als eigener Chunk) | spec.md Abschnitt 1 |
 | P7 | Tests lokal | `supabase start` ohne Edge-Runtime und Studio, `supabase db reset`, `SEED_TEST_PASSWORD=… supabase/seed.sh`, `supabase test db supabase/tests/database` | wie CI (db-tests.yml Block B) |
+| P8 | Gesamtbudget eines Postens ändern | zusätzliche Funktion `fi_budget_item_move(p_item, p_group_name)`; leere Gesamtbudgets werden entfernt | der Finanzplan kennt keine Gesamtbudgets; beim ersten Jahr ohne `zuordnung.csv` braucht die Budgetpflege einen Weg, Posten zu gruppieren |
+| P9 | Migrationen Phase 2 | `20261105100100` Tabellen, RLS · `…0200` Kontoangaben, Regelvorrang, View `fi_budget_assigned` · `…0300` Finanzplan, Gesamtbudgets, Regeln, `zuordnung.csv`, neues Jahr · `…0400` DATEV-Import · `…0500` Umschlüsseln, Vorschläge, Hinweise, Umschichtungen, Markierung · `…0600` Lesefunktionen `ds_budget_*`, `ds_todo` · `…0700` Löschlauf (pg_cron täglich 03:15) | Zeitstempel nach den TK-Migrationen (`20261104…`) |
+| P10 | Vorschau (R18) | berechnet in `fi_budget_preview(year, referat)`, nur beim ersten Posten „Vergütung Aktive“ eines Gesamtbudgets des Referats; Runden und Abrechnungen getrennt (`preview_runs`, `preview_settlements`) | spec R18 Umsetzung |
+| P11 | Vorjahr nach Löschlauf (R20) | `fi_budget_item_sums` nutzt Einzelbuchungen, ohne sie die Monatssummen bis zum letzten vollen Monat; Monatssummen werden über die Regeln ohne Einzelbuchungsmerkmale zugeordnet | spec R20 [ANNAHME] |
+| P12 | Zu tun | eigene Anträge und Vorschläge: offen oder in den letzten 14 Tagen entschieden [ANNAHME]; Datenstand alt ab 42 Tagen nur für das laufende Jahr | US-DS-17, R23 |
 
 ## Offene Punkte für die Abnahme
 
