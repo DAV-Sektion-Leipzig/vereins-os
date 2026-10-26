@@ -1,6 +1,6 @@
 # Übergabe: Administration → Planungshilfe Touren und Kurse (Freigaberecht)
 
-Stand: 26.10.2026 · Version 1.0 · Status: offen (Planungshilfe eingefroren; Einarbeitung bei der Wiederaufnahme) · Von: Administration (AD, Nachtrag v0.10) · An: Planungshilfe Touren und Kurse (TK)
+Stand: 26.10.2026 · Version 1.0 · Status: eingearbeitet (26.10.2026) · Von: Administration (AD, Nachtrag v0.10) · An: Planungshilfe Touren und Kurse (TK)
 Grundlage: spec.md AD v0.10.0 (R30, R50, T59, T68); querschnitt-administration.md Q1 (Product Owner 24.10.2026); Entscheidung Product Owner 26.10.2026 im Chat Finanzen
 Änderungen v1.0: Erste Fassung.
 
@@ -18,4 +18,4 @@ Q1 ist entschieden: Freigaben sind eine eigene Aktion im Rechtemodell, nicht ein
 
 ## Einarbeitung
 
-- [ ] eingearbeitet in Planungshilfe Touren und Kurse (Datei, Version): –
+- [x] eingearbeitet in Planungshilfe Touren und Kurse: specs/tk-touren-kurse/spec.md v0.3 (26.10.2026) – Abschnitte 2 (`tk_can_approve` über `ad_can_approve`), 3, 7, 9, 11; 02-stories.md v0.5.
