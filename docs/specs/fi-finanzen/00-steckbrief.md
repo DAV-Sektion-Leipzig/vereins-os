@@ -1,7 +1,8 @@
 # Steckbrief: Finanzen
 
-Stand: 26.10.2026 · Version 0.4 · Kürzel: FI · Priorität: 3 – nach der Anwesenheitserfassung · Ablage: docs/specs/fi-finanzen/ · Status: Entwurf, MVP-Schnitt bestätigt (Product Owner 24.10.2026)
+Stand: 26.10.2026 · Version 0.5 · Kürzel: FI · Priorität: 3 – nach der Anwesenheitserfassung · Ablage: docs/specs/fi-finanzen/ · Status: abgeschlossen, bereit für Stories (Product Owner 26.10.2026)
 Grundlage: vision.md v0.4, modul-landkarte.md v2.8, rollen.md v1.1, glossar.md v1.6, offene-punkte.md v5.5, querschnitt-administration.md v0.1 (P1, P3, P6, P7, P11–P17, Q4–Q6, Q9), arbeitsplan.md v0.3 (Schritt 10), specs/ez-einsaetze/uebergabe-finanzen.md v1.6 (F1–F9), specs/tk-touren-kurse/uebergabe-finanzen.md v1.3 (Punkte 1–7), specs/ez-einsaetze/spec.md v0.5 (Abschnitte 2 und 7), specs/ad-administration/spec.md v0.9 (Nachtrag v0.9, Sätze und Pauschalen), specs/ea-ehrenamt/spec.md v0.2.1 und 01-erhebung.md v0.5 (C2 Nr. 5, 9, 15, 16)
+Änderungen v0.5: Offene Punkte in Iteration 1 verschoben, Steckbrief abgeschlossen (Product Owner 26.10.2026). MVP ohne Storno einer Auszahlungsrunde; Abgleich Punktekonto zeigt beide Summen; Erklärung und Begriff „abschließen“ bleiben [ANNAHME] bis zur Abnahme.
 Änderungen v0.4: Vorlagen der Geschäftsstelle (Auszahlliste als PDF, SEPA-Datei als XML) eingearbeitet (Product Owner 26.10.2026): Auszahlung in Auszahlungsrunden; die Freigabe einer Runde erzeugt Auszahlliste und Überweisungsdatei (pain.001.001.03); je Person und Gruppe eine Zeile und eine Überweisung; „sachlich richtig“ = Bestätigung im Vereins OS. Die einzelne Abrechnung wird „abgeschlossen“ (bisher „freigegeben“) [ANNAHME: Begriff].
 Änderungen v0.3: Weitere offene Fragen geklärt (Product Owner 25.10.2026): Höchstbetrag 3.300 € ab 2026, maßgeblich das Jahr der Auszahlung; Vertretung bei der Bestätigung; Q4-Annahme bestätigt (Belege in der Finanzbuchhaltung); Vergütung bei Arbeitseinsätzen über die Ehrenamtspauschale (später); Erklärung auf dem Abrechnungsdokument; heutiger Aufwand 3–5 Arbeitstage je Halbjahr.
 Änderungen v0.2: Offene Fragen mit dem Product Owner geklärt (25.10.2026): Vier-Augen-Prinzip – Referent:in bestätigt die Abrechnungen ihres Referats, die Geschäftsstelle gibt frei; damit Referent:innen schon im MVP Nutzer von Finanzen (Reichweite „Referat“, ohne Bankdaten; ändert Q9); Trainervereinbarung ist Voraussetzung der Auszahlung; Training ohne Trainingszeit 0 TE mit Hinweis; eintägige Ausbildungsfahrt mit Sätzen der Mehrtageskurse; Abrechnungsart wählt, wer den Einsatz anlegen darf.
@@ -104,9 +105,14 @@ Trainer:innen und Helfer:innen werden aus der großen Excel-Tabelle des Microsof
 
 **Entschieden 26.10.2026 (Product Owner):** Auszahlung in Auszahlungsrunden; Freigabe einer Runde erzeugt Auszahlliste (PDF) und Überweisungsdatei (XML, pain.001.001.03 wie die Vorlage der Sparkasse); „sachlich richtig“ = Bestätigung im Vereins OS; je Person und Gruppe eine Zeile und eine Überweisung.
 
-**Offene Fragen:**
-- [OFFEN] Rücknahme einer freigegebenen Auszahlungsrunde, wenn die Bank die Datei ablehnt (Vorschlag: stornieren, Abrechnungen wieder „abgegeben“). Wer: Geschäftsstelle mit Sparkasse.
-- [ANNAHME] Begriff „abschließen“ für die einzelne Abrechnung, damit „freigeben“ nur für die Auszahlungsrunde gilt. Wer bestätigt: Product Owner.
-- [OFFEN] Zählen Probetrainings für die Kletterhalle (werden sie abgebucht)? Wer: Geschäftsstelle.
-- [ANNAHME] Wortlaut der Erklärung auf dem Abrechnungsdokument: „Ich versichere, dass die Angaben richtig sind und die Vergütung zusammen mit anderen Einnahmen aus nebenberuflicher Tätigkeit nach § 3 Nr. 26 EStG den Freibetrag im Kalenderjahr nicht übersteigt. Änderungen teile ich der Sektion unverzüglich mit.“ Wer prüft: Product Owner, vor der Spec.
+**Offene Fragen:** keine für den MVP.
+
+**Iteration 1 (offene Punkte, Product Owner 26.10.2026: in Iteration 1, kein Blocker für den MVP):**
+- Rücknahme (Storno) einer freigegebenen Auszahlungsrunde, wenn die Bank die Datei ablehnt (Vorschlag: stornieren, Abrechnungen wieder „abgegeben“). Klärt: Geschäftsstelle mit Sparkasse. Im MVP [ANNAHME]: kein Storno; Korrektur außerhalb des Vereins OS.
+- Zählen Probetrainings für die Kletterhalle? Klärt: Geschäftsstelle. Im MVP zeigt der Abgleich beide Summen.
+- Sonderfälle im heutigen Ablauf (Nachzahlungen, Rückforderungen). Klärt: Geschäftsstelle.
+
+**Annahmen, die mit der Abnahme bestätigt werden:**
+- [ANNAHME] Begriff „abschließen“ für die einzelne Abrechnung, damit „freigeben“ nur für die Auszahlungsrunde gilt.
+- [ANNAHME] Wortlaut der Erklärung auf dem Abrechnungsdokument: „Ich versichere, dass die Angaben richtig sind und die Vergütung zusammen mit anderen Einnahmen aus nebenberuflicher Tätigkeit nach § 3 Nr. 26 EStG den Freibetrag im Kalenderjahr nicht übersteigt. Änderungen teile ich der Sektion unverzüglich mit.“ Wer prüft: Product Owner, spätestens mit der Abnahme.
 - Buchungslauf (später): Übergabeformat (DATEV-Buchungsexport oder SEPA-Datei, Datei oder Schnittstelle über SC) und Empfänger der Mails bleiben offen (offene-punkte.md); Richtung (Einzug) und Vertrag sind im Glossar festgelegt.

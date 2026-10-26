@@ -1,7 +1,8 @@
 # Erhebung: Finanzen
 
-Datum: 26.10.2026 · Version 0.4 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner); Vorlagen der Geschäftsstelle: Auszahlliste (PDF) und SEPA-Datei (XML) einer Auszahlung der Übungsleitervergütung (Muster mit Echtdaten, nicht im Repository)
+Datum: 26.10.2026 · Version 0.5 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner); Vorlagen der Geschäftsstelle: Auszahlliste (PDF) und SEPA-Datei (XML) einer Auszahlung der Übungsleitervergütung (Muster mit Echtdaten, nicht im Repository)
 Grundlage: 00-steckbrief.md v0.4; specs/ez-einsaetze/uebergabe-finanzen.md v1.6 (F1–F9); specs/tk-touren-kurse/uebergabe-finanzen.md v1.3; specs/ez-einsaetze/spec.md v0.5; specs/ad-administration/spec.md v0.9; specs/ea-ehrenamt/01-erhebung.md v0.5 (C2); Vergütungsordnung (Beschluss 21.11.2023, ergänzt 11.12.2025, Anhang 1)
+Änderungen v0.5: Offene Fragen in Iteration 1 verschoben (Product Owner 26.10.2026); im MVP kein Storno einer Auszahlungsrunde [ANNAHME].
 Änderungen v0.4: Vorlagen der Geschäftsstelle eingearbeitet (Product Owner 26.10.2026): Auszahlung in **Auszahlungsrunden**; die Freigabe einer Runde erzeugt **Auszahlliste (PDF)** für die Ablage in der Buchhaltung und **Überweisungsdatei (XML, pain.001.001.03)** für die Sparkasse (B5, C3, C6, C7, R24–R30); je Person und Gruppe eine Zeile und eine Überweisung; „sachlich richtig“ auf der Auszahlliste = Bestätigung im Vereins OS. Begriff: Die einzelne Abrechnung wird **abgeschlossen** (bisher „freigegeben“), freigegeben wird nur die Auszahlungsrunde [ANNAHME: Begriff, damit „Freigabe“ eindeutig bleibt].
 Änderungen v0.3: Höchstbetrag im Jahr der Auszahlung (R11), Vertretung bei der Bestätigung (R23), Erklärung auf dem Abrechnungsdokument (R18), Belege in der Finanzbuchhaltung bestätigt (F) (Product Owner 25.10.2026).
 Änderungen v0.2: Entscheidungen des Product Owners vom 25.10.2026 eingearbeitet: Bestätigung durch die Referent:in (Zustand „bestätigt“, Abschnitt A, B3a, R23), Trainervereinbarung als Voraussetzung (R14), Training ohne Trainingszeit (R4), Probetrainings getrennt (B6).
@@ -64,13 +65,13 @@ Begriffe nach glossar.md; neue Begriffe (Abrechnungsart, Position, Abrechnungsdo
    beide mit denselben Zeilen und derselben Summe (R28). Die enthaltenen Abrechnungen werden **ausgezahlt** (in Runde n, Ausführungsdatum).
 5. Geschäftsstelle lädt die XML im Online-Banking hoch, druckt die Auszahlliste, holt die Unterschriften „gf Vorstand“ und „angewiesen“ ein und gibt sie mit dem Kontoauszug an die Buchhaltung (außerhalb des Vereins OS).
 6. Erneuter Download beider Dateien einer freigegebenen Runde ist möglich, mit Warnung „Diese Runde ist bereits freigegeben. Die Überweisungsdatei nicht erneut hochladen.“ (R29).
-- [OFFEN] Rücknahme einer freigegebenen Runde, wenn die Bank die Datei ablehnt (Vorschlag: Runde stornieren → Abrechnungen wieder „abgegeben“, neue Runde).
+- Rücknahme einer freigegebenen Runde, wenn die Bank die Datei ablehnt: Iteration 1 (Vorschlag: Runde stornieren → Abrechnungen wieder „abgegeben“, neue Runde). Im MVP kein Storno [ANNAHME].
 
 **B6 – Abgleich Punktekonto Kletterhalle**
 - Geschäftsstelle wählt Ort (nur Orte mit Kennzeichen „Punktekonto Kletterhalle“) und Zeitraum der Rechnung.
 - Das System zeigt je Training: Datum, Gruppe, Anzahl anwesender Teilnehmer:innen, Anzahl Probetrainings; Summe ohne und mit Probetrainings (aus `ez_climbing_points_report`).
 - Geschäftsstelle gibt die Anzahl bzw. Punkte laut Rechnung und die Rechnungsnummer ein; das System zeigt die Abweichung. Der Abgleich wird gespeichert (Datum, Ort, Zeitraum, Werte, Bemerkung) [ANNAHME]. Keine Namen.
-- [OFFEN] Zählen Probetrainings für die Halle mit? Bis zur Klärung durch die Geschäftsstelle beide Summen (Product Owner 25.10.2026).
+- Zählen Probetrainings für die Halle mit? Klärung in Iteration 1; im MVP beide Summen (Product Owner 25./26.10.2026).
 
 **B7 – Iteration 1 (Stichpunkte, Erhebung folgt)**
 - Einzelabrechnung je Einsatz (Kurs, Tour, vergütete Einsätze anderer Referate) mit Lehreinheiten, Tagen, Organisationspauschale von Hand; Vorbelegung aus der Planungshilfe (`tk_settlement_draft`); Gemeinschaftstour nur Organisationspauschale; Auszahlung über dieselben Auszahlungsrunden [ANNAHME].
@@ -100,7 +101,7 @@ Begriffe nach glossar.md; neue Begriffe (Abrechnungsart, Position, Abrechnungsdo
 | Entwurf | Entwurf | Geschäftsstelle | Auswahl ändern |
 | Entwurf | freigegeben | Geschäftsstelle | mindestens eine Auszahlzeile; Angaben der Sektion vollständig (A10); erzeugt PDF und XML |
 | Entwurf | – (gelöscht) | Geschäftsstelle | Runde verwerfen |
-| freigegeben | storniert | Geschäftsstelle | [OFFEN] bei Ablehnung durch die Bank |
+| freigegeben | storniert | Geschäftsstelle | Iteration 1, bei Ablehnung durch die Bank |
 
 ## C. Daten (Feld | Typ | Pflicht | Beispiel | Quelle)
 
@@ -287,7 +288,7 @@ Kein `BtchBookg` (Sammelbuchung nach Voreinstellung der Bank, wie Vorlage), kein
 
 | Frage | Wer klärt | bis wann |
 |---|---|---|
-| Wortlaut der Erklärung auf dem Abrechnungsdokument prüfen (R18) | Product Owner | vor der Spec |
-| Rücknahme einer freigegebenen Runde bei Ablehnung durch die Bank | Geschäftsstelle mit Sparkasse | vor der Spec |
-| Zählen Probetrainings für die Kletterhalle (B6)? | Geschäftsstelle | vor den Stories |
-| Sonderfälle im heutigen Ablauf (z. B. Nachzahlungen, Rückforderungen) | Geschäftsstelle | vor den Stories |
+| Wortlaut der Erklärung auf dem Abrechnungsdokument prüfen (R18, [ANNAHME]) | Product Owner | Abnahme MVP |
+| Rücknahme einer freigegebenen Runde bei Ablehnung durch die Bank | Geschäftsstelle mit Sparkasse | Iteration 1 |
+| Zählen Probetrainings für die Kletterhalle (B6)? | Geschäftsstelle | Iteration 1 |
+| Sonderfälle im heutigen Ablauf (z. B. Nachzahlungen, Rückforderungen) | Geschäftsstelle | Iteration 1 |
