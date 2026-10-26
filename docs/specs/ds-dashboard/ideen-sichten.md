@@ -1,6 +1,7 @@
 # Ideenkatalog: Sichten und Kennzahlen des Dashboards
 
-Stand: 26.10.2026 · Version 0.3 · Status: Entwurf zur Auswahl durch den Product Owner und die Referate
+Stand: 26.10.2026 · Version 0.4 · Status: Ideenspeicher; die Auswahl steht in sichten.md
+Änderungen v0.4: Auswahl M/S/C/W in sichten.md v0.1 (Q-DS5); Vorjahr nur ein Jahr (Q-DS19); Fragen an die Referate entfallen (keine Rückmeldung, Product Owner 26.10.2026).
 Änderungen v0.3: Q-DS9 (Vorjahresvergleich für Budget und Kennzahlen) eingearbeitet: B7 als Must; alle Kennzahlen mit Vorjahreswert.
 Änderungen v0.2: Entscheidungen Q-DS1 (Referat sieht Einzelbuchungen), Q-DS2 (Budget in FI) und Q-DS3 (Auslastung ohne Platzzahl) eingearbeitet.
 Grundlage: Steckbriefe, Specs und Merkposten der Module AD, EA, GR, EZ, TK, FI (Stand 26.10.2026); 00-steckbrief.md DS v0.1.
@@ -108,7 +109,10 @@ Kürzel der Priorität für die Rückmeldung: **M** = Must (MVP), **S** = Should
 
 ---
 
-## Fragen an die Referate (Vorschlag für die Erhebung)
+## Fragen an die Referate (entfallen)
+
+Die Referate geben keine Rückmeldung (Product Owner 26.10.2026). Die Fragen dienten Claude bei der Festlegung in sichten.md als Leitfragen.
+
 
 1. Welche drei Zahlen schaust du heute am häufigsten nach – und wo?
 2. Welche Entscheidung würdest du mit einer Kennzahl anders oder früher treffen (z. B. Gruppe zusammenlegen, Trainer:in suchen, Budget umschichten)?

@@ -1,7 +1,8 @@
 # Steckbrief: Dashboard
 
-Stand: 26.10.2026 · Version 0.9 · Kürzel: DS [ANNAHME] · Priorität: Budget-Sicht früh (nach dem Kern der Administration), Referats-Kennzahlen nach EZ und FI · Ablage: docs/specs/ds-dashboard/ · Status: Entwurf · Product Owner: Toni Werner
+Stand: 26.10.2026 · Version 0.10 · Kürzel: DS [ANNAHME] · Priorität: Budget-Sicht früh (nach dem Kern der Administration), Referats-Kennzahlen nach EZ und FI · Ablage: docs/specs/ds-dashboard/ · Status: Entwurf · Product Owner: Toni Werner
 Grundlage: vision.md v0.4, modul-landkarte.md v2.17, rollen.md v1.3, glossar.md, offene-punkte.md v5.15, specs/fi-finanzen/00-steckbrief.md v0.5 (Nicht im Scope: „Budget-Übersicht, Dashboard: später“), specs/gr-gruppen/00-steckbrief.md v0.7 und specs/ez-einsaetze/00-steckbrief.md v0.9 (Auslastung, Betreuungsschlüssel in Iteration 2), specs/tk-touren-kurse/00-steckbrief.md v0.7 (Kosten- und CO2-Auswertung), Prototyp Budget-Dashboard (Übergabe: prototyp-budget-dashboard.md v1.0), Ideenkatalog ideen-sichten.md v0.1.
+Änderungen v0.10: Q-DS5 und Q-DS19 entschieden (Product Owner 26.10.2026): Die Referate geben keine Rückmeldung; Claude legt die Sichten als Referent:in fest (sichten.md v0.1, zur Abnahme); Vorjahresvergleich nur mit dem Vorjahr; Gesamtbudgets ohne Referat bestätigt.
 Änderungen v0.9: Q-DS18 entschieden (Product Owner 26.10.2026): Referent:innen schichten den Plan nur um (Summe des Gesamtbudgets bleibt gleich), die Budgetpflege bestätigt.
 Änderungen v0.8: Q-DS15 bis Q-DS17 entschieden (Product Owner 26.10.2026): Jede Referent:in sieht das gesamte Budget des Vereins (Summen aller Gesamtbudgets), Einzelbuchungen nur des eigenen Referats; sie pflegt nur ihr eigenes Budget: Hinweise und Plan; Umschlüsseln nur als Vorschlag an die Budgetpflege. Tabelle „Sichtbarkeit der Gesamtbudgets“ wird zu „Gesamtbudgets und Referate“.
 Änderungen v0.7: Q-DS6 entschieden (Product Owner 26.10.2026): Gesamtbudgets je Referat; „Veranstaltungen“ und „Fördermittel“ für alle mit „Dashboard lesen“; neue Referate Öffentlichkeitsarbeit und Umwelt und Naturschutz; Sulzenauhütte ohne Budget-Sicht.
@@ -33,7 +34,7 @@ Der 1. Vorsitzende wertet den Finanzplan mit einem eigenen, offline laufenden Bu
 
 **Im Scope (MVP) [ANNAHME: Vorschlag, Schnitt mit dem Product Owner klären]:**
 - **Budget-Sicht** (Grundlage: Prototyp Budget-Dashboard). Daten, Import und Pflege liegen im **Bereich Budget von Finanzen** (Q-DS2, Product Owner 26.10.2026; Anforderungen: uebergabe-finanzen.md); das Dashboard zeigt sie je Sicht an. Umfang wie im Prototyp: Finanzplan des Jahres (Budgetposten mit Plan, Einnahme/Ausgabe, Gesamtbudget), Zuordnung Konto → Budgetposten mit Historie (ersetzt `zuordnung.csv` und die Versionsdateien), Einspielen des DATEV-Exports (Kontenblätter als CSV), Berechnung Plan / verbraucht / frei je Budgetposten und Gesamtbudget, Ampel (grün < 80 %, gelb 80–100 %, rot > 100 %), Zeitmarke Datenstand, Einnahmen Plan / erreicht / fehlt noch, nicht zugeordnete Buchungen, Prüfung (Summe je Konto = Kontenübersicht; ausgewertet = Ausgaben − Einnahmen + nicht zugeordnet), Umschlüsseln einzelner Buchungen, Druckansicht für die Vorstandssitzung.
-- **Vorjahresvergleich Budget** (Q-DS9, Product Owner 26.10.2026): je Gesamtbudget und Budgetposten das Vorjahr zum gleichen Stichtag (Datenstand des laufenden Jahres, z. B. 30.06.2027 gegen 30.06.2026) und das Ergebnis des ganzen Vorjahres; Grundlage sind die Summen je Budgetposten und Monat (bleiben nach Q-DS11 erhalten). Budgetposten werden über den gleichen Namen und das gleiche Gesamtbudget verglichen [ANNAHME]; neue oder umbenannte Posten erscheinen ohne Vorjahreswert.
+- **Vorjahresvergleich Budget** (Q-DS9, Product Owner 26.10.2026): je Gesamtbudget und Budgetposten **nur das Vorjahr** (Q-DS19) zum gleichen Stichtag (Datenstand des laufenden Jahres, z. B. 30.06.2027 gegen 30.06.2026) und das Ergebnis des ganzen Vorjahres; Grundlage sind die Summen je Budgetposten und Monat (bleiben nach Q-DS11 erhalten). Budgetposten werden über den gleichen Namen und das gleiche Gesamtbudget verglichen [ANNAHME]; neue oder umbenannte Posten erscheinen ohne Vorjahreswert.
 - **Budget-Sicht für alle mit „Dashboard lesen“** (Q-DS15): alle Gesamtbudgets und Budgetposten mit Summen; das eigene Referat ist hervorgehoben bzw. oben [ANNAHME]. Einzelbuchungen sieht eine Referent:in nur bei den Budgetposten ihres Referats und bei Gesamtbudgets für alle (Veranstaltungen, Fördermittel) [ANNAHME]; Vorstand, Admin, Geschäftsstelle und Budgetpflege sehen alle Einzelbuchungen. Nicht zugeordnete Buchungen sehen nur Vorstand, Admin, Geschäftsstelle und die Budgetpflege (Q-DS13).
 - **Pflege durch die Referent:in** (Q-DS16, Q-DS17): (1) **Hinweis** je Budgetposten des eigenen Referats (z. B. „Rechnung Trainingslager kommt im August“), sichtbar für alle mit Budget-Sicht; (2) **Plan umschichten** (Q-DS18 (Product Owner 26.10.2026)): zwischen Budgetposten des eigenen Gesamtbudgets, die Summe des Gesamtbudgets bleibt gleich; nur zwischen Posten gleicher Art (Ausgabe ↔ Ausgabe, Einnahme ↔ Einnahme) [ANNAHME]; mit Grund; Stand beantragt → bestätigt / abgelehnt durch die **Budgetpflege**; erst bestätigt zählt sie. Die Sicht zeigt beschlossenen Plan (Excel) und aktuellen Plan (beschlossen + bestätigte Umschichtungen) nebeneinander; (3) **Umschlüsselung vorschlagen** für eine Buchung des eigenen Referats (Ziel-Budgetposten, Grund); die Budgetpflege nimmt an oder lehnt ab; bis dahin zählt die Buchung beim bisherigen Posten. Zuordnung der Konten, Import und Umschlüsseln bleiben bei der Budgetpflege.
 - **Startseite:** Die Sichten ersetzen den Platzhalter der Startseite (Willkommensgrafik, AD) für Nutzer mit DS-Rechten [ANNAHME].
@@ -45,7 +46,7 @@ Der 1. Vorsitzende wertet den Finanzplan mit einem eigenen, offline laufenden Bu
 - **Leistungssport:** wie Kinder und Jugend, dazu Wettkampfbetreuungen und Trainingslager.
 - **Touren und Ausbildung:** Planungen je Status, Kostendeckung, Absagen, „durchgeführt, nicht abgerechnet“, CO2 je Jahr (sobald TK Iteration 1).
 - **Verknüpfung Budget ↔ Abrechnung:** abgerechnete, noch nicht gebuchte Vergütung als „gebunden“ am Budgetposten „Vergütung Aktive“.
-- Weitere Ideen: ideen-sichten.md.
+- **Inhalt und Aufbau der Sichten:** sichten.md v0.1 (Festlegung durch Claude als Referent:in im Auftrag des Product Owners, Q-DS5): je Sicht ① Zu tun, ② Budget meines Referats, ③ Mein Referat in Zahlen, ④ Budget des Vereins; Bausteine je Referat; Entscheidung M/S/C/W zu jedem Eintrag des Ideenkatalogs (ideen-sichten.md).
 
 **Gesamtbudgets und Referate** (Q-DS6, Q-DS15 (Product Owner 26.10.2026); Namen wie im Finanzplan 2026). Die Summen aller Gesamtbudgets sieht jede:r mit „Dashboard lesen“; die Tabelle legt fest, wer **Einzelbuchungen** sieht und wer das Gesamtbudget **pflegt** (Hinweise, Plan):
 
@@ -61,11 +62,11 @@ Der 1. Vorsitzende wertet den Finanzplan mit einem eigenen, offline laufenden Bu
 | Umwelt und Naturschutz | Referat Umwelt und Naturschutz (**neu**) | neues Referat in den Stammdaten der Administration |
 | Veranstaltungen | Einzelbuchungen: **alle** mit „Dashboard lesen“; Pflege: Budgetpflege | Jugend Cup, Europa Cup, Bergfilmfestival |
 | Fördermittel | Einzelbuchungen: **alle** mit „Dashboard lesen“; Pflege: Budgetpflege | nur Einnahmen |
-| Geschäftsstelle & Verwaltung | ohne Referat: Einzelbuchungen Vorstand, Admin, Geschäftsstelle; Pflege Budgetpflege [ANNAHME] | inkl. Spenden, Ehrenamtspauschale |
-| Mitgliederverwaltung | ohne Referat [ANNAHME] | – |
-| Ausleihe/Bibliothek | ohne Referat [ANNAHME] | – |
-| Rücklagen | ohne Referat [ANNAHME] | kalkulatorisch („keine Buchung“) |
-| Vereinszentrum | ohne Referat [ANNAHME] | – |
+| Geschäftsstelle & Verwaltung | ohne Referat: Einzelbuchungen Vorstand, Admin, Geschäftsstelle; Pflege Budgetpflege (bestätigt 26.10.2026) | inkl. Spenden, Ehrenamtspauschale |
+| Mitgliederverwaltung | ohne Referat | – |
+| Ausleihe/Bibliothek | ohne Referat | – |
+| Rücklagen | ohne Referat | kalkulatorisch („keine Buchung“) |
+| Vereinszentrum | ohne Referat | – |
 | – (Sulzenauhütte) | kein eigenes Budget; das Referat sieht wie alle die Summen des Vereins | kein Budgetposten im Finanzplan; Konten bleiben „nicht zugeordnet“ |
 
 Neue Gesamtbudgets eines späteren Finanzplans bekommen ihr Referat bei der Budgetpflege; ohne Angabe gelten sie als „ohne Referat“ [ANNAHME].
@@ -104,11 +105,12 @@ Neue Gesamtbudgets eines späteren Finanzplans bekommen ihr Referat bei der Budg
 - Q-DS2 – **entschieden 26.10.2026:** Budget (Finanzplan, Zuordnung, Buchungen) ist ein Bereich von Finanzen; das Dashboard zeigt die Sichten und liest aus allen Modulen.
 - Q-DS3 – **entschieden 26.10.2026:** Auslastung = Anwesenheitsquote, Betreuungsschlüssel und Probetrainings; keine Platzzahl.
 - Q-DS4 – **entschieden 26.10.2026:** Budget-Sicht früh (nach dem Kern der Administration, Daten liegen heute vor), Referats-Kennzahlen nach EZ und FI. [OFFEN] Anpassung des Arbeitsplans (Reihenfolge: Nachtrag AD v0.10 Rechte FI, Bereich Budget FI, DS).
-- [OFFEN] Q-DS5 Welche Referate bekommen welche Sicht? Vorschlag in ideen-sichten.md; Rückmeldung je Referat (Kinder und Jugend, Leistungssport, Klettern, Touren, Ausbildung, Karl-Stein-Hütte, Sulzenauhütte).
+- Q-DS5 – **entschieden 26.10.2026:** keine Rückmeldung der Referate; Claude legt die Sichten als Referent:in fest (sichten.md), der Product Owner nimmt ab.
 - Q-DS6 – **entschieden 26.10.2026:** siehe Tabelle „Sichtbarkeit der Gesamtbudgets“; neue Referate Öffentlichkeitsarbeit und Umwelt und Naturschutz (Übergabe an die Administration D10).
 - Q-DS7 – **entschieden 26.10.2026:** 1. Vorsitzender, später Schatzmeister:in; künftig über die DATEV-Schnittstelle des Schnittstellen-Connectors; Export monatlich.
 - Q-DS8 – **entschieden 26.10.2026:** ja, Kennzahlen der eigenen Gruppe, ohne Budget (nach dem MVP, mit Reichweite „Gruppe“).
-- Q-DS9 – **entschieden 26.10.2026:** Vorjahresvergleich für Budget und Kennzahlen. [OFFEN] Nur das Vorjahr oder mehrere Jahre (Summen des Budgets sind dafür nötig; Löschfrist der Summen)?
+- Q-DS9 – **entschieden 26.10.2026:** Vorjahresvergleich für Budget und Kennzahlen.
+- Q-DS19 – **entschieden 26.10.2026:** nur das Vorjahr, kein Vergleich über mehrere Jahre.
 - Q-DS10 – **entschieden 26.10.2026:** Name in der Oberfläche „Dashboard“; Begriffe Dashboard, Sicht, Kennzahl, Budgetposten, Gesamtbudget, Zuordnung (Budget), Buchung, umschlüsseln, Datenstand im Glossar v1.7. Kürzel DS bleibt [ANNAHME] bis zur Umsetzung.
 - Q-DS11 – **entschieden 26.10.2026:** Einzelbuchungen laufendes Jahr und Vorjahr, danach nur Summen je Budgetposten und Monat.
 - Q-DS12 – **entschieden 26.10.2026:** eigenes Recht „Dashboard lesen“ (Modul DS, Reichweite „Referat“).
