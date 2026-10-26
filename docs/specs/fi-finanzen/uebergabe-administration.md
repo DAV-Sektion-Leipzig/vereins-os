@@ -1,7 +1,8 @@
 # Übergabe: Finanzen → Administration
 
-Stand: 25.10.2026 · Version 1.2 · Status: offen · Von: Finanzen (FI) · An: Administration (AD)
+Stand: 26.10.2026 · Version 1.3 · Status: offen · Von: Finanzen (FI) · An: Administration (AD)
 Grundlage: docs/specs/fi-finanzen/00-steckbrief.md v0.1, 01-erhebung.md v0.1; spec.md AD v0.9 (Nachtrag v0.9, `ad_rates`, `ea_person_licenses`); querschnitt-administration.md v0.1 (P6, P7, P11, P14, Q2, Q6)
+Änderungen v1.3: A10 entschieden – Angaben der Sektion für die Auszahlung (Name, IBAN, BIC, Sachkonto) als Einstellung der Administration (Vorlagen der Geschäftsstelle, Product Owner 26.10.2026).
 Änderungen v1.2: Höchstbetrag entschieden (A4).
 Änderungen v1.1: Startwert eintägige Ausbildungsfahrt entschieden (A2); A7 um Referent:innen mit Reichweite „Referat“ und Aktion „freigeben“ erweitert (Vier-Augen-Prinzip, Product Owner 25.10.2026); A8 und A9 angepasst.
 Änderungen v1.0: Erste Fassung.
@@ -21,11 +22,10 @@ Finanzen rechnet die Vergütung nach der Vergütungsordnung aus der Anwesenheits
 - **A7 – Modul FI in `ad_modules`:** Startwerte: Geschäftsstelle verwalten (Reichweite alle); **Referent:in FI lesen mit Reichweite „Referat“ und Aktion „freigeben“** (Bestätigung der Abrechnungen ihres Referats, Vier-Augen-Prinzip, Product Owner 25.10.2026) [ANNAHME: Stufe und Umsetzung der Aktion nach Q1]; Admin und Vorstand kein Zugriff. Reichweite „Referat“ für FI zulassen (Check wie R30). `ad_can_read_rates()` enthält FI bereits (v0.9); für Referent:innen mit FI-Reichweite „Referat“ prüfen [ANNAHME: Lesen der Sätze erlaubt]. Folge: rollen.md Abschnitt 5 (Spalte FI, Referent:in) anpassen.
 - **A8 – Lesefunktion Personendaten für Finanzen (P7, Product Owner 24.10.2026):** Funktion mit festen Spalten, erlaubt nur mit FI verwalten bzw. FI ≥ lesen mit Reichweite „alle“ (nicht für Referent:innen mit Reichweite „Referat“; diese sehen nur die berechneten Hinweise), unabhängig von Rechten auf das Ehrenamtsmanagement, z. B. `ea_person_finance_data(p_person_ids uuid[], p_date date)` [ANNAHME: Name]: Kontoinhaber:in und IBAN (`bank_account`), Datum Trainervereinbarung (`trainer_agreement`), Jahre mit Bestätigung steuerfreie Einnahmen (`tax_free_confirmation.year` mit Abgabedatum), förderfähige Lizenzen (Qualifikationsart, gültig von = Erwerb, gültig bis, förderfähig) auch in der Vergangenheit (Prüfung für das Halbjahr). Keine Lizenznummer, keine anderen Eigenschaften; nur Menschen; auch ausgeschiedene Personen, solange eine Abrechnung offen ist [ANNAHME]. Höchstzahl IDs wie `ea_person_licenses`.
 - **A9 – Namen für Finanzen (Q2):** `ea_person_names` um `fi_person_visible` erweitern (Platzhalter `false`, gleiche Signatur; Finanzen ersetzt ihn): Personen mit einer Abrechnung oder einer abrechenbaren Anwesenheit; bei Reichweite „Referat“ nur, wenn die Abrechnung bzw. Anwesenheit ein eigenes Referat betrifft.
-- **A10 – Auftraggeberkonto der Sektion für SEPA:** [OFFEN] Ort der Pflege (Vorschlag: Einstellung in der Administration, nur Admin; Name, IBAN, BIC). Keine Secrets; die IBAN der Sektion ist keine Personenangabe, steht aber nicht im Repository.
+- **A10 – Angaben der Sektion für die Auszahlung (Product Owner 26.10.2026):** Einstellung in der Administration, Pflege nur Admin, mit „gültig ab“ [ANNAHME]: Name der Sektion für Auftraggeber und Einreicher der Überweisungsdatei (laut Vorlage „Sektion Leipzig des DAV e.V.“), IBAN und BIC des Auszahlungskontos, Sachkonto der Übungsleitervergütung (für die Auszahlliste). Lesen nur mit FI verwalten; IBAN-Prüfung wie R13 EA. Werte trägt der Admin in TEST fiktiv und in PROD echt ein. Keine Secrets; die IBAN der Sektion ist keine Personenangabe, steht aber nicht im Repository.
 
 ## Offene Punkte
 
-- [OFFEN] Ort der Pflege des Auftraggeberkontos (A10).
 
 ## Einarbeitung
 

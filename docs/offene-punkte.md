@@ -1,6 +1,8 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 25.10.2026 · Version 5.8
+Stand: 26.10.2026 · Version 5.10
+Änderungen v5.10: Finanzen: Steckbrief v0.5 abgeschlossen; offene Punkte in Iteration 1 verschoben (Product Owner 26.10.2026).
+Änderungen v5.9: Finanzen: Vorlagen der Geschäftsstelle eingearbeitet – Auszahlungsrunden mit Auszahlliste (PDF) und Überweisungsdatei (XML, pain.001.001.03); Angaben der Sektion für die Auszahlung in der Administration (Steckbrief v0.4, Erhebung v0.4).
 Änderungen v5.8: Finanzen: Höchstbetrag, Vertretung, Q4-Annahme, Arbeitseinsätze, Erklärung auf dem Abrechnungsdokument entschieden (Steckbrief v0.3, Erhebung v0.3); rollen.md v1.2.
 Änderungen v5.7: Finanzen: offene Fragen geklärt (Product Owner 25.10.2026): Vier-Augen-Prinzip mit Bestätigung durch die Referent:in (Q9 für FI geändert), Trainervereinbarung als Voraussetzung, Training ohne Trainingszeit, eintägige Ausbildungsfahrt, Wahl der Abrechnungsart; Steckbrief v0.2, Erhebung v0.2.
 Änderungen v5.6: Finanzen: Steckbrief v0.1 und Erhebung v0.1 (Entwurf); Q4, Q5, Q6, Q9 entschieden; Übergaben aus EZ (v1.6) und TK (v1.3) eingearbeitet; neue Übergaben an Administration, Anwesenheitserfassung und Planungshilfe.
@@ -164,7 +166,7 @@ Entschieden 22.10.2026 (Product Owner, fünfter Block): PDF-Übernahme nicht im 
 
 ## FI – Finanzen (Priorität 3 – nach der Anwesenheitserfassung)
 
-Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.3, Entwurf, MVP-Schnitt bestätigt 24.10.2026) · Erhebung: 01-erhebung.md (Version 0.3, Entwurf) · Übergaben: uebergabe-administration.md (v1.2, offen), uebergabe-anwesenheitserfassung.md (v1.1, offen), uebergabe-planungshilfe.md (v1.0, offen; Planungshilfe eingefroren)
+Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.5, abgeschlossen 26.10.2026) · Erhebung: 01-erhebung.md (Version 0.5) · Übergaben: uebergabe-administration.md (v1.3, offen), uebergabe-anwesenheitserfassung.md (v1.2, offen), uebergabe-planungshilfe.md (v1.0, offen; Planungshilfe eingefroren)
 
 - Entschieden 24.10.2026 (Product Owner, Chat Finanzen):
   - **Q4 – Aufbewahrung:** 5 Jahre wie überall, auch für Abrechnungen und abgerechnete Einsätze; steuerlich aufbewahrungspflichtige Belege liegen in der Finanzbuchhaltung (bestätigt 25.10.2026).
@@ -178,8 +180,8 @@ Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.3, Entwurf, MVP-S
 - Entschieden 25.10.2026 (Product Owner): Vier-Augen-Prinzip – Referent:in bestätigt die Abrechnungen ihres Referats, die Geschäftsstelle gibt frei (Aktion „freigeben“ nach Q1, Übergabe an die Administration A7; rollen.md Spalte FI anzupassen); Trainervereinbarung ist Voraussetzung der Auszahlung; Training ohne Trainingszeit = 0 TE mit Hinweis und Korrektur; eintägige Ausbildungsfahrt startet mit Sätzen der Mehrtageskurse; Abrechnungsart am Einsatz wählt, wer den Einsatz anlegen darf.
 - Entschieden 25.10.2026 (Product Owner): steuerfreier Höchstbetrag 3.300 € ab 01.01.2026, Summe im Jahr der Auszahlung; Vertretung bei der Bestätigung durch stellvertretende Referent:in, sonst zweite Person der Geschäftsstelle mit Begründung; Vergütung bei Arbeitseinsätzen über die Ehrenamtspauschale (später); Erklärung zum Freibetrag auf dem Abrechnungsdokument (Wortlaut [ANNAHME], prüft der Product Owner); heutiger Aufwand 3–5 Arbeitstage je Halbjahr.
 - Erledigt (glossar.md, Gruppen v0.6–v0.8): „Vertrag“ wird im Modul Gruppen geführt (je Teilnahme); der Buchungslauf ist ein Einzug (SEPA-Lastschrift).
-- [OFFEN] SEPA: Format/Version laut Sparkasse, Auftraggeberkonto (Ort der Pflege), Verwendungszweck, Sammelbuchung, Rücknahme bei Ablehnung (Geschäftsstelle mit Sparkasse).
-- [OFFEN] Zählen Probetrainings für die Kletterhalle? (Geschäftsstelle)
+- Entschieden 26.10.2026 (Product Owner, Vorlagen der Geschäftsstelle): Auszahlung in Auszahlungsrunden (mehrere je Halbjahr); die Freigabe einer Runde erzeugt Auszahlliste (PDF, Ablage Buchhaltung) und Überweisungsdatei (XML, pain.001.001.03 wie die Vorlage der Sparkasse, Sammelüberweisung); je Person und Gruppe eine Zeile und eine Überweisung; „sachlich richtig“ = Bestätigung im Vereins OS, „gf Vorstand“ und „angewiesen“ auf Papier; Angaben der Sektion (Name, IBAN, BIC, Sachkonto) als Einstellung der Administration (A10). Die einzelne Abrechnung wird „abgeschlossen“ (bisher „freigegeben“) [ANNAHME: Begriff].
+- Iteration 1 (Product Owner 26.10.2026, kein Blocker für den MVP): Rücknahme einer freigegebenen Auszahlungsrunde bei Ablehnung durch die Bank (Geschäftsstelle mit Sparkasse; im MVP kein Storno [ANNAHME]); zählen Probetrainings für die Kletterhalle (Geschäftsstelle; im MVP beide Summen); Sonderfälle wie Nachzahlungen und Rückforderungen (Geschäftsstelle).
 - [OFFEN] Buchungslauf (später): DATEV-Buchungsexport oder SEPA-Datei; Datei-Export oder Schnittstelle über SC; Empfänger der Mails. (vision.md, modul-landkarte.md)
 - Hinweis aus EA: Bankverbindung der Aktiven und Trainervereinbarung liegen im Ehrenamtsmanagement.
 - **Übergabe aus EZ (v1.6): eingearbeitet am 24.10.2026** in 00-steckbrief.md v0.1 und 01-erhebung.md v0.1 (F1–F9).
