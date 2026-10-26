@@ -1,7 +1,8 @@
 # Steckbrief: Dashboard
 
-Stand: 26.10.2026 · Version 0.12 · Kürzel: DS [ANNAHME] · Priorität: Budget-Sicht früh (nach dem Kern der Administration), Referats-Kennzahlen nach EZ und FI · Ablage: docs/specs/ds-dashboard/ · Status: Entwurf · Product Owner: Toni Werner
+Stand: 26.10.2026 · Version 0.13 · Kürzel: DS [ANNAHME] · Priorität: Budget-Sicht früh (nach dem Kern der Administration), Referats-Kennzahlen nach EZ und FI · Ablage: docs/specs/ds-dashboard/ · Status: Entwurf · Product Owner: Toni Werner
 Grundlage: vision.md v0.4, modul-landkarte.md v2.17, rollen.md v1.3, glossar.md, offene-punkte.md v5.15, specs/fi-finanzen/00-steckbrief.md v0.5 (Nicht im Scope: „Budget-Übersicht, Dashboard: später“), specs/gr-gruppen/00-steckbrief.md v0.7 und specs/ez-einsaetze/00-steckbrief.md v0.9 (Auslastung, Betreuungsschlüssel in Iteration 2), specs/tk-touren-kurse/00-steckbrief.md v0.7 (Kosten- und CO2-Auswertung), Prototyp Budget-Dashboard (Übergabe: prototyp-budget-dashboard.md v1.0), Ideenkatalog ideen-sichten.md v0.1.
+Änderungen v0.13: Gruppendetail (Product Owner 26.10.2026): Anwesenheit je Teilnehmer:in bleibt; Verlauf der Gruppen über 4 Halbjahre (Ausnahme zu Q-DS19, das für Budget und übrige Kennzahlen gilt).
 Änderungen v0.12: Regel „eine Quelle für Geld“ (Product Owner 26.10.2026): Beträge des Budgets nur aus Finanzplan und DATEV-Import, nicht aus Buchungsläufen.
 Änderungen v0.11: Grundsatz (Product Owner 26.10.2026): Referent:innen steuern ihre Gruppen mit dem Dashboard (Entscheidungen anhand der Kennzahlen); Gruppendetail mit Namen und Hinweisen über das Recht auf das Dashboard; Übergabe an Gruppen (uebergabe-gruppen.md v1.0).
 Änderungen v0.10: Q-DS5 und Q-DS19 entschieden (Product Owner 26.10.2026): Die Referate geben keine Rückmeldung; Claude legt die Sichten als Referent:in fest (sichten.md v0.4, zur Abnahme); Vorjahresvergleich nur mit dem Vorjahr; Gesamtbudgets ohne Referat bestätigt.
@@ -49,7 +50,7 @@ Der 1. Vorsitzende wertet den Finanzplan mit einem eigenen, offline laufenden Bu
 - **Leistungssport:** wie Kinder und Jugend, dazu Wettkampfbetreuungen und Trainingslager.
 - **Touren und Ausbildung:** Planungen je Status, Kostendeckung, Absagen, „durchgeführt, nicht abgerechnet“, CO2 je Jahr (sobald TK Iteration 1).
 - **Verknüpfung Budget ↔ Abrechnung:** abgerechnete, noch nicht gebuchte Vergütung als „gebunden“ am Budgetposten „Vergütung Aktive“.
-- **Inhalt und Aufbau der Sichten:** sichten.md v0.7 (Festlegung durch Claude als Referent:in im Auftrag des Product Owners, Q-DS5): je Sicht ① Zu tun, ② Budget meines Referats, ③ Mein Referat in Zahlen, ④ Budget des Vereins; Bausteine je Referat; Entscheidung M/S/C/W zu jedem Eintrag des Ideenkatalogs (ideen-sichten.md).
+- **Inhalt und Aufbau der Sichten:** sichten.md v0.8 (Festlegung durch Claude als Referent:in im Auftrag des Product Owners, Q-DS5): je Sicht ① Zu tun, ② Budget meines Referats, ③ Mein Referat in Zahlen, ④ Budget des Vereins; Bausteine je Referat; Entscheidung M/S/C/W zu jedem Eintrag des Ideenkatalogs (ideen-sichten.md).
 
 **Gesamtbudgets und Referate** (Q-DS6, Q-DS15 (Product Owner 26.10.2026); Namen wie im Finanzplan 2026). Die Summen aller Gesamtbudgets sieht jede:r mit „Dashboard lesen“; die Tabelle legt fest, wer **Einzelbuchungen** sieht und wer das Gesamtbudget **pflegt** (Hinweise, Plan):
 
@@ -115,7 +116,7 @@ Neue Gesamtbudgets eines späteren Finanzplans bekommen ihr Referat bei der Budg
 - Q-DS7 – **entschieden 26.10.2026:** 1. Vorsitzender, später Schatzmeister:in; künftig über die DATEV-Schnittstelle des Schnittstellen-Connectors; Export monatlich.
 - Q-DS8 – **entschieden 26.10.2026:** ja, Kennzahlen der eigenen Gruppe, ohne Budget (nach dem MVP, mit Reichweite „Gruppe“).
 - Q-DS9 – **entschieden 26.10.2026:** Vorjahresvergleich für Budget und Kennzahlen.
-- Q-DS19 – **entschieden 26.10.2026:** nur das Vorjahr, kein Vergleich über mehrere Jahre.
+- Q-DS19 – **entschieden 26.10.2026:** nur das Vorjahr, kein Vergleich über mehrere Jahre. Ausnahme (Product Owner 26.10.2026): Kennzahlen einer Gruppe im Gruppendetail im Verlauf über 4 Halbjahre (Daten der Anwesenheitserfassung, die ohnehin 5 Jahre aufbewahrt werden).
 - Q-DS10 – **entschieden 26.10.2026:** Name in der Oberfläche „Dashboard“; Begriffe Dashboard, Sicht, Kennzahl, Budgetposten, Gesamtbudget, Zuordnung (Budget), Buchung, umschlüsseln, Datenstand im Glossar v1.7. Kürzel DS bleibt [ANNAHME] bis zur Umsetzung.
 - Q-DS11 – **entschieden 26.10.2026:** Einzelbuchungen laufendes Jahr und Vorjahr, danach nur Summen je Budgetposten und Monat.
 - Q-DS12 – **entschieden 26.10.2026:** eigenes Recht „Dashboard lesen“ (Modul DS, Reichweite „Referat“).

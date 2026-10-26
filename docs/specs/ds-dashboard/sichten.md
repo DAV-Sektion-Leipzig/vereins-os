@@ -1,6 +1,7 @@
 # Sichten des Dashboards
 
-Stand: 26.10.2026 · Version 0.7 · Status: Entwurf
+Stand: 26.10.2026 · Version 0.8 · Status: Entwurf
+Änderungen v0.8: Gruppendetail abgenommen (Product Owner 26.10.2026): Anwesenheit je Teilnehmer:in bleibt; Verlauf der Gruppen über 4 Halbjahre (Ausnahme zu Q-DS19). Skizze: zweite Seite „Gruppendetail“.
 Änderungen v0.7: B8 bleibt als Vorschau mit klarer Sichtbarkeit (Product Owner 26.10.2026).
 Änderungen v0.6: Regel „eine Quelle für Geld“ (Product Owner 26.10.2026): Beträge des Budgets nur aus dem DATEV-Import, nicht aus Buchungsläufen oder Abrechnungen; B10 entfällt endgültig; B8 nur als getrennt ausgewiesene Vorschau [OFFEN].
 Änderungen v0.5: Grundsatz „Referent:innen steuern ihre Gruppen mit dem Dashboard“ (Product Owner 26.10.2026); Gruppendetail im Dashboard mit Namen und Hinweisen; Steuerungshinweis je Status; offene Frage zu den Rechten auf Gruppen gelöst.
@@ -41,7 +42,7 @@ Daraus folgt die Reihenfolge jeder Sicht.
 
 Regeln für alle Blöcke:
 - **Höchstens 6 Kennzahlen je Block** sichtbar; der Rest hinter „mehr“.
-- **Vorjahr** als kleine Zahl mit Pfeil (▲ ▼), nie als eigene Spalte; ohne Vorjahreswert „neu“.
+- **Vorjahr** als kleine Zahl mit Pfeil (▲ ▼), nie als eigene Spalte; ohne Vorjahreswert „neu“. Ausnahme Gruppen: Im Gruppendetail zusätzlich der Verlauf über 4 Halbjahre (Product Owner 26.10.2026).
 - **Ampel** einheitlich mit Form und Farbe (● grün, ▲ gelb, ■ rot) wie im Prototyp; jede Ampel nennt ihre Regel im Tooltip.
 - **Jede Zahl ist ein Link** ins Fachmodul (dort gelten dessen Rechte); im Dashboard selbst keine Namen außer bei Einzelbuchungen.
 - **Datenstand** steht an jedem Block, der aus einem Import kommt (Budget); Kennzahlen aus den Modulen sind tagesaktuell.
@@ -76,9 +77,9 @@ Eine Zeile je Gruppe (mobil: eine Karte), Zeitraum: laufendes Halbjahr, Vergleic
 - Rechte: Referent:innen bekommen **kein** Recht auf das Modul Gruppen; Namen und Hinweise ihrer Gruppen sehen sie über das Recht auf das Dashboard (Reichweite „Referat“) (Product Owner 26.10.2026). Damit lassen sich Z5 und Z6 nachverfolgen.
 
 **Gruppendetail im Dashboard** [FESTLEGUNG]: Klick auf eine Gruppe öffnet eine Seite mit
-- Kopf: Name, Trainingszeiten, Status mit **Steuerungshinweis** (Tabelle unten), Kennzahlen der Zeile im Verlauf der letzten 4 Halbjahre (soweit vorhanden; Vorjahresvergleich bleibt im Hauptblock).
+- Kopf: Name, Trainingszeiten, Status mit **Steuerungshinweisen** samt Begründung aus den Daten (Tabelle unten), Kennzahlen mit Vorjahr und **Verlauf der letzten 4 Halbjahre** (Teilnehmer:innen, Anwesenheit, Trainings, Betreuungsschlüssel; soweit vorhanden) (Product Owner 26.10.2026).
 - **Betreuung:** Namen der Trainer:innen und Helfer:innen mit Funktion, seit wann, Lizenz gültig bis (nur Datum, keine Lizenznummer); Hinweis bei Ablauf in 90 Tagen.
-- **Teilnehmer:innen:** Vorname und Nachname, Teilnahme seit, Hinweise „Teilnahme klären“, „kein Notfallkontakt“, „keine erziehungsberechtigte Person“; Anzahl Trainings anwesend im Halbjahr [ANNAHME]. **Keine** Kontaktdaten, kein Geburtsdatum oder Alter, keine Verträge, keine Gesundheitsangaben, keine Fotoerlaubnis (Product Owner 26.10.2026).
+- **Teilnehmer:innen:** Vorname und Nachname, Teilnahme seit, Hinweise „Teilnahme klären“, „kein Notfallkontakt“, „keine erziehungsberechtigte Person“; **Anzahl Trainings anwesend im Halbjahr** („x von n“, als Balken) (Product Owner 26.10.2026); sortiert: mit Hinweis zuerst, dann nach Anwesenheit aufsteigend. **Keine** Kontaktdaten, kein Geburtsdatum oder Alter, keine Verträge, keine Gesundheitsangaben, keine Fotoerlaubnis (Product Owner 26.10.2026).
 - **Trainings:** Liste der Trainings im Halbjahr mit Datum, anwesend (Anzahl TN, Betreuer:innen), Betreuungsschlüssel eingehalten ja/nein, abgesagt mit Grund.
 
 **Steuerungshinweis je Status** [FESTLEGUNG] – Text im Gruppendetail und als Tooltip am Status, keine Aufgabe im System:
