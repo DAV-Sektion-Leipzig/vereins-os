@@ -30,7 +30,7 @@ export function HintBadges({ hints, year }: { hints: string[]; year?: number }) 
     <ul className="flex flex-wrap gap-1">
       {hints.map((h) => (
         <li key={h}>
-          <Badge className="bg-destructive/10 whitespace-normal text-destructive">
+          <Badge className="h-auto min-h-5 justify-start bg-destructive/10 text-left whitespace-normal text-destructive">
             <CircleAlertIcon data-icon="inline-start" aria-hidden="true" />
             {hintLabel(h, year)}
           </Badge>

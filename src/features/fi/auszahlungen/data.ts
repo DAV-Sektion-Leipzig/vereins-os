@@ -46,11 +46,23 @@ export type Available = { settlement_id: string; display_name: string; amount: n
 
 export type RunPreview = { run: Run; lines: PreviewLine[]; total: number; available: Available[] }
 
-export type RunResult = { preview: RunPreview | null; failed: boolean }
+/** closedCount: abgeschlossene, noch nicht abgegebene Abrechnungen des Halbjahres (kommen erst nach der Abgabe in eine Runde). */
+export type RunResult = { preview: RunPreview | null; closedCount: number; failed: boolean }
 
 export async function loadRun({ params }: LoaderFunctionArgs): Promise<RunResult> {
   await requireFiManage()
   const { data, error } = await supabase.rpc('fi_preview_payout_run', { p_run: params.id ?? '' })
-  if (error || !data) return { preview: null, failed: true }
-  return { preview: data as RunPreview, failed: false }
+  if (error || !data) return { preview: null, closedCount: 0, failed: true }
+  const preview = data as RunPreview
+  let closedCount = 0
+  if (preview.run.status === 'draft') {
+    const closed = await supabase.rpc('fi_list_settlements', {
+      p_year: preview.run.year,
+      p_half: preview.run.half,
+      p_status: 'closed',
+      p_limit: 1,
+    })
+    closedCount = Array.isArray(closed.data) && closed.data[0] ? Number((closed.data[0] as { total_count: number }).total_count) : 0
+  }
+  return { preview, closedCount, failed: false }
 }
