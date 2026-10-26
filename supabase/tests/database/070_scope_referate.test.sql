@@ -33,15 +33,15 @@ select ok(not public.ad_has_any_level('AD', 'read'), 'kein Recht auf AD');
 select pg_temp.as_owner();
 update public.ad_modules set is_available = false where code = 'EA';
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
-select is_empty($$ select code from public.ad_my_modules() $$, 'keine Kachel, solange EA nicht verfügbar ist');
+select is_empty($$ select code from public.ad_my_modules() where code = 'EA' $$, 'keine Kachel, solange EA nicht verfügbar ist');
 
 select pg_temp.as_owner();
 update public.ad_modules set is_available = true where code = 'EA';
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
-select results_eq($$ select code, level::text from public.ad_my_modules() $$,
+select results_eq($$ select code, level::text from public.ad_my_modules() where code = 'EA' $$,
   $$ values ('EA'::text, 'edit'::text) $$, 'Kachel EA mit Stufe bearbeiten über Reichweite Referat');
 select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
-select results_eq($$ select code, level::text from public.ad_my_modules() $$,
+select results_eq($$ select code, level::text from public.ad_my_modules() where code = 'EA' $$,
   $$ values ('EA'::text, 'manage'::text) $$, 'Geschäftsstelle: Kachel EA verwalten');
 select pg_temp.as_owner();
 update public.ad_modules set is_available = false where code = 'EA';
