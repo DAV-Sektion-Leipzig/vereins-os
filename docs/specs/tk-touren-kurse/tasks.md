@@ -30,8 +30,8 @@ Siehe [AD tasks.md](../ad-administration/tasks.md) Phase 18 (T134–T141). Vorau
 
 ## Stufe 3: Anbindung Anwesenheitserfassung (Branch `tk-ez-anbindung`)
 
-- [ ] T015 [spec T13] EZ T036 (mit `p_remuneration_kind_code`, EZ v1.3) und TK-Anbindung in `tk_change_status` (publish, cancel mit `TK_EZ_LOCKED`) und `tk_save_plan` (Synchronisation, Abrechnungsart, `EZ_SETTLED` wie `EZ_EVENT_LOCKED`); Seed Planung 5 mit Einsatz
-- [ ] T016 [spec T14] pgTAP `850_tk_ez.test.sql` zusammen mit EZ T037/T038: Inhalt R15, Gemeinschaftstour mit `COMMUNITY_TOUR`, Sperre nach Anwesenheit und Abrechnung, Absage, Rollback
+- [x] T015 [spec T13] `20261106000100_ez_planned_event.sql`, `20261106000200_tk_ez.sql` (`tk_ez_sync`; Seed Planung 5 mit Einsatz): EZ T036 (mit `p_remuneration_kind_code`, EZ v1.3) und TK-Anbindung in `tk_change_status` (publish, cancel mit `TK_EZ_LOCKED`) und `tk_save_plan` (Synchronisation, Abrechnungsart, `EZ_SETTLED` wie `EZ_EVENT_LOCKED`); Seed Planung 5 mit Einsatz
+- [x] T016 [spec T14] (30 Prüfungen) pgTAP `850_tk_ez.test.sql` zusammen mit EZ T037/T038: Inhalt R15, Gemeinschaftstour mit `COMMUNITY_TOUR`, Sperre nach Anwesenheit und Abrechnung, Absage, Rollback
 
 ## Stufe 4: Oberfläche (Branch `tk-oberflaeche`)
 
