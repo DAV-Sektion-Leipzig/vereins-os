@@ -1,6 +1,7 @@
 # Anleitung Vereins OS
 
-Stand: 27.10.2026 · Version 3.0
+Stand: 27.10.2026 · Version 3.1
+Änderungen v3.1: Planungshilfe Touren und Kurse ist freigeschaltet (Hinweise „in Vorbereitung“ entfernt).
 Änderungen v3.0: neues Modul Planungshilfe Touren und Kurse (in Vorbereitung): Abschnitte für Referent:innen und Geschäftsstelle (Planung anlegen, Schritte 1–7, einreichen, freigeben, Yolawo, Ausgaben, PDF, Kostenauswertung); Bilder folgen vor der Freischaltung.
 Änderungen v2.0: neues Modul Dashboard (Bereich Budget, in Vorbereitung) mit neuem Teil „Anleitung für die Budgetpflege“; Abschnitte Dashboard für Referent:innen und Geschäftsstelle, Startseite mit Dashboard, Kennzeichen „Budget pflegen“ in der Rechtevorlage, neue Wörter in der Wörterliste.
 Änderungen v1.1: Gruppen, Anwesenheitserfassung und Finanzen sind freigeschaltet (Hinweise „in Vorbereitung“ entfernt, Startseite mit Kachel Finanzen); Abschnitt „Anleitung aktualisieren“ um das Nachziehen im Nachgang ergänzt.
@@ -37,7 +38,7 @@ Du siehst im Vereins OS nur die Module, für die du Rechte hast.
 | Gruppen | Gruppen, Teilnehmer:innen, Erziehungsberechtigte, Verträge | freigeschaltet |
 | Anwesenheitserfassung | Trainings, Fahrten und andere Einsätze mit Anwesenheit | freigeschaltet |
 | Finanzen | Halbjahresabrechnung der Trainer:innen und Helfer:innen, Auszahlung | freigeschaltet |
-| Planungshilfe Touren und Kurse | Touren und Kurse planen, kalkulieren, freigeben, für Yolawo vorbereiten | in Vorbereitung |
+| Planungshilfe Touren und Kurse | Touren und Kurse planen, kalkulieren, freigeben, für Yolawo vorbereiten | freigeschaltet |
 
 ## Hilfe
 

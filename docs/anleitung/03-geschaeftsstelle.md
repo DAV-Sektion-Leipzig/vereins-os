@@ -17,7 +17,7 @@ Du darfst in allen Fachmodulen **verwalten**. Das heißt: Du siehst alle Referat
 | Anwesenheitserfassung | Einsätze aller Referate erfassen, korrigieren, löschen | freigeschaltet |
 | Finanzen | Halbjahresabrechnung berechnen, abschließen, auszahlen | freigeschaltet |
 | Dashboard | Budget aller Referate und des Vereins sehen, mit Einzelbuchungen und Prüfung | in Vorbereitung |
-| Planungshilfe Touren und Kurse | Planungen aller Referate bearbeiten, in Yolawo anlegen, abschließen, Kostenauswertung | in Vorbereitung |
+| Planungshilfe Touren und Kurse | Planungen aller Referate bearbeiten, in Yolawo anlegen, abschließen, Kostenauswertung | freigeschaltet |
 
 Vieles funktioniert genauso wie bei den Referent:innen. Dort ist es Schritt für Schritt erklärt: [Anleitung für Referent:innen](02-referentinnen.md). Hier steht, was **du zusätzlich** tust.
 
@@ -219,8 +219,6 @@ Die Abrechnungen sind danach **„ausgezahlt“**. Die Dateien kannst du später
 ---
 
 ## Planungshilfe Touren und Kurse
-
-> **In Vorbereitung:** Das Modul ist noch nicht freigeschaltet. Bilder folgen.
 
 Die Planungshilfe funktioniert für dich wie für die Referent:innen: [Anleitung für Referent:innen](02-referentinnen.md#planungshilfe-touren-und-kurse). Du siehst die Planungen **aller Referate**. Zusätzlich gilt:
 
