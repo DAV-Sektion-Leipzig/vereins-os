@@ -1,6 +1,7 @@
 # Sichten des Dashboards
 
-Stand: 26.10.2026 · Version 0.3 · Status: Entwurf
+Stand: 26.10.2026 · Version 0.4 · Status: Entwurf
+Änderungen v0.4: Schmale Spalten im Baustein Gruppen (Product Owner 26.10.2026): Spaltenköpfe TN, Anwesenheit, PT; kurze Werte; Legende unter der Liste.
 Änderungen v0.3: Herkunft von Gruppenname und Trainingszeit (Modul Gruppen) und Link je Recht festgelegt; Lücke: Referent:innen haben kein Recht auf Gruppen [OFFEN].
 Änderungen v0.2: Baustein Gruppen für Referate mit vielen Gruppen (Kinder und Jugend hat über 14; Product Owner 26.10.2026): Status je Gruppe, Sortierung, Filter „Mit Hinweis“ / „Alle“, Zählleiste; Ampel für abgesagte Trainings. Skizze: Artifact „Dashboard Kinder und Jugend“.
 Grundlage: 00-steckbrief.md DS v0.10, ideen-sichten.md v0.4 (Ideenkatalog), Entscheidungen Q-DS1 bis Q-DS19.
@@ -64,6 +65,8 @@ Eine Zeile je Gruppe (mobil: eine Karte), Zeitraum: laufendes Halbjahr, Vergleic
 - **Gruppenname** = `gr_groups.name` aus dem Modul Gruppen; **Zeile darunter** = die heute gültigen Trainingszeiten der Gruppe (`gr_training_times`, je Wochentag eine; mehrere durch Komma getrennt, z. B. „Mo 16:30–18:00, Do 16:30–18:00“; keine: „keine Trainingszeit“). Geliefert über eine Lesefunktion von Gruppen mit Recht auf DS (wie `gr_groups_for_attendance`, nur Gruppe, Referat, Name, Trainingszeiten, Anzahlen; keine Personendaten).
 - **Link der Gruppe:** mit Recht „Gruppen lesen“ auf die Gruppe im Modul Gruppen (`/gr/gruppen/:id`); sonst mit Recht auf die Anwesenheitserfassung auf die Einsätze der Gruppe; sonst kein Link.
 - [OFFEN] Referent:innen haben laut Spec Gruppen keinen Zugriff auf Gruppen (Startwerte: Referent:in und Vorstand ohne Rechte; Reichweite in GR nur „alle“; specs/gr-gruppen/spec.md Abschnitt 3). Damit führen die Punkte „Gruppen ohne Trainer:in mit Lizenz“ und „Teilnahme klären / ohne Notfallkontakt“ (Z5, Z6) für Referent:innen ins Leere: Sie sehen die Anzahl, aber nicht, wen es betrifft. Vorschlag: Reichweite „Referat“ für GR lesen (Nachtrag Gruppen und Administration) oder Z5/Z6 für Referent:innen nur als Hinweis „Geschäftsstelle informiert“.
+
+**Schmale Spalten** (Product Owner 26.10.2026): Spaltenköpfe **Status · Gruppe · TN · Anwesenheit · Trainings · Betreuungsschlüssel · PT · Betreuung**; Abkürzungen mit Langform beim Überfahren (`<abbr title>`) und in der Legende unter der Liste. Kurze Werte: Anwesenheit „71 %“ mit „▲ 1 Pkt.“, Trainings „16“ mit „0 abgesagt“, Betreuungsschlüssel „■ 3× darunter“, Betreuung „1 / 0“ (Trainer:innen mit Lizenz / Helfer:innen); „Nachfrage hoch“ nur in der Statusspalte.
 
 **Viele Gruppen** (Kinder und Jugend hat über 14 Gruppen, Product Owner 26.10.2026) [FESTLEGUNG]:
 - **Status je Gruppe** = schlechteste Ampel der Zeile: ■ handeln, ▲ beobachten, ◆ Nachfrage hoch (keine Warnung, aber Hinweis), ● ok.
