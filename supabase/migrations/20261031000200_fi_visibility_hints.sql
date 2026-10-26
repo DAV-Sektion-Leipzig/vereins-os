@@ -96,27 +96,27 @@ begin
    limit 1;
 
   if not v_flags.has_tax_confirmation then
-    v_hints := v_hints || 'no_tax_confirmation';
-    v_reasons := v_reasons || 'no_tax_confirmation';
+    v_hints := array_append(v_hints, 'no_tax_confirmation');
+    v_reasons := array_append(v_reasons, 'no_tax_confirmation');
   end if;
   if not v_flags.has_bank then
-    v_hints := v_hints || 'no_bank_account';
-    v_reasons := v_reasons || 'no_bank_account';
+    v_hints := array_append(v_hints, 'no_bank_account');
+    v_reasons := array_append(v_reasons, 'no_bank_account');
   end if;
   if not v_flags.has_agreement then
-    v_hints := v_hints || 'no_trainer_agreement';
-    v_reasons := v_reasons || 'no_trainer_agreement';
+    v_hints := array_append(v_hints, 'no_trainer_agreement');
+    v_reasons := array_append(v_reasons, 'no_trainer_agreement');
   end if;
   if v_limit is not null and v_total > v_limit then
-    v_hints := v_hints || 'max_exceeded';
+    v_hints := array_append(v_hints, 'max_exceeded');
   end if;
   if v_s.has_new_events then
-    v_hints := v_hints || 'has_new_events';
+    v_hints := array_append(v_hints, 'has_new_events');
   end if;
   v_hints := v_hints || array(
     select distinct h::text from public.fi_settlement_items i, unnest(i.hints) as h where i.settlement_id = p_id);
   if v_s.amount <= 0 then
-    v_reasons := v_reasons || 'amount_zero';
+    v_reasons := array_append(v_reasons, 'amount_zero');
   end if;
 
   return jsonb_build_object(
