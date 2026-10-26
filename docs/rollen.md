@@ -1,6 +1,7 @@
 # Rollen und Rechte: Vereins OS
 
-Stand: 25.10.2026 · Version 1.2
+Stand: 26.10.2026 · Version 1.3
+Änderungen v1.3: Aktion „freigeben“ im Rechtemodell (Q1; spec.md AD Nachtrag v0.10): Kennzeichen „darf freigeben“ an einem Recht, mit dessen Reichweite; das Modul TKF entfällt – die Vorlage „Freigabe Touren und Kurse“ hat TK bearbeiten + freigeben (Product Owner 26.10.2026).
 Änderungen v1.2: Finanzen (Steckbrief FI v0.3, Product Owner 24./25.10.2026): Referent:innen bestätigen die Abrechnungen ihres Referats („sachlich richtig“), bevor die Geschäftsstelle sie abschließt und über Auszahlungsrunden auszahlt (Vier-Augen-Prinzip; FI lesen mit Aktion „freigeben“ nach Q1, Reichweite „Referat“, ohne Bankdaten); Reichweite „Referat“ auch für FI; Aufbewahrung der Abrechnungsdaten 5 Jahre, Belege in der Finanzbuchhaltung. Umsetzung über die Übergabe an die Administration (specs/fi-finanzen/uebergabe-administration.md A7).
 Änderungen v1.1: Planungshilfe Touren und Kurse (TK) und Freigabe Touren und Kurse (TKF) in Rechte-Matrix und Beispielen; neue Rechtevorlage „Freigabe Touren und Kurse“ (delegierbares Freigaberecht, vergeben durch den Admin); Reichweite „Referat“ auch für TK und TKF; Sichtbarkeitspfad Planungshilfe (Namen und Lizenzen); Sätze und Pauschalen als Stammdaten, Pflege nur Admin (spec.md AD v0.9).
 Änderungen v1.0: Modul Einsätze heißt Anwesenheitserfassung (EZ); Admin erhält Startwert „Anwesenheitserfassung lesen“ (Entscheidung Product Owner 21.10.2026).
@@ -27,14 +28,14 @@ Begriffe nach glossar.md. „Rolle“ wird nicht mehr verwendet; es heißt **Rec
 
 | Teil | Bedeutung | Beispiele |
 |---|---|---|
-| Modul | In welchem Modul | EA, GR, EZ, TK, TKF, FI |
+| Modul | In welchem Modul | EA, GR, EZ, TK, FI |
 | Objekt | Worauf | Person, Eigenschaftsart (z. B. Qualifikation, Nachweis), Gruppe, Einsatz, Planung, Abrechnung |
-| Aktion | Was | lesen, bearbeiten, verwalten |
+| Aktion | Was | lesen, bearbeiten, verwalten; zusätzlich „freigeben“ (v1.3, nur FI und TK) |
 | Reichweite | Für welche Daten | alle · Referat · Gruppe · nur eigene Daten |
 
 **Im MVP:** Rechte je Modul (lesen / bearbeiten / verwalten / kein Zugriff). Reichweite „alle“ für alle Module; im Ehrenamtsmanagement, in der Anwesenheitserfassung, in der Planungshilfe Touren und Kurse (inkl. Freigabe) und in Finanzen (neu v1.2) zusätzlich „Referat“: Die Referate legt der Admin bei der Zuweisung der Vorlage fest (eine Person kann mehrere haben). Objekt sowie Reichweiten „Gruppe“ und „nur eigene“ sind im Datenmodell vorgesehen und kommen nach dem MVP; die Reichweite „Gruppe“ zuerst für die Anwesenheitserfassung (Iteration 1 von EZ), „nur eigene“ für Tourenleitende (Iteration 2 der Planungshilfe). Ausnahmen im MVP: Lesestufe an der Eigenschaftsart (siehe 3); Qualifikationsarten dürfen mit „AD bearbeiten“ oder „EA verwalten“ gepflegt werden (siehe 4).
 
-**Freigaberecht (neu v1.1):** Das Freigeben von Touren und Kursen ist keine eigene Aktion, sondern ein eigenes Modul ohne Seiten: **TKF „Freigabe Touren und Kurse“**, Stufe „bearbeiten“ = darf freigeben (mit Reichweite „Referat“) [ANNAHME: Umsetzung, spec.md AD v0.9]. Wer es hat, darf Planungen des Referats auch bearbeiten und Rückfragen stellen (Product Owner 22.10.2026).
+**Aktion „freigeben“ (v1.3, Q1, spec.md AD v0.10):** Ein Recht kann zusätzlich zur Stufe das Kennzeichen **„darf freigeben“** haben; es gilt mit der Reichweite des Rechts (alle oder die Referate der Zuweisung). Im MVP nur in Finanzen (Abrechnungen als sachlich richtig bestätigen) und in der Planungshilfe (Planungen freigeben). Das frühere Modul TKF entfällt (Product Owner 26.10.2026). Wer in der Planungshilfe freigeben darf, darf Planungen des Referats auch bearbeiten und Rückfragen stellen (Product Owner 22.10.2026).
 
 Beispiel Einzelrecht (nach MVP): EA · Qualifikation · bearbeiten · Referat Ausbildung · gültig bis 31.12.2027.
 
@@ -91,7 +92,7 @@ Die Grundstruktur (Person, Eigenschaftsart, Eigenschaft) entsteht mit AD; EA und
 - **Wer:** Startwert: Referent:innen der Referate Touren und Ausbildung [ANNAHME]; zusätzlich Personen, an die eine Referent:in die Freigabe delegiert (der Admin vergibt die Vorlage auf ihren Wunsch).
 - **Tut:** in der Planungshilfe Planungen des zugewiesenen Referats freigeben, bearbeiten (auch nach der Freigabe), Rückfragen stellen, als „in Yolawo angelegt“ markieren, absagen (Product Owner 22.10.2026).
 - **Sichtbarkeit:** Planungen des zugewiesenen Referats inkl. Kontakt- und Notfalldaten der Leitung; Namen und Lizenzen der Leitenden. Keine Rechte in anderen Modulen.
-- **Rechte:** TKF bearbeiten mit Reichweite „Referat“.
+- **Rechte:** TK bearbeiten + freigeben mit Reichweite „Referat“ (v1.3; bisher Modul TKF).
 
 ### Vorstand
 - **Wer:** im MVP nur der 1. Vorsitzende (Toni Werner).
@@ -108,15 +109,15 @@ Die Grundstruktur (Person, Eigenschaftsart, Eigenschaft) entsteht mit AD; EA und
 
 ## 5. Rechte-Matrix der Vorlagen (Startwerte MVP)
 
-Stufen: **lesen** = ansehen · **bearbeiten** = anlegen und ändern · **verwalten** = zusätzlich löschen, exportieren, Abläufe auslösen (z. B. Buchungslauf), Lesestufe „nur Geschäftsstelle und Admin“ · – = kein Zugriff. Reichweite „alle“, außer wo genannt. EZ = Anwesenheitserfassung, TK = Planungshilfe Touren und Kurse, TKF = Freigabe Touren und Kurse (bearbeiten = freigeben). **freigeben** (neu v1.2) = eigene Aktion nach Q1 (Product Owner 24.10.2026), in Finanzen: Abrechnungen bestätigen.
+Stufen: **lesen** = ansehen · **bearbeiten** = anlegen und ändern · **verwalten** = zusätzlich löschen, exportieren, Abläufe auslösen (z. B. Buchungslauf), Lesestufe „nur Geschäftsstelle und Admin“ · – = kein Zugriff. Reichweite „alle“, außer wo genannt. EZ = Anwesenheitserfassung, TK = Planungshilfe Touren und Kurse. **+ freigeben** = Kennzeichen „darf freigeben“ (v1.3): in Finanzen Abrechnungen bestätigen, in der Planungshilfe Planungen freigeben.
 
-| Vorlage | AD | SC | EA | GR | EZ | TK | TKF | FI | OA | PM | GS | AM |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Admin | verwalten | verwalten | verwalten | lesen | lesen | lesen | – | – | – | – | – | – |
-| Geschäftsstelle | – | – | verwalten | verwalten | verwalten | verwalten | – | verwalten | verwalten | verwalten | verwalten | verwalten |
-| Referent:in | – | – | bearbeiten (Reichweite Referat) | – | bearbeiten (Reichweite Referat) | bearbeiten (Reichweite Referat) | – | lesen + freigeben (Reichweite Referat) | – | – | – | – |
-| Freigabe Touren und Kurse | – | – | – | – | – | – | bearbeiten (Reichweite Referat) | – | – | – | – | – |
-| Vorstand | – | – | – | – | – | – | – | – | – | – | – | – |
+| Vorlage | AD | SC | EA | GR | EZ | TK | FI | OA | PM | GS | AM |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Admin | verwalten | verwalten | verwalten | lesen | lesen | lesen | – | – | – | – | – |
+| Geschäftsstelle | – | – | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten |
+| Referent:in | – | – | bearbeiten (Reichweite Referat) | – | bearbeiten (Reichweite Referat) | bearbeiten (Reichweite Referat) | lesen + freigeben (Reichweite Referat) | – | – | – | – |
+| Freigabe Touren und Kurse | – | – | – | – | – | bearbeiten + freigeben (Reichweite Referat) | – | – | – | – | – |
+| Vorstand | – | – | – | – | – | – | – | – | – | – | – |
 
 Vorstand: Startwerte ohne Rechte; je Modul höchstens so viel wie Geschäftsstelle. Das Anlegen von Eigenschaftsarten gehört zu „EA verwalten“ bzw. „AD verwalten“. Das Pflegen von Qualifikationsarten gehört zu „EA verwalten“ bzw. „AD bearbeiten“. Das Pflegen von Sätzen und Pauschalen gehört zu „AD bearbeiten“ (nur Admin). Vertrauliche Eigenschaften lesen nur Vorlagen mit Rechten auf AD.
 
@@ -141,7 +142,7 @@ Vorstand: Startwerte ohne Rechte; je Modul höchstens so viel wie Geschäftsstel
 ## 7. Hinweise
 
 - **Datenarchitektur:** Supabase-RLS prüft Zeilen, nicht Spalten. Deshalb wird jede Eigenschaft als eigene Zeile gespeichert (Person – Eigenschaftsart – Werte der Felder – gültig von/bis), nicht als Spalte (festgelegt in tech-stack.md). Die Lesestufe hängt an der Eigenschaftsart, damit RLS je Zeile entscheiden kann. Kontakt- und Notfalldaten der Planungshilfe liegen aus demselben Grund in einer eigenen Tabelle.
-- **Komplexität:** Entschieden 19.10.2026: im MVP nur Vorlagen je Modul; erweitert 21.10.2026 um Reichweite „Referat“ für EA (und EZ), 22.10.2026 für TK und TKF. Datenmodell für Einzelrechte, Objekt, weitere Reichweiten und Befristung ausgelegt. Die Sichtbarkeit je Pfad macht die RLS-Regeln deutlich komplexer; sie wird mit einer Sichtbarkeitsmatrix getestet (spec.md AD Abschnitt 9).
+- **Komplexität:** Entschieden 19.10.2026: im MVP nur Vorlagen je Modul; erweitert 21.10.2026 um Reichweite „Referat“ für EA (und EZ), 22.10.2026 für TK, 24.10.2026 für FI; Aktion „freigeben“ als Kennzeichen am Recht (Q1, 24./26.10.2026). Datenmodell für Einzelrechte, Objekt, weitere Reichweiten und Befristung ausgelegt. Die Sichtbarkeit je Pfad macht die RLS-Regeln deutlich komplexer; sie wird mit einer Sichtbarkeitsmatrix getestet (spec.md AD Abschnitt 9).
 - **Status für die ganze Person:** Eine Referentin kann eine Person, die auch in anderen Referaten tätig ist, für alle auf „ruhend“ oder „ausgeschieden“ setzen (bewusst entschieden, 21.10.2026). Gegenmaßnahme: Hinweis auf die anderen Referate mit Bestätigung, Historie mit „wer, wann“.
 - **Frei definierte Eigenschaftsarten und DSGVO:** Sie laden dazu ein, sensible Daten zu erfassen (Gesundheit, Religion, Notizen über Personen). Deshalb Pflichtangabe „Zweck“ je Eigenschaftsart, Lesestufe und ein Hinweistext beim Anlegen, dass keine besonderen Kategorien (Art. 9 DSGVO) erfasst werden. Beschäftigtendaten (z. B. Hauptamt) werden als vertraulich gekennzeichnet. Gesundheitsangaben von Teilnehmer:innen liegen nicht in Eigenschaften, sondern in einer eigenen Tabelle des Moduls Gruppen.
 - **Kinder in der Anwesenheitserfassung (v0.9):** Referent:innen sehen über Anwesenheitslisten Namen von Teilnehmer:innen (Minderjährige), ohne Rechte auf Gruppen. Nur Name, nie Geburtsdatum, Kontaktdaten oder Gesundheitsangaben; Eintrag im Verarbeitungsverzeichnis. Freitext Probetraining nur Vorname.
@@ -155,4 +156,4 @@ Vorstand: Startwerte ohne Rechte; je Modul höchstens so viel wie Geschäftsstel
 
 ## 8. Offene Punkte
 
-Den Modulen zugeordnet in offene-punkte.md: Vertretung des Admins (AD), Freigabe der Annahmen des Nachtrags Personenmodell (AD), Löschung nach 5 Jahren über alle Module inkl. Zugang, Startkonfiguration Vorstand, Vorlage für Gruppenleitungen mit Reichweite „Gruppe“ und Rechte nach dem MVP (übergreifend), Annahmen Nachtrag v0.9 (AD: Freigaberecht über TKF, Startwerte TK, förderfähig = DOSB-lizenzfähig), Pflege der Sätze durch Geschäftsstelle oder Referent:innen (später), Zugang für Tourenleitende (Iteration 2 der Planungshilfe).
+Den Modulen zugeordnet in offene-punkte.md: Vertretung des Admins (AD), Freigabe der Annahmen des Nachtrags Personenmodell (AD), Löschung nach 5 Jahren über alle Module inkl. Zugang, Startkonfiguration Vorstand, Vorlage für Gruppenleitungen mit Reichweite „Gruppe“ und Rechte nach dem MVP (übergreifend), Annahmen Nachtrag v0.9 (AD: Startwerte TK, förderfähig = DOSB-lizenzfähig) und v0.10 (AD: Aktion „freigeben“, Stammdaten Finanzen), Pflege der Sätze durch Geschäftsstelle oder Referent:innen (später), Zugang für Tourenleitende (Iteration 2 der Planungshilfe).

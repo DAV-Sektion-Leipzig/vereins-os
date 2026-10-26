@@ -1,6 +1,6 @@
 # Übergabe: Finanzen → Administration
 
-Stand: 26.10.2026 · Version 1.3 · Status: offen · Von: Finanzen (FI) · An: Administration (AD)
+Stand: 26.10.2026 · Version 1.3 · Status: eingearbeitet (26.10.2026, spec.md AD v0.10.0) · Von: Finanzen (FI) · An: Administration (AD)
 Grundlage: docs/specs/fi-finanzen/00-steckbrief.md v0.1, 01-erhebung.md v0.1; spec.md AD v0.9 (Nachtrag v0.9, `ad_rates`, `ea_person_licenses`); querschnitt-administration.md v0.1 (P6, P7, P11, P14, Q2, Q6)
 Änderungen v1.3: A10 entschieden – Angaben der Sektion für die Auszahlung (Name, IBAN, BIC, Sachkonto) als Einstellung der Administration (Vorlagen der Geschäftsstelle, Product Owner 26.10.2026).
 Änderungen v1.2: Höchstbetrag entschieden (A4).
@@ -29,4 +29,4 @@ Finanzen rechnet die Vergütung nach der Vergütungsordnung aus der Anwesenheits
 
 ## Einarbeitung
 
-- [ ] eingearbeitet in Administration (Datei, Version): –
+- [x] eingearbeitet in Administration (Datei, Version): docs/specs/ad-administration/spec.md v0.10.0 (Nachtrag v0.10, 26.10.2026; A1–A10, Aktion „freigeben“ R50, TKF entfällt). Namen: `ad_remuneration_kinds`, `ad_remuneration_positions`, `ad_remuneration_defaults`, `ad_settlement_deadlines`, `ad_payout_settings`, `ea_referate.semiannual_settlement`, `ea_person_finance_data`, `fi_person_visible`, `ad_my_approve_referate`, `ad_can_approve`.

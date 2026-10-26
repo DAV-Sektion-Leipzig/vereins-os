@@ -1,8 +1,9 @@
 # Spec: Finanzen (FI)
 
-Version: 0.1 · Status: Entwurf (zur Freigabe als Ready durch den Product Owner) · Stand: 26.10.2026 · Product Owner: Toni Werner
+Version: 0.1.1 · Status: Entwurf (zur Freigabe als Ready durch den Product Owner) · Stand: 26.10.2026 · Product Owner: Toni Werner
 Stories: docs/specs/fi-finanzen/02-stories.md (US-FI-01 bis US-FI-17, v0.1)
 Grundlage: 00-steckbrief.md v0.5 (abgeschlossen), 01-erhebung.md v0.6 (R1–R30, C6, C7), 02-stories.md v0.1 (R31–R33), glossar.md v1.6, rollen.md v1.2, tech-stack.md, Übergaben FI → AD v1.3 (A1–A10), FI → EZ v1.2 (Z1–Z5), FI → TK v1.0; spec.md Administration v0.9 (`ad_rates`, `ad_rates_at`, `ea_person_names`), spec.md Anwesenheitserfassung v0.5 (`ez_events`, `ez_attendances`, `ez_climbing_points_report`)
+Änderungen v0.1.1: Namen an den Nachtrag v0.10 der Administration angeglichen (`ad_my_approve_referate`, `ad_can_approve`, `ad_remuneration_kinds`/`ad_remuneration_positions`, `ad_settlement_deadline`, `ad_payout_settings_at`, `ea_person_finance_data`); Annahme zu den AD-Namen entfällt.
 Änderungen v0.1: Erster Entwurf.
 
 **Voraussetzungen für die Umsetzung:** (1) Nachtrag der Administration nach Übergabe FI → AD v1.3 (Abrechnungsarten, Vorbelegung, Sätze, Höchstbetrag, Fristen, Kennzeichen am Referat, Angaben der Sektion, Lesefunktion Personendaten, Modul FI, Aktion „freigeben“ aus Q1, `fi_person_visible`) und (2) Nachtrag der Anwesenheitserfassung nach Übergabe FI → EZ v1.2 (Abrechnungsart am Einsatz, Lesefunktion `ez_settlement_basis`, Platzhalter `fi_attendance_locked` und `fi_event_locked`). Namen der Objekte aus den Nachträgen sind hier als [ANNAHME] verwendet; maßgeblich ist der jeweilige Nachtrag. Finanzen legt keine Tabellen oder Funktionen anderer Module an; es ersetzt nur die Platzhalter `fi_person_visible`, `fi_attendance_locked` und `fi_event_locked` (gleiche Signatur).
@@ -69,7 +70,7 @@ Unique `(person_id, year, half)`. Index `(year, half, status)`, `(payout_run_id)
 | event_date | date | ja | – | Datum bzw. Startdatum (Sortierung, Satzstand R9) |
 | referat_id | uuid | ja | – | Referat des Einsatzes (Sichtbarkeit R31, Bestätigung R23) |
 | group_id | uuid | nein | null | erste Gruppe des Einsatzes (R24); FK gr_groups(id) on delete restrict |
-| remuneration_kind_id | uuid | ja | – | Abrechnungsart des Einsatzes; FK auf die Tabelle der Administration [ANNAHME: `ad_remuneration_kinds`] |
+| remuneration_kind_id | uuid | ja | – | Abrechnungsart des Einsatzes; FK ad_remuneration_kinds(id) (spec.md AD v0.10) |
 | position | fi_position | ja | – | |
 | recorded_role | ez_role | nein | null | Rolle in der Anwesenheit (`trainer`/`helper`); null bei Organisationspauschale |
 | calc_rate_role | fi_rate_role | ja | – | berechnete Satzart (R8) |
@@ -164,7 +165,7 @@ Rechte (zentrale Stelle):
 - `fi_can_manage() returns boolean` – `ad_has_level('FI','manage')`.
 - `fi_can_read_all() returns boolean` – `ad_has_level('FI','read')` (Reichweite alle).
 - `fi_read_referate() returns uuid[]` – `ad_my_referate('FI','read')`.
-- `fi_confirm_referate() returns uuid[]` – Referate, für die der Nutzer die Aktion „freigeben“ in FI hat [ANNAHME: Funktion der Administration aus dem Nachtrag zu Q1, z. B. `ad_my_action_referate('FI','approve')`].
+- `fi_confirm_referate() returns uuid[]` – Referate, für die der Nutzer die Aktion „freigeben“ in FI hat = `ad_my_approve_referate('FI')` (spec.md AD v0.10, R50); Prüfung einzelner Referate über `ad_can_approve('FI', referat)`.
 - `fi_can_read_settlement(p_id uuid) returns boolean` – `fi_can_read_all()` oder es gibt eine Position mit `referat_id = any(fi_read_referate())` (R31).
 
 Ersetzte Platzhalter (gleiche Signatur):
@@ -205,13 +206,13 @@ Trigger: Audit (`*_by_person_id`), Sperre von `person_id`, `year`, `half` nach A
 
 | Objekt | Modul | Zweck |
 |---|---|---|
-| `ad_remuneration_kinds`, Positionen je Abrechnungsart mit Satzschlüssel je Rolle | AD (A1) | Satzschlüssel je Position und Satzart |
+| `ad_remuneration_kinds`, `ad_remuneration_positions` (Satzschlüssel je Rolle) | AD (A1) | Satzschlüssel je Position und Satzart |
 | `ad_rates_at(date)` mit Schlüsseln aus A3 und Höchstbetrag (A4) | AD | Sätze, Höchstbetrag |
-| Abgabefristen mit „gültig ab“ | AD (A5) | R19 |
+| `ad_settlement_deadline(year, half)` | AD (A5) | R19 |
 | `ea_referate.semiannual_settlement` | AD (A6) | R2 |
-| Angaben der Sektion für die Auszahlung (Name, IBAN, BIC, Sachkonto) | AD (A10) | Auszahlliste, Überweisungsdatei |
-| Lesefunktion Personendaten (z. B. `ea_person_finance_data(ids, date)`) | AD (A8) | Bankverbindung, Trainervereinbarung, Bestätigung steuerfreie Einnahmen, förderfähige Lizenzen mit gültig von/bis |
-| Modul FI, Reichweite „Referat“, Aktion „freigeben“ | AD (A7, Q1) | Rechte |
+| `ad_payout_settings_at(date)` (Name, IBAN, BIC, Sachkonto) | AD (A10) | Auszahlliste, Überweisungsdatei |
+| `ea_person_finance_data(ids, date)` | AD (A8) | Bankverbindung, Trainervereinbarung, Bestätigung steuerfreie Einnahmen, förderfähige Lizenzen mit gültig von/bis |
+| Modul FI, Reichweite „Referat“, `ad_my_approve_referate`, `ad_can_approve`, `fi_person_visible` (Platzhalter) | AD (A7, A9, Q1) | Rechte, Namen |
 | `ez_events.remuneration_kind_id` | EZ (Z1) | Abrechnungsart des Einsatzes |
 | `ez_settlement_basis(from, to, referate)` mit Dauer der Trainingszeit und Gruppenname | EZ (Z2) | Grundlage der Berechnung |
 | `ez_climbing_points_report` mit FI-Rechten | EZ (Z2) | Abgleich Punktekonto |
@@ -396,7 +397,7 @@ Voraussetzung: Nachträge AD und EZ umgesetzt (eigene Tasks dort).
 Entscheidungen des Product Owners: siehe 00-steckbrief.md (24.–26.10.2026) und 01-erhebung.md.
 
 Annahmen (sichtbar, Bestätigung bei Freigabe oder Abnahme):
-- [ANNAHME] Namen der Objekte aus den Nachträgen AD und EZ (Abschnitt 2, „Benötigt aus anderen Modulen“).
+- [ANNAHME] Namen der Objekte aus dem Nachtrag EZ (Abschnitt 2, „Benötigt aus anderen Modulen“); die Namen aus der Administration stehen in spec.md AD v0.10.
 - [ANNAHME] Zweiter Platzhalter `fi_event_locked` für die Kopfdaten (Ergänzung zum Nachtrag EZ, Z3).
 - [ANNAHME] Begriff „abschließen“; Wortlaut der Erklärung auf dem Abrechnungsdokument.
 - [ANNAHME] Organisationspauschale auch ohne eigene Anwesenheit der organisierenden Person; zusätzlich zum Tagessatz; Halbtage zählen als Tag.
