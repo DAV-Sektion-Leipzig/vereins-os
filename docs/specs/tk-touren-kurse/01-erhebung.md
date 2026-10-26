@@ -1,7 +1,7 @@
 # Erhebung: Planungshilfe Touren und Kurse
 
 Datum: 26.10.2026 · Version 0.8 · Beteiligte: Toni Werner (Product Owner); Referat Touren (über den HTML-Prototyp „Tourenkonzept“ und dessen Übergabe) · Status: Entwurf
-Änderungen v0.8: Wiederaufnahme: Satzart auch bei Lizenz-Erwerb im Halbjahr des Startdatums (wie Finanzen); Kurse ein- und mehrtägig nach Lehreinheiten; Titel ungekürzt an den Einsatz; Gemeinschaftstour übergibt die Abrechnungsart „Gemeinschaftstour“ (Product Owner 26.10.2026).
+Änderungen v0.8: Wiederaufnahme: externe Leitende aus der Planung anlegen; Löschfrist 30 Tage; Satzart auch bei Lizenz-Erwerb im Halbjahr des Startdatums (wie Finanzen); Kurse ein- und mehrtägig nach Lehreinheiten; Titel ungekürzt an den Einsatz; Gemeinschaftstour übergibt die Abrechnungsart „Gemeinschaftstour“ (Product Owner 26.10.2026).
 Änderungen v0.7: Organisationspauschale der Gemeinschaftstour trägt vorerst die Sektion; Sätze pflegt vorerst nur der Admin (Product Owner 22.10.2026).
 Änderungen v0.6: Gemeinschaftstour mit Organisationspauschale (Vergütungsordnung Ziff. 9.2); Sätze und Pauschalen als Stammdaten der Administration; Stornoregel nicht im Scope (Product Owner 22.10.2026).
 Änderungen v0.5: PDF-Übernahme nicht im Scope (Referat überträgt Einreichungen von Hand; Ablösung des HTML-Formulars folgt in Iteration 2); Person mit Freigaberecht darf Planungen auch bearbeiten und Rückfragen stellen (Product Owner 22.10.2026); Stories v0.1 erstellt.
@@ -44,7 +44,7 @@ PDF-Übernahme entfällt (Product Owner 22.10.2026): Die Ablösung des HTML-Form
 - Suche über alle Aktiven (Ehrenamtsstatus „aktiv“, ab 2 Zeichen, nur Name) [ANNAHME, wie in der Anwesenheitserfassung].
 - Nach der Auswahl: gültige Lizenzen der Person (Qualifikationsart, gültig bis, förderfähig ja/nein); Rolle Leitung, Co-Leitung oder Helfer:in.
 - Satzart je Person: Trainer:in, wenn Rolle ≠ Helfer:in und eine förderfähige Lizenz am **ersten Tag** der Tour bzw. des Kurses gültig ist („gültig bis“ ≥ Startdatum); läuft die Lizenz während der Tour ab, gilt der Trainersatz für die ganze Tour, keine tageweise Rechnung (Product Owner 22.10.2026); sonst Helfer:in. Trainer:in auch, wenn die förderfähige Lizenz im Kalenderhalbjahr des Startdatums erworben wurde (gleiche Regel wie Finanzen, Product Owner 26.10.2026). Ersetzt die Regel „Lizenzjahr ≥ Tourjahr“ aus Prototyp 4.3. Beispiel: Lizenz gültig bis 30.10.2027 – Kurs am 15.10.2027 und Tour 29.10.–01.11.2027 Trainersatz, Kurs am 02.11.2027 Helfersatz.
-- Person ohne Ehrenamtsstatus (z. B. externe Leitung) [OFFEN]: neu als Aktive:r anlegen wie beim Arbeitseinsatz der Anwesenheitserfassung, oder nicht zulässig.
+- Person ohne Ehrenamtsstatus (z. B. externe Leitung): wird direkt aus der Planung als Aktive:r mit Funktion Helfer:in angelegt bzw. wieder aktiviert, wie beim Arbeitseinsatz der Anwesenheitserfassung, von allen mit TK bearbeiten (Product Owner 26.10.2026).
 - Kontakt-E-Mail und Mobilnummer der Leitung: Vorschlag aus der Eigenschaft Kontaktdaten, je Planung änderbar [ANNAHME].
 
 ### B4 Zustände
@@ -82,7 +82,7 @@ Jeder Wechsel mit „wer, wann, Kommentar“ im Verlauf. Nach „freigegeben“ 
 - Status „in Yolawo angelegt“ manuell.
 
 ### B8 Notfallkontakte löschen
-- Täglicher Job: Notfallkontakte von Planungen im Status „durchgeführt“, „abgeschlossen“ oder „abgesagt“ werden nach Frist gelöscht [OFFEN: Frist; Vorschlag 14 Tage nach Enddatum].
+- Täglicher Job: Notfallkontakte von Planungen im Status „durchgeführt“, „abgeschlossen“ oder „abgesagt“ werden 30 Tage nach Enddatum bzw. Absage gelöscht (Product Owner 26.10.2026).
 
 ### B9 Auswertungen (Product Owner 22.10.2026)
 - **MVP – Kosten:** Liste aller lesbaren Planungen mit Filter Jahr, Referat, Tourtyp, Status; je Planung und als Summe: Vergütung, Organisationspauschale, Kosten der Leitung, sonstige Kosten, Gesamtkosten, Beitrag Mitglieder, Mindest-/Höchstzahl, Ergebnis bei Mindest- und Höchstzahl, „Sektion trägt“ bei Touren ohne Beitrag [ANNAHME: Spalten]. Abgesagte Planungen ausblendbar. CSV-Export nur mit „verwalten“ [ANNAHME].

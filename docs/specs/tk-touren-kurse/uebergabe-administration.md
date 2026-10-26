@@ -1,7 +1,7 @@
 # Übergabe: Planungshilfe Touren und Kurse → Administration
 
-Stand: 26.10.2026 · Version 1.8 · Status: offen (nur Punkt 15; Punkte 1–14 eingearbeitet) · Von: Planungshilfe Touren und Kurse (TK) · An: Administration (AD)
-Änderungen v1.8: Punkt 15 neu: Erwerbsdatum der Lizenz in `ea_person_licenses` (Trainersatz auch bei Erwerb im Halbjahr des Startdatums, wie Finanzen; Product Owner 26.10.2026). Hinweis: Punkte 9 und 11 (Modul TKF) sind durch Nachtrag v0.10 AD ersetzt (Aktion „darf freigeben“, Übergabe AD → TK `uebergabe-planungshilfe-freigabe.md`).
+Stand: 26.10.2026 · Version 1.8 · Status: offen (Punkte 15 und 16; Punkte 1–14 eingearbeitet) · Von: Planungshilfe Touren und Kurse (TK) · An: Administration (AD)
+Änderungen v1.8: Punkt 16 neu: Anlegen und Reaktivieren von Aktiven aus der Planungshilfe (Product Owner 26.10.2026). Punkt 15 neu: Erwerbsdatum der Lizenz in `ea_person_licenses` (Trainersatz auch bei Erwerb im Halbjahr des Startdatums, wie Finanzen; Product Owner 26.10.2026). Hinweis: Punkte 9 und 11 (Modul TKF) sind durch Nachtrag v0.10 AD ersetzt (Aktion „darf freigeben“, Übergabe AD → TK `uebergabe-planungshilfe-freigabe.md`).
 Änderungen v1.7: Eingearbeitet in spec.md Administration v0.9 (T59–T67) im Chat Planungshilfe Touren und Kurse (Product Owner 22.10.2026: Chat der Administration liegt in einem anderen Projekt).
 Änderungen v1.6: Konkretisierung aus spec.md TK v0.1: Freigaberecht über zweites Modul TKF, Schlüssel der Sätze, Signatur von `ea_person_licenses` und `ad_rates_at`, Testzugänge.
 Änderungen v1.5: Sätze und Pauschalen pflegt vorerst nur der Admin (Product Owner 22.10.2026).
@@ -33,6 +33,7 @@ Grundlage: docs/specs/tk-touren-kurse/00-steckbrief.md v0.7, 01-erhebung.md v0.7
 14. **Testzugänge (Seed TEST):** Tina Touren (Referent:in Touren + Freigabe), Alex Ausbildung (Referent:in Ausbildung ohne Freigabe), Fritz Freigabe (nur Freigabe, Referat Touren); Aktive Bernd Berg (Trainer*in C Bergwandern, förderfähig, gültig bis 30.10.2027), Hilde Helfer (ohne Lizenz), Karl Kletter (Trainer*in C Sportklettern, bis 31.12.2025) (spec.md TK Abschnitt 9).
 
 15. **Erwerbsdatum der Lizenz (neu v1.8, Product Owner 26.10.2026):** `ea_person_licenses` liefert zusätzlich `valid_from date` (Erwerbsdatum bzw. „gültig ab“ der Lizenz, gleiche Quelle wie `licenses` in `ea_person_finance_data`). Die Planungshilfe rechnet den Trainersatz auch, wenn die förderfähige Lizenz im Kalenderhalbjahr des Startdatums erworben wurde (spec.md TK v0.3 R2, gleiche Regel wie Finanzen R8). Deshalb liefert die Funktion auch Lizenzen, deren `valid_from` nach `p_date` liegt, sofern im selben Halbjahr; `valid_on_date` bleibt die taggenaue Prüfung. Gehört zu AD T62.
+16. **Anlegen und Reaktivieren aus der Planungshilfe (neu v1.8, Product Owner 26.10.2026):** Externe Leitende werden direkt aus der Planung angelegt bzw. wieder aktiviert, wie beim Arbeitseinsatz der Anwesenheitserfassung (AD v0.8.2, R45, R45a), aufgerufen über `tk_create_leader` und `tk_reactivate_leader` (spec.md TK v0.3 R23). Nötig: `ea_create_volunteer` und `ea_activate_person` mit dem Pfad TK erlaubt, wenn der Aufruf über `ad_has_any_level('TK','edit')` mit dem Referat der Planung in der Reichweite erlaubt ist; Einschränkung auf `{"function":"Helfer:in"}`; `created_in = 'TK'` (neuer Wert im Check `created_in`; `'EA'`, wenn der Nutzer passende EA-Rechte hat, wie für EZ); `ad_find_similar_persons` für TK ≥ edit freigeben. Damit entfällt der Satz „Die Planungshilfe legt keine Personen an (v0.9)“ in spec.md AD Abschnitt 2. Gehört zu AD T62 bzw. einem neuen Task neben T53.
 
 ## Offen
 
@@ -42,7 +43,7 @@ Grundlage: docs/specs/tk-touren-kurse/00-steckbrief.md v0.7, 01-erhebung.md v0.7
 
 ## Einarbeitung
 
-- [ ] Punkt 15 eingearbeitet in Administration (Datei, Version): –
+- [ ] Punkte 15 und 16 eingearbeitet in Administration (Datei, Version): –
 - [x] eingearbeitet in Administration: docs/specs/ad-administration/spec.md v0.9 (22.10.2026) – Abschnitte 2 (ad_modules `is_hidden`, TK/TKF, ad_rates, `ad_rates_at`, `ea_person_licenses`, `tk_person_visible`), 3 (Startwerte, Vorlage „Freigabe Touren und Kurse“), 5 (R30, R46–R48), 6 (/ad/saetze), 9 (Personen 13–18), 10 (T59–T67), 11.
 - Punkt 6 (Kontaktdaten der Leitung als Vorschlag) nicht übernommen: Die Planungshilfe erfasst Kontaktdaten je Planung selbst (R48).
 - Offen bleiben: externe Leitende ohne Ehrenamtsstatus (im MVP vorher im Ehrenamtsmanagement anlegen, A9 der Stories); Zuordnung Qualifikationsart → Sportart liegt in der Planungshilfe (`tk_qualification_sports`); Reichweite „nur eigene“ (später).

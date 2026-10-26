@@ -1,7 +1,7 @@
 # Steckbrief: Planungshilfe Touren und Kurse
 
 Stand: 26.10.2026 · Version 0.8 · Kürzel: TK · Ablage: docs/specs/tk-touren-kurse/ · Status: Entwurf · Product Owner: Toni Werner
-Änderungen v0.8: Wiederaufnahme, Abgleich mit den anderen Modulen: Titel ungekürzt (Anwesenheitserfassung erlaubt 90 Zeichen); Kurse ein- und mehrtägig nach Lehreinheiten; Trainersatz auch bei Lizenz-Erwerb im Halbjahr des Startdatums wie in Finanzen; Freigabe über die Aktion „darf freigeben“ der Administration (Product Owner 24./26.10.2026).
+Änderungen v0.8: Wiederaufnahme, Abgleich mit den anderen Modulen: externe Leitende aus der Planung anlegen; Löschfrist Notfallkontakte 30 Tage; Material nur Ausrüstungsliste; Titel ungekürzt (Anwesenheitserfassung erlaubt 90 Zeichen); Kurse ein- und mehrtägig nach Lehreinheiten; Trainersatz auch bei Lizenz-Erwerb im Halbjahr des Startdatums wie in Finanzen; Freigabe über die Aktion „darf freigeben“ der Administration (Product Owner 24./26.10.2026).
 Änderungen v0.7: Organisationspauschale der Gemeinschaftstour trägt vorerst die Sektion (Umlage auf Teilnehmende später klären); Sätze pflegt vorerst nur der Admin (Product Owner 22.10.2026).
 Änderungen v0.6: Gemeinschaftstour mit Organisationspauschale nach Vergütungsordnung Ziff. 9.2 (Fehler im Prototyp); Sätze und Pauschalen als Stammdaten in der Administration; Stornoregel (Rückerstattung 90 %/50 %) nicht im Scope (Product Owner 22.10.2026).
 Änderungen v0.5: PDF-Übernahme nicht im Scope (Referat überträgt Einreichungen von Hand bis Iteration 2); Person mit Freigaberecht darf Planungen bearbeiten und Rückfragen stellen; Iteration 2 (öffentliches Formular oder Zugang) als offener Punkt für später; Stories v0.1 (Product Owner 22.10.2026).
@@ -64,7 +64,7 @@ Tourenleitende planen Touren und Kurse mit einer eigenständigen HTML-Datei („
 - Zugang bzw. öffentliche Eingabe für Tourenleitende und Ablösung des HTML-Formulars (Iteration 2).
 - CO2-Auswertung über mehrere Planungen (Iteration 1); im MVP nur die CO2-Bilanz je Planung.
 - Anmeldung von Fahrten, auch Kinder- und Jugendfahrten (bisher dem Modul zugeordnet, modul-landkarte.md v1.4) – [OFFEN]: eigene spätere Iteration oder anderes Modul; der Prototyp deckt sie nicht ab.
-- Benötigtes Material der Sektion (Ausleihe) – [OFFEN]; im MVP nur Ausrüstungsliste für Teilnehmende als Text.
+- Benötigtes Material der Sektion (Ausleihe) – später (eigenes Modul); im MVP nur Ausrüstungsliste für Teilnehmende als Text (Product Owner 26.10.2026).
 - Ist-CO2-Bilanz nach der Tour, Feedbackbogen, Tourenberichte (später).
 - Fotos hochladen (Titelbild weiter per E-Mail) [ANNAHME].
 - Erwachsenenfahrten und Ausfahrten von Gruppen.
@@ -90,9 +90,9 @@ Tourenleitende planen Touren und Kurse mit einer eigenständigen HTML-Datei („
 **Offene Fragen:**
 - [OFFEN] Wer setzt „in Yolawo angelegt“, wenn die Tourenleitung das Angebot selbst anlegt (Prototyp: „Ich selbst, mit eigenem Yolawo-Zugang“)? Vorschlag: Referent:in nach Rückmeldung.
 - [OFFEN] Gemeinschaftstour: Später klären, ob die Organisationspauschale von den Teilnehmenden zurückgeholt wird (Umlage oder kleiner Beitrag); bis dahin trägt sie die Sektion (Product Owner 22.10.2026).
-- [OFFEN] Löschfrist der Notfallkontakte nach der Tour (Vorschlag: 14 Tage nach „durchgeführt“).
+- Entschieden 26.10.2026: Notfallkontakte werden 30 Tage nach Tourende bzw. Absage gelöscht.
 - [OFFEN] Anmeldung von Fahrten (Kinder- und Jugendfahrten): weiter in diesem Modul (spätere Iteration) oder neu zuordnen?
-- [OFFEN] „Benötigtes Material“ (modul-landkarte.md): Material der Sektion reservieren oder nur Ausrüstungsliste?
+- Entschieden 26.10.2026: „Benötigtes Material“ nur als Ausrüstungsliste; Reservierung von Material der Sektion später.
 - [OFFEN] Iteration 2 (später anschauen): öffentliches Formular ohne Login (Datenschutz, Missbrauchsschutz) oder Zugang für Tourenleitende mit Reichweite „nur eigene“?
 - [OFFEN] Priorität und Einordnung in die Reihenfolge der Module.
 - [ANNAHME] bestätigen: Kürzel TK und Ablage; Statusmodell; Admin liest; Berechnung serverseitig; Planwerte nur als Vorbelegung für Finanzen.

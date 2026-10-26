@@ -1,7 +1,7 @@
 # Stories: Planungshilfe Touren und Kurse (TK) – MVP
 
 Stand: 26.10.2026 · Version 0.5 · Status: Entwurf · Product Owner: Toni Werner
-Änderungen v0.5: Wiederaufnahme: Fritz Freigabe mit Vorlage „Freigabe Touren und Kurse“ (TK bearbeiten + darf freigeben); US-TK-03 AK7 Lizenz-Erwerb im Halbjahr; US-TK-10 AK2 auch mehrtägige Kurse nach Lehreinheiten (AK7 neu); US-TK-16 AK6 Titel ungekürzt, AK7 Abrechnungsart Gemeinschaftstour; A4 entfällt (Product Owner 24./26.10.2026).
+Änderungen v0.5: Wiederaufnahme: Fritz Freigabe mit Vorlage „Freigabe Touren und Kurse“ (TK bearbeiten + darf freigeben); US-TK-03 AK8 Lizenz-Erwerb im Halbjahr, AK9/AK10 externe Leitende anlegen und reaktivieren; US-TK-16 AK5 nur Freigabe und Geschäftsstelle; US-TK-22 Frist 30 Tage; Annahmen A1–A12 bestätigt bzw. geändert (A6, A9, A11); US-TK-10 AK2 auch mehrtägige Kurse nach Lehreinheiten (AK7 neu); US-TK-16 AK6 Titel ungekürzt, AK7 Abrechnungsart Gemeinschaftstour; A4 entfällt (Product Owner 24./26.10.2026).
 Änderungen v0.4: Namen der Testpersonen an den Seed der Administration angeglichen (Tina Touren, Alex Ausbildung, Anna Fiktiv, Test Admin, Bernd Beispiel).
 Änderungen v0.3: A12 bestätigt (Organisationspauschale der Gemeinschaftstour trägt vorerst die Sektion); Sätze pflegt nur der Admin (US-TK-19) (Product Owner 22.10.2026).
 Änderungen v0.2: Gemeinschaftstour mit Organisationspauschale (US-TK-10 AK3, US-TK-11 AK7); US-TK-19 neu: Sätze aus der Administration verwenden (Pflege dort, Übergabe v1.4); Stornoregel entfernt (US-TK-09, US-TK-15) (Product Owner 22.10.2026).
@@ -83,9 +83,11 @@ Testpersonen der Akzeptanzkriterien (fiktiv, Seed TEST): **Tina Touren** (Refere
 - AK4: Gegeben Hilde Helfer mit Rolle „Co-Leitung“, wenn die Satzart berechnet wird, dann ist sie „Helfer:in“; gegeben Rolle „Helfer:in“, dann immer „Helfer:in“, auch mit Lizenz.
 - AK5: Gegeben Sportart „Klettern“ und nur Bernd Berg als nicht helfende Person, wenn geprüft wird, dann erscheint „Keine der angegebenen Qualifikationen deckt Klettern als Führungstour ab. Bitte Qualifikation, Sportart oder Tourtyp prüfen.“ (Prototyp 6.3, Zuordnung nach Erhebung C3).
 - AK6 (Fehler): Gegeben dieselbe Person zweimal, wenn ich sie erneut hinzufüge, dann erscheint „Diese Person ist schon eingetragen.“
-- AK7: Gegeben Karl Kletter mit einer förderfähigen Lizenz, erworben am 15.08.2027, und ein Kurs am 10.07.2027, wenn die Satzart berechnet wird, dann ist sie „Trainer:in“ mit Hinweis „Lizenz erworben am 15.08.2027 – Trainersatz für das ganze Halbjahr.“ (gleiche Regel wie Finanzen, Product Owner 26.10.2026).
+- AK8: Gegeben Karl Kletter mit einer förderfähigen Lizenz, erworben am 15.08.2027, und ein Kurs am 10.07.2027, wenn die Satzart berechnet wird, dann ist sie „Trainer:in“ mit Hinweis „Lizenz erworben am 15.08.2027 – Trainersatz für das ganze Halbjahr.“ (gleiche Regel wie Finanzen, Product Owner 26.10.2026).
 - AK7 (Rechte): Gegeben eine Person ohne Ehrenamtsstatus „aktiv“, dann erscheint sie nicht in der Suche; die Planungshilfe zeigt keine weiteren Eigenschaften der Person als Name und Lizenzen (Qualifikationsart, gültig bis, förderfähig).
-**Nicht Teil dieser Story:** Anlegen externer Leitender ohne Ehrenamtsstatus [OFFEN]; Pflege von Lizenzen (Ehrenamtsmanagement).
+- AK9: Gegeben eine externe Bergführerin, die nicht in den Aktiven ist, wenn ich „Neue Person anlegen“ wähle, Vor- und Nachname eingebe und das Häkchen „Ich habe die Person über die Speicherung ihrer Daten informiert …“ setze, dann wird sie nach der Dublettenprüfung als Aktive mit Funktion Helfer:in im Referat der Planung angelegt und in die Leitung eingetragen (Satzart Helfer:in, bis die Geschäftsstelle eine Lizenz einträgt). Ohne Häkchen: „Bitte bestätige, dass du die Person informiert hast.“ (Product Owner 26.10.2026)
+- AK10: Gegeben die Dublettenprüfung findet eine ausgeschiedene Person, wenn ich „Wieder aktivieren“ bestätige, dann erhält sie Ehrenamtsstatus „aktiv“ (Funktion Helfer:in, Referat der Planung) und wird eingetragen.
+**Nicht Teil dieser Story:** Pflege von Lizenzen (Ehrenamtsmanagement).
 
 ### US-TK-04: Kontakt- und Notfalldaten der Leitung erfassen
 **Als** Referent:in bzw. Geschäftsstelle
@@ -256,7 +258,7 @@ Testpersonen der Akzeptanzkriterien (fiktiv, Seed TEST): **Tina Touren** (Refere
 - AK2: Gegeben der Einsatz existiert und ich ändere Termin oder Leitung, wenn ich speichere, dann wird der Einsatz aktualisiert, solange keine Anwesenheit „anwesend“ eingetragen ist.
 - AK3 (Fehler): Gegeben eine Anwesenheit „anwesend“ existiert, wenn ich den Termin ändere, dann wird die Planung gespeichert, der Einsatz nicht, und es erscheint „Der Einsatz ist schon erfasst und wurde nicht geändert. Bitte in der Anwesenheitserfassung anpassen.“
 - AK4 (Fehler): Gegeben die Anwesenheitserfassung ist nicht verfügbar, wenn ich markiere, dann wird nichts geändert und es erscheint „Einsatz konnte nicht angelegt werden. Bitte später erneut versuchen.“ (eine Transaktion).
-- AK5 (Rechte): Gegeben Anna Fiktiv (Geschäftsstelle), dann darf sie markieren; Test Admin nicht.
+- AK5 (Rechte): Gegeben Anna Fiktiv (Geschäftsstelle) oder Fritz Freigabe, dann dürfen sie markieren; Alex Ausbildung (Referent:in ohne Freigaberecht) und Test Admin nicht (Product Owner 26.10.2026).
 - AK6: Gegeben ein Titel mit bis zu 90 Zeichen, dann wird er ungekürzt in den Einsatz übernommen.
 - AK7: Gegeben eine Gemeinschaftstour, dann erhält der Einsatz die Abrechnungsart „Gemeinschaftstour“; bei Kurs und Führungstour die Vorbelegung der Anwesenheitserfassung (Product Owner 26.10.2026).
 **Nicht Teil dieser Story:** Erfassung der Anwesenheit (Anwesenheitserfassung); Teilnehmende.
@@ -331,9 +333,9 @@ Testpersonen der Akzeptanzkriterien (fiktiv, Seed TEST): **Tina Touren** (Refere
 **damit** Daten Dritter nicht länger als nötig gespeichert sind.
 **Priorität:** Must · **Regeln:** R8, B8 · **Abhängig von:** US-TK-04
 **Akzeptanzkriterien**
-- AK1: Gegeben eine Planung mit Enddatum vor mehr als 14 Tagen [OFFEN: Frist] und Status „in Yolawo angelegt“, „durchgeführt“, „abgeschlossen“ oder „abgesagt“, wenn der tägliche Job läuft, dann werden Name und Telefon aller Notfallkontakte und die Mobilnummern der Leitung gelöscht [ANNAHME: Mobilnummer auch].
+- AK1: Gegeben eine Planung mit Enddatum vor mehr als 30 Tagen (Product Owner 26.10.2026) und Status „in Yolawo angelegt“, „durchgeführt“, „abgeschlossen“ oder „abgesagt“, wenn der tägliche Job läuft, dann werden Name und Telefon aller Notfallkontakte und die Mobilnummern der Leitung gelöscht [ANNAHME: Mobilnummer auch].
 - AK2: Gegeben die Löschung, dann zeigt die Planung „Notfallkontakte gelöscht am …“ und der Verlauf einen Eintrag (ohne Inhalte).
-- AK3: Gegeben eine abgesagte Planung, dann gilt die Frist ab dem Datum der Absage [ANNAHME].
+- AK3: Gegeben eine abgesagte Planung, dann gilt die Frist ab dem Datum der Absage.
 - AK4 (Fehler): Gegeben der Job schlägt fehl, dann läuft er am nächsten Tag erneut und erfasst alle fälligen Planungen.
 - AK5 (Rechte): Gegeben niemand, dann kann gelöschte Notfalldaten wiederherstellen (keine Historie der Werte).
 **Nicht Teil dieser Story:** Löschung im E-Mail-Postfach des Referats.
@@ -363,20 +365,20 @@ Testpersonen der Akzeptanzkriterien (fiktiv, Seed TEST): **Tina Touren** (Refere
 
 ---
 
-## Annahmen dieser Stories (vom Product Owner zu bestätigen)
+## Annahmen dieser Stories (bestätigt vom Product Owner am 26.10.2026; A6, A9, A11 geändert)
 
 - A1: Referat folgt aus dem Tourtyp (Kurs → Ausbildung, sonst Touren), nicht frei wählbar (US-TK-02).
 - A2: Freigaberecht als eigene Rechtevorlage (TK bearbeiten + darf freigeben); Startwert für alle Referent:innen Touren und Ausbildung; Geschäftsstelle gibt nicht frei, darf aber Rückfragen stellen (US-TK-14).
 - A3: Admin (TK lesen) sieht keine Kontakt- und Notfalldaten (US-TK-04, US-TK-21).
 - A4: entfällt (Titel ungekürzt, Anwesenheitserfassung erlaubt 90 Zeichen).
 - A5: „durchgeführt“ manuell im MVP; „abgeschlossen“ nur Geschäftsstelle (US-TK-18).
-- A6: Löschfrist Notfallkontakte 14 Tage nach Enddatum bzw. Absage, inkl. Mobilnummer der Leitung (US-TK-22).
+- A6: Löschfrist Notfallkontakte 30 Tage nach Enddatum bzw. Absage (geändert 26.10.2026), inkl. Mobilnummer der Leitung (US-TK-22).
 - A7: Spalten der Kostenauswertung; CSV nur Geschäftsstelle (US-TK-20).
 - A8: Keine E-Mail-Benachrichtigungen im MVP (US-TK-13).
-- A9: Externe Leitende ohne Ehrenamtsstatus sind im MVP nicht wählbar; sie müssen vorher im Ehrenamtsmanagement angelegt werden (US-TK-03).
+- A9: geändert 26.10.2026: Externe Leitende werden direkt aus der Planung angelegt oder wieder aktiviert (Funktion Helfer:in, alle mit TK bearbeiten; US-TK-03 AK9, AK10).
 - A10: Bestätigung c1 bleibt eine Bestätigung (keine automatische Prüfung im Ehrenamtsmanagement).
 - A12: bestätigt 22.10.2026 – bei Gemeinschaftstouren trägt vorerst die Sektion die Organisationspauschale; kein Teilnahmebeitrag (US-TK-11 AK7).
-- A11: Wer „in Yolawo angelegt“ setzt, wenn die Tourenleitung selbst anlegt: Referent:in oder Person mit Freigaberecht nach Rückmeldung.
+- A11: geändert 26.10.2026: „In Yolawo angelegt“ setzen nur Personen mit Freigaberecht und die Geschäftsstelle (auch wenn die Tourenleitung selbst angelegt hat, nach Rückmeldung).
 
 ## Offen vor der Spec
 
