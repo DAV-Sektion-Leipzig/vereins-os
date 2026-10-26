@@ -214,6 +214,38 @@ spec.md TK v0.4 Abschnitt 5; Datenbank Stufe 2 umgesetzt (`20261105000100`–`�
 | `TK_EZ_LOCKED` | Der Einsatz ist schon erfasst oder abgerechnet und wurde nicht geändert. Bitte in der Anwesenheitserfassung anpassen. (Absage: „Absage nicht möglich: Im Einsatz sind schon Personen als anwesend erfasst oder er ist abgerechnet.“) | R15 | folgt mit Stufe 3 (tasks.md T015) |
 | `TK_EZ_SYNC_FAILED` | Die Planung ist gespeichert, der Einsatz konnte nicht aktualisiert werden. Bitte später erneut speichern. [ANNAHME: Text] | R15 | folgt mit Stufe 3 (tasks.md T015) |
 
+## Bereich Budget (FI, Dashboard DS)
+
+spec.md DS v0.2 Abschnitt 5; Datenbank umgesetzt (`20261105100100`–`…0700`), Oberfläche folgt (Phase 3). `FI_BUDGET_SHEET_MISSING` prüft der Browser.
+
+| Code | Meldung | Regel | Status |
+|---|---|---|---|
+| `FI_BUDGET_FORBIDDEN` | Für diesen Bereich hast du keine Rechte. | R13, R21 | Datenbank umgesetzt |
+| `FI_BUDGET_SUM_MISMATCH` (Detail: Art, Summe, Excel) | Die Summe der Budgetposten passt nicht zur Summenzeile der Excel. | R10 | Datenbank umgesetzt |
+| `FI_BUDGET_SHEET_MISSING` | Kein Tabellenblatt ‚Finanzplan JJJJ‘ gefunden. | B1 | Browser (Phase 3) |
+| `FI_BUDGET_ACCOUNT_INVALID` (Detail: Angabe) | Die Kontoangabe ist ungültig. | R2 | Datenbank umgesetzt |
+| `FI_BUDGET_RANGE_INVALID` (Detail: Angabe) | Der Kontenbereich ist ungültig. | R2 | Datenbank umgesetzt |
+| `FI_BUDGET_RULE_DUPLICATE` (Detail: Angabe) | Für diese Kontoangabe gibt es schon eine gültige Regel. | R11 | Datenbank umgesetzt |
+| `FI_BUDGET_ITEM_UNKNOWN` | Budgetposten nicht gefunden. | – | Datenbank umgesetzt |
+| `FI_BUDGET_REFERAT_REQUIRED` | Bitte ein Referat wählen. | R22 | Datenbank umgesetzt |
+| `FI_BUDGET_NO_ROWS` | Die Datei enthält keine Buchungen. | US-FI-26 | Datenbank umgesetzt |
+| `FI_BUDGET_NO_PLAN` | Für JJJJ ist noch kein Finanzplan eingelesen. | US-FI-26 | Datenbank umgesetzt |
+| `FI_BUDGET_REASON_REQUIRED` | Bitte einen Grund angeben. | R15, R16 | Datenbank umgesetzt |
+| `FI_BUDGET_NOTE_TOO_LONG` | Der Hinweis darf höchstens 500 Zeichen haben. | R17 | Datenbank umgesetzt |
+| `FI_BUDGET_REALLOC_GROUP` | Umschichten geht nur zwischen Posten desselben Gesamtbudgets und derselben Art. | R15 | Datenbank umgesetzt |
+| `FI_BUDGET_REALLOC_AMOUNT` (Detail: Postenname) | Der Betrag ist höher als der Plan von ‚…‘. | R15 | Datenbank umgesetzt |
+| `FI_BUDGET_REALLOC_STALE` | Die Umschichtung passt nicht mehr zum Plan. Bitte ablehnen oder neu beantragen lassen. | R15 | Datenbank umgesetzt |
+| `FI_BUDGET_OWN_REQUEST` | Deinen eigenen Antrag bestätigt eine andere Person mit Budgetpflege. | R15 | Datenbank umgesetzt |
+| `FI_BUDGET_PROPOSAL_OPEN` | Zu dieser Buchung gibt es schon einen offenen Vorschlag. | R16 | Datenbank umgesetzt |
+| `FI_BUDGET_PLAN_EMPTY` | [OFFEN] Meldung fehlt in der Spec; Frontend zeigt die allgemeine Meldung | B1 | Datenbank umgesetzt |
+| `FI_BUDGET_ITEM_DUPLICATE` (Detail: Name, Gesamtbudget) | [OFFEN] Meldung fehlt in der Spec | R10 | Datenbank umgesetzt |
+| `FI_BUDGET_RULE_UNKNOWN` | [OFFEN] Meldung fehlt in der Spec | R11 | Datenbank umgesetzt |
+| `FI_BUDGET_BOOKING_UNKNOWN` | [OFFEN] Meldung fehlt in der Spec | US-FI-27 | Datenbank umgesetzt |
+| `FI_BUDGET_SCOPE_INVALID` | [OFFEN] Meldung fehlt in der Spec (Oberfläche bietet nur gültige Werte an) | US-FI-27 | Datenbank umgesetzt |
+| `FI_BUDGET_STATE` | [OFFEN] Meldung fehlt in der Spec; Vorschlag wie `FI_STATUS`: „In diesem Zustand ist das nicht möglich.“ | spec 4 | Datenbank umgesetzt |
+
+Hinweis: Die Meldungen zu `FI_BUDGET_SUM_MISMATCH`, `FI_BUDGET_ACCOUNT_INVALID`, `FI_BUDGET_RANGE_INVALID`, `FI_BUDGET_RULE_DUPLICATE`, `FI_BUDGET_ITEM_UNKNOWN` und `FI_BUDGET_NO_ROWS` nennt die Spec nur als Code; die Texte oben sind Vorschläge für Phase 3 [OFFEN].
+
 ## Hinweise (keine Fehlermeldungen)
 
 Diese Codes bzw. Fälle melden einen **erfolgreichen** Vorgang. Das Frontend zeigt sie als Hinweis an (z. B. sonner-Toast „info“) und nicht als Fehler. Die Aktion ist ausgeführt.
