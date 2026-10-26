@@ -1,8 +1,9 @@
 # Spec: Dashboard (DS) mit Bereich Budget (FI)
 
-Version: 0.1 · Status: Entwurf · Stand: 26.10.2026 · Product Owner: Toni Werner
+Version: 0.2 · Status: Ready (freigegeben 26.10.2026) · Stand: 26.10.2026 · Product Owner: Toni Werner
 Stories: docs/specs/ds-dashboard/02-stories.md (US-DS-07 bis US-DS-20, v0.2) und docs/specs/fi-finanzen/02-stories.md (Nachtrag v0.3, US-FI-22 bis US-FI-29)
 Grundlage: 00-steckbrief.md v0.13, 01-erhebung.md v0.2 (Regeln R1–R24), 02-stories.md v0.2 (R25, R26), sichten.md v0.8, prototyp-budget-dashboard.md v1.0, uebergabe-administration.md v1.4 (D1–D10), uebergabe-finanzen.md v1.8 (B1–B17), glossar.md v1.7; bestehende Migrationen AD (`ad_has_level`, `ad_has_any_level`, `ad_my_referate`, `ad_template_rights.can_approve`) und FI (`fi_payout_runs`, `fi_payout_lines`).
+Änderungen v0.2: Status Ready (Product Owner 26.10.2026); Annahmen in Abschnitt 11 bestätigt.
 Änderungen v0.1: Erster Entwurf für den MVP (Budget-Sicht, Budgetpflege, Pflege durch Referent:innen, Zu tun im MVP-Umfang).
 
 Regelverweise: „R…“ = 01-erhebung.md DS; „DS R25/R26“ = 02-stories.md DS.
@@ -343,11 +344,11 @@ Fiktiv, keine Echtdaten; Finanzplan „Finanzplan 2026“ und „Finanzplan 2027
 
 ## 11. Annahmen und offene Punkte
 
-- [ANNAHME] Verarbeitung der Dateien im Browser, Regeln in der Datenbank (Abschnitt 1).
-- [ANNAHME] Beträge `numeric(12,2)`; Excel-Bibliothek nach plan.md.
-- [ANNAHME] Zuordnung zur Laufzeit per View; gespeicherte Zuordnung nur bei Leistungsproblemen.
-- [ANNAHME] Vorschau umfasst freigegebene, nicht gebuchte Runden und abgeschlossene, nicht ausgezahlte Abrechnungen; Abgleichfenster −3/+14 Tage.
-- [ANNAHME] Budgetpflege darf direkt umschichten; eigene Anträge bestätigt die Schatzmeister:in bzw. die andere Person mit Budgetpflege.
-- [ANNAHME] Admin-Nachtrag (T1–T4) in diesem Vorhaben statt eigener Spec der Administration; spec.md AD erhält einen Verweis.
+- Bestätigt (Product Owner 26.10.2026): Verarbeitung der Dateien im Browser, Regeln in der Datenbank (Abschnitt 1).
+- Bestätigt (Product Owner 26.10.2026): Beträge `numeric(12,2)`; Excel-Bibliothek nach plan.md.
+- Bestätigt (Product Owner 26.10.2026): Zuordnung zur Laufzeit per View; gespeicherte Zuordnung nur bei Leistungsproblemen.
+- Bestätigt (Product Owner 26.10.2026): Vorschau umfasst freigegebene, nicht gebuchte Runden und abgeschlossene, nicht ausgezahlte Abrechnungen; Abgleichfenster −3/+14 Tage.
+- Bestätigt (Product Owner 26.10.2026): Budgetpflege darf direkt umschichten; eigene Anträge bestätigt die Schatzmeister:in bzw. die andere Person mit Budgetpflege.
+- Bestätigt (Product Owner 26.10.2026): Admin-Nachtrag (T1–T4) in diesem Vorhaben statt eigener Spec der Administration; spec.md AD erhält einen Verweis.
 - [OFFEN] Eintrag im Verarbeitungsverzeichnis vor Echtdaten (01-erhebung.md F).
 - [OFFEN] rollen.md: Spalte DS, Vorlage Budgetpflege, Admin sieht Budget (uebergabe-administration.md D5).
