@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 26.10.2026 · Version 5.14
+Stand: 26.10.2026 · Version 5.15
+Änderungen v5.15: Neues Modul Dashboard (DS [ANNAHME]): Steckbrief v0.1 (Entwurf) mit offenen Fragen Q-DS1 bis Q-DS10; Merkposten „Dashboard (EA)“ und „Auswertungen auf Gruppenebene“ mit Verweis auf DS.
 Änderungen v5.14: Finanzen Spec v0.2, Administration Nachtrag v0.10 und Anwesenheitserfassung Nachtrag v0.6 Ready (Product Owner 26.10.2026); Annahmen bei der Abnahme.
 Änderungen v5.13: Anwesenheitserfassung Nachtrag v0.6 (Finanzen; im Chat Finanzen eingearbeitet): Abrechnungsart am Einsatz, Lesefunktion für Finanzen, Sperre abgerechneter Einsätze; offene Punkte zu Löschfrist, mehrtägigen Einsätzen, Lehreinheiten und Sperre erledigt; Übergabe FI → EZ eingearbeitet.
 Änderungen v5.12: Administration Nachtrag v0.10 (Finanzen, Aktion „freigeben“; im Chat Finanzen eingearbeitet): Q1 umgesetzt in der Spec, TKF entfällt; Übergabe FI → AD eingearbeitet; neue Übergabe AD → TK (Freigaberecht).
@@ -194,6 +195,23 @@ Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.5, abgeschlossen 
 - **Übergabe aus EZ (v1.6): eingearbeitet am 24.10.2026** in 00-steckbrief.md v0.1 und 01-erhebung.md v0.1 (F1–F9).
 - **Übergabe aus der Planungshilfe Touren und Kurse (v1.3): eingearbeitet am 24.10.2026** in 00-steckbrief.md v0.1 (Punkte 1–7; Antworten in uebergabe-planungshilfe.md v1.0).
 
+## DS – Dashboard (Priorität offen)
+
+Steckbrief: docs/specs/ds-dashboard/00-steckbrief.md (Version 0.1, Entwurf 26.10.2026) · Übergabe des Prototyps: prototyp-budget-dashboard.md (v1.0) · Ideenkatalog: ideen-sichten.md (v0.1)
+
+- Vorgabe Product Owner 26.10.2026: Neues Modul Dashboard; Grundlage ist das Budget-Dashboard des 1. Vorsitzenden; darüber Sichten für einzelne Referate, z. B. Auslastung der Gruppen für Kinder und Jugend.
+- [OFFEN] Q-DS1 Buchungsdaten: DATEV-Export offline lassen (nur Summen ins Vereins OS) oder Buchungsliste speichern; sehen Referent:innen Einzelbuchungen ihres Referats? (00-steckbrief.md DS; Datenschutz: Buchungstexte mit Namen)
+- [OFFEN] Q-DS2 Modulzuschnitt: Budget als Bereich von Finanzen (Steckbrief FI v0.5: „Budget-Übersicht, Dashboard: später“) und DS nur Anzeige – oder Budget im Modul DS? (00-steckbrief.md DS, 00-steckbrief.md FI)
+- [OFFEN] Q-DS3 Auslastung einer Gruppe: Teilnehmer:innen/Platzzahl (neues Feld in GR), Anwesenheitsquote oder Betreuungsschlüssel? (00-steckbrief.md DS, 00-steckbrief.md GR „Bedarf/Auslastung“, 00-steckbrief.md EZ Iteration 2)
+- [OFFEN] Q-DS4 MVP-Schnitt und Einordnung in die Reihenfolge AD → EA → GR → EZ → FI. (modul-landkarte.md)
+- [OFFEN] Q-DS5 Sichten je Referat: Rückmeldung der Referate zum Ideenkatalog. (ideen-sichten.md)
+- [OFFEN] Q-DS6 Zuordnung Gesamtbudget → Referat; Gesamtbudgets ohne Referat nur für den Vorstand? (00-steckbrief.md DS)
+- [OFFEN] Q-DS7 Wer spielt den DATEV-Export ein und pflegt die Zuordnung, wie oft? (00-steckbrief.md DS)
+- [OFFEN] Q-DS8 Kennzahlen der eigenen Gruppe für Gruppenleitungen (Reichweite „Gruppe“, nach MVP)? (00-steckbrief.md DS)
+- [OFFEN] Q-DS9 Vergleich mit Vorjahren. (00-steckbrief.md DS)
+- [OFFEN] Q-DS10 Kürzel DS, Name in der Oberfläche, Begriffe für glossar.md (Sicht, Kennzahl, Budgetposten, Gesamtbudget, Datenstand). (00-steckbrief.md DS)
+- [OFFEN] Datenschutz Minderjährige: Mindestgröße für Kennzahlen zu Gruppen (z. B. Altersstruktur). (00-steckbrief.md DS)
+
 ## OA – Öffentlichkeitsarbeit (Priorität 4)
 
 - [OFFEN] Gehören Umfragen zu OA? Welcher Umfrage-Dienst? (modul-landkarte.md)
@@ -237,7 +255,7 @@ Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.5, abgeschlossen 
 - Einzelrechte, Rechte je Objekt, Reichweiten Gruppe / nur eigene; Rechtevorlage für Gruppenleitungen.
 - Frei wählbare Leserechte je Eigenschaftsart und Rechtevorlage (Option B, EA).
 - Filter über frei definierte Felder (EA).
-- Dashboard (EA).
+- Dashboard (EA) – Kennzahlen des Ehrenamtsmanagements im Modul Dashboard (DS) [ANNAHME].
 - Geburtstagserinnerung (EA; Entscheidung, ob Referent:innen Geburtstage sehen; ggf. mit SC).
 - Löschen von Personen in der Oberfläche (EA).
 - Löschlauf für Personen über alle Module (nur löschen, wenn kein Pfad die Person mehr braucht; A8 der Übergabe GR).
@@ -259,7 +277,7 @@ Steckbrief: docs/specs/fi-finanzen/00-steckbrief.md (Version 0.5, abgeschlossen 
 - Startseite: Unterscheidbarkeit der Modul-Einträge (Symbol oder Zweckzeile), spätestens mit dem zweiten Modul.
 - GitHub: gemeinsames Konto DAVLeipzig in eine Organisation überführen.
 - Erfassung durch Gruppenleitungen und Trainer:innen mit Reichweite „Gruppe“; Ablösung des Forms-Formulars (EZ, Iteration 1; AD vorgemerkt in spec.md v0.8 Abschnitt 11).
-- Auswertungen auf Gruppenebene: Auslastung, Bedarf, Anzahl Trainings, Rückspielen an Gruppen; kritische Situationen beim Betreuungsschlüssel visuell darstellen (Alter der Kinder nur intern berechnet, nie Geburtsdatum anzeigen) (EZ, Iteration 2 oder später).
+- Auswertungen auf Gruppenebene: Auslastung, Bedarf, Anzahl Trainings, Rückspielen an Gruppen; kritische Situationen beim Betreuungsschlüssel visuell darstellen (Alter der Kinder nur intern berechnet, nie Geburtsdatum anzeigen) (EZ, Iteration 2 oder später); Anzeige im Modul Dashboard (DS) [ANNAHME].
 - Erwachsenenfahrten in der Anwesenheitserfassung (gleiche Logik wie Kinder- und Jugendfahrten) (EZ, später).
 - Einsatzhistorie und letzter Einsatz je Person im Ehrenamtsmanagement (EA, Iteration 2).
 - Einchecken per QR-Code bei Arbeitseinsätzen mit Anlegen neuer Personen durch Spontane (EZ, späte Iteration; öffentliche Seite, DSGVO und Missbrauchsschutz klären).
