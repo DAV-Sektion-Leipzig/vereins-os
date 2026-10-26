@@ -1,0 +1,92 @@
+# Prüft nach jedem Stand von main, ob sich die Oberfläche geändert hat, ohne dass die Anleitung (docs/anleitung)
+# im selben Merge angepasst wurde. Dann sammelt der Workflow die Änderung im offenen Issue mit dem Label „anleitung“
+# (legt es bei Bedarf an). Die Routine „Anleitung nachziehen“ arbeitet das Issue ab und öffnet einen Pull Request.
+# Greift auf keine Supabase-Umgebung zu.
+name: Anleitung prüfen
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Änderungen an Oberfläche und Anleitung bestimmen
+        id: diff
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+        run: |
+          if [[ "$BEFORE" =~ ^0+$ ]] || ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            BEFORE="$(git rev-parse "$AFTER^1")"
+          fi
+          files="$(git diff --name-only "$BEFORE" "$AFTER")"
+
+          if grep -q '^docs/anleitung/' <<<"$files"; then
+            echo "Anleitung wurde im selben Merge angepasst."
+            exit 0
+          fi
+
+          # Module nach Ordnern der Oberfläche (src/features/<kürzel>) und gemeinsamen Teilen
+          declare -A NAMES=(
+            [ad]="Administration" [ea]="Ehrenamtsmanagement" [gr]="Gruppen" [ez]="Anwesenheitserfassung"
+            [fi]="Finanzen" [tk]="Planungshilfe Touren und Kurse" [auth]="Erste Schritte (Anmeldung)"
+            [start]="Erste Schritte (Startseite)" [shared]="mehrere Module"
+          )
+          modules=""
+          while read -r code; do
+            [[ -z "$code" ]] && continue
+            modules+="${NAMES[$code]:-Modul $code}, "
+          done < <(sed -n 's#^src/features/\([^/]*\)/.*#\1#p' <<<"$files" | sort -u)
+          grep -qE '^src/(components|App\.tsx)' <<<"$files" && modules+="gemeinsame Oberfläche, "
+          # Freischaltung eines Moduls (Kachel auf der Startseite) in einer Migration
+          git diff "$BEFORE" "$AFTER" -- supabase/migrations | grep -qE '^\+.*is_available' \
+            && modules+="Freischaltung eines Moduls (Tabelle „Welche Module gibt es?“), "
+          modules="${modules%, }"
+
+          if [[ -z "$modules" ]]; then
+            echo "Keine Änderung an der Oberfläche."
+            exit 0
+          fi
+
+          {
+            echo "modules=$modules"
+            echo "subject=$(git log -1 --format=%s "$AFTER")"
+            echo "range=${BEFORE:0:7}..${AFTER:0:7}"
+            echo 'files<<EOF'
+            grep -E '^(src/|supabase/migrations/)' <<<"$files" | head -n 40
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Issue „Anleitung nachziehen“ anlegen oder ergänzen
+        if: steps.diff.outputs.modules != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MODULES: ${{ steps.diff.outputs.modules }}
+          SUBJECT: ${{ steps.diff.outputs.subject }}
+          RANGE: ${{ steps.diff.outputs.range }}
+          FILES: ${{ steps.diff.outputs.files }}
+        run: |
+          gh label create anleitung --color 50ae2f \
+            --description "Anleitung für Nutzer:innen nachziehen" >/dev/null 2>&1 || true
+
+          entry="$(printf '### %s\n\n- Stand: `%s`\n- Betroffen: %s\n\n<details><summary>Geänderte Dateien</summary>\n\n```\n%s\n```\n</details>\n' \
+            "$SUBJECT" "$RANGE" "$MODULES" "$FILES")"
+
+          number="$(gh issue list --label anleitung --state open --json number --jq '.[0].number')"
+          if [[ -n "$number" ]]; then
+            gh issue comment "$number" --body "$entry"
+          else
+            gh issue create --label anleitung --title "Anleitung nachziehen" --body "$(printf '%s\n\n%s' \
+              'Auf `main` hat sich die Oberfläche geändert, ohne dass `docs/anleitung/` angepasst wurde. Die Routine „Anleitung nachziehen“ ergänzt die Anleitung (Text, Bilder, Version) in einem Pull Request, der dieses Issue schließt. Ist keine Änderung nötig, wird das Issue mit Begründung geschlossen.' \
+              "$entry")"
+          fi
