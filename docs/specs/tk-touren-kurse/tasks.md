@@ -43,9 +43,9 @@ Siehe [AD tasks.md](../ad-administration/tasks.md) Phase 18 (T134–T141). Vorau
 
 ## Stufe 5: Ausgaben und Auswertung (Branch `tk-ausgaben-auswertung`)
 
-- [ ] T022 [spec T19] Texte (Eingabeblatt, Ausschreibung, Zusammenfassung) als reine Funktionen mit Test; Reiter „Ausgaben“ mit Kopierknöpfen (US-TK-15, -21)
-- [ ] T023 [spec T19] PDF nach Prototyp 7.5; gemeinsame PDF-Hilfen nach `src/lib/pdf.ts`
-- [ ] T024 [spec T21] `/tk/auswertung` mit Summenzeile und CSV (Semikolon, UTF-8 mit BOM, nur Geschäftsstelle) (US-TK-20); Anleitung ergänzen
+- [x] T022 [spec T19] `ausgaben/texts.ts`, `ausgaben/AusgabenTab.tsx`, Test `scripts/tk-calc/texts.test.ts`: Texte (Eingabeblatt, Ausschreibung, Zusammenfassung) als reine Funktionen mit Test; Reiter „Ausgaben“ mit Kopierknöpfen (US-TK-15, -21)
+- [x] T023 [spec T19] PDF nach Prototyp 7.5 (`ausgaben/pdf.ts`); Abweichung plan.md P10: PDF-Hilfen bleiben in `src/features/fi/export/pdf.ts` und werden von dort genutzt (kein Verschieben, keine Änderung an Finanzen)
+- [x] T024 [spec T21] `auswertung/` (Anleitung: Teile Referent:innen und Geschäftsstelle, Version 3.0, ohne Bilder – Bilder vor der Freischaltung mit T025): `/tk/auswertung` mit Summenzeile und CSV (Semikolon, UTF-8 mit BOM, nur Geschäftsstelle) (US-TK-20); Anleitung ergänzen
 
 ## Stufe 6: Abnahme und Freischalten
 

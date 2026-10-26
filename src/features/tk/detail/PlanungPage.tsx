@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/features/ez/shared/ConfirmDialog'
+import { AusgabenTab } from '@/features/tk/ausgaben/AusgabenTab'
+import type { TextInput } from '@/features/tk/ausgaben/texts'
 import { FormDialog } from '@/features/fi/shared/FormDialog'
 import { LoadFailed } from '@/features/gr/shared/ui'
 import { calculate, calcInput, savePayload, toDraft, type DetailResult, type Draft, type SaveResult } from '@/features/tk/detail/data'
@@ -75,7 +77,7 @@ function PlanEditor({ initial }: { initial: PlanDetail }) {
   const [savedAt, setSavedAt] = useState<Date | null>(null)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [conflict, setConflict] = useState<string | null>(null)
-  const [step, setStep] = useState<number | 'verlauf'>(1)
+  const [step, setStep] = useState<number | 'verlauf' | 'ausgaben'>(1)
   const [newPerson, setNewPerson] = useState(false)
   const [action, setAction] = useState<Action | null>(null)
   const [input, setInput] = useState('')
@@ -195,6 +197,19 @@ function PlanEditor({ initial }: { initial: PlanDetail }) {
   const actions = availableActions(detail)
   const stepProps: StepProps = { draft, detail, calc, rates: detail.rates, disabled: !canWrite, missing, setFields, setDraft }
   const rateLabel = (k: string) => detail.rates[k]?.label
+  const textInput: TextInput = {
+    fields: draft.fields,
+    leaders: draft.leaders,
+    leaderIds: draft.leaders.map((l) => l.person_id),
+    contacts: detail.can_read_contacts && !detail.plan.contacts_purged_at ? draft.contacts : undefined,
+    legs: draft.legs,
+    costs: draft.costs.filter((c) => c.label.trim() !== ''),
+    calc,
+    co2Price: detail.rates.rCO2?.value != null ? Number(detail.rates.rCO2.value) : null,
+    efs: Object.fromEntries(Object.entries(detail.rates).filter(([k]) => k.startsWith('ef_')).map(([k, r]) => [k, Number(r.value ?? 0)])),
+    missing: detail.results?.missing ?? [],
+    today: todayIso(),
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -239,8 +254,8 @@ function PlanEditor({ initial }: { initial: PlanDetail }) {
 
       <nav aria-label="Schritte" className="-mx-1 overflow-x-auto">
         <ul className="flex gap-1 px-1">
-          {[...STEPS.map((s) => ({ key: s.n as number | 'verlauf', label: `${s.n}. ${s.title}`, open: (detail.results?.missing ?? []).filter((m) => stepOf(m) === s.n).length })),
-            { key: 'verlauf' as const, label: 'Verlauf', open: 0 }].map((t) => (
+          {[...STEPS.map((s) => ({ key: s.n as number | 'verlauf' | 'ausgaben', label: `${s.n}. ${s.title}`, open: (detail.results?.missing ?? []).filter((m) => stepOf(m) === s.n).length })),
+            { key: 'ausgaben' as const, label: 'Ausgaben', open: 0 }, { key: 'verlauf' as const, label: 'Verlauf', open: 0 }].map((t) => (
             <li key={t.key}>
               <button
                 type="button"
@@ -265,6 +280,7 @@ function PlanEditor({ initial }: { initial: PlanDetail }) {
           {step === 5 && <Step5 {...stepProps} />}
           {step === 6 && <Step6 {...stepProps} />}
           {step === 7 && <Step7 {...stepProps} />}
+          {step === 'ausgaben' && <AusgabenTab input={textInput} missingLabels={(detail.results?.missing ?? []).map((m) => missingLabel(m, rateLabel))} />}
           {step === 'verlauf' && <Verlauf entries={detail.history} />}
           {typeof step === 'number' && (
             <div className="mt-8 flex justify-between gap-3">

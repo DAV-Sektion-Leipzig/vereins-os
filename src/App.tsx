@@ -99,6 +99,8 @@ import { loadClimbing } from '@/features/fi/kletterhalle/data'
 import { KletterhallePage as FiKletterhallePage } from '@/features/fi/kletterhalle/KletterhallePage'
 import { AbrechnungenPage } from '@/features/fi/liste/AbrechnungenPage'
 import { loadTkAccess, requireTkEdit } from '@/features/tk/access'
+import { AuswertungPage } from '@/features/tk/auswertung/AuswertungPage'
+import { loadReport as loadTkReport } from '@/features/tk/auswertung/data'
 import { loadPlan } from '@/features/tk/detail/data'
 import { PlanungPage } from '@/features/tk/detail/PlanungPage'
 import { loadPlanList } from '@/features/tk/liste/data'
@@ -248,7 +250,7 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        // TK mit TK ≥ lesen in irgendeiner Reichweite (spec.md TK 3, Routenschutz); Auswertung folgt mit Stufe 5.
+        // TK mit TK ≥ lesen in irgendeiner Reichweite (spec.md TK 3, Routenschutz).
         id: 'tk',
         path: 'tk',
         loader: loadTkAccess,
@@ -257,7 +259,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, loader: loadPlanList, element: <PlanungenPage /> },
           { path: 'neu', loader: requireTkEdit, element: <PlanungNeuPage /> },
-          { path: 'auswertung', element: <PlaceholderPage title="Kostenauswertung" /> },
+          { path: 'auswertung', loader: loadTkReport, element: <AuswertungPage /> },
           { path: ':id', loader: loadPlan, element: <PlanungPage /> },
           { path: '*', loader: () => redirect('/tk') },
         ],
