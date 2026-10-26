@@ -271,26 +271,37 @@ export function Step3(p: StepProps) {
 
       <Section title="Geplante An- und Abreise" description="Für die CO2-Bilanz; PKW, E-PKW und Kleinbus nach Fahrzeugen, sonst nach Personen.">
         {p.missing.has('travel_legs') && <p className="text-sm text-destructive">Bitte mindestens eine Teilstrecke mit km und Personen bzw. Fahrzeugen angeben.</p>}
-        <div className="flex flex-col gap-3">
-          {legs.map((l, i) => (
-            <div key={i} className="grid items-end gap-3 rounded-xl border p-3 sm:grid-cols-[1.4fr_1.4fr_0.7fr_0.7fr_0.7fr_auto_auto]">
-              <SelectField label="Verkehrsmittel" value={l.mode} options={opts(TRANSPORT_LABELS)} disabled={d} onChange={(v) => v && setLeg(i, { mode: v })} />
-              <TextField label="Strecke" value={l.label} disabled={d} onChange={(v) => setLeg(i, { label: v })} />
-              <NumberField label="km einfach" value={l.km_one_way} disabled={d} onChange={(v) => setLeg(i, { km_one_way: v ?? 0 })} />
-              <NumberField label="Personen" value={l.persons} disabled={d} onChange={(v) => setLeg(i, { persons: v ?? 0 })} />
-              <NumberField label="Fahrzeuge" value={l.vehicles} disabled={d || !VEHICLE_MODES.includes(l.mode)} onChange={(v) => setLeg(i, { vehicles: v ?? 0 })} />
-              <CheckField label="hin und zurück" checked={l.round_trip} disabled={d} onChange={(v) => setLeg(i, { round_trip: v })} />
-              <div className="flex items-center justify-between gap-2 sm:justify-end">
-                <span className="text-sm tabular-nums">{formatKg(kg(l))}</span>
-                {!d && (
-                  <Button variant="ghost" size="icon" aria-label="Teilstrecke entfernen" onClick={() => setLegs((x) => x.filter((_, j) => j !== i))}>
-                    <Trash2Icon aria-hidden="true" />
-                  </Button>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+        <ol className="flex flex-col gap-3">
+          {legs.map((l, i) => {
+            const vehicle = VEHICLE_MODES.includes(l.mode)
+            return (
+              <li key={i} className="flex flex-col gap-4 rounded-xl border p-4">
+                <div className="grid gap-4 sm:grid-cols-[minmax(12rem,1fr)_2fr]">
+                  <SelectField label="Verkehrsmittel" value={l.mode} options={opts(TRANSPORT_LABELS)} disabled={d} onChange={(v) => v && setLeg(i, { mode: v })} />
+                  <TextField label="Strecke" hint="z. B. „Leipzig–Innsbruck“" value={l.label} disabled={d} onChange={(v) => setLeg(i, { label: v })} />
+                </div>
+                <div className="flex flex-wrap items-end gap-x-6 gap-y-4">
+                  <NumberField label="km einfach" value={l.km_one_way} disabled={d} onChange={(v) => setLeg(i, { km_one_way: v ?? 0 })} />
+                  <NumberField label="Personen" value={l.persons} disabled={d} onChange={(v) => setLeg(i, { persons: v ?? 0 })} />
+                  {vehicle && <NumberField label="Fahrzeuge" value={l.vehicles} disabled={d} onChange={(v) => setLeg(i, { vehicles: v ?? 0 })} />}
+                  <div className="flex h-8 items-center">
+                    <CheckField label="hin und zurück" checked={l.round_trip} disabled={d} onChange={(v) => setLeg(i, { round_trip: v })} />
+                  </div>
+                  <div className="ml-auto flex h-8 items-center gap-2">
+                    <span className="text-sm whitespace-nowrap tabular-nums">
+                      {formatKg(kg(l))} CO2e{vehicle ? ' (nach Fahrzeugen)' : ''}
+                    </span>
+                    {!d && (
+                      <Button variant="ghost" size="icon" aria-label={`Teilstrecke ${i + 1} entfernen`} onClick={() => setLegs((x) => x.filter((_, j) => j !== i))}>
+                        <Trash2Icon aria-hidden="true" />
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </li>
+            )
+          })}
+        </ol>
         {!d && (
           <div>
             <Button variant="outline" onClick={() => setLegs((x) => [...x, { mode: 'rail_long', label: null, km_one_way: 0, persons: f.co2_persons ?? p.calc.suggestions.co2_persons ?? 0, vehicles: 0, round_trip: true }])}>

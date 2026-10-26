@@ -149,7 +149,7 @@ export function CheckField(props: { label: ReactNode; checked: boolean; onChange
   )
 }
 
-/** Feld mit automatischem Vorschlag (Prototyp 4.2): „geändert“ und „Vorschlag übernehmen“. */
+/** Feld mit automatischem Vorschlag (Prototyp 4.2): „Vorschlag“ bzw. „geändert, Vorschlag n · übernehmen“ unter dem Feld. */
 export function SuggestedNumber(props: {
   label: string
   value: number | null
@@ -161,6 +161,23 @@ export function SuggestedNumber(props: {
   onChange: (v: number | null) => void
   onReset: () => void
 }) {
+  const changed = props.touched && props.suggestion !== null && props.value !== props.suggestion
+  const note =
+    props.suggestion === null ? null : changed ? (
+      <>
+        geändert, Vorschlag {props.suggestion}
+        {!props.disabled && (
+          <>
+            {' · '}
+            <button type="button" className="underline underline-offset-4" onClick={props.onReset}>
+              übernehmen
+            </button>
+          </>
+        )}
+      </>
+    ) : (
+      'Vorschlag'
+    )
   return (
     <NumberField
       label={props.label}
@@ -168,20 +185,14 @@ export function SuggestedNumber(props: {
       onChange={props.onChange}
       disabled={props.disabled}
       missing={props.missing}
-      hint={props.hint}
-      suffix={
-        props.touched && props.suggestion !== null ? (
-          <span className="flex items-center gap-2 text-xs text-muted-foreground">
-            geändert (Vorschlag {props.suggestion})
-            {!props.disabled && (
-              <button type="button" className="underline underline-offset-4" onClick={props.onReset}>
-                Vorschlag übernehmen
-              </button>
-            )}
-          </span>
-        ) : props.suggestion !== null ? (
-          <span className="text-xs text-muted-foreground">Vorschlag</span>
-        ) : null
+      hint={
+        note || props.hint ? (
+          <>
+            {note}
+            {note && props.hint ? <br /> : null}
+            {props.hint}
+          </>
+        ) : undefined
       }
     />
   )
