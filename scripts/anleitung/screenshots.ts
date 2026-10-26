@@ -36,6 +36,7 @@ const ZUGANG = {
   referent: 'test.referent@dav-leipzig.de',
   kiju: 'test.kiju@dav-leipzig.de',
   vorstand: 'test.vorstand@dav-leipzig.de',
+  touren: 'test.touren@dav-leipzig.de',
 } as const
 
 // Feste IDs aus supabase/seed.sql und seed-ez.sql
@@ -230,6 +231,53 @@ const SHOTS: Shot[] = [
     schritte: (p) => p.getByRole('link', { name: 'Budgetpflege' }).first().click(),
     hoehe: 1060,
   },
+
+  // Planungshilfe Touren und Kurse (Seed SEED_WITH_TK=1, Planungen 1–9)
+  { name: 'tk-planungen', zugang: 'touren', pfad: '/tk' },
+  { name: 'tk-neu', zugang: 'touren', pfad: '/tk/neu' },
+  { name: 'tk-planung', zugang: 'touren', pfad: '/tk', schritte: (p) => link(p, 'Hüttentour Stubaier Alpen (Test)'), hoehe: 1000 },
+  {
+    name: 'tk-anreise',
+    zugang: 'touren',
+    pfad: '/tk',
+    schritte: async (p) => {
+      await link(p, 'Hüttentour Stubaier Alpen (Test)')
+      await klick(p, /^3\. Termin/)
+    },
+    hoehe: 1300,
+  },
+  {
+    name: 'tk-kalkulation',
+    zugang: 'touren',
+    pfad: '/tk',
+    schritte: async (p) => {
+      await link(p, 'Hüttentour Stubaier Alpen (Test)')
+      await klick(p, /^6\. Kalkulation/)
+    },
+    hoehe: 1500,
+  },
+  {
+    name: 'tk-ausgaben',
+    zugang: 'touren',
+    pfad: '/tk',
+    schritte: async (p) => {
+      await link(p, 'Hüttentour Stubaier Alpen (Test)')
+      await klick(p, /^Ausgaben/)
+    },
+    hoehe: 1200,
+  },
+  {
+    name: 'tk-freigeben',
+    zugang: 'touren',
+    pfad: '/tk',
+    schritte: async (p) => {
+      await link(p, 'Hüttentour Stubaier Alpen (Test)')
+      await klick(p, 'Freigeben')
+    },
+    dialog: true,
+  },
+  { name: 'tk-auswertung', zugang: 'geschaeftsstelle', pfad: '/tk/auswertung?jahr=2027' },
+  { name: 'tk-planungen-mobil', zugang: 'touren', pfad: '/tk', mobil: true },
 ]
 
 async function anmelden(page: Page, email: string) {
