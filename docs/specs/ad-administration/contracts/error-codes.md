@@ -22,7 +22,7 @@ Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnun
 | `AD_NO_TEMPLATE` | Bitte zuerst mindestens eine Rechtevorlage zuweisen. | R17 | umgesetzt |
 | `AD_MAIL_FAILED` | Die Einladung konnte nicht verschickt werden. Bitte später erneut versuchen. | – | umgesetzt |
 | `AD_TEMPLATE_NAME_TAKEN` / `ad_templates_name_key` | Eine Rechtevorlage mit diesem Namen gibt es bereits. | – | umgesetzt |
-| `AD_SCOPE_NOT_ALLOWED` / `ad_template_rights_scope_allowed` | Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement und in der Anwesenheitserfassung möglich. | R30 | Datenbank umgesetzt (v0.8, `20261026000100`); Text in der Oberfläche folgt mit T120 (bis dahin der Kerntext) |
+| `AD_SCOPE_NOT_ALLOWED` / `ad_template_rights_scope_allowed` | Die Reichweite ‚Referat‘ ist nur im Ehrenamtsmanagement, in der Anwesenheitserfassung, in der Planungshilfe Touren und Kurse und in Finanzen möglich. | R30 | umgesetzt; Text v0.10 (`20261029000100`) |
 | `AD_REFERAT_REQUIRED` | Bitte mindestens ein Referat auswählen. | R31 | umgesetzt |
 | `AD_CONFIDENTIAL_ONLY_AD` | Nur mit Rechten auf die Administration möglich. | R29 | umgesetzt |
 | `AD_QUALIFICATION_NAME_REQUIRED` | Bitte eine Bezeichnung angeben. | R21 | umgesetzt |
@@ -37,6 +37,17 @@ Diese Liste ist vollständig und normativ: Die Specs verweisen für die Zuordnun
 | `AD_LOCATION_NAME_TAKEN` | Einen Ort mit dieser Bezeichnung gibt es bereits. | R43 | Datenbank umgesetzt (`20261026000200`); Oberfläche T120 |
 | `AD_SEARCH_TOO_SHORT` | Bitte mindestens 2 Zeichen eingeben. | R44 | Datenbank umgesetzt (`20261026000300`) |
 | `AD_TOO_MANY_IDS` | Etwas ist schiefgelaufen. Bitte versuche es erneut. (allgemeine Meldung, Programmierfehler; Product Owner 24.10.2026) | R44 | Datenbank umgesetzt (`20261026000300`) |
+| `AD_APPROVE_NOT_ALLOWED` / `ad_template_rights_approve_allowed` | ‚Darf freigeben‘ ist nur in Finanzen und in der Planungshilfe und nur zusammen mit einer Stufe möglich. | R50 | Datenbank umgesetzt (`20261029000100`); Oberfläche T74 |
+| `AD_RATE_FIELD_REQUIRED` (Detail: Feld) | Bitte ‚<Feld>‘ angeben. | R46, R51, R54 | Datenbank umgesetzt (`20261029000200`, `…0300`) |
+| `AD_RATE_VALUE` | Wert ungültig. | R46 | Datenbank umgesetzt (`20261029000200`) |
+| `AD_RATE_DUPLICATE` | Für dieses Datum gibt es schon einen Wert. | R46, R52, R53, R54 | Datenbank umgesetzt (`20261029000200`, `…0300`) |
+| `AD_REMUNERATION_DUPLICATE` | Diese Bezeichnung gibt es schon. | R51 | Datenbank umgesetzt (`20261029000300`) |
+| `AD_RATE_KEY_UNKNOWN` (Detail: Schlüssel) | Den Satz ‚<Schlüssel>‘ gibt es nicht. | R51 | Datenbank umgesetzt (`20261029000300`) |
+| `AD_REMUNERATION_POSITION` | Organisationspauschale und Lehreinheit nur ‚ohne Rolle‘, übrige Positionen mit Sätzen für Trainer:in und Helfer:in. | R51 | Datenbank umgesetzt (`20261029000300`) |
+| `AD_REMUNERATION_INACTIVE` | Diese Abrechnungsart ist nicht mehr aktiv. Bitte eine andere wählen. | R52 | Datenbank umgesetzt (`20261029000300`) |
+| `AD_DEADLINE_INVALID` | Bitte ein gültiges Datum angeben. | R53 | Datenbank umgesetzt (`20261029000300`) |
+| `AD_DEADLINE_MISSING` | Etwas ist schiefgelaufen. Bitte versuche es erneut. (keine Frist für das Halbjahr; Stammdaten prüfen) | R53 | Datenbank umgesetzt (`20261029000300`) |
+| `AD_BIC_INVALID` | BIC ungültig. | R54 | Datenbank umgesetzt (`20261029000300`) |
 | `AD_FORBIDDEN`, SQLSTATE `42501` | Für diesen Bereich hast du keine Rechte. | R8, R43 | umgesetzt |
 | Constraint `ea_referate_name_key` bzw. `ea_gremien_name_key` (kein Code, [ANNAHME]) | ~~Ein Referat mit dieser Bezeichnung gibt es bereits. / Ein Gremium mit dieser Bezeichnung gibt es bereits.~~ ersetzt durch „Diese Bezeichnung gibt es bereits.“ (EA spec.md Abschnitt 6, US-EA-14 AK3; Zeile im Abschnitt EA) | – | umgesetzt (Oberfläche: `/ea/stammdaten`) |
 | Constraint `ad_qualification_types_discipline_not_blank` / `…_issuer_not_blank` (kein Code, [ANNAHME]) | Bitte eine Sparte angeben. / Bitte einen Aussteller angeben. | US-AD-17 AK2 | umgesetzt |

@@ -26,8 +26,9 @@ select results_eq(
             ('Geschäftsstelle', 'AM', 'manage'), ('Geschäftsstelle', 'EA', 'manage'), ('Geschäftsstelle', 'EZ', 'manage'),
             ('Geschäftsstelle', 'FI', 'manage'),
             ('Geschäftsstelle', 'GR', 'manage'), ('Geschäftsstelle', 'GS', 'manage'), ('Geschäftsstelle', 'OA', 'manage'),
-            ('Geschäftsstelle', 'PM', 'manage'), ('Referent:in', 'EA', 'edit'), ('Referent:in', 'EZ', 'edit') $$,
-  'Startvorlagen nach spec.md Abschnitt 3 (Kern v0.7, Nachtrag v0.8); Vorstand ohne Rechte'
+            ('Geschäftsstelle', 'PM', 'manage'), ('Referent:in', 'EA', 'edit'), ('Referent:in', 'EZ', 'edit'),
+            ('Referent:in', 'FI', 'read') $$,
+  'Startvorlagen nach spec.md Abschnitt 3 (Kern v0.7, Nachträge v0.8 und v0.10); Vorstand ohne Rechte'
 );
 select is((select count(*)::int from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
            where t.name = 'Vorstand'), 10, 'Vorstand hat je Modul eine Zeile');

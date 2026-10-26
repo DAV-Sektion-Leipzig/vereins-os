@@ -502,6 +502,22 @@ Außerdem laufen `db push` und `seed.sh` gegen TEST ohne Fehler. AK2 und AK5 wer
 - [ ] T120 [US-AD-27] [US-AD-28] [US-AD-29] (spec T55) Oberfläche: Zeile Anwesenheitserfassung und Reichweite „Referat“ für EZ in der Vorlagen-Matrix (R30, neuer Meldungstext in `src/lib/errors.ts`), /ad/orte Liste und Formular mit Navigationseintrag, Komponenten „Personensuche Aktive“ und „Auswahlfeld Ort“ – **zurückgestellt** (src/ nicht Teil der Sitzung vom 24.10.2026)
 - [ ] T121 (spec T58) Nach Freigabe des Product Owners nach TEST ausrollen (`npx supabase db push --linked`, Seed-Ergänzung Orte) und quickstart.md C4 mit den Testzugängen abnehmen
 
+## Phase 16: Nachtrag v0.10 Finanzen und Aktion „freigeben“ (Branch `ad-nachtrag-v010`, spec v0.10.0)
+
+**Zweck**: spec T68–T73, T75, T76 sowie T60 und der Vergütungsteil von T61 (Sätze aus Nachtrag v0.9, mit Finanzen vorgezogen). Datenbank, pgTAP, Seed, Fehlercodes. Die Oberfläche (spec T74) folgt auf einem eigenen Branch, weil `src/` nicht auto-gemergt wird. Die Schlüssel der Planungshilfe außerhalb der Vergütung (Reisekosten, Beitrag, Zahlungsgebühren, Klima, Grenzwerte der Planung) kommen mit der Planungshilfe (T61 Rest); für `flight_min_km` gibt es noch keinen Wert.
+
+**Unabhängiger Test**: pgTAP 290–293 grün; angepasste Tests 020, 070, 150 grün.
+
+- [x] T122 [spec T68] `supabase/migrations/20261029000100_ad_approve.sql`, `supabase/tests/database/290_ad_approve.test.sql`: Spalte `ad_template_rights.can_approve` mit Check und Trigger (R50, `AD_APPROVE_NOT_ALLOWED`), R30 für EA, EZ, TK, FI; `ad_my_approve_referate`, `ad_has_approve`, `ad_can_approve`
+- [x] T123 [spec T60, T61 Teil, T69 Teil] `supabase/migrations/20261029000200_ad_rates.sql`, `supabase/tests/database/291_ad_rates.test.sql`: Enum `ad_rate_group`, Tabelle `ad_rates` (R46), `ad_can_edit_rates`, `ad_can_read_rates` (ohne TKF), `ad_rates_at`; Startbestand Vergütung (`rTL`, `rTLh`, `rH`, `rHh`, `rOrg`, `rLE`, `rTE`, `rTEH`, `rFT`, `rFTh`, `rFH`, `rFHh`, `rWK`, `rWKH`) und `maxUeL` (3.000 € ab 2021, 3.300 € ab 2026)
+- [x] T124 [spec T69, T70] `supabase/migrations/20261029000300_ad_remuneration.sql`, `supabase/tests/database/292_ad_remuneration.test.sql`: `ad_remuneration_kinds`, `ad_remuneration_positions`, `ad_remuneration_defaults`, `ad_settlement_deadlines`, `ad_payout_settings`, `ea_referate.semiannual_settlement` (R51–R54) mit Startbestand; `ad_can_edit_remuneration`, `ad_can_read_remuneration`, `ad_remuneration_default_at`, `ad_settlement_deadline`, `ad_payout_settings_at`
+- [x] T125 [spec T71] `supabase/migrations/20261029000400_ad_fi_start_values.sql`: Referent:in FI lesen + freigeben (Reichweite Referat), ohne Änderungen des Admins zu überschreiben; Tests 020, 150 angepasst, 070 prüft den Check jetzt mit SC
+- [x] T126 [spec T72] `supabase/migrations/20261029000500_ad_finance_data.sql`, `supabase/tests/database/293_ad_finance_data.test.sql`: `fi_person_visible` (Platzhalter), `ea_person_names` um Finanzen erweitert, `ea_person_finance_data` (R55, R56)
+- [x] T127 [P] [spec T73] `contracts/error-codes.md`: neue Codes v0.10, Text `AD_SCOPE_NOT_ALLOWED`
+- [x] T128 [spec T76] `supabase/seed.sql`: fiktive Angaben der Sektion (Beispiel-IBAN, BIC `TESTDEFFXXX`, Sachkonto „0000 0“)
+- [ ] T129 [spec T74] Oberfläche: Spalte „darf freigeben“ in der Vorlagen-Matrix, Seiten /ad/saetze (aus v0.9 T64), /ad/abrechnungsarten, /ad/auszahlung, Navigationseinträge – eigener Branch `us-ad-v010-oberflaeche`
+- [ ] T130 [spec T77] Nach Freigabe des Product Owners nach TEST ausrollen und mit Admin und Geschäftsstelle abnehmen
+
 ## Abhängigkeiten und Reihenfolge
 
 ### Zwischen den Phasen

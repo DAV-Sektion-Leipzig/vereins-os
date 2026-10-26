@@ -63,7 +63,7 @@ select pg_temp.as_owner();
 alter table public.ad_template_rights disable trigger ad_template_rights_guard;
 select throws_ok(
   $$ update public.ad_template_rights set scope = 'referat'
-      where template_id = (select id from public.ad_templates where name = 'Vorstand') and module_code = 'FI' $$,
+      where template_id = (select id from public.ad_templates where name = 'Vorstand') and module_code = 'SC' $$,
   '23514', null, 'Check ad_template_rights_scope_allowed sichert ab');
 alter table public.ad_template_rights enable trigger ad_template_rights_guard;
 
