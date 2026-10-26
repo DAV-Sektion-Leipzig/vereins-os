@@ -19,7 +19,7 @@ Kürzel der Priorität für die Rückmeldung: **M** = Must (MVP), **S** = Should
 | B2 | Einnahmen Plan / erreicht / fehlt noch | Vorstand, Referat | DATEV-Export | DS-MVP | – |
 | B3 | Verbrauch im Verhältnis zum abgelaufenen Jahr („schneller als geplant“) als Hinweis | Referat | B1 | DS-MVP | – |
 | B4 | Einzelbuchungen je Budgetposten | Geschäftsstelle, Vorstand, Admin, Budgetpflege; Referat nur eigene Budgetposten (Q-DS1, Q-DS15) | DATEV-Export (FI) | DS-MVP | Buchungstexte enthalten Namen; Einzelbuchungen laufendes Jahr + Vorjahr (Q-DS11) |
-| B12 | Hinweise und geänderter Plan je Budgetposten, Vorschläge zur Umschlüsselung (Q-DS16, Q-DS17) | Referat (eigene Posten), Budgetpflege | Referent:in | DS-MVP | – |
+| B12 | Hinweise, Umschichtungen (beantragt / bestätigt) und Vorschläge zur Umschlüsselung je Budgetposten (Q-DS16 bis Q-DS18) | Referat (eigene Posten), Budgetpflege | Referent:in | DS-MVP | – |
 | B5 | Nicht zugeordnete Buchungen, Prüfung des Exports | Geschäftsstelle, Vorstand | DATEV-Export | DS-MVP | – |
 | B6 | Monatsverlauf je Gesamtbudget (kumuliert gegen Plan-Linie) | Vorstand, Referat | DATEV-Export | DS-MVP oder S | – |
 | B7 | Vergleich mit dem Vorjahr (gleicher Stichtag und ganzes Vorjahr) je Gesamtbudget und Budgetposten (Q-DS9, entschieden) | Vorstand, Referat | Summen je Budgetposten und Monat (FI) | DS-MVP | Summen je Monat bleiben, Einzelbuchungen nur Vorjahr (Q-DS11) |

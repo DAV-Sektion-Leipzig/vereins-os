@@ -1,6 +1,7 @@
 # Übergabe: Dashboard → Finanzen (Bereich Budget)
 
-Stand: 26.10.2026 · Version 1.5 · Status: offen (einzuarbeiten in den Steckbrief Finanzen als neuer, vorgezogener Bereich)
+Stand: 26.10.2026 · Version 1.6 · Status: offen (einzuarbeiten in den Steckbrief Finanzen als neuer, vorgezogener Bereich)
+Änderungen v1.6: B16 nach Q-DS18 (Umschichtung mit Bestätigung durch die Budgetpflege).
 Änderungen v1.5: Q-DS15 bis Q-DS17: Summen für alle, Einzelbuchungen je Referat (B9), Pflege durch Referent:innen (neu B15 Hinweise, B16 Plan ändern, B17 Vorschlag Umschlüsselung), B3 und B10 angepasst.
 Änderungen v1.4: B3 nach Q-DS6 (Sichtbarkeit je Gesamtbudget: Referat, alle, ohne Referat).
 Änderungen v1.3: neu B14 Vorjahresvergleich (Q-DS9).
@@ -36,7 +37,7 @@ Damit ändert sich im Steckbrief Finanzen v0.5 „Nicht im Scope: … Budget-Üb
 | B13 | **Später:** Import über die DATEV-Schnittstelle des Schnittstellen-Connectors statt CSV; Rechenregeln und Prüfungen bleiben gleich. | Q-DS7 |
 | B14 | **Vorjahresvergleich** (Q-DS9, Product Owner 26.10.2026): Summen je Budgetposten und Monat bleiben über die Löschfrist der Einzelbuchungen hinaus erhalten [OFFEN: wie viele Jahre]; Lesefunktion liefert je Budgetposten und Gesamtbudget das Vorjahr bis zum gleichen Stichtag (Datenstand des laufenden Jahres) und das ganze Vorjahr; Verknüpfung der Budgetposten zweier Jahre über Name und Gesamtbudget [ANNAHME], neue Posten ohne Vorjahreswert. | Q-DS9 |
 | B15 | **Hinweis je Budgetposten** (Q-DS16): Text, wer, wann; pflegt die Referent:in des Referats oder die Budgetpflege; sichtbar für alle mit Budget-Sicht; Historie. Ersetzt für Referent:innen den Hinweis der Zuordnung im Prototyp nicht (der bleibt bei der Budgetpflege) [ANNAHME]. | Q-DS16 |
-| B16 | **Plan ändern** (Q-DS16): Referent:in ändert den Plan eines Budgetpostens ihres Referats mit Grund; gespeichert mit Historie neben dem beschlossenen Plan aus der Excel. [OFFEN Q-DS18: Bestätigung, nur Umschichten oder auch Erhöhen, Verhalten beim erneuten Einlesen der Excel.] | Q-DS16 |
+| B16 | **Plan umschichten** (Q-DS16, Q-DS18, entschieden 26.10.2026): Referent:in beantragt eine Umschichtung (Betrag von Budgetposten A nach B, beide im Gesamtbudget ihres Referats, gleiche Art [ANNAHME]) mit Grund; die Summe des Gesamtbudgets bleibt gleich. Stand beantragt → bestätigt / abgelehnt (mit Grund) durch die Budgetpflege; Liste offener Anträge für die Budgetpflege. Aktueller Plan = beschlossener Plan (Excel) + bestätigte Umschichtungen; beide werden angezeigt und im Vorjahresvergleich verwendet [ANNAHME: Vergleich mit aktuellem Plan]. Beim erneuten Einlesen der Excel bleiben bestätigte Umschichtungen erhalten, solange beide Posten existieren; sonst Hinweis [ANNAHME]. Die Budgetpflege darf direkt umschichten [ANNAHME]. | Q-DS16, Q-DS18 |
 | B17 | **Vorschlag Umschlüsselung** (Q-DS17): Referent:in schlägt für eine Buchung eines Budgetpostens ihres Referats einen anderen Budgetposten mit Grund vor; Stand vorgeschlagen → angenommen / abgelehnt (mit Grund); erst „angenommen“ wirkt wie B8; Liste offener Vorschläge für die Budgetpflege. | Q-DS17 |
 | B12 | **Abnahme:** fiktiver DATEV-Export im Repository mit allen Sonderfällen (Doppelzählung, Storno, Umbuchung, EB-Wert, anderes Jahr, fehlende Einzelbuchung, Einzelbuchungsregel, Kostenstelle); Vergleich mit den echten Referenzwerten des Erstexports nur lokal durch den Product Owner. | Prototyp |
 
