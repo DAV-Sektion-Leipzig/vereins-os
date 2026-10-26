@@ -21,7 +21,7 @@ Die Tasks folgen spec.md Abschnitt 10 (T1–T16). Ein eigener Spec-Kit-Plan ents
 - [x] FT07 (spec T7) `supabase/migrations/20261031000700_fi_climbing.sql`: Abgleich Punktekonto
 - [x] FT08 (spec T8) Fehlercodes `FI_*` in `docs/specs/ad-administration/contracts/error-codes.md`; `ad_modules.is_available` für FI erst mit der Freigabe
 - [x] FT09 (spec T9) pgTAP `610_fi_structure.test.sql`, `620_fi_flow.test.sql`
-- [ ] FT10 (spec T10) Seed `supabase/seed-fi.sql` mit `SEED_WITH_FI` (Personen, Einsätze, Testzugänge Lea Leistung und Gerd Geschäftsstelle) – eigener PR
+- [x] FT10 (spec T10) Seed `supabase/seed-fi.sql` mit `SEED_WITH_FI=1 supabase/seed.sh` (Personen 601–606, Einsätze im 1. Halbjahr 2026, Leistungsgruppe Test, Testzugänge Lea Leistung `test.leistung@dav-leipzig.de` und Gerd Geschäftsstelle `test.geschaeftsstelle2@dav-leipzig.de`); erwartete Beträge im Kopf der Datei. Ausführen in TEST durch den Product Owner (`.env.local`)
 
 ## Phase 2: Oberfläche (je eigener Branch, Merge durch den Product Owner)
 
