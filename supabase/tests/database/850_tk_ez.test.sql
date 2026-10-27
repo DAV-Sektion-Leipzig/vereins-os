@@ -161,7 +161,7 @@ update public.ea_persons set volunteer_status = 'active' where id = 'a0000000-00
 select pg_temp.as_user(3);
 select throws_ok($$ select public.ez_upsert_planned_event(gen_random_uuid(), 'tour', (select id from public.ea_referate where name = 'Touren'),
                       'X', 'single', current_date, null, null, null, 'under_8h', 'a0000000-0000-4000-8000-000000000016', '[]') $$,
-  'P0001', 'EZ_FORBIDDEN', 'Vorstand: kein Einsatz aus der Planungshilfe');
+  '42501', null, 'Vorstand: kein Einsatz aus der Planungshilfe (Funktion nur intern, S-02)');
 select pg_temp.as_user(14);
 select throws_ok($$ select public.ez_planned_event_state(current_setting('test.p')::uuid) $$, 'P0001', 'EZ_NOT_FOUND',
   'Alex: Stand einer Tour nicht lesbar');

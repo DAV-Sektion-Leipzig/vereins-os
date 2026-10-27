@@ -86,3 +86,15 @@ Rückgabe: `event_id uuid, start_date date, group_name text, participants_presen
 | `ad_find_similar_persons(p_first, p_last, p_email)` | AD | Dublettenprüfung |
 | `ad_locations` (Tabelle) | AD | Orte |
 | `ea_referate` (Tabelle) | AD | Referate |
+
+## Anbindung der Planungshilfe (TK)
+
+Migrationen `20261106000100_ez_planned_event.sql`, Härtung `20261108000200_ez_planned_event_hardening.sql` (Befund S-02, Sicherheits-Review).
+
+| Funktion | Rückgabe | Aufruf | Rechte und Prüfungen | Fehler |
+|---|---|---|---|---|
+| `ez_upsert_planned_event(p_tk_plan_id, p_kind, p_referat_id, p_title, p_span, p_start_date, p_start_time, p_end_date, p_end_time, p_day_category, p_organizer_person_id, p_persons jsonb, p_remuneration_kind_code text default null)` | uuid (Einsatz) | **nur intern** über `tk_ez_sync` (aus `tk_save_plan`, `tk_change_status` publish); kein `execute` für `authenticated` | `tk_can_write(p_referat_id)`; Planung vorhanden, `tk_plans.referat_id = p_referat_id`, Status `approved` (Übergang zu „in Yolawo angelegt“) oder `published` | `EZ_FORBIDDEN`, `EZ_KIND_NOT_ALLOWED`, `EZ_FIELD_REQUIRED`, `EZ_TITLE_LENGTH`, `EZ_END_DATE`, `EZ_EVENT_CANCELLED`, `EZ_EVENT_LOCKED`, `EZ_SETTLED`, `EZ_FIELD_LOCKED`, `EZ_REMUNERATION_INACTIVE`, `EZ_ORGANIZER_NOT_ACTIVE`, `EZ_ROLE_NOT_ALLOWED`, `EZ_DUPLICATE_PERSON`, `EZ_PERSON_NOT_ACTIVE` |
+| `ez_cancel_planned_event(p_tk_plan_id uuid, p_reason text)` | void | **nur intern** über `tk_change_status` cancel; kein `execute` für `authenticated` | `tk_can_write(referat_id)` des Einsatzes | `EZ_FORBIDDEN`, `EZ_EVENT_LOCKED`, `EZ_SETTLED`, `EZ_CANCEL_REASON` |
+| `ez_planned_event_state(p_tk_plan_id uuid)` | jsonb oder null | Frontend der Planungshilfe (`authenticated`) | `tk_can_read(referat_id)` | `EZ_NOT_FOUND` |
+
+`ez_events.tk_plan_id` verweist per Fremdschlüssel `ez_events_tk_plan_id_fkey` auf `tk_plans(id)` (`on delete restrict`; `tk_delete_plan` löscht ohnehin nur Planungen ohne Einsatz). Gibt es beim Lauf der Migration verwaiste Werte, bleibt der Fremdschlüssel `not valid` (gilt für neue und geänderte Zeilen) und die Migration meldet die Anzahl per NOTICE.
