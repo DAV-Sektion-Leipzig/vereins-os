@@ -12,6 +12,8 @@ import {
   filterHref,
   hasActiveFilter,
   VOLUNTEER_STATUS_LABELS,
+  type ExpiryItem,
+  type ExpiryKind,
   type VolunteerRow,
   type VolunteersResult,
 } from '@/features/ea/aktive/data'
@@ -120,32 +122,65 @@ function SearchForm({ result: { filter, options }, showReset }: SearchFormProps)
         />
       </div>
       {/* key setzt die Filterfelder zurück, wenn sich die Filter über die Adresse ändern */}
-      <Filterleiste key={filterHref({ ...filter, q: '' }, 1)} filter={filter} options={options} />
-      {showReset && (
-        <Button variant="ghost" asChild className="self-start">
-          <Link to="/ea/aktive">Filter zurücksetzen</Link>
-        </Button>
-      )}
+      <Filterleiste key={filterHref({ ...filter, q: '' }, 1)} filter={filter} options={options}>
+        {showReset && (
+          <Button variant="ghost" asChild className="self-start">
+            <Link to="/ea/aktive">Filter zurücksetzen</Link>
+          </Button>
+        )}
+      </Filterleiste>
     </Form>
   )
 }
 
 function Name({ person }: { person: VolunteerRow }) {
   return (
-    <span className="flex flex-wrap items-center gap-2">
-      <Link to={`/ea/aktive/${person.id}`} className="font-medium underline-offset-4 hover:underline">
-        {personName(person)}
-      </Link>
-      {person.trainer_without_license && <WithoutLicense />}
+    <Link to={`/ea/aktive/${person.id}`} className="font-medium underline-offset-4 hover:underline">
+      {personName(person)}
+    </Link>
+  )
+}
+
+const MAX_EXPIRIES = 2
+
+const EXPIRY_KIND_LABELS: Record<ExpiryKind, string> = {
+  license: 'Lizenz',
+  qualification: 'Qualifikation',
+  police_clearance: 'Führungszeugnis',
+}
+
+// Ablauf an einer Stelle: schlechtester Status (Badge), darunter was abgelaufen ist oder bald abläuft.
+// Gilt „ohne gültige Lizenz“, ersetzt das Kennzeichen mit der abgelaufenen Lizenz das Badge (spec.md EA Abschnitt 6).
+function Ablauf({ person }: { person: VolunteerRow }) {
+  if (person.worst_expiry === 'none' && !person.trainer_without_license) return <AblaufBadge status="none" />
+  const expiredLicenses = person.trainer_without_license ? person.expiries.filter((e) => e.kind === 'license') : []
+  const others = person.expiries.filter((e) => !expiredLicenses.includes(e))
+  const shown = others.length > MAX_EXPIRIES ? others.slice(0, MAX_EXPIRIES - 1) : others
+  const more = others.length - shown.length
+  return (
+    <span className="flex flex-col items-start gap-1">
+      {person.trainer_without_license ? (
+        <WithoutLicense licenses={expiredLicenses} />
+      ) : (
+        <AblaufBadge status={person.worst_expiry} />
+      )}
+      {shown.map((e) => (
+        <span key={e.propertyId} className="text-xs text-muted-foreground">
+          {[EXPIRY_KIND_LABELS[e.kind], e.code].filter(Boolean).join(' ')} · {formatDate(e.validUntil)}
+          {e.status === 'expiring' && person.worst_expiry === 'expired' && ' (läuft bald ab)'}
+        </span>
+      ))}
+      {more > 0 && <span className="text-xs text-muted-foreground">+ {more} weitere</span>}
     </span>
   )
 }
 
-function WithoutLicense() {
+function WithoutLicense({ licenses }: { licenses: ExpiryItem[] }) {
+  const detail = licenses.map((e) => `${e.code ?? 'Lizenz'} bis ${formatDate(e.validUntil)}`).join(', ')
   return (
     <Badge className="bg-destructive/10 text-destructive">
       <TriangleAlertIcon data-icon="inline-start" aria-hidden="true" />
-      ohne gültige Lizenz
+      ohne gültige Lizenz{detail && ` · ${detail}`}
     </Badge>
   )
 }
@@ -175,7 +210,7 @@ const COLUMNS: Column<VolunteerRow>[] = [
     className: 'whitespace-normal',
   },
   { key: 'licenses', header: 'Lizenzen', cell: (p) => <List values={p.license_codes} /> },
-  { key: 'expiry', header: 'Ablauf', cell: (p) => <AblaufBadge status={p.worst_expiry} /> },
+  { key: 'expiry', header: 'Ablauf', cell: (p) => <Ablauf person={p} />, className: 'whitespace-normal' },
   {
     key: 'open',
     header: <span className="sr-only">Aktion</span>,
@@ -203,12 +238,14 @@ function VolunteerCard({ person }: { person: VolunteerRow }) {
         {person.referate.length > 0 && (
           <span className="text-sm text-muted-foreground">Referate: {person.referate.join(', ')}</span>
         )}
-        <div className="flex flex-wrap items-center gap-2 text-sm">
-          {person.license_codes.length > 0 && (
-            <span className="text-muted-foreground">Lizenzen: {person.license_codes.join(', ')}</span>
-          )}
-          {person.worst_expiry !== 'none' && <AblaufBadge status={person.worst_expiry} />}
-        </div>
+        {person.license_codes.length > 0 && (
+          <span className="text-sm text-muted-foreground">Lizenzen: {person.license_codes.join(', ')}</span>
+        )}
+        {(person.worst_expiry !== 'none' || person.trainer_without_license) && (
+          <span className="text-sm">
+            <Ablauf person={person} />
+          </span>
+        )}
       </div>
       <Button variant="outline" asChild className="self-start">
         <Link to={`/ea/aktive/${person.id}`} aria-label={`${personName(person)} öffnen`}>

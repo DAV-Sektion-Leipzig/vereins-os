@@ -29,7 +29,7 @@ export function ResponsiveTable<T>({ rows, rowKey, columns, card, empty, caption
 
   return (
     <>
-      <div className="hidden rounded-xl border sm:block">
+      <div className="hidden overflow-hidden rounded-xl border sm:block">
         <Table>
           {caption && <caption className="sr-only">{caption}</caption>}
           <TableHeader>
@@ -43,7 +43,7 @@ export function ResponsiveTable<T>({ rows, rowKey, columns, card, empty, caption
           </TableHeader>
           <TableBody>
             {rows.map((row) => (
-              <TableRow key={rowKey(row)} className="hover:bg-transparent">
+              <TableRow key={rowKey(row)} className="last:border-0 hover:bg-transparent">
                 {columns.map((c, i) => (
                   <TableCell key={c.key} className={cn(i === 0 && 'pl-4', i === columns.length - 1 && 'pr-4', c.className)}>
                     {c.cell(row)}

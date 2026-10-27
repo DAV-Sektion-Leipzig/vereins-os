@@ -39,6 +39,19 @@ export type VolunteerRow = {
   worst_expiry: ExpiryStatus
   trainer_without_license: boolean
   total_count: number
+  /** Abgelaufene und bald ablaufende Eigenschaften aus ea_v_expiry, abgelaufene zuerst */
+  expiries: ExpiryItem[]
+}
+
+export type ExpiryKind = 'license' | 'qualification' | 'police_clearance'
+
+export type ExpiryItem = {
+  propertyId: string
+  kind: ExpiryKind
+  /** Kürzel, sonst Bezeichnung der Qualifikationsart; beim Führungszeugnis null */
+  code: string | null
+  validUntil: string
+  status: 'expired' | 'expiring'
 }
 
 export type VolunteerFilter = {
@@ -206,8 +219,49 @@ export async function loadVolunteers({ request }: LoaderFunctionArgs): Promise<V
   ])
 
   if (list.error || !Array.isArray(list.data)) return { filter, options, rows: [], total: 0, failed: true }
-  const rows = list.data as VolunteerRow[]
+  const listed = list.data as Omit<VolunteerRow, 'expiries'>[]
+  const expiries = await loadExpiries(listed.map((r) => r.id))
+  if (!expiries) return { filter, options, rows: [], total: 0, failed: true }
+  const rows = listed.map((r) => ({ ...r, expiries: expiries.get(r.id) ?? [] }))
   return { filter, options, rows, total: rows[0]?.total_count ?? 0, failed: false }
+}
+
+type ExpiryViewRow = {
+  property_id: string
+  person_id: string
+  kind: ExpiryKind
+  qualification_code: string | null
+  qualification_name: string | null
+  valid_until: string
+  expiry_status: 'expired' | 'expiring'
+}
+
+/** Was abgelaufen ist oder bald abläuft, je Person der Seite (RLS von ea_v_expiry; Referent:in ohne Führungszeugnis). */
+async function loadExpiries(personIds: string[]): Promise<Map<string, ExpiryItem[]> | null> {
+  const byPerson = new Map<string, ExpiryItem[]>()
+  if (personIds.length === 0) return byPerson
+  const { data, error } = await supabase
+    .from('ea_v_expiry')
+    .select('property_id, person_id, kind, qualification_code, qualification_name, valid_until, expiry_status')
+    .in('person_id', personIds)
+    .in('expiry_status', ['expired', 'expiring'])
+  if (error || !data) return null
+  const items = (data as ExpiryViewRow[]).toSorted(
+    (a, b) =>
+      Number(b.expiry_status === 'expired') - Number(a.expiry_status === 'expired') ||
+      a.valid_until.localeCompare(b.valid_until),
+  )
+  for (const e of items) {
+    const item: ExpiryItem = {
+      propertyId: e.property_id,
+      kind: e.kind,
+      code: e.qualification_code ?? e.qualification_name,
+      validUntil: e.valid_until,
+      status: e.expiry_status,
+    }
+    byPerson.set(e.person_id, [...(byPerson.get(e.person_id) ?? []), item])
+  }
+  return byPerson
 }
 
 // --- Person im Detail (US-EA-04, US-EA-11; T038)
