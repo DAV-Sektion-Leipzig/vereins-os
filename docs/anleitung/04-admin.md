@@ -76,6 +76,8 @@ Klicke bei „Zugang“ auf **„Einladen“**. Die Person bekommt eine E-Mail. 
 
 > **Gut zu wissen:** Ein Amt bringt keine Rechte mit. Wird jemand Referent:in, musst du die Vorlage selbst zuweisen. Hört jemand auf, entziehe die Vorlage oder sperre den Zugang.
 
+> **Schutz vor Aussperren:** Deinen eigenen Zugang kannst du nicht sperren. Den Zugang des Notfall-Admins kannst du nicht sperren und ihm die Admin-Rechte nicht entziehen. Mindestens ein aktiver Zugang muss die Administration verwalten können: Den letzten solchen Zugang kannst du nicht sperren, ihm die Vorlage nicht entziehen und in seiner Vorlage die Stufe für die Administration nicht herabsetzen.
+
 ### Eigenschaften einer Person
 
 Unten auf der Detailseite pflegst du die **Eigenschaften** der Person, zum Beispiel Kontaktdaten oder Funktionen. Das geht genauso wie im [Ehrenamtsmanagement](02-referentinnen.md#eine-person-ansehen). Als Admin siehst du auch **vertrauliche** Eigenschaften, zum Beispiel ein Hauptamt.

@@ -1,6 +1,7 @@
 # Anleitung Vereins OS
 
-Stand: 27.10.2026 · Version 3.7
+Stand: 27.10.2026 · Version 3.8
+Änderungen v3.8: Administration: Hinweis zum Schutz vor Aussperren (eigener Zugang, Notfall-Admin und letzter Admin können nicht gesperrt werden bzw. ihre Admin-Rechte nicht verlieren).
 Änderungen v3.7: Gruppen: Das Datum bei Fotoerlaubnis und Einwilligung darf nicht vor dem letzten Eintrag liegen.
 Änderungen v3.6: Qualifikationsarten: neue Spalte „Personen“; Filter „Qualifikation“ in „Aktive“ zeigt nur vergebene Arten.
 Änderungen v3.5: Ehrenamtsmanagement „Aktive“: Filter sind eingeklappt hinter dem Knopf „Filter“, gesetzte Filter stehen als Chips daneben.
