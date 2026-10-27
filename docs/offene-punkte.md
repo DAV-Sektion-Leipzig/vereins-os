@@ -241,7 +241,7 @@ Steckbrief: docs/specs/ds-dashboard/00-steckbrief.md (Version 0.13, Entwurf 26.1
 - API-Key-Verwaltung: im Modul SC statt als Erweiterung von AD (Q-SC9, Product Owner 27.10.2026); Felder und Erinnerung in 01-erhebung.md SC.
 - Weitere Anforderungen kommen aus EA (E-Mail vor Ablauf einer Qualifikation, Geburtstagserinnerung), FI (DATEV/Sparkasse) und OA (Instagram, Umfragen); ggf. TK (Schreib-Schnittstelle Yolawo, falls vorhanden [OFFEN]).
 - DATEV-Schnittstelle für den Import der Buchungen in den Bereich Budget von Finanzen statt CSV (Dashboard Q-DS7, Product Owner 26.10.2026); [OFFEN] welche DATEV-Schnittstelle (z. B. DATEVconnect, Datenservice) und Kosten.
-- Steckbrief v0.3 (Entwurf, 27.10.2026), Erhebung v0.1: specs/sc-schnittstellen/00-steckbrief.md. Offene Fragen dort im Detail:
+- Steckbrief v0.5 (Entwurf, 27.10.2026), Erhebung v0.3, Stories v0.1 (US-SC-01 bis US-SC-16): specs/sc-schnittstellen/00-steckbrief.md. Offene Fragen dort im Detail:
   - Entschieden 27.10.2026 (Product Owner): **Q-SC1** Name in der Oberfläche „Schnittstellen“, Code `SC`; **Q-SC2** MVP = E-Mail-Versand, Iteration 1 DATEV, Iteration 2 Instagram; **Q-SC3** vorerst keine weiteren Dienste.
   - Zurückgestellt: **Q-SC4** DATEV (Schnittstelle, Vertragspartner, Kosten) klärt der Product Owner zu gegebener Zeit, spätestens vor Iteration 1.
   - Entschieden 27.10.2026 (Product Owner): MVP jetzt (Finanzen und Dashboard umgesetzt); **Q-SC6** Texte der E-Mail-Vorlagen pflegt der Admin; **Q-SC8** Freigabe je Anbindung und Modul durch den Admin; **Q-SC9** Tabellen im Modul SC (`sc_`); **Q-SC10** Erinnerung 30 Tage vor Ablauf, Löschung von Protokoll und Postausgang nach 90 Tagen.

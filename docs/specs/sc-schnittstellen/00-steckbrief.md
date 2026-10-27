@@ -1,7 +1,8 @@
 # Steckbrief: Schnittstellen-Connector
 
-Stand: 27.10.2026 · Version 0.5 · Kürzel: SC · Priorität: MVP jetzt, Finanzen und Dashboard sind umgesetzt (Product Owner 27.10.2026) · Ablage: docs/specs/sc-schnittstellen/ · Status: Entwurf · Product Owner: Toni Werner
+Stand: 27.10.2026 · Version 0.5.1 · Kürzel: SC · Priorität: MVP jetzt, Finanzen und Dashboard sind umgesetzt (Product Owner 27.10.2026) · Ablage: docs/specs/sc-schnittstellen/ · Status: Entwurf · Product Owner: Toni Werner
 Grundlage: vision.md (Basis: Administration und Schnittstellen-Connector), modul-landkarte.md v2.18, tech-stack.md (Abschnitte 1 und 4), rollen.md (Rechte-Matrix), glossar.md v1.8 („Basismodul“, „API-Key“), offene-punkte.md v5.19 (Abschnitt SC), querschnitt-administration.md (P8, P9, P10, P16), Anforderungen aus den Steckbriefen und Specs von AD, EA, FI, DS, TK, AM (siehe „Abhängigkeiten“).
+Änderungen v0.5.1: Stories v0.1 (US-SC-01 bis US-SC-16).
 Änderungen v0.5: E-Mail-Versand über **Brevo** statt Google-Konto (Erhebung E5, Product Owner 27.10.2026); E2 bis E7 der Erhebung entschieden.
 Änderungen v0.4: Geschäftsstelle liest den SC (E1 der Erhebung, Product Owner 27.10.2026).
 Änderungen v0.3: Q-SC6, Q-SC8, Q-SC9, Q-SC10 und Zeitpunkt entschieden (Product Owner 27.10.2026): Texte der E-Mail-Vorlagen pflegt der Admin; der Admin gibt je Anbindung die nutzenden Module frei; Tabellen der API-Keys im Modul SC (`sc_`); Erinnerung 30 Tage vor Ablauf, Löschung von Protokoll und Postausgang nach 90 Tagen; MVP jetzt. Erhebung v0.1.
