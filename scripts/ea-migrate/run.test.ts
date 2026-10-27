@@ -1,7 +1,18 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { ImportResult } from './report.ts'
-import { EXIT, main, parseArgs, projectRef, type Io, type Rpc } from './run.ts'
+import {
+  ALREADY_RUN,
+  ALREADY_RUN_MESSAGE,
+  EXIT,
+  main,
+  parseArgs,
+  projectRef,
+  RpcError,
+  UNKNOWN_RESULT_MESSAGE,
+  type Io,
+  type Rpc,
+} from './run.ts'
 import { TEMPLATE_HEADER } from './columns.ts'
 
 const URL_TEST = 'https://abcdefghijklmnopqrst.supabase.co'
@@ -82,4 +93,55 @@ test('Lauf: interner Probelauf, dann Schreiben und Abschlussbericht', async () =
   assert.equal(await main(['--file', 'a.csv', '--run'], io), EXIT.ok)
   assert.deepEqual(calls, [true, false])
   assert.match(files['a.abschlussbericht.md'], /^# Abschlussbericht/)
+})
+
+test('Probelauf nach erfolgtem Import: Hinweis auf Wiederholungsschutz, Lauf abgebrochen (B-07)', async () => {
+  const alreadyRun: ImportResult = {
+    ...clean,
+    errors: [
+      {
+        row: 0,
+        code: ALREADY_RUN,
+        message:
+          'Der Import wurde bereits ausgeführt (5 Personen aus dem Migrationsskript vorhanden). Ein zweiter Lauf würde alle Personen doppelt anlegen.',
+      },
+    ],
+  }
+  const { io, logs, calls, files } = fakeIo([URL_TEST, 'abcdefghijklmnopqrst'], KEY, async () => alreadyRun)
+  assert.equal(await main(['--file', 'a.csv', '--run'], io), EXIT.findings)
+  assert.deepEqual(calls, [true])
+  assert.ok(logs.includes(ALREADY_RUN_MESSAGE))
+  assert.match(logs.at(-1)!, /^Probelauf hat Fehler\. Lauf abgebrochen\./)
+  assert.match(files['a.pruefbericht.md'], /Der Import wurde bereits ausgeführt/)
+})
+
+test('Lauf: EA_IMPORT_ALREADY_RUN der Datenbank → verständliche Meldung (B-07)', async () => {
+  const { io, logs, calls } = fakeIo([URL_TEST, 'abcdefghijklmnopqrst'], KEY, async (_rows, _cutoff, dryRun) => {
+    if (dryRun) return clean
+    throw new RpcError(ALREADY_RUN, 'P0001')
+  })
+  assert.equal(await main(['--file', 'a.csv', '--run'], io), EXIT.findings)
+  assert.deepEqual(calls, [true, false])
+  assert.equal(logs.at(-1), `${ALREADY_RUN_MESSAGE} Lauf abgebrochen, nichts geschrieben.`)
+})
+
+test('Lauf: Fehlerantwort der Datenbank → nichts geschrieben', async () => {
+  const { io, logs } = fakeIo([URL_TEST, 'abcdefghijklmnopqrst'], KEY, async (_rows, _cutoff, dryRun) => {
+    if (dryRun) return clean
+    throw new RpcError('canceling statement due to statement timeout', '57014')
+  })
+  assert.equal(await main(['--file', 'a.csv', '--run'], io), EXIT.findings)
+  assert.equal(logs.at(-1), 'Aufruf fehlgeschlagen, nichts geschrieben: canceling statement due to statement timeout')
+})
+
+test('Lauf: keine Antwort (Netzwerk-Timeout) → Ergebnis unbekannt statt „nichts geschrieben“ (B-07)', async () => {
+  for (const error of [new RpcError('TypeError: fetch failed'), new Error('socket hang up')]) {
+    const { io, logs } = fakeIo([URL_TEST, 'abcdefghijklmnopqrst'], KEY, async (_rows, _cutoff, dryRun) => {
+      if (dryRun) return clean
+      throw error
+    })
+    assert.equal(await main(['--file', 'a.csv', '--run'], io), EXIT.findings)
+    assert.ok(logs.at(-1)!.endsWith(UNKNOWN_RESULT_MESSAGE))
+    assert.doesNotMatch(logs.at(-1)!, /nichts geschrieben/)
+  }
 })
