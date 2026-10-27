@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { CircleAlertIcon, InfoIcon } from 'lucide-react'
-import { useRevalidator } from 'react-router-dom'
+import { useRevalidator, useRouteLoaderData } from 'react-router-dom'
 import { AccessStatusBadge } from '@/components/AccessStatusBadge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -11,12 +11,16 @@ import { saveLoginEmail, type AccessInfo, type PersonRow } from '@/features/ad/p
 import { MESSAGES, toMessage } from '@/lib/errors'
 import { formatDateTime } from '@/lib/format'
 import { callFunction } from '@/lib/functions'
+import type { Me } from '@/lib/rights'
 
 // T095 (US-AD-08, US-AD-09): Login-Adresse nach R20, Einladen / Erneut einladen (R17), Sperren mit Bestätigung, Entsperren.
 type Props = { person: PersonRow; access: AccessInfo | null; lockedByName: string | null; hasTemplate: boolean; canEdit: boolean }
 
 export function ZugangAbschnitt({ person, access, lockedByName, hasTemplate, canEdit }: Props) {
   const revalidator = useRevalidator()
+  // Eigenen Zugang nicht sperren (Befund S-01); die Datenbank prüft das ebenfalls (AD_SELF_LOCK)
+  const { me } = (useRouteLoaderData('protected') as { me: Me | null } | undefined) ?? { me: null }
+  const isSelf = me?.person_id === person.person_id
   const status = person.access_status
   const [editingEmail, setEditingEmail] = useState(false)
   const [locking, setLocking] = useState(false)
@@ -121,7 +125,7 @@ export function ZugangAbschnitt({ person, access, lockedByName, hasTemplate, can
                 {pending === 'invite' ? 'Wird verschickt …' : status === 'invited' ? 'Erneut einladen' : 'Einladen'}
               </Button>
             )}
-            {(status === 'invited' || status === 'active') && (
+            {(status === 'invited' || status === 'active') && !isSelf && (
               <Button variant="destructive" onClick={() => setLocking(true)} disabled={pending !== null}>
                 Sperren
               </Button>

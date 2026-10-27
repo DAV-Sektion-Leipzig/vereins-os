@@ -13,6 +13,9 @@ export class FunctionError extends Error {
 /** HTTP-Status je Fehlercode aus den internen Funktionen (raise exception '<CODE>'). */
 export const RPC_STATUS: Record<string, number> = {
   AD_INVALID_STATUS: 409,
+  AD_LAST_ADMIN: 409,
+  AD_EMERGENCY_PROTECTED: 409,
+  AD_SELF_LOCK: 409,
   AD_EMAIL_LOCKED: 409,
   AD_EMAIL_TAKEN: 409,
   AD_EMAIL_DOMAIN: 422,

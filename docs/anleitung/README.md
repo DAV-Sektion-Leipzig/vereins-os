@@ -1,6 +1,7 @@
 # Anleitung Vereins OS
 
-Stand: 27.10.2026 · Version 3.6
+Stand: 27.10.2026 · Version 3.7
+Änderungen v3.7: Administration: Hinweis zum Schutz vor Aussperren (eigener Zugang, Notfall-Admin und letzter Admin können nicht gesperrt werden bzw. ihre Admin-Rechte nicht verlieren).
 Änderungen v3.6: Qualifikationsarten: neue Spalte „Personen“; Filter „Qualifikation“ in „Aktive“ zeigt nur vergebene Arten.
 Änderungen v3.5: Ehrenamtsmanagement „Aktive“: Filter sind eingeklappt hinter dem Knopf „Filter“, gesetzte Filter stehen als Chips daneben.
 Änderungen v3.4: Ehrenamtsmanagement „Aktive“: Filter stehen in einem eigenen Kasten „Filter“, das Auswahlfeld heißt „Ablaufstatus“, die Spalte „Ablauf“ zeigt, was abgelaufen ist oder bald abläuft, und das Kennzeichen „ohne gültige Lizenz“.

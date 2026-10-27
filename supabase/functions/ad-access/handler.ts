@@ -32,11 +32,25 @@ export async function handleAccess(req: Request, deps: Deps): Promise<Response> 
 
     if (action === 'lock') {
       if (!access || (status !== 'invited' && status !== 'active')) throw new FunctionError(409, 'AD_INVALID_STATUS')
+      // Schutz vor Aussperren (Befund S-01): eigener Zugang, Notfall-Admin, letzter Admin.
+      // Maßgeblich ist die Datenbank; geprüft wird vor dem Bann, damit kein geschützter Zugang gebannt wird.
+      if (access.auth_user_id === actor) throw new FunctionError(409, 'AD_SELF_LOCK')
+      await deps.db.rpc('ad_check_lock', { p_person: personId, p_actor: actor })
       if (access.auth_user_id) {
         const err = await deps.auth.setBanned(access.auth_user_id, true)
         if (err) throw new Error(err)
       }
-      const result = await deps.db.rpc<{ status: AccessStatus }[]>('ad_apply_lock', { p_person: personId, p_actor: actor })
+      let result: { status: AccessStatus }[]
+      try {
+        result = await deps.db.rpc<{ status: AccessStatus }[]>('ad_apply_lock', { p_person: personId, p_actor: actor })
+      } catch (error) {
+        // Lehnt die Datenbank ab (z. B. parallele Änderung), Bann zurücknehmen
+        if (access.auth_user_id) {
+          const err = await deps.auth.setBanned(access.auth_user_id, false)
+          if (err) console.error('ad-access: Bann konnte nicht zurückgenommen werden', err)
+        }
+        throw error
+      }
       return json(200, { status: result[0]?.status ?? 'locked' }, origin)
     }
 

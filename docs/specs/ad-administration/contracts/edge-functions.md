@@ -53,4 +53,6 @@ Request: `{ "person_id": "<uuid>", "action": "lock" | "unlock" | "change_email",
 | unlock | `locked` | `ban_duration: 'none'` | `active`, wenn ein Passwort gesetzt ist (`encrypted_password` nicht leer), sonst `invited` | `unlocked` |
 | change_email | `invited` (sonst 409 `AD_EMAIL_LOCKED`) | prüft R1 über `ad_login_email_allowed` (`AD_EMAIL_DOMAIN`), R2 (`AD_EMAIL_TAKEN`); `auth.admin.deleteUser(auth_user_id)` | `ad_apply_email_change`: neue `login_email`, `auth_user_id` null, Status `none`; Antwort `200 { "status": "none", "code": "AD_EMAIL_CHANGED" }` | `email_changed` (Details: alte → neue Adresse) |
 
+Schutz vor Aussperren beim Sperren (Review-Befund S-01, Migration `20261108000500`): eigener Zugang 409 `AD_SELF_LOCK`, Notfallzugang 409 `AD_EMERGENCY_PROTECTED`, letzter aktiver Zugang mit AD = verwalten 409 `AD_LAST_ADMIN`. Die Edge Function ruft vor dem Bann `ad_check_lock(p_person, p_actor)` auf (nur service_role); `ad_apply_lock` prüft in derselben Transaktion erneut. Lehnt `ad_apply_lock` trotzdem ab, wird der Bann zurückgenommen.
+
 Beim Sperren wird nichts gelöscht (US-AD-09 AK6). `change_email` löscht nur den Auth-Eintrag einer noch nicht aktivierten Einladung; der alte Link ist damit ungültig (US-AD-03 AK7). Bei Status `none` ändert die Oberfläche die Login-Adresse direkt in `ad_accesses`.

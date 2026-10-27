@@ -45,9 +45,33 @@ Deno.test('400 bei unbekannter Aktion und bei login_email ohne change_email', as
 Deno.test('lock: aktiv → gesperrt mit Bann und Protokollfunktion (AK1)', async () => {
   const r = await run({ person_id: ACCESS_ACTIVE.person_id, action: 'lock' })
   assertEquals([r.status, r.body.status], [200, 'locked'])
-  assertEquals(r.calls[0], { name: 'setBanned', args: ['u-active', true] })
-  assertEquals(r.calls[1].name, 'rpc:ad_apply_lock')
-  assertEquals((r.calls[1].args[0] as Record<string, unknown>).p_actor, 'actor-1')
+  assertEquals(r.calls[0], { name: 'rpc:ad_check_lock', args: [{ p_person: ACCESS_ACTIVE.person_id, p_actor: 'actor-1' }] })
+  assertEquals(r.calls[1], { name: 'setBanned', args: ['u-active', true] })
+  assertEquals(r.calls[2].name, 'rpc:ad_apply_lock')
+  assertEquals((r.calls[2].args[0] as Record<string, unknown>).p_actor, 'actor-1')
+})
+
+Deno.test('lock: eigener Zugang → 409 AD_SELF_LOCK ohne Bann (Befund S-01)', async () => {
+  const r = await run({ person_id: ACCESS_ACTIVE.person_id, action: 'lock' }, { actor: 'u-active' })
+  assertEquals([r.status, r.body.code], [409, 'AD_SELF_LOCK'])
+  assertEquals(r.calls.length, 0)
+})
+
+Deno.test('lock: Datenbank lehnt vor dem Bann ab → 409 mit Code, kein Bann (Befund S-01)', async () => {
+  for (const code of ['AD_SELF_LOCK', 'AD_EMERGENCY_PROTECTED', 'AD_LAST_ADMIN']) {
+    const r = await run({ person_id: ACCESS_ACTIVE.person_id, action: 'lock' }, { rpcErrors: { ad_check_lock: code } })
+    assertEquals([r.status, r.body.code], [409, code])
+    assertEquals(r.calls.some((c) => c.name === 'setBanned'), false)
+    assertEquals(r.calls.some((c) => c.name === 'rpc:ad_apply_lock'), false)
+    assertEquals(r.accesses.get(ACCESS_ACTIVE.person_id)?.status, 'active')
+  }
+})
+
+Deno.test('lock: ad_apply_lock lehnt ab → Bann zurückgenommen, 409 (Befund S-01)', async () => {
+  const r = await run({ person_id: ACCESS_ACTIVE.person_id, action: 'lock' }, { rpcErrors: { ad_apply_lock: 'AD_LAST_ADMIN' } })
+  assertEquals([r.status, r.body.code], [409, 'AD_LAST_ADMIN'])
+  const bans = r.calls.filter((c) => c.name === 'setBanned').map((c) => c.args)
+  assertEquals(bans, [['u-active', true], ['u-active', false]])
 })
 
 Deno.test('lock: eingeladen → gesperrt (Einladung zurückziehen)', async () => {
