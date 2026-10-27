@@ -66,7 +66,13 @@ export function qualificationLabel(q: Pick<QualificationType, 'code' | 'name' | 
 const COLUMNS =
   'id, code, name, discipline, kind, level, specification, issuer, dosb_eligible, validity_years, status, note, source_ref, created_at, updated_at, updated_by'
 
-export type ListResult = { items: QualificationType[]; canEdit: boolean; failed: boolean }
+export type ListResult = {
+  items: QualificationType[]
+  canEdit: boolean
+  /** Personen mit aktueller Eigenschaft je Qualifikationsart (ad_qualification_usage_all); null, wenn nicht abrufbar */
+  usage: Record<string, number> | null
+  failed: boolean
+}
 
 /** Pfade je Modul (T052): unter /ad bzw. /ea dieselben Seiten. */
 export const QUALIFICATION_TYPES_PATH: Record<TypesGate, string> = {
@@ -82,12 +88,22 @@ export function qualificationTypesLoader(gate: TypesGate) {
 
 async function loadQualificationTypesFor(gate: TypesGate): Promise<ListResult> {
   await requireTypesAccess(gate)
-  const [list, canEdit] = await Promise.all([
+  const [list, canEdit, usage] = await Promise.all([
     supabase.from('ad_qualification_types').select(COLUMNS).order('discipline').order('name'),
     canEditQualificationTypes(),
+    loadUsageAll(),
   ])
-  if (list.error) return { items: [], canEdit, failed: true }
-  return { items: list.data as QualificationType[], canEdit, failed: false }
+  if (list.error) return { items: [], canEdit, usage: null, failed: true }
+  return { items: list.data as QualificationType[], canEdit, usage, failed: false }
+}
+
+type UsageRow = { qualification_type_id: string; persons: number }
+
+/** Spalte „Personen“: nur die Zahl je Art; ohne Recht (AD_FORBIDDEN) bleibt die Spalte leer. */
+async function loadUsageAll(): Promise<Record<string, number> | null> {
+  const { data, error } = await supabase.rpc('ad_qualification_usage_all')
+  if (error || !Array.isArray(data)) return null
+  return Object.fromEntries((data as UsageRow[]).map((r) => [r.qualification_type_id, r.persons]))
 }
 
 export type EditResult = {
