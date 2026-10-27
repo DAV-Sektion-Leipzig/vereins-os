@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 27.10.2026 · Version 5.20
+Stand: 27.10.2026 · Version 5.21
+Änderungen v5.21: Schnittstellen-Connector – Q-SC1 bis Q-SC3 entschieden, Q-SC4 zurückgestellt (Product Owner 27.10.2026); Steckbrief v0.2.
 Änderungen v5.20: Schnittstellen-Connector – Steckbrief v0.1 (Entwurf) mit den Fragen Q-SC1 bis Q-SC10 (Auftrag Product Owner 27.10.2026).
 Änderungen v5.19: Nachträge für die Planungshilfe eingearbeitet: spec.md AD v0.12 (Erwerbsdatum der Lizenz, Personen aus der Planung anlegen; Nachtrag v0.9 Ready) und spec.md EZ v0.7 (Abrechnungsart aus der Planung).
 Änderungen v5.18: Planungshilfe Touren und Kurse wieder aufgenommen: Abgleich mit dem Stand der anderen Module (Spec v0.3, Stories v0.5, Steckbrief und Erhebung v0.8); Übergaben AD → TK und FI → TK eingearbeitet; Abrechnungsart Gemeinschaftstour, Kurse nach Lehreinheiten und Lizenz-Regel wie Finanzen entschieden; neue Übergabepunkte an EZ (v1.3) und AD (v1.8).
@@ -237,11 +238,10 @@ Steckbrief: docs/specs/ds-dashboard/00-steckbrief.md (Version 0.13, Entwurf 26.1
 - [OFFEN] API-Key-Verwaltung als Erweiterung von AD: Felder, Anzeige der letzten Zeichen, Erinnerung vor Ablauf per E-Mail. (modul-landkarte.md, 00-steckbrief.md AD)
 - Weitere Anforderungen kommen aus EA (E-Mail vor Ablauf einer Qualifikation, Geburtstagserinnerung), FI (DATEV/Sparkasse) und OA (Instagram, Umfragen); ggf. TK (Schreib-Schnittstelle Yolawo, falls vorhanden [OFFEN]).
 - DATEV-Schnittstelle für den Import der Buchungen in den Bereich Budget von Finanzen statt CSV (Dashboard Q-DS7, Product Owner 26.10.2026); [OFFEN] welche DATEV-Schnittstelle (z. B. DATEVconnect, Datenservice) und Kosten.
-- Steckbrief v0.1 (Entwurf, 27.10.2026): specs/sc-schnittstellen/00-steckbrief.md. Offene Fragen dort im Detail:
-  - [OFFEN] Q-SC1 Name in der Oberfläche („Schnittstellen-Connector“, „Konnektor“ oder „Schnittstellen“); Code bleibt `SC`.
-  - [OFFEN] Q-SC2 Schnitt und Zeitpunkt des MVP (Vorschlag: Rahmen, API-Key-Verwaltung, E-Mail-Versand).
-  - [OFFEN] Q-SC3 Liste der anzubindenden Dienste über E-Mail, DATEV, Instagram, Umfrage-Dienst hinaus.
-  - [OFFEN] Q-SC4 DATEV: Schnittstelle, Vertragspartner, Kosten (1. Vorsitzender mit Finanzbuchhaltung).
+- Steckbrief v0.2 (Entwurf, 27.10.2026): specs/sc-schnittstellen/00-steckbrief.md. Offene Fragen dort im Detail:
+  - Entschieden 27.10.2026 (Product Owner): **Q-SC1** Name in der Oberfläche „Schnittstellen“, Code `SC`; **Q-SC2** MVP = E-Mail-Versand, Iteration 1 DATEV, Iteration 2 Instagram; **Q-SC3** vorerst keine weiteren Dienste.
+  - Zurückgestellt: **Q-SC4** DATEV (Schnittstelle, Vertragspartner, Kosten) klärt der Product Owner zu gegebener Zeit, spätestens vor Iteration 1.
+  - [OFFEN] Zeitpunkt des MVP im Arbeitsplan (vor oder nach Finanzen und Dashboard).
   - [OFFEN] Q-SC5 Instagram (Business-Konto) und Umfrage-Dienst (AV-Vertrag, EU-Server) (Öffentlichkeitsarbeit).
   - [OFFEN] Q-SC6 Pflege der E-Mail-Vorlagen.
   - [OFFEN] Q-SC7 Eingehende Schnittstellen (Webhooks); Vorschlag: nicht im MVP.

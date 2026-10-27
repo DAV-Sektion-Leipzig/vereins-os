@@ -1,6 +1,7 @@
 # Glossar: Vereins OS
 
-Stand: 26.10.2026 · Version 1.8
+Stand: 27.10.2026 · Version 1.9
+Änderungen v1.9: Schnittstellen-Connector mit Namen in der Oberfläche „Schnittstellen“ aufgenommen (Product Owner 27.10.2026).
 Änderungen v1.8: Abschnitt „Touren und Kurse“ mit Planung, Tourenleitung, Teilnahmebeitrag, Kostendeckung, CO2-Bilanz, Klimaschutzbudget, Yolawo; Kurs ein- und mehrtägig nach Lehreinheiten (Product Owner 26.10.2026).
 Änderungen v1.7: Begriffe des Moduls **Dashboard** (DS) aufgenommen: Dashboard, Sicht, Kennzahl, Budgetposten, Gesamtbudget, Zuordnung (Budget), Buchung, umschlüsseln, umschichten, Datenstand, Budgetpflege; Anwesenheitsquote; Abkürzungen TN (Teilnehmer:innen) und PT (Probetrainings) nur in schmalen Tabellenköpfen; neue Referate Öffentlichkeitsarbeit und Umwelt und Naturschutz (Product Owner 26.10.2026; specs/ds-dashboard/00-steckbrief.md v0.5).
 Änderungen v1.6: Einsatzart heißt **Wettkampfbetreuung** statt Wettkampfbegleitung; Einsatz kann abgesagt werden (Stand „abgesagt“ mit Grund, alle Einsatzarten); Kurs und Tour in der Anwesenheitserfassung ohne Teilnehmende (Product Owner 24.10.2026).
@@ -138,6 +139,7 @@ Regel: ein Begriff pro Sache. Synonyme stehen nur in „Nicht verwechseln mit“
 | vertraulich | Höchste Lesestufe: Eigenschaften dieser Art darf nur lesen, wer Rechte auf AD hat; durchgesetzt in der Datenbank. | sichtbar in | Hauptamt ist vertraulich. |
 | Protokoll | Nachvollziehbare Liste der Einladungen, Vergaben und Entzüge von Rechtevorlagen, Sperren/Entsperren und Anmeldungen des Notfall-Admins (wer, wem, was, wann); 5 Jahre aufbewahrt. | Historie (frühere Werte einer Eigenschaft) | „19.10.2026 14:00 Toni Werner hat Denise Muster die Vorlage Geschäftsstelle zugewiesen.“ |
 | Dashboard | Modul (DS [ANNAHME]), das Sichten mit Kennzahlen aus allen Modulen und die Budget-Sicht zeigt; nur lesen, eigenes Recht „Dashboard lesen“ mit Reichweite „alle“ oder „Referat“. Name in der Oberfläche „Dashboard“ (Product Owner 26.10.2026). | Startseite; Auswertung in einem Fachmodul | Dashboard des Referats Kinder und Jugend |
+| Schnittstellen-Connector | Basismodul (SC), das externe Dienste zentral anbindet (MVP: E-Mail-Versand; später DATEV, Instagram); Fachmodule nutzen die Anbindungen über serverseitige Funktionen, API-Keys nur im Supabase Vault. Name in der Oberfläche „Schnittstellen“ (Product Owner 27.10.2026). | Schnittstelle eines Fachmoduls zu einem anderen Modul; Login-Mails (Supabase Auth) | Erinnerung vor Ablauf einer Lizenz per E-Mail über den Schnittstellen-Connector |
 | Sicht | Zusammenstellung von Kennzahlen für eine Nutzergruppe im Dashboard (Vorstand, Referat, Geschäftsstelle, später Gruppe). | Ansicht, Bericht (Synonyme, nicht verwenden); Sichtbarkeit von Personen; Reichweite | Sicht des Referats Kinder und Jugend |
 | Kennzahl | Anzahl, Summe oder Quote, die ein Fachmodul für das Dashboard liefert; keine Personenliste. | KPI (nicht verwenden); Auswertung | Anwesenheitsquote der Gruppe „Jugendgruppe Test 1“: 72 % |
 | Anwesenheitsquote | Kennzahl je Gruppe und Zeitraum: Ø anwesende Teilnehmer:innen je Training ÷ Teilnehmer:innen der Gruppe zum Datum des Trainings. Im Spaltenkopf des Dashboards kurz „Anwesenheit“. | Anwesenheit (Zuordnung einer Person zu einem Einsatz) | 71 % im 2. Halbjahr 2026 |

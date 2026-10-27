@@ -1,7 +1,8 @@
 # Steckbrief: Schnittstellen-Connector
 
-Stand: 27.10.2026 · Version 0.1 · Kürzel: SC · Priorität: spätestens mit OA (4) [ANNAHME], Start der Erhebung jetzt (Product Owner 27.10.2026) · Ablage: docs/specs/sc-schnittstellen/ · Status: Entwurf · Product Owner: Toni Werner
+Stand: 27.10.2026 · Version 0.2 · Kürzel: SC · Priorität: spätestens mit OA (4) [ANNAHME], Start der Erhebung jetzt (Product Owner 27.10.2026) · Ablage: docs/specs/sc-schnittstellen/ · Status: Entwurf · Product Owner: Toni Werner
 Grundlage: vision.md (Basis: Administration und Schnittstellen-Connector), modul-landkarte.md v2.18, tech-stack.md (Abschnitte 1 und 4), rollen.md (Rechte-Matrix), glossar.md v1.8 („Basismodul“, „API-Key“), offene-punkte.md v5.19 (Abschnitt SC), querschnitt-administration.md (P8, P9, P10, P16), Anforderungen aus den Steckbriefen und Specs von AD, EA, FI, DS, TK, AM (siehe „Abhängigkeiten“).
+Änderungen v0.2: Q-SC1 bis Q-SC4 entschieden (Product Owner 27.10.2026): Name in der Oberfläche „Schnittstellen“, Code bleibt `SC`; MVP = E-Mail-Versand, danach Iteration 1 DATEV, Iteration 2 Instagram; vorerst keine weiteren Dienste; DATEV klärt der Product Owner zu gegebener Zeit (vor Iteration 1).
 Änderungen v0.1: Erster Entwurf (Auftrag Product Owner 27.10.2026: „neues Modul Konnektor, bei dem wir mehrere APIs anbinden können; die Schnittstellen sollen durch die Module im Vereins OS genutzt werden“). Bisher verstreute Anforderungen an SC aus allen Modulen gesammelt; Schnitt des MVP als Vorschlag.
 
 **Problem heute:**
@@ -26,9 +27,10 @@ Das Vereins OS spricht heute mit keinem externen Dienst außer Supabase Auth (Lo
 - **Anbindung:** konfigurierte Verbindung zu einem Dienst im Schnittstellen-Connector (Art, Name, Zustand, API-Key, freigegebene Module). Ein Dienst kann mehrere Anbindungen haben (z. B. zwei Postfächer) [ANNAHME].
 - **Aufruf:** einzelne Anfrage eines Moduls über eine Anbindung, mit Ergebnis (erfolgreich, fehlgeschlagen, wartet).
 - **Postausgang:** Warteschlange der zu versendenden E-Mails mit Stand (wartet, versendet, fehlgeschlagen).
-- „API-Key“ und „Basismodul“ stehen schon im Glossar. [OFFEN] Name des Moduls: Im Auftrag heißt es „Konnektor“, im Glossar und in der Modul-Landkarte „Schnittstellen-Connector“ (Q-SC1).
+- „API-Key“ und „Basismodul“ stehen schon im Glossar.
+- **Name** (Q-SC1, Product Owner 27.10.2026): Modul „Schnittstellen-Connector“, Code `SC`; Name in der Oberfläche **„Schnittstellen“** (Glossar v1.9).
 
-**Im Scope (MVP) [ANNAHME: Vorschlag, Schnitt mit dem Product Owner klären (Q-SC2)]:**
+**Im Scope (MVP)** (Q-SC2, Product Owner 27.10.2026: zuerst E-Mail-Versand; Einzelheiten [ANNAHME] bis zur Erhebung):
 - **Rahmen für Anbindungen** (generisch): Liste der Anbindungen je Art; Felder Art, Name, Zustand (aktiv, abgeschaltet, gestört), freigegebene Module, Ablaufdatum des API-Keys, zuletzt gewechselt, letzter erfolgreicher Aufruf, letzter Fehler. Eine neue Art von Anbindung kommt per Migration und Edge Function hinzu, die Pflege in der Oberfläche ist für alle Arten gleich.
 - **API-Key-Verwaltung** (Erweiterung aus der Administration, querschnitt P10, Seite „Einstellungen“): Key nur hineinschreiben (Supabase Vault), danach nie wieder anzeigen, nur die letzten 4 Zeichen [ANNAHME]; wechseln; Ablaufdatum; Erinnerung an den Admin 30 Tage vor Ablauf [ANNAHME: Frist]. Metadaten in einer Tabelle des Moduls (tech-stack.md 1: „Tabelle im Modul AD“; [OFFEN] Präfix `ad_` oder `sc_`, Q-SC9).
 - **Ein Aufrufweg für alle Module:** Fachmodule rufen nie direkt einen Dienst auf, sondern eine Funktion des SC (Datenbankfunktion bzw. Edge Function); nur SC liest den Key aus Vault. Aufrufe laufen ausschließlich serverseitig (modul-landkarte.md, Regeln).
@@ -38,16 +40,21 @@ Das Vereins OS spricht heute mit keinem externen Dienst außer Supabase Auth (Lo
 - **Testaufruf** je Anbindung durch den Admin (z. B. Test-E-Mail an die eigene Adresse), damit ein gewechselter Key sofort geprüft ist.
 - Mobil lesbar ab 375 px.
 
-**Iteration 1 (nach dem MVP, je Anlass im nutzenden Modul) [ANNAHME]:**
+**Nutzung des E-Mail-Versands in den Fachmodulen (nach dem MVP, je Anlass im nutzenden Modul) [ANNAHME]:**
 - Erste Nutzer des E-Mail-Versands: EA – E-Mail vor Ablauf einer Qualifikation (offene-punkte.md; Vorlauf nach dem Regelwerk der Ablaufwarnung) und Geburtstagserinnerung (offen in EA); AD – Hinweis bei Anmeldung des Notfall-Admins; FI – Erinnerung vor den Abgabefristen (31.07., 15.12.) und an „durchgeführt, nicht abgerechnet, älter als 4 Wochen“. Die Stories dazu gehören in das jeweilige Modul, SC liefert nur den Versand [ANNAHME].
 - **Benachrichtigungseinstellungen je Nutzer** (abbestellen je Anlass; querschnitt P9) [OFFEN] ob in SC oder AD.
 
-**Später (eigene Iterationen, sobald das nutzende Modul so weit ist):**
-- **DATEV:** Import der Buchungen in den Bereich Budget von Finanzen statt CSV (Q-DS7, B13 der Übergabe DS → FI); Rechenregeln und Prüfungen des Budgets bleiben gleich. [OFFEN] welche Schnittstelle (DATEVconnect, DATEV-Datenservice) und Kosten (Q-SC4).
-- **Instagram:** Beiträge aus der Öffentlichkeitsarbeit veröffentlichen (mit OA). [OFFEN] Voraussetzungen (Business-Konto, Meta-App, Prüfung durch Meta) (Q-SC5).
+**Iteration 1 – DATEV** (Q-SC2, Product Owner 27.10.2026):
+- Import der Buchungen in den Bereich Budget von Finanzen statt CSV (Q-DS7, B13 der Übergabe DS → FI); Rechenregeln und Prüfungen des Budgets bleiben gleich.
+- Schnittstelle, Vertragspartner und Kosten klärt der Product Owner zu gegebener Zeit, spätestens vor Beginn der Iteration (Q-SC4).
+
+**Iteration 2 – Instagram** (Q-SC2, Product Owner 27.10.2026):
+- Beiträge aus der Öffentlichkeitsarbeit veröffentlichen (mit OA). [OFFEN] Voraussetzungen (Business-Konto, Meta-App, Prüfung durch Meta) (Q-SC5).
+
+**Vorerst keine weiteren Dienste** (Q-SC3, Product Owner 27.10.2026). Merkposten ohne Reihenfolge, nur nach eigener Entscheidung:
 - **Umfrage-Dienst:** Umfragen anlegen und Ergebnisse abholen (mit OA). [OFFEN] welcher Dienst (Q-SC5).
-- **Sparkasse:** Überweisungs- und Lastschriftdateien heute als Datei zum manuellen Hochladen (FI); eine direkte Bankschnittstelle (z. B. EBICS) nur nach eigener Entscheidung [ANNAHME: nicht geplant].
-- **Yolawo:** Schreib-Schnittstelle für Angebote nur, falls Yolawo eine anbietet ([OFFEN], tk-touren-kurse/00-steckbrief.md).
+- **Sparkasse:** Überweisungs- und Lastschriftdateien bleiben Dateien zum manuellen Hochladen (FI); keine direkte Bankschnittstelle.
+- **Yolawo:** Schreib-Schnittstelle für Angebote nur, falls Yolawo eine anbietet (tk-touren-kurse/00-steckbrief.md).
 - **Microsoft Graph** statt Gmail für den Versand über die Vereinsdomain, nach Zustimmung des Bundesverbands (tech-stack.md 4).
 
 **Nicht im Scope:**
@@ -79,11 +86,11 @@ Das Vereins OS spricht heute mit keinem externen Dienst außer Supabase Auth (Lo
 - **Nie gegen PROD testen:** Testaufrufe und Seeds nur in TEST; der Seed legt keine echten Keys an.
 
 **Offene Fragen:**
-- [OFFEN] **Q-SC1** Name: „Schnittstellen-Connector“ (Glossar, Landkarte, Code `SC`) beibehalten oder in der Oberfläche „Konnektor“ bzw. „Schnittstellen“? Vorschlag: Code bleibt `SC`; in der Oberfläche „Schnittstellen“, weil Nutzer:innen dort Dienste sehen, nicht eine Technik.
-- [OFFEN] **Q-SC2** Schnitt des MVP: Rahmen + API-Key-Verwaltung + E-Mail-Versand (Vorschlag), oder zuerst DATEV (größter Handgriff im Monat), oder zuerst Instagram (OA)? Und Zeitpunkt: vor oder nach FI und DS?
-- [OFFEN] **Q-SC3** Welche Dienste sollen angebunden werden? Bekannt: E-Mail (Gmail), DATEV, Instagram, Umfrage-Dienst. Weitere (z. B. Kalender, Cloud-Ablage, Messenger, Bundesverband)?
-- [OFFEN] **Q-SC4** DATEV: welche Schnittstelle (DATEVconnect, DATEV-Datenservice, Export über die Steuerkanzlei), wer ist Vertragspartner, Kosten? Klärt: 1. Vorsitzender mit der Finanzbuchhaltung.
-- [OFFEN] **Q-SC5** Instagram und Umfrage-Dienst: Gibt es ein Business-Konto der Sektion? Welcher Umfrage-Dienst (mit AV-Vertrag, EU-Server)? Klärt: Öffentlichkeitsarbeit.
+- Q-SC1 – **entschieden 27.10.2026:** Name in der Oberfläche „Schnittstellen“; Modul „Schnittstellen-Connector“, Code `SC`.
+- Q-SC2 – **entschieden 27.10.2026:** MVP = E-Mail-Versand (mit Rahmen und API-Key-Verwaltung); Iteration 1 DATEV; Iteration 2 Instagram. [OFFEN] Zeitpunkt des MVP im Arbeitsplan (vor oder nach Finanzen und Dashboard).
+- Q-SC3 – **entschieden 27.10.2026:** vorerst keine weiteren Dienste.
+- Q-SC4 – **zurückgestellt 27.10.2026:** DATEV-Schnittstelle, Vertragspartner und Kosten klärt der Product Owner zu gegebener Zeit, spätestens vor Iteration 1; kein Hindernis für den MVP.
+- [OFFEN] **Q-SC5** Instagram (Iteration 2) und Umfrage-Dienst (Merkposten): Gibt es ein Business-Konto der Sektion? Welcher Umfrage-Dienst (mit AV-Vertrag, EU-Server)? Klärt: Öffentlichkeitsarbeit, vor Iteration 2.
 - [OFFEN] **Q-SC6** Wer pflegt die Texte der E-Mail-Vorlagen: Admin, Geschäftsstelle oder fest im Code?
 - [OFFEN] **Q-SC7** Braucht das Vereins OS eingehende Schnittstellen (z. B. Ergebnisse einer Umfrage per Webhook, Anfragen von Dritten)? Vorschlag: nein im MVP.
 - [OFFEN] **Q-SC8** Gibt der Admin je Anbindung frei, welche Module sie nutzen dürfen (Vorschlag), oder darf jedes Modul jede Anbindung nutzen?
