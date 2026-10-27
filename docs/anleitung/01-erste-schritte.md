@@ -101,3 +101,6 @@ Klicke oben rechts auf **„Abmelden“**. Melde dich immer ab, wenn du an einem
 | **Datenstand** | Datum der letzten Buchung im DATEV-Export. Bis dahin sind die Zahlen im Dashboard vollständig. |
 | **Umschichtung** | Geld zwischen zwei Budgetposten desselben Gesamtbudgets verschieben. Die Summe bleibt gleich. |
 | **Umschlüsselung** | Eine Buchung einem anderen Budgetposten zuordnen. |
+| **Schnittstellen** | Verbindung des Vereins OS zu anderen Diensten, zum Beispiel Brevo für E-Mails. |
+| **Anlass** | Der Grund für eine E-Mail aus dem Vereins OS, zum Beispiel „Anmeldung des Notfall-Admins“. Jeder Anlass hat eine eigene Vorlage. |
+| **Postausgang** | Liste der E-Mails, die das Vereins OS verschickt oder verschicken will. |

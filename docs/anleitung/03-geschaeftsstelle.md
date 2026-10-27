@@ -18,6 +18,7 @@ Du darfst in allen Fachmodulen **verwalten**. Das heißt: Du siehst alle Referat
 | Finanzen | Halbjahresabrechnung berechnen, abschließen, auszahlen | freigeschaltet |
 | Dashboard | Budget aller Referate und des Vereins sehen, mit Einzelbuchungen und Prüfung | freigeschaltet |
 | Planungshilfe Touren und Kurse | Planungen aller Referate bearbeiten, in Yolawo anlegen, abschließen, Kostenauswertung | freigeschaltet |
+| Schnittstellen | nur lesen: sehen, ob der E-Mail-Versand funktioniert | freigeschaltet |
 
 Vieles funktioniert genauso wie bei den Referent:innen. Dort ist es Schritt für Schritt erklärt: [Anleitung für Referent:innen](02-referentinnen.md). Hier steht, was **du zusätzlich** tust.
 
@@ -230,3 +231,10 @@ Die Planungshilfe funktioniert für dich wie für die Referent:innen: [Anleitung
 - **Lizenzen:** Bekommt jemand den Helfersatz, obwohl er oder sie eine Lizenz hat, trage die Lizenz im Ehrenamtsmanagement ein. Die Planung rechnet danach beim nächsten Speichern den Trainersatz.
 - **Kostenauswertung:** Unter **„Auswertung“** lädst du die Tabelle mit **„CSV herunterladen“** herunter, zum Beispiel für Excel. Kontakt- und Notfalldaten stehen nicht darin.
 
+---
+
+## Schnittstellen
+
+Über die Schnittstellen verschickt das Vereins OS E-Mails aus Abläufen. Du darfst hier **nur lesen**: Anbindungen mit Zustand, den Postausgang (ohne Betreff und Text) und das Protokoll.
+
+Ist der E-Mail-Versand gestört oder konnte eine E-Mail nicht versendet werden, siehst du einen **roten Hinweis auf der Startseite**. Sag dann dem Admin Bescheid. Wie der Admin den Fehler behebt, steht in der [Anleitung für den Admin](04-admin.md#schnittstellen).

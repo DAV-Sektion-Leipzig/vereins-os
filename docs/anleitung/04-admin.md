@@ -11,6 +11,7 @@ Für den Admin mit der Rechtevorlage „Admin“. Der Admin richtet Personen, Zu
 | Administration | verwalten: alles |
 | Ehrenamtsmanagement | verwalten: wie die Geschäftsstelle, dazu vertrauliche Angaben |
 | Gruppen, Anwesenheitserfassung | lesen (zum Beispiel für einen Notfall auf einer Ausfahrt) |
+| Schnittstellen | verwalten: E-Mail-Versand einrichten, Key, Vorlagen, Postausgang |
 
 Die Seiten der Administration findest du oben in der Leiste: Personen, Rechtevorlagen, Eigenschaftsarten, Qualifikationsarten, Sätze, Abrechnungsarten, Auszahlung, Protokoll.
 
@@ -175,3 +176,68 @@ Eine Abrechnungsart legt fest, **welcher Satz** für welche Position gilt, zum B
 ![Protokoll mit Einladungen, Rechtevergaben, Sperren und Anmeldungen des Notfall-Admins](bilder/ad-protokoll.png)
 
 Das Protokoll zeigt, wer wann jemanden eingeladen, gesperrt oder Rechte vergeben hat. Es wird 5 Jahre aufbewahrt.
+
+---
+
+## Schnittstellen
+
+Über die **Schnittstellen** verschickt das Vereins OS E-Mails aus Abläufen, zum Beispiel wenn sich der Notfall-Admin anmeldet oder wenn ein API-Key bald abläuft. Die E-Mails gehen über den Dienst **Brevo** von der Adresse `noreply@vereinsos.dav-leipzig.de`. Die Einladung und „Passwort vergessen“ laufen **nicht** hierüber.
+
+![So kommt eine E-Mail an: Ein Modul legt sie in den Postausgang, alle 5 Minuten verschickt das Vereins OS wartende E-Mails über Brevo; bei Fehlern bis zu 3 Versuche](diagramme/postausgang.png)
+
+Oben stehen vier Reiter: **Anbindungen**, **Vorlagen**, **Postausgang**, **Protokoll**. Ist etwas gestört, siehst du oben einen roten Hinweis – auch auf der Startseite.
+
+### Den E-Mail-Versand einrichten
+
+![Anbindung mit Zustand, Absender, Key, Grenzen und freigegebenen Modulen](bilder/sc-anbindungen.png)
+
+1. Im Brevo-Konto der Sektion einen **API-Key** erzeugen (für TEST und PROD je einen eigenen).
+2. **„Anbindung anlegen“**: Name, Absenderadresse und Absendername sind schon vorbelegt. Ein Ablaufdatum für den Key ist freiwillig.
+3. **„Key hinterlegen“**: den Key einfügen und speichern. Danach siehst du nur noch die letzten 4 Zeichen, zum Beispiel „…k3x9“.
+4. **„Module freigeben“**: Häkchen bei Administration und Schnittstellen setzen. Nur freigegebene Module dürfen E-Mails verschicken.
+5. **„Test-E-Mail senden“**: Die E-Mail geht an deine Login-Adresse. Schau nach, ob sie im Posteingang liegt (nicht im Junk-Ordner).
+6. **„aktivieren“**: geht erst nach einer erfolgreichen Test-E-Mail.
+
+**Zustände einer Anbindung:**
+
+| Zustand | Bedeutung | Was tun? |
+|---|---|---|
+| aktiv | E-Mails gehen hinaus. | nichts |
+| abgeschaltet | Du hast die Anbindung abgeschaltet. Wartende E-Mails bleiben liegen. | „aktivieren“ |
+| gestört | 3 Fehler hintereinander oder ein neuer Key ohne Test. | Fehler lesen, ggf. Key wechseln, „Test-E-Mail senden“ |
+| abgelaufen | Das Ablaufdatum des Keys ist erreicht. | „Key wechseln“ mit neuem Datum, dann „Test-E-Mail senden“ |
+
+**Grenzen:** Höchstens **100 E-Mails je Stunde** und **300 je Tag** (kostenloser Tarif von Brevo). Weitere E-Mails warten bis zur nächsten Stunde bzw. bis zum nächsten Tag. TEST und PROD teilen sich das Konto; in TEST deshalb höchstens 50 am Tag.
+
+**Key wechseln:** „Key wechseln“, neuen Key einfügen, speichern, dann „Test-E-Mail senden“. Bis der Test klappt, ist die Anbindung „gestört“. 30 und 7 Tage vor dem Ablaufdatum bekommst du eine Erinnerung per E-Mail.
+
+**Abschalten:** zum Beispiel, wenn ein Key in falsche Hände geraten ist. Wartende E-Mails bleiben im Postausgang; nach 7 Tagen gelten sie als „zu alt“.
+
+### Vorlagen
+
+![Vorlage bearbeiten mit Betreff, Text, Platzhaltern und Vorschau](bilder/sc-vorlage.png)
+
+Jeder **Anlass** hat eine eigene E-Mail. Du kannst Betreff (höchstens 150 Zeichen) und Text (höchstens 2.000 Zeichen) ändern.
+
+- **Platzhalter** wie `{zeitpunkt}` oder `{link}` setzt das Vereins OS beim Versand ein. Klick auf einen Platzhalter fügt ihn in den Text ein.
+- **Keine Namen und keine anderen Personendaten** in die E-Mail schreiben. Die Anrede ist „Hallo,“. Die E-Mail enthält nur einen kurzen Hinweis und einen Link ins Vereins OS.
+- Mit **„Vorschau“** siehst du die E-Mail mit Beispielwerten.
+- Der neue Text gilt für E-Mails, die nach dem Speichern verschickt werden.
+
+### Postausgang
+
+![Postausgang mit Filtern, Zustand und Aktionen](bilder/sc-postausgang.png)
+
+Hier stehen alle E-Mails der letzten **90 Tage** mit Zustand: **wartet**, **versendet**, **fehlgeschlagen** oder **verworfen**.
+
+- **„Inhalt“** zeigt Betreff und Text.
+- **„erneut senden“** bei fehlgeschlagenen E-Mails, zum Beispiel nachdem du den Key gewechselt hast.
+- **„verwerfen“**, wenn die E-Mail nicht mehr gesendet werden soll.
+
+Nach 90 Tagen löscht das Vereins OS E-Mails und Protokolleinträge automatisch.
+
+### Protokoll der Schnittstellen
+
+![Protokoll der Schnittstellen mit Versand, Tests und Änderungen](bilder/sc-protokoll.png)
+
+Das Protokoll zeigt jeden Versand, jeden Test und jede Änderung an Anbindungen, Freigaben und Vorlagen. Den Key und den Inhalt der E-Mails zeigt es nie.

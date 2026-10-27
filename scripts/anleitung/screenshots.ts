@@ -8,7 +8,7 @@
 //   SEED_TEST_PASSWORD=… npm run anleitung:screenshots -- ez-training  nur Bilder, deren Name den Text enthält
 //   SEED_TEST_PASSWORD=… npm run anleitung:screenshots -- --vorbereiten  vorher die Daten der Finanzen vorbereiten
 //
-// Daten: Seed mit SEED_WITH_EZ=1, SEED_WITH_FI=1, SEED_WITH_DS=1 und SEED_WITH_TK=1 (scripts/anleitung/lokaler-stack.sh).
+// Daten: Seed mit SEED_WITH_EZ=1, SEED_WITH_FI=1, SEED_WITH_DS=1, SEED_WITH_TK=1 und SEED_WITH_SC=1 (scripts/anleitung/lokaler-stack.sh).
 // Das Dashboard nutzt die Budgetdaten aus supabase/seed-ds.sql (Vorstand mit Vorlage „Budgetpflege“). „--vorbereiten“ erledigt in
 // der Oberfläche, was die Bilder der Finanzen zeigen: 1. Halbjahr 2026 berechnen, Tina Trainerin und Hans Helfer als
 // Kim Kinderjugend bestätigen, Tina Trainerin abschließen und ihre Abgabe erfassen, eine Auszahlungsrunde anlegen.
@@ -123,6 +123,18 @@ const SHOTS: Shot[] = [
   { name: 'ad-abrechnungsarten', zugang: 'admin', pfad: '/ad/abrechnungsarten' },
   { name: 'ad-auszahlung', zugang: 'admin', pfad: '/ad/auszahlung', hoehe: 1000 },
   { name: 'ad-protokoll', zugang: 'admin', pfad: '/ad/protokoll' },
+
+  // Schnittstellen (Seed mit SEED_WITH_SC=1)
+  { name: 'sc-anbindungen', zugang: 'admin', pfad: '/schnittstellen' },
+  {
+    name: 'sc-vorlage',
+    zugang: 'admin',
+    pfad: '/schnittstellen/vorlagen',
+    schritte: (p) => klick(p, 'bearbeiten'),
+    dialog: true,
+  },
+  { name: 'sc-postausgang', zugang: 'admin', pfad: '/schnittstellen/postausgang' },
+  { name: 'sc-protokoll', zugang: 'admin', pfad: '/schnittstellen/protokoll' },
 
   // Ehrenamtsmanagement
   {

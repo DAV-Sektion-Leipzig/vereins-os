@@ -1,0 +1,8 @@
+%% Postausgang der Schnittstellen (E-Mail über Brevo)
+flowchart LR
+  A["Modul<br/><small>z. B. Anmeldung des<br/>Notfall-Admins</small>"] --> B["wartet<br/><small>im Postausgang</small>"]
+  B -- "alle 5 Minuten" --> C["Brevo"]
+  C --> D["versendet"]
+  C -. "Fehler: nach 15 Min.<br/>und 1 Std. erneut" .-> B
+  B -. "3 Fehler oder<br/>älter als 7 Tage" .-> E["fehlgeschlagen<br/><small>Admin: erneut senden<br/>oder verwerfen</small>"]
+  E -. "erneut senden" .-> B

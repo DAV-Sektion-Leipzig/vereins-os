@@ -1,6 +1,7 @@
 # Anleitung Vereins OS
 
-Stand: 27.10.2026 · Version 3.8
+Stand: 27.10.2026 · Version 4.0
+Änderungen v4.0: neues Modul Schnittstellen (E-Mail über Brevo): Abschnitte für den Admin (einrichten, Key wechseln, Vorlagen, Postausgang, Protokoll) und die Geschäftsstelle (lesen, Hinweis auf der Startseite), Ablaufbild Postausgang, neue Wörter; Bilder folgen über den Workflow „Anleitung: Bilder erzeugen“, sobald TEST die Migrationen hat.
 Änderungen v3.8: Administration: Hinweis zum Schutz vor Aussperren (eigener Zugang, Notfall-Admin und letzter Admin können nicht gesperrt werden bzw. ihre Admin-Rechte nicht verlieren).
 Änderungen v3.7: Gruppen: Das Datum bei Fotoerlaubnis und Einwilligung darf nicht vor dem letzten Eintrag liegen.
 Änderungen v3.6: Qualifikationsarten: neue Spalte „Personen“; Filter „Qualifikation“ in „Aktive“ zeigt nur vergebene Arten.
@@ -46,6 +47,7 @@ Du siehst im Vereins OS nur die Module, für die du Rechte hast.
 | Anwesenheitserfassung | Trainings, Fahrten und andere Einsätze mit Anwesenheit | freigeschaltet |
 | Finanzen | Halbjahresabrechnung der Trainer:innen und Helfer:innen, Auszahlung | freigeschaltet |
 | Planungshilfe Touren und Kurse | Touren und Kurse planen, kalkulieren, freigeben, für Yolawo vorbereiten | freigeschaltet |
+| Schnittstellen | E-Mails aus dem Vereins OS über Brevo: Anbindung, Vorlagen, Postausgang | freigeschaltet |
 
 ## Hilfe
 
