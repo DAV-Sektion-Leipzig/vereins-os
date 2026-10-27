@@ -67,3 +67,7 @@ Nachtrag v0.8 (seit 24.10.2026, tasks.md Phase 15):
 | `ez_person_visible` | `p_person` | boolean (Platzhalter false) | US-AD-29 |
 
 Nicht umgesetzt (Nachtrag v0.9): `ea_person_licenses`, `ad_rates_at`, `ad_can_edit_rates`, `ad_can_read_rates`.
+
+## Trigger auf Supabase Auth (Review S-04, seit 08.11.2026)
+
+`ad_auth_user_email_guard` (before update of `email`, `email_change` on `auth.users`, Migration `20261108000300_ad_auth_email_guard.sql`): Eine Änderung der Login-Adresse über Supabase Auth (z. B. `supabase.auth.updateUser({ email })`) wird abgelehnt, wenn die neue Adresse R1 verletzt (`AD_EMAIL_DOMAIN`) oder – bei verknüpftem Zugang – nicht der `ad_accesses.login_email` entspricht (`AD_EMAIL_CHANGE_VIA_FUNCTION`, R20). Login-Adressen ändert nur `ad-access` `change_email` (Auth-Eintrag löschen und neu anlegen). Leere Werte (`email_change = ''`) und unveränderte Spalten gehen durch; Login, Passwort und Bann sind nicht betroffen. Test: `supabase/tests/database/035_ad_auth_email_guard.test.sql`.

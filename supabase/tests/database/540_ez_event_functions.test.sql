@@ -336,10 +336,14 @@ select is(pg_temp.err(format('select public.ez_reactivate_helper(%L, %L)', pg_te
 -- Einsätze aus der Planungshilfe (R25): tk_plan_id im Test gesetzt
 select pg_temp.as_owner();
 select set_config('request.jwt.claims', json_build_object('sub', pg_temp.u(2), 'role', 'authenticated')::text, true);
+-- Planung vorhanden (Fremdschlüssel ez_events.tk_plan_id → tk_plans, S-02)
+insert into public.tk_plans (id, plan_type, referat_id, title, client_request_id)
+values ('f1000000-0000-4000-8000-000000000099', 'guided_tour', pg_temp.referat('Touren'), 'Tour aus der Planung',
+        gen_random_uuid());
 insert into public.ez_events (id, kind, span, referat_id, title, organizer_person_id, start_date, day_category, client_request_id,
                               tk_plan_id)
 values ('f0000000-0000-4000-8000-000000000099', 'tour', 'single', pg_temp.referat('Klettern'), 'Tour aus der Planung',
-        pg_temp.p(4), date '2026-11-29', 'at_least_8h', gen_random_uuid(), gen_random_uuid());
+        pg_temp.p(4), date '2026-11-29', 'at_least_8h', gen_random_uuid(), 'f1000000-0000-4000-8000-000000000099');
 insert into public.ez_attendances (event_id, person_id, role, status, from_plan)
 values (pg_temp.e(99), pg_temp.p(4), 'trainer', 'registered', true);
 select pg_temp.as_user(pg_temp.u(9));

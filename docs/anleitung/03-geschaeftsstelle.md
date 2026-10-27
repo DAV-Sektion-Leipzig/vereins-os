@@ -118,6 +118,8 @@ Klicke in der Teilnehmerliste auf einen Namen. Hier kannst du:
 - **Vertrag kündigen** oder **Teilnahme beenden**, wenn ein Kind die Gruppe verlässt.
 - **Fotoerlaubnis** und **Gesundheit** ändern.
 
+Das Datum einer Änderung an Fotoerlaubnis oder Einwilligung darf nicht vor dem letzten Eintrag liegen. Für den gleichen Tag geht es.
+
 > **Gut zu wissen:** Gesundheitsangaben nur eintragen, wenn eine schriftliche Einwilligung der Erziehungsberechtigten vorliegt. Nur das, was für Training und Fahrten nötig ist.
 
 ---

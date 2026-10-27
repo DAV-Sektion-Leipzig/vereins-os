@@ -120,6 +120,7 @@ export const MESSAGES = {
   grHealthConsentRequired: 'Bitte zuerst die Einwilligung der Erziehungsberechtigten erfassen.',
   grHealthNoteInvalid: 'Bitte einen Text mit höchstens 2000 Zeichen eingeben.',
   grFunctionOverlap: 'Diese Person hat diese Funktion in der Gruppe bereits.',
+  grConsentDateBeforeCurrent: 'Das Datum darf nicht vor dem letzten Eintrag (<TT.MM.JJJJ>) liegen.',
   forbidden: 'Für diesen Bereich hast du keine Rechte.',
   unexpected: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
   loginFailed: 'Anmeldung fehlgeschlagen. Bitte E-Mail-Adresse und Passwort prüfen.',
@@ -239,6 +240,7 @@ const CODE_MESSAGES: Record<string, string> = {
   GR_HEALTH_CONSENT_REQUIRED: MESSAGES.grHealthConsentRequired,
   GR_HEALTH_NOTE_INVALID: MESSAGES.grHealthNoteInvalid,
   GR_FUNCTION_OVERLAP: MESSAGES.grFunctionOverlap,
+  GR_CONSENT_DATE_BEFORE_CURRENT: MESSAGES.grConsentDateBeforeCurrent,
 }
 
 // Hinweise: erfolgreicher Vorgang, keine Fehlermeldung
@@ -287,7 +289,7 @@ function asErrorLike(value: unknown): ErrorLike {
 
 /**
  * Setzt das detail des Datenbankfehlers in den Platzhalter ein: Feldname für „<Feld>“ (R35),
- * Grenzdatum für „<TT.MM.JJJJ>“ (EA_STATUS_DATE, R18 EA), Höchstlänge für „<n>“ (GR_TEXT_TOO_LONG, R27 GR).
+ * Grenzdatum für „<TT.MM.JJJJ>“ (EA_STATUS_DATE, R18 EA; GR_CONSENT_DATE_BEFORE_CURRENT, Befund D-02), Höchstlänge für „<n>“ (GR_TEXT_TOO_LONG, R27 GR).
  */
 function withDetail(text: string, details: string): string {
   return text

@@ -1,0 +1,38 @@
+# Typprüfung, Lint und TypeScript-Tests (SEPA pain.001/pain.008, TK-Kalkulation,
+# Budget-Import, EA-Migration usw.) auf jedem Pull Request.
+# Greift auf keine Supabase-Umgebung zu und braucht keine Secrets.
+#
+# Hinweis: Die Actions sind wie im übrigen Repository per Tag eingebunden. Ein Pinning auf
+# Commit-SHA ist empfohlen (Befund I-06), aber nicht Teil dieser Änderung.
+name: Frontend-Prüfungen
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Abhängigkeiten installieren
+        run: npm ci
+
+      - name: Typprüfung
+        run: npx tsc -b
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tests (scripts/**/*.test.ts)
+        run: npm test

@@ -45,6 +45,7 @@ function Button({
   variant = "default",
   size = "default",
   asChild = false,
+  type,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
@@ -57,6 +58,12 @@ function Button({
       data-slot="button"
       data-variant={variant}
       data-size={size}
+      // Ein natives <button> ohne type ist im Browser type="submit": Innerhalb
+      // eines Formulars würde jede Schaltfläche (z. B. „Ändern“, „Hinzufügen“)
+      // zusätzlich zu ihrem onClick das Formular absenden. Deshalb ist der
+      // Standard hier "button"; Speichern-Knöpfe setzen type="submit"
+      // ausdrücklich. Mit asChild bestimmt das Kind-Element den Typ selbst.
+      type={asChild ? type : (type ?? "button")}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />

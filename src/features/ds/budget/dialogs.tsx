@@ -11,8 +11,8 @@ import { dsRpc, DS_MESSAGES } from '@/features/ds/errors'
 import type { Booking, OverviewItem } from '@/features/ds/budget/data'
 import { euro, euroCents, textareaClassName } from '@/features/ds/budget/ui'
 import { FormError, selectClassName } from '@/features/gr/shared/ui'
-import { parseAmount } from '@/features/ds/budget/parse/csv'
 import { formatDate } from '@/lib/format'
+import { EURO_INPUT_HINT, parseEuro } from '@/lib/money'
 
 type ShellProps = {
   title: string
@@ -141,9 +141,10 @@ export function ReallocDialog({ items, from, direct = false, onClose }: ReallocP
       error={error}
       onClose={onClose}
       onSubmit={() => {
-        const value = parseAmount(amount)
+        // Freitext, kein DATEV-Format: „12.50“ = 12,50 €, Tausenderpunkt ungültig (W-02)
+        const value = parseEuro(amount)
         if (!source || !target) return setError(DS_MESSAGES.reallocGroup)
-        if (value === null || Number.isNaN(value) || value <= 0) return setError('Bitte einen gültigen Betrag eingeben.')
+        if (value === null || value <= 0) return setError(EURO_INPUT_HINT)
         if (reason.trim() === '') return setError(DS_MESSAGES.reasonRequired)
         submit(
           'fi_budget_realloc_request',
