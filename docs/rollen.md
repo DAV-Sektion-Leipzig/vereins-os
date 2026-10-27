@@ -1,6 +1,7 @@
 # Rollen und Rechte: Vereins OS
 
-Stand: 26.10.2026 · Version 1.3
+Stand: 27.10.2026 · Version 1.4
+Änderungen v1.4: Geschäftsstelle erhält „Schnittstellen“ (SC) lesen: Zustand der Anbindungen, Postausgang ohne Inhalt, Protokoll (Erhebung SC E1, Product Owner 27.10.2026).
 Änderungen v1.3: Aktion „freigeben“ im Rechtemodell (Q1; spec.md AD Nachtrag v0.10): Kennzeichen „darf freigeben“ an einem Recht, mit dessen Reichweite; das Modul TKF entfällt – die Vorlage „Freigabe Touren und Kurse“ hat TK bearbeiten + freigeben (Product Owner 26.10.2026).
 Änderungen v1.2: Finanzen (Steckbrief FI v0.3, Product Owner 24./25.10.2026): Referent:innen bestätigen die Abrechnungen ihres Referats („sachlich richtig“), bevor die Geschäftsstelle sie abschließt und über Auszahlungsrunden auszahlt (Vier-Augen-Prinzip; FI lesen mit Aktion „freigeben“ nach Q1, Reichweite „Referat“, ohne Bankdaten); Reichweite „Referat“ auch für FI; Aufbewahrung der Abrechnungsdaten 5 Jahre, Belege in der Finanzbuchhaltung. Umsetzung über die Übergabe an die Administration (specs/fi-finanzen/uebergabe-administration.md A7).
 Änderungen v1.1: Planungshilfe Touren und Kurse (TK) und Freigabe Touren und Kurse (TKF) in Rechte-Matrix und Beispielen; neue Rechtevorlage „Freigabe Touren und Kurse“ (delegierbares Freigaberecht, vergeben durch den Admin); Reichweite „Referat“ auch für TK und TKF; Sichtbarkeitspfad Planungshilfe (Namen und Lizenzen); Sätze und Pauschalen als Stammdaten, Pflege nur Admin (spec.md AD v0.9).
@@ -114,7 +115,7 @@ Stufen: **lesen** = ansehen · **bearbeiten** = anlegen und ändern · **verwalt
 | Vorlage | AD | SC | EA | GR | EZ | TK | FI | OA | PM | GS | AM |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | Admin | verwalten | verwalten | verwalten | lesen | lesen | lesen | – | – | – | – | – |
-| Geschäftsstelle | – | – | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten |
+| Geschäftsstelle | – | lesen | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten | verwalten |
 | Referent:in | – | – | bearbeiten (Reichweite Referat) | – | bearbeiten (Reichweite Referat) | bearbeiten (Reichweite Referat) | lesen + freigeben (Reichweite Referat) | – | – | – | – |
 | Freigabe Touren und Kurse | – | – | – | – | – | bearbeiten + freigeben (Reichweite Referat) | – | – | – | – | – |
 | Vorstand | – | – | – | – | – | – | – | – | – | – | – |

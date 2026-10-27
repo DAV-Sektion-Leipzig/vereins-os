@@ -1,7 +1,8 @@
 # Steckbrief: Schnittstellen-Connector
 
-Stand: 27.10.2026 · Version 0.3 · Kürzel: SC · Priorität: MVP jetzt, Finanzen und Dashboard sind umgesetzt (Product Owner 27.10.2026) · Ablage: docs/specs/sc-schnittstellen/ · Status: Entwurf · Product Owner: Toni Werner
+Stand: 27.10.2026 · Version 0.4 · Kürzel: SC · Priorität: MVP jetzt, Finanzen und Dashboard sind umgesetzt (Product Owner 27.10.2026) · Ablage: docs/specs/sc-schnittstellen/ · Status: Entwurf · Product Owner: Toni Werner
 Grundlage: vision.md (Basis: Administration und Schnittstellen-Connector), modul-landkarte.md v2.18, tech-stack.md (Abschnitte 1 und 4), rollen.md (Rechte-Matrix), glossar.md v1.8 („Basismodul“, „API-Key“), offene-punkte.md v5.19 (Abschnitt SC), querschnitt-administration.md (P8, P9, P10, P16), Anforderungen aus den Steckbriefen und Specs von AD, EA, FI, DS, TK, AM (siehe „Abhängigkeiten“).
+Änderungen v0.4: Geschäftsstelle liest den SC (E1 der Erhebung, Product Owner 27.10.2026).
 Änderungen v0.3: Q-SC6, Q-SC8, Q-SC9, Q-SC10 und Zeitpunkt entschieden (Product Owner 27.10.2026): Texte der E-Mail-Vorlagen pflegt der Admin; der Admin gibt je Anbindung die nutzenden Module frei; Tabellen der API-Keys im Modul SC (`sc_`); Erinnerung 30 Tage vor Ablauf, Löschung von Protokoll und Postausgang nach 90 Tagen; MVP jetzt. Erhebung v0.1.
 Änderungen v0.2: Q-SC1 bis Q-SC4 entschieden (Product Owner 27.10.2026): Name in der Oberfläche „Schnittstellen“, Code bleibt `SC`; MVP = E-Mail-Versand, danach Iteration 1 DATEV, Iteration 2 Instagram; vorerst keine weiteren Dienste; DATEV klärt der Product Owner zu gegebener Zeit (vor Iteration 1).
 Änderungen v0.1: Erster Entwurf (Auftrag Product Owner 27.10.2026: „neues Modul Konnektor, bei dem wir mehrere APIs anbinden können; die Schnittstellen sollen durch die Module im Vereins OS genutzt werden“). Bisher verstreute Anforderungen an SC aus allen Modulen gesammelt; Schnitt des MVP als Vorschlag.
@@ -18,7 +19,7 @@ Das Vereins OS spricht heute mit keinem externen Dienst außer Supabase Auth (Lo
 
 **Nutzer & Rechtevorlagen:**
 - Admin – SC verwalten (Startwert seit dem Kern der Administration, rollen.md Abschnitt 5): Dienste anbinden, API-Keys hinterlegen und wechseln, Anbindung aktivieren und abschalten, Protokoll der Aufrufe lesen, Testaufruf auslösen.
-- Geschäftsstelle – SC: kein Zugriff (Startwert). [OFFEN] Soll die Geschäftsstelle den Zustand der Dienste lesen (z. B. „E-Mail-Versand gestört“), ohne Keys zu pflegen?
+- Geschäftsstelle – SC lesen (neuer Startwert, E1, Product Owner 27.10.2026): Zustand der Anbindungen, Störungen, Postausgang ohne Inhalt der E-Mails, Protokoll; keine Pflege, keine Keys.
 - Fachmodule (kein Nutzer): nutzen eine Anbindung über serverseitige Funktionen. Das Recht prüft das **aufrufende Modul** mit dem Recht des angemeldeten Nutzers auf dieses Modul (z. B. „Erinnerung senden“ nur mit EA bearbeiten); ein Recht auf SC ist dafür nicht nötig [ANNAHME].
 - Zeitgesteuerte Abläufe (pg_cron, ohne angemeldeten Nutzer, querschnitt P16) nutzen SC ebenfalls; sie laufen als Datenbankfunktion des jeweiligen Moduls.
 - Je Anbindung legt der Admin fest, **welche Module** sie nutzen dürfen (Q-SC8, Product Owner 27.10.2026; z. B. DATEV nur für FI). Ein Modul ohne Freigabe erhält eine Fehlermeldung, kein stilles Scheitern.
@@ -97,4 +98,4 @@ Das Vereins OS spricht heute mit keinem externen Dienst außer Supabase Auth (Lo
 - Q-SC8 – **entschieden 27.10.2026:** Der Admin gibt je Anbindung frei, welche Module sie nutzen dürfen.
 - Q-SC9 – **entschieden 27.10.2026:** Tabellen der API-Keys im Modul SC (Präfix `sc_`), nicht `ad_api_keys`.
 - Q-SC10 – **entschieden 27.10.2026:** Erinnerung 30 Tage vor Ablauf eines Keys; Protokoll und Postausgang werden nach 90 Tagen gelöscht.
-- Fragen zu Einzelheiten des MVP: 01-erhebung.md, „Offene Fragen“ (E1 bis E7).
+- Fragen zu Einzelheiten des MVP: 01-erhebung.md, „Offene Fragen“ (E2 bis E7).

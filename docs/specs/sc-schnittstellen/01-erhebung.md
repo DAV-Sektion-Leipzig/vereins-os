@@ -1,7 +1,8 @@
 # Erhebung: Schnittstellen-Connector
 
-Datum: 27.10.2026 · Version 0.1 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner)
+Datum: 27.10.2026 · Version 0.2 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner)
 Grundlage: 00-steckbrief.md v0.3, tech-stack.md v0.8 (Abschnitte 1 und 4), querschnitt-administration.md (P8, P9, P10, P16), spec.md AD (Zugänge, Protokoll, Notfall-Admin), spec.md EA (Kontakt-E-Mail, Ablaufwarnung).
+Änderungen v0.2: E1 entschieden (Product Owner 27.10.2026): Die Geschäftsstelle liest Zustand der Schnittstellen, Postausgang und Protokoll (Startwert SC lesen), ohne Inhalt der E-Mails.
 Änderungen v0.1: Erster Entwurf für den MVP (Q-SC2, Product Owner 27.10.2026): Rahmen für Anbindungen, API-Key-Verwaltung, E-Mail-Versand mit Postausgang und Vorlagen, Protokoll. DATEV (Iteration 1) und Instagram (Iteration 2) nur in Abschnitt E.
 
 Begriffe nach glossar.md v1.10 (u. a. Schnittstellen-Connector, API-Key, Basismodul). Neu und noch nicht im Glossar [ANNAHME: Begriffe nach Steckbrief]: **Dienst**, **Anbindung**, **Aufruf**, **Postausgang**, dazu **Anlass** (Grund einer E-Mail mit eigener Vorlage, z. B. „Ablauf eines API-Keys“).
@@ -13,12 +14,13 @@ Begriffe nach glossar.md v1.10 (u. a. Schnittstellen-Connector, API-Key, Basismo
 | Rechtevorlage | Recht | Was | Reichweite |
 |---|---|---|---|
 | Admin (auch Notfall-Admin) | SC verwalten (Startwert) | Anbindungen anlegen, ändern, abschalten; API-Key hinterlegen und wechseln; Module freigeben; Vorlagen der Anlässe pflegen (Q-SC6); Postausgang und Protokoll lesen; fehlgeschlagene E-Mail erneut senden oder verwerfen; Testaufruf | alle |
-| Geschäftsstelle | – (Startwert) | kein Zugriff; [OFFEN] Zustand der Anbindungen lesen (E1) | – |
+| Geschäftsstelle | SC lesen (neuer Startwert, E1, Product Owner 27.10.2026) | Anbindungen und Zustand, Hinweise auf Störungen, Postausgang ohne Betreff und Text, Protokoll; keine Pflege, kein Testaufruf, kein erneutes Senden | alle |
 | Referent:in, Vorstand, Freigabe Touren und Kurse | – | kein Zugriff | – |
 | Fachmodul (über eine Funktion) | Recht des angemeldeten Nutzers im Fachmodul | legt eine E-Mail eines eigenen Anlasses in den Postausgang; nur wenn die Anbindung für dieses Modul freigegeben ist (Q-SC8) | – |
 | Zeitgesteuerter Ablauf (pg_cron) | ohne Nutzer | wie Fachmodul; läuft als Datenbankfunktion des Fachmoduls | – |
 
 - Stufen in SC [ANNAHME]: **lesen** = Anbindungen, Zustand, Postausgang (ohne Inhalt), Protokoll ansehen; **bearbeiten** = zusätzlich Vorlagen pflegen, erneut senden, Testaufruf; **verwalten** = zusätzlich Anbindungen anlegen, Keys hinterlegen, Module freigeben, abschalten.
+- Der Startwert „Geschäftsstelle = SC lesen“ wird mit der ersten Migration des SC gesetzt, ohne Änderungen des Admins an der Vorlage zu überschreiben (Muster wie FI-Startwerte, T125 AD).
 - Ein Recht auf SC gibt keine Rechte in den Fachmodulen; ein Recht in einem Fachmodul gibt kein Recht auf SC.
 - Den API-Key liest **niemand** über die Oberfläche oder die Datenbank-API, auch nicht der Admin; nur die Edge Function des SC liest ihn aus Vault.
 - Die Seite „Schnittstellen“ erscheint in der Navigation nur mit Recht auf SC (`ad_modules.is_available` für SC wird mit der ersten Oberfläche gesetzt, Muster wie DS und TK).
@@ -79,7 +81,7 @@ Ist die Anbindung abgeschaltet, gestört oder abgelaufen, bleiben E-Mails „war
 30 Tage vor dem Ablaufdatum (Q-SC10) und erneut 7 Tage vorher [ANNAHME] E-Mail des Anlasses „Ablauf eines API-Keys“ an alle Nutzer mit SC verwalten; zusätzlich Hinweis auf der Seite „Schnittstellen“. Betrifft der Ablauf die E-Mail-Anbindung selbst, geht die E-Mail noch über sie hinaus, solange sie gültig ist.
 
 **B7 – Störung sichtbar machen** (System)
-Gestörte, abgelaufene oder bald ablaufende Anbindungen und fehlgeschlagene E-Mails zeigt die Seite „Schnittstellen“ oben als Hinweis; zusätzlich ein Hinweis auf der Startseite für Nutzer mit SC verwalten [ANNAHME]. Eine E-Mail über die gestörte Anbindung selbst ist nicht möglich.
+Gestörte, abgelaufene oder bald ablaufende Anbindungen und fehlgeschlagene E-Mails zeigt die Seite „Schnittstellen“ oben als Hinweis; zusätzlich ein Hinweis auf der Startseite für Nutzer mit Recht auf SC (Admin, Geschäftsstelle) [ANNAHME]. Eine E-Mail über die gestörte Anbindung selbst ist nicht möglich.
 
 **B8 – Protokoll und Postausgang ansehen** (Admin)
 Liste mit Filter (Anbindung, Modul, Anlass, Ergebnis, Zeitraum); E-Mails ohne Text, nur Anlass, Empfängeradresse, Zustand, Versuche, letzte Fehlermeldung.
@@ -173,7 +175,7 @@ Liste mit Filter (Anbindung, Modul, Anlass, Ergebnis, Zeitraum); E-Mails ohne Te
 - Gespeichert werden Empfängeradressen und Texte der E-Mails im Postausgang sowie das Protokoll, je 90 Tage; danach automatische Löschung.
 - Für das normale Gmail-Konto gibt es keinen Auftragsverarbeitungsvertrag; deshalb R8 (keine Personendaten im Inhalt).
 - Empfänger:innen ohne DAV-Adresse (Kontakt-E-Mail von Aktiven) erhalten E-Mails über ein Gmail-Konto; Eintrag im Verarbeitungsverzeichnis der Sektion ergänzen (Product Owner).
-- Den Inhalt einer E-Mail sieht nur der Admin im Postausgang [ANNAHME]; Lesestufe für die Geschäftsstelle siehe E1.
+- Den Inhalt einer E-Mail (Betreff, Text) sieht nur der Admin im Postausgang [ANNAHME]; die Geschäftsstelle sieht Anlass, Empfängeradresse, Zustand und Fehlermeldung (E1).
 - Keys liegen nur in Vault; Fehlermeldungen des Dienstes werden gekürzt gespeichert und dürfen keinen Key enthalten.
 
 ## G. Nicht-funktional
@@ -188,7 +190,7 @@ Liste mit Filter (Anbindung, Modul, Anlass, Ergebnis, Zeitraum); E-Mails ohne Te
 
 | Nr | Frage | Wer klärt | bis wann |
 |---|---|---|---|
-| E1 | Soll die Geschäftsstelle den Zustand der Schnittstellen und den Postausgang **lesen** (Startwert SC lesen), damit sie Störungen bemerkt, auch wenn der Admin nicht da ist? Vorschlag: ja, ohne Inhalt der E-Mails. | Product Owner | vor den Stories |
+| E1 | **Entschieden 27.10.2026:** Die Geschäftsstelle liest Zustand, Postausgang (ohne Inhalt) und Protokoll; Startwert SC lesen. | Product Owner | erledigt |
 | E2 | Anrede mit Vornamen („Hallo Erika,“) oder ohne Namen („Hallo,“)? Der Vorname wäre ein Personendatum im Gmail-Konto ohne AV-Vertrag. Vorschlag: ohne Namen. | Product Owner | vor den Stories |
 | E3 | Erste Anlässe im MVP: Test-E-Mail, Ablauf eines API-Keys und Anmeldung des Notfall-Admins (Vorschlag), oder gleich auch EA „Ablauf einer Qualifikation“? | Product Owner | vor den Stories |
 | E4 | Adresse: Login-Adresse vor Kontakt-E-Mail (Vorschlag R5), oder soll das Fachmodul die Adressart wählen? | Product Owner | vor der Spec |

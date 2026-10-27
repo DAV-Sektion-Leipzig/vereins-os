@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 27.10.2026 · Version 5.22
+Stand: 27.10.2026 · Version 5.23
+Änderungen v5.23: Schnittstellen-Connector – E1 entschieden: Geschäftsstelle liest SC (Product Owner 27.10.2026); rollen.md v1.4.
 Änderungen v5.22: Schnittstellen-Connector – Q-SC6, Q-SC8, Q-SC9, Q-SC10 und Zeitpunkt entschieden (Product Owner 27.10.2026); Steckbrief v0.3, Erhebung v0.1 mit Fragen E1 bis E7.
 Änderungen v5.21: Schnittstellen-Connector – Q-SC1 bis Q-SC3 entschieden, Q-SC4 zurückgestellt (Product Owner 27.10.2026); Steckbrief v0.2.
 Änderungen v5.20: Schnittstellen-Connector – Steckbrief v0.1 (Entwurf) mit den Fragen Q-SC1 bis Q-SC10 (Auftrag Product Owner 27.10.2026).
@@ -243,7 +244,8 @@ Steckbrief: docs/specs/ds-dashboard/00-steckbrief.md (Version 0.13, Entwurf 26.1
   - Entschieden 27.10.2026 (Product Owner): **Q-SC1** Name in der Oberfläche „Schnittstellen“, Code `SC`; **Q-SC2** MVP = E-Mail-Versand, Iteration 1 DATEV, Iteration 2 Instagram; **Q-SC3** vorerst keine weiteren Dienste.
   - Zurückgestellt: **Q-SC4** DATEV (Schnittstelle, Vertragspartner, Kosten) klärt der Product Owner zu gegebener Zeit, spätestens vor Iteration 1.
   - Entschieden 27.10.2026 (Product Owner): MVP jetzt (Finanzen und Dashboard umgesetzt); **Q-SC6** Texte der E-Mail-Vorlagen pflegt der Admin; **Q-SC8** Freigabe je Anbindung und Modul durch den Admin; **Q-SC9** Tabellen im Modul SC (`sc_`); **Q-SC10** Erinnerung 30 Tage vor Ablauf, Löschung von Protokoll und Postausgang nach 90 Tagen.
-  - [OFFEN] E1 bis E7 zum MVP (01-erhebung.md SC, „Offene Fragen“).
+  - Entschieden 27.10.2026 (Product Owner): **E1** Geschäftsstelle liest SC (Zustand, Postausgang ohne Inhalt, Protokoll).
+  - [OFFEN] E2 bis E7 zum MVP (01-erhebung.md SC, „Offene Fragen“).
   - [OFFEN] Q-SC5 Instagram (Business-Konto) und Umfrage-Dienst (AV-Vertrag, EU-Server) (Öffentlichkeitsarbeit).
   - [OFFEN] Q-SC7 Eingehende Schnittstellen (Webhooks); Vorschlag: nicht im MVP.
 
