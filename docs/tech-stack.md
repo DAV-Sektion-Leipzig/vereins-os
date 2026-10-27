@@ -1,6 +1,7 @@
 # Tech-Stack: Vereins OS
 
-Stand: 23.10.2026 · Version 0.7 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
+Stand: 27.10.2026 · Version 0.8 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
+Änderungen v0.8: Metadaten der API-Keys im Modul SC statt AD (Q-SC9, Product Owner 27.10.2026).
 Änderungen v0.7 (23.10.2026, Entscheidung Product Owner): Claude Code legt Pull Requests an; Auto-Merge für Datenbank, Tests und Umsetzungsdateien nach grünen Pflicht-Checks; Oberfläche und fachliche Dokumente gibt weiterhin der Product Owner frei (Abschnitt 3).
 
 ## Überblick
@@ -29,7 +30,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 - **Region:** EU (Frankfurt). [ANNAHME]
 - **Auth:** E-Mail und Passwort. Benutzername ist immer die DAV-E-Mail-Adresse der Person (gepflegt über das Portal „DAV 360 Mitarbeiter“). SSO später prüfen.
 - **Selbstregistrierung aus.** Nutzer legt nur der Admin an (Einladung). [ANNAHME]
-- **Secrets / API-Keys:** Supabase Vault; Zugriff nur serverseitig (Edge Functions, Datenbankfunktionen). Metadaten (Dienst, zuletzt gewechselt, Ablaufdatum) in einer Tabelle im Modul AD.
+- **Secrets / API-Keys:** Supabase Vault; Zugriff nur serverseitig (Edge Functions, Datenbankfunktionen). Metadaten (Dienst, zuletzt gewechselt, Ablaufdatum) in Tabellen des Moduls SC (Präfix `sc_`, Product Owner 27.10.2026).
 - **Serverlogik:** Supabase Edge Functions für externe Dienste und E-Mail-Versand; zeitgesteuerte Jobs (Erinnerungen, Buchungslauf, Löschung nach 5 Jahren) per Datenbank-Scheduler (pg_cron). [ANNAHME]
 - **Datenschutz:** Auftragsverarbeitungsvertrag (DPA) mit Supabase abschließen; Eintrag im Verarbeitungsverzeichnis der Sektion.
 

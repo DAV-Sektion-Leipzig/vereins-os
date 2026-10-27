@@ -1,6 +1,7 @@
 # Glossar: Vereins OS
 
-Stand: 27.10.2026 · Version 1.9
+Stand: 27.10.2026 · Version 1.10
+Änderungen v1.10: API-Key wird im Schnittstellen-Connector nachgehalten, nicht im Admin-Modul (Product Owner 27.10.2026).
 Änderungen v1.9: Schnittstellen-Connector mit Namen in der Oberfläche „Schnittstellen“ aufgenommen (Product Owner 27.10.2026).
 Änderungen v1.8: Abschnitt „Touren und Kurse“ mit Planung, Tourenleitung, Teilnahmebeitrag, Kostendeckung, CO2-Bilanz, Klimaschutzbudget, Yolawo; Kurs ein- und mehrtägig nach Lehreinheiten (Product Owner 26.10.2026).
 Änderungen v1.7: Begriffe des Moduls **Dashboard** (DS) aufgenommen: Dashboard, Sicht, Kennzahl, Budgetposten, Gesamtbudget, Zuordnung (Budget), Buchung, umschlüsseln, umschichten, Datenstand, Budgetpflege; Anwesenheitsquote; Abkürzungen TN (Teilnehmer:innen) und PT (Probetrainings) nur in schmalen Tabellenköpfen; neue Referate Öffentlichkeitsarbeit und Umwelt und Naturschutz (Product Owner 26.10.2026; specs/ds-dashboard/00-steckbrief.md v0.5).
@@ -143,7 +144,7 @@ Regel: ein Begriff pro Sache. Synonyme stehen nur in „Nicht verwechseln mit“
 | Sicht | Zusammenstellung von Kennzahlen für eine Nutzergruppe im Dashboard (Vorstand, Referat, Geschäftsstelle, später Gruppe). | Ansicht, Bericht (Synonyme, nicht verwenden); Sichtbarkeit von Personen; Reichweite | Sicht des Referats Kinder und Jugend |
 | Kennzahl | Anzahl, Summe oder Quote, die ein Fachmodul für das Dashboard liefert; keine Personenliste. | KPI (nicht verwenden); Auswertung | Anwesenheitsquote der Gruppe „Jugendgruppe Test 1“: 72 % |
 | Anwesenheitsquote | Kennzahl je Gruppe und Zeitraum: Ø anwesende Teilnehmer:innen je Training ÷ Teilnehmer:innen der Gruppe zum Datum des Trainings. Im Spaltenkopf des Dashboards kurz „Anwesenheit“. | Anwesenheit (Zuordnung einer Person zu einem Einsatz) | 71 % im 2. Halbjahr 2026 |
-| API-Key | Zugangsschlüssel für einen externen Dienst; im Admin-Modul nachgehalten (mit SC), in Supabase Vault gespeichert. | Passwort eines Nutzers | Instagram-Key, gültig bis 30.06.2027 |
+| API-Key | Zugangsschlüssel für einen externen Dienst; im Schnittstellen-Connector nachgehalten, in Supabase Vault gespeichert. | Passwort eines Nutzers | Instagram-Key, gültig bis 30.06.2027 |
 
 ## Finanzen und Aufgaben
 
