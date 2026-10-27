@@ -54,6 +54,7 @@ Diese Liste ist normativ für Gruppen (spec.md 5, T2). Die Meldungstexte stehen 
 | `GR_HEALTH_CONSENT_REQUIRED` | Bitte zuerst die Einwilligung der Erziehungsberechtigten erfassen. | R24 | `gr_save_health_note` | umgesetzt |
 | `GR_HEALTH_NOTE_INVALID` | Bitte einen Text mit höchstens 2000 Zeichen eingeben. | spec.md 2.1 | `gr_save_health_note` | umgesetzt |
 | `GR_FUNCTION_OVERLAP` | Diese Person hat diese Funktion in der Gruppe bereits. | R28 | `gr_add_group_function`, `gr_end_group_function` | umgesetzt |
+| `GR_CONSENT_DATE_BEFORE_CURRENT` | Das Datum darf nicht vor dem letzten Eintrag (`<TT.MM.JJJJ>`) liegen. detail = Datum des aktuellen Eintrags (TT.MM.JJJJ); gleiches Datum ist erlaubt. | R12, R24, Review-Befund D-02 | `gr_set_photo_consent`, `gr_set_health_consent` | umgesetzt |
 
 Weiterverwendete Codes anderer Module: `AD_NAME_REQUIRED` (R4 AD, neue Person), `EA_RELATION_REQUIRED` und `EA_GROUP_RELATION_ONLY_GR` (R38, R39), `EA_VALID_RANGE` („gültig bis“ einer Funktion vor „seit“, plan.md H2). Unerwartete Fehler: „Etwas ist schiefgelaufen. Bitte versuche es erneut.“
 

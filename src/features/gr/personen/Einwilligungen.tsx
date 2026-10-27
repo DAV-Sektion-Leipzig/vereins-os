@@ -63,7 +63,7 @@ function ConsentEditor({
         <form onSubmit={onSubmit} noValidate className="flex flex-wrap items-end gap-3">
           <div className="flex flex-col gap-2">
             <Label htmlFor={`${id}-date`}>Datum ({current ? 'Widerruf' : 'Erteilung'})</Label>
-            <Input id={`${id}-date`} type="date" max={todayIso()} value={date} onChange={(e) => setDate(e.target.value)} className="sm:w-44" />
+            <Input id={`${id}-date`} type="date" min={rows[0]?.effective_on} max={todayIso()} value={date} onChange={(e) => setDate(e.target.value)} className="sm:w-44" />
           </div>
           <Button type="submit" disabled={pending} className="h-11 sm:h-8">
             {pending ? 'Speichern …' : `„${current ? 'nein' : 'ja'}“ speichern`}
