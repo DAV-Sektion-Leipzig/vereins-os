@@ -1,6 +1,7 @@
 # Tech-Stack: Vereins OS
 
-Stand: 27.10.2026 · Version 0.8 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
+Stand: 27.10.2026 · Version 0.9 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
+Änderungen v0.9: E-Mails aus Abläufen über Brevo (SC) statt Google-Konto (Product Owner 27.10.2026); Login-Mails offen.
 Änderungen v0.8: Metadaten der API-Keys im Modul SC statt AD (Q-SC9, Product Owner 27.10.2026).
 Änderungen v0.7 (23.10.2026, Entscheidung Product Owner): Claude Code legt Pull Requests an; Auto-Merge für Datenbank, Tests und Umsetzungsdateien nach grünen Pflicht-Checks; Oberfläche und fachliche Dokumente gibt weiterhin der Product Owner frei (Abschnitt 3).
 
@@ -64,8 +65,8 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 
 | Zweck | Dienst | Stand |
 |---|---|---|
-| Login-Mails (Einladung, Passwort zurücksetzen) | Google-Konto der Sektion als SMTP in Supabase Auth | MVP |
-| Erinnerungen, Mails aus Abläufen | Google-Konto der Sektion über SC (Edge Function) | ab SC |
+| Login-Mails (Einladung, Passwort zurücksetzen) | Google-Konto der Sektion als SMTP in Supabase Auth; [OFFEN] Umstellung auf Brevo (Erhebung SC E11) | MVP |
+| Erinnerungen, Mails aus Abläufen | Brevo über SC (Edge Function, API-Key in Vault) (Product Owner 27.10.2026) | ab SC |
 | Versand über Vereinsdomain / Microsoft-Tenant | Microsoft Graph | später; nur nach Abstimmung mit dem Bundesverband |
 | Instagram, Umfrage-Dienst | über SC | ab OA |
 | DATEV / Sparkasse | Datei-Export oder Schnittstelle | [OFFEN], Klärung in FI |
@@ -73,6 +74,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 - Eigener SMTP ist im Free-Plan möglich; Supabase begrenzt Auth-Mails dann standardmäßig auf 30 pro Stunde. Für ca. 4 Nutzer ausreichend.
 - Login-Mails gehen an DAV-Adressen (Microsoft-Tenant des Bundesverbands). Zustellung aus einem Google-Konto vor Go-live testen (Spam-Filter). [ANNAHME]
 - Das Google-Konto ist ein normales Gmail-Konto. Versand per SMTP mit App-Passwort; das App-Passwort liegt nur in den Supabase-Einstellungen bzw. in Vault.
+- **Brevo** (transaktionale E-Mails aus dem Vereins OS, Product Owner 27.10.2026): Versand nur über den Schnittstellen-Connector; Auftragsverarbeitungsvertrag mit Brevo; Absender und Tarif siehe Erhebung SC (E8–E10).
 - **Datenschutz:** Für ein normales Gmail-Konto gibt es keinen Auftragsverarbeitungsvertrag. Regel: Mails enthalten keine Personendaten außer der Empfängeradresse und einem kurzen Hinweistext mit Link ins Vereins OS (z. B. „Du hast eine neue Aufgabe“ statt Aufgabeninhalt).
 - Wechsel auf Microsoft Graph (Vereinsdomain) bleibt Ziel, sobald der Bundesverband zustimmt.
 

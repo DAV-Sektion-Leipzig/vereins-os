@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 27.10.2026 · Version 5.23
+Stand: 27.10.2026 · Version 5.24
+Änderungen v5.24: Schnittstellen-Connector – E2 bis E7 entschieden, E-Mail über Brevo statt Google-Konto (Product Owner 27.10.2026); neue Fragen E8 bis E11.
 Änderungen v5.23: Schnittstellen-Connector – E1 entschieden: Geschäftsstelle liest SC (Product Owner 27.10.2026); rollen.md v1.4.
 Änderungen v5.22: Schnittstellen-Connector – Q-SC6, Q-SC8, Q-SC9, Q-SC10 und Zeitpunkt entschieden (Product Owner 27.10.2026); Steckbrief v0.3, Erhebung v0.1 mit Fragen E1 bis E7.
 Änderungen v5.21: Schnittstellen-Connector – Q-SC1 bis Q-SC3 entschieden, Q-SC4 zurückgestellt (Product Owner 27.10.2026); Steckbrief v0.2.
@@ -245,7 +246,8 @@ Steckbrief: docs/specs/ds-dashboard/00-steckbrief.md (Version 0.13, Entwurf 26.1
   - Zurückgestellt: **Q-SC4** DATEV (Schnittstelle, Vertragspartner, Kosten) klärt der Product Owner zu gegebener Zeit, spätestens vor Iteration 1.
   - Entschieden 27.10.2026 (Product Owner): MVP jetzt (Finanzen und Dashboard umgesetzt); **Q-SC6** Texte der E-Mail-Vorlagen pflegt der Admin; **Q-SC8** Freigabe je Anbindung und Modul durch den Admin; **Q-SC9** Tabellen im Modul SC (`sc_`); **Q-SC10** Erinnerung 30 Tage vor Ablauf, Löschung von Protokoll und Postausgang nach 90 Tagen.
   - Entschieden 27.10.2026 (Product Owner): **E1** Geschäftsstelle liest SC (Zustand, Postausgang ohne Inhalt, Protokoll).
-  - [OFFEN] E2 bis E7 zum MVP (01-erhebung.md SC, „Offene Fragen“).
+  - Entschieden 27.10.2026 (Product Owner): **E2** Anrede ohne Namen; **E3** Anlässe des MVP: Test-E-Mail, Ablauf eines API-Keys, Anmeldung des Notfall-Admins; **E4** Login-Adresse, sonst Kontakt-E-Mail; **E5** transaktionale E-Mails über **Brevo** statt Google-Konto; **E6** kein Abbestellen im MVP; **E7** Zahlen bestätigt.
+  - [OFFEN] E8 Absenderadresse und Domain bei Brevo (ohne DNS-Zugriff auf dav-leipzig.de); E9 Brevo-Konto, AV-Vertrag, Keys für TEST und PROD; E10 Tarif; E11 Login-Mails ebenfalls auf Brevo? (01-erhebung.md SC)
   - [OFFEN] Q-SC5 Instagram (Business-Konto) und Umfrage-Dienst (AV-Vertrag, EU-Server) (Öffentlichkeitsarbeit).
   - [OFFEN] Q-SC7 Eingehende Schnittstellen (Webhooks); Vorschlag: nicht im MVP.
 
