@@ -16,6 +16,7 @@ import { FormDialog } from '@/features/fi/shared/FormDialog'
 import { HintBadges, textareaClassName } from '@/features/fi/shared/ui'
 import { FormError, LoadFailed } from '@/features/gr/shared/ui'
 import { formatDate, formatDateTime } from '@/lib/format'
+import { parseEuro } from '@/lib/money'
 import { cn } from '@/lib/utils'
 
 type Dialog = { kind: 'release' | 'discard' | 'refetch' } | { kind: 'extra'; line: CollectionLine } | null
@@ -379,8 +380,9 @@ function ExtraDialog({
         )
       }
       onSubmit={() => {
-        const value = Number(amount.trim().replace(/\./g, '').replace(',', '.'))
-        if (!amount.trim() || Number.isNaN(value)) return setLocalError(FI_MESSAGES.amountInvalid)
+        // Zusatzbetrag nur positiv (fi_set_collection_extra: p_amount > 0); „12.50“ = 12,50 €, Tausenderpunkt ungültig
+        const value = parseEuro(amount)
+        if (value === null) return setLocalError(FI_MESSAGES.amountInvalid)
         setLocalError(null)
         onSave(value, text, reason)
       }}
