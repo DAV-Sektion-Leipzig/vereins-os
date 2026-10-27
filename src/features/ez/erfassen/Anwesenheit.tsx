@@ -86,12 +86,12 @@ export function AnwesenheitsListe({ list, persons, substitutes, lockedIds, settl
                 setSearching(false)
               }}
             />
-            <Button variant="ghost" className="self-start" onClick={() => setSearching(false)}>
+            <Button type="button" variant="ghost" className="self-start" onClick={() => setSearching(false)}>
               Abbrechen
             </Button>
           </div>
         ) : (
-          <Button variant="outline" className="h-11 self-start sm:h-8" onClick={() => setSearching(true)} disabled={disabled}>
+          <Button type="button" variant="outline" className="h-11 self-start sm:h-8" onClick={() => setSearching(true)} disabled={disabled}>
             <UserPlusIcon data-icon="inline-start" aria-hidden="true" />
             Person hinzufügen
           </Button>
@@ -242,7 +242,7 @@ export function PersonenEintragen({ persons, names, defaultRole, lockedIds, sett
                     ))}
                   </select>
                   {!locked && (
-                    <Button
+                    <Button type="button"
                       variant="ghost"
                       size="icon"
                       aria-label={`${name} entfernen`}

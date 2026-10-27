@@ -314,7 +314,7 @@ export function EinsatzFormular({
                 {values.additionalGroupIds.map((id) => (
                   <li key={id} className="flex items-center gap-1 rounded-lg border py-1 pr-1 pl-2.5 text-sm">
                     {groupOptions.find((g) => g.id === id)?.name}
-                    <Button
+                    <Button type="button"
                       variant="ghost"
                       size="icon-sm"
                       aria-label="Gruppe entfernen"
@@ -370,7 +370,7 @@ export function EinsatzFormular({
                     {names[values.organizerId] ?? 'ausgewählte Person'}
                   </span>
                   {!timesLocked && (
-                    <Button variant="ghost" size="sm" onClick={() => setEditingOrganizer(true)}>
+                    <Button type="button" variant="ghost" size="sm" onClick={() => setEditingOrganizer(true)}>
                       Ändern
                     </Button>
                   )}
@@ -586,7 +586,7 @@ export function EinsatzFormular({
                 onChange={(e) => set({ trials: values.trials.map((x, j) => (j === i ? e.target.value : x)) })}
                 className="sm:w-64"
               />
-              <Button
+              <Button type="button"
                 variant="ghost"
                 size="icon"
                 aria-label={`Probetraining ${i + 1} entfernen`}
@@ -597,7 +597,7 @@ export function EinsatzFormular({
               </Button>
             </div>
           ))}
-          <Button variant="outline" className="h-11 self-start sm:h-8" onClick={() => set({ trials: [...values.trials, ''] })}>
+          <Button type="button" variant="outline" className="h-11 self-start sm:h-8" onClick={() => set({ trials: [...values.trials, ''] })}>
             Probetraining hinzufügen
           </Button>
         </section>
