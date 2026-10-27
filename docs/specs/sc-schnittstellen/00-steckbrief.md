@@ -1,7 +1,8 @@
 # Steckbrief: Schnittstellen-Connector
 
-Stand: 27.10.2026 · Version 0.5.1 · Kürzel: SC · Priorität: MVP jetzt, Finanzen und Dashboard sind umgesetzt (Product Owner 27.10.2026) · Ablage: docs/specs/sc-schnittstellen/ · Status: Entwurf · Product Owner: Toni Werner
+Stand: 27.10.2026 · Version 0.6 · Kürzel: SC · Priorität: MVP jetzt, Finanzen und Dashboard sind umgesetzt (Product Owner 27.10.2026) · Ablage: docs/specs/sc-schnittstellen/ · Status: Entwurf · Product Owner: Toni Werner
 Grundlage: vision.md (Basis: Administration und Schnittstellen-Connector), modul-landkarte.md v2.18, tech-stack.md (Abschnitte 1 und 4), rollen.md (Rechte-Matrix), glossar.md v1.8 („Basismodul“, „API-Key“), offene-punkte.md v5.19 (Abschnitt SC), querschnitt-administration.md (P8, P9, P10, P16), Anforderungen aus den Steckbriefen und Specs von AD, EA, FI, DS, TK, AM (siehe „Abhängigkeiten“).
+Änderungen v0.6: Erhebung E8 bis E11 entschieden (Product Owner 27.10.2026): Absender `noreply@vereinsos.dav-leipzig.de`, Brevo-Konto angelegt, kostenloser Tarif mit höchstens 300 E-Mails am Tag, Login-Mails nicht im Scope (entfallen mit SSO).
 Änderungen v0.5.1: Stories v0.1 (US-SC-01 bis US-SC-16).
 Änderungen v0.5: E-Mail-Versand über **Brevo** statt Google-Konto (Erhebung E5, Product Owner 27.10.2026); E2 bis E7 der Erhebung entschieden.
 Änderungen v0.4: Geschäftsstelle liest den SC (E1 der Erhebung, Product Owner 27.10.2026).
@@ -62,7 +63,7 @@ Das Vereins OS spricht heute mit keinem externen Dienst außer Supabase Auth (Lo
 - **Microsoft Graph** statt Brevo für den Versand über die Vereinsdomain, nach Zustimmung des Bundesverbands (tech-stack.md 4).
 
 **Nicht im Scope:**
-- Login-Mails (Einladung, Passwort zurücksetzen): bleiben direkt bei Supabase Auth (00-steckbrief.md AD, Abhängigkeiten).
+- Login-Mails (Einladung, Passwort zurücksetzen): bleiben direkt bei Supabase Auth und entfallen mit SSO (Erhebung E11, Product Owner 27.10.2026).
 - Fachlogik der nutzenden Module: wann eine Erinnerung fällig ist, welche Buchungen importiert werden oder was ein Instagram-Beitrag enthält, entscheidet das Fachmodul; SC transportiert nur.
 - Eingehende Schnittstellen, über die externe Dienste Daten in das Vereins OS schreiben (Webhooks, eigene API für Dritte) [ANNAHME; Q-SC7].
 - Schnittstelle zur Mitgliederverwaltung bzw. zu Salesforce (glossar.md: keine Schnittstelle; querschnitt P18).
@@ -82,11 +83,11 @@ Das Vereins OS spricht heute mit keinem externen Dienst außer Supabase Auth (Lo
 
 **Risiken / Besonderheiten:**
 - **Secrets:** Keys nur in Supabase Vault; kein Key im Repository, im Frontend, in `.env`-Dateien oder in einer für Nutzer lesbaren Tabelle (CLAUDE.md, modul-landkarte.md). Die Tabelle der Anbindungen enthält nur Metadaten. TEST und PROD haben **getrennte Keys**; in TEST nur Test-Konten bzw. Sandbox der Dienste [ANNAHME].
-- **Datenschutz E-Mail:** Mit Brevo ist ein Auftragsverarbeitungsvertrag abzuschließen (Erhebung E9). Mails bleiben trotzdem ohne Personendaten außer Empfänger und Link, Anrede ohne Namen (Erhebung E2). Empfängeradressen von Aktiven außerhalb von @dav-leipzig.de (Kontakt-E-Mail) sind Personendaten im Postausgang und im Protokoll; Löschfrist 90 Tage (Q-SC10).
+- **Datenschutz E-Mail:** Brevo ist Auftragsverarbeiter; das Konto der Sektion ist angelegt, Auftragsverarbeitungsvertrag prüft der Product Owner (Erhebung E9). Mails bleiben trotzdem ohne Personendaten außer Empfänger und Link, Anrede ohne Namen (Erhebung E2). Empfängeradressen von Aktiven außerhalb von @dav-leipzig.de (Kontakt-E-Mail) sind Personendaten im Postausgang und im Protokoll; Löschfrist 90 Tage (Q-SC10).
 - **Datenschutz DATEV:** Buchungstexte enthalten Namen von Personen; gleiche Regeln wie beim CSV-Import des Bereichs Budget (ds-dashboard/00-steckbrief.md, Risiken). Auftragsverarbeitung mit DATEV klären.
-- **Grenzen der Dienste:** Brevo begrenzt den Versand je nach Tarif (Tageslimit, Erhebung E10); Supabase Free-Plan begrenzt Aufrufe von Edge Functions. Für ca. 4 bis 30 Nutzer und einige Dutzend Erinnerungen im Monat ausreichend [ANNAHME].
-- **Zustellung:** Ohne bestätigte Absenderdomain (DNS von dav-leipzig.de nicht zugänglich) können Mails an DAV-Adressen (Microsoft-Tenant) im Spam landen; vor Go-live testen (Erhebung E8).
-- **Kosten:** Brevo im kostenlosen Tarif [ANNAHME, Erhebung E10]; DATEV-Schnittstelle, Instagram-Freigabe und Umfrage-Dienst ggf. kostenpflichtig [OFFEN].
+- **Grenzen der Dienste:** kostenloser Brevo-Tarif mit höchstens **300 E-Mails am Tag** (Erhebung E10, R13), TEST und PROD im selben Konto; Supabase Free-Plan begrenzt Aufrufe von Edge Functions. Für ca. 4 bis 30 Nutzer und einige Dutzend Erinnerungen im Monat ausreichend [ANNAHME].
+- **Zustellung:** Absender `noreply@vereinsos.dav-leipzig.de`, Domain in Brevo eingerichtet (Erhebung E8); Zustellung an DAV-Adressen (Microsoft-Tenant) vor Go-live in TEST prüfen.
+- **Kosten:** Brevo im kostenlosen Tarif (Erhebung E10); DATEV-Schnittstelle, Instagram-Freigabe und Umfrage-Dienst ggf. kostenpflichtig [OFFEN].
 - **Nie gegen PROD testen:** Testaufrufe und Seeds nur in TEST; der Seed legt keine echten Keys an.
 
 **Offene Fragen:**
@@ -100,4 +101,4 @@ Das Vereins OS spricht heute mit keinem externen Dienst außer Supabase Auth (Lo
 - Q-SC8 – **entschieden 27.10.2026:** Der Admin gibt je Anbindung frei, welche Module sie nutzen dürfen.
 - Q-SC9 – **entschieden 27.10.2026:** Tabellen der API-Keys im Modul SC (Präfix `sc_`), nicht `ad_api_keys`.
 - Q-SC10 – **entschieden 27.10.2026:** Erinnerung 30 Tage vor Ablauf eines Keys; Protokoll und Postausgang werden nach 90 Tagen gelöscht.
-- Fragen zu Einzelheiten des MVP: 01-erhebung.md, „Offene Fragen“ (E8 bis E11).
+- Fragen zu Einzelheiten des MVP: 01-erhebung.md, „Offene Fragen“ (alle entschieden, 27.10.2026).

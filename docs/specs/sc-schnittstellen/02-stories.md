@@ -1,8 +1,9 @@
 # Stories: Schnittstellen-Connector
 
-Stand: 27.10.2026 · Version 0.1 · Kürzel: SC · Status: Entwurf
+Stand: 27.10.2026 · Version 0.2 · Kürzel: SC · Status: Entwurf
 Quellen: 00-steckbrief.md (v0.5), 01-erhebung.md (v0.3, Regeln R1–R16), rollen.md (v1.4), glossar.md (v1.11), tech-stack.md (v0.9).
 Umfang: MVP – Rahmen für Anbindungen, API-Key-Verwaltung, E-Mail-Versand über Brevo mit Postausgang und Vorlagen, Protokoll, Erinnerung vor Ablauf eines Keys, Anlass „Anmeldung des Notfall-Admins“ (AD). Nicht: DATEV (Iteration 1), Instagram (Iteration 2), Anlässe der Fachmodule EA und FI (eigene Stories dort).
+Änderungen v0.2: Absender und Tageslimit nach Erhebung v0.4 (E8, E10): US-SC-02 AK1, US-SC-09 AK4.
 Änderungen v0.1: Erster Entwurf.
 
 Beispiele sind fiktiv (Personen, Adressen, Keys). Name in der Oberfläche: „Schnittstellen“.
@@ -57,7 +58,7 @@ Beispiele sind fiktiv (Personen, Adressen, Keys). Name in der Oberfläche: „Sc
 **Priorität:** Must · **Regeln:** R11, R14, R15 · **Abhängig von:** US-SC-01
 
 **Akzeptanzkriterien**
-- AK1: Gegeben ich gebe Name „E-Mail Sektion“, Absender „vereinsos.test@example.org“, Absendername „DAV Leipzig – Vereins OS“ und einen Key ein, wenn ich speichere, dann ist die Anbindung mit Zustand „abgeschaltet“ angelegt, der Key liegt in Vault und es werden nur die letzten 4 Zeichen angezeigt.
+- AK1: Gegeben ich gebe Name „E-Mail Sektion“, Absender „noreply@vereinsos.dav-leipzig.de“, Absendername „Vereins OS“ und einen Key ein, wenn ich speichere, dann ist die Anbindung mit Zustand „abgeschaltet“ angelegt, der Key liegt in Vault und es werden nur die letzten 4 Zeichen angezeigt.
 - AK2: Gegeben ich lasse Name, Absenderadresse oder Key leer oder die Absenderadresse ist ungültig, wenn ich speichere, dann erscheint am Feld eine Fehlermeldung (z. B. „Bitte gib eine gültige E-Mail-Adresse ein.“) und nichts wird gespeichert.
 - AK3: Gegeben ich habe gespeichert, wenn ich die Anbindung erneut öffne, dann ist das Feld „API-Key“ leer mit dem Hinweis „hinterlegt: …k3x9“; der Key ist nicht abrufbar (R11).
 - AK4: Gegeben ich habe nur SC lesen, wenn ich versuche, eine Anbindung anzulegen (auch direkt über die Datenbank-API), dann wird abgelehnt (R17).
@@ -163,7 +164,7 @@ Beispiele sind fiktiv (Personen, Adressen, Keys). Name in der Oberfläche: „Sc
 - AK1: Gegeben eine E-Mail „wartet“ und die Anbindung ist aktiv, wenn der Job läuft, dann übergibt die Edge Function sie an Brevo; nimmt Brevo an, ist sie „versendet“ mit Zeitpunkt, und im Protokoll steht „Versand erfolgreich“.
 - AK2: Gegeben Brevo meldet einen Fehler, dann bleibt die E-Mail „wartet“, nächster Versuch nach 15 Minuten, dann nach 1 Stunde; nach dem 3. Fehler ist sie „fehlgeschlagen“ mit der gekürzten Meldung (R7).
 - AK3: Gegeben 3 Aufrufe in Folge sind fehlgeschlagen, dann wechselt die Anbindung auf „gestört“ und der Job versendet bis zum nächsten erfolgreichen Test nichts mehr über sie (R7).
-- AK4: Gegeben in der laufenden Stunde wurden schon 100 E-Mails übergeben, dann bleiben weitere „wartet“ bis zur nächsten Stunde (R13).
+- AK4: Gegeben in der laufenden Stunde wurden schon 100 E-Mails übergeben, dann bleiben weitere „wartet“ bis zur nächsten Stunde; gegeben am Tag wurden schon 300 übergeben (in TEST 50), dann bleiben weitere „wartet“ bis zum nächsten Tag, und die Seite „Schnittstellen“ zeigt „Tageslimit erreicht“ (R13).
 - AK5: Gegeben die Anbindung ist abgeschaltet, gestört oder abgelaufen, dann versendet der Job nichts; der Key wird nur in der Edge Function aus Vault gelesen und nie gespeichert oder protokolliert (R1, R11).
 
 **Nicht Teil dieser Story:** Zustellbestätigungen und Öffnungen aus Brevo (kein Tracking, [ANNAHME]).

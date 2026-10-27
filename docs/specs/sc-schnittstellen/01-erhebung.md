@@ -1,7 +1,8 @@
 # Erhebung: Schnittstellen-Connector
 
-Datum: 27.10.2026 · Version 0.3 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner)
+Datum: 27.10.2026 · Version 0.4 · Status: Entwurf · Beteiligte: Toni Werner (Product Owner)
 Grundlage: 00-steckbrief.md v0.3, tech-stack.md v0.8 (Abschnitte 1 und 4), querschnitt-administration.md (P8, P9, P10, P16), spec.md AD (Zugänge, Protokoll, Notfall-Admin), spec.md EA (Kontakt-E-Mail, Ablaufwarnung).
+Änderungen v0.4: E8 bis E11 entschieden (Product Owner 27.10.2026): Absender `noreply@vereinsos.dav-leipzig.de`, Domain in Brevo eingerichtet; Brevo-Konto angelegt; kostenloser Tarif mit **höchstens 300 E-Mails am Tag** (neue Grenze in R13); Login-Mails nicht im Scope (bleiben bei Supabase Auth, erledigt sich mit SSO).
 Änderungen v0.3: E2 bis E7 entschieden (Product Owner 27.10.2026): Anrede ohne Namen; Anlässe des MVP wie vorgeschlagen; Adresse = Login-Adresse, sonst Kontakt-E-Mail; **Brevo statt Google-Konto** für die transaktionalen E-Mails aus dem Vereins OS; kein Abbestellen im MVP; Zahlen bestätigt. Neue Fragen E8 bis E10 zu Brevo.
 Änderungen v0.2: E1 entschieden (Product Owner 27.10.2026): Die Geschäftsstelle liest Zustand der Schnittstellen, Postausgang und Protokoll (Startwert SC lesen), ohne Inhalt der E-Mails.
 Änderungen v0.1: Erster Entwurf für den MVP (Q-SC2, Product Owner 27.10.2026): Rahmen für Anbindungen, API-Key-Verwaltung, E-Mail-Versand mit Postausgang und Vorlagen, Protokoll. DATEV (Iteration 1) und Instagram (Iteration 2) nur in Abschnitt E.
@@ -30,7 +31,7 @@ Begriffe nach glossar.md v1.10 (u. a. Schnittstellen-Connector, API-Key, Basismo
 
 **B1 – E-Mail-Anbindung einrichten** (Admin, einmalig je Umgebung)
 1. Seite „Schnittstellen“ → „Anbindung anlegen“ → Art „E-Mail (Brevo)“ (im MVP die einzige Art; E5, Product Owner 27.10.2026).
-2. Angaben: Name, Absenderadresse und Absendername (in Brevo als Absender bestätigt, E8), API-Key von Brevo, Ablaufdatum des Keys (optional; Brevo-Keys laufen nicht von selbst ab), freigegebene Module.
+2. Angaben: Name, Absenderadresse (`noreply@vereinsos.dav-leipzig.de`, in Brevo eingerichtet, E8) und Absendername („Vereins OS“ wie bei den Login-Mails [ANNAHME]), API-Key von Brevo, Ablaufdatum des Keys (optional; Brevo-Keys laufen nicht von selbst ab), freigegebene Module.
 3. Speichern → API-Key geht nach Vault, angezeigt werden nur die letzten 4 Zeichen; Zustand „abgeschaltet“.
 4. Testaufruf: Test-E-Mail an die Login-Adresse des Admins. Erfolg → „aktivieren“ möglich; Fehler → Meldung des Dienstes (z. B. „Anmeldung abgelehnt“), Zustand bleibt.
 5. TEST und PROD haben je eigene Anbindungen mit eigenen Keys; der Seed legt in TEST eine Anbindung ohne gültigen Key an (R14).
@@ -102,7 +103,7 @@ Liste mit Filter (Anbindung, Modul, Anlass, Ergebnis, Zeitraum); E-Mails ohne Te
 | Art | Auswahl (MVP: E-Mail (Brevo)) | ja | E-Mail (Brevo) | Migration |
 | Name | Text | ja | „E-Mail Sektion“ | Admin |
 | Zustand | aktiv, abgeschaltet, gestört, abgelaufen | ja | aktiv | System / Admin |
-| Einstellungen der Art | je Art (E-Mail: Absenderadresse, Absendername) | ja | vereinsos.test@example.org, „DAV Leipzig – Vereins OS“ | Admin |
+| Einstellungen der Art | je Art (E-Mail: Absenderadresse, Absendername) | ja | noreply@vereinsos.dav-leipzig.de, „Vereins OS“ | Admin |
 | Verweis auf den Key | Kennung des Eintrags in Vault | ja (zum Aktivieren) | – (nie angezeigt) | System |
 | Letzte 4 Zeichen | Text | nein | „…k3x9“ | System |
 | Ablaufdatum des Keys | Datum | nein | 30.06.2027 | Admin |
@@ -154,7 +155,7 @@ Liste mit Filter (Anbindung, Modul, Anlass, Ergebnis, Zeitraum); E-Mails ohne Te
 - **R10** Gibt es für einen Schlüssel schon eine E-Mail im Postausgang (außer „verworfen“), wird keine zweite eingestellt (kein Doppelversand bei wiederholtem Job).
 - **R11** Der API-Key ist nach dem Speichern für niemanden mehr lesbar; angezeigt werden nur die letzten 4 Zeichen.
 - **R12** Postausgang und Protokoll werden 90 Tage nach dem letzten Zustandswechsel automatisch gelöscht (Q-SC10).
-- **R13** Höchstens 100 E-Mails je Stunde über eine Anbindung (E7); darüber bleiben sie „wartet“. Zusätzlich gilt das Tageslimit des Brevo-Tarifs (E10).
+- **R13** Höchstens 100 E-Mails je Stunde (E7) und **höchstens 300 E-Mails je Kalendertag** (Tageslimit des kostenlosen Brevo-Tarifs, E10) über alle E-Mail-Anbindungen einer Umgebung; darüber bleiben sie „wartet“ bis zur nächsten Stunde bzw. zum nächsten Tag. Ab 250 E-Mails an einem Tag zeigt die Seite „Schnittstellen“ einen Hinweis [ANNAHME]. TEST und PROD teilen sich das Brevo-Konto; deshalb in TEST höchstens 50 E-Mails je Tag [ANNAHME].
 - **R16** Kein Abbestellen im MVP (E6, Product Owner 27.10.2026): E-Mails eines Anlasses gehen immer an die ermittelte Adresse.
 - **R14** Kein echter Key im Repository, im Seed oder in TEST-Daten aus PROD; der Seed legt in TEST eine abgeschaltete Anbindung ohne Key an.
 - **R15** Änderungen an Anbindungen, Keys, Freigaben und Vorlagen stehen im Protokoll (wer, wann, was; ohne Key).
@@ -175,7 +176,7 @@ Liste mit Filter (Anbindung, Modul, Anlass, Ergebnis, Zeitraum); E-Mails ohne Te
 ## F. Datenschutz
 
 - Gespeichert werden Empfängeradressen und Texte der E-Mails im Postausgang sowie das Protokoll, je 90 Tage; danach automatische Löschung.
-- Brevo ist Auftragsverarbeiter: Auftragsverarbeitungsvertrag mit Brevo abschließen und Eintrag im Verarbeitungsverzeichnis der Sektion ergänzen (Product Owner, E9). R8 (keine Personendaten im Inhalt, Anrede ohne Namen) gilt trotzdem (E2).
+- Brevo ist Auftragsverarbeiter: Konto der Sektion ist angelegt (E9); Auftragsverarbeitungsvertrag und Eintrag im Verarbeitungsverzeichnis der Sektion prüft der Product Owner. R8 (keine Personendaten im Inhalt, Anrede ohne Namen) gilt trotzdem (E2).
 - Brevo speichert versendete E-Mails und Ereignisse (zugestellt, abgelehnt) in seinem Konto; Aufbewahrung dort nach den Einstellungen des Brevo-Kontos [ANNAHME]. Tracking von Öffnungen und Klicks wird nicht genutzt [ANNAHME].
 - Den Inhalt einer E-Mail (Betreff, Text) sieht nur der Admin im Postausgang [ANNAHME]; die Geschäftsstelle sieht Anlass, Empfängeradresse, Zustand und Fehlermeldung (E1).
 - Keys liegen nur in Vault; Fehlermeldungen des Dienstes werden gekürzt gespeichert und dürfen keinen Key enthalten.
@@ -184,8 +185,8 @@ Liste mit Filter (Anbindung, Modul, Anlass, Ergebnis, Zeitraum); E-Mails ohne Te
 
 - Versand innerhalb von 10 Minuten nach dem Einstellen, wenn die Anbindung aktiv ist [ANNAHME].
 - Seite „Schnittstellen“ mobil nutzbar ab 375 px.
-- Grenzen: Tageslimit des Brevo-Tarifs (E10), Supabase Free-Plan für Edge Functions; für erwartete Mengen (einige Dutzend E-Mails im Monat) ausreichend [ANNAHME].
-- Zustellung an DAV-Adressen (Microsoft-Tenant) vor dem Go-live testen (Spam-Filter). Ohne bestätigte Absenderdomain (DKIM, DMARC) droht Spam (E8).
+- Grenzen: 300 E-Mails am Tag (kostenloser Brevo-Tarif, R13), Supabase Free-Plan für Edge Functions; für erwartete Mengen (einige Dutzend E-Mails im Monat) ausreichend.
+- Zustellung an DAV-Adressen (Microsoft-Tenant) vor dem Go-live in TEST prüfen (Spam-Filter); die Absenderdomain `vereinsos.dav-leipzig.de` ist in Brevo eingerichtet (E8).
 - Nie gegen PROD testen; Testaufrufe nur in TEST mit einem Testkonto.
 
 ## Offene Fragen (Frage | Wer klärt | bis wann)
@@ -199,7 +200,7 @@ Liste mit Filter (Anbindung, Modul, Anlass, Ergebnis, Zeitraum); E-Mails ohne Te
 | E5 | **Entschieden 27.10.2026:** Kein Google-Konto; die transaktionalen E-Mails aus dem Vereins OS laufen über **Brevo**. | Product Owner | erledigt |
 | E6 | **Entschieden 27.10.2026:** Kein Abbestellen im MVP (R16). | Product Owner | erledigt |
 | E7 | **Entschieden 27.10.2026:** Zahlen bestätigt (3 Versuche: sofort, 15 Minuten, 1 Stunde; Takt 5 Minuten; „zu alt“ nach 7 Tagen; zweite Erinnerung 7 Tage vor Ablauf; höchstens 100 E-Mails je Stunde). | Product Owner | erledigt |
-| E8 | Brevo-Absender: Welche Absenderadresse und welcher Absendername? Die Domain dav-leipzig.de ist ohne DNS-Zugriff (tech-stack.md 3) in Brevo nicht als Domain zu bestätigen (DKIM, DMARC); eine einzelne bestätigte Adresse von dav-leipzig.de kann bei DAV-Adressen im Spam landen. Vorschlag: Zustellung in TEST prüfen, bei Problemen Bundesverband um DNS-Einträge bitten. | Product Owner | vor der Abnahme in TEST |
-| E9 | Brevo-Konto: Wer legt es an (Konto der Sektion), ist der Auftragsverarbeitungsvertrag abgeschlossen? Je ein eigener API-Key für TEST und PROD (Vorschlag) oder zwei Konten? | Product Owner | vor der Abnahme in TEST |
-| E10 | Tarif: Reicht der kostenlose Tarif von Brevo (Tageslimit, vision.md „0 € laufend“)? | Product Owner | vor dem Go-live |
-| E11 | Login-Mails (Einladung, Passwort zurücksetzen) laufen heute über das Google-Konto als SMTP in Supabase Auth (Modul AD, nicht über SC). Sollen sie auch auf Brevo (SMTP-Relay in Supabase Auth) umgestellt werden? Das wäre eine Änderung an AD und an der Einstellung im Dashboard von TEST und PROD. | Product Owner | offen, unabhängig vom MVP |
+| E8 | **Entschieden 27.10.2026:** Absender `noreply@vereinsos.dav-leipzig.de`; Domain richtet Brevo ein. Absendername „Vereins OS“ [ANNAHME]. | Product Owner | erledigt |
+| E9 | **Entschieden 27.10.2026:** Das Brevo-Konto ist angelegt. Je ein eigener API-Key für TEST und PROD im selben Konto [ANNAHME]. | Product Owner | erledigt |
+| E10 | **Entschieden 27.10.2026:** Kostenloser Tarif; Grenze 300 E-Mails am Tag beachten (R13). | Product Owner | erledigt |
+| E11 | **Entschieden 27.10.2026:** Login-Mails sind nicht im Scope; sie bleiben bei Supabase Auth und entfallen mit SSO. | Product Owner | erledigt |
