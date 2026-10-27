@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 26.10.2026 · Version 5.19
+Stand: 27.10.2026 · Version 5.20
+Änderungen v5.20: Schnittstellen-Connector – Steckbrief v0.1 (Entwurf) mit den Fragen Q-SC1 bis Q-SC10 (Auftrag Product Owner 27.10.2026).
 Änderungen v5.19: Nachträge für die Planungshilfe eingearbeitet: spec.md AD v0.12 (Erwerbsdatum der Lizenz, Personen aus der Planung anlegen; Nachtrag v0.9 Ready) und spec.md EZ v0.7 (Abrechnungsart aus der Planung).
 Änderungen v5.18: Planungshilfe Touren und Kurse wieder aufgenommen: Abgleich mit dem Stand der anderen Module (Spec v0.3, Stories v0.5, Steckbrief und Erhebung v0.8); Übergaben AD → TK und FI → TK eingearbeitet; Abrechnungsart Gemeinschaftstour, Kurse nach Lehreinheiten und Lizenz-Regel wie Finanzen entschieden; neue Übergabepunkte an EZ (v1.3) und AD (v1.8).
 Änderungen v5.17: Dashboard Steckbrief v0.13, Erhebung v0.2, Stories v0.2, Spec v0.2 Ready (Budgetpflege als US-FI-22 bis US-FI-29 in Finanzen) (u. a. eine Quelle für Geld): Q-DS5 bis Q-DS19 und D5 entschieden; Sichten festgelegt durch Claude als Referent:in (sichten.md v0.5, zur Abnahme); Referent:innen steuern ihre Gruppen mit dem Dashboard (Übergabe DS → GR v1.0); neue Referate Öffentlichkeitsarbeit und Umwelt und Naturschutz (Übergabe an AD D10) (Product Owner 26.10.2026); Übergaben DS → FI v1.2 und DS → AD v1.1 bei FI und AD eingetragen; DATEV-Schnittstelle bei SC; Begriffe im Glossar v1.7.
@@ -236,6 +237,17 @@ Steckbrief: docs/specs/ds-dashboard/00-steckbrief.md (Version 0.13, Entwurf 26.1
 - [OFFEN] API-Key-Verwaltung als Erweiterung von AD: Felder, Anzeige der letzten Zeichen, Erinnerung vor Ablauf per E-Mail. (modul-landkarte.md, 00-steckbrief.md AD)
 - Weitere Anforderungen kommen aus EA (E-Mail vor Ablauf einer Qualifikation, Geburtstagserinnerung), FI (DATEV/Sparkasse) und OA (Instagram, Umfragen); ggf. TK (Schreib-Schnittstelle Yolawo, falls vorhanden [OFFEN]).
 - DATEV-Schnittstelle für den Import der Buchungen in den Bereich Budget von Finanzen statt CSV (Dashboard Q-DS7, Product Owner 26.10.2026); [OFFEN] welche DATEV-Schnittstelle (z. B. DATEVconnect, Datenservice) und Kosten.
+- Steckbrief v0.1 (Entwurf, 27.10.2026): specs/sc-schnittstellen/00-steckbrief.md. Offene Fragen dort im Detail:
+  - [OFFEN] Q-SC1 Name in der Oberfläche („Schnittstellen-Connector“, „Konnektor“ oder „Schnittstellen“); Code bleibt `SC`.
+  - [OFFEN] Q-SC2 Schnitt und Zeitpunkt des MVP (Vorschlag: Rahmen, API-Key-Verwaltung, E-Mail-Versand).
+  - [OFFEN] Q-SC3 Liste der anzubindenden Dienste über E-Mail, DATEV, Instagram, Umfrage-Dienst hinaus.
+  - [OFFEN] Q-SC4 DATEV: Schnittstelle, Vertragspartner, Kosten (1. Vorsitzender mit Finanzbuchhaltung).
+  - [OFFEN] Q-SC5 Instagram (Business-Konto) und Umfrage-Dienst (AV-Vertrag, EU-Server) (Öffentlichkeitsarbeit).
+  - [OFFEN] Q-SC6 Pflege der E-Mail-Vorlagen.
+  - [OFFEN] Q-SC7 Eingehende Schnittstellen (Webhooks); Vorschlag: nicht im MVP.
+  - [OFFEN] Q-SC8 Freigabe einer Anbindung je Modul durch den Admin.
+  - [OFFEN] Q-SC9 Tabelle der API-Keys im Modul SC (`sc_`) statt AD (`ad_api_keys`, tech-stack.md).
+  - [OFFEN] Q-SC10 Fristen: Erinnerung 30 Tage vor Ablauf eines Keys; Löschung von Protokoll und Postausgang nach 90 Tagen.
 
 ## PM, GS, AM – Projekt-, Geschäftsstellen-, Aufgabenmanagement (Priorität 5)
 
