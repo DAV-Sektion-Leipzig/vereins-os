@@ -94,7 +94,7 @@ export type VolunteersResult = {
 }
 
 /** Referent:in: Reichweite nur Referat – Referatsfilter eingeschränkt und vorbelegt (US-EA-03 AK4). */
-function restrictedReferate(access: EaAccess): string[] | null {
+export function restrictedReferate(access: EaAccess): string[] | null {
   return !access.canManage && !access.canEdit && access.myReferate.length > 0 ? access.myReferate : null
 }
 

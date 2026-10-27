@@ -93,11 +93,11 @@ Hier findest du alle Aktiven deines Referats mit ihren Funktionen, Ämtern, Lize
 
 ### Aktive finden
 
-![Liste „Aktive“ mit Suche und Filtern nach Ehrenamtsstatus, Referat, Funktion, Amt, Gremium und Qualifikation](bilder/ea-aktive.png)
+![Liste „Aktive“ mit Suche, aufgeklapptem Filterkasten und den Spalten Status, Referate, Funktionen, Lizenzen und Ablauf](bilder/ea-aktive.png)
 
 1. Öffne auf der Startseite **„Ehrenamtsmanagement“**. Du landest bei **„Aktive“**.
 2. Gib in **„Suche“** einen Vor-, Ruf- oder Nachnamen ein.
-3. Im Kasten **„Filter“** grenzt du die Liste ein, zum Beispiel nach **Funktion** „Trainer:in“, nach einer **Qualifikation** oder nach dem **Ablaufstatus**. Mit **„Filter zurücksetzen“** im selben Kasten siehst du wieder alle.
+3. Klicke auf **„Filter“**. Ein Kasten klappt auf, in dem du die Liste eingrenzt, zum Beispiel nach **Funktion** „Trainer:in“, nach einer **Qualifikation** oder nach dem **Ablaufstatus**. Jeder gesetzte Filter erscheint als grüner Chip neben dem Knopf; mit dem **✕** am Chip nimmst du ihn wieder weg, mit **„Filter zurücksetzen“** alle auf einmal.
 4. Klicke auf einen Namen, um die Person zu öffnen.
 
 Die Spalte **„Ablauf“** zeigt, ob etwas abgelaufen ist oder in den nächsten 3 Monaten abläuft. Darunter steht, was es ist, mit Datum, zum Beispiel „Führungszeugnis · 23.12.2026“. Hat jemand die Funktion Trainer:in, aber keine gültige Lizenz, steht dort statt des Hinweises das rote Kennzeichen **„ohne gültige Lizenz“** mit der abgelaufenen Lizenz, zum Beispiel „ohne gültige Lizenz · TCSPI bis 31.12.2025“.
