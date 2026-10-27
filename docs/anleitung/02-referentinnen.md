@@ -100,7 +100,7 @@ Hier findest du alle Aktiven deines Referats mit ihren Funktionen, Ämtern, Lize
 3. Im Kasten **„Filter“** grenzt du die Liste ein, zum Beispiel nach **Funktion** „Trainer:in“, nach einer **Qualifikation** oder nach dem **Ablaufstatus**. Mit **„Filter zurücksetzen“** im selben Kasten siehst du wieder alle.
 4. Klicke auf einen Namen, um die Person zu öffnen.
 
-Die Spalte **„Ablauf“** zeigt, ob etwas abgelaufen ist oder in den nächsten 3 Monaten abläuft. Darunter steht, was es ist, mit Datum, zum Beispiel „Führungszeugnis · 23.12.2026“. Hat jemand die Funktion Trainer:in, aber keine gültige Lizenz, steht dort stattdessen das rote Kennzeichen **„ohne gültige Lizenz“**, daneben die abgelaufene Lizenz, zum Beispiel „TCSPI bis 31.12.2025“.
+Die Spalte **„Ablauf“** zeigt, ob etwas abgelaufen ist oder in den nächsten 3 Monaten abläuft. Darunter steht, was es ist, mit Datum, zum Beispiel „Führungszeugnis · 23.12.2026“. Hat jemand die Funktion Trainer:in, aber keine gültige Lizenz, steht dort statt des Hinweises das rote Kennzeichen **„ohne gültige Lizenz“** mit der abgelaufenen Lizenz, zum Beispiel „ohne gültige Lizenz · TCSPI bis 31.12.2025“.
 
 > **Gut zu wissen:** Du siehst nur Personen mit dem Status „aktiv“ oder „ruhend“, die eine Funktion oder ein Amt in deinem Referat haben.
 

@@ -12,6 +12,7 @@ import {
   filterHref,
   hasActiveFilter,
   VOLUNTEER_STATUS_LABELS,
+  type ExpiryItem,
   type ExpiryKind,
   type VolunteerRow,
   type VolunteersResult,
@@ -149,7 +150,7 @@ const EXPIRY_KIND_LABELS: Record<ExpiryKind, string> = {
 }
 
 // Ablauf an einer Stelle: schlechtester Status (Badge), darunter was abgelaufen ist oder bald abläuft.
-// Gilt „ohne gültige Lizenz“, nennt das Kennzeichen die abgelaufenen Lizenzen selbst; sie stehen nicht noch einmal darunter.
+// Gilt „ohne gültige Lizenz“, ersetzt das Kennzeichen mit der abgelaufenen Lizenz das Badge (spec.md EA Abschnitt 6).
 function Ablauf({ person }: { person: VolunteerRow }) {
   if (person.worst_expiry === 'none' && !person.trainer_without_license) return <AblaufBadge status="none" />
   const expiredLicenses = person.trainer_without_license ? person.expiries.filter((e) => e.kind === 'license') : []
@@ -158,16 +159,10 @@ function Ablauf({ person }: { person: VolunteerRow }) {
   const more = others.length - shown.length
   return (
     <span className="flex flex-col items-start gap-1">
-      {person.worst_expiry !== 'none' && <AblaufBadge status={person.worst_expiry} />}
-      {person.trainer_without_license && (
-        <span className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
-          <WithoutLicense />
-          {expiredLicenses.length > 0 && (
-            <span className="text-xs text-muted-foreground">
-              {expiredLicenses.map((e) => `${e.code ?? 'Lizenz'} bis ${formatDate(e.validUntil)}`).join(', ')}
-            </span>
-          )}
-        </span>
+      {person.trainer_without_license ? (
+        <WithoutLicense licenses={expiredLicenses} />
+      ) : (
+        <AblaufBadge status={person.worst_expiry} />
       )}
       {shown.map((e) => (
         <span key={e.propertyId} className="text-xs text-muted-foreground">
@@ -180,11 +175,12 @@ function Ablauf({ person }: { person: VolunteerRow }) {
   )
 }
 
-function WithoutLicense() {
+function WithoutLicense({ licenses }: { licenses: ExpiryItem[] }) {
+  const detail = licenses.map((e) => `${e.code ?? 'Lizenz'} bis ${formatDate(e.validUntil)}`).join(', ')
   return (
     <Badge className="bg-destructive/10 text-destructive">
       <TriangleAlertIcon data-icon="inline-start" aria-hidden="true" />
-      ohne gültige Lizenz
+      ohne gültige Lizenz{detail && ` · ${detail}`}
     </Badge>
   )
 }
