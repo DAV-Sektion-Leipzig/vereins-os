@@ -1,6 +1,7 @@
 # Anleitung Vereins OS
 
-Stand: 27.10.2026 · Version 3.4
+Stand: 27.10.2026 · Version 3.5
+Änderungen v3.5: Ehrenamtsmanagement „Aktive“: Filter sind eingeklappt hinter dem Knopf „Filter“, gesetzte Filter stehen als Chips daneben.
 Änderungen v3.4: Ehrenamtsmanagement „Aktive“: Filter stehen in einem eigenen Kasten „Filter“, das Auswahlfeld heißt „Ablaufstatus“, die Spalte „Ablauf“ zeigt, was abgelaufen ist oder bald abläuft, und das Kennzeichen „ohne gültige Lizenz“.
 Änderungen v3.3: Bilder der Planungshilfe Touren und Kurse (Liste, neue Planung, Schritte 1, 3 und 6, Freigabe, Ausgaben, Kostenauswertung).
 Änderungen v3.2: Dashboard ist freigeschaltet (Hinweise „in Vorbereitung“ entfernt); Startseite zeigt mit Rechten auf das Dashboard „Zu tun“ und das Budget; Bilder des Dashboards mit den Testdaten von Leistungssport.

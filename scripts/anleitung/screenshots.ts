@@ -125,7 +125,12 @@ const SHOTS: Shot[] = [
   { name: 'ad-protokoll', zugang: 'admin', pfad: '/ad/protokoll' },
 
   // Ehrenamtsmanagement
-  { name: 'ea-aktive', zugang: 'referent', pfad: '/ea/aktive' },
+  {
+    name: 'ea-aktive',
+    zugang: 'referent',
+    pfad: '/ea/aktive',
+    schritte: (p) => p.getByRole('button', { name: /^Filter/ }).click(),
+  },
   { name: 'ea-person', zugang: 'referent', pfad: `/ea/aktive/${ID.lena}` },
   { name: 'ea-person-neu', zugang: 'referent', pfad: '/ea/aktive/neu' },
   {

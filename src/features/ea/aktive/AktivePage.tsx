@@ -6,11 +6,11 @@ import { ResponsiveTable, type Column } from '@/components/ResponsiveTable'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useEaAccess } from '@/features/ea/access'
+import { useEaAccess, type EaAccess } from '@/features/ea/access'
 import {
   filterHref,
   hasActiveFilter,
+  restrictedReferate,
   VOLUNTEER_STATUS_LABELS,
   type ExpiryItem,
   type ExpiryKind,
@@ -45,7 +45,7 @@ export function AktivePage() {
         )}
       </div>
 
-      <SearchForm result={{ filter, options }} showReset={hasActiveFilter(filter, access)} />
+      <SearchForm result={{ filter, options }} access={access} showReset={hasActiveFilter(filter, access)} />
 
       {failed ? (
         <div className="flex flex-col items-start gap-3">
@@ -75,14 +75,20 @@ export function AktivePage() {
   )
 }
 
-type SearchFormProps = { result: Pick<VolunteersResult, 'filter' | 'options'>; showReset: boolean }
+type SearchFormProps = {
+  result: Pick<VolunteersResult, 'filter' | 'options'>
+  access: EaAccess
+  showReset: boolean
+}
 
 // Suche ab 1 Zeichen mit 300 ms Verzögerung (spec.md EA Abschnitt 6); Filter lösen sofort aus.
-function SearchForm({ result: { filter, options }, showReset }: SearchFormProps) {
+function SearchForm({ result: { filter, options }, access, showReset }: SearchFormProps) {
   const submit = useSubmit()
   const formRef = useRef<HTMLFormElement>(null)
   const [q, setQ] = useState(filter.q)
   const submitted = useRef(filter.q)
+  // Der Filterkasten bleibt offen, während die Liste neu lädt (die Filterleiste selbst wird je Adresse neu aufgebaut)
+  const [filterOpen, setFilterOpen] = useState(false)
 
   // Suchbegriff von außen geändert (z. B. „Filter zurücksetzen“, Zurück im Browser)
   useEffect(() => {
@@ -108,27 +114,30 @@ function SearchForm({ result: { filter, options }, showReset }: SearchFormProps)
   }
 
   return (
-    <Form ref={formRef} method="get" action="/ea/aktive" onSubmit={onSubmit} className="flex flex-col gap-4">
-      <div className="flex flex-col gap-2 sm:max-w-xs">
-        <Label htmlFor="ea-search">Suche</Label>
-        <Input
-          id="ea-search"
-          name="q"
-          type="search"
-          value={q}
-          onChange={(event) => setQ(event.target.value)}
-          placeholder="Vor-, Ruf- oder Nachname"
-          autoComplete="off"
-        />
-      </div>
+    <Form ref={formRef} method="get" action="/ea/aktive" onSubmit={onSubmit}>
       {/* key setzt die Filterfelder zurück, wenn sich die Filter über die Adresse ändern */}
-      <Filterleiste key={filterHref({ ...filter, q: '' }, 1)} filter={filter} options={options}>
-        {showReset && (
-          <Button variant="ghost" asChild className="self-start">
-            <Link to="/ea/aktive">Filter zurücksetzen</Link>
-          </Button>
-        )}
-      </Filterleiste>
+      <Filterleiste
+        key={filterHref({ ...filter, q: '' }, 1)}
+        filter={filter}
+        options={options}
+        ownReferate={restrictedReferate(access)}
+        open={filterOpen}
+        onToggle={() => setFilterOpen((o) => !o)}
+        showReset={showReset}
+        search={
+          <Input
+            id="ea-search"
+            name="q"
+            type="search"
+            value={q}
+            onChange={(event) => setQ(event.target.value)}
+            placeholder="Vor-, Ruf- oder Nachname"
+            aria-label="Suche"
+            autoComplete="off"
+            className="sm:max-w-xs"
+          />
+        }
+      />
     </Form>
   )
 }
