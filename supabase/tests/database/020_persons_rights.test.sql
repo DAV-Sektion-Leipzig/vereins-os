@@ -28,10 +28,10 @@ select results_eq(
             ('Geschäftsstelle', 'AM', 'manage'), ('Geschäftsstelle', 'DS', 'read'), ('Geschäftsstelle', 'EA', 'manage'), ('Geschäftsstelle', 'EZ', 'manage'),
             ('Geschäftsstelle', 'FI', 'manage'),
             ('Geschäftsstelle', 'GR', 'manage'), ('Geschäftsstelle', 'GS', 'manage'), ('Geschäftsstelle', 'OA', 'manage'),
-            ('Geschäftsstelle', 'PM', 'manage'), ('Geschäftsstelle', 'TK', 'manage'),
+            ('Geschäftsstelle', 'PM', 'manage'), ('Geschäftsstelle', 'SC', 'read'), ('Geschäftsstelle', 'TK', 'manage'),
             ('Referent:in', 'DS', 'read'), ('Referent:in', 'EA', 'edit'), ('Referent:in', 'EZ', 'edit'),
             ('Referent:in', 'FI', 'read'), ('Referent:in', 'TK', 'edit'), ('Vorstand', 'DS', 'read') $$,
-  'Startvorlagen nach spec.md Abschnitt 3 (Kern v0.7, Nachträge v0.8, v0.9 und v0.10) und spec.md DS (DS lesen, Vorlage Budgetpflege)'
+  'Startvorlagen nach spec.md Abschnitt 3 (Kern v0.7, Nachträge v0.8, v0.9 und v0.10) und spec.md DS (DS lesen, Vorlage Budgetpflege), spec.md SC (Geschäftsstelle SC lesen)'
 );
 select is((select count(*)::int from public.ad_template_rights r join public.ad_templates t on t.id = r.template_id
            where t.name = 'Vorstand'), 12, 'Vorstand hat je Modul eine Zeile');

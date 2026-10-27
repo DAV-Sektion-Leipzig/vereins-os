@@ -87,4 +87,10 @@ if [[ "${SEED_WITH_DS:-}" == "1" ]]; then
   echo "Seed Budget abgeschlossen."
 fi
 
+# Testdaten Schnittstellen nur auf Wunsch (vereins-os-test), nicht in CI (spec.md SC Abschnitt 9)
+if [[ "${SEED_WITH_SC:-}" == "1" ]]; then
+  psql "$SEED_DB_URL" --single-transaction -v ON_ERROR_STOP=1 -f supabase/seed-sc.sql
+  echo "Seed Schnittstellen abgeschlossen."
+fi
+
 echo "Seed abgeschlossen."
