@@ -27,12 +27,12 @@ Die Tasks folgen spec.md Abschnitt 10 (T1–T19); Entscheidungen in [plan.md](pl
 
 ## Phase 2: Oberfläche (Merge durch den Product Owner)
 
-- [ ] ST13 (spec T13) `/schnittstellen`, Navigation, Reiter „Anbindungen“ mit Dialogen; Migration `is_available` für SC
-- [ ] ST14 (spec T14) Reiter „Vorlagen“
-- [ ] ST15 (spec T15) Reiter „Postausgang“ und „Protokoll“
-- [ ] ST16 (spec T16) Hinweiskarte auf der Startseite
-- [ ] ST18 (spec T18) Anleitung „Schnittstellen“ (neue Hauptversion)
-- [ ] ST19 (spec T19) abnahme-test.md, Abnahme in TEST
+- [x] ST13 (spec T13) `/schnittstellen` (`src/features/sc/`), Kachel auf der Startseite, Reiter „Anbindungen“ mit Dialogen; Migration `20261110000100_sc_available.sql` (`is_available`, `sc_actor_names`)
+- [x] ST14 (spec T14) Reiter „Vorlagen“ (Platzhalter zum Einfügen, Zähler, Vorschau)
+- [x] ST15 (spec T15) Reiter „Postausgang“ und „Protokoll“ (Filter über die Adresse, 50 je Seite)
+- [x] ST16 (spec T16) Hinweiskarte auf der Startseite (nur mit SC lesen)
+- [x] ST18 (spec T18) Anleitung v4.0: Admin, Geschäftsstelle, Wörterliste, Ablaufbild `postausgang`; Bilder `sc-*` vorläufig aus der Oberfläche mit simulierten Antworten, neu erzeugen mit dem Workflow „Anleitung: Bilder erzeugen“ (Filter `sc-`), sobald TEST Migrationen und Seed hat
+- [ ] ST19 (spec T19) [abnahme-test.md](abnahme-test.md) angelegt; Abnahme in TEST durch den Product Owner
 
 ## Abweichungen und Präzisierungen gegenüber spec.md (zur Kenntnis des Product Owners)
 
@@ -42,3 +42,5 @@ Die Tasks folgen spec.md Abschnitt 10 (T1–T19); Entscheidungen in [plan.md](pl
 - `sc_report` erhält die Fehlerart; 429 zählt nicht für die Störung, übrige 400 zählen als Konfigurationsfehler (P6).
 - Test-E-Mails zählen nicht für das Tageslimit (P7).
 - `ad_modules.is_available` für SC kommt mit der Oberfläche (ST13), nicht mit T2, damit die Navigation nicht auf eine leere Seite zeigt.
+- Zusätzliche Lesefunktion `sc_actor_names(uuid[])` für die Spalte „Von“ im Protokoll (nur mit SC lesen, nur Namen).
+- Route `/schnittstellen` statt Modulkürzel (wie `/dashboard`).

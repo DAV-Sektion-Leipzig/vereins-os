@@ -7,7 +7,7 @@ export type MyModulesResult = { modules: MyModule[]; failed: boolean }
 
 // Einstieg je umgesetztem Modul; Module ohne Eintrag erscheinen nicht (US-AD-05 AK1)
 export const MODULE_PATHS: Partial<Record<ModuleCode, string>> = {
-  DS: '/dashboard', AD: '/ad', EA: '/ea', GR: '/gr', EZ: '/ez', TK: '/tk', FI: '/fi',
+  DS: '/dashboard', AD: '/ad', SC: '/schnittstellen', EA: '/ea', GR: '/gr', EZ: '/ez', TK: '/tk', FI: '/fi',
 }
 
 async function fetchMyModules(): Promise<MyModulesResult> {

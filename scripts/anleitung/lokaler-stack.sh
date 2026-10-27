@@ -41,7 +41,7 @@ publishable="$(node -e 'console.log(JSON.parse(process.argv[1]).PUBLISHABLE_KEY)
 
 [[ "$db_url" =~ @(127\.0\.0\.1|localhost): ]] || { echo "Kein lokaler Stack: $db_url" >&2; exit 1; }
 
-SEED_DB_URL="$db_url" SEED_WITH_EZ=1 SEED_WITH_FI=1 SEED_WITH_DS=1 supabase/seed.sh
+SEED_DB_URL="$db_url" SEED_WITH_EZ=1 SEED_WITH_FI=1 SEED_WITH_DS=1 SEED_WITH_SC=1 supabase/seed.sh
 
 # Für die Bilder alle Module mit Oberfläche zeigen; den echten Stand nennt die Tabelle in docs/anleitung/README.md
 psql "$db_url" -q -c "update public.ad_modules set is_available = true where code in ('DS', 'AD', 'EA', 'GR', 'EZ', 'FI', 'TK')"

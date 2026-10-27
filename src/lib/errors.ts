@@ -8,6 +8,27 @@ export type AppMessage = {
 }
 
 export const MESSAGES = {
+  // Schnittstellen (spec.md SC v0.2 Abschnitt 5; contracts/error-codes.md)
+  scForbidden: 'Dafür fehlt dir das Recht.',
+  scNameInvalid: 'Bitte einen Namen und einen Absendernamen mit höchstens 80 Zeichen angeben.',
+  scNameTaken: 'Eine Anbindung mit diesem Namen gibt es bereits.',
+  scEmailInvalid: 'Bitte gib eine gültige E-Mail-Adresse ein.',
+  scLimitInvalid: 'Höchstens 100 E-Mails je Stunde und 300 je Tag.',
+  scKindFixed: 'Die Art einer Anbindung lässt sich nicht ändern.',
+  scConnectionUnknown: 'Die Anbindung gibt es nicht mehr. Bitte lade die Seite neu.',
+  scKeyInvalid: 'Der API-Key muss 8 bis 500 Zeichen lang sein und darf keine Leerzeichen enthalten.',
+  scKeyMissing: 'Bitte zuerst einen API-Key hinterlegen.',
+  scKeyExpired: 'Der API-Key ist abgelaufen. Bitte hinterlege einen neuen Key.',
+  scTestRequired: 'Bitte zuerst einen erfolgreichen Test durchführen.',
+  scAlreadyActive: 'Es ist schon eine E-Mail-Anbindung aktiv.',
+  scOccasionUnknown: 'Diesen Anlass gibt es nicht.',
+  scTextRequired: 'Bitte Betreff und Text angeben.',
+  scTooLong: 'Höchstens 150 Zeichen im Betreff und 2.000 im Text.',
+  scPlaceholderUnknown: 'Der Platzhalter {<Feld>} ist für diesen Anlass nicht erlaubt.',
+  scOutboxUnknown: 'Die E-Mail gibt es nicht mehr (nach 90 Tagen gelöscht).',
+  scOutboxState: 'Das geht nur bei wartenden oder fehlgeschlagenen E-Mails.',
+  scModuleNotAllowed: 'Die Schnittstelle ist für dieses Modul nicht freigegeben.',
+  scNoEmail: 'Für diese Person ist keine E-Mail-Adresse hinterlegt.',
   emailDomain: 'Zugang nur mit Adresse @dav-leipzig.de möglich.',
   emailTaken: 'Diese Login-Adresse ist bereits vergeben.',
   emailLocked: 'Die Login-Adresse kann nur vor der Aktivierung des Zugangs geändert werden.',
@@ -133,6 +154,31 @@ export const MESSAGES = {
 
 // Codes aus Datenbank (raise exception '<CODE>') und Edge Functions ({ code })
 const CODE_MESSAGES: Record<string, string> = {
+  SC_FORBIDDEN: MESSAGES.scForbidden,
+  SC_NAME_INVALID: MESSAGES.scNameInvalid,
+  SC_NAME_TAKEN: MESSAGES.scNameTaken,
+  SC_EMAIL_INVALID: MESSAGES.scEmailInvalid,
+  SC_LIMIT_INVALID: MESSAGES.scLimitInvalid,
+  SC_KIND_FIXED: MESSAGES.scKindFixed,
+  SC_CONNECTION_UNKNOWN: MESSAGES.scConnectionUnknown,
+  SC_KEY_INVALID: MESSAGES.scKeyInvalid,
+  SC_KEY_MISSING: MESSAGES.scKeyMissing,
+  SC_KEY_EXPIRED: MESSAGES.scKeyExpired,
+  SC_TEST_REQUIRED: MESSAGES.scTestRequired,
+  SC_ALREADY_ACTIVE: MESSAGES.scAlreadyActive,
+  SC_STATE_INVALID: MESSAGES.unexpected,
+  SC_MODULE_UNKNOWN: MESSAGES.unexpected,
+  SC_OCCASION_UNKNOWN: MESSAGES.scOccasionUnknown,
+  SC_TEXT_REQUIRED: MESSAGES.scTextRequired,
+  SC_TOO_LONG: MESSAGES.scTooLong,
+  SC_PLACEHOLDER_UNKNOWN: MESSAGES.scPlaceholderUnknown,
+  SC_OUTBOX_UNKNOWN: MESSAGES.scOutboxUnknown,
+  SC_OUTBOX_STATE: MESSAGES.scOutboxState,
+  SC_MODULE_NOT_ALLOWED: MESSAGES.scModuleNotAllowed,
+  SC_NO_EMAIL: MESSAGES.scNoEmail,
+  SC_UNAUTHENTICATED: MESSAGES.unexpected,
+  SC_BAD_REQUEST: MESSAGES.unexpected,
+  SC_UNEXPECTED: MESSAGES.unexpected,
   AD_EMAIL_DOMAIN: MESSAGES.emailDomain,
   AD_EMAIL_MISSING: MESSAGES.emailDomain,
   AD_EMAIL_TAKEN: MESSAGES.emailTaken,
@@ -275,6 +321,8 @@ const CONSTRAINT_MESSAGES: Record<string, string> = {
   ea_gremien_name_key: MESSAGES.masterDataNameTaken,
   ea_referate_name_not_blank: MESSAGES.nameRequiredSingle,
   ea_gremien_name_not_blank: MESSAGES.nameRequiredSingle,
+  sc_connections_name_key: MESSAGES.scNameTaken,
+  sc_connections_one_active: MESSAGES.scAlreadyActive,
 }
 
 type ErrorLike = {

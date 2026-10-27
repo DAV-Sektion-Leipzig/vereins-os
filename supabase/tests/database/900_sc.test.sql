@@ -286,5 +286,15 @@ select lives_ok($$ select public.sc_set_state((select id from conn), 'disabled')
 select throws_ok($$ select public.sc_set_state((select id from conn), 'disturbed') $$, 'P0001', 'SC_STATE_INVALID',
   'nur aktiv oder abgeschaltet');
 
+-- Oberfläche freigeschaltet, Namen der Ausführenden (ST13)
+select ok((select is_available from public.ad_modules where code = 'SC'), 'Modul SC freigeschaltet');
+select pg_temp.as_user('b0000000-0000-4000-8000-000000000002');
+select results_eq($$ select name from public.sc_actor_names(array['b0000000-0000-4000-8000-000000000001'::uuid]) $$,
+  $$ values ('Test Admin'::text) $$, 'Geschäftsstelle sieht den Namen des Admins im Protokoll');
+select pg_temp.as_user('b0000000-0000-4000-8000-000000000009');
+select is((select count(*)::int from public.sc_actor_names(array['b0000000-0000-4000-8000-000000000001'::uuid])), 0,
+  'Referent:in: keine Namen');
+select pg_temp.as_owner();
+
 select * from finish();
 rollback;

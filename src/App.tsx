@@ -98,6 +98,13 @@ import { FiLayout } from '@/features/fi/FiLayout'
 import { loadClimbing } from '@/features/fi/kletterhalle/data'
 import { KletterhallePage as FiKletterhallePage } from '@/features/fi/kletterhalle/KletterhallePage'
 import { AbrechnungenPage } from '@/features/fi/liste/AbrechnungenPage'
+import { loadScAccess } from '@/features/sc/access'
+import { AnbindungenPage } from '@/features/sc/AnbindungenPage'
+import { loadConnections, loadLog, loadOccasions, loadOutbox } from '@/features/sc/data'
+import { PostausgangPage } from '@/features/sc/PostausgangPage'
+import { ProtokollPage as ScProtokollPage } from '@/features/sc/ProtokollPage'
+import { ScLayout } from '@/features/sc/ScLayout'
+import { VorlagenPage } from '@/features/sc/VorlagenPage'
 import { loadTkAccess, requireTkEdit } from '@/features/tk/access'
 import { AuswertungPage } from '@/features/tk/auswertung/AuswertungPage'
 import { loadReport as loadTkReport } from '@/features/tk/auswertung/data'
@@ -182,6 +189,21 @@ export const router = createBrowserRouter([
           { path: 'auszahlung', loader: loadPayoutAdmin, element: <AuszahlungPage /> },
           { path: 'protokoll', loader: loadAuditLog, element: <ProtokollPage /> },
           { path: '*', element: <PlaceholderPage title="Administration" /> },
+        ],
+      },
+      {
+        // Schnittstellen mit SC ≥ lesen; Pflege mit bearbeiten bzw. verwalten (spec.md SC v0.2 Abschnitte 3 und 6).
+        id: 'sc',
+        path: 'schnittstellen',
+        loader: loadScAccess,
+        element: <ScLayout />,
+        handle: { moduleName: 'Schnittstellen' } satisfies RouteHandle,
+        children: [
+          { index: true, loader: loadConnections, element: <AnbindungenPage /> },
+          { path: 'vorlagen', loader: loadOccasions, element: <VorlagenPage /> },
+          { path: 'postausgang', loader: loadOutbox, element: <PostausgangPage /> },
+          { path: 'protokoll', loader: loadLog, element: <ScProtokollPage /> },
+          { path: '*', loader: () => redirect('/schnittstellen') },
         ],
       },
       {
