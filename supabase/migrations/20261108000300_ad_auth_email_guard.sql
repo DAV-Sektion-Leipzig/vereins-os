@@ -47,8 +47,9 @@ begin
     if not coalesce(public.ad_login_email_allowed(v_addr::extensions.citext), false) then
       raise exception 'AD_EMAIL_DOMAIN' using errcode = 'P0001';
     end if;
-    -- Regel 2 (R20): nur mit verknüpftem Zugang
-    if coalesce(v_linked, false) and v_addr::extensions.citext is distinct from v_login then
+    -- Regel 2 (R20): nur mit verknüpftem Zugang. Vergleich über lower(): mit search_path = '' greift
+    -- der Gleichheitsoperator von citext (Schema extensions) nicht, es würde als text verglichen.
+    if coalesce(v_linked, false) and lower(v_addr) is distinct from lower(v_login::text) then
       raise exception 'AD_EMAIL_CHANGE_VIA_FUNCTION' using errcode = 'P0001';
     end if;
   end loop;
