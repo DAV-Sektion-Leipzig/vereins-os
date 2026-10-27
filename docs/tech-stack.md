@@ -1,6 +1,9 @@
 # Tech-Stack: Vereins OS
 
-Stand: 23.10.2026 · Version 0.7 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
+Stand: 27.10.2026 · Version 0.10 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
+Änderungen v0.10: Brevo-Absender, Tarif und Login-Mails entschieden (Product Owner 27.10.2026).
+Änderungen v0.9: E-Mails aus Abläufen über Brevo (SC) statt Google-Konto (Product Owner 27.10.2026); Login-Mails offen.
+Änderungen v0.8: Metadaten der API-Keys im Modul SC statt AD (Q-SC9, Product Owner 27.10.2026).
 Änderungen v0.7 (23.10.2026, Entscheidung Product Owner): Claude Code legt Pull Requests an; Auto-Merge für Datenbank, Tests und Umsetzungsdateien nach grünen Pflicht-Checks; Oberfläche und fachliche Dokumente gibt weiterhin der Product Owner frei (Abschnitt 3).
 
 ## Überblick
@@ -29,7 +32,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 - **Region:** EU (Frankfurt). [ANNAHME]
 - **Auth:** E-Mail und Passwort. Benutzername ist immer die DAV-E-Mail-Adresse der Person (gepflegt über das Portal „DAV 360 Mitarbeiter“). SSO später prüfen.
 - **Selbstregistrierung aus.** Nutzer legt nur der Admin an (Einladung). [ANNAHME]
-- **Secrets / API-Keys:** Supabase Vault; Zugriff nur serverseitig (Edge Functions, Datenbankfunktionen). Metadaten (Dienst, zuletzt gewechselt, Ablaufdatum) in einer Tabelle im Modul AD.
+- **Secrets / API-Keys:** Supabase Vault; Zugriff nur serverseitig (Edge Functions, Datenbankfunktionen). Metadaten (Dienst, zuletzt gewechselt, Ablaufdatum) in Tabellen des Moduls SC (Präfix `sc_`, Product Owner 27.10.2026).
 - **Serverlogik:** Supabase Edge Functions für externe Dienste und E-Mail-Versand; zeitgesteuerte Jobs (Erinnerungen, Buchungslauf, Löschung nach 5 Jahren) per Datenbank-Scheduler (pg_cron). [ANNAHME]
 - **Datenschutz:** Auftragsverarbeitungsvertrag (DPA) mit Supabase abschließen; Eintrag im Verarbeitungsverzeichnis der Sektion.
 
@@ -63,8 +66,8 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 
 | Zweck | Dienst | Stand |
 |---|---|---|
-| Login-Mails (Einladung, Passwort zurücksetzen) | Google-Konto der Sektion als SMTP in Supabase Auth | MVP |
-| Erinnerungen, Mails aus Abläufen | Google-Konto der Sektion über SC (Edge Function) | ab SC |
+| Login-Mails (Einladung, Passwort zurücksetzen) | Google-Konto der Sektion als SMTP in Supabase Auth; keine Umstellung auf Brevo, entfällt mit SSO (Product Owner 27.10.2026) | MVP |
+| Erinnerungen, Mails aus Abläufen | Brevo über SC (Edge Function, API-Key in Vault) (Product Owner 27.10.2026) | ab SC |
 | Versand über Vereinsdomain / Microsoft-Tenant | Microsoft Graph | später; nur nach Abstimmung mit dem Bundesverband |
 | Instagram, Umfrage-Dienst | über SC | ab OA |
 | DATEV / Sparkasse | Datei-Export oder Schnittstelle | [OFFEN], Klärung in FI |
@@ -72,6 +75,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 - Eigener SMTP ist im Free-Plan möglich; Supabase begrenzt Auth-Mails dann standardmäßig auf 30 pro Stunde. Für ca. 4 Nutzer ausreichend.
 - Login-Mails gehen an DAV-Adressen (Microsoft-Tenant des Bundesverbands). Zustellung aus einem Google-Konto vor Go-live testen (Spam-Filter). [ANNAHME]
 - Das Google-Konto ist ein normales Gmail-Konto. Versand per SMTP mit App-Passwort; das App-Passwort liegt nur in den Supabase-Einstellungen bzw. in Vault.
+- **Brevo** (transaktionale E-Mails aus dem Vereins OS, Product Owner 27.10.2026): Versand nur über den Schnittstellen-Connector; Absender `noreply@vereinsos.dav-leipzig.de` (Domain in Brevo eingerichtet); kostenloser Tarif, höchstens 300 E-Mails am Tag für TEST und PROD zusammen; Auftragsverarbeitungsvertrag mit Brevo.
 - **Datenschutz:** Für ein normales Gmail-Konto gibt es keinen Auftragsverarbeitungsvertrag. Regel: Mails enthalten keine Personendaten außer der Empfängeradresse und einem kurzen Hinweistext mit Link ins Vereins OS (z. B. „Du hast eine neue Aufgabe“ statt Aufgabeninhalt).
 - Wechsel auf Microsoft Graph (Vereinsdomain) bleibt Ziel, sobald der Bundesverband zustimmt.
 

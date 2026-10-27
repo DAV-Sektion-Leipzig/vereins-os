@@ -1,6 +1,14 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 26.10.2026 · Version 5.19
+Stand: 27.10.2026 · Version 5.27
+Änderungen v5.27: Schnittstellen-Connector – Annahmen A1 bis A10 bestätigt, Spec v0.2 Ready (Product Owner 27.10.2026).
+Änderungen v5.26: Schnittstellen-Connector – Spec v0.1 (Entwurf) mit Annahmen A1 bis A10 zur Bestätigung.
+Änderungen v5.25: Schnittstellen-Connector – E8 bis E11 entschieden (Product Owner 27.10.2026): Absender, Brevo-Konto, 300 E-Mails am Tag, Login-Mails nicht im Scope.
+Änderungen v5.24: Schnittstellen-Connector – E2 bis E7 entschieden, E-Mail über Brevo statt Google-Konto (Product Owner 27.10.2026); neue Fragen E8 bis E11.
+Änderungen v5.23: Schnittstellen-Connector – E1 entschieden: Geschäftsstelle liest SC (Product Owner 27.10.2026); rollen.md v1.4.
+Änderungen v5.22: Schnittstellen-Connector – Q-SC6, Q-SC8, Q-SC9, Q-SC10 und Zeitpunkt entschieden (Product Owner 27.10.2026); Steckbrief v0.3, Erhebung v0.1 mit Fragen E1 bis E7.
+Änderungen v5.21: Schnittstellen-Connector – Q-SC1 bis Q-SC3 entschieden, Q-SC4 zurückgestellt (Product Owner 27.10.2026); Steckbrief v0.2.
+Änderungen v5.20: Schnittstellen-Connector – Steckbrief v0.1 (Entwurf) mit den Fragen Q-SC1 bis Q-SC10 (Auftrag Product Owner 27.10.2026).
 Änderungen v5.19: Nachträge für die Planungshilfe eingearbeitet: spec.md AD v0.12 (Erwerbsdatum der Lizenz, Personen aus der Planung anlegen; Nachtrag v0.9 Ready) und spec.md EZ v0.7 (Abrechnungsart aus der Planung).
 Änderungen v5.18: Planungshilfe Touren und Kurse wieder aufgenommen: Abgleich mit dem Stand der anderen Module (Spec v0.3, Stories v0.5, Steckbrief und Erhebung v0.8); Übergaben AD → TK und FI → TK eingearbeitet; Abrechnungsart Gemeinschaftstour, Kurse nach Lehreinheiten und Lizenz-Regel wie Finanzen entschieden; neue Übergabepunkte an EZ (v1.3) und AD (v1.8).
 Änderungen v5.17: Dashboard Steckbrief v0.13, Erhebung v0.2, Stories v0.2, Spec v0.2 Ready (Budgetpflege als US-FI-22 bis US-FI-29 in Finanzen) (u. a. eine Quelle für Geld): Q-DS5 bis Q-DS19 und D5 entschieden; Sichten festgelegt durch Claude als Referent:in (sichten.md v0.5, zur Abnahme); Referent:innen steuern ihre Gruppen mit dem Dashboard (Übergabe DS → GR v1.0); neue Referate Öffentlichkeitsarbeit und Umwelt und Naturschutz (Übergabe an AD D10) (Product Owner 26.10.2026); Übergaben DS → FI v1.2 und DS → AD v1.1 bei FI und AD eingetragen; DATEV-Schnittstelle bei SC; Begriffe im Glossar v1.7.
@@ -233,9 +241,18 @@ Steckbrief: docs/specs/ds-dashboard/00-steckbrief.md (Version 0.13, Entwurf 26.1
 
 ## SC – Schnittstellen-Connector (spätestens mit OA)
 
-- [OFFEN] API-Key-Verwaltung als Erweiterung von AD: Felder, Anzeige der letzten Zeichen, Erinnerung vor Ablauf per E-Mail. (modul-landkarte.md, 00-steckbrief.md AD)
+- API-Key-Verwaltung: im Modul SC statt als Erweiterung von AD (Q-SC9, Product Owner 27.10.2026); Felder und Erinnerung in 01-erhebung.md SC.
 - Weitere Anforderungen kommen aus EA (E-Mail vor Ablauf einer Qualifikation, Geburtstagserinnerung), FI (DATEV/Sparkasse) und OA (Instagram, Umfragen); ggf. TK (Schreib-Schnittstelle Yolawo, falls vorhanden [OFFEN]).
 - DATEV-Schnittstelle für den Import der Buchungen in den Bereich Budget von Finanzen statt CSV (Dashboard Q-DS7, Product Owner 26.10.2026); [OFFEN] welche DATEV-Schnittstelle (z. B. DATEVconnect, Datenservice) und Kosten.
+- Steckbrief v0.6 (Entwurf, 27.10.2026), Erhebung v0.4, Stories v0.2 (US-SC-01 bis US-SC-16), Spec v0.2 Ready (Annahmen A1 bis A10 bestätigt, Product Owner 27.10.2026): specs/sc-schnittstellen/00-steckbrief.md. Offene Fragen dort im Detail:
+  - Entschieden 27.10.2026 (Product Owner): **Q-SC1** Name in der Oberfläche „Schnittstellen“, Code `SC`; **Q-SC2** MVP = E-Mail-Versand, Iteration 1 DATEV, Iteration 2 Instagram; **Q-SC3** vorerst keine weiteren Dienste.
+  - Zurückgestellt: **Q-SC4** DATEV (Schnittstelle, Vertragspartner, Kosten) klärt der Product Owner zu gegebener Zeit, spätestens vor Iteration 1.
+  - Entschieden 27.10.2026 (Product Owner): MVP jetzt (Finanzen und Dashboard umgesetzt); **Q-SC6** Texte der E-Mail-Vorlagen pflegt der Admin; **Q-SC8** Freigabe je Anbindung und Modul durch den Admin; **Q-SC9** Tabellen im Modul SC (`sc_`); **Q-SC10** Erinnerung 30 Tage vor Ablauf, Löschung von Protokoll und Postausgang nach 90 Tagen.
+  - Entschieden 27.10.2026 (Product Owner): **E1** Geschäftsstelle liest SC (Zustand, Postausgang ohne Inhalt, Protokoll).
+  - Entschieden 27.10.2026 (Product Owner): **E2** Anrede ohne Namen; **E3** Anlässe des MVP: Test-E-Mail, Ablauf eines API-Keys, Anmeldung des Notfall-Admins; **E4** Login-Adresse, sonst Kontakt-E-Mail; **E5** transaktionale E-Mails über **Brevo** statt Google-Konto; **E6** kein Abbestellen im MVP; **E7** Zahlen bestätigt.
+  - Entschieden 27.10.2026 (Product Owner): **E8** Absender `noreply@vereinsos.dav-leipzig.de`, Domain richtet Brevo ein; **E9** Brevo-Konto angelegt; **E10** kostenloser Tarif, höchstens 300 E-Mails am Tag; **E11** Login-Mails nicht im Scope (bleiben bei Supabase Auth, entfallen mit SSO).
+  - [OFFEN] Q-SC5 Instagram (Business-Konto) und Umfrage-Dienst (AV-Vertrag, EU-Server) (Öffentlichkeitsarbeit).
+  - [OFFEN] Q-SC7 Eingehende Schnittstellen (Webhooks); Vorschlag: nicht im MVP.
 
 ## PM, GS, AM – Projekt-, Geschäftsstellen-, Aufgabenmanagement (Priorität 5)
 
