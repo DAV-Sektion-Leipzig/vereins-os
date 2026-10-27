@@ -22,6 +22,19 @@ npm run ea:migrate -- --file <pfad> --run     [--cutoff TT.MM.JJJJ]
 
 Exitcode 0 nur bei einem Probelauf ohne Fehler bzw. bei einem geschriebenen Lauf.
 
+### Wiederholungsschutz und Fehler beim Lauf (Befund B-07, Migration `20261108000400_ea_import_once.sql`)
+
+Der Import ist einmalig. Gibt es bereits Personen mit `created_in = 'script'`, legt ein zweiter Lauf nichts an:
+
+| Fall | Datenbank | Skript |
+|---|---|---|
+| Probelauf nach erfolgtem Import | Fehler im Bericht mit `row = 0`, `code = 'EA_IMPORT_ALREADY_RUN'`: „Der Import wurde bereits ausgeführt (<n> Personen aus dem Migrationsskript vorhanden). Ein zweiter Lauf würde alle Personen doppelt anlegen.“ | Ausgabe „Der Import wurde bereits ausgeführt. Ein zweiter Lauf würde alle Personen doppelt anlegen.“; bei `--run` danach „Probelauf hat Fehler. Lauf abgebrochen.“ |
+| schreibender Aufruf nach erfolgtem Import | `raise exception 'EA_IMPORT_ALREADY_RUN'` (SQLSTATE `P0001`), nichts geschrieben; gleichzeitige Läufe sperren sich gegenseitig (`pg_advisory_xact_lock`) | „Der Import wurde bereits ausgeführt. Ein zweiter Lauf würde alle Personen doppelt anlegen. Lauf abgebrochen, nichts geschrieben.“ |
+| schreibender Aufruf, Datenbank antwortet mit Fehler (Fehlercode vorhanden) | Transaktion zurückgerollt (A3) | „Aufruf fehlgeschlagen, nichts geschrieben: <Meldung>“ |
+| schreibender Aufruf ohne auswertbare Antwort (Netzwerk, Timeout, Gateway) | Ergebnis unbekannt: die Transaktion kann durchgelaufen sein | „Aufruf fehlgeschlagen: <Meldung>. Ergebnis unbekannt – bitte in TEST bzw. PROD prüfen, bevor der Lauf wiederholt wird.“ |
+
+Alle Fälle enden mit Exitcode 1.
+
 ## Übergabe an die Datenbank
 
 `p_rows` ist ein JSON-Array, je CSV-Zeile ein Objekt:
@@ -77,6 +90,7 @@ Stichtag = `p_cutoff`. „gv“ = `valid_from`, „gb“ = `valid_to`. Eigenscha
 | IBAN ungültig | Fehler | „Zeile <n>: Die IBAN ist ungültig.“ |
 | Auswahlwert unbekannt (Geschlecht u. a.) | Fehler | „Zeile <n>: Wert <wert> für <Feld> unbekannt“ |
 | Datum oder ja/nein nicht lesbar (Skript) | Fehler | „Zeile <n>: <Spalte> nicht lesbar“ |
+| Import bereits ausgeführt (Personen mit `created_in = 'script'` vorhanden) | Fehler (Code `EA_IMPORT_ALREADY_RUN`) | „Der Import wurde bereits ausgeführt (<n> Personen aus dem Migrationsskript vorhanden). Ein zweiter Lauf würde alle Personen doppelt anlegen.“ |
 | Dublettenverdacht (Datenbank oder Datei) | Warnung | „Zeile <n>: Dublettenverdacht zu <Name> (vorhanden \| Zeile <m>)“ (US-EA-17 AK3) |
 | mehr Lizenzen als Lizenznummern | Warnung | „Zeile <n>: <k> Lizenzen, <m> Lizenznummern“ |
 | Lizenz ohne „gültig bis“ | Warnung | „Zeile <n>: Lizenz <code> ohne gültig bis, berechnet <datum>“ |

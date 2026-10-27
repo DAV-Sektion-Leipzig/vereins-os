@@ -3,7 +3,8 @@
 import type { Finding } from './csv.ts'
 
 export type ImportResult = {
-  errors: Finding[]
+  /** code nur bei Befunden mit fester Bedeutung, z. B. EA_IMPORT_ALREADY_RUN (Wiederholungsschutz) */
+  errors: (Finding & { code?: string })[]
   warnings: Finding[]
   counts: Record<string, number>
   written: boolean

@@ -5,6 +5,26 @@ import { buildReport, type ImportResult } from './report.ts'
 
 export type Rpc = (rows: ImportRow[], cutoff: string, dryRun: boolean) => Promise<ImportResult>
 
+/**
+ * Fehlerantwort der Datenbank bzw. von PostgREST. `code` ist der Fehlercode der Antwort (SQLSTATE oder PGRST…);
+ * fehlt er, kam keine auswertbare Antwort an (Netzwerk, Timeout, Gateway) und das Ergebnis ist unbekannt.
+ */
+export class RpcError extends Error {
+  readonly code?: string
+  constructor(message: string, code?: string) {
+    super(message)
+    this.name = 'RpcError'
+    this.code = code
+  }
+}
+
+/** Wiederholungsschutz der Datenbank (Migration 20261108000400_ea_import_once.sql, Befund B-07) */
+export const ALREADY_RUN = 'EA_IMPORT_ALREADY_RUN'
+export const ALREADY_RUN_MESSAGE = 'Der Import wurde bereits ausgeführt. Ein zweiter Lauf würde alle Personen doppelt anlegen.'
+export const UNKNOWN_RESULT_MESSAGE = 'Ergebnis unbekannt – bitte in TEST bzw. PROD prüfen, bevor der Lauf wiederholt wird.'
+
+const messageOf = (error: unknown) => (error instanceof Error ? error.message : 'unbekannter Fehler')
+
 export type Io = {
   readFile: (path: string) => Promise<string>
   writeFile: (path: string, content: string) => Promise<void>
@@ -99,9 +119,10 @@ export async function main(argv: string[], io: Io): Promise<number> {
   try {
     dry = await rpc(parsed.rows, args.cutoff, true)
   } catch (error) {
-    io.log(`Aufruf fehlgeschlagen: ${error instanceof Error ? error.message : 'unbekannter Fehler'}`)
+    io.log(`Aufruf fehlgeschlagen: ${messageOf(error)}`)
     return EXIT.findings
   }
+  if (dry.errors.some((e) => e.code === ALREADY_RUN)) io.log(ALREADY_RUN_MESSAGE)
   const hasErrors = parsed.formatErrors.length > 0 || dry.errors.length > 0
   const dryPath = reportPath(args.file, 'pruefbericht')
   await io.writeFile(dryPath, report('dry-run', dry))
@@ -120,7 +141,15 @@ export async function main(argv: string[], io: Io): Promise<number> {
   try {
     result = await rpc(parsed.rows, args.cutoff, false)
   } catch (error) {
-    io.log(`Aufruf fehlgeschlagen, nichts geschrieben: ${error instanceof Error ? error.message : 'unbekannter Fehler'}`)
+    if (messageOf(error) === ALREADY_RUN) {
+      io.log(`${ALREADY_RUN_MESSAGE} Lauf abgebrochen, nichts geschrieben.`)
+    } else if (error instanceof RpcError && error.code) {
+      // Die Datenbank hat mit einem Fehler geantwortet: Die Transaktion des RPC-Aufrufs ist zurückgerollt (A3).
+      io.log(`Aufruf fehlgeschlagen, nichts geschrieben: ${error.message}`)
+    } else {
+      // Keine auswertbare Antwort (z. B. Netzwerk-Timeout): Die Transaktion kann trotzdem durchgelaufen sein.
+      io.log(`Aufruf fehlgeschlagen: ${messageOf(error)}. ${UNKNOWN_RESULT_MESSAGE}`)
+    }
     return EXIT.findings
   }
   const runPath = reportPath(args.file, 'abschlussbericht')

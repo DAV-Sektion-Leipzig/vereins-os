@@ -7,7 +7,7 @@ import { Writable } from 'node:stream'
 import { createClient } from '@supabase/supabase-js'
 import type { ImportRow } from './csv.ts'
 import type { ImportResult } from './report.ts'
-import { main, type Io } from './run.ts'
+import { main, RpcError, type Io } from './run.ts'
 
 let muted = false
 const output = new Writable({
@@ -43,8 +43,9 @@ const io: Io = {
     const client = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } })
     return async (rows: ImportRow[], cutoff: string, dryRun: boolean) => {
       const { data, error } = await client.rpc('ea_import_volunteers', { p_rows: rows, p_cutoff: cutoff, p_dry_run: dryRun })
-      // nur die Meldung weitergeben, keine Header oder Konfiguration
-      if (error) throw new Error(error.message)
+      // nur Meldung und Fehlercode weitergeben, keine Header oder Konfiguration; ohne Code (Netzwerk, Timeout)
+      // gilt das Ergebnis als unbekannt (run.ts)
+      if (error) throw new RpcError(error.message, error.code || undefined)
       return data as ImportResult
     }
   },
