@@ -7,7 +7,7 @@ Grundlage: 00-steckbrief.md v0.3, tech-stack.md v0.8 (Abschnitte 1 und 4), quers
 Änderungen v0.2: E1 entschieden (Product Owner 27.10.2026): Die Geschäftsstelle liest Zustand der Schnittstellen, Postausgang und Protokoll (Startwert SC lesen), ohne Inhalt der E-Mails.
 Änderungen v0.1: Erster Entwurf für den MVP (Q-SC2, Product Owner 27.10.2026): Rahmen für Anbindungen, API-Key-Verwaltung, E-Mail-Versand mit Postausgang und Vorlagen, Protokoll. DATEV (Iteration 1) und Instagram (Iteration 2) nur in Abschnitt E.
 
-Begriffe nach glossar.md v1.10 (u. a. Schnittstellen-Connector, API-Key, Basismodul). Neu und noch nicht im Glossar [ANNAHME: Begriffe nach Steckbrief]: **Dienst**, **Anbindung**, **Aufruf**, **Postausgang**, dazu **Anlass** (Grund einer E-Mail mit eigener Vorlage, z. B. „Ablauf eines API-Keys“).
+Begriffe nach glossar.md v1.10 (u. a. Schnittstellen-Connector, API-Key, Basismodul). Seit Glossar v1.12 auch: **Dienst**, **Anbindung**, **Aufruf**, **Postausgang**, dazu **Anlass** (Grund einer E-Mail mit eigener Vorlage, z. B. „Ablauf eines API-Keys“).
 
 **Zuschnitt:** SC transportiert nur. Wann eine E-Mail fällig ist und an wen, entscheidet das Fachmodul; SC kennt keine Fachdaten (keine Qualifikationen, Abrechnungen, Buchungen). Tabellen mit Präfix `sc_` (Q-SC9).
 

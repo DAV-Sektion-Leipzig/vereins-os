@@ -1,6 +1,7 @@
 # Glossar: Vereins OS
 
-Stand: 27.10.2026 · Version 1.11
+Stand: 27.10.2026 · Version 1.12
+Änderungen v1.12: Begriffe des Schnittstellen-Connectors aufgenommen: Dienst, Anbindung, Aufruf, Postausgang, Anlass (Product Owner 27.10.2026).
 Änderungen v1.11: Brevo als Dienst für transaktionale E-Mails aufgenommen (Product Owner 27.10.2026).
 Änderungen v1.10: API-Key wird im Schnittstellen-Connector nachgehalten, nicht im Admin-Modul (Product Owner 27.10.2026).
 Änderungen v1.9: Schnittstellen-Connector mit Namen in der Oberfläche „Schnittstellen“ aufgenommen (Product Owner 27.10.2026).
@@ -143,6 +144,11 @@ Regel: ein Begriff pro Sache. Synonyme stehen nur in „Nicht verwechseln mit“
 | Dashboard | Modul (DS [ANNAHME]), das Sichten mit Kennzahlen aus allen Modulen und die Budget-Sicht zeigt; nur lesen, eigenes Recht „Dashboard lesen“ mit Reichweite „alle“ oder „Referat“. Name in der Oberfläche „Dashboard“ (Product Owner 26.10.2026). | Startseite; Auswertung in einem Fachmodul | Dashboard des Referats Kinder und Jugend |
 | Schnittstellen-Connector | Basismodul (SC), das externe Dienste zentral anbindet (MVP: E-Mail-Versand über Brevo; später DATEV, Instagram); Fachmodule nutzen die Anbindungen über serverseitige Funktionen, API-Keys nur im Supabase Vault. Name in der Oberfläche „Schnittstellen“ (Product Owner 27.10.2026). | Schnittstelle eines Fachmoduls zu einem anderen Modul; Login-Mails (Supabase Auth) | Erinnerung vor Ablauf einer Lizenz per E-Mail über den Schnittstellen-Connector |
 | Brevo | Externer Dienst für transaktionale E-Mails aus dem Vereins OS (Erinnerungen, Hinweise aus Abläufen); angebunden über den Schnittstellen-Connector (Product Owner 27.10.2026). | Login-Mails über Supabase Auth; Newsletter | Erinnerung vor Ablauf eines API-Keys über Brevo |
+| Dienst | Externer Anbieter, mit dem das Vereins OS über den Schnittstellen-Connector Daten austauscht. | Modul; Fachmodul | Brevo, DATEV, Instagram |
+| Anbindung | Konfigurierte Verbindung zu einem Dienst im Schnittstellen-Connector mit Art, Name, Zustand (aktiv, abgeschaltet, gestört, abgelaufen), API-Key und freigegebenen Modulen. | Dienst; API-Key | Anbindung „E-Mail Sektion“ (Brevo), aktiv, freigegeben für AD und SC |
+| Aufruf | Einzelne Anfrage über eine Anbindung mit Ergebnis (erfolgreich, fehlgeschlagen); steht im Protokoll des Schnittstellen-Connectors. | Protokoll der Administration | Versand einer E-Mail an Brevo am 27.10.2026 10:15, erfolgreich |
+| Postausgang | Warteschlange der E-Mails im Schnittstellen-Connector mit Stand wartet, versendet, fehlgeschlagen oder verworfen; Löschung nach 90 Tagen. | Postfach eines Nutzers | E-Mail „Anmeldung des Notfall-Admins“, wartet, Versuch 1 |
+| Anlass | Grund einer E-Mail aus einem Ablauf mit eigener Vorlage (Betreff, Text, erlaubte Platzhalter); gehört genau einem Modul, Texte pflegt der Admin. | Einsatzart | „Ablauf eines API-Keys“ (SC), „Anmeldung des Notfall-Admins“ (AD) |
 | Sicht | Zusammenstellung von Kennzahlen für eine Nutzergruppe im Dashboard (Vorstand, Referat, Geschäftsstelle, später Gruppe). | Ansicht, Bericht (Synonyme, nicht verwenden); Sichtbarkeit von Personen; Reichweite | Sicht des Referats Kinder und Jugend |
 | Kennzahl | Anzahl, Summe oder Quote, die ein Fachmodul für das Dashboard liefert; keine Personenliste. | KPI (nicht verwenden); Auswertung | Anwesenheitsquote der Gruppe „Jugendgruppe Test 1“: 72 % |
 | Anwesenheitsquote | Kennzahl je Gruppe und Zeitraum: Ø anwesende Teilnehmer:innen je Training ÷ Teilnehmer:innen der Gruppe zum Datum des Trainings. Im Spaltenkopf des Dashboards kurz „Anwesenheit“. | Anwesenheit (Zuordnung einer Person zu einem Einsatz) | 71 % im 2. Halbjahr 2026 |

@@ -1,7 +1,8 @@
 # Steckbrief: Schnittstellen-Connector
 
-Stand: 27.10.2026 · Version 0.6.1 · Kürzel: SC · Priorität: MVP jetzt, Finanzen und Dashboard sind umgesetzt (Product Owner 27.10.2026) · Ablage: docs/specs/sc-schnittstellen/ · Status: Entwurf · Product Owner: Toni Werner
+Stand: 27.10.2026 · Version 0.6.2 · Kürzel: SC · Priorität: MVP jetzt, Finanzen und Dashboard sind umgesetzt (Product Owner 27.10.2026) · Ablage: docs/specs/sc-schnittstellen/ · Status: Entwurf · Product Owner: Toni Werner
 Grundlage: vision.md (Basis: Administration und Schnittstellen-Connector), modul-landkarte.md v2.18, tech-stack.md (Abschnitte 1 und 4), rollen.md (Rechte-Matrix), glossar.md v1.8 („Basismodul“, „API-Key“), offene-punkte.md v5.19 (Abschnitt SC), querschnitt-administration.md (P8, P9, P10, P16), Anforderungen aus den Steckbriefen und Specs von AD, EA, FI, DS, TK, AM (siehe „Abhängigkeiten“).
+Änderungen v0.6.2: Spec v0.2 Ready (Product Owner 27.10.2026).
 Änderungen v0.6.1: Spec v0.1 (Entwurf, Tasks T1–T19).
 Änderungen v0.6: Erhebung E8 bis E11 entschieden (Product Owner 27.10.2026): Absender `noreply@vereinsos.dav-leipzig.de`, Brevo-Konto angelegt, kostenloser Tarif mit höchstens 300 E-Mails am Tag, Login-Mails nicht im Scope (entfallen mit SSO).
 Änderungen v0.5.1: Stories v0.1 (US-SC-01 bis US-SC-16).
@@ -28,7 +29,7 @@ Das Vereins OS spricht heute mit keinem externen Dienst außer Supabase Auth (Lo
 - Zeitgesteuerte Abläufe (pg_cron, ohne angemeldeten Nutzer, querschnitt P16) nutzen SC ebenfalls; sie laufen als Datenbankfunktion des jeweiligen Moduls.
 - Je Anbindung legt der Admin fest, **welche Module** sie nutzen dürfen (Q-SC8, Product Owner 27.10.2026; z. B. DATEV nur für FI). Ein Modul ohne Freigabe erhält eine Fehlermeldung, kein stilles Scheitern.
 
-**Begriffe [ANNAHME: Vorschlag, nach Bestätigung ins Glossar]:**
+**Begriffe** (im Glossar seit v1.12, Product Owner 27.10.2026):
 - **Dienst:** externer Anbieter, mit dem das Vereins OS Daten austauscht (z. B. Brevo, DATEV, Instagram, Umfrage-Dienst).
 - **Anbindung:** konfigurierte Verbindung zu einem Dienst im Schnittstellen-Connector (Art, Name, Zustand, API-Key, freigegebene Module). Ein Dienst kann mehrere Anbindungen haben (z. B. zwei Postfächer) [ANNAHME].
 - **Aufruf:** einzelne Anfrage eines Moduls über eine Anbindung, mit Ergebnis (erfolgreich, fehlgeschlagen, wartet).

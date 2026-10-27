@@ -1,8 +1,9 @@
 # Spec: Schnittstellen-Connector (SC) – MVP E-Mail über Brevo
 
-Version: 0.1 · Status: Entwurf · Stand: 27.10.2026 · Product Owner: Toni Werner
+Version: 0.2 · Status: Ready (freigegeben 27.10.2026) · Stand: 27.10.2026 · Product Owner: Toni Werner
 Stories: docs/specs/sc-schnittstellen/02-stories.md (US-SC-01 bis US-SC-16, v0.2)
 Grundlage: 00-steckbrief.md v0.6, 01-erhebung.md v0.4 (Regeln R1–R16), 02-stories.md v0.2 (R17, R18), rollen.md v1.4, glossar.md v1.11, tech-stack.md v0.10, spec.md AD (Zugänge, `ad_audit_log`, Notfall-Admin, Muster der Edge Functions `ad-invite`), querschnitt-administration.md (P9, P10, P16).
+Änderungen v0.2: Status Ready (Product Owner 27.10.2026); Annahmen A1 bis A10 in Abschnitt 11 bestätigt; Begriffe im Glossar v1.12.
 Änderungen v0.1: Erster Entwurf.
 
 Regelverweise: „R…“ = 01-erhebung.md SC (R1–R16) bzw. 02-stories.md SC (R17, R18).
@@ -21,7 +22,7 @@ Regelverweise: „R…“ = 01-erhebung.md SC (R1–R16) bzw. 02-stories.md SC (
 
 **Nicht im Scope:** Login-Mails (bleiben bei Supabase Auth, entfallen mit SSO; Erhebung E11); DATEV (Iteration 1); Instagram (Iteration 2); Anlässe der Fachmodule EA und FI (eigene Stories dort); Abbestellen (R16); HTML-Mails, Anhänge, Tracking von Öffnungen und Klicks; eingehende Schnittstellen (Webhooks); Löschen von Anbindungen; Export des Protokolls.
 
-**Architektur (Entscheidung dieser Spec) [ANNAHME bis Ready]:**
+**Architektur (Entscheidung dieser Spec, bestätigt als A1 durch den Product Owner 27.10.2026):**
 - **Einstellen** in den Postausgang nur über die Datenbankfunktion `sc_mail_enqueue` (security definer, nicht für `authenticated` ausführbar), aufgerufen aus Datenbankfunktionen und Triggern der Module.
 - **Versenden** nur über die Edge Function `sc-send` (R1). pg_cron ruft alle 5 Minuten `sc_dispatch()` auf; diese ruft über **pg_net** die Edge Function mit einem Dispatch-Geheimnis auf, aber nur, wenn E-Mails fällig sind. Die Edge Function holt die fälligen E-Mails über Funktionen, die nur `service_role` ausführen darf (Muster `ad_apply_invite`), liest den Key aus Vault und ruft `POST https://api.brevo.com/v3/smtp/email` auf.
 - **Key** liegt in Vault unter dem Namen `sc_connection_<id>`; `sc_connections` speichert nur die letzten 4 Zeichen. Schreiben über `sc_set_key` (Admin), Lesen nur über `sc_connection_key` (nur `service_role`).
@@ -284,7 +285,7 @@ Testzugänge: bestehende Admin- und Geschäftsstelle-Zugänge; Referent:in als F
 
 ## 11. Annahmen und offene Punkte
 
-Annahmen [ANNAHME], vom Product Owner bis Ready zu bestätigen:
+Annahmen A1 bis A10 – **bestätigt (Product Owner 27.10.2026):**
 - A1 Versand über die Brevo-HTTP-API (nicht SMTP-Relay); Auslösen per pg_cron → pg_net → Edge Function; Geheimnis und URLs in Vault, gesetzt vom Product Owner je Umgebung.
 - A2 Stufen in SC: read = ansehen; edit = Vorlagen, Test, erneut senden, verwerfen, Inhalt ansehen; manage = Anbindung, Key, Zustand, Freigaben. Der Admin hat manage, die Geschäftsstelle read.
 - A3 Ein neuer Key setzt eine aktive Anbindung auf „gestört“, bis die Test-E-Mail erfolgreich war.
@@ -294,6 +295,6 @@ Annahmen [ANNAHME], vom Product Owner bis Ready zu bestätigen:
 - A7 Brevo-Fehler 400 wegen Empfänger → sofort „fehlgeschlagen“, ohne Störung der Anbindung.
 - A8 Reiner Text, kein HTML; kein Tracking.
 - A9 Kein Löschen von Anbindungen im MVP; Abschalten genügt.
-- A10 Begriffe **Dienst**, **Anbindung**, **Aufruf**, **Postausgang**, **Anlass** kommen mit Ready ins Glossar (Definition of Ready).
+- A10 Begriffe **Dienst**, **Anbindung**, **Aufruf**, **Postausgang**, **Anlass** stehen im Glossar (v1.12).
 
 Offene Punkte: keine. Abhängig: Iteration 1 (DATEV, Q-SC4) und Iteration 2 (Instagram, Q-SC5) mit eigener Spec-Erweiterung.
