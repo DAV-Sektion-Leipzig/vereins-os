@@ -249,6 +249,37 @@ spec.md DS v0.2 Abschnitt 5; Datenbank umgesetzt (`20261105100100`–`…0700`),
 
 Hinweis: Die Meldungen zu `FI_BUDGET_SUM_MISMATCH`, `FI_BUDGET_ACCOUNT_INVALID`, `FI_BUDGET_RANGE_INVALID`, `FI_BUDGET_RULE_DUPLICATE`, `FI_BUDGET_ITEM_UNKNOWN` und `FI_BUDGET_NO_ROWS` nennt die Spec nur als Code; die Texte oben sind Vorschläge für Phase 3 [OFFEN].
 
+## Schnittstellen (SC)
+
+spec.md SC v0.2 Abschnitt 5; Datenbank und Edge Function `sc-send` umgesetzt (`20261109000100`–`…0400`), Oberfläche folgt (Phase 2). `SC_FORBIDDEN` gilt für alle Funktionen des SC (R17).
+
+| Code | Meldung | Regel | Status |
+|---|---|---|---|
+| `SC_FORBIDDEN` | Dafür fehlt dir das Recht. | R17 | umgesetzt |
+| `SC_NAME_INVALID` | Bitte einen Namen und einen Absendernamen mit höchstens 80 Zeichen angeben. | – | umgesetzt |
+| `SC_NAME_TAKEN` / `sc_connections_name_key` | Eine Anbindung mit diesem Namen gibt es bereits. | – | umgesetzt |
+| `SC_EMAIL_INVALID` | Bitte gib eine gültige E-Mail-Adresse ein. | – | umgesetzt |
+| `SC_LIMIT_INVALID` | Höchstens 100 E-Mails je Stunde und 300 je Tag. | R13 | umgesetzt |
+| `SC_KIND_FIXED` | Die Art einer Anbindung lässt sich nicht ändern. | – | umgesetzt |
+| `SC_CONNECTION_UNKNOWN` | Die Anbindung gibt es nicht mehr. Bitte lade die Seite neu. | – | umgesetzt |
+| `SC_KEY_INVALID` | Der API-Key muss 8 bis 500 Zeichen lang sein und darf keine Leerzeichen enthalten. | R11 | umgesetzt |
+| `SC_KEY_MISSING` | Bitte zuerst einen API-Key hinterlegen. | R3 | umgesetzt |
+| `SC_KEY_EXPIRED` | Der API-Key ist abgelaufen. Bitte hinterlege einen neuen Key. | R6 | umgesetzt |
+| `SC_TEST_REQUIRED` | Bitte zuerst einen erfolgreichen Test durchführen. | R3 | umgesetzt |
+| `SC_ALREADY_ACTIVE` / `sc_connections_one_active` | Es ist schon eine E-Mail-Anbindung aktiv. | R4 | umgesetzt |
+| `SC_STATE_INVALID` | Etwas ist schiefgelaufen. Bitte versuche es erneut. | – | umgesetzt (nur bei Umgehung der Oberfläche) |
+| `SC_MODULE_UNKNOWN` | Etwas ist schiefgelaufen. Bitte versuche es erneut. | – | umgesetzt (nur bei Umgehung der Oberfläche) |
+| `SC_OCCASION_UNKNOWN` | Diesen Anlass gibt es nicht. | – | umgesetzt |
+| `SC_TEXT_REQUIRED` | Bitte Betreff und Text angeben. | R9 | umgesetzt |
+| `SC_TOO_LONG` | Höchstens 150 Zeichen im Betreff und 2.000 im Text. | R9 | umgesetzt |
+| `SC_PLACEHOLDER_UNKNOWN` (Detail: Platzhalter) | Der Platzhalter {…} ist für diesen Anlass nicht erlaubt. | R8, R9 | umgesetzt |
+| `SC_OUTBOX_UNKNOWN` | Die E-Mail gibt es nicht mehr (nach 90 Tagen gelöscht). | R12 | umgesetzt |
+| `SC_OUTBOX_STATE` | Das geht nur bei wartenden oder fehlgeschlagenen E-Mails. | – | umgesetzt |
+| `SC_MODULE_NOT_ALLOWED` | Die Schnittstelle ist für dieses Modul nicht freigegeben. | R2 | umgesetzt (an das aufrufende Modul) |
+| `SC_NO_EMAIL` | Für diese Person ist keine E-Mail-Adresse hinterlegt. | R5 | umgesetzt (an das aufrufende Modul) |
+| `SC_DEDUPE_KEY_REQUIRED` | – (Programmierfehler eines Moduls) | R10 | umgesetzt |
+| `SC_UNAUTHENTICATED`, `SC_BAD_REQUEST`, `SC_UNEXPECTED` (Edge Function `sc-send`) | Etwas ist schiefgelaufen. Bitte versuche es erneut. | – | umgesetzt |
+
 ## Hinweise (keine Fehlermeldungen)
 
 Diese Codes bzw. Fälle melden einen **erfolgreichen** Vorgang. Das Frontend zeigt sie als Hinweis an (z. B. sonner-Toast „info“) und nicht als Fehler. Die Aktion ist ausgeführt.

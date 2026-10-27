@@ -48,6 +48,24 @@ Die Mailvorlagen enthalten nur einen kurzen Hinweistext und den Link, keine Pers
 5. **Zustellungstest (US-AD-01 AK5):** Die Einladung muss im Posteingang liegen, nicht im Junk-Ordner und nicht in der Quarantäne. Passwort über den Link setzen; der Status wechselt auf „aktiv“. Danach auf der Login-Seite „Passwort vergessen“ auslösen; auch diese Mail muss im Posteingang liegen.
 6. **Notfall-Admin einladen:** in AD über „Einladen“ bei der Funktionsperson (US-AD-08).
 
+## 2a. Schnittstellen: E-Mail über Brevo (spec.md SC, je Umgebung TEST und PROD)
+
+Einmal je Umgebung, nachdem die Migrationen `20261109000100`–`…0400` angekommen sind. Werte nie ins Repository.
+
+1. **Edge Function `sc-send` bereitstellen** ohne JWT-Prüfung des Gateways (der Versand-Job ruft ohne JWT auf; die Funktion prüft das Geheimnis bzw. das JWT selbst), z. B. `supabase functions deploy sc-send --no-verify-jwt --project-ref <ref>` (Weg nach O1).
+2. **Drei Einträge im Vault** (SQL-Editor des Dashboards; je Umgebung eigene Werte):
+
+   ```sql
+   select vault.create_secret('https://<ref>.supabase.co/functions/v1/sc-send', 'sc_dispatch_url');
+   select vault.create_secret('<langes Zufallsgeheimnis, z. B. 48 Zeichen>', 'sc_dispatch_secret');
+   select vault.create_secret('<Adresse des Vereins OS, PROD: https://vereins-os.sektion-leipzig.workers.dev>', 'sc_app_url');
+   ```
+
+   Ohne diese Einträge ruft der Job `sc-dispatch` die Edge Function nicht auf (es geht nichts verloren; E-Mails warten).
+3. **Brevo:** je Umgebung ein eigener API-Key im Brevo-Konto der Sektion (Erhebung E9); IP-Beschränkung für API-Keys in Brevo ausschalten (die Edge Functions haben wechselnde Adressen). Absender `noreply@vereinsos.dav-leipzig.de` (E8).
+4. **In der Oberfläche „Schnittstellen“** (als Admin): Anbindung „E-Mail Sektion“ anlegen (Absender wie oben, Absendername „Vereins OS“, in TEST höchstens 50 E-Mails am Tag), Key hinterlegen, Module AD und SC freigeben, Test-E-Mail senden, aktivieren.
+5. **Zustellungstest:** Test-E-Mail an eine DAV-Adresse muss im Posteingang liegen (nicht Junk, nicht Quarantäne).
+
 ## 3. GitHub-Secret für die Datenbanktests
 
 Die Action `.github/workflows/db-tests.yml` braucht das Repository-Secret `SEED_TEST_PASSWORD` (Passwort der fiktiven Testzugänge im lokalen Stack). Anlegen: GitHub → Repository → Settings → Secrets and variables → Actions → „New repository secret“, Name `SEED_TEST_PASSWORD`.
