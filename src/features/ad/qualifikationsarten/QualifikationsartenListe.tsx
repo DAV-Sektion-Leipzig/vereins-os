@@ -25,7 +25,7 @@ const selectClassName =
 // T077 (US-AD-17 AK1): Liste gruppiert nach Sparte; Suche und Filter im Browser, weil die Liste klein ist.
 // `basePath` erlaubt dieselbe Seite unter /ea/qualifikationsarten (spec.md AD Abschnitt 6).
 export function QualifikationsartenListe({ basePath = '/ad/qualifikationsarten' }: { basePath?: string }) {
-  const { items, canEdit, failed } = useLoaderData() as ListResult
+  const { items, canEdit, usage, failed } = useLoaderData() as ListResult
   const revalidator = useRevalidator()
   const [params, setParams] = useSearchParams()
   const [q, setQ] = useState(params.get('q') ?? '')
@@ -60,8 +60,10 @@ export function QualifikationsartenListe({ basePath = '/ad/qualifikationsarten' 
     return [...map.entries()]
   }, [filtered])
 
+  // Feste Breiten, damit die Spalten über alle Sparten (je eine Tabelle) in einer Flucht stehen; nur „Bezeichnung“ ist flexibel.
+  const dash = <span className="text-muted-foreground">–</span>
   const columns: Column<QualificationType>[] = [
-    { key: 'code', header: 'Kürzel', cell: (i) => i.code ?? <span className="text-muted-foreground">–</span>, className: 'font-medium tabular-nums' },
+    { key: 'code', header: 'Kürzel', cell: (i) => i.code ?? dash, className: 'font-medium tabular-nums', headerClassName: 'w-24' },
     {
       key: 'name',
       header: 'Bezeichnung',
@@ -72,14 +74,22 @@ export function QualifikationsartenListe({ basePath = '/ad/qualifikationsarten' 
       ),
       className: 'whitespace-normal',
     },
-    { key: 'kind', header: 'Typ', cell: (i) => KIND_LABELS[i.kind] },
-    { key: 'level', header: 'Lizenzstufe', cell: (i) => (i.level ? LEVEL_LABELS[i.level] : <span className="text-muted-foreground">–</span>) },
+    { key: 'kind', header: 'Typ', cell: (i) => KIND_LABELS[i.kind], headerClassName: 'w-40' },
+    { key: 'level', header: 'Lizenzstufe', cell: (i) => (i.level ? LEVEL_LABELS[i.level] : dash), headerClassName: 'w-32' },
     {
       key: 'validity',
       header: 'Gültigkeitsdauer',
-      cell: (i) => (i.validity_years ? `${i.validity_years} ${i.validity_years === 1 ? 'Jahr' : 'Jahre'}` : <span className="text-muted-foreground">–</span>),
+      cell: (i) => (i.validity_years ? `${i.validity_years} ${i.validity_years === 1 ? 'Jahr' : 'Jahre'}` : dash),
+      headerClassName: 'w-40',
     },
-    { key: 'status', header: 'Status', cell: (i) => <StatusBadge status={i.status} /> },
+    {
+      key: 'persons',
+      header: 'Personen',
+      cell: (i) => (usage?.[i.id] ? usage[i.id] : dash),
+      className: 'text-right tabular-nums',
+      headerClassName: 'w-28 text-right',
+    },
+    { key: 'status', header: 'Status', cell: (i) => <StatusBadge status={i.status} />, headerClassName: 'w-28' },
   ]
 
   return (
@@ -177,6 +187,7 @@ export function QualifikationsartenListe({ basePath = '/ad/qualifikationsarten' 
                     {KIND_LABELS[i.kind]}
                     {i.level && ` · Stufe ${LEVEL_LABELS[i.level]}`}
                     {i.validity_years && ` · ${i.validity_years} Jahre`}
+                    {usage?.[i.id] && ` · ${usage[i.id]} ${usage[i.id] === 1 ? 'Person' : 'Personen'}`}
                   </span>
                   <StatusBadge status={i.status} className="self-start" />
                 </div>

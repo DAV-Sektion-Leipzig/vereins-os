@@ -165,8 +165,8 @@ function choices(types: ChoiceType[], systemKey: 'function' | 'position'): strin
   return type?.ea_property_fields.find((f) => f.key === systemKey)?.choice_values ?? []
 }
 
-async function loadOptions(access: EaAccess): Promise<FilterOptions> {
-  const [referate, gremien, types, qualifications] = await Promise.all([
+async function loadOptions(access: EaAccess, selectedQualification: string): Promise<FilterOptions> {
+  const [referate, gremien, types, qualifications, used] = await Promise.all([
     supabase.from('ea_referate').select('id, name').eq('is_active', true).order('sort_order'),
     access.canManage
       ? supabase.from('ea_gremien').select('id, name').eq('is_active', true).order('sort_order')
@@ -176,11 +176,19 @@ async function loadOptions(access: EaAccess): Promise<FilterOptions> {
       .select('system_key, ea_property_fields(key, choice_values)')
       .in('system_key', ['function', 'position']),
     supabase.from('ad_qualification_types').select('id, code, name, discipline').order('discipline').order('name'),
+    // Nur Arten anbieten, die bei sichtbaren Aktiven aktuell vergeben sind (RLS von ea_v_expiry entscheidet)
+    supabase.from('ea_v_expiry').select('qualification_type_id').in('kind', ['license', 'qualification']),
   ])
 
   const own = restrictedReferate(access)
   const allReferate = (referate.data ?? []) as Option[]
-  const qualificationTypes = (qualifications.data ?? []) as QualificationOption[]
+  const usedIds = new Set(
+    ((used.data ?? []) as { qualification_type_id: string | null }[]).map((r) => r.qualification_type_id),
+  )
+  // Die gewählte Art bleibt wählbar, auch wenn sie nicht (mehr) vergeben ist, damit der Filter sichtbar bleibt
+  const qualificationTypes = ((qualifications.data ?? []) as QualificationOption[]).filter(
+    (q) => usedIds.has(q.id) || q.id === selectedQualification,
+  )
   const typeRows = (types.data ?? []) as ChoiceType[]
 
   return {
@@ -215,7 +223,7 @@ export async function loadVolunteers({ request }: LoaderFunctionArgs): Promise<V
       p_limit: PAGE_SIZE,
       p_offset: (filter.page - 1) * PAGE_SIZE,
     }),
-    loadOptions(access),
+    loadOptions(access, filter.qualification),
   ])
 
   if (list.error || !Array.isArray(list.data)) return { filter, options, rows: [], total: 0, failed: true }

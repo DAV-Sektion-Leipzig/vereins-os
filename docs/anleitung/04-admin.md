@@ -140,7 +140,7 @@ Eigenschaftsarten mit dem Zeichen **System** braucht das Vereins OS selbst. Änd
 
 ![Liste der Qualifikationsarten](bilder/ad-qualifikationsarten.png)
 
-Hier stehen die Lizenzen und Ausbildungen des DAV mit Kürzel, Lizenzstufe und Gültigkeitsdauer. **„DOSB-lizenzfähig“** ist wichtig für Finanzen: Nur mit einer förderfähigen Lizenz gibt es den Trainer:innen-Satz. Gelöscht wird nichts.
+Hier stehen die Lizenzen und Ausbildungen des DAV mit Kürzel, Lizenzstufe und Gültigkeitsdauer. Die Spalte **„Personen“** zeigt, wie viele Personen die Qualifikation gerade haben. **„DOSB-lizenzfähig“** ist wichtig für Finanzen: Nur mit einer förderfähigen Lizenz gibt es den Trainer:innen-Satz. Gelöscht wird nichts.
 
 ---
 
