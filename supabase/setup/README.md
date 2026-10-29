@@ -69,3 +69,7 @@ Einmal je Umgebung, nachdem die Migrationen `20261109000100`–`…0400` angekom
 ## 3. GitHub-Secret für die Datenbanktests
 
 Die Action `.github/workflows/db-tests.yml` braucht das Repository-Secret `SEED_TEST_PASSWORD` (Passwort der fiktiven Testzugänge im lokalen Stack). Anlegen: GitHub → Repository → Settings → Secrets and variables → Actions → „New repository secret“, Name `SEED_TEST_PASSWORD`.
+
+## 4. Tägliches Backup und Lebenszeichen
+
+Die Action `.github/workflows/backup.yml` sichert PROD täglich nach Cloudflare R2 und hält PROD und TEST aktiv. Sie braucht das Environment `backup` (nur Branch `main`) mit Secrets und Variablen. Einrichtung, Überwachung und Desaster Recovery: [`docs/backup-und-wiederherstellung.md`](../../docs/backup-und-wiederherstellung.md).

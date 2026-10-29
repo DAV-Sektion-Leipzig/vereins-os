@@ -1,0 +1,178 @@
+# Tägliche Sicherung von vereins-os-prod und Lebenszeichen für PROD und TEST (Free-Plan pausiert nach 7 Tagen).
+# 1. Sicherung (roles/schema/data) mit scripts/backup/dump.sh, verschlüsselt mit age, Ablage in Cloudflare R2.
+# 2. Probe-Wiederherstellung in einen frischen lokalen Stack im Runner und Vergleich der Zeilenzahlen.
+# 3. Lebenszeichen: Abfragen an PROD (Sicherung) und TEST sowie je ein Aufruf der Auth-API.
+# Secrets und Variablen liegen im Environment „backup“, das nur Läufe von main erlaubt.
+# Inhalte aus PROD erscheinen nie im Log (öffentliches Repository); unverschlüsselt nur im Runner.
+# Einrichtung und Desaster Recovery: docs/backup-und-wiederherstellung.md
+name: Backup
+
+on:
+  schedule:
+    - cron: '17 1 * * *' # täglich 01:17 UTC (02:17 bzw. 03:17 Uhr in Leipzig)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backup
+  cancel-in-progress: false
+
+jobs:
+  backup-prod:
+    runs-on: ubuntu-24.04
+    environment: backup
+    timeout-minutes: 45
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+      AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+      R2_ENDPOINT: https://${{ vars.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.121.0
+
+      - name: psql 17 und age bereitstellen
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-common age
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y postgresql-client-17
+          echo /usr/lib/postgresql/17/bin >> "$GITHUB_PATH"
+
+      - name: Einrichtung prüfen
+        env:
+          PROD_DB_URL: ${{ secrets.PROD_DB_URL }}
+          AGE_RECIPIENTS: ${{ vars.BACKUP_AGE_RECIPIENTS }}
+        run: |
+          missing=""
+          [[ -n "$PROD_DB_URL" ]] || missing+=" PROD_DB_URL"
+          [[ -n "$AGE_RECIPIENTS" ]] || missing+=" BACKUP_AGE_RECIPIENTS"
+          [[ -n "$AWS_ACCESS_KEY_ID" && -n "$AWS_SECRET_ACCESS_KEY" ]] || missing+=" R2_ACCESS_KEY_ID/R2_SECRET_ACCESS_KEY"
+          [[ -n "$R2_BUCKET" && "$R2_ENDPOINT" != "https://.r2.cloudflarestorage.com" ]] || missing+=" R2_ACCOUNT_ID/R2_BUCKET"
+          if [[ -n "$missing" ]]; then
+            echo "::error::Im Environment „backup“ fehlt:$missing (siehe docs/backup-und-wiederherstellung.md)"
+            exit 1
+          fi
+
+      - name: Sicherung erstellen
+        env:
+          BACKUP_DB_URL: ${{ secrets.PROD_DB_URL }}
+        run: |
+          stamp="$(date -u +%Y-%m-%dT%H%MZ)"
+          dir="$RUNNER_TEMP/vereins-os-prod_$stamp"
+          scripts/backup/dump.sh "$dir"
+          echo "DUMP_DIR=$dir" >> "$GITHUB_ENV"
+          echo "BACKUP_FILE=$RUNNER_TEMP/vereins-os-prod_$stamp.tar.gz.age" >> "$GITHUB_ENV"
+
+      - name: Verschlüsseln
+        env:
+          AGE_RECIPIENTS: ${{ vars.BACKUP_AGE_RECIPIENTS }}
+        run: |
+          printf '%s\n' "$AGE_RECIPIENTS" > "$RUNNER_TEMP/recipients.txt"
+          tar -C "$(dirname "$DUMP_DIR")" -czf - "$(basename "$DUMP_DIR")" \
+            | age -R "$RUNNER_TEMP/recipients.txt" -o "$BACKUP_FILE"
+          (cd "$(dirname "$BACKUP_FILE")" && sha256sum "$(basename "$BACKUP_FILE")" > "$(basename "$BACKUP_FILE").sha256")
+          echo "Verschlüsselt: $(du -h "$BACKUP_FILE" | cut -f1)"
+
+      - name: In Cloudflare R2 ablegen
+        run: |
+          name="$(basename "$BACKUP_FILE")"
+          prefixes=(daily)
+          # Am Monatsersten zusätzlich eine Monatssicherung (längere Aufbewahrung per Lifecycle-Regel in R2)
+          [[ "$(date -u +%d)" == 01 ]] && prefixes+=(monthly)
+          for p in "${prefixes[@]}"; do
+            for f in "$BACKUP_FILE" "$BACKUP_FILE.sha256"; do
+              aws s3 cp "$f" "s3://$R2_BUCKET/$p/$(basename "$f")" --endpoint-url "$R2_ENDPOINT" --only-show-errors
+            done
+            size="$(aws s3api head-object --bucket "$R2_BUCKET" --key "$p/$name" --endpoint-url "$R2_ENDPOINT" \
+              --query ContentLength --output text)"
+            [[ "$size" == "$(stat -c %s "$BACKUP_FILE")" ]] || { echo "::error::Größe in R2 stimmt nicht: $p/$name"; exit 1; }
+            echo "Abgelegt: $p/$name" | tee -a "$GITHUB_STEP_SUMMARY"
+          done
+
+      - name: Probe-Wiederherstellung (lokaler Stack im Runner)
+        run: |
+          echo "RESTORE_LOG=$RUNNER_TEMP/restore-check.log" >> "$GITHUB_ENV"
+          scripts/backup/restore-check.sh "$DUMP_DIR" "$RUNNER_TEMP/restore-check.log"
+          echo "Probe-Wiederherstellung erfolgreich." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Protokoll der Probe verschlüsselt ablegen
+        if: failure() && env.RESTORE_LOG != ''
+        run: |
+          log_file="$RUNNER_TEMP/$(basename "$BACKUP_FILE" .tar.gz.age)_restore-check.log.age"
+          age -R "$RUNNER_TEMP/recipients.txt" -o "$log_file" "$RESTORE_LOG"
+          aws s3 cp "$log_file" "s3://$R2_BUCKET/logs/$(basename "$log_file")" --endpoint-url "$R2_ENDPOINT" --only-show-errors
+          echo "Protokoll der Probe (verschlüsselt): logs/$(basename "$log_file")" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Lebenszeichen PROD (Auth-API)
+        if: vars.PROD_SUPABASE_URL != ''
+        env:
+          SUPABASE_URL: ${{ vars.PROD_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ vars.PROD_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          curl -fsS -o /dev/null -H "apikey: $SUPABASE_KEY" "$SUPABASE_URL/auth/v1/health"
+
+      - name: Unverschlüsselte Daten im Runner löschen
+        if: always()
+        run: rm -rf "$RUNNER_TEMP"/vereins-os-prod_* "$RUNNER_TEMP/restore-check.log"
+
+  keepalive-test:
+    runs-on: ubuntu-24.04
+    environment: backup
+    timeout-minutes: 10
+    steps:
+      - name: Lebenszeichen TEST (Datenbank und Auth-API)
+        env:
+          TEST_DB_URL: ${{ secrets.TEST_DB_URL }}
+          SUPABASE_URL: ${{ vars.TEST_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ vars.TEST_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          if [[ -z "$TEST_DB_URL" ]]; then
+            echo "::warning::TEST_DB_URL fehlt im Environment „backup“; kein Lebenszeichen für TEST."
+            exit 0
+          fi
+          psql "$TEST_DB_URL" -X -q -v ON_ERROR_STOP=1 -At \
+            -c "select count(*) from auth.users" -c "select count(*) from public.ad_accesses" > /dev/null
+          if [[ -n "$SUPABASE_URL" ]]; then
+            curl -fsS -o /dev/null -H "apikey: $SUPABASE_KEY" "$SUPABASE_URL/auth/v1/health"
+          fi
+          echo "TEST hat ein Lebenszeichen erhalten."
+
+  melden:
+    needs: [backup-prod, keepalive-test]
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Issue „Backup fehlgeschlagen“ anlegen, ergänzen oder schließen
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RESULT_PROD: ${{ needs.backup-prod.result }}
+          RESULT_TEST: ${{ needs.keepalive-test.result }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create backup --color d73a4a --description "Tägliche Sicherung von PROD" >/dev/null 2>&1 || true
+          number="$(gh issue list --label backup --state open --json number --jq '.[0].number')"
+          if [[ "$RESULT_PROD" == success && "$RESULT_TEST" == success ]]; then
+            [[ -n "$number" ]] && gh issue close "$number" --comment "Wieder erfolgreich: $RUN_URL"
+            exit 0
+          fi
+          entry="$(printf -- '- %s: Sicherung PROD **%s**, Lebenszeichen TEST **%s** – %s' \
+            "$(date -u +%Y-%m-%d)" "$RESULT_PROD" "$RESULT_TEST" "$RUN_URL")"
+          if [[ -n "$number" ]]; then
+            gh issue comment "$number" --body "$entry"
+          else
+            gh issue create --label backup --title "Backup fehlgeschlagen" --body "$(printf '%s\n\n%s' \
+              'Die tägliche Sicherung oder das Lebenszeichen ist fehlgeschlagen. Ursache im verlinkten Lauf prüfen (Abschnitt „Überwachung“ in `docs/backup-und-wiederherstellung.md`). Das Issue schließt sich beim nächsten erfolgreichen Lauf.' \
+              "$entry")"
+          fi

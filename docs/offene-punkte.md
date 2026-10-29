@@ -1,6 +1,7 @@
 # Offene Punkte je Modul: Vereins OS
 
-Stand: 27.10.2026 · Version 5.27
+Stand: 29.10.2026 · Version 5.28
+Änderungen v5.28: Backup PROD – tägliche Sicherung per GitHub Action statt „nicht im Scope“ (Auftrag Product Owner 29.10.2026); offene Fristen und Speicherort in backup-und-wiederherstellung.md Abschnitt 9.
 Änderungen v5.27: Schnittstellen-Connector – Annahmen A1 bis A10 bestätigt, Spec v0.2 Ready (Product Owner 27.10.2026).
 Änderungen v5.26: Schnittstellen-Connector – Spec v0.1 (Entwurf) mit Annahmen A1 bis A10 zur Bestätigung.
 Änderungen v5.25: Schnittstellen-Connector – E8 bis E11 entschieden (Product Owner 27.10.2026): Absender, Brevo-Konto, 300 E-Mails am Tag, Login-Mails nicht im Scope.
@@ -327,7 +328,7 @@ Steckbrief: docs/specs/ds-dashboard/00-steckbrief.md (Version 0.13, Entwurf 26.1
 |---|---|
 | Spec Kit und `docs/specs/<modul>/` | bestätigt: `docs/specs/<modul>/` führend, Spec Kit erzeugt plan.md und tasks.md |
 | Tabellen-Präfix oder Schema | Präfix nach Modulkürzel, kein eigenes Schema |
-| Backup PROD | nicht im Scope, Risiko akzeptiert |
+| Backup PROD | tägliches Backup per GitHub Action nach Cloudflare R2 (Product Owner 29.10.2026, ersetzt „nicht im Scope“); Details und offene Fristen in `backup-und-wiederherstellung.md` |
 | Auftragsverarbeitungsvertrag Cloudflare | schließt der Product Owner ab |
 | Zuständig für Datenschutz | Toni Werner |
 | Vorstand vs. Geschäftsstelle | unterschiedliche, konfigurierbare Rechtevorlagen; Vorstand grundsätzlich weniger Rechte |
