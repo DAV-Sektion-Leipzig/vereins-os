@@ -1,6 +1,7 @@
 # Tech-Stack: Vereins OS
 
-Stand: 27.10.2026 · Version 0.10 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
+Stand: 29.10.2026 · Version 0.11 · Vorbild: Architektur eines vergleichbaren Projekts (Development Layer, Skills & Frameworks, GitHub, statisches Frontend-Hosting, zwei Supabase-Instanzen); Hosting abweichend vom Vorbild bei Cloudflare statt GitHub Pages
+Änderungen v0.11: Tägliches Backup von PROD nach Cloudflare R2 und Lebenszeichen für PROD und TEST per GitHub Action (Auftrag Product Owner 29.10.2026, docs/backup-und-wiederherstellung.md).
 Änderungen v0.10: Brevo-Absender, Tarif und Login-Mails entschieden (Product Owner 27.10.2026).
 Änderungen v0.9: E-Mails aus Abläufen über Brevo (SC) statt Google-Konto (Product Owner 27.10.2026); Login-Mails offen.
 Änderungen v0.8: Metadaten der API-Keys im Modul SC statt AD (Q-SC9, Product Owner 27.10.2026).
@@ -27,8 +28,8 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 | vereins-os-prod | Produktivbetrieb Geschäftsstelle | Echtdaten |
 
 - Free-Plan erlaubt genau 2 aktive Projekte; damit ist das Kontingent ausgeschöpft.
-- **Pausierung:** Free-Projekte werden nach 7 Tagen geringer Aktivität pausiert. PROD ist durch tägliche Nutzung der Geschäftsstelle geschützt; TEST wird bei Bedarf im Dashboard wieder gestartet. [ANNAHME: kein Keep-alive-Job nötig]
-- **Backups:** Im Free-Plan gibt es keine herunterladbaren Backups. Eine eigene Sicherung von PROD ist bewusst nicht im Scope (Entscheidung Product Owner, 19.10.2026). Akzeptiertes Risiko: Datenverlust in PROD ist nicht wiederherstellbar; TEST enthält nur fiktive Daten und ersetzt kein Backup.
+- **Pausierung:** Free-Projekte werden nach 7 Tagen geringer Aktivität pausiert. Die tägliche GitHub Action „Backup“ gibt PROD (durch die Sicherung) und TEST (eigene Abfragen) jeden Tag ein Lebenszeichen; schlägt es fehl, meldet die Action das im Issue „Backup fehlgeschlagen“ (Product Owner 29.10.2026).
+- **Backups:** Im Free-Plan gibt es keine herunterladbaren Backups. Deshalb sichert die GitHub Action „Backup“ PROD täglich (Rollen, Schema, Daten), verschlüsselt mit age und abgelegt in Cloudflare R2; jede Sicherung wird im Runner probeweise eingespielt (Auftrag Product Owner 29.10.2026, ersetzt die Entscheidung vom 19.10.2026). Einrichtung, Überwachung und Desaster Recovery: [backup-und-wiederherstellung.md](backup-und-wiederherstellung.md). Die Action ist der einzige automatisierte Lesezugriff auf PROD; sie läuft nur von `main` (Environment `backup`). TEST enthält nur fiktive Daten und wird nicht gesichert.
 - **Region:** EU (Frankfurt). [ANNAHME]
 - **Auth:** E-Mail und Passwort. Benutzername ist immer die DAV-E-Mail-Adresse der Person (gepflegt über das Portal „DAV 360 Mitarbeiter“). SSO später prüfen.
 - **Selbstregistrierung aus.** Nutzer legt nur der Admin an (Einladung). [ANNAHME]
@@ -139,7 +140,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 │   ├── setup/                      Einrichtungsskript PROD
 │   ├── seed.sh                     Seed-Skript, bricht bei PROD ab
 │   └── seed.sql                    nur fiktive Daten
-├── .github/workflows/              GitHub Actions (Datenbanktests)
+├── .github/workflows/              GitHub Actions (Datenbanktests, Backup)
 ├── src/                            Frontend
 │   └── assets/brand/               DAV-Logos (unverändert)
 └── wrangler.jsonc                  Cloudflare-Konfiguration
@@ -155,7 +156,7 @@ VS Code + Claude Code  ── push/pull ──▶ GitHub (Sektions-Repo) ──�
 
 - Spec Kit wie oben beschrieben.
 - Tabellen-Präfix nach Modulkürzel, kein eigenes Schema.
-- Kein eigenes Backup von PROD (Risiko akzeptiert).
+- ~~Kein eigenes Backup von PROD (Risiko akzeptiert).~~ Ersetzt am 29.10.2026: tägliches Backup per GitHub Action (Abschnitt 1).
 - Auftragsverarbeitungsvertrag mit Cloudflare: schließt der Product Owner ab.
 - Seed über `seed.sh`, pgTAP in GitHub Action mit lokalem Stack, Abnahme in TEST.
 - Änderungen nur per Pull Request, Branch-Schutz für `main` (Product Owner, 19.10.2026); Auto-Merge für Datenbank, Tests und Umsetzungsdateien (Product Owner, 23.10.2026).
